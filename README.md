@@ -15,9 +15,13 @@ A gameplay se baseia em decisões rápidas combinadas com mini-games e interaç�
 Ou simplesmente não sobreviver. Para tornar a experiência acessível a todos, o jogo incluirá opções de acessibilidade motora, cognitiva, visão e audição.
 Dessa forma, tentaremos englobar a maior quantidade possível de necessidades para que todos possam aproveitar a história e explorar todos os caminhos possíveis do jogo.
 
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/ee3e2944-5e64-4677-84ae-26580b0a4879" />
+A PRIMEIRA TELA: 
+- Representa a tela que o player ve quando entra pela primeira vez no jogo, ja pondendo configurar a linguagem e o leitor de tela.
+
 <img width="1366" height="768" alt="Captura de tela 2026-05-08 012512" src="https://github.com/user-attachments/assets/8f749048-346b-4113-a970-e9841d723c71" />
 
-A PRIMEIRA TELA:
+TELA INICIAL
 
 - Basicamente, a primeira tela serve como um momento que o usuário poderia configurar o jogo para adequar melhor a gameplay à ele mesmo. É nesse parte em que, de fato,
   a experiência torna-se além de divertida, inclusiva.
@@ -40,7 +44,8 @@ OPÇÕES:
 - Ao clicar no botão de volume, o jogador pode configurar o som ambiente(passos, golpes e outras interações), a música que toca de fundo na gameplay, e o leitor de tela, mecanismo que, se ativado,
   lê os textos presentes na tela para o jogador com deficiências visuais!
 
-<img width="1366" height="768" alt="Captura de tela 2026-05-08 012629" src="https://github.com/user-attachments/assets/778dc3eb-3572-4d47-80c8-e5c6a8e014e5" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/4f5831b5-409a-4f18-8832-46849ad90885" />
+
 
 - A aba de interfaces configura para o jogador 3 principais recursos: FPS, Tamanho da Interface e tela cheia. O fps tem as configurações de limite de fps, para o jogo rodar sem problemas e sem forçar a máquina de um player que tenha um menor poder computacional,
   juntamente com a função de mostrar o fps na tela, para monitorar o desempenho da máquina. O tamanho de interface aumenta ou diminui os icones e textos do jogo, visando ajudar na gameplay dos jogadores com deficiencias visuais.
