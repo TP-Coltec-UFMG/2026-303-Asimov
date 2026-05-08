@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c84y2vbsdbxqt"
+
+[deps]
+
+files=["res://Tradutions/traducoes - Página1(7).PORTUGUÊS.translation", "res://Tradutions/traducoes - Página1(7).ENGLISH.translation", "res://Tradutions/traducoes - Página1(7).ESPAÑOL.translation", "res://Tradutions/traducoes - Página1(7).FRANÇAIS.translation"]
+
+source_file="res://Tradutions/traducoes - Página1(7).csv"
+dest_files=["res://Tradutions/traducoes - Página1(7).PORTUGUÊS.translation", "res://Tradutions/traducoes - Página1(7).ENGLISH.translation", "res://Tradutions/traducoes - Página1(7).ESPAÑOL.translation", "res://Tradutions/traducoes - Página1(7).FRANÇAIS.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
