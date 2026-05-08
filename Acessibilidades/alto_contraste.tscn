@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://bpcrruakkh4cr"]
-
-[sub_resource type="QuadMesh" id="QuadMesh_hp4hf"]
-
-[node name="ALTO_CONTRASTE" type="MeshInstance2D" unique_id=907147133]
-self_modulate = Color(0, 0, 0, 1)
-scale = Vector2(522, 308.00003)
-mesh = SubResource("QuadMesh_hp4hf")
