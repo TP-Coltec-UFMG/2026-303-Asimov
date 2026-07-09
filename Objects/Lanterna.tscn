@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://ceroyqy22gqmd"]
+
+[ext_resource type="Script" uid="uid://c1qngxm6uqdw7" path="res://Objects/scripts/Lanterna.gd" id="1_iojv6"]
+[ext_resource type="Texture2D" uid="uid://xe3xoat3u8dd" path="res://Sprites/ilumination/Design sem nome(8).png" id="2_ldti0"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="3_pljbo"]
+[ext_resource type="Texture2D" uid="uid://0vvakbvh2kim" path="res://Sprites/objects/Lanterna.png" id="4_ldti0"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="5_8yxdu"]
+[ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="6_udy4t"]
+[ext_resource type="AudioStream" uid="uid://c7nxcjmbwjjit" path="res://Sounds/switch3.ogg" id="7_46il4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
+radius = 26.476404
+
+[node name="Lanterna" type="Node2D" unique_id=1140399274]
+script = ExtResource("1_iojv6")
+
+[node name="Luz" type="PointLight2D" parent="." unique_id=705748685]
+visible = false
+position = Vector2(211.50003, 156.19788)
+scale = Vector2(0.09429286, 0.1829843)
+color = Color(0.99999994, 0.80680114, 0.3938179, 1)
+shadow_enabled = true
+shadow_filter = 1
+shadow_filter_smooth = 3.3
+texture = ExtResource("2_ldti0")
+texture_scale = 1.48
+
+[node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("3_pljbo")]
+interact_name = "Lanterna"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=1116452658]
+shape = SubResource("CircleShape2D_6hjy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1463579393]
+rotation = 6.890877e-05
+texture = ExtResource("4_ldti0")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=54547402]
+z_index = -8
+position = Vector2(3.9999998, -4)
+scale = Vector2(0.02711612, 0.027819581)
+color = Color(0.871761, 0.8767314, 1, 1)
+shadow_filter = 2
+texture = ExtResource("5_8yxdu")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=181840189]
+visible = false
+position = Vector2(49.500004, -77.25002)
+scale = Vector2(0.12, 0.12)
+energy = 0.32
+texture = ExtResource("5_8yxdu")
+
+[node name="PickupComponent" type="Node" parent="." unique_id=167873576 node_paths=PackedStringArray("interactable")]
+script = ExtResource("6_udy4t")
+item_id = "lanterna"
+interactable = NodePath("../Interectable")
+metadata/_custom_type_script = "uid://dtfbuvijibmfx"
+
+[node name="ligando" type="AudioStreamPlayer2D" parent="." unique_id=907665176]
+stream = ExtResource("7_46il4")

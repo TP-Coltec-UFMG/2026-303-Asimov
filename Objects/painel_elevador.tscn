@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://c46ktfchhqx7n"]
+
+[ext_resource type="Script" uid="uid://d6ja6e7d5abq" path="res://Objects/scripts/painel_elevador.gd" id="1_jox7w"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jox7w"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ricc7"]
+light_mode = 1
+
+[node name="PainelElevador" type="Node2D" unique_id=236849866]
+process_mode = 3
+z_index = 999
+material = SubResource("CanvasItemMaterial_jox7w")
+script = ExtResource("1_jox7w")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1906461254]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 8.0
+offset_top = -8.0
+offset_right = 96.0
+offset_bottom = 160.0
+color = Color(0.61420286, 0.6142028, 0.6142028, 1)
+
+[node name="andar1" type="Button" parent="." unique_id=1304678461]
+material = SubResource("CanvasItemMaterial_ricc7")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 16.0
+offset_right = 48.0
+offset_bottom = 31.0
+grow_horizontal = 2
+text = "1"
+
+[node name="andar2" type="Button" parent="." unique_id=555039272]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 56.0
+offset_right = 88.0
+offset_bottom = 31.0
+text = "2"
+
+[node name="andar3" type="Button" parent="." unique_id=856684712]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 16.0
+offset_top = 40.0
+offset_right = 48.0
+offset_bottom = 71.0
+text = "3"
+
+[node name="andar4" type="Button" parent="." unique_id=1263369988]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 56.0
+offset_top = 40.0
+offset_right = 88.0
+offset_bottom = 71.0
+text = "4"
+
+[node name="andar5" type="Button" parent="." unique_id=1887938738]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 16.0
+offset_top = 80.0
+offset_right = 48.0
+offset_bottom = 111.0
+text = "5"
+
+[node name="andar6" type="Button" parent="." unique_id=1532645743]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 56.0
+offset_top = 80.0
+offset_right = 88.0
+offset_bottom = 111.0
+text = "6"
+
+[node name="fechar" type="Button" parent="." unique_id=1916950001]
+material = SubResource("CanvasItemMaterial_ricc7")
+offset_left = 16.0
+offset_top = 120.0
+offset_right = 88.0
+offset_bottom = 151.0
+text = "< >"
+
+[connection signal="pressed" from="andar1" to="." method="_on_andar_1_pressed"]
+[connection signal="pressed" from="andar2" to="." method="_on_andar_2_pressed"]
+[connection signal="pressed" from="andar3" to="." method="_on_andar_3_pressed"]
+[connection signal="pressed" from="andar4" to="." method="_on_andar_4_pressed"]
+[connection signal="pressed" from="andar5" to="." method="_on_andar_5_pressed"]
+[connection signal="pressed" from="andar6" to="." method="_on_andar_6_pressed"]
+[connection signal="pressed" from="fechar" to="." method="_on_fechar_pressed"]

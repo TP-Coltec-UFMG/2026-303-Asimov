@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cov3vbbrkirdf"]
+
+[ext_resource type="Script" uid="uid://dmk0muhflr4if" path="res://Objects/scripts/conhecimento.gd" id="1_4kem8"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="2_fwtvt"]
+[ext_resource type="Texture2D" uid="uid://07i7xm3v4k3e" path="res://Sprites/objects/livro.png" id="3_c18f0"]
+[ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="4_4kem8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
+radius = 26.476404
+
+[node name="Conhecimento" type="Node2D" unique_id=1043564305]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_4kem8")
+
+[node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_fwtvt")]
+interact_name = "Conhecimento"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=1872025487]
+shape = SubResource("CircleShape2D_6hjy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=803464878]
+rotation = 6.890877e-05
+texture = ExtResource("3_c18f0")
+
+[node name="PickupComponent" type="Node" parent="." unique_id=2065607514 node_paths=PackedStringArray("interactable")]
+script = ExtResource("4_4kem8")
+item_id = "conhecimento"
+interactable = NodePath("../Interectable")
+metadata/_custom_type_script = "uid://dtfbuvijibmfx"

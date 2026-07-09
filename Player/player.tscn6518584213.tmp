@@ -1,0 +1,207 @@
+[gd_scene format=3 uid="uid://beyeq37qyobrm"]
+
+[ext_resource type="Script" uid="uid://3wbie5tbpcl4" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://blog31qf3wjk" path="res://Player/Sprites/SpritePlayer.png" id="2_4ntmi"]
+[ext_resource type="Script" uid="uid://b7xlxny8xmho1" path="res://Player/camera_2d.gd" id="3_btcbx"]
+[ext_resource type="PackedScene" uid="uid://dh0axsg4h77gg" path="res://Interaction_components/interactiong_component.tscn" id="4_gwnis"]
+[ext_resource type="Texture2D" uid="uid://dw7oxkc824dh5" path="res://Sprites/sr20cb92d236baws3.png" id="5_vtle1"]
+[ext_resource type="Script" uid="uid://c1qngxm6uqdw7" path="res://Scenes/Lanterna.gd" id="6_od3ui"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/2d_lights_and_shadows_neutral_point_light.webp" id="7_00tjw"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ntmi"]
+radius = 15.0
+height = 52.0
+
+[sub_resource type="Animation" id="Animation_btcbx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_4ntmi"]
+resource_name = "idle_down"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="Animation" id="Animation_gwnis"]
+resource_name = "idle_side"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [14, 15, 16]
+}
+
+[sub_resource type="Animation" id="Animation_k53q1"]
+resource_name = "idle_up"
+length = 0.4
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [7, 8, 9]
+}
+
+[sub_resource type="Animation" id="Animation_fhl08"]
+resource_name = "walk_down"
+length = 0.3
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [3, 4, 5, 6]
+}
+
+[sub_resource type="Animation" id="Animation_vtle1"]
+resource_name = "walk_side"
+length = 0.3
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [17, 18, 19, 20]
+}
+
+[sub_resource type="Animation" id="Animation_od3ui"]
+resource_name = "walk_up"
+length = 0.3
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 13]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_btcbx"]
+_data = {
+&"RESET": SubResource("Animation_btcbx"),
+&"idle_down": SubResource("Animation_4ntmi"),
+&"idle_side": SubResource("Animation_gwnis"),
+&"idle_up": SubResource("Animation_k53q1"),
+&"walk_down": SubResource("Animation_fhl08"),
+&"walk_side": SubResource("Animation_vtle1"),
+&"walk_up": SubResource("Animation_od3ui")
+}
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_4ntmi"]
+cull_mode = 1
+polygon = PackedVector2Array(0, -26, -1, -25, -1, -23, -4, -23, -8, -19, -9, -17, -9, -11, -8, -11, -8, -10, -9, -10, -17, -2, -18, 0, -18, 7, -15, 13, -14, 14, -12, 14, -9, 11, -8, 11, -8, 14, -7, 14, -7, 18, -9, 18, -11, 20, -11, 21, -10, 21, -10, 22, -10, 21, -10, 21, -10, 22, 9, 22, 10, 21, 10, 20, 8, 18, 7, 18, 7, 14, 8, 14, 8, 10, 11, 10, 11, 11, 12, 12, 13, 12, 15, 10, 15, 5, 14, 5, 14, 1, 13, 1, 13, -6, 9, -10, 9, -17, 4, -23, 0, -23, 0, -24, 1, -24, 1, -26)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_btcbx"]
+cull_mode = 1
+polygon = PackedVector2Array(-2, -26, -1, -26, 0, -25, 0, -23, 4, -23, 8, -19, 9, -17, 9, -8, 10, -8, 12, -6, 13, -4, 14, 1, 15, 5, 15, 10, 13, 12, 11, 12, 10, 11, 8, 11, 8, 14, 7, 15, 7, 18, 8, 18, 10, 20, 10, 21, 9, 22, -10, 22, -11, 21, -11, 20, -9, 18, -7, 18, -7, 15, -8, 14, -8, 11, -9, 11, -9, 12, -11, 14, -12, 14, -17, 9, -18, 7, -18, 0, -17, -2, -9, -10, -8, -10, -8, -11, -9, -11, -9, -17, -8, -19, -4, -23, -1, -23, -1, -24, -2, -24)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_gwnis"]
+cull_mode = 1
+polygon = PackedVector2Array(-2, -26, -2, -25, -1, -25, -1, -23, -3, -23, -6, -20, -7, -18, -7, -12, -6, -12, -6, -10, -7, -10, -8, -9, -8, -5, -9, -5, -12, -2, -13, 0, -13, 7, -12, 9, -8, 13, -6, 13, -5, 12, -5, 11, -3, 11, -3, 14, -4, 14, -4, 18, -5, 18, -5, 19, -7, 19, -8, 20, -8, 21, -7, 22, 7, 22, 10, 21, 10, 20, 9, 19, 8, 17, 6, 17, 6, 13, 7, 13, 7, 10, 8, 10, 9, 9, 10, 7, 10, 4, 9, 4, 9, 0, 8, 0, 8, -1, 9, -1, 10, -2, 10, -5, 9, -5, 9, -10, 10, -10, 10, -13, 11, -13, 11, -16, 10, -18, 9, -20, 8, -21, 7, -22, 6, -23, 1, -23, 1, -24, -1, -26)
+
+[node name="Player" type="CharacterBody2D" unique_id=1888366647]
+script = ExtResource("1_4ntmi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=781184643]
+position = Vector2(-1, -1)
+shape = SubResource("CapsuleShape2D_4ntmi")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1887433784]
+texture = ExtResource("2_4ntmi")
+hframes = 21
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1986231153]
+libraries/ = SubResource("AnimationLibrary_btcbx")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1510520508]
+process_mode = 3
+skew = -0.11170107
+ignore_rotation = false
+position_smoothing_enabled = true
+rotation_smoothing_speed = 20.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_vertical_offset = -1.0
+script = ExtResource("3_btcbx")
+
+[node name="OccluderFront" type="LightOccluder2D" parent="." unique_id=138279711]
+occluder = SubResource("OccluderPolygon2D_4ntmi")
+
+[node name="OccluderBack" type="LightOccluder2D" parent="." unique_id=281354042]
+visible = false
+occluder = SubResource("OccluderPolygon2D_btcbx")
+
+[node name="OccluderSide" type="LightOccluder2D" parent="." unique_id=2020043514]
+visible = false
+occluder = SubResource("OccluderPolygon2D_gwnis")
+
+[node name="InteractiongComponent" parent="." unique_id=1047232936 instance=ExtResource("4_gwnis")]
+
+[node name="Lanterna" type="Sprite2D" parent="." unique_id=1368689345]
+visible = false
+position = Vector2(12.774197, 6.903154)
+rotation = 1.5684911
+scale = Vector2(0.015886113, 0.019607598)
+texture = ExtResource("5_vtle1")
+script = ExtResource("6_od3ui")
+
+[node name="PointLight2D" type="PointLight2D" parent="Lanterna" unique_id=883144698]
+position = Vector2(1900, 0)
+scale = Vector2(13.4765625, 11.5625)
+color = Color(0.46839583, 0.454517, 0.03257826, 1)
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("7_00tjw")
