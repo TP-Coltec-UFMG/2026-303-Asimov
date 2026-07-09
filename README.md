@@ -1,7 +1,9 @@
 
 Grupo: Henrique Aredes, Lucas Santana, João Leonardo Matheus Ramalho, Gabriel Oliveira, Gabriel Fernandes
 
- Nome do jogo: Asimov
+Planilha de acessibilidade: https://drive.google.com/file/d/1FEIQEs97rEnrc1OhOVlO4QP7KQ_LfHmU/view?usp=sharing
+
+Nome do jogo: Asimov
 
 CONCEITO
 
