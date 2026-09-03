@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://btiojmlbqhdrn"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_nqlva"]
-[ext_resource type="PackedScene" uid="uid://cs0lgkde3bsb1" path="res://TileMaps/Andar_Hall/hall.tscn" id="2_ho60l"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="3_2s751"]
-[ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="4_6qnfl"]
+[ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="4_48805"]
+[ext_resource type="Texture2D" uid="uid://dgisco7ahvjd1" path="res://pedaco_1.png" id="5_8q7s7"]
+[ext_resource type="PackedScene" uid="uid://ce1wy22xikmix" path="res://Objects/fogo.tscn" id="5_48805"]
 [ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs/Clarxs.tscn" id="5_vvkyc"]
 [ext_resource type="PackedScene" uid="uid://cyl02mn4y4x7c" path="res://NPC'S/marker_point.tscn" id="6_pgrj2"]
+[ext_resource type="Texture2D" uid="uid://b0elgotgwc83h" path="res://pedaco_3.png" id="7_nflo4"]
 [ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/06_purple_crimson.png" id="7_nqlva"]
+[ext_resource type="Texture2D" uid="uid://cfw8c3ewx78lf" path="res://pedaco_2.png" id="8_vkln7"]
+[ext_resource type="PackedScene" uid="uid://dsyhrp3kskfss" path="res://hall_quebrado.tscn" id="9_1xwy5"]
 [ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://luz_emergencia.tscn" id="9_xl0vw"]
 [ext_resource type="Texture2D" uid="uid://dei4d8qxmiky" path="res://Sprites/objects/alerta_luz.png" id="10_xodlo"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="11_8uelp"]
@@ -17,6 +21,16 @@
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="14_8uelp"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="15_wweuw"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_ysydw"]
+[ext_resource type="Script" uid="uid://778gwebo6sfc" path="res://Scenes/quest_mission.gd" id="18_h0r3n"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="18_pfqqk"]
+[ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://New_Piskel.png" id="19_xl0vw"]
+[ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://New_Piskel1.png" id="20_xodlo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8q7s7"]
+size = Vector2(16, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nflo4"]
+size = Vector2(18, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_61dx5"]
 size = Vector2(9, 11.5)
@@ -24,28 +38,223 @@ size = Vector2(9, 11.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wweuw"]
 size = Vector2(9, 12)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
+size = Vector2(30, 17)
+
+[sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
+font = ExtResource("18_pfqqk")
+font_size = 10
+outline_size = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_xl0vw"]
+font = ExtResource("18_pfqqk")
+font_size = 9
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_xl0vw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_xodlo")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="andar_hall" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_nqlva")
 
 [node name="Coletaveis" type="Node" parent="." unique_id=141771484]
 
-[node name="Extintor" parent="Coletaveis" unique_id=1140399274 instance=ExtResource("13_xl0vw")]
-position = Vector2(4.7683716e-07, -108.99999)
+[node name="Extintor" parent="Coletaveis" unique_id=1140399274 groups=["Coletaveis"] instance=ExtResource("13_xl0vw")]
+position = Vector2(161.00002, -12.999977)
 scale = Vector2(0.425, 0.425)
 save_id = "extintor1"
 
-[node name="Extintor2" parent="Coletaveis" unique_id=2070645289 instance=ExtResource("13_xl0vw")]
-position = Vector2(-49.999996, -108.99999)
+[node name="Extintor3" parent="Coletaveis" unique_id=1692687369 groups=["Coletaveis"] instance=ExtResource("13_xl0vw")]
+position = Vector2(161, 103.000015)
+scale = Vector2(0.425, 0.425)
+save_id = "extintor1"
+
+[node name="Extintor2" parent="Coletaveis" unique_id=2070645289 groups=["Coletaveis"] instance=ExtResource("13_xl0vw")]
+position = Vector2(29.999985, -47)
+rotation = 0.7078837
 scale = Vector2(0.425, 0.425)
 save_id = "extintor2"
 
-[node name="Lanterna" parent="Coletaveis" unique_id=792768314 instance=ExtResource("4_6qnfl")]
-z_index = 2
-position = Vector2(-63, -9)
-scale = Vector2(0.295, 0.295)
-save_id = "lanterna_1"
+[node name="pedaco1" type="CharacterBody2D" parent="Coletaveis" unique_id=775917438 groups=["empurravel"]]
+position = Vector2(-12, 2)
+script = ExtResource("4_48805")
+save_id = "PEDACO_PAREDE_1"
+
+[node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco1" unique_id=1463579393]
+position = Vector2(-19, -93)
+rotation = 6.890877e-05
+texture = ExtResource("5_8q7s7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1" unique_id=1174819247]
+position = Vector2(-19, -92)
+shape = SubResource("RectangleShape2D_8q7s7")
+
+[node name="Interectable" parent="Coletaveis/pedaco1" unique_id=1406152477 groups=["empurravel"] instance=ExtResource("11_8uelp")]
+position = Vector2(-19, -87)
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1/Interectable" unique_id=1325901001]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_nflo4")
+
+[node name="pedaco5" type="CharacterBody2D" parent="Coletaveis" unique_id=1634234465 groups=["empurravel"]]
+position = Vector2(21, 37)
+script = ExtResource("4_48805")
+save_id = "PEDACO_PAREDE_1"
+
+[node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco5" unique_id=1160564438]
+position = Vector2(-19, -93)
+rotation = -0.46569985
+texture = ExtResource("5_8q7s7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco5" unique_id=1165852911]
+position = Vector2(-19, -92)
+shape = SubResource("RectangleShape2D_8q7s7")
+
+[node name="Interectable" parent="Coletaveis/pedaco5" unique_id=719517567 groups=["empurravel"] instance=ExtResource("11_8uelp")]
+position = Vector2(-19, -87)
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco5/Interectable" unique_id=807392476]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_nflo4")
+
+[node name="pedaco2" type="CharacterBody2D" parent="Coletaveis" unique_id=1777953629 groups=["empurravel"]]
+position = Vector2(9, -1)
+script = ExtResource("4_48805")
+save_id = "PEDACO_PAREDE_1"
+
+[node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco2" unique_id=919829966]
+position = Vector2(-19, -93)
+rotation = 0.30381602
+texture = ExtResource("8_vkln7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco2" unique_id=814235645]
+position = Vector2(-19, -92)
+shape = SubResource("RectangleShape2D_8q7s7")
+
+[node name="Interectable" parent="Coletaveis/pedaco2" unique_id=1033899244 groups=["empurravel"] instance=ExtResource("11_8uelp")]
+position = Vector2(-19, -87)
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco2/Interectable" unique_id=710339716]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_nflo4")
+
+[node name="pedaco4" type="CharacterBody2D" parent="Coletaveis" unique_id=302313232 groups=["empurravel"]]
+position = Vector2(-27, 31)
+script = ExtResource("4_48805")
+save_id = "PEDACO_PAREDE_1"
+
+[node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco4" unique_id=955443142]
+position = Vector2(-19, -93)
+rotation = -0.5141846
+texture = ExtResource("8_vkln7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco4" unique_id=295865186]
+position = Vector2(-19, -92)
+shape = SubResource("RectangleShape2D_8q7s7")
+
+[node name="Interectable" parent="Coletaveis/pedaco4" unique_id=598137820 groups=["empurravel"] instance=ExtResource("11_8uelp")]
+position = Vector2(-19, -87)
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco4/Interectable" unique_id=151309507]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_nflo4")
+
+[node name="pedaco3" type="CharacterBody2D" parent="Coletaveis" unique_id=386280701 groups=["empurravel"]]
+position = Vector2(-3, 23)
+script = ExtResource("4_48805")
+save_id = "PEDACO_PAREDE_1"
+
+[node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco3" unique_id=353176548]
+position = Vector2(-19, -93)
+rotation = 0.30381602
+texture = ExtResource("7_nflo4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco3" unique_id=1080797742]
+position = Vector2(-19, -92)
+shape = SubResource("RectangleShape2D_8q7s7")
+
+[node name="Interectable" parent="Coletaveis/pedaco3" unique_id=1796292153 groups=["empurravel"] instance=ExtResource("11_8uelp")]
+position = Vector2(-19, -87)
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco3/Interectable" unique_id=1903912937]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_nflo4")
+
+[node name="Pedaco3" type="Sprite2D" parent="Coletaveis" unique_id=1325852619]
+position = Vector2(-157, -92.000015)
+rotation = 0.87187374
+texture = ExtResource("7_nflo4")
+
+[node name="Pedaco4" type="Sprite2D" parent="Coletaveis" unique_id=1454671649]
+position = Vector2(-146.00002, -63.999985)
+rotation = 0.87187374
+texture = ExtResource("7_nflo4")
+
+[node name="Pedaco5" type="Sprite2D" parent="Coletaveis" unique_id=1893714115]
+position = Vector2(-59, -95)
+rotation = 0.87187374
+texture = ExtResource("7_nflo4")
+
+[node name="Pedaco6" type="Sprite2D" parent="Coletaveis" unique_id=373901798]
+position = Vector2(-109, -93)
+rotation = 0.87187374
+texture = ExtResource("7_nflo4")
+
+[node name="Pedaco7" type="Sprite2D" parent="Coletaveis" unique_id=2037936400]
+position = Vector2(-96.000015, -63.000015)
+rotation = 0.87187374
+texture = ExtResource("7_nflo4")
+
+[node name="Pedaco8" type="Sprite2D" parent="Coletaveis" unique_id=564680590]
+position = Vector2(-159, -32.000015)
+rotation = 0.87187374
+texture = ExtResource("7_nflo4")
 
 [node name="Perigos" type="Node" parent="." unique_id=1469058963]
+
+[node name="Fogo" parent="Perigos" unique_id=1620408042 instance=ExtResource("5_48805")]
+z_index = 99
+position = Vector2(-142, -75)
+
+[node name="Fogo2" parent="Perigos" unique_id=392018364 instance=ExtResource("5_48805")]
+z_index = 99
+position = Vector2(-83, -63)
+save_id = "fogo02"
+
+[node name="Fogo4" parent="Perigos" unique_id=1717051885 instance=ExtResource("5_48805")]
+z_index = 99
+position = Vector2(-118, -36)
+save_id = "fogo03"
+
+[node name="Fogo3" parent="Perigos" unique_id=1234051676 instance=ExtResource("5_48805")]
+z_index = 99
+position = Vector2(-47, -62)
+save_id = "fogo04"
+
+[node name="Fogo5" parent="Perigos" unique_id=1580959386 instance=ExtResource("5_48805")]
+z_index = 99
+position = Vector2(3, -69)
+save_id = "fogo05"
 
 [node name="Iluminacao" type="Node" parent="." unique_id=865113971]
 
@@ -126,7 +335,7 @@ color = Color(0.36057273, 0.36057273, 0.3605727, 1)
 
 [node name="Interativos" type="Node" parent="." unique_id=636557829]
 
-[node name="HALL" parent="." unique_id=1500386464 instance=ExtResource("2_ho60l")]
+[node name="HALL_QUEBRADO" parent="." unique_id=1433076941 instance=ExtResource("9_1xwy5")]
 
 [node name="NPCs" type="Node" parent="." unique_id=1012355832]
 
@@ -138,13 +347,14 @@ sprite_sheet = ExtResource("7_nqlva")
 position = Vector2(9, -61)
 
 [node name="Marker_point_2" parent="NPCs/NPC1" unique_id=1383230832 instance=ExtResource("6_pgrj2")]
-position = Vector2(-29, -61)
+position = Vector2(28, -26)
+movement_type = 1
 
 [node name="Marker_point_3" parent="NPCs/NPC1" unique_id=446185251 instance=ExtResource("6_pgrj2")]
 position = Vector2(-17, -26)
 
 [node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("12_48805")]
-position = Vector2(-105, -58)
+position = Vector2(-43, 31)
 
 [node name="EntranceMarkers" type="Node2D" parent="." unique_id=2000728230]
 
@@ -152,7 +362,7 @@ position = Vector2(-105, -58)
 position = Vector2(-26, -94)
 
 [node name="start_game_position" type="Marker2D" parent="EntranceMarkers" unique_id=830529126]
-position = Vector2(-129, -37)
+position = Vector2(-43, 36)
 
 [node name="SceneTrigger2" parent="." unique_id=889034584 instance=ExtResource("14_6qnfl")]
 position = Vector2(-135, 120)
@@ -164,7 +374,7 @@ z_index = 1
 position = Vector2(108.5, -233.25)
 shape = SubResource("RectangleShape2D_61dx5")
 
-[node name="Interectable" parent="SceneTrigger2" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("11_8uelp")]
+[node name="Interectable" parent="SceneTrigger2" unique_id=195474032 groups=["Coletaveis"] instance=ExtResource("11_8uelp")]
 interact_name = "Elevador"
 is_not_object = true
 
@@ -185,4 +395,95 @@ scene_trigger = NodePath("../SceneTrigger2")
 process_physics_priority = -6
 player = NodePath("../../ManPlayer")
 
+[node name="Area2D" type="Area2D" parent="UI" unique_id=1222956211]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D" unique_id=1915402409]
+position = Vector2(-26, -96.5)
+shape = SubResource("RectangleShape2D_yf5fn")
+
+[node name="QUEST_MISSION" type="CanvasLayer" parent="." unique_id=1686386730 groups=["alto_contraste"]]
+script = ExtResource("18_h0r3n")
+
+[node name="ColorRect" type="ColorRect" parent="QUEST_MISSION" unique_id=896148046]
+offset_left = 374.0
+offset_top = 35.0
+offset_right = 480.0
+offset_bottom = 105.0
+color = Color(0.094684996, 0.09468501, 0.09468501, 1)
+
+[node name="Label2" type="Label" parent="QUEST_MISSION" unique_id=623343459 groups=["alto_contraste"]]
+offset_left = 410.0
+offset_top = 37.0
+offset_right = 451.0
+offset_bottom = 50.0
+text = "TAREFAS"
+label_settings = SubResource("LabelSettings_g4v7s")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QUEST_MISSION" unique_id=2030489717]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -87.0
+offset_top = -76.0
+offset_right = 62.0
+offset_bottom = -47.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="QUEST_MISSION/VBoxContainer" unique_id=666895531]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="QUEST_MISSION/VBoxContainer/HBoxContainer2" unique_id=76649463 groups=["alto_contraste"]]
+layout_mode = 2
+text = "APAGUE O FOGO"
+label_settings = SubResource("LabelSettings_xl0vw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="QUEST_MISSION/VBoxContainer/HBoxContainer2" unique_id=2136747803]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+frame = 1
+frame_progress = 1.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="QUEST_MISSION/VBoxContainer" unique_id=1178570110]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="QUEST_MISSION/VBoxContainer/HBoxContainer" unique_id=1149265948 groups=["alto_contraste"]]
+layout_mode = 2
+text = "LIBERE O ELEVADOR"
+label_settings = SubResource("LabelSettings_xl0vw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="QUEST_MISSION/VBoxContainer/HBoxContainer" unique_id=269822958]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+frame = 1
+frame_progress = 1.0
+
+[node name="Pedaco2" type="Sprite2D" parent="." unique_id=936507080]
+position = Vector2(-129, -85)
+rotation = -0.76281595
+texture = ExtResource("8_vkln7")
+
+[node name="Pedaco3" type="Sprite2D" parent="." unique_id=1042419351]
+position = Vector2(-104, -40.999992)
+rotation = -0.76281595
+texture = ExtResource("8_vkln7")
+
+[node name="Pedaco4" type="Sprite2D" parent="." unique_id=1574042398]
+position = Vector2(-79, -115.99999)
+rotation = -0.76281595
+texture = ExtResource("8_vkln7")
+
+[node name="Pedaco5" type="Sprite2D" parent="." unique_id=131602223]
+position = Vector2(-77.000015, -46)
+rotation = -0.76281595
+texture = ExtResource("8_vkln7")
+
+[connection signal="fogo_apagou" from="Perigos/Fogo3" to="QUEST_MISSION" method="_on_fogo_3_fogo_apagou"]
+[connection signal="fogo_apagou" from="Perigos/Fogo5" to="QUEST_MISSION" method="_on_fogo_5_fogo_apagou"]
 [connection signal="jogador_morreu" from="ManPlayer" to="UI/Controle_de_tempo" method="_on_man_player_jogador_morreu"]
+[connection signal="body_entered" from="UI/Area2D" to="QUEST_MISSION" method="_on_area_2d_body_entered"]

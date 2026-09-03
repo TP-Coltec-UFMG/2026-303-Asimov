@@ -32,6 +32,7 @@ const PASSO_ATUALIZACAO_COLLISION: float = 0.05
 const INTERVALO_DANO: float = 0.10
 const DANO_POR_TICK: int = 10
 
+signal fogo_apagou
 
 func _ready() -> void:
 	if particulas.process_material is ParticleProcessMaterial:
@@ -190,7 +191,10 @@ func apagar_fogo() -> void:
 
 	if save_enabled and player != null:
 		SaveGame.create_checkpoint(player)
+	
+	fogo_apagou.emit()
 	queue_free()
+	
 
 
 func restaurar_fogo_apagado() -> void:

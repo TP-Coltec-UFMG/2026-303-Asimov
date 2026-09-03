@@ -2,7 +2,7 @@ extends Control
 
 signal tempo_esgotado
 
-const TEMPO_LIMITE_DE_JOGO: float = 60 * 10
+const TEMPO_LIMITE_DE_JOGO: float = 60
 const TEMPO_INICIO_AUDIO: float = 11.0
 const TEMPO_INICIO_COUNT_DOWN: float = 46.0
 
@@ -54,7 +54,6 @@ func _process(delta: float) -> void:
 		ultimo_segundo_exibido = segundos_restantes
 		atualizar_label()
 		
-	print(tempo_decorrido)
 
 	if tempo_decorrido >= TEMPO_LIMITE_DE_JOGO:
 		fim_de_jogo()

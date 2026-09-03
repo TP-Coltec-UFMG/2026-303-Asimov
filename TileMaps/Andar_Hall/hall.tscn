@@ -5118,271 +5118,269 @@ tile_set = SubResource("TileSet_3gngh")
 tile_map_data = PackedByteArray("AAD1//f/AgAGAAIAAAAKAPf/AgAFAAIAAAD1//j/AgAGAAAAAAD1//n/AgAGAAAAAAD1//r/AgAGAAAAAAD1//v/AgAGAAAAAAD1//z/AgAGAAAAAAD1//3/AgAGAAAAAAD1//7/AgAGAAAAAAD1////AgAGAAAAAAD1/wAAAgAGAAAAAAD1/wEAAgAGAAAAAAD1/wIAAgAGAAAAAAD1/wMAAgAGAAAAAAD1/wQAAgAGAAAAAAD1/wUAAgAGAAAAAAD1/wYAAgAGAAAAAAD1/wcAAgAGAAAAAAD1/wgAAgAGAAAAAAD1/wkAAgAGAAAAAAD1/woAAgAGAAAAAAD1/wsAAgAGAAAAAAD1/wwAAgAGAAIAACAKAPj/AgAFAAAAAAAKAPn/AgAFAAAAAAAKAPr/AgAFAAAAAAAKAPv/AgAFAAAAAAAKAPz/AgAFAAAAAAAKAP3/AgAFAAAAAAAKAP7/AgAFAAAAAAAKAP//AgAFAAAAAAAKAAAAAgAFAAAAAAAKAAEAAgAFAAAAAAAKAAIAAgAFAAAAAAAKAAMAAgAFAAAAAAAKAAQAAgAFAAAAAAAKAAUAAgAFAAAAAAAKAAYAAgAFAAAAAAAKAAcAAgAFAAAAAAAKAAgAAgAFAAAAAAAKAAkAAgAFAAAAAAAKAAoAAgAFAAAAAAAKAAsAAgAFAAAAAAAKAAwAAgAFAAIAACD2/wwAAgAdABoAACD3/wwAAgAdABoAACD4/wwAAgAdABoAACD5/wwAAgAdABoAACD6/wwAAgAdABoAACD7/wwAAgAdABoAACD8/wwAAgAdABoAACD9/wwAAgAdABoAACD+/wwAAgAdABoAACD//wwAAgAdABoAACAAAAwAAgAdABoAACABAAwAAgAdABoAACACAAwAAgAdABoAACADAAwAAgAdABoAACAEAAwAAgAdABoAACAFAAwAAgAdABoAACAGAAwAAgAdABoAACAHAAwAAgAdABoAACAIAAwAAgAdABoAACAJAAwAAgAdABoAACA=")
 tile_set = SubResource("TileSet_fcnqv")
 
-[node name="Sprites" type="Node" parent="." unique_id=1359485735]
-
-[node name="Sprite02" type="Sprite2D" parent="Sprites" unique_id=1597051778]
+[node name="Sprite02" type="Sprite2D" parent="." unique_id=1597051778]
 position = Vector2(21.315, -84.97)
 scale = Vector2(0.23, 0.23)
 texture = ExtResource("5_cg0wi")
 
-[node name="Sprite53" type="Sprite2D" parent="Sprites" unique_id=771743637]
+[node name="Sprite53" type="Sprite2D" parent="." unique_id=771743637]
 position = Vector2(-69.31501, -8.105003)
 scale = Vector2(0.31, 0.31)
 texture = ExtResource("22_4qe7d")
 
-[node name="Sprite56" type="Sprite2D" parent="Sprites" unique_id=777925115]
+[node name="Sprite56" type="Sprite2D" parent="." unique_id=777925115]
 position = Vector2(-4.315033, -8.105003)
 scale = Vector2(0.31, 0.31)
 texture = ExtResource("22_4qe7d")
 
-[node name="Sprite57" type="Sprite2D" parent="Sprites" unique_id=1479041800]
+[node name="Sprite57" type="Sprite2D" parent="." unique_id=1479041800]
 position = Vector2(63.68495, -8.105003)
 scale = Vector2(0.31, 0.31)
 texture = ExtResource("22_4qe7d")
 
-[node name="Sprite03" type="Sprite2D" parent="Sprites" unique_id=1320193940]
+[node name="Sprite03" type="Sprite2D" parent="." unique_id=1320193940]
 position = Vector2(73.315, -84.97)
-rotation = -3.1415927
+rotation = 3.1415925
 scale = Vector2(0.23, -0.23)
 texture = ExtResource("5_cg0wi")
 
-[node name="Sprite50" type="Sprite2D" parent="Sprites" unique_id=177712686]
+[node name="Sprite50" type="Sprite2D" parent="." unique_id=177712686]
 position = Vector2(46.595, -110.8)
 scale = Vector2(0.23, 0.23)
 texture = ExtResource("6_j6p2g")
 
-[node name="Sprite04" type="Sprite2D" parent="Sprites" unique_id=262480550]
+[node name="Sprite04" type="Sprite2D" parent="." unique_id=262480550]
 position = Vector2(107.315, -84.97)
 scale = Vector2(0.23, 0.23)
 texture = ExtResource("5_cg0wi")
 
-[node name="Sprite05" type="Sprite2D" parent="Sprites" unique_id=949094450]
+[node name="Sprite05" type="Sprite2D" parent="." unique_id=949094450]
 position = Vector2(159.315, -84.97)
-rotation = -3.1415927
+rotation = 3.1415925
 scale = Vector2(0.23, -0.23)
 texture = ExtResource("5_cg0wi")
 
-[node name="Sprite51" type="Sprite2D" parent="Sprites" unique_id=1677450296]
+[node name="Sprite51" type="Sprite2D" parent="." unique_id=1677450296]
 position = Vector2(132.595, -110.8)
 scale = Vector2(0.23, 0.23)
 texture = ExtResource("6_j6p2g")
 
-[node name="Sprite46" type="Sprite2D" parent="Sprites" unique_id=438426026]
+[node name="Sprite46" type="Sprite2D" parent="." unique_id=438426026]
 position = Vector2(90, -102.00001)
 scale = Vector2(0.165, 0.165)
 texture = ExtResource("7_sy21g")
 
-[node name="Sprite58" type="Sprite2D" parent="Sprites" unique_id=1477597615]
+[node name="Sprite58" type="Sprite2D" parent="." unique_id=1477597615]
 position = Vector2(21.49498, -75.925)
 scale = Vector2(0.155, 0.155)
 texture = ExtResource("8_sy21g")
 
-[node name="Sprite62" type="Sprite2D" parent="Sprites" unique_id=667877215]
+[node name="Sprite62" type="Sprite2D" parent="." unique_id=667877215]
 position = Vector2(-95.505005, 105.07501)
 scale = Vector2(0.155, 0.155)
 texture = ExtResource("8_sy21g")
 
-[node name="Sprite63" type="Sprite2D" parent="Sprites" unique_id=1596637004]
+[node name="Sprite63" type="Sprite2D" parent="." unique_id=1596637004]
 position = Vector2(-157.505, 118.07501)
 scale = Vector2(0.155, 0.155)
 texture = ExtResource("8_sy21g")
 
-[node name="Sprite59" type="Sprite2D" parent="Sprites" unique_id=75623864]
+[node name="Sprite59" type="Sprite2D" parent="." unique_id=75623864]
 position = Vector2(72.49498, -75.925)
 scale = Vector2(0.155, 0.155)
 texture = ExtResource("8_sy21g")
 
-[node name="Sprite60" type="Sprite2D" parent="Sprites" unique_id=1588085372]
+[node name="Sprite60" type="Sprite2D" parent="." unique_id=1588085372]
 position = Vector2(107.49497, -75.925)
 scale = Vector2(0.155, 0.155)
 texture = ExtResource("8_sy21g")
 
-[node name="Sprite61" type="Sprite2D" parent="Sprites" unique_id=1693542431]
+[node name="Sprite61" type="Sprite2D" parent="." unique_id=1693542431]
 position = Vector2(158.49496, -75.925)
 scale = Vector2(0.155, 0.155)
 texture = ExtResource("8_sy21g")
 
-[node name="Sprite54" type="Sprite2D" parent="Sprites" unique_id=972734136]
+[node name="Sprite54" type="Sprite2D" parent="." unique_id=972734136]
 position = Vector2(46.999954, -86.00001)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("9_7pnml")
 
-[node name="Sprite55" type="Sprite2D" parent="Sprites" unique_id=2097888202]
+[node name="Sprite55" type="Sprite2D" parent="." unique_id=2097888202]
 position = Vector2(132.99994, -86.00001)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("9_7pnml")
 
-[node name="Sprite26" type="Sprite2D" parent="Sprites" unique_id=1809379100]
+[node name="Sprite26" type="Sprite2D" parent="." unique_id=1809379100]
 position = Vector2(-68.9, -11.599998)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("10_4mvnm")
 
-[node name="Sprite27" type="Sprite2D" parent="Sprites" unique_id=802683571]
+[node name="Sprite27" type="Sprite2D" parent="." unique_id=802683571]
 position = Vector2(-3.9000015, -11.599998)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("10_4mvnm")
 
-[node name="Sprite2D" type="Sprite2D" parent="Sprites" unique_id=1720874176]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1720874176]
 position = Vector2(64.1, -11.599998)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("10_4mvnm")
 
-[node name="Sprite31" type="Sprite2D" parent="Sprites" unique_id=2101574124]
+[node name="Sprite31" type="Sprite2D" parent="." unique_id=2101574124]
 position = Vector2(-22.75, 68.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_0j3ta")
 
-[node name="Sprite32" type="Sprite2D" parent="Sprites" unique_id=133228905]
+[node name="Sprite32" type="Sprite2D" parent="." unique_id=133228905]
 position = Vector2(9.25, 68.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_0j3ta")
 
-[node name="Sprite33" type="Sprite2D" parent="Sprites" unique_id=1017960060]
+[node name="Sprite33" type="Sprite2D" parent="." unique_id=1017960060]
 position = Vector2(41.25, 68.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_0j3ta")
 
-[node name="Sprite34" type="Sprite2D" parent="Sprites" unique_id=1684071637]
+[node name="Sprite34" type="Sprite2D" parent="." unique_id=1684071637]
 position = Vector2(-22.75, 103.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_0j3ta")
 
-[node name="Sprite35" type="Sprite2D" parent="Sprites" unique_id=1138105350]
+[node name="Sprite35" type="Sprite2D" parent="." unique_id=1138105350]
 position = Vector2(9.25, 103.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_0j3ta")
 
-[node name="Sprite36" type="Sprite2D" parent="Sprites" unique_id=1253317285]
+[node name="Sprite36" type="Sprite2D" parent="." unique_id=1253317285]
 position = Vector2(41.25, 103.375)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("11_0j3ta")
 
-[node name="Sprite13" type="Sprite2D" parent="Sprites" unique_id=1529596967]
+[node name="Sprite13" type="Sprite2D" parent="." unique_id=1529596967]
 position = Vector2(-134, 109.2)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("12_357kl")
 
-[node name="Sprite14" type="Sprite2D" parent="Sprites" unique_id=2142298517]
+[node name="Sprite14" type="Sprite2D" parent="." unique_id=2142298517]
 position = Vector2(-114.00001, 109.2)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("12_357kl")
 
-[node name="Sprite15" type="Sprite2D" parent="Sprites" unique_id=218320797]
+[node name="Sprite15" type="Sprite2D" parent="." unique_id=218320797]
 position = Vector2(-139.9, 191.3)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("13_37oqf")
 
-[node name="Sprite16" type="Sprite2D" parent="Sprites" unique_id=608307241]
+[node name="Sprite16" type="Sprite2D" parent="." unique_id=608307241]
 position = Vector2(-118.89999, 191.3)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("13_37oqf")
 
-[node name="Sprite17" type="Sprite2D" parent="Sprites" unique_id=786363745]
+[node name="Sprite17" type="Sprite2D" parent="." unique_id=786363745]
 position = Vector2(-97.89999, 191.30002)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("13_37oqf")
 
-[node name="Sprite19" type="Sprite2D" parent="Sprites" unique_id=993334543]
+[node name="Sprite19" type="Sprite2D" parent="." unique_id=993334543]
 position = Vector2(-79, 130)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("14_loqnb")
 
-[node name="Sprite20" type="Sprite2D" parent="Sprites" unique_id=2108022222]
+[node name="Sprite20" type="Sprite2D" parent="." unique_id=2108022222]
 position = Vector2(-114, 136)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("15_mrgk8")
 
-[node name="Sprite18" type="Sprite2D" parent="Sprites" unique_id=1924592958]
+[node name="Sprite18" type="Sprite2D" parent="." unique_id=1924592958]
 position = Vector2(-132, 167)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("16_a2u5j")
 
-[node name="Sprite21" type="Sprite2D" parent="Sprites" unique_id=967272028]
+[node name="Sprite21" type="Sprite2D" parent="." unique_id=967272028]
 position = Vector2(-157, 176)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("17_htpvg")
 
-[node name="Sprite06" type="Sprite2D" parent="Sprites" unique_id=1910484364]
+[node name="Sprite06" type="Sprite2D" parent="." unique_id=1910484364]
 position = Vector2(-158, 143)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("18_1wxba")
 
-[node name="Sprite39" type="Sprite2D" parent="Sprites" unique_id=1197034332]
+[node name="Sprite39" type="Sprite2D" parent="." unique_id=1197034332]
 position = Vector2(-77, 191.99998)
 scale = Vector2(0.16, 0.16)
 texture = ExtResource("21_blq1g")
 
-[node name="Sprite41" type="Sprite2D" parent="Sprites" unique_id=1058903074]
+[node name="Sprite41" type="Sprite2D" parent="." unique_id=1058903074]
 position = Vector2(159, 189)
 scale = Vector2(0.16, 0.16)
 texture = ExtResource("19_rupbu")
 
-[node name="Sprite48" type="Sprite2D" parent="Sprites" unique_id=1825663134]
+[node name="Sprite48" type="Sprite2D" parent="." unique_id=1825663134]
 position = Vector2(-81, -112)
 scale = Vector2(0.16, 0.16)
 texture = ExtResource("21_2ivvb")
 
-[node name="Sprite43" type="Sprite2D" parent="Sprites" unique_id=197419137]
+[node name="Sprite43" type="Sprite2D" parent="." unique_id=197419137]
 position = Vector2(-148, -99)
 scale = Vector2(0.275, 0.275)
 texture = ExtResource("24_blq1g")
 
-[node name="Sprite44" type="Sprite2D" parent="Sprites" unique_id=527155536]
+[node name="Sprite44" type="Sprite2D" parent="." unique_id=527155536]
 position = Vector2(-107.99999, -99)
 scale = Vector2(0.275, 0.275)
 texture = ExtResource("25_bct1m")
 
-[node name="Sprite45" type="Sprite2D" parent="Sprites" unique_id=203616721]
+[node name="Sprite45" type="Sprite2D" parent="." unique_id=203616721]
 position = Vector2(-161.7, -58.46)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("26_3tsoe")
 
-[node name="Sprite64" type="Sprite2D" parent="Sprites" unique_id=1774344108]
+[node name="Sprite64" type="Sprite2D" parent="." unique_id=1774344108]
 position = Vector2(-161.7, 95.54004)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("26_3tsoe")
 
-[node name="Sprite65" type="Sprite2D" parent="Sprites" unique_id=1393249613]
+[node name="Sprite65" type="Sprite2D" parent="." unique_id=1393249613]
 position = Vector2(161.30006, 95.54004)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("26_3tsoe")
 
-[node name="Sprite66" type="Sprite2D" parent="Sprites" unique_id=843827364]
+[node name="Sprite66" type="Sprite2D" parent="." unique_id=843827364]
 position = Vector2(161.30006, -20.459969)
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("26_3tsoe")
 
-[node name="Sprite47" type="Sprite2D" parent="Sprites" unique_id=1445669238]
+[node name="Sprite47" type="Sprite2D" parent="." unique_id=1445669238]
 position = Vector2(-68, -112)
 scale = Vector2(0.16, 0.16)
 texture = ExtResource("27_1bxjf")
 
-[node name="Sprite49" type="Sprite2D" parent="Sprites" unique_id=596300684]
+[node name="Sprite49" type="Sprite2D" parent="." unique_id=596300684]
 position = Vector2(-70.00001, -18.999998)
 scale = Vector2(0.175, 0.175)
 texture = ExtResource("28_de0n4")
 
-[node name="Sprite52" type="Sprite2D" parent="Sprites" unique_id=1296335831]
+[node name="Sprite52" type="Sprite2D" parent="." unique_id=1296335831]
 position = Vector2(-5.0000153, -18.999996)
 scale = Vector2(0.175, 0.175)
 texture = ExtResource("28_de0n4")
 
-[node name="MesaCinuca256x256(1)" type="Sprite2D" parent="Sprites" unique_id=998955662]
+[node name="MesaCinuca256x256(1)" type="Sprite2D" parent="." unique_id=998955662]
 position = Vector2(-9.999998, 159)
 scale = Vector2(0.326, 0.318)
 texture = ExtResource("29_blq1g")
 
-[node name="MesaCinuca256x256(1)2" type="Sprite2D" parent="Sprites" unique_id=226035552]
+[node name="MesaCinuca256x256(1)2" type="Sprite2D" parent="." unique_id=226035552]
 position = Vector2(94, 158.99998)
 scale = Vector2(0.326, 0.318)
 texture = ExtResource("29_blq1g")
 
-[node name="Sprite07" type="Sprite2D" parent="Sprites" unique_id=778408083]
+[node name="Sprite07" type="Sprite2D" parent="." unique_id=778408083]
 position = Vector2(-28.000002, -110)
 scale = Vector2(1.0937499, 1)
 texture = ExtResource("31_blq1g")
 
-[node name="PixelArtSmall(1)" type="Sprite2D" parent="Sprites" unique_id=609834353]
+[node name="PixelArtSmall(1)" type="Sprite2D" parent="." unique_id=609834353]
 position = Vector2(-128, 23.999994)
 scale = Vector2(0.067, 0.067)
 texture = ExtResource("31_bct1m")
