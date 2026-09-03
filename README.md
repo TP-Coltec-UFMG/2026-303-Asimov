@@ -39,12 +39,7 @@ OPÇÕES:
 
 - Ao clicar no botão da tela inical de opções a tela acima é aberta. É ali ficam as configurações de acessibilidade, linguagens, controles, volume sonoro, opções de aúdio e interface personalisada.
 
-<img width="1366" height="768" alt="Captura de tela 2026-07-08 231234" src="https://github.com/user-attachments/assets/609afd66-d1e6-4452-acaf-435ca06eb876" />
-
-
-
-
-
+ACESSIBILIDADES
 
 - Por fim, a tela de acessebilidade, lá o jogador pode configura as cores do jogo, com base no tipo de daltonismo que ele tem(se tiver). A intensidade das cores, para não machucar a visão, caso venha ser um problema por desgaste ocular, ou apenas por que jogou por muitas horas(esperamos isso!).
   Além disso temos a opção de ativar o leitor de tela, e as legendas, caso o player tenha algum tipo de deficiencia auditiva.
@@ -56,32 +51,50 @@ JOGABILIDADE
 
 - Na fase atual do jogo, já foram desenvolvidas diversas mecânicas fundamentais, bem como algumas áreas do datacenter da empresa. O personagem inicia sua jornada em seu escritório, marcando o começo da missão de salvar o mundo. Em uma perspectiva 2D top-down, o jogador pode se movimentar nas quatro direções (cima, baixo, esquerda e direita) utilizando as teclas clássicas (W, A, S, D). A interação com objetos é realizada pela tecla E, permitindo adicionar itens ao inventário, que possui capacidade para até cinco espaços.
 
-<img width="1366" height="768" alt="Captura de tela 2026-07-08 231442" src="https://github.com/user-attachments/assets/529c983d-d8cb-4bae-be8d-fee2a005d920" />
+<img width="951" height="540" alt="Captura de tela 2026-09-03 103818" src="https://github.com/user-attachments/assets/65d821ad-33df-441e-a93f-12c0ef0adff1" />
 
-- Os itens desenvolvidos até o momento são compartilhados entre os dois personagens de diferentes profissões. Entre eles estão: lanterna, arma de choque, cartão de acesso forte, cartão de acesso normal e livros. A lanterna pode ser ligada e desligada com a tecla Q, sendo essencial para iluminar ambientes escuros, já que a I.A. desliga a energia do local para dificultar o progresso do jogador e restringir o acesso a recursos importantes.
+- Os itens desenvolvidos até o momento são: lanterna, arma de choque, cartão de acesso forte, cartão de acesso normal, extintor de incêndio e laptop. A lanterna pode ser ligada e desligada com a tecla Q, sendo essencial para iluminar ambientes escuros, já que a I.A desliga a energia do local para dificultar o progresso do jogador e restringir o acesso a recursos importantes. O extintor tem a mesma mecânica da Lanterna, sendo acessado pela tecla V, você mudar a propagação dele com o mouse.
 
-<img width="1346" height="748" alt="Captura de tela 2026-07-09 121201" src="https://github.com/user-attachments/assets/785c24cc-03b7-4a52-99db-9267df4c5af3" />
-
-- A arma de choque será utilizada para nocautear robôs responsáveis pela segurança de áreas críticas da empresa, como o datacenter, o núcleo de energia e a sala do CEO. No entanto, a mecânica de ataque ainda está em desenvolvimento.
+CARTÕES :
 
 - Os cartões de acesso são utilizados para desbloquear portas restritas. O cartão verde (nível básico) permite abrir portas verdes, enquanto o cartão vermelho (nível avançado) dá acesso a áreas mais críticas do prédio.
 
+LANTERNA
+
+<img width="1346" height="748" alt="Captura de tela 2026-07-09 121201" src="https://github.com/user-attachments/assets/785c24cc-03b7-4a52-99db-9267df4c5af3" />
+
+EXTINTOR
+
+<img width="973" height="554" alt="Captura de tela 2026-09-03 095116" src="https://github.com/user-attachments/assets/0cf31f62-1269-4342-859d-e6315eec7caa" />
+
+MECÂNICA DE EMPURRAR E PUXAR
+
+- Ela é feita com as teclas F para empurrar e F + Shift para puxar, e pode ser ativada em itens que atrapalham o acesso do personagem a algum lugar ou item. Nesses itens aparecem ao lado deles a tecla F, mostrando que eles contém essa mecânica
+
+
+AMBIENTES :
+
+
 <img width="707" height="377" alt="image" src="https://github.com/user-attachments/assets/0541b3cd-6fce-48e3-8d87-1cc2417e8f62" />
 
-O edifício do jogo será composto por seis andares: datacenter, núcleo de energia, sala de ferramentas, salas principais, sala do chefe, hall e área de saída. A movimentação entre os andares é realizada por meio de um elevador. Atualmente, três andares já estão funcionais: sala de ferramentas, salas principais e núcleo de energia.
+O edifício do jogo será composto por seis andares: datacenter, sala de ferramentas, escritório, sala do chefe, hall e área de saída. A movimentação entre os andares é realizada por meio de um elevador. Atualmente, quatro andares já estão funcionais: sala de ferramentas, escritório, Datacenter e Hall.
 
+LOCOMOÇÃO ENTRE ANDARES:
+
+- Implementamos um elevador para se mover entre os andares:
+
+<img width="926" height="521" alt="Captura de tela 2026-09-03 101107" src="https://github.com/user-attachments/assets/98a871d9-65bc-4611-aead-64d96427db5d" />
+
+SALA DE FERRAMENTAS
 <img width="1346" height="748" alt="Captura de tela 2026-07-09 121201" src="https://github.com/user-attachments/assets/d2ab9cfb-61c1-4bb2-a3c2-c8db331aa571" />
-Sala de equipamentos e ferramentas
 
+DATACENTES
 <img width="1344" height="712" alt="Captura de tela 2026-07-09 121248" src="https://github.com/user-attachments/assets/dc8f7c00-9c3c-42c3-9a07-c0fdee79bca3" />
-Parte computacional do núcleo de energia
 
+ESCRITORIO E SALA DO CHEFE
 <img width="1366" height="768" alt="Captura de tela 2026-07-08 231442" src="https://github.com/user-attachments/assets/2f0d3aec-d4f0-4dc4-9efc-c7725dff0bea" />
-Salas principais e Salas do chefe
 
-Outra mecânica importante já implementada é o sistema de aquisição de conhecimento, no jogo ele não será coletável, mas fizemos assim para teste. À medida que o jogador completa tarefas, participa de minigames e adquire aprendizado, seu nível de inteligência aumenta, permitindo a realização de ações mais complexas, como programar, hackear sistemas e compreender circuitos e mapas.
 
-<img width="957" height="366" alt="image" src="https://github.com/user-attachments/assets/d3d7931e-4441-4342-b878-a5928eb277d8" />
 
 Por fim, foi desenvolvido um minigame de teste com o objetivo de validar as mecânicas de interação do personagem e servir como base para futuras implementações no jogo.
 
