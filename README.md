@@ -11,17 +11,20 @@ O jogador escolherá entre dois personagens que trabalham na empresa ASIMOV, uma
 
 Assim, o player vai aprender com o jogo sobre hacking, redes neurais, datacenters e como a Inteligência Artificial é feita, além das consequências de ignorar as 3 leis de Asimov no desenvolvimento dessa tecnologia.
 
-<img width="1022" height="611" alt="Captura de tela 2026-09-03 120401" src="https://github.com/user-attachments/assets/4ed0485a-2728-4727-9df2-6f39dd436c4f" />
+
 
 
 A PRIMEIRA TELA: 
+
+<img width="1022" height="611" alt="Captura de tela 2026-09-03 120401" src="https://github.com/user-attachments/assets/4ed0485a-2728-4727-9df2-6f39dd436c4f" />
 - Representa a tela que o player ve quando entra pela primeira vez no jogo, ja pondendo configurar a linguagem e o leitor de tela.
 
-<img width="1366" height="768" alt="Captura de tela 2026-07-08 231158" src="https://github.com/user-attachments/assets/d3153180-7ea6-48a0-b8be-a92e95188b4d" />
+
 
 
 TELA INICIAL
 
+<img width="1366" height="768" alt="Captura de tela 2026-07-08 231158" src="https://github.com/user-attachments/assets/d3153180-7ea6-48a0-b8be-a92e95188b4d" />
 - Basicamente, a primeira tela serve como um momento que o usuário poderia configurar o jogo para adequar melhor a gameplay à ele mesmo. É nesse parte em que, de fato,
   a experiência torna-se além de divertida, inclusiva.
 - Temos 3 botões, um de iniciar um novo jogo, um de sair, um de acessar um tutorial das principais mecânicas gerais do jogo e o outro que dá as opções de configuração.
@@ -53,19 +56,33 @@ JOGABILIDADE
 
 <img width="951" height="540" alt="Captura de tela 2026-09-03 103818" src="https://github.com/user-attachments/assets/65d821ad-33df-441e-a93f-12c0ef0adff1" />
 
-- Os itens desenvolvidos até o momento são: lanterna, arma de choque, cartão de acesso forte, cartão de acesso normal, extintor de incêndio e laptop. A lanterna pode ser ligada e desligada com a tecla Q, sendo essencial para iluminar ambientes escuros, já que a I.A desliga a energia do local para dificultar o progresso do jogador e restringir o acesso a recursos importantes. O extintor tem a mesma mecânica da Lanterna, sendo acessado pela tecla V, você mudar a propagação dele com o mouse.
+* Os itens desenvolvidos até o momento são: lanterna, arma de choque, cartão de acesso forte, cartão de acesso normal, extintor de incêndio e laptop.
 
-CARTÕES :
+### CARTÕES
 
-- Os cartões de acesso são utilizados para desbloquear portas restritas. O cartão verde (nível básico) permite abrir portas verdes, enquanto o cartão vermelho (nível avançado) dá acesso a áreas mais críticas do prédio.
+Os cartões de acesso são utilizados para desbloquear portas restritas. O cartão verde (nível básico) permite abrir portas verdes, enquanto o cartão vermelho (nível avançado) dá acesso a áreas mais críticas do prédio.
 
-LANTERNA
+### LANTERNA
+
+A lanterna pode ser ligada e desligada com a tecla **Q**, sendo essencial para iluminar ambientes escuros. A I.A. desliga a energia de determinados locais para dificultar o progresso do jogador e restringir seu acesso a recursos importantes.
 
 <img width="1346" height="748" alt="Captura de tela 2026-07-09 121201" src="https://github.com/user-attachments/assets/785c24cc-03b7-4a52-99db-9267df4c5af3" />
 
-EXTINTOR
+### EXTINTOR DE INCÊNDIO
+
+O extintor possui uma mecânica semelhante à da lanterna e pode ser utilizado pela tecla **V**. A direção da propagação do extintor pode ser alterada utilizando o mouse, permitindo ao jogador direcionar o jato para apagar o fogo.
+
+Além disso, a mecânica de **fogo** foi implementada no jogo. O fogo possui uma área de propagação e pode causar dano ao jogador. Conforme o jogador permanece em contato com as chamas, sua **vida diminui progressivamente** e, caso ela chegue a zero, o jogador é eliminado.
 
 <img width="973" height="554" alt="Captura de tela 2026-09-03 095116" src="https://github.com/user-attachments/assets/0cf31f62-1269-4342-859d-e6315eec7caa" />
+
+### ARMA DE CHOQUE
+
+A arma de choque foi desenvolvida como um dos recursos disponíveis para o jogador, podendo ser utilizada durante a exploração do ambiente e em situações de perigo.
+
+### LAPTOP
+
+O laptop também foi implementado como um recurso de interação do jogador, sendo utilizado em situações relacionadas aos sistemas e à tecnologia presentes no ambiente do jogo.
 
 MECÂNICA DE EMPURRAR E PUXAR
 
