@@ -16,7 +16,8 @@ Assim, o player vai aprender com o jogo sobre hacking, redes neurais, datacenter
 
 A PRIMEIRA TELA: 
 
-<img width="1022" height="611" alt="Captura de tela 2026-09-03 120401" src="https://github.com/user-attachments/assets/4ed0485a-2728-4727-9df2-6f39dd436c4f" />
+<img width="989" height="502" alt="image" src="https://github.com/user-attachments/assets/34bded7e-08c6-4da3-951e-a6d90b20a640" />
+
 - Representa a tela que o player ve quando entra pela primeira vez no jogo, ja pondendo configurar a linguagem e o leitor de tela.
 
 
@@ -37,7 +38,8 @@ TUTORIAL
 
 OPÇÕES:
 
-<img width="1366" height="768" alt="Captura de tela 2026-07-08 231220" src="https://github.com/user-attachments/assets/54290612-1ced-4a86-9897-15b65fd8bd68" />
+<img width="872" height="514" alt="Captura de tela 2026-09-03 102944" src="https://github.com/user-attachments/assets/cc7c543e-298c-49be-b2c4-2e7d5e86a627" />
+
 
 
 - Ao clicar no botão da tela inical de opções a tela acima é aberta. É ali ficam as configurações de acessibilidade, linguagens, controles, volume sonoro, opções de aúdio e interface personalisada.
@@ -47,7 +49,8 @@ ACESSIBILIDADES
 - Por fim, a tela de acessebilidade, lá o jogador pode configura as cores do jogo, com base no tipo de daltonismo que ele tem(se tiver). A intensidade das cores, para não machucar a visão, caso venha ser um problema por desgaste ocular, ou apenas por que jogou por muitas horas(esperamos isso!).
   Além disso temos a opção de ativar o leitor de tela, e as legendas, caso o player tenha algum tipo de deficiencia auditiva.
 
-<img width="1366" height="768" alt="Captura de tela 2026-07-08 231325" src="https://github.com/user-attachments/assets/e5e40a7a-1a77-4989-9a92-2a36584ba85e" />
+<img width="919" height="533" alt="Captura de tela 2026-09-03 103040" src="https://github.com/user-attachments/assets/b5a9d731-9107-421a-ba74-616354d1e46e" />
+
 
 
 JOGABILIDADE
