@@ -92,7 +92,6 @@ MECÂNICA DE EMPURRAR E PUXAR
 
 AMBIENTES :
 
-
 O edifício do jogo será composto por seis andares: datacenter, sala de ferramentas, escritório, sala do chefe, hall e área de saída. A movimentação entre os andares é realizada por meio de um elevador. Atualmente, quatro andares já estão funcionais: sala de ferramentas, escritório, Datacenter e Hall.
 
 LOCOMOÇÃO ENTRE ANDARES:
@@ -102,17 +101,41 @@ LOCOMOÇÃO ENTRE ANDARES:
 <img width="926" height="521" alt="Captura de tela 2026-09-03 101107" src="https://github.com/user-attachments/assets/98a871d9-65bc-4611-aead-64d96427db5d" />
 
 SALA DE FERRAMENTAS
+
 <img width="1346" height="748" alt="Captura de tela 2026-07-09 121201" src="https://github.com/user-attachments/assets/d2ab9cfb-61c1-4bb2-a3c2-c8db331aa571" />
 
-DATACENTES
+DATACENTER
+
 <img width="1344" height="712" alt="Captura de tela 2026-07-09 121248" src="https://github.com/user-attachments/assets/dc8f7c00-9c3c-42c3-9a07-c0fdee79bca3" />
 
 ESCRITORIO E SALA DO CHEFE
 <img width="1366" height="768" alt="Captura de tela 2026-07-08 231442" src="https://github.com/user-attachments/assets/2f0d3aec-d4f0-4dc4-9efc-c7725dff0bea" />
 
 
+MINIGAMES
 
-Por fim, foi desenvolvido um minigame de teste com o objetivo de validar as mecânicas de interação do personagem e servir como base para futuras implementações no jogo.
+- Por fim, foram desenvolvidos 4 minigames que simbolizam as tarefas técnicas que o protagonista vai ter que realizar para derrotar a I.A
+
+CIRCUITOS 
+
+- Esse minigame consiste numa simulação simples de um circuito elétrico que representará o jogador queimando os componentes do datacenter para danificar o funcionamento da I.A e a obtenção de suas bases de dados ao ponto dela parar de funcionar. O jogo consiste em 5 variações, cada uma com seu objetivo de queimar certos componentes do circuito, conectando fios, os cortando com o alicate e aumentando a tensão.
+
+<img width="800" height="453" alt="Captura de tela 2026-09-03 114701" src="https://github.com/user-attachments/assets/3e9168e4-d4e4-45b0-bd9a-939fc344d0ad" />
+
+VIGILÂNCIA/HACKING
+
+<img width="1760" height="988" alt="image" src="https://github.com/user-attachments/assets/ac47fd19-2969-4a43-be21-88b34167c10d" />
+
+
+VIÉSES
+
+<img width="1760" height="990" alt="image (2)" src="https://github.com/user-attachments/assets/2e474883-b7c0-48d4-81f1-24134d946637" />
+
+
+ENCONTRAR CAMINHO CIRCUITO
+
+<img width="1756" height="987" alt="image (4)" src="https://github.com/user-attachments/assets/19de2db7-cada-4a46-a0b7-2205a2af6981" />
+
 
 
 
