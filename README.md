@@ -56,31 +56,29 @@ JOGABILIDADE
 
 <img width="951" height="540" alt="Captura de tela 2026-09-03 103818" src="https://github.com/user-attachments/assets/65d821ad-33df-441e-a93f-12c0ef0adff1" />
 
-* Os itens desenvolvidos até o momento são: lanterna, arma de choque, cartão de acesso forte, cartão de acesso normal, extintor de incêndio e laptop.
+- Os itens desenvolvidos até o momento são: lanterna, arma de choque, cartão de acesso forte, cartão de acesso normal, extintor de incêndio e laptop.
 
-### CARTÕES
+CARTÕES
 
-Os cartões de acesso são utilizados para desbloquear portas restritas. O cartão verde (nível básico) permite abrir portas verdes, enquanto o cartão vermelho (nível avançado) dá acesso a áreas mais críticas do prédio.
+- Os cartões de acesso são utilizados para desbloquear portas restritas. O cartão verde (nível básico) permite abrir portas verdes, enquanto o cartão vermelho (nível avançado) dá acesso a áreas mais críticas do prédio.
 
-### LANTERNA
+<img width="707" height="377" alt="image" src="https://github.com/user-attachments/assets/0541b3cd-6fce-48e3-8d87-1cc2417e8f62" />
 
-A lanterna pode ser ligada e desligada com a tecla **Q**, sendo essencial para iluminar ambientes escuros. A I.A. desliga a energia de determinados locais para dificultar o progresso do jogador e restringir seu acesso a recursos importantes.
+LANTERNA
+
+- A lanterna pode ser ligada e desligada com a tecla **Q**, sendo essencial para iluminar ambientes escuros. A I.A. desliga a energia de determinados locais para dificultar o progresso do jogador e restringir seu acesso a recursos importantes.
 
 <img width="1346" height="748" alt="Captura de tela 2026-07-09 121201" src="https://github.com/user-attachments/assets/785c24cc-03b7-4a52-99db-9267df4c5af3" />
 
-### EXTINTOR DE INCÊNDIO
+EXTINTOR DE INCÊNDIO
 
-O extintor possui uma mecânica semelhante à da lanterna e pode ser utilizado pela tecla **V**. A direção da propagação do extintor pode ser alterada utilizando o mouse, permitindo ao jogador direcionar o jato para apagar o fogo.
+- O extintor possui uma mecânica semelhante à da lanterna e pode ser utilizado pela tecla **V**. A direção da propagação do extintor pode ser alterada utilizando o mouse, permitindo ao jogador direcionar o jato para apagar o fogo.
 
-Além disso, a mecânica de **fogo** foi implementada no jogo. O fogo possui uma área de propagação e pode causar dano ao jogador. Conforme o jogador permanece em contato com as chamas, sua **vida diminui progressivamente** e, caso ela chegue a zero, o jogador é eliminado.
+- Além disso, a mecânica de fogo foi implementada no jogo. O fogo possui uma área de propagação e pode causar dano ao jogador. Conforme o jogador permanece em contato com as chamas, sua vida diminui progressivamente e, caso ela chegue a zero, o jogador é eliminado.
 
 <img width="973" height="554" alt="Captura de tela 2026-09-03 095116" src="https://github.com/user-attachments/assets/0cf31f62-1269-4342-859d-e6315eec7caa" />
 
-### ARMA DE CHOQUE
-
-A arma de choque foi desenvolvida como um dos recursos disponíveis para o jogador, podendo ser utilizada durante a exploração do ambiente e em situações de perigo.
-
-### LAPTOP
+LAPTOP
 
 O laptop também foi implementado como um recurso de interação do jogador, sendo utilizado em situações relacionadas aos sistemas e à tecnologia presentes no ambiente do jogo.
 
@@ -88,11 +86,12 @@ MECÂNICA DE EMPURRAR E PUXAR
 
 - Ela é feita com as teclas F para empurrar e F + Shift para puxar, e pode ser ativada em itens que atrapalham o acesso do personagem a algum lugar ou item. Nesses itens aparecem ao lado deles a tecla F, mostrando que eles contém essa mecânica
 
+<img width="1001" height="562" alt="Captura de tela 2026-09-03 095145" src="https://github.com/user-attachments/assets/0b22149e-8983-40b8-a564-14b7f4f86991" />
+
+
 
 AMBIENTES :
 
-
-<img width="707" height="377" alt="image" src="https://github.com/user-attachments/assets/0541b3cd-6fce-48e3-8d87-1cc2417e8f62" />
 
 O edifício do jogo será composto por seis andares: datacenter, sala de ferramentas, escritório, sala do chefe, hall e área de saída. A movimentação entre os andares é realizada por meio de um elevador. Atualmente, quatro andares já estão funcionais: sala de ferramentas, escritório, Datacenter e Hall.
 
