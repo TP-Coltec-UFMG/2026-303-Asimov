@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://ds77qm40evcoj"]
 
 [ext_resource type="Script" uid="uid://mtm5plwvaoj4" path="res://Scenes/scripts/sala_chefe.gd" id="1_aiqco"]
-[ext_resource type="PackedScene" uid="uid://b7ciyujrqamcr" path="res://TileMaps/sala.tscn" id="1_roblp"]
+[ext_resource type="PackedScene" uid="uid://b7ciyujrqamcr" path="res://TileMaps/Andar_escritorio/sala.tscn" id="1_roblp"]
 [ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="3_aiqco"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_dc347"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="5_a2vgb"]
-[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="5_sgpf2"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="5_sgpf2"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="6_a2vgb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dc347"]

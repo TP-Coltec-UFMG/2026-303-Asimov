@@ -66,7 +66,8 @@ func _on_interact_range_area_exited(area: Area2D) -> void:
 func _mostra_interacao(delta: float) -> void:
 	var objeto_atual = current_interactions[0].get_parent()
 	interact_button.visible = true
-	interact_button_label.text = "E"
+	var event = InputMap.action_get_events("interact")[0]
+	interact_button_label.text = OS.get_keycode_string(event.physical_keycode)
 
 	if objeto_atual != objeto_destacado:
 		_parar_interacao()

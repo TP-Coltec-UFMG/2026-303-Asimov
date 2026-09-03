@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_aes5c"]
 [ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="2_o85rk"]
-[ext_resource type="PackedScene" uid="uid://nk3t56ltg47k" path="res://TileMaps/escritorio.tscn" id="3_kribp"]
+[ext_resource type="PackedScene" uid="uid://nk3t56ltg47k" path="res://TileMaps/Andar_escritorio/escritorio.tscn" id="3_kribp"]
 [ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="5_3b6cl"]
 [ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="6_iqkel"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="7_rnk6w"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="8_eb2mc"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="10_ekofs"]
-[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="10_wvila"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="10_wvila"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="11_vhcpt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]

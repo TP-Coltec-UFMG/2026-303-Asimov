@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bhpxogjjjv5ef" path="res://NPC'S/Clarxs/clarxs.gd" id="1_aekyl"]
 [ext_resource type="Texture2D" uid="uid://cu63a735oxyf" path="res://NPC'S/Clarxs/AlexUpDown.png" id="2_aekyl"]
 [ext_resource type="Texture2D" uid="uid://dy03jegfblbn0" path="res://NPC'S/Clarxs/AlexSide.png" id="3_0ouef"]
-[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/06_purple_crimson.png" id="3_23wyb"]
+[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/Clarxs/06_purple_crimson.png" id="3_23wyb"]
 [ext_resource type="FontFile" uid="uid://e6o7s3fomjpp" path="res://Fonts/PixelifySans-SemiBold.ttf" id="4_0ouef"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23wyb"]

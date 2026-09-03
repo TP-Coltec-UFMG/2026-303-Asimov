@@ -6,6 +6,7 @@ func _ready() -> void:
 func _on_toggled(value: bool) -> void:
 	Configs._change_alto_contraste(value)
 	HighContrast.set_enabled(value)
+	SaveLoad._save()
 	if value:
 		if Configs.configs.leitor_de_tela:
 			LeitorDeTela._ler_texto(atr("Alto Contraste Ligado"))

@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="3_86ehh"]
 [ext_resource type="Script" uid="uid://tpjjvufd1tyc" path="res://Sprites/selectionpage/selectionbutton.gd" id="3_h7hbm"]
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="5_h7hbm"]
-[ext_resource type="Script" path="res://Scripts/UI/menu_input_router.gd" id="6_menu_input"]
+[ext_resource type="Script" uid="uid://dsipk6ntdfmhe" path="res://Scripts/UI/menu_input_router.gd" id="6_menu_input"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
 atlas = ExtResource("5_h7hbm")
@@ -73,7 +73,7 @@ animations = [{
 
 [node name="slectionpage" type="Node2D" unique_id=1755590176]
 
-[node name="MenuInputRouter" type="Node" parent="."]
+[node name="MenuInputRouter" type="Node" parent="." unique_id=691436893]
 script = ExtResource("6_menu_input")
 
 [node name="Control" type="Control" parent="." unique_id=1858804346]
@@ -84,6 +84,7 @@ offset_bottom = 40.0
 script = ExtResource("1_72v1o")
 
 [node name="Job" type="Control" parent="Control" unique_id=1221201597]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -210,7 +211,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Difficulty" type="Control" parent="Control" unique_id=1787481485]
-visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0

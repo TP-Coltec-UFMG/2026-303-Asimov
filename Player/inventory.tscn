@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://n2hnejkagkk0"]
 
-[ext_resource type="Script" uid="uid://bds4yigtoy1bc" path="res://Scripts/inventory.gd" id="1_ogkbk"]
+[ext_resource type="Script" uid="uid://bds4yigtoy1bc" path="res://Player/Scripts/inventory.gd" id="1_ogkbk"]
 [ext_resource type="Texture2D" uid="uid://ctla0j2ge4cca" path="res://Sprites/ui/item_slot_default_background.png" id="2_ogkbk"]
-[ext_resource type="Script" uid="uid://7h3kghxq5mju" path="res://Scripts/slot.gd" id="3_uj6eu"]
-[ext_resource type="Script" uid="uid://p6n57k8c5gx2" path="res://Scripts/slot_4.gd" id="4_30xvo"]
+[ext_resource type="Script" uid="uid://7h3kghxq5mju" path="res://Player/Scripts/slot.gd" id="3_uj6eu"]
+[ext_resource type="Script" uid="uid://p6n57k8c5gx2" path="res://Player/Scripts/slot_4.gd" id="4_30xvo"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uj6eu"]
 light_mode = 1

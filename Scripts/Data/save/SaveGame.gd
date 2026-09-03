@@ -2,9 +2,10 @@ extends Node
 
 const FILE_PATH: String = "user://SaveFileGameState.json"
 const CHARACTER_SELECTION_SCENE: String = "res://Scenes/slectionpage.tscn"
+const MAIN_MENU_SCENE: String = "res://Scenes/principal.tscn"
 
 const INVALID_CHECKPOINT_POS: Vector2 = Vector2(-999, -999)
-const SAVE_VERSION: int = 3
+const SAVE_VERSION: int = 4
 
 # Tempo registrado no último checkpoint.
 var tempo_restante: float = -1.0
@@ -20,8 +21,10 @@ var checkpoint_pos: Vector2 = INVALID_CHECKPOINT_POS
 var state_player: Dictionary = {}
 var checkpoint_world_state: Dictionary = {}
 var checkpoint_progress: Dictionary = {}
+var checkpoint_audio_state: Dictionary = {}
 
 var restore_checkpoint_pending: bool = false
+var restore_audio_pending: bool = false
 
 
 func _ready() -> void:
@@ -46,6 +49,7 @@ func _save() -> void:
 		"state_player": state_player.duplicate(true),
 		"world_state": checkpoint_world_state.duplicate(true),
 		"progress": checkpoint_progress.duplicate(true),
+		"audio_state": checkpoint_audio_state.duplicate(true),
 		"tempo_restante": tempo_restante
 	}
 
@@ -113,6 +117,16 @@ func _load() -> void:
 	if loaded_progress is Dictionary:
 		checkpoint_progress = loaded_progress.duplicate(true)
 
+	var loaded_audio: Variant = data.get(
+		"audio_state",
+		{}
+	)
+
+	checkpoint_audio_state.clear()
+
+	if loaded_audio is Dictionary:
+		checkpoint_audio_state = loaded_audio.duplicate(true)
+
 	tempo_restante = float(
 		data.get("tempo_restante", -1.0)
 	)
@@ -162,7 +176,10 @@ func capturar_tempo_atual() -> void:
 		)
 
 
-func create_checkpoint(player: Player) -> void:
+func create_checkpoint(
+	player: Player,
+	audio_state_override: Dictionary = {}
+) -> void:
 	if player == null:
 		return
 
@@ -184,6 +201,15 @@ func create_checkpoint(player: Player) -> void:
 		"difficulty": Configs.configs.get("difficulty", "")
 	}
 
+	if audio_state_override.is_empty():
+		checkpoint_audio_state = (
+			MusicController.get_checkpoint_state().duplicate(true)
+		)
+	else:
+		# O menu de pausa captura isto antes de pausar a SceneTree. Assim o
+		# silêncio temporário do menu nunca substitui o áudio real da partida.
+		checkpoint_audio_state = audio_state_override.duplicate(true)
+
 	capturar_tempo_atual()
 	tempo_restante = tempo_atual
 
@@ -203,6 +229,11 @@ func has_checkpoint() -> bool:
 	)
 
 
+func persist_checkpoint() -> void:
+	# Regrava somente o checkpoint já capturado. Nunca consulta o áudio do menu.
+	_save()
+
+
 func load_last_checkpoint() -> bool:
 	if not has_checkpoint():
 		return false
@@ -214,9 +245,33 @@ func load_last_checkpoint() -> bool:
 	# Descarta o tempo atual e recupera o tempo do checkpoint.
 	tempo_atual = tempo_restante
 	restore_checkpoint_pending = true
+	restore_audio_pending = not checkpoint_audio_state.is_empty()
+
+	if restore_audio_pending:
+		# Mantém os playbacks vivos, mas pausados, durante a troca. A restauração
+		# usa seek() neles depois que a nova cena terminar de inicializar.
+		MusicController.begin_checkpoint_restore()
+	else:
+		# Save antigo: não há posição para restaurar, então a cena pode iniciar
+		# suas músicas normalmente.
+		MusicController.stop_all_audio()
 
 	scene_manager.player = null
 	scene_manager.last_scene_name = ""
+
+	var scene_changed_callback := Callable(
+		self,
+		"_on_checkpoint_scene_changed"
+	)
+
+	if get_tree().scene_changed.is_connected(scene_changed_callback):
+		get_tree().scene_changed.disconnect(scene_changed_callback)
+
+	if restore_audio_pending:
+		get_tree().scene_changed.connect(
+			scene_changed_callback,
+			CONNECT_ONE_SHOT
+		)
 
 	var erro: Error = get_tree().change_scene_to_file(
 		checkpoint_scene_path
@@ -224,6 +279,11 @@ func load_last_checkpoint() -> bool:
 
 	if erro != OK:
 		restore_checkpoint_pending = false
+		restore_audio_pending = false
+
+		if get_tree().scene_changed.is_connected(scene_changed_callback):
+			get_tree().scene_changed.disconnect(scene_changed_callback)
+
 		push_error(
 			"Não foi possível carregar a cena do checkpoint: "
 			+ checkpoint_scene_path
@@ -247,6 +307,24 @@ func apply_pending_checkpoint(player: Player) -> bool:
 
 	restore_checkpoint_pending = false
 	return true
+
+
+func _on_checkpoint_scene_changed() -> void:
+	_restore_audio_after_scene_ready()
+
+
+func _restore_audio_after_scene_ready() -> void:
+	# Alguns nós da fase iniciam alarme/música em _ready(). Esperar um frame
+	# garante que nenhum desses play() volte a faixa para zero após o restore.
+	await get_tree().process_frame
+
+	if not restore_audio_pending:
+		return
+
+	MusicController.load_checkpoint_state(
+		checkpoint_audio_state.duplicate(true)
+	)
+	restore_audio_pending = false
 
 
 func restaurar_tempo_checkpoint() -> void:
@@ -322,16 +400,54 @@ func is_object_collected(object_id: String) -> bool:
 	return load_object_state(object_id) == true
 
 
+func save_current_session(
+	audio_state_override: Dictionary = {}
+) -> bool:
+	var current_scene := get_tree().current_scene
+
+	# O menu mantém os players globais pausados. Uma notificação de fechamento
+	# recebida aqui não pode substituir o áudio salvo durante a fase.
+	if (
+		current_scene == null
+		or current_scene.scene_file_path == MAIN_MENU_SCENE
+	):
+		return false
+
+	var current_player := get_tree().get_first_node_in_group(
+		"player"
+	) as Player
+
+	if current_player == null:
+		return false
+
+	if not current_scene.is_ancestor_of(current_player):
+		return false
+
+	if not current_player.checkpoint_enabled:
+		return false
+
+	# Fechar a janela na tela de morte não pode substituir o último checkpoint
+	# válido por um estado em que o jogador já está morto.
+	if current_player.get_vida() <= 0.0:
+		return false
+
+	create_checkpoint(current_player, audio_state_override)
+	return true
+
+
 func clear_save() -> void:
 	save_data.clear()
 	checkpoint_world_state.clear()
 	state_player.clear()
 	checkpoint_progress.clear()
+	checkpoint_audio_state.clear()
 
 	checkpoint_scene_path = ""
 	checkpoint_player_scene_path = ""
 	checkpoint_pos = INVALID_CHECKPOINT_POS
 	restore_checkpoint_pending = false
+	restore_audio_pending = false
+	MusicController.stop_all_audio()
 
 	tempo_restante = -1.0
 	tempo_atual = -1.0
@@ -361,3 +477,11 @@ func reset_progress() -> void:
 	get_tree().change_scene_to_file(
 		CHARACTER_SELECTION_SCENE
 	)
+
+
+func _notification(what: int) -> void:
+	if (
+		what == NOTIFICATION_WM_CLOSE_REQUEST
+		or what == NOTIFICATION_APPLICATION_PAUSED
+	):
+		save_current_session()

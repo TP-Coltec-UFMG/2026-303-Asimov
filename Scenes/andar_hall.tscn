@@ -3,28 +3,30 @@
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_nqlva"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="3_2s751"]
 [ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="4_48805"]
-[ext_resource type="Texture2D" uid="uid://dgisco7ahvjd1" path="res://pedaco_1.png" id="5_8q7s7"]
+[ext_resource type="Texture2D" uid="uid://dgisco7ahvjd1" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_1.png" id="5_8q7s7"]
 [ext_resource type="PackedScene" uid="uid://ce1wy22xikmix" path="res://Objects/fogo.tscn" id="5_48805"]
 [ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs/Clarxs.tscn" id="5_vvkyc"]
 [ext_resource type="PackedScene" uid="uid://cyl02mn4y4x7c" path="res://NPC'S/marker_point.tscn" id="6_pgrj2"]
-[ext_resource type="Texture2D" uid="uid://b0elgotgwc83h" path="res://pedaco_3.png" id="7_nflo4"]
-[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/06_purple_crimson.png" id="7_nqlva"]
-[ext_resource type="Texture2D" uid="uid://cfw8c3ewx78lf" path="res://pedaco_2.png" id="8_vkln7"]
-[ext_resource type="PackedScene" uid="uid://dsyhrp3kskfss" path="res://hall_quebrado.tscn" id="9_1xwy5"]
-[ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://luz_emergencia.tscn" id="9_xl0vw"]
+[ext_resource type="Texture2D" uid="uid://b0elgotgwc83h" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_3.png" id="7_nflo4"]
+[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/Clarxs/06_purple_crimson.png" id="7_nqlva"]
+[ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="8_mrwqp"]
+[ext_resource type="Texture2D" uid="uid://cfw8c3ewx78lf" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_2.png" id="8_vkln7"]
+[ext_resource type="PackedScene" uid="uid://dsyhrp3kskfss" path="res://TileMaps/Andar_Hall/hall_quebrado.tscn" id="9_1xwy5"]
+[ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://Objects/luz_emergencia.tscn" id="9_xl0vw"]
 [ext_resource type="Texture2D" uid="uid://dei4d8qxmiky" path="res://Sprites/objects/alerta_luz.png" id="10_xodlo"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="11_8uelp"]
-[ext_resource type="Texture2D" uid="uid://1v81ofhv621m" path="res://Sprites/objects/ChatGPT Image 2 de set. de 2026, 12_16_04-1.png-1.png.png" id="11_h0r3n"]
+[ext_resource type="Texture2D" uid="uid://1v81ofhv621m" path="res://Sprites/objects/alarme2.png" id="11_h0r3n"]
 [ext_resource type="PackedScene" uid="uid://beyeq37qyobrm" path="res://Player/ManPlayer.tscn" id="12_48805"]
 [ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="13_xl0vw"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="14_6qnfl"]
-[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="14_8uelp"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="14_8uelp"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="15_wweuw"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_ysydw"]
-[ext_resource type="Script" uid="uid://778gwebo6sfc" path="res://Scenes/quest_mission.gd" id="18_h0r3n"]
+[ext_resource type="Script" uid="uid://778gwebo6sfc" path="res://Scenes/scripts/quest_mission.gd" id="18_h0r3n"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="18_pfqqk"]
-[ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://New_Piskel.png" id="19_xl0vw"]
-[ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://New_Piskel1.png" id="20_xodlo"]
+[ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://Sprites/ui/New_Piskel.png" id="19_xl0vw"]
+[ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://Sprites/ui/New_Piskel1.png" id="20_xodlo"]
+[ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="26_nflo4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8q7s7"]
 size = Vector2(16, 12)
@@ -40,6 +42,70 @@ size = Vector2(9, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
 size = Vector2(30, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(0, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61q4e"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(384, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_846ot"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(768, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1el0"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(1152, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj1q6"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(1536, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfdv3"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(1920, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hv3k8"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(2304, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8red6"]
+atlas = ExtResource("26_nflo4")
+region = Rect2(2688, 0, 384, 216)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vkln7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2iras")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_61q4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_846ot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1el0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj1q6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfdv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hv3k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8red6")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 20.0
+}]
 
 [sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
 font = ExtResource("18_pfqqk")
@@ -230,6 +296,9 @@ position = Vector2(-159, -32.000015)
 rotation = 0.87187374
 texture = ExtResource("7_nflo4")
 
+[node name="Cartao_forte" parent="Coletaveis" unique_id=1025788070 instance=ExtResource("8_mrwqp")]
+position = Vector2(-21, 30)
+
 [node name="Perigos" type="Node" parent="." unique_id=1469058963]
 
 [node name="Fogo" parent="Perigos" unique_id=1620408042 instance=ExtResource("5_48805")]
@@ -400,6 +469,13 @@ player = NodePath("../../ManPlayer")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D" unique_id=1915402409]
 position = Vector2(-26, -96.5)
 shape = SubResource("RectangleShape2D_yf5fn")
+
+[node name="Transition" type="AnimatedSprite2D" parent="UI" unique_id=954264057]
+z_index = 1
+position = Vector2(239.99998, 135)
+scale = Vector2(1.25, 1.2500001)
+sprite_frames = SubResource("SpriteFrames_vkln7")
+frame = 7
 
 [node name="QUEST_MISSION" type="CanvasLayer" parent="." unique_id=1686386730 groups=["alto_contraste"]]
 script = ExtResource("18_h0r3n")

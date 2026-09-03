@@ -7,6 +7,8 @@ extends Control
 const AJUSTE_LABEL_GRANDE: float = 6.0
 const GRUPO_INTERFACE: String = "interface_escalavel"
 
+var audio_state_before_pause: Dictionary = {}
+
 
 func _ready() -> void:
 	HighContrast.apply_to_tree(self)
@@ -294,11 +296,17 @@ func esta_dentro_do_logo(node: Node) -> bool:
 
 func resume():
 	get_tree().paused = false
+	audio_state_before_pause.clear()
 	$AnimationPlayer.play_backwards("blur")
 	hide()
 
 
 func pause():
+	# O AudioStreamPlayer pode informar playing=false depois que a SceneTree é
+	# pausada. Guardamos antes disso o estado que realmente estava tocando.
+	audio_state_before_pause = (
+		MusicController.get_checkpoint_state().duplicate(true)
+	)
 	get_tree().paused = true
 	$AnimationPlayer.play("blur")
 	show()
@@ -339,11 +347,31 @@ func _on_options_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	if get_tree().paused:
+		# Salva e silencia no próprio clique. Ao tirar o pause da SceneTree, o
+		# Godot pode limpar o stream_paused automático dos AudioStreamPlayers;
+		# por isso a fase atual só é removida depois do bloqueio. A SceneTree é
+		# reativada quando os nós e áudios locais da fase já saíram da árvore.
+		SaveGame.save_current_session(audio_state_before_pause)
+		MusicController.pause_all_audio()
 		transition.visible = true
 		transition.play("default")
 		await transition.animation_finished
-		resume()
-		get_tree().change_scene_to_file("res://Scenes/principal.tscn")
+
+		var scene_tree := get_tree()
+		var erro := scene_tree.change_scene_to_file(
+			"res://Scenes/principal.tscn"
+		)
+
+		if erro != OK:
+			MusicController.allow_scene_audio()
+			resume()
+			push_error("Não foi possível voltar ao menu principal.")
+			return
+
+		# Não use resume() antes da troca: ele reativava por um frame todos os
+		# AudioStreamPlayers locais da fase que estava sendo encerrada.
+		scene_tree.paused = false
+		MusicController.pause_all_audio()
 
 
 # ---- M E N U  O P C O E S  ----

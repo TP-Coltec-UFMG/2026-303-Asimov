@@ -274,7 +274,7 @@ func _apply_input_mode_visuals() -> void:
 		else:
 			_indicator_icon.texture = MOUSE_ICON
 			_indicator_panel.accessibility_name = "Modo mouse"
-
+	@warning_ignore("incompatible_ternary")
 	var focus_style: StyleBox = (
 		_keyboard_focus_style if _input_mode == InputMode.KEYBOARD else _mouse_focus_style
 	)
@@ -311,7 +311,8 @@ func _refresh_controls() -> void:
 	var host := get_parent()
 	if host == null:
 		return
-
+		
+	@warning_ignore("incompatible_ternary")
 	var focus_style: StyleBox = (
 		_keyboard_focus_style if _input_mode == InputMode.KEYBOARD else _mouse_focus_style
 	)
@@ -447,10 +448,12 @@ func _configure_scope_navigation(scope: Node) -> void:
 	var controls := _collect_focusable_controls(scope)
 	var first_content_control: Control
 	var back_buttons: Array[Control] = []
+	
 
 	for control in controls:
 		if _is_back_button(control):
 			back_buttons.append(control)
+			@warning_ignore("unassigned_variable")
 		elif first_content_control == null:
 			first_content_control = control
 
@@ -529,106 +532,86 @@ func _configure_controls_columns(scope: Node) -> void:
 	if scope.name != &"Controles":
 		return
 
-	var left_paths: Array[String] = [
-		"VBoxContainer/InputRemapButton",
-		"VBoxContainer/Inputremapdown",
-		"VBoxContainer/Inputremapright",
-		"VBoxContainer/Inputremapleft",
-		"VBoxContainer/InputremapRun",
-		"VBoxContainer/InputremapInteract",
-		"VBoxContainer/InputremapUse_Card",
-	]
-
-	var right_paths: Array[String] = [
-		"VBoxContainer3/InputremapSelect_lanterna",
-		"VBoxContainer3/InputremapSelect_arma",
-		"VBoxContainer3/InputremapSelect_card",
-		"VBoxContainer3/InputremapUse_laptop",
-		"VBoxContainer3/InputremapUse_faca",
-		"VBoxContainer3/InputremapAscende_Lanterna",
-		"VBoxContainer3/InputremapPause",
-	]
-
-	var left_controls: Array[Control] = []
-	var right_controls: Array[Control] = []
-
-	for path in left_paths:
-		var control := scope.get_node_or_null(path) as Control
-		if control != null:
-			left_controls.append(control)
-
-	for path in right_paths:
-		var control := scope.get_node_or_null(path) as Control
-		if control != null:
-			right_controls.append(control)
-
-	var pair_count: int = min(
-		left_controls.size(),
-		right_controls.size()
+	var columns_root := scope.get_node_or_null(
+		"RemapPanel/Margin/Content/Columns"
 	)
 
-	for index in range(pair_count):
-		var left_control := left_controls[index]
-		var right_control := right_controls[index]
+	if columns_root == null:
+		return
 
-		# Navegação horizontal entre as colunas.
-		_set_focus_neighbor(
-			left_control,
-			right_control,
-			&"right"
-		)
-		_set_focus_neighbor(
-			right_control,
-			left_control,
-			&"left"
-		)
+	var control_columns: Array = []
 
-		# Navegação vertical na coluna esquerda.
-		if index > 0:
-			_set_focus_neighbor(
-				left_control,
-				left_controls[index - 1],
-				&"up"
-			)
+	for group_panel: Node in columns_root.get_children():
+		var column_controls: Array[Control] = []
 
-		if index < left_controls.size() - 1:
-			_set_focus_neighbor(
-				left_control,
-				left_controls[index + 1],
-				&"down"
-			)
+		for control: Control in _collect_focusable_controls(group_panel):
+			if control is InputRemapButton:
+				column_controls.append(control)
 
-		# Navegação vertical na coluna direita.
-		if index > 0:
-			_set_focus_neighbor(
-				right_control,
-				right_controls[index - 1],
-				&"up"
-			)
+		if not column_controls.is_empty():
+			control_columns.append(column_controls)
 
-		if index < right_controls.size() - 1:
-			_set_focus_neighbor(
-				right_control,
-				right_controls[index + 1],
-				&"down"
-			)
+	if control_columns.is_empty():
+		return
 
-	# Os dois primeiros controles podem subir até o X.
+	for column_index: int in range(control_columns.size()):
+		var column_controls: Array = control_columns[column_index]
+
+		for row_index: int in range(column_controls.size()):
+			var control := column_controls[row_index] as Control
+
+			if row_index > 0:
+				_set_focus_neighbor(
+					control,
+					column_controls[row_index - 1] as Control,
+					&"up"
+				)
+
+			if row_index < column_controls.size() - 1:
+				_set_focus_neighbor(
+					control,
+					column_controls[row_index + 1] as Control,
+					&"down"
+				)
+
+			if column_index > 0:
+				var left_column: Array = control_columns[column_index - 1]
+				var left_row: int = mini(
+					row_index,
+					left_column.size() - 1
+				)
+				_set_focus_neighbor(
+					control,
+					left_column[left_row] as Control,
+					&"left"
+				)
+
+			if column_index < control_columns.size() - 1:
+				var right_column: Array = control_columns[column_index + 1]
+				var right_row: int = mini(
+					row_index,
+					right_column.size() - 1
+				)
+				_set_focus_neighbor(
+					control,
+					right_column[right_row] as Control,
+					&"right"
+				)
+
+	# O primeiro controle de cada coluna pode subir até o X.
 	var back_button := scope.get_node_or_null(
 		"BackToMenuButton"
 	) as Control
 
 	if back_button != null:
-		if not left_controls.is_empty():
-			_set_focus_neighbor(
-				left_controls[0],
-				back_button,
-				&"up"
-			)
+		for column_value: Variant in control_columns:
+			var column_controls: Array = column_value
 
-		if not right_controls.is_empty():
+			if column_controls.is_empty():
+				continue
+
 			_set_focus_neighbor(
-				right_controls[0],
+				column_controls[0] as Control,
 				back_button,
 				&"up"
 			)

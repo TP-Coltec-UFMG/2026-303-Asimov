@@ -29,7 +29,7 @@
 [ext_resource type="Texture2D" uid="uid://bosao8auk2ffb" path="res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_47.png" id="27_1bxjf"]
 [ext_resource type="Texture2D" uid="uid://bwf1sq85w30xi" path="res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_42.png" id="28_de0n4"]
 [ext_resource type="Texture2D" uid="uid://63wcsrfhwyoh" path="res://TileMaps/Andar_Hall/SPRITES_HALL/mesa_cinuca_256x256(1).png" id="29_blq1g"]
-[ext_resource type="Texture2D" uid="uid://4i7y3qthwopk" path="res://TileMaps/Andar_Hall/SPRITES_HALL/ChatGPT Image 13 de ago. de 2026, 15_54_26.png" id="31_bct1m"]
+[ext_resource type="Texture2D" uid="uid://4i7y3qthwopk" path="res://TileMaps/Andar_Hall/SPRITES_HALL/mesasinuca.png" id="31_bct1m"]
 [ext_resource type="Texture2D" uid="uid://c4xmnmxshnjq6" path="res://TileMaps/Andar_ferramentas/sprites/sprite_06.png" id="31_blq1g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_keic5"]

@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y1e7n"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_ohpwi"]
+[ext_resource type="PackedScene" uid="uid://ce1wy22xikmix" path="res://Objects/fogo.tscn" id="3_6gj4d"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="3_g7g5b"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_6gj4d"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="5_g7g5b"]
-[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="5_ohpwi"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="5_ohpwi"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="6_g7g5b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
@@ -176,6 +177,12 @@ position = Vector2(246.5, 185.5)
 scale = Vector2(0.17578134, 0.10546874)
 shadow_enabled = true
 texture = ExtResource("2_ohpwi")
+
+[node name="Fogo" parent="Iluminacao" unique_id=1620408042 instance=ExtResource("3_6gj4d")]
+position = Vector2(-49, 25)
+
+[node name="Fogo2" parent="Iluminacao" unique_id=720178038 instance=ExtResource("3_6gj4d")]
+position = Vector2(14, 25)
 
 [node name="ANDAR_DATA_CENTER" parent="." unique_id=601132916 instance=ExtResource("3_g7g5b")]
 position = Vector2(-230, -253)

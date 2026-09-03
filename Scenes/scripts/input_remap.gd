@@ -62,6 +62,7 @@ func remapear(novo_input: InputEvent) -> void:
 
 	# Adiciona o novo input
 	InputMap.action_add_event(action, novo_input)
+	SaveLoad.save_input_bindings()
 	get_tree().call_group(
 		&"inventory_binding_slots",
 		&"refresh_bind_label"

@@ -190,6 +190,7 @@ func _on_color_changed(new_color: Color) -> void:
 
 	Configs._change_cor_alto_contraste(opaque_color)
 	HighContrast.set_accent_color(opaque_color)
+	SaveLoad._save()
 
 
 func _announce_picker_area() -> void:

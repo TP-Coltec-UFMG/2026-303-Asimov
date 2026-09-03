@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://destem3uvhbqo"]
+
+[ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="1_mux6p"]
+[ext_resource type="Script" uid="uid://cu23k1pdvicyc" path="res://Objects/scripts/controle_de_tempo.gd" id="1_xttx4"]
+[ext_resource type="Texture2D" uid="uid://cpx1nu7dykfwr" path="res://Sprites/ui/New Piskel-1.png(4).png" id="2_jyovk"]
+[ext_resource type="AudioStream" uid="uid://dr6xbjlg35m7c" path="res://Sounds/freesound_community-countdown-from-10-105775.mp3" id="3_ynpmj"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jyovk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
+font = ExtResource("1_mux6p")
+font_size = 13
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Controle_de_tempo" type="Control" unique_id=1720657433]
+material = SubResource("CanvasItemMaterial_jyovk")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xttx4")
+
+[node name="Control" type="Control" parent="." unique_id=719952366]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 4.0
+offset_right = 20.0
+offset_bottom = 44.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Control" unique_id=504622369]
+position = Vector2(17, 25)
+scale = Vector2(2.70125, 2.715)
+texture = ExtResource("2_jyovk")
+
+[node name="Label" type="Label" parent="." unique_id=558452645]
+material = SubResource("CanvasItemMaterial_jyovk")
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.5
+offset_top = 4.0
+offset_right = 30.5
+offset_bottom = 20.0
+grow_horizontal = 2
+text = " 00m : 00s"
+label_settings = SubResource("LabelSettings_g4v7s")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=50509427]
+material = SubResource("CanvasItemMaterial_jyovk")
+position = Vector2(0, 4)
+stream = ExtResource("3_ynpmj")
+volume_db = -80.0
+
+[node name="Timer" type="Timer" parent="." unique_id=159055284]
+
+[connection signal="tempo_esgotado" from="." to="." method="_on_tempo_esgotado"]

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://4kom7uj1bd1a"]
 
-[ext_resource type="Script" uid="uid://d10isvmtkk8d1" path="res://Scenes/andar_ferramentas.gd" id="1_n3mbp"]
+[ext_resource type="Script" uid="uid://d10isvmtkk8d1" path="res://Scenes/scripts/andar_ferramentas.gd" id="1_n3mbp"]
 [ext_resource type="PackedScene" uid="uid://cllel81t2sjj0" path="res://TileMaps/Andar_ferramentas/andar_ferramentas.tscn" id="2_rggv4"]
-[ext_resource type="Texture2D" uid="uid://7ckbd80e35xk" path="res://sprite_22.png" id="4_cse0d"]
+[ext_resource type="Texture2D" uid="uid://7ckbd80e35xk" path="res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_22.png" id="4_cse0d"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_n3mbp"]
-[ext_resource type="PackedScene" uid="uid://h1afny316xf8" path="res://dijuntor.tscn" id="5_cse0d"]
+[ext_resource type="PackedScene" uid="uid://h1afny316xf8" path="res://Objects/dijuntor.tscn" id="5_cse0d"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="6_l4nl3"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="6_ricc7"]
-[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="8_l4nl3"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="8_l4nl3"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="9_nddim"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]

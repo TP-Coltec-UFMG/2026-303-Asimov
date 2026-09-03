@@ -9,7 +9,7 @@ var no_inventario: bool = false
 @onready var timer: Timer = $Timer
 @onready var reticula: Sprite2D = $reticula
 
-const BULLET = preload("res://bullet.tscn")
+const BULLET = preload("res://Objects/bullet.tscn")
 
 func _ready() -> void:
 	if not no_inventario:

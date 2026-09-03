@@ -75,6 +75,7 @@ const GRUPO_INTERFACE: String = \"interface_escalavel\"
 
 func _ready() -> void:
 	HighContrast.apply_to_tree(self)
+	MusicController.pause_all_audio()
 
 	SaveLoad._load()
 	SaveGame._load()
@@ -382,6 +383,7 @@ func _on_new_game_button_pressed() -> void:
 	if SaveGame.has_checkpoint():
 		SaveGame.load_last_checkpoint()
 	else:
+		MusicController.allow_scene_audio()
 		Configs.tutorial_return_scene = \"res://Scenes/slectionpage.tscn\"
 		if bool(Configs.configs.get(\"tutorial_seen\", false)):
 			get_tree().change_scene_to_file(\"res://Scenes/slectionpage.tscn\")
@@ -391,6 +393,7 @@ func _on_new_game_button_pressed() -> void:
 func _on_tutorial_button_pressed() -> void:
 	transition.play(\"default\")
 	await transition.animation_finished
+	MusicController.allow_scene_audio()
 	Configs.tutorial_return_scene = \"res://Scenes/principal.tscn\"
 	get_tree().change_scene_to_file(\"res://Tutorial/tutorial.tscn\")
 		
@@ -411,6 +414,7 @@ func _on_exit_game_button_pressed() -> void:
 
 	transition.play(\"default\")
 	await transition.animation_finished
+	SaveGame.persist_checkpoint()
 	SaveLoad._save()
 	get_tree().quit()
 # --------------------------------

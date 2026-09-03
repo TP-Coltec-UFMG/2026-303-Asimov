@@ -18,6 +18,7 @@ var configs: Dictionary = {
 	"volume_leitor": 1.0,
 	"alto_contraste": false,
 	"cor_alto_contraste": Color.YELLOW,
+	"input_bindings": {},
 	"interface_size": 0,
 	"tutorial_seen": false,
 	"tutorial_completed": false,
