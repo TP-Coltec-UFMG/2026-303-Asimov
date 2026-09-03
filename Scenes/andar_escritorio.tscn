@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://c560g03fs0qnq"]
+
+[ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_aes5c"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="2_o85rk"]
+[ext_resource type="PackedScene" uid="uid://nk3t56ltg47k" path="res://TileMaps/escritorio.tscn" id="3_kribp"]
+[ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="5_3b6cl"]
+[ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="6_iqkel"]
+[ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="7_rnk6w"]
+[ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="8_eb2mc"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="10_ekofs"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="10_wvila"]
+[ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="11_vhcpt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(11, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekofs"]
+size = Vector2(12, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pondc"]
+size = Vector2(11, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iqkel"]
+size = Vector2(11, 18)
+
+[node name="andar_escritorio" type="Node2D" unique_id=1272659551]
+script = ExtResource("1_aes5c")
+
+[node name="Perigos" type="Node" parent="." unique_id=1974936498]
+
+[node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Iluminacao" unique_id=249170204]
+self_modulate = Color(1, 1, 1, 0)
+light_mask = 2
+visibility_layer = 2
+position = Vector2(-2, 1)
+color = Color(0.6239672, 0.62396723, 0.6239672, 1)
+
+[node name="PointLight2D" type="PointLight2D" parent="Iluminacao" unique_id=809226912]
+position = Vector2(114, 96)
+texture = ExtResource("2_o85rk")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Iluminacao" unique_id=781439204]
+position = Vector2(114, -108)
+texture = ExtResource("2_o85rk")
+
+[node name="Coletaveis" type="Node" parent="." unique_id=263636248]
+
+[node name="Extintor" parent="Coletaveis" unique_id=1509788145 instance=ExtResource("5_3b6cl")]
+position = Vector2(69, -203)
+scale = Vector2(0.51, 0.51)
+save_id = "extintor_andar_escritório_1"
+
+[node name="Extintor2" parent="Coletaveis" unique_id=1036135176 instance=ExtResource("5_3b6cl")]
+position = Vector2(10, -205.00002)
+scale = Vector2(0.51, 0.51)
+save_id = "extintor_andar_escritório_2"
+
+[node name="Lanterna" parent="Coletaveis" unique_id=336998762 instance=ExtResource("6_iqkel")]
+position = Vector2(-10.000001, -203.99998)
+scale = Vector2(0.28753498, 0.24209166)
+save_id = "lanterna_andar_escritório_1"
+
+[node name="ESCRITORIO" parent="." unique_id=1500386464 instance=ExtResource("3_kribp")]
+position = Vector2(-170, -241)
+
+[node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("7_rnk6w")]
+connected_scene = "sala_chefe"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=953326990]
+z_index = 1
+position = Vector2(102, -210)
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="Interectable" parent="SceneTrigger" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("10_ekofs")]
+position = Vector2(166, -210)
+interact_name = "Acesso de Chefe"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger/Interectable" unique_id=985394204]
+z_index = 2
+position = Vector2(-64, 0.5)
+shape = SubResource("RectangleShape2D_ekofs")
+
+[node name="SceneTrigger2" parent="." unique_id=240234933 instance=ExtResource("7_rnk6w")]
+position = Vector2(-64, 0)
+eh_elevador = true
+andar_atual = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2" unique_id=1717688883]
+z_index = 1
+position = Vector2(101.5, -210)
+shape = SubResource("RectangleShape2D_pondc")
+
+[node name="Interectable" parent="SceneTrigger2" unique_id=921508858 groups=["Coletaveis"] instance=ExtResource("10_ekofs")]
+position = Vector2(64, 0)
+interact_name = "Elevador"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2/Interectable" unique_id=1445547422]
+z_index = 2
+position = Vector2(37.5, -210)
+shape = SubResource("RectangleShape2D_iqkel")
+
+[node name="EntranceMarkers" type="Node2D" parent="." unique_id=1615271080]
+position = Vector2(38, -84)
+
+[node name="SALA_CHEFE" type="Marker2D" parent="EntranceMarkers" unique_id=994001935]
+position = Vector2(64, -101)
+
+[node name="any" type="Marker2D" parent="EntranceMarkers" unique_id=1756450873]
+position = Vector2(0, -101)
+
+[node name="PainelElevador" parent="." unique_id=236849866 node_paths=PackedStringArray("scene_trigger") instance=ExtResource("8_eb2mc")]
+position = Vector2(69, -429.00003)
+scene_trigger = NodePath("../SceneTrigger2")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1766997313]
+
+[node name="Controle_de_tempo" parent="UI" unique_id=1720657433 instance=ExtResource("10_wvila")]
+
+[node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("11_vhcpt")]
+process_physics_priority = -6
+
+[node name="Quest_missao" type="CanvasLayer" parent="." unique_id=747407563]

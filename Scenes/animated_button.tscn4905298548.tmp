@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ci8v2nive2ur5"]
+
+[ext_resource type="Script" uid="uid://bhglxuy8nn5dq" path="res://Scripts/animated_button.gd" id="1_1a68j"]
+[ext_resource type="FontFile" uid="uid://e6o7s3fomjpp" path="res://fonts/PixelifySans-SemiBold.ttf" id="1_qsou7"]
+
+[node name="AnimatedButton" type="Button" unique_id=464511439]
+anchors_preset = -1
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 9.0
+offset_bottom = 9.0
+theme_override_fonts/font = ExtResource("1_qsou7")
+flat = true
+script = ExtResource("1_1a68j")
+
+[node name="Timer" type="Timer" parent="." unique_id=12435681]
+wait_time = 0.05
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

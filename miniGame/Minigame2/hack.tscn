@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cb836joq6nx8f"]
+
+[ext_resource type="Script" uid="uid://bqhc72xhev8kj" path="res://MinigamesProgramador/Minigame2/scripts/hack.gd" id="1_yk5kj"]
+[ext_resource type="Texture2D" uid="uid://c7i5ud7l7uxsy" path="res://MinigamesProgramador/sprites/energy.png" id="2_4k2se"]
+[ext_resource type="Shader" uid="uid://beqd6tv60fca8" path="res://MinigamesProgramador/shader/hack.gdshader" id="2_abl72"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eae4o"]
+shader = ExtResource("2_abl72")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6mkor"]
+size = Vector2(36, 36)
+
+[node name="Hack" type="CharacterBody2D" unique_id=37334449]
+script = ExtResource("1_yk5kj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1349428885]
+material = SubResource("ShaderMaterial_eae4o")
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_4k2se")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1047198534]
+shape = SubResource("RectangleShape2D_6mkor")

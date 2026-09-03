@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://ce1wy22xikmix"]
+
+[ext_resource type="Script" uid="uid://8xom4guy7ye4" path="res://Objects/scripts/fogo.gd" id="1_xs3m7"]
+[ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_36til"]
+
+[sub_resource type="Gradient" id="Gradient_xs3m7"]
+offsets = PackedFloat32Array(0, 0.9996142)
+colors = PackedColorArray(0.34117648, 0, 0, 1, 1, 0.9607843, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_s37p7"]
+gradient = SubResource("Gradient_xs3m7")
+
+[sub_resource type="Curve" id="Curve_36til"]
+_data = [Vector2(0, 0.61115915), 0.0, 0.0, 0, 0, Vector2(0.51176196, 0.89489615), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_36til"]
+curve = SubResource("Curve_36til")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qogx6"]
+particle_flag_disable_z = true
+emission_shape = 2
+emission_sphere_radius = 13.7
+direction = Vector3(0, -1, 0)
+spread = 180.0
+radial_velocity_min = -20.000021
+radial_velocity_max = -20.000021
+gravity = Vector3(0, -98, 0)
+scale_min = 15.0
+scale_max = 15.0
+scale_curve = SubResource("CurveTexture_36til")
+color_ramp = SubResource("GradientTexture1D_s37p7")
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yf5fn"]
+radius = 17.0
+height = 56.0
+
+[node name="Fogo" type="Node2D" unique_id=1620408042]
+script = ExtResource("1_xs3m7")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=18750719]
+amount = 20
+process_material = SubResource("ParticleProcessMaterial_qogx6")
+
+[node name="AreaFogo" type="Area2D" parent="." unique_id=1531924034]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaFogo" unique_id=1201496961]
+position = Vector2(0, -16)
+shape = SubResource("CapsuleShape2D_yf5fn")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=1169644284]
+scale = Vector2(0.5, 0.5)
+color = Color(0.92941177, 0.34509805, 0, 1)
+shadow_enabled = true
+texture = ExtResource("2_36til")
+
+[connection signal="body_shape_entered" from="AreaFogo" to="." method="_on_area_fogo_body_shape_entered"]
+[connection signal="body_shape_exited" from="AreaFogo" to="." method="_on_area_fogo_body_shape_exited"]

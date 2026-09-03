@@ -1,0 +1,296 @@
+[gd_scene format=3 uid="uid://c46ktfchhqx7n"]
+
+[ext_resource type="Script" uid="uid://d6ja6e7d5abq" path="res://Objects/scripts/painel_elevador.gd" id="1_jox7w"]
+[ext_resource type="Texture2D" uid="uid://bulegaci15jjl" path="res://Sprites/elevador/bt_andar_normal.png" id="2_3p0gg"]
+[ext_resource type="Texture2D" uid="uid://7srd8jn6g8gu" path="res://Sprites/elevador/bt_andar_01_apertado.png" id="3_au2wp"]
+[ext_resource type="Texture2D" uid="uid://blx8cmhv3n10s" path="res://Sprites/elevador/bt_andar_01_selecionado.png" id="4_uxpsl"]
+[ext_resource type="Texture2D" uid="uid://de68x3qdn8nn6" path="res://Sprites/elevador/bt_andar_02_apertado.png" id="5_my1m8"]
+[ext_resource type="Texture2D" uid="uid://cqwbnvjynkxuw" path="res://Sprites/elevador/bt_andar_02_selecionado.png" id="6_mi22k"]
+[ext_resource type="Texture2D" uid="uid://did4owq17kj1k" path="res://Sprites/elevador/bt_andar_03_apertado.png" id="7_ql12e"]
+[ext_resource type="Texture2D" uid="uid://p4slqrricwi7" path="res://Sprites/elevador/bt_andar_03_selecionado.png" id="8_p6e0x"]
+[ext_resource type="Texture2D" uid="uid://c30yvm451gsef" path="res://Sprites/elevador/bt_andar_04_apertado.png" id="9_ti1u4"]
+[ext_resource type="Texture2D" uid="uid://ddqs682gqruur" path="res://Sprites/elevador/bt_andar_04_selecionado.png" id="10_tr1ib"]
+[ext_resource type="Texture2D" uid="uid://b5yc7jbviuifa" path="res://Sprites/elevador/bt_andar_05_apertado.png" id="11_i824y"]
+[ext_resource type="Texture2D" uid="uid://cfoye8y42gnu3" path="res://Sprites/elevador/bt_andar_05_selecionado.png" id="12_rc3h6"]
+[ext_resource type="Texture2D" uid="uid://bjnscraekgah4" path="res://Sprites/elevador/bt_andar_06_apertado.png" id="13_0stc8"]
+[ext_resource type="Texture2D" uid="uid://djovcicrh6t15" path="res://Sprites/elevador/bt_andar_06_selecionado.png" id="14_yk887"]
+[ext_resource type="Texture2D" uid="uid://b8wfvty6dadvi" path="res://Sprites/elevador/bt_andar_porta_apertado.png" id="15_v0pcy"]
+[ext_resource type="Texture2D" uid="uid://cf5viql775oyc" path="res://Sprites/elevador/bt_andar_porta_selecionado.png" id="16_mkahn"]
+[ext_resource type="Texture2D" uid="uid://p3uxhhrojdfw" path="res://Sprites/elevador/bt_andar_norm_abri.png" id="17_my1m8"]
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Fonts/PixelifySans-Regular.ttf" id="17_uxpsl"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jox7w"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_au2wp"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_lr6vi"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi22k"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(0, 0, 344, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ql12e"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(344, 0, 344, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p6e0x"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(0, 256, 344, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ti1u4"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(344, 256, 344, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tr1ib"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(0, 512, 344, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i824y"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(344, 512, 344, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rc3h6"]
+atlas = ExtResource("17_my1m8")
+region = Rect2(0, 768, 344, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lr6vi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi22k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ql12e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p6e0x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ti1u4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tr1ib")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i824y")
+}, {
+"duration": 6.0,
+"texture": SubResource("AtlasTexture_rc3h6")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uxpsl"]
+light_mode = 1
+
+[node name="PainelElevador" type="Node2D" unique_id=236849866]
+process_mode = 3
+z_index = 999
+material = SubResource("CanvasItemMaterial_jox7w")
+scale = Vector2(0.925, 0.695)
+script = ExtResource("1_jox7w")
+
+[node name="BtAndarNormal" type="Sprite2D" parent="." unique_id=387262429]
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("2_3p0gg")
+
+[node name="BtAndar01Apertado" type="Sprite2D" parent="." unique_id=1085480621]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("3_au2wp")
+
+[node name="BtAndar01Selecionado" type="Sprite2D" parent="." unique_id=367066002]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("4_uxpsl")
+
+[node name="BtAndar02Apertado" type="Sprite2D" parent="." unique_id=774755632]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("5_my1m8")
+
+[node name="BtAndar02Selecionado" type="Sprite2D" parent="." unique_id=1537388376]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("6_mi22k")
+
+[node name="BtAndar03Apertado" type="Sprite2D" parent="." unique_id=305331770]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("7_ql12e")
+
+[node name="BtAndar03Selecionado" type="Sprite2D" parent="." unique_id=889978373]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("8_p6e0x")
+
+[node name="BtAndar04Apertado" type="Sprite2D" parent="." unique_id=129583294]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("9_ti1u4")
+
+[node name="BtAndar04Selecionado" type="Sprite2D" parent="." unique_id=235635397]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("10_tr1ib")
+
+[node name="BtAndar05Apertado" type="Sprite2D" parent="." unique_id=334671979]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("11_i824y")
+
+[node name="BtAndar05Selecionado" type="Sprite2D" parent="." unique_id=1935493704]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("12_rc3h6")
+
+[node name="BtAndar06Apertado" type="Sprite2D" parent="." unique_id=1356895751]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("13_0stc8")
+
+[node name="BtAndar06Selecionado" type="Sprite2D" parent="." unique_id=1753256527]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("14_yk887")
+
+[node name="BtAndarPortaApertado" type="Sprite2D" parent="." unique_id=176491741]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("15_v0pcy")
+
+[node name="BtAndarPortaSelecionado" type="Sprite2D" parent="." unique_id=1921014191]
+visible = false
+material = SubResource("CanvasItemMaterial_au2wp")
+position = Vector2(-51, 49)
+texture = ExtResource("16_mkahn")
+
+[node name="Abrindo" type="AnimatedSprite2D" parent="." unique_id=358266962]
+visible = false
+material = SubResource("CanvasItemMaterial_lr6vi")
+position = Vector2(-50.810814, 48.920876)
+scale = Vector2(0.99999994, 0.99999994)
+sprite_frames = SubResource("SpriteFrames_lr6vi")
+frame = 6
+frame_progress = 1.0
+
+[node name="andar1" type="Button" parent="." unique_id=1304678461]
+material = SubResource("CanvasItemMaterial_au2wp")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 19.0
+offset_top = 7.0
+offset_right = 47.0
+offset_bottom = 35.0
+grow_horizontal = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="andar2" type="Button" parent="." unique_id=555039272]
+material = SubResource("CanvasItemMaterial_au2wp")
+offset_left = 52.0
+offset_top = 7.0
+offset_right = 81.0
+offset_bottom = 35.0
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="andar3" type="Button" parent="." unique_id=856684712]
+material = SubResource("CanvasItemMaterial_au2wp")
+offset_left = 19.0
+offset_top = 44.0
+offset_right = 48.0
+offset_bottom = 72.0
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="andar4" type="Button" parent="." unique_id=1263369988]
+material = SubResource("CanvasItemMaterial_au2wp")
+offset_left = 53.0
+offset_top = 44.0
+offset_right = 81.0
+offset_bottom = 72.0
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="andar5" type="Button" parent="." unique_id=1887938738]
+material = SubResource("CanvasItemMaterial_au2wp")
+offset_left = 19.0
+offset_top = 81.0
+offset_right = 48.0
+offset_bottom = 109.0
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="andar6" type="Button" parent="." unique_id=1532645743]
+material = SubResource("CanvasItemMaterial_au2wp")
+offset_left = 53.0
+offset_top = 81.0
+offset_right = 82.0
+offset_bottom = 109.0
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="fechar" type="Button" parent="." unique_id=1916950001]
+material = SubResource("CanvasItemMaterial_au2wp")
+offset_left = 36.0
+offset_top = 116.0
+offset_right = 64.0
+offset_bottom = 144.0
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="." unique_id=396894721]
+visible = false
+material = SubResource("CanvasItemMaterial_uxpsl")
+offset_left = 8.648648
+offset_top = -56.11511
+offset_right = 89.72974
+offset_bottom = -31.654678
+theme_override_fonts/font = ExtResource("17_uxpsl")
+theme_override_font_sizes/font_size = 13
+text = "CARREGANDO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="andar1" to="." method="_on_andar_1_mouse_entered"]
+[connection signal="mouse_exited" from="andar1" to="." method="_on_andar_1_mouse_exited"]
+[connection signal="pressed" from="andar1" to="." method="_on_andar_1_pressed"]
+[connection signal="mouse_entered" from="andar2" to="." method="_on_andar_2_mouse_entered"]
+[connection signal="mouse_exited" from="andar2" to="." method="_on_andar_2_mouse_exited"]
+[connection signal="pressed" from="andar2" to="." method="_on_andar_2_pressed"]
+[connection signal="mouse_entered" from="andar3" to="." method="_on_andar_3_mouse_entered"]
+[connection signal="mouse_exited" from="andar3" to="." method="_on_andar_3_mouse_exited"]
+[connection signal="pressed" from="andar3" to="." method="_on_andar_3_pressed"]
+[connection signal="mouse_entered" from="andar4" to="." method="_on_andar_4_mouse_entered"]
+[connection signal="mouse_exited" from="andar4" to="." method="_on_andar_4_mouse_exited"]
+[connection signal="pressed" from="andar4" to="." method="_on_andar_4_pressed"]
+[connection signal="mouse_entered" from="andar5" to="." method="_on_andar_5_mouse_entered"]
+[connection signal="mouse_exited" from="andar5" to="." method="_on_andar_5_mouse_exited"]
+[connection signal="pressed" from="andar5" to="." method="_on_andar_5_pressed"]
+[connection signal="mouse_entered" from="andar6" to="." method="_on_andar_6_mouse_entered"]
+[connection signal="mouse_exited" from="andar6" to="." method="_on_andar_6_mouse_exited"]
+[connection signal="pressed" from="andar6" to="." method="_on_andar_6_pressed"]
+[connection signal="mouse_entered" from="fechar" to="." method="_on_fechar_mouse_entered"]
+[connection signal="mouse_exited" from="fechar" to="." method="_on_fechar_mouse_exited"]
+[connection signal="pressed" from="fechar" to="." method="_on_fechar_pressed"]

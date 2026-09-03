@@ -1,0 +1,1738 @@
+[gd_scene format=3 uid="uid://cyt75dhhu275m"]
+
+[ext_resource type="Texture2D" uid="uid://dshixi05lnm7l" path="res://Sprites/ui/Logo/AuraCode.png" id="1_7w63j"]
+[ext_resource type="Shader" uid="uid://domit7v3xvssn" path="res://shaders/metalic.gdshader" id="1_8ed56"]
+[ext_resource type="Texture2D" uid="uid://4o4sq3ass5tj" path="res://Sprites/background/MenuBackground.png" id="5_e46k6"]
+[ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="6_1d07u"]
+[ext_resource type="Shader" uid="uid://eth68kkqm6mj" path="res://shaders/blur.gdshader" id="7_e1iit"]
+[ext_resource type="PackedScene" uid="uid://b25tlu8urnkux" path="res://Scenes/Utils/filtro_daltonismo.tscn" id="8_8ed56"]
+[ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="8_cwg8b"]
+[ext_resource type="PackedScene" uid="uid://ci8v2nive2ur5" path="res://Scenes/Utils/animated_button.tscn" id="8_e46k6"]
+[ext_resource type="Texture2D" uid="uid://byp7lf7i0kq0i" path="res://Sprites/ui/Labels/New Piskel(14).png" id="9_3so0l"]
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Fonts/PixelifySans-Regular.ttf" id="9_hjo07"]
+[ext_resource type="Script" uid="uid://c3o46ilruapx4" path="res://Scripts/Objects/Label/fps_label.gd" id="10_e46k6"]
+[ext_resource type="Texture2D" uid="uid://begd1l5bv4bdb" path="res://Sprites/ui/Icons/sprite_05.png" id="11_uro47"]
+[ext_resource type="Texture2D" uid="uid://dfuffgnqyexh0" path="res://Sprites/ui/Nodes/New Piskel(19).png" id="11_xtmj4"]
+[ext_resource type="Texture2D" uid="uid://le863dyokcah" path="res://Sprites/ui/Nodes/New Piskel(18).png" id="12_f0wd5"]
+[ext_resource type="StyleBox" uid="uid://c5bx6mcurutjk" path="res://Material/buttonHover_flat.tres" id="12_wwn80"]
+[ext_resource type="Script" uid="uid://i1rviwbqavlf" path="res://Scripts/Acessibility/leitor_de_tela_primeira_vez.gd" id="13_3tow0"]
+[ext_resource type="Texture2D" uid="uid://ci4kcnpm4h3u3" path="res://Sprites/ui/Icons/sprite_03.png" id="13_e5vij"]
+[ext_resource type="Script" uid="uid://dfvk0re1w0h2c" path="res://Scripts/Objects/Button/button_acess_menu.gd" id="14_a2p0c"]
+[ext_resource type="FontFile" uid="uid://e6o7s3fomjpp" path="res://Fonts/PixelifySans-SemiBold.ttf" id="14_sp8er"]
+[ext_resource type="Texture2D" uid="uid://dd6y52fpxhr4l" path="res://Sprites/ui/Icons/sprite_07.png" id="15_0mpbj"]
+[ext_resource type="Script" uid="uid://4owk1gtkwir6" path="res://Scripts/Objects/OptionButton/option_language_button.gd" id="15_87yob"]
+[ext_resource type="Texture2D" uid="uid://iv4la0c7u2ae" path="res://Sprites/ui/Icons/sprite_17.png" id="16_d6mn4"]
+[ext_resource type="Texture2D" uid="uid://be4bcow3802oh" path="res://Sprites/ui/Icons/sprite_08.png" id="16_uro47"]
+[ext_resource type="Texture2D" uid="uid://baeo2hahwt04k" path="res://Sprites/ui/Icons/sprite_01.png" id="17_tpdn8"]
+[ext_resource type="PackedScene" uid="uid://cl7p75jsc212w" path="res://Scenes/Utils/volume_slider.tscn" id="21_wx2ih"]
+[ext_resource type="Script" uid="uid://c6sqqjbnso428" path="res://Scripts/Sounds/value_volume.gd" id="22_l3pgq"]
+[ext_resource type="Script" uid="uid://bdydc3jee0mhe" path="res://Scripts/Sounds/value_music.gd" id="23_ruetv"]
+[ext_resource type="Texture2D" uid="uid://fi4josxhfa76" path="res://Sprites/ui/Icons/sprite_04.png" id="24_kwms5"]
+[ext_resource type="Script" uid="uid://ev1h82fudthv" path="res://Scripts/Sounds/value_sfx.gd" id="25_s3xfc"]
+[ext_resource type="Texture2D" uid="uid://crsq7vjjyplis" path="res://Sprites/ui/Icons/sprite_06.png" id="26_3hmxf"]
+[ext_resource type="Script" uid="uid://dflx71jtdm4bf" path="res://Scripts/Sounds/value_ldt.gd" id="27_h0ab0"]
+[ext_resource type="Texture2D" uid="uid://by2lixjesxdfr" path="res://Sprites/ui/Icons/sprite_14.png" id="28_4axyp"]
+[ext_resource type="Texture2D" uid="uid://b4ycsa3gv06xx" path="res://Sprites/background/OptionBackground.png" id="29_wwn80"]
+[ext_resource type="Script" uid="uid://bieg178qr1jvh" path="res://Scripts/Objects/CheckBox/tela_cheia_button.gd" id="32_ldthr"]
+[ext_resource type="Texture2D" uid="uid://xaehmu5grhap" path="res://Sprites/ui/Icons/sprite_10.png" id="33_uqvdj"]
+[ext_resource type="Script" uid="uid://dx5q3ta47wlkc" path="res://Scripts/Objects/CheckBox/mostrar_fps.gd" id="34_71tyw"]
+[ext_resource type="Texture2D" uid="uid://b7b70kqfm8hok" path="res://Sprites/ui/Icons/26.png" id="35_ok68f"]
+[ext_resource type="Script" uid="uid://db23hbr8jngdd" path="res://Scripts/Objects/OptionButton/options_frame_rate.gd" id="36_8ibws"]
+[ext_resource type="Texture2D" uid="uid://phw3kjfgq33p" path="res://Sprites/ui/Icons/sprite_25.png" id="37_aduey"]
+[ext_resource type="Script" uid="uid://cspyx3luw5ct5" path="res://Scripts/Acessibility/options_interface_size.gd" id="38_dwq42"]
+[ext_resource type="Texture2D" uid="uid://bjixc5qrdjgc1" path="res://Sprites/ui/Icons/sprite_23.png" id="39_d2tqo"]
+[ext_resource type="Script" uid="uid://dnofvqmf0ukq5" path="res://Scripts/Acessibility/Controle_daltonismo.gd" id="41_uwub7"]
+[ext_resource type="Script" uid="uid://ds3e58qhmtuxo" path="res://Scripts/Objects/OptionButton/option_daltonismo_button.gd" id="42_optdy"]
+[ext_resource type="Texture2D" uid="uid://d3d1hkeb2lfca" path="res://Sprites/ui/Nodes/sprite_6.png" id="43_c62xq"]
+[ext_resource type="StyleBox" uid="uid://cfg3yi6v77uwd" path="res://Material/style_slider_black.tres" id="44_2gnsi"]
+[ext_resource type="StyleBox" uid="uid://dq3sdfmn5ky3w" path="res://Material/style_slider_white.tres" id="45_mhowh"]
+[ext_resource type="Script" uid="uid://icm7gtd4sph1" path="res://Scripts/Acessibility/intensidade.gd" id="46_odi5q"]
+[ext_resource type="Script" uid="uid://d2lhurtsmqmha" path="res://Scripts/Acessibility/legendas.gd" id="47_rgcw2"]
+[ext_resource type="Texture2D" uid="uid://6t8db2xg7cui" path="res://Sprites/ui/Labels/New Piskel(12).png" id="48_5eu1u"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="49_ux6ub"]
+[ext_resource type="Texture2D" uid="uid://d3a7250k7317g" path="res://Sprites/ui/Icons/sprite_15.png" id="50_jqje3"]
+[ext_resource type="Script" uid="uid://foqfa63m5okv" path="res://Scripts/Acessibility/spin_box.gd" id="51_cvc15"]
+[ext_resource type="Script" uid="uid://cjjk3fkuntc6w" path="res://Scripts/Acessibility/leitor_de_tela.gd" id="52_ephr7"]
+[ext_resource type="Script" uid="uid://chxf33bnldydm" path="res://Scripts/Acessibility/alto_contraste.gd" id="53_pqb3s"]
+[ext_resource type="Texture2D" uid="uid://6iwo13ufuuch" path="res://Sprites/ui/Icons/sprite_18.png" id="54_hxftb"]
+
+[sub_resource type="GDScript" id="GDScript_8ibws"]
+script/source = "extends Node2D
+
+@onready var transition: AnimatedSprite2D = $Transition
+@onready var primeira_vez: Node2D = $PrimeiraVez
+@export_file(\"*.tscn\") var scene_to_change_path: String
+
+const AJUSTE_LABEL_GRANDE: float = 6.0
+const GRUPO_INTERFACE: String = \"interface_escalavel\"
+
+
+func _ready() -> void:
+	HighContrast.apply_to_tree(self)
+
+	SaveLoad._load()
+	transition.visible = true
+	transition.frame = 7
+	transition.play_backwards(\"default\")
+
+	if Configs.configs.primeira_vez:
+		primeira_vez._iniciar()
+		primeira_vez.visible = true
+		Configs._change_primeira_vez()
+	else:
+		primeira_vez.visible = false
+
+	var interface_index: int = int(Configs.configs.get(\"interface_size\", 0))
+	call_deferred(\"aplicar_tamanho_interface_por_index\", interface_index)
+
+
+
+# ---- A P L I C A  E S C A L A  I N T E R F A C E  ----
+func obter_fator_interface(index: int) -> float:
+	match index:
+		0:
+			return 1.0 # Padrão
+		1:
+			return 0.8 # Pequeno
+		2:
+			return 1.25 # Grande
+		_:
+			return 1.0
+
+func aplicar_tamanho_interface_por_index(index: int) -> void:
+	var fator: float = obter_fator_interface(index)
+	aplicar_tamanho_interface(self, fator, index)
+
+func aplicar_tamanho_interface(node: Node, fator: float, interface_index: int) -> void:
+	salvar_valores_originais(node)
+	aplicar_escala_node(node, fator, interface_index)
+
+	for child in node.get_children():
+		aplicar_tamanho_interface(child, fator, interface_index)
+
+func salvar_valores_originais(node: Node) -> void:
+	if node.has_meta(\"valores_salvos\"):
+		return
+
+	if node is OptionButton:
+		var option_button := node as OptionButton
+
+		var font_size: int = option_button.get_theme_font_size(\"font_size\")
+		var pos_y: float = option_button.position.y
+		var minimum_size: Vector2 = option_button.custom_minimum_size
+
+		option_button.set_meta(\"base_font_size\", font_size)
+		option_button.set_meta(\"base_position_y\", pos_y)
+		option_button.set_meta(\"base_minimum_size\", minimum_size)
+
+	elif node is CheckBox:
+		var check_box := node as CheckBox
+
+		var font_size: int = check_box.get_theme_font_size(\"font_size\")
+		var pos_y: float = check_box.position.y
+
+		check_box.set_meta(\"base_font_size\", font_size)
+		check_box.set_meta(\"base_position_y\", pos_y)
+
+	elif node is Button:
+		var button := node as Button
+
+		var font_size: int = button.get_theme_font_size(\"font_size\")
+		var scale_base: Vector2 = button.scale
+		var pos_y: float = button.position.y
+
+		button.set_meta(\"base_font_size\", font_size)
+		button.set_meta(\"base_expand_icon\", button.expand_icon)
+		button.set_meta(\"base_scale\", scale_base)
+		button.set_meta(\"base_position_y\", pos_y)
+
+	elif node is Label:
+		var label := node as Label
+
+		var font_size: int = label.get_theme_font_size(\"font_size\")
+		var pos_y: float = label.position.y
+
+		label.set_meta(\"base_font_size\", font_size)
+		label.set_meta(\"base_position_y\", pos_y)
+
+	elif node is Slider:
+		var slider := node as Slider
+
+		var pos_y: float = slider.position.y
+		var minimum_size: Vector2 = slider.custom_minimum_size
+		var scale_base: Vector2 = slider.scale
+
+		slider.set_meta(\"base_position_y\", pos_y)
+		slider.set_meta(\"base_minimum_size\", minimum_size)
+		slider.set_meta(\"base_scale\", scale_base)
+
+	elif node is Sprite2D:
+		var sprite := node as Sprite2D
+
+		if not sprite.is_in_group(GRUPO_INTERFACE):
+			node.set_meta(\"valores_salvos\", true)
+			return
+
+		var scale_base: Vector2 = sprite.scale
+		var pos_y: float = sprite.position.y
+
+		sprite.set_meta(\"base_scale\", scale_base)
+		sprite.set_meta(\"base_position_y\", pos_y)
+
+	elif node is BoxContainer:
+		var box := node as BoxContainer
+
+		var pos_y: float = box.position.y
+		var minimum_size: Vector2 = box.custom_minimum_size
+		var separation: int = box.get_theme_constant(\"separation\")
+
+		box.set_meta(\"base_position_y\", pos_y)
+		box.set_meta(\"base_minimum_size\", minimum_size)
+		box.set_meta(\"base_separation\", separation)
+
+	node.set_meta(\"valores_salvos\", true)
+
+func aplicar_escala_node(node: Node, fator: float, interface_index: int) -> void:
+	if node is OptionButton:
+		var option_button := node as OptionButton
+
+		if option_button.has_meta(\"base_font_size\") and option_button.has_meta(\"base_position_y\"):
+			var base_font_size: int = int(option_button.get_meta(\"base_font_size\"))
+			var base_position_y: float = float(option_button.get_meta(\"base_position_y\"))
+
+			var novo_font_size: int = int(round(base_font_size * fator))
+			var diferenca_fonte: int = novo_font_size - base_font_size
+
+			option_button.add_theme_font_size_override(\"font_size\", novo_font_size)
+
+			var nova_posicao: Vector2 = option_button.position
+			nova_posicao.y = base_position_y - diferenca_fonte
+			option_button.position = nova_posicao
+
+			var popup: PopupMenu = option_button.get_popup()
+			if popup != null:
+				popup.add_theme_font_size_override(\"font_size\", novo_font_size)
+
+		if option_button.has_meta(\"base_minimum_size\"):
+			var base_minimum_size: Vector2 = option_button.get_meta(\"base_minimum_size\")
+			option_button.custom_minimum_size = base_minimum_size * fator
+
+	elif node is CheckBox:
+		var check_box := node as CheckBox
+
+		if check_box.has_meta(\"base_font_size\") and check_box.has_meta(\"base_position_y\"):
+			var base_font_size: int = int(check_box.get_meta(\"base_font_size\"))
+			var base_position_y: float = float(check_box.get_meta(\"base_position_y\"))
+
+			var novo_font_size: int = int(round(base_font_size * fator))
+			var diferenca_fonte: int = novo_font_size - base_font_size
+
+			check_box.add_theme_font_size_override(\"font_size\", novo_font_size)
+
+			var nova_posicao: Vector2 = check_box.position
+			nova_posicao.y = base_position_y - diferenca_fonte
+			check_box.position = nova_posicao
+
+	elif node is Button:
+		var button := node as Button
+
+		if button.has_meta(\"base_font_size\"):
+			var base_font_size: int = int(button.get_meta(\"base_font_size\"))
+			var novo_font_size: int = int(round(base_font_size * fator))
+
+			button.add_theme_font_size_override(\"font_size\", novo_font_size)
+
+		if button.has_meta(\"base_scale\"):
+			var base_scale: Vector2 = button.get_meta(\"base_scale\")
+			button.scale = base_scale * fator
+
+		if button.has_meta(\"base_position_y\"):
+			var base_position_y: float = float(button.get_meta(\"base_position_y\"))
+
+			var nova_posicao: Vector2 = button.position
+			nova_posicao.y = base_position_y * fator
+			button.position = nova_posicao
+
+		if button.has_meta(\"base_expand_icon\"):
+			if interface_index == 2:
+				button.expand_icon = true
+			else:
+				button.expand_icon = bool(button.get_meta(\"base_expand_icon\"))
+
+	elif node is Label:
+		var label := node as Label
+
+		if label.has_meta(\"base_font_size\") and label.has_meta(\"base_position_y\"):
+			var base_font_size: int = int(label.get_meta(\"base_font_size\"))
+			var base_position_y: float = float(label.get_meta(\"base_position_y\"))
+
+			var novo_font_size: int = int(round(base_font_size * fator))
+			var diferenca_fonte: int = novo_font_size - base_font_size
+
+			if interface_index == 2 and esta_dentro_do_logo(label):
+				novo_font_size = base_font_size
+				diferenca_fonte = 0
+
+			label.add_theme_font_size_override(\"font_size\", novo_font_size)
+
+			var nova_posicao: Vector2 = label.position
+			nova_posicao.y = base_position_y - diferenca_fonte
+
+			if interface_index == 2 and not esta_dentro_do_logo(label):
+				nova_posicao.y -= AJUSTE_LABEL_GRANDE
+
+			label.position = nova_posicao
+
+	elif node is Slider:
+		var slider := node as Slider
+
+		if slider.has_meta(\"base_scale\"):
+			var base_scale: Vector2 = slider.get_meta(\"base_scale\")
+			slider.scale = base_scale * fator
+
+		if slider.has_meta(\"base_minimum_size\"):
+			var base_minimum_size: Vector2 = slider.get_meta(\"base_minimum_size\")
+			slider.custom_minimum_size = base_minimum_size * fator
+
+		if slider.has_meta(\"base_position_y\"):
+			var base_position_y: float = float(slider.get_meta(\"base_position_y\"))
+
+			var nova_posicao: Vector2 = slider.position
+			nova_posicao.y = base_position_y * fator
+			slider.position = nova_posicao
+
+	elif node is Sprite2D:
+		var sprite := node as Sprite2D
+
+		if not sprite.is_in_group(GRUPO_INTERFACE):
+			return
+
+		if sprite.has_meta(\"base_scale\") and sprite.has_meta(\"base_position_y\"):
+			var base_scale: Vector2 = sprite.get_meta(\"base_scale\")
+			var base_position_y: float = float(sprite.get_meta(\"base_position_y\"))
+
+			sprite.scale = base_scale * fator
+
+			var nova_posicao: Vector2 = sprite.position
+			nova_posicao.y = base_position_y * fator
+			sprite.position = nova_posicao
+
+	elif node is BoxContainer:
+		var box := node as BoxContainer
+
+		if box.has_meta(\"base_minimum_size\"):
+			var base_minimum_size: Vector2 = box.get_meta(\"base_minimum_size\")
+			box.custom_minimum_size = base_minimum_size * fator
+
+			
+		if box.has_meta(\"base_separation\"):
+			var base_separation: int = int(box.get_meta(\"base_separation\"))
+			var nova_separation: int = int(round(base_separation * fator))
+
+			box.add_theme_constant_override(\"separation\", nova_separation)
+
+func esta_dentro_do_logo(node: Node) -> bool:
+	var atual := node.get_parent()
+
+	while atual != null:
+		if atual.name.to_lower() == \"logo\":
+			return true
+
+		atual = atual.get_parent()
+
+	return false
+# ------------------------------------------------------
+
+
+
+# ---- M E N U  I N I C I A L ----
+func _on_new_game_button_pressed() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	get_tree().change_scene_to_file(scene_to_change_path)
+
+func _on_options_game_button_pressed() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$\"Menu Inicial\".visible = false
+	$Opcoes.visible = true
+	$BackgroundMenuInicial.visible = false
+	$BackgroundMenuOptions.visible = true
+	transition.play_backwards(\"default\")
+
+func _on_exit_game_button_pressed() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	SaveLoad._save()
+	get_tree().quit()
+# --------------------------------
+
+
+# ---- M E N U  O P C O E S  ----
+func _on_back_to_menu_button_pressed() -> void:
+	SaveLoad.save_data = Configs.configs
+	SaveLoad._save()
+	transition.play(\"default\")
+	await transition.animation_finished
+	$\"Menu Inicial\".visible = true
+	$Opcoes.visible = false
+	$BackgroundMenuInicial.visible = true
+	$BackgroundMenuOptions.visible = false
+	transition.play_backwards(\"default\")
+
+func _on_menu_sounds_settings_pressed() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$Opcoes.visible = false
+	$SettingSound.visible = true
+	transition.play_backwards(\"default\")
+
+func _on_menu_controllers_pressed() -> void:
+	pass # Replace with function body.
+
+func _on_menu_interface_pressed() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$Opcoes.visible = false
+	$Interface.visible = true
+	transition.play_backwards(\"default\")
+
+func _on_menu_acessibilidadades_pressed() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$Opcoes.visible = false
+	$Accessibility.visible = true
+	transition.play_backwards(\"default\")
+# --------------------------------
+
+# ---- M E N U  V O L U M E  ----
+func _on_back_to_menu_button_pressed_on_settings_sounds() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$Opcoes.visible = true
+	$SettingSound.visible = false
+	transition.play_backwards(\"default\")
+
+# ---- M E N U  I N T E R F A C E  ----
+func _on_back_to_menu_button_pressed_on_interface_menu() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$Opcoes.visible = true
+	$Interface.visible = false
+	transition.play_backwards(\"default\")
+
+func _on_options_interface_size_item_selected(index: int) -> void:
+	aplicar_tamanho_interface_por_index(index)
+
+# ---- M E N U  A C E S S I B I L I D A D E S  ----
+func _on_back_to_menu_button_pressed_on_acessibility() -> void:
+	transition.play(\"default\")
+	await transition.animation_finished
+	$Opcoes.visible = true
+	$Accessibility.visible = false
+	transition.play_backwards(\"default\")
+
+# ---- M E N U  P R I M E I R A  V E Z  ----
+func _on_back_to_menu_button_pressed_on_menu_primeira_vez() -> void:
+	$\"Menu Inicial\".visible = true
+	$PrimeiraVez.visible = false
+"
+
+[sub_resource type="GDScript" id="GDScript_aduey"]
+script/source = "extends Node2D
+
+
+func _on_new_game_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"NOVO JOGO\"))
+
+
+func _on_options_game_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"OPÇÕES\"))
+
+
+func _on_exit_game_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"SAIR\"))
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lop0i"]
+shader = ExtResource("1_8ed56")
+shader_parameter/shine_duration = 0.6
+shader_parameter/pause_duration = 3.0
+shader_parameter/width = 0.15
+shader_parameter/intensity = 1.0
+shader_parameter/shine_color = Color(1, 1, 1, 1)
+
+[sub_resource type="GDScript" id="GDScript_dwq42"]
+script/source = "extends Button
+
+@export_category(\"Hover\")
+@export var hover_scale: Vector2 = Vector2(1.1, 1.1)
+@export var hover_animation_length: float = 0.1
+@export var un_hover_animation_length: float = 0.1
+
+@export_category(\"Press\")
+@export var press_scale: Vector2 = Vector2(0.95, 0.95)
+@export var press_animation_length_1: float = 0.1
+@export var press_animation_length_2: float = 0.1
+
+var animation_tween: Tween
+
+func _ready() -> void:
+	pressed.connect(_button_press)
+
+	mouse_entered.connect(_button_hover)
+	mouse_exited.connect(_button_un_hover)
+
+	focus_entered.connect(_button_hover)
+	focus_exited.connect(_button_un_hover)
+
+	pivot_offset = size / 2.0
+
+
+func _button_press() -> void:
+	if animation_tween:
+		animation_tween.kill()
+
+	animation_tween = create_tween().set_trans(Tween.TRANS_SINE)
+
+	animation_tween.tween_property(self, \"scale\", press_scale, press_animation_length_1)
+	animation_tween.chain().tween_property(self, \"scale\", hover_scale, press_animation_length_2)
+
+
+func _button_hover() -> void:
+
+	if animation_tween:
+		animation_tween.kill()
+
+	animation_tween = create_tween().set_trans(Tween.TRANS_SINE)
+	animation_tween.tween_property(self, \"scale\", hover_scale, hover_animation_length)
+
+
+func _button_un_hover() -> void:
+	if animation_tween:
+		animation_tween.kill()
+
+	animation_tween = create_tween().set_trans(Tween.TRANS_SINE)
+	animation_tween.tween_property(self, \"scale\", Vector2.ONE, un_hover_animation_length)
+"
+
+[sub_resource type="GDScript" id="GDScript_d2tqo"]
+script/source = "extends Node2D
+
+
+func _on_option_language_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Idioma\"))
+
+
+func _on_menu_sounds_settings_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Opções de Volume\"))
+
+
+func _on_menu_controllers_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Opções de Controles\"))
+
+
+func _on_menu_interface_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Opções de Interface\"))
+
+
+func _on_menu_acessibilidadades_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Opções de Acessibilidade\"))
+
+
+func _on_back_to_menu_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
+"
+
+[sub_resource type="GDScript" id="GDScript_au6yr"]
+script/source = "extends Node2D
+
+func _on_back_to_menu_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
+
+
+func _on_volume_slider_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Volume\")) 
+
+
+func _on_music_slider_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Música\"))
+
+
+func _on_sfx_slider_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Ambiente\"))
+
+
+func _on_ldt_slider_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Leitor de Tela\"))
+
+
+func _on_volume_slider_value_changed(value: float) -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
+
+
+func _on_music_slider_value_changed(value: float) -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
+
+
+func _on_sfx_slider_value_changed(value: float) -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
+
+
+func _on_ldt_slider_value_changed(value: float) -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
+"
+
+[sub_resource type="GDScript" id="GDScript_gulxn"]
+script/source = "extends Node2D
+
+@onready var options_frame_rate: OptionButton = $OptionsFrameRate
+@onready var options_interface_size: OptionButton = $OptionsInterfaceSize
+
+
+func _on_tela_cheia_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+		Configs._change_tela_cheia(true)
+		if Configs.configs.leitor_de_tela:
+			LeitorDeTela._ler_texto(atr(\"Tela cheia ativada\"))
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
+		Configs._change_tela_cheia(false)
+		if Configs.configs.leitor_de_tela:
+			LeitorDeTela._ler_texto(atr(\"Tela cheia desativada\"))
+
+
+func _on_mostrar_fps_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		Configs._change_mostrar_fps(true)
+		if Configs.configs.leitor_de_tela:
+			LeitorDeTela._ler_texto(atr(\"Mostrar FPS ativado\"))
+	else:
+		Configs._change_mostrar_fps(false)
+		if Configs.configs.leitor_de_tela:
+			LeitorDeTela._ler_texto(atr(\"Mostrar FPS desativado\"))
+
+
+func _on_options_frame_rate_item_selected(index: int) -> void:
+	Engine.max_fps = options_frame_rate.get_item_id(index)
+	Configs._change_frame_rate(Engine.max_fps)
+
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(options_frame_rate.get_item_id(index))))
+
+
+func _on_back_to_menu_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
+
+
+func _on_tela_cheia_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Tela Cheia\"))
+
+
+func _on_mostrar_fps_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Mostrar FPS\"))
+
+
+func _on_options_frame_rate_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Limite de FPS\"))
+
+
+func _on_options_frame_rate_item_focused(index: int) -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(options_frame_rate.get_item_id(index))))
+
+
+func _on_options_interface_size_item_selected(index: int) -> void:
+	Configs._change_interface_size(index)
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(str(options_interface_size.get_item_text(index))))
+"
+
+[sub_resource type="GDScript" id="GDScript_brbsc"]
+script/source = "extends Node2D
+
+func _iniciar() -> void:
+	
+	var idioma: String = OS.get_locale_language()
+	var new_language
+	if idioma == \"pt\":
+		print(\"dgsahujdgajhsd\")
+		new_language = \"PORTUGUÊS\"
+	elif idioma == \"en\":
+		new_language = \"ENGLISH\"
+	elif idioma == \"es\":
+		new_language = \"ESPAÑOL\"
+	elif idioma == \"fr\":
+		new_language = \"FRANÇAIS\"
+	else:
+		new_language = \"ENGLISH\"
+		
+	Configs._change_traducao(new_language)
+	TranslationServer.set_locale(new_language)
+	SaveLoad._save()
+	
+	if Configs.configs.primeira_vez:
+		LeitorDeTela._ler_texto(atr(\"Bem Vindo, o leitor de tela pode ser ativado\"))
+		
+	pass 
+
+
+func _on_back_to_menu_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
+
+
+func _on_option_language_button_mouse_entered() -> void:
+	if Configs.configs.leitor_de_tela:
+		LeitorDeTela._ler_texto(atr(\"Idioma\"))
+
+
+func _on_leitor_de_tela_mouse_entered() -> void:
+	if Configs.configs.primeira_vez:
+		LeitorDeTela._ler_texto(atr(\"Leitor de Tela\"))
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dmrql"]
+shader = ExtResource("7_e1iit")
+shader_parameter/blur_amount = 1.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s770a"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(0, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ry7uj"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(384, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_heorm"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(768, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xciv"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(1152, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbitn"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(1536, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r27yb"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(1920, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cq8n8"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(2304, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbijp"]
+atlas = ExtResource("6_1d07u")
+region = Rect2(2688, 0, 384, 216)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vdsvq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s770a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ry7uj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_heorm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xciv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbitn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r27yb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cq8n8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbijp")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 30.0
+}]
+
+[sub_resource type="QuadMesh" id="QuadMesh_hp4hf"]
+
+[node name="Principal" type="Node2D" unique_id=1854141835]
+script = SubResource("GDScript_8ibws")
+scene_to_change_path = "uid://btiojmlbqhdrn"
+
+[node name="Menu Inicial" type="Node2D" parent="." unique_id=441017326]
+script = SubResource("GDScript_aduey")
+
+[node name="AuraLogo" type="Sprite2D" parent="Menu Inicial" unique_id=569960088]
+material = SubResource("ShaderMaterial_lop0i")
+position = Vector2(108, 70)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_7w63j")
+region_enabled = true
+region_rect = Rect2(9, 12, 109, 40)
+metadata/_edit_lock_ = true
+
+[node name="CodeLogo" type="Sprite2D" parent="Menu Inicial" unique_id=247713054]
+position = Vector2(108.00001, 114)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_7w63j")
+region_enabled = true
+region_rect = Rect2(32, 87, 49, 15)
+metadata/_edit_lock_ = true
+
+[node name="VContainer" type="VBoxContainer" parent="Menu Inicial" unique_id=198518198]
+offset_left = 55.0
+offset_top = 139.0
+offset_right = 159.0
+offset_bottom = 235.0
+pivot_offset = Vector2(44, 44)
+alignment = 1
+
+[node name="NewGameButton" parent="Menu Inicial/VContainer" unique_id=464511439 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+size_flags_vertical = 4
+text = "NOVO JOGO"
+
+[node name="OptionsGameButton" parent="Menu Inicial/VContainer" unique_id=407914417 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "OPÇÕES"
+
+[node name="ExitGameButton" parent="Menu Inicial/VContainer" unique_id=940429094 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "SAIR"
+script = SubResource("GDScript_dwq42")
+
+[node name="Opcoes" type="Node2D" parent="." unique_id=316651987]
+visible = false
+script = SubResource("GDScript_d2tqo")
+
+[node name="Label" type="Label" parent="Opcoes" unique_id=1178174762]
+offset_right = 480.0
+offset_bottom = 49.0
+pivot_offset = Vector2(72, 24)
+theme_override_fonts/font = ExtResource("8_cwg8b")
+theme_override_font_sizes/font_size = 40
+text = "OPÇÕES"
+horizontal_alignment = 1
+
+[node name="VContainer" type="VBoxContainer" parent="Opcoes" unique_id=1417689129]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 113.24906
+offset_top = 68.05654
+offset_right = 352.24905
+offset_bottom = 202.05655
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 13
+alignment = 1
+
+[node name="OptionLanguageButton" type="OptionButton" parent="Opcoes/VContainer" unique_id=639345582]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("14_sp8er")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 4
+popup/item_0/text = "PORTUGUÊS"
+popup/item_0/id = 0
+popup/item_1/text = "ENGLISH"
+popup/item_1/id = 1
+popup/item_2/text = "ESPAÑOL"
+popup/item_2/id = 2
+popup/item_3/text = "FRANÇAIS"
+popup/item_3/id = 3
+script = ExtResource("15_87yob")
+pixel_font = ExtResource("9_hjo07")
+pixel_font_size = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Opcoes/VContainer/OptionLanguageButton" unique_id=2054117421]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.07112971
+anchor_top = 0.05
+anchor_right = -0.07112971
+anchor_bottom = 0.05
+offset_left = 17.0
+offset_top = -17.0
+offset_right = 80.0
+offset_bottom = 6.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Idioma"
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Opcoes/VContainer/OptionLanguageButton" unique_id=821123754]
+position = Vector2(-15, 4)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("11_uro47")
+
+[node name="VContainer" type="VBoxContainer" parent="Opcoes/VContainer" unique_id=1714036469]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MenuSoundsSettings" parent="Opcoes/VContainer/VContainer" unique_id=348332979 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/pressed = ExtResource("12_wwn80")
+theme_override_styles/disabled = ExtResource("12_wwn80")
+theme_override_styles/focus = ExtResource("12_wwn80")
+text = "Volume"
+icon = ExtResource("13_e5vij")
+flat = false
+autowrap_mode = 1
+expand_icon = true
+script = ExtResource("14_a2p0c")
+
+[node name="MenuControllers" parent="Opcoes/VContainer/VContainer" unique_id=1211165866 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+text = "Controles"
+icon = ExtResource("15_0mpbj")
+flat = false
+expand_icon = true
+script = ExtResource("14_a2p0c")
+
+[node name="MenuInterface" parent="Opcoes/VContainer/VContainer" unique_id=683670524 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+theme_override_icons/icon = ExtResource("16_d6mn4")
+text = "Interface"
+flat = false
+expand_icon = true
+script = ExtResource("14_a2p0c")
+
+[node name="MenuAcessibilidadades" parent="Opcoes/VContainer/VContainer" unique_id=802893363 instance=ExtResource("8_e46k6")]
+layout_mode = 2
+theme_override_icons/icon = ExtResource("17_tpdn8")
+text = "Acessibilidade"
+flat = false
+expand_icon = true
+script = ExtResource("14_a2p0c")
+
+[node name="BackToMenuButton" parent="Opcoes" unique_id=1249152386 instance=ExtResource("8_e46k6")]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 453.0
+offset_top = 2.0
+offset_right = 478.0
+offset_bottom = 27.0
+grow_horizontal = 0
+pivot_offset = Vector2(13, 13)
+theme_override_constants/icon_max_width = 23
+theme_override_icons/icon = ExtResource("16_uro47")
+icon = ExtResource("16_uro47")
+
+[node name="SettingSound" type="Node2D" parent="." unique_id=1863827344]
+visible = false
+script = SubResource("GDScript_au6yr")
+
+[node name="Label" type="Label" parent="SettingSound" unique_id=294837672]
+anchors_preset = -1
+anchor_left = -0.15416667
+anchor_top = -0.05185185
+anchor_right = -0.0020833334
+anchor_bottom = -0.05185185
+offset_top = 2.000001
+offset_right = 480.0
+offset_bottom = 51.0
+pivot_offset = Vector2(72, 24)
+theme_override_fonts/font = ExtResource("8_cwg8b")
+theme_override_font_sizes/font_size = 32
+text = "Configurações de Volume"
+horizontal_alignment = 1
+
+[node name="VContainer" type="VBoxContainer" parent="SettingSound" unique_id=1177525169]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 140.0
+offset_top = 74.0
+offset_right = 324.0
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="volume_slider" parent="SettingSound/VContainer" unique_id=1050084370 instance=ExtResource("21_wx2ih")]
+layout_mode = 2
+theme_override_constants/grabber_offset = 0
+value = 0.0
+bus_name = "Master"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="SettingSound/VContainer/volume_slider" unique_id=1546773487]
+layout_mode = 0
+offset_top = -15.0
+offset_right = 63.0
+offset_bottom = 8.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Volume"
+
+[node name="valueVolume" type="Label" parent="SettingSound/VContainer/volume_slider" unique_id=1275555422]
+layout_mode = 0
+offset_left = 193.0
+offset_top = -4.0
+offset_right = 233.0
+offset_bottom = 12.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "0.0%"
+script = ExtResource("22_l3pgq")
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingSound/VContainer/volume_slider" unique_id=738202887]
+position = Vector2(-15, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("13_e5vij")
+
+[node name="music_slider" parent="SettingSound/VContainer" unique_id=302280531 instance=ExtResource("21_wx2ih")]
+layout_mode = 2
+theme_override_constants/grabber_offset = 0
+bus_name = "Music"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="SettingSound/VContainer/music_slider" unique_id=70215321]
+layout_mode = 0
+offset_top = -14.0
+offset_right = 63.0
+offset_bottom = 9.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Música"
+
+[node name="valueMusic" type="Label" parent="SettingSound/VContainer/music_slider" unique_id=1699647418]
+layout_mode = 0
+offset_left = 193.0
+offset_top = -4.0
+offset_right = 233.0
+offset_bottom = 12.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "0.0%"
+script = ExtResource("23_ruetv")
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingSound/VContainer/music_slider" unique_id=319767956]
+position = Vector2(-15, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("24_kwms5")
+
+[node name="sfx_slider" parent="SettingSound/VContainer" unique_id=365052139 instance=ExtResource("21_wx2ih")]
+layout_mode = 2
+theme_override_constants/grabber_offset = 0
+bus_name = "sfx"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="SettingSound/VContainer/sfx_slider" unique_id=1904687893]
+layout_mode = 0
+offset_top = -13.0
+offset_right = 63.0
+offset_bottom = 10.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Ambiente"
+
+[node name="valueSFX" type="Label" parent="SettingSound/VContainer/sfx_slider" unique_id=1698967497]
+layout_mode = 0
+offset_left = 193.0
+offset_top = -4.0
+offset_right = 233.0
+offset_bottom = 12.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "0.0%"
+script = ExtResource("25_s3xfc")
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingSound/VContainer/sfx_slider" unique_id=725032545]
+position = Vector2(-15, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("26_3hmxf")
+
+[node name="ldt_slider" parent="SettingSound/VContainer" unique_id=1929455966 instance=ExtResource("21_wx2ih")]
+layout_mode = 2
+theme_override_constants/grabber_offset = 0
+bus_name = "ldt"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="SettingSound/VContainer/ldt_slider" unique_id=723850059]
+layout_mode = 0
+offset_top = -13.0
+offset_right = 63.0
+offset_bottom = 10.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Leitor de Tela"
+
+[node name="valueLDT" type="Label" parent="SettingSound/VContainer/ldt_slider" unique_id=1079405448]
+layout_mode = 0
+offset_left = 193.0
+offset_top = -4.0
+offset_right = 233.0
+offset_bottom = 12.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "0.0%"
+script = ExtResource("27_h0ab0")
+
+[node name="Sprite2D" type="Sprite2D" parent="SettingSound/VContainer/ldt_slider" unique_id=1554590497]
+position = Vector2(-15, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("28_4axyp")
+
+[node name="BackToMenuButton" parent="SettingSound" unique_id=1152320076 instance=ExtResource("8_e46k6")]
+offset_left = 453.0
+offset_top = 2.0
+offset_right = 478.0
+offset_bottom = 27.0
+grow_horizontal = 0
+pivot_offset = Vector2(13, 13)
+theme_override_constants/icon_max_width = 23
+theme_override_icons/icon = ExtResource("16_uro47")
+icon = ExtResource("16_uro47")
+
+[node name="Interface" type="Node2D" parent="." unique_id=542096577]
+visible = false
+script = SubResource("GDScript_gulxn")
+
+[node name="Label" type="Label" parent="Interface" unique_id=1732049581]
+anchors_preset = -1
+anchor_left = -0.15416667
+anchor_top = -0.014814815
+anchor_right = 0.1875
+anchor_bottom = -0.014814815
+offset_top = 7.0
+offset_right = 480.0
+offset_bottom = 56.0
+pivot_offset = Vector2(72, 24)
+theme_override_fonts/font = ExtResource("8_cwg8b")
+theme_override_font_sizes/font_size = 40
+text = "INTERFACE"
+horizontal_alignment = 1
+
+[node name="TelaCheia" type="CheckBox" parent="Interface" unique_id=148363256]
+anchors_preset = -1
+offset_left = 101.0
+offset_top = 75.0
+offset_right = 194.0
+offset_bottom = 99.0
+theme_override_constants/h_separation = 7
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Tela Cheia"
+flat = true
+script = ExtResource("32_ldthr")
+
+[node name="Sprite18" type="Sprite2D" parent="Interface/TelaCheia" unique_id=1497351401]
+position = Vector2(-17, 11)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("33_uqvdj")
+
+[node name="MostrarFps" type="CheckBox" parent="Interface" unique_id=1205473490]
+offset_left = 99.0
+offset_top = 138.0
+offset_right = 216.0
+offset_bottom = 162.0
+theme_override_constants/h_separation = 7
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Mostrar FPS"
+flat = true
+script = ExtResource("34_71tyw")
+
+[node name="Sprite2D" type="Sprite2D" parent="Interface/MostrarFps" unique_id=60706656]
+position = Vector2(-15, 12)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("35_ok68f")
+
+[node name="OptionsFrameRate" type="OptionButton" parent="Interface" unique_id=1987265582]
+offset_left = 278.0
+offset_top = 155.0
+offset_right = 412.0
+offset_bottom = 179.0
+theme_override_fonts/font = ExtResource("14_sp8er")
+theme_override_font_sizes/font_size = 12
+item_count = 4
+popup/item_0/text = "30 FPS"
+popup/item_0/id = 30
+popup/item_1/text = "60 FPS"
+popup/item_1/id = 60
+popup/item_2/text = "120 FPS"
+popup/item_2/id = 120
+popup/item_3/text = "Ilimitado"
+popup/item_3/id = 0
+script = ExtResource("36_8ibws")
+pixel_font = ExtResource("9_hjo07")
+pixel_font_size = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Interface/OptionsFrameRate" unique_id=1171772738]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.1119403
+anchor_right = -0.014925373
+offset_left = 17.0
+offset_top = -18.999996
+offset_right = 92.0
+offset_bottom = 4.000004
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 14
+text = "Limite de FPS"
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Interface/OptionsFrameRate" unique_id=833301602]
+position = Vector2(-20.99997, -5)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("37_aduey")
+
+[node name="OptionsInterfaceSize" type="OptionButton" parent="Interface" unique_id=1751656589]
+offset_left = 279.0
+offset_top = 95.0
+offset_right = 413.0
+offset_bottom = 116.0
+theme_override_fonts/font = ExtResource("14_sp8er")
+theme_override_font_sizes/font_size = 10
+item_count = 3
+popup/item_0/text = "Padrão"
+popup/item_0/id = 0
+popup/item_1/text = "Diminuida"
+popup/item_1/id = 1
+popup/item_2/text = "Aumentada"
+popup/item_2/id = 2
+script = ExtResource("38_dwq42")
+pixel_font = ExtResource("8_cwg8b")
+pixel_font_size = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Interface/OptionsInterfaceSize" unique_id=249950414]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.12686561
+anchor_right = 0.38059703
+offset_left = 17.0
+offset_top = -17.0
+offset_right = 80.0
+offset_bottom = 6.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Tamanho da Interface"
+metadata/_edit_use_anchors_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Interface/OptionsInterfaceSize" unique_id=1830823395]
+position = Vector2(-21.99997, -9)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("39_d2tqo")
+
+[node name="BackToMenuButton" parent="Interface" unique_id=157982470 instance=ExtResource("8_e46k6")]
+offset_left = 453.0
+offset_top = 2.0
+offset_right = 478.0
+offset_bottom = 27.0
+grow_horizontal = 0
+pivot_offset = Vector2(13, 13)
+theme_override_constants/icon_max_width = 23
+theme_override_icons/icon = ExtResource("16_uro47")
+icon = ExtResource("16_uro47")
+
+[node name="Accessibility" type="Node2D" parent="." unique_id=1659829776]
+visible = false
+
+[node name="Label" type="Label" parent="Accessibility" unique_id=62005335]
+anchors_preset = -1
+anchor_left = -0.15416667
+anchor_top = -0.014814815
+anchor_right = 0.1875
+anchor_bottom = -0.014814815
+offset_right = 480.0
+offset_bottom = 49.0
+pivot_offset = Vector2(72, 24)
+theme_override_fonts/font = ExtResource("8_cwg8b")
+theme_override_font_sizes/font_size = 40
+text = "ACESSIBILIDADE"
+horizontal_alignment = 1
+
+[node name="VContainer" type="VBoxContainer" parent="Accessibility" unique_id=1384590856]
+offset_left = 118.0
+offset_top = 64.0
+offset_right = 329.0
+offset_bottom = 238.0
+theme_override_constants/separation = 18
+script = ExtResource("41_uwub7")
+
+[node name="OptionDaltonismoButton" type="OptionButton" parent="Accessibility/VContainer" unique_id=1149141263]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("14_sp8er")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 4
+popup/item_0/text = "Desligado"
+popup/item_0/id = 0
+popup/item_1/text = "Auxílio Protanopia"
+popup/item_1/id = 1
+popup/item_2/text = "Auxílio Deuteranopia"
+popup/item_2/id = 2
+popup/item_3/text = "Auxílio Tritanopia"
+popup/item_3/id = 3
+script = ExtResource("42_optdy")
+pixel_font = ExtResource("9_hjo07")
+pixel_font_size = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Accessibility/VContainer/OptionDaltonismoButton" unique_id=341723286]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.0663717
+anchor_top = -0.16666648
+anchor_right = 0.18555143
+anchor_bottom = 0.0952381
+offset_left = 17.0
+offset_top = -11.500004
+offset_right = 78.2871
+offset_bottom = 6.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Filtro de daltonismo"
+metadata/_edit_use_anchors_ = true
+
+[node name="IntensidadeDaltonismo" type="HSlider" parent="Accessibility/VContainer" unique_id=79041385]
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("43_c62xq")
+theme_override_icons/grabber_highlight = ExtResource("43_c62xq")
+theme_override_icons/grabber_disabled = ExtResource("43_c62xq")
+theme_override_styles/slider = ExtResource("44_2gnsi")
+theme_override_styles/grabber_area = ExtResource("45_mhowh")
+theme_override_styles/grabber_area_highlight = ExtResource("45_mhowh")
+max_value = 1.0
+step = 0.01
+script = ExtResource("46_odi5q")
+
+[node name="Label" type="Label" parent="Accessibility/VContainer/IntensidadeDaltonismo" unique_id=1251013475]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.07522124
+anchor_top = 2.8611107
+anchor_right = -0.07522124
+anchor_bottom = 2.8611107
+offset_left = 17.0
+offset_top = -41.749996
+offset_right = 134.0
+offset_bottom = -18.749996
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Intensidade"
+metadata/_edit_use_anchors_ = true
+
+[node name="Legendas" type="CheckBox" parent="Accessibility/VContainer" unique_id=1174431280]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Legendas"
+flat = true
+script = ExtResource("47_rgcw2")
+
+[node name="Tamanho" type="SpinBox" parent="Accessibility/VContainer/Legendas" unique_id=124055614]
+visible = false
+layout_mode = 0
+offset_left = 56.0
+offset_top = 22.0
+offset_right = 142.5
+offset_bottom = 53.0
+scale = Vector2(0.6, 0.6)
+min_value = 8.0
+max_value = 16.0
+value = 10.0
+suffix = "px"
+
+[node name="Label" type="Label" parent="Accessibility/VContainer/Legendas/Tamanho" unique_id=1121423891]
+layout_mode = 0
+offset_left = -72.85713
+offset_top = -3.0517578e-05
+offset_right = -3.857132
+offset_bottom = 28.57138
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 16
+text = "Tamanho"
+vertical_alignment = 1
+
+[node name="Back" type="Sprite2D" parent="Accessibility/VContainer/Legendas" unique_id=1833887889]
+visible = false
+position = Vector2(180, 35.000008)
+scale = Vector2(6, 6)
+texture = ExtResource("48_5eu1u")
+
+[node name="PreviewTamanho" type="Label" parent="Accessibility/VContainer/Legendas" unique_id=675232699]
+visible = false
+layout_mode = 0
+offset_left = 120.3125
+offset_top = 26.000008
+offset_right = 252.3125
+offset_bottom = 54.000008
+theme_override_fonts/font = ExtResource("49_ux6ub")
+theme_override_font_sizes/font_size = 13
+text = "px"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PreviewSubtitlles" type="Label" parent="Accessibility/VContainer/Legendas" unique_id=2120307935]
+visible = false
+layout_mode = 0
+offset_left = 120.3125
+offset_top = -0.9999924
+offset_right = 252.3125
+offset_bottom = 26.000008
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 10
+text = "10 Minutos..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sprite18" type="Sprite2D" parent="Accessibility/VContainer/Legendas" unique_id=1001763521]
+position = Vector2(-12, 12)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("50_jqje3")
+
+[node name="SpinBox" type="SpinBox" parent="Accessibility/VContainer/Legendas" unique_id=65692375]
+layout_mode = 0
+offset_left = 224.0
+offset_top = -34.0
+offset_right = 310.5
+offset_bottom = -3.0
+scale = Vector2(0.7, 0.7)
+max_value = 1.0
+step = 0.01
+alignment = 1
+script = ExtResource("51_cvc15")
+
+[node name="LeitorDeTela" type="CheckBox" parent="Accessibility/VContainer" unique_id=1977352214]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Leitor de Tela"
+flat = true
+icon_alignment = 2
+script = ExtResource("52_ephr7")
+
+[node name="Velocidade" type="SpinBox" parent="Accessibility/VContainer/LeitorDeTela" unique_id=162051311]
+visible = false
+layout_mode = 0
+offset_left = 56.0
+offset_top = 19.0
+offset_right = 142.5
+offset_bottom = 50.0
+scale = Vector2(0.7, 0.7)
+min_value = 0.5
+max_value = 3.0
+step = 0.5
+value = 1.0
+suffix = "x"
+
+[node name="Label" type="Label" parent="Accessibility/VContainer/LeitorDeTela/Velocidade" unique_id=1204663596]
+layout_mode = 0
+offset_left = -87.14285
+offset_right = -5.142853
+offset_bottom = 28.571402
+theme_override_fonts/font = ExtResource("9_hjo07")
+text = "Velocidade"
+vertical_alignment = 1
+
+[node name="Sprite18" type="Sprite2D" parent="Accessibility/VContainer/LeitorDeTela" unique_id=465163554]
+position = Vector2(-12, 12)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("28_4axyp")
+
+[node name="AltoContraste" type="CheckBox" parent="Accessibility/VContainer" unique_id=1994119951]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Alto Contraste"
+flat = true
+script = ExtResource("53_pqb3s")
+
+[node name="Sprite18" type="Sprite2D" parent="Accessibility/VContainer/AltoContraste" unique_id=1105132515]
+position = Vector2(-12, 12)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("54_hxftb")
+
+[node name="BackToMenuButton" parent="Accessibility" unique_id=1696244246 instance=ExtResource("8_e46k6")]
+offset_left = 453.0
+offset_top = 2.0
+offset_right = 478.0
+offset_bottom = 27.0
+grow_horizontal = 0
+pivot_offset = Vector2(13, 13)
+theme_override_constants/icon_max_width = 23
+theme_override_icons/icon = ExtResource("16_uro47")
+icon = ExtResource("16_uro47")
+
+[node name="PrimeiraVez" type="Node2D" parent="." unique_id=32790835]
+script = SubResource("GDScript_brbsc")
+
+[node name="ColorRect" type="ColorRect" parent="PrimeiraVez" unique_id=1002074400]
+material = SubResource("ShaderMaterial_dmrql")
+offset_right = 482.0
+offset_bottom = 270.0
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="PrimeiraVez" unique_id=523651046]
+z_index = 1
+offset_left = 118.0
+offset_top = 78.0
+offset_right = 378.0
+offset_bottom = 101.0
+theme_override_fonts/font = ExtResource("8_cwg8b")
+theme_override_font_sizes/font_size = 20
+text = "Bem Vindo"
+horizontal_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="PrimeiraVez" unique_id=218166353]
+position = Vector2(253, 125)
+scale = Vector2(10.41211, 9.40625)
+texture = ExtResource("9_3so0l")
+
+[node name="LeitorDeTela" type="CheckBox" parent="PrimeiraVez" unique_id=1728682958]
+offset_left = 190.0
+offset_top = 103.0
+offset_right = 305.0
+offset_bottom = 127.0
+theme_override_constants/h_separation = 7
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Leitor de Tela"
+flat = true
+icon_alignment = 2
+script = ExtResource("13_3tow0")
+
+[node name="Velocidade" type="SpinBox" parent="PrimeiraVez/LeitorDeTela" unique_id=1980974152]
+visible = false
+layout_mode = 0
+offset_left = 56.0
+offset_top = 19.0
+offset_right = 142.5
+offset_bottom = 50.0
+scale = Vector2(0.7, 0.7)
+min_value = 0.5
+max_value = 3.0
+step = 0.5
+value = 1.0
+suffix = "x"
+
+[node name="Label" type="Label" parent="PrimeiraVez/LeitorDeTela/Velocidade" unique_id=1740012334]
+layout_mode = 0
+offset_left = -87.14285
+offset_right = -5.142853
+offset_bottom = 28.571402
+theme_override_fonts/font = ExtResource("9_hjo07")
+text = "Velocidade"
+vertical_alignment = 1
+
+[node name="OptionLanguageButton" type="OptionButton" parent="PrimeiraVez" unique_id=1888961834]
+offset_left = 206.0
+offset_top = 161.0
+offset_right = 292.0
+offset_bottom = 182.0
+theme_override_fonts/font = ExtResource("14_sp8er")
+theme_override_font_sizes/font_size = 10
+selected = 0
+item_count = 4
+popup/item_0/text = "PORTUGUÊS"
+popup/item_0/id = 0
+popup/item_1/text = "ENGLISH"
+popup/item_1/id = 1
+popup/item_2/text = "ESPAÑOL"
+popup/item_2/id = 2
+popup/item_3/text = "FRANÇAIS"
+popup/item_3/id = 3
+script = ExtResource("15_87yob")
+pixel_font = ExtResource("9_hjo07")
+pixel_font_size = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="PrimeiraVez/OptionLanguageButton" unique_id=1726408728]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.19767442
+anchor_top = -0.095238276
+anchor_right = -0.19767442
+anchor_bottom = -0.095238276
+offset_left = 17.0
+offset_top = -17.0
+offset_right = 80.0
+offset_bottom = 6.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 12
+text = "Idioma"
+metadata/_edit_use_anchors_ = true
+
+[node name="BackToMenuButton" parent="PrimeiraVez" unique_id=176674471 instance=ExtResource("8_e46k6")]
+offset_left = 350.0
+offset_top = 81.0
+offset_right = 375.0
+offset_bottom = 106.0
+grow_horizontal = 0
+pivot_offset = Vector2(13, 13)
+theme_override_constants/icon_max_width = 23
+theme_override_icons/icon = ExtResource("16_uro47")
+icon = ExtResource("16_uro47")
+
+[node name="BackgroundMenuInicial" type="Sprite2D" parent="." unique_id=1492838052]
+z_index = -99
+position = Vector2(241, 135)
+scale = Vector2(1.005, 1)
+texture = ExtResource("5_e46k6")
+metadata/_edit_lock_ = true
+
+[node name="BackgroundMenuOptions" type="Sprite2D" parent="." unique_id=1258775074]
+visible = false
+z_index = -99
+position = Vector2(239.99998, 135.00002)
+scale = Vector2(0.99999994, 1)
+texture = ExtResource("29_wwn80")
+metadata/_edit_lock_ = true
+
+[node name="Transition" type="AnimatedSprite2D" parent="." unique_id=1522834345]
+visible = false
+z_index = 1
+position = Vector2(239.99998, 135)
+scale = Vector2(1.25, 1.2500001)
+sprite_frames = SubResource("SpriteFrames_vdsvq")
+metadata/_edit_lock_ = true
+
+[node name="ALTO_CONTRASTE" type="MeshInstance2D" parent="." unique_id=907147133]
+visible = false
+self_modulate = Color(0, 0, 0, 1)
+z_index = -1
+position = Vector2(224.00002, 144)
+scale = Vector2(522, 308.00003)
+mesh = SubResource("QuadMesh_hp4hf")
+metadata/_edit_lock_ = true
+
+[node name="FiltroDaltonismo" parent="." unique_id=1713150449 instance=ExtResource("8_8ed56")]
+visible = false
+
+[node name="FPSLabel" type="Label" parent="." unique_id=728948992]
+visible = false
+offset_top = 8.0
+offset_right = 32.0
+offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 9
+text = "123 FPS"
+script = ExtResource("10_e46k6")
+metadata/_edit_lock_ = true
+
+[connection signal="mouse_entered" from="Menu Inicial/VContainer/NewGameButton" to="Menu Inicial" method="_on_new_game_button_mouse_entered"]
+[connection signal="pressed" from="Menu Inicial/VContainer/NewGameButton" to="." method="_on_new_game_button_pressed"]
+[connection signal="mouse_entered" from="Menu Inicial/VContainer/OptionsGameButton" to="Menu Inicial" method="_on_options_game_button_mouse_entered"]
+[connection signal="pressed" from="Menu Inicial/VContainer/OptionsGameButton" to="." method="_on_options_game_button_pressed"]
+[connection signal="mouse_entered" from="Menu Inicial/VContainer/ExitGameButton" to="Menu Inicial" method="_on_exit_game_button_mouse_entered"]
+[connection signal="pressed" from="Menu Inicial/VContainer/ExitGameButton" to="." method="_on_exit_game_button_pressed"]
+[connection signal="item_selected" from="Opcoes/VContainer/OptionLanguageButton" to="Opcoes/VContainer/OptionLanguageButton" method="_on_item_selected"]
+[connection signal="mouse_entered" from="Opcoes/VContainer/OptionLanguageButton" to="Opcoes" method="_on_option_language_button_mouse_entered"]
+[connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuSoundsSettings" to="Opcoes" method="_on_menu_sounds_settings_mouse_entered"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuSoundsSettings" to="." method="_on_menu_sounds_settings_pressed"]
+[connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuControllers" to="Opcoes" method="_on_menu_controllers_mouse_entered"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuControllers" to="." method="_on_menu_controllers_pressed"]
+[connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuInterface" to="Opcoes" method="_on_menu_interface_mouse_entered"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuInterface" to="." method="_on_menu_interface_pressed"]
+[connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuAcessibilidadades" to="Opcoes" method="_on_menu_acessibilidadades_mouse_entered"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuAcessibilidadades" to="." method="_on_menu_acessibilidadades_pressed"]
+[connection signal="mouse_entered" from="Opcoes/BackToMenuButton" to="Opcoes" method="_on_back_to_menu_button_mouse_entered"]
+[connection signal="pressed" from="Opcoes/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed"]
+[connection signal="mouse_entered" from="SettingSound/VContainer/volume_slider" to="SettingSound" method="_on_volume_slider_mouse_entered"]
+[connection signal="value_changed" from="SettingSound/VContainer/volume_slider" to="SettingSound" method="_on_volume_slider_value_changed"]
+[connection signal="value_changed" from="SettingSound/VContainer/volume_slider" to="SettingSound/VContainer/volume_slider/valueVolume" method="_on_volume_slider_value_changed"]
+[connection signal="mouse_entered" from="SettingSound/VContainer/music_slider" to="SettingSound" method="_on_music_slider_mouse_entered"]
+[connection signal="value_changed" from="SettingSound/VContainer/music_slider" to="SettingSound" method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="SettingSound/VContainer/music_slider" to="SettingSound/VContainer/music_slider/valueMusic" method="_on_music_slider_value_changed"]
+[connection signal="mouse_entered" from="SettingSound/VContainer/sfx_slider" to="SettingSound" method="_on_sfx_slider_mouse_entered"]
+[connection signal="value_changed" from="SettingSound/VContainer/sfx_slider" to="SettingSound" method="_on_sfx_slider_value_changed"]
+[connection signal="value_changed" from="SettingSound/VContainer/sfx_slider" to="SettingSound/VContainer/sfx_slider/valueSFX" method="_on_sfx_slider_value_changed"]
+[connection signal="mouse_entered" from="SettingSound/VContainer/ldt_slider" to="SettingSound" method="_on_ldt_slider_mouse_entered"]
+[connection signal="value_changed" from="SettingSound/VContainer/ldt_slider" to="SettingSound" method="_on_ldt_slider_value_changed"]
+[connection signal="value_changed" from="SettingSound/VContainer/ldt_slider" to="SettingSound/VContainer/ldt_slider/valueLDT" method="_on_ldt_slider_value_changed"]
+[connection signal="mouse_entered" from="SettingSound/BackToMenuButton" to="SettingSound" method="_on_back_to_menu_button_mouse_entered"]
+[connection signal="pressed" from="SettingSound/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_settings_sounds"]
+[connection signal="mouse_entered" from="Interface/TelaCheia" to="Interface" method="_on_tela_cheia_mouse_entered"]
+[connection signal="toggled" from="Interface/TelaCheia" to="Interface" method="_on_tela_cheia_toggled"]
+[connection signal="mouse_entered" from="Interface/MostrarFps" to="Interface" method="_on_mostrar_fps_mouse_entered"]
+[connection signal="toggled" from="Interface/MostrarFps" to="Interface" method="_on_mostrar_fps_toggled"]
+[connection signal="item_focused" from="Interface/OptionsFrameRate" to="Interface" method="_on_options_frame_rate_item_focused"]
+[connection signal="item_selected" from="Interface/OptionsFrameRate" to="Interface" method="_on_options_frame_rate_item_selected"]
+[connection signal="mouse_entered" from="Interface/OptionsFrameRate" to="Interface" method="_on_options_frame_rate_mouse_entered"]
+[connection signal="item_focused" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_item_focused"]
+[connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="." method="_on_options_interface_size_item_selected"]
+[connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_item_selected"]
+[connection signal="mouse_entered" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_mouse_entered"]
+[connection signal="pressed" from="Interface/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_interface_menu"]
+[connection signal="item_selected" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_item_selected"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_mouse_entered"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/IntensidadeDaltonismo" to="Accessibility/VContainer" method="_on_intensidade_mouse_entered"]
+[connection signal="value_changed" from="Accessibility/VContainer/IntensidadeDaltonismo" to="Accessibility/VContainer" method="_on_intensidade_value_changed"]
+[connection signal="value_changed" from="Accessibility/VContainer/IntensidadeDaltonismo" to="Accessibility/VContainer/Legendas/SpinBox" method="_on_intensidade_value_changed"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer" method="_on_legendas_mouse_entered"]
+[connection signal="toggled" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer/Legendas" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/Legendas/Tamanho" to="Accessibility/VContainer" method="_on_tamanho_mouse_entered"]
+[connection signal="value_changed" from="Accessibility/VContainer/Legendas/Tamanho" to="Accessibility/VContainer/Legendas" method="_on_tamanho_value_changed"]
+[connection signal="value_changed" from="Accessibility/VContainer/Legendas/SpinBox" to="Accessibility/VContainer/IntensidadeDaltonismo" method="_on_spin_box_value_changed"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela" to="Accessibility/VContainer" method="_on_leitor_de_tela_mouse_entered"]
+[connection signal="toggled" from="Accessibility/VContainer/LeitorDeTela" to="Accessibility/VContainer/LeitorDeTela" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela/Velocidade" to="Accessibility/VContainer/LeitorDeTela" method="_on_velocidade_mouse_entered"]
+[connection signal="value_changed" from="Accessibility/VContainer/LeitorDeTela/Velocidade" to="Accessibility/VContainer/LeitorDeTela" method="_on_velocidade_value_changed"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste" to="Accessibility/VContainer/AltoContraste" method="_on_mouse_entered"]
+[connection signal="toggled" from="Accessibility/VContainer/AltoContraste" to="Accessibility/VContainer/AltoContraste" method="_on_toggled"]
+[connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_acessibility"]
+[connection signal="mouse_entered" from="PrimeiraVez/LeitorDeTela" to="PrimeiraVez" method="_on_leitor_de_tela_mouse_entered"]
+[connection signal="toggled" from="PrimeiraVez/LeitorDeTela" to="PrimeiraVez/LeitorDeTela" method="_on_toggled"]
+[connection signal="mouse_entered" from="PrimeiraVez/LeitorDeTela/Velocidade" to="PrimeiraVez/LeitorDeTela" method="_on_velocidade_mouse_entered"]
+[connection signal="value_changed" from="PrimeiraVez/LeitorDeTela/Velocidade" to="PrimeiraVez/LeitorDeTela" method="_on_velocidade_value_changed"]
+[connection signal="item_selected" from="PrimeiraVez/OptionLanguageButton" to="PrimeiraVez/OptionLanguageButton" method="_on_item_selected"]
+[connection signal="mouse_entered" from="PrimeiraVez/OptionLanguageButton" to="PrimeiraVez" method="_on_option_language_button_mouse_entered"]
+[connection signal="pressed" from="PrimeiraVez/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_menu_primeira_vez"]

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bvhi27tium5k"]
+
+[ext_resource type="Script" uid="uid://tpm7aq061dk" path="res://Scenes/scripts/scene_trigger.gd" id="1_mgjgu"]
+[ext_resource type="AudioStream" uid="uid://745vxabvgswc" path="res://Sounds/powerUp1.ogg" id="2_a25fm"]
+[ext_resource type="AudioStream" uid="uid://c0u7qqxsqras7" path="res://Sounds/pepSound1.ogg" id="3_ltik7"]
+
+[node name="SceneTrigger" type="Area2D" unique_id=889034584]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_mgjgu")
+
+[node name="Acesso liberado" type="AudioStreamPlayer2D" parent="." unique_id=152860672]
+stream = ExtResource("2_a25fm")
+
+[node name="Aceso negado" type="AudioStreamPlayer2D" parent="." unique_id=498956185]
+stream = ExtResource("3_ltik7")
+
+[node name="Timer" type="Timer" parent="." unique_id=1322855280]
+wait_time = 2.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

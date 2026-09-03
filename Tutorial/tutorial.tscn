@@ -1,0 +1,620 @@
+[gd_scene format=3 uid="uid://dw1cb3xxluveb"]
+
+[ext_resource type="Script" uid="uid://badtvdgktmr48" path="res://Tutorial/tutorial.gd" id="1_tutorial"]
+[ext_resource type="PackedScene" uid="uid://beyeq37qyobrm" path="res://Player/ManPlayer.tscn" id="2_player"]
+[ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="3_n4ihd"]
+[ext_resource type="PackedScene" uid="uid://ce1wy22xikmix" path="res://Objects/fogo.tscn" id="4_fire"]
+[ext_resource type="Texture2D" uid="uid://p6v25k2gbsgl" path="res://TileMaps/Andar_ferramentas/sprites/sprite_02.png" id="4_itvf6"]
+[ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="5_bold"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="5_itvf6"]
+[ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="7_n4ihd"]
+
+[sub_resource type="RectangleShape2D" id="WallHorizontal"]
+size = Vector2(320, 8)
+
+[sub_resource type="RectangleShape2D" id="WallVertical"]
+size = Vector2(8, 180)
+
+[sub_resource type="RectangleShape2D" id="ConsoleShape"]
+size = Vector2(18, 22)
+
+[sub_resource type="RectangleShape2D" id="CrateShape"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gotrj"]
+size = Vector2(24, 20)
+
+[sub_resource type="RectangleShape2D" id="MoveZoneShape"]
+size = Vector2(28, 30)
+
+[sub_resource type="RectangleShape2D" id="RunZoneShape"]
+size = Vector2(34, 30)
+
+[sub_resource type="RectangleShape2D" id="PushGoalShape"]
+size = Vector2(30, 34)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_itvf6"]
+size = Vector2(21.5, 26)
+
+[sub_resource type="RectangleShape2D" id="ExitZoneShape"]
+size = Vector2(28, 34)
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.02, 0.02, 0.02, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="ModalStyle"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.02, 0.03, 0.05, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.78, 0.18, 1)
+
+[sub_resource type="StyleBoxFlat" id="ButtonNormal"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.055, 0.11, 0.16, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.66, 0.72, 1)
+
+[sub_resource type="StyleBoxFlat" id="ButtonPressed"]
+bg_color = Color(0.12, 0.38, 0.35, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.86, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="ButtonHover"]
+bg_color = Color(0.09, 0.27, 0.31, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.66, 0.96, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="ButtonFocus"]
+bg_color = Color(0.055, 0.11, 0.16, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.86, 0.25, 1)
+
+[node name="PlayableTutorial" type="Node2D" unique_id=1828576534]
+process_mode = 3
+script = ExtResource("1_tutorial")
+
+[node name="TrainingLight" type="CanvasModulate" parent="." unique_id=519811764]
+
+[node name="Room" type="Node2D" parent="." unique_id=1018723188]
+
+[node name="Floor" type="Polygon2D" parent="Room" unique_id=1788486808]
+z_index = -10
+color = Color(0.015, 0.015, 0.015, 1)
+polygon = PackedVector2Array(-156, -86, 156, -86, 156, 86, -156, 86)
+
+[node name="FloorInner" type="Polygon2D" parent="Room" unique_id=986197538]
+z_index = -9
+color = Color(0.09, 0.09, 0.09, 1)
+polygon = PackedVector2Array(-146, -76, 146, -76, 146, 76, -146, 76)
+
+[node name="CenterPath" type="Polygon2D" parent="Room" unique_id=1335183132]
+z_index = -8
+color = Color(0.18, 0.18, 0.18, 1)
+polygon = PackedVector2Array(-142, 18, 138, 18, 138, 54, -142, 54)
+
+[node name="TopPath" type="Polygon2D" parent="Room" unique_id=419340947]
+z_index = -8
+color = Color(0.14, 0.14, 0.14, 1)
+polygon = PackedVector2Array(-45, -55, 130, -55, 130, -20, -45, -20)
+
+[node name="GridLines" type="Node2D" parent="Room" unique_id=260208653]
+z_index = -7
+
+[node name="Horizontal1" type="Line2D" parent="Room/GridLines" unique_id=1753952678]
+points = PackedVector2Array(-145, -18, 145, -18)
+width = 1.0
+default_color = Color(0.42, 0.42, 0.42, 0.45)
+
+[node name="Horizontal2" type="Line2D" parent="Room/GridLines" unique_id=119202789]
+points = PackedVector2Array(-145, 58, 145, 58)
+width = 1.0
+default_color = Color(0.42, 0.42, 0.42, 0.45)
+
+[node name="Vertical1" type="Line2D" parent="Room/GridLines" unique_id=1692601025]
+points = PackedVector2Array(-70, -75, -70, 75)
+width = 1.0
+default_color = Color(0.42, 0.42, 0.42, 0.45)
+
+[node name="Vertical2" type="Line2D" parent="Room/GridLines" unique_id=1483450896]
+points = PackedVector2Array(70, -75, 70, 75)
+width = 1.0
+default_color = Color(0.42, 0.42, 0.42, 0.45)
+
+[node name="WallsVisual" type="Node2D" parent="Room" unique_id=898283873]
+
+[node name="Top" type="Polygon2D" parent="Room/WallsVisual" unique_id=119526408]
+color = Color(0.88, 0.88, 0.88, 1)
+polygon = PackedVector2Array(-160, -90, 160, -90, 160, -82, -160, -82)
+
+[node name="Bottom" type="Polygon2D" parent="Room/WallsVisual" unique_id=1217748441]
+color = Color(0.88, 0.88, 0.88, 1)
+polygon = PackedVector2Array(-160, 82, 160, 82, 160, 90, -160, 90)
+
+[node name="Left" type="Polygon2D" parent="Room/WallsVisual" unique_id=1977154626]
+color = Color(0.88, 0.88, 0.88, 1)
+polygon = PackedVector2Array(-160, -90, -152, -90, -152, 90, -160, 90)
+
+[node name="Right" type="Polygon2D" parent="Room/WallsVisual" unique_id=1399594280]
+color = Color(0.88, 0.88, 0.88, 1)
+polygon = PackedVector2Array(152, -90, 160, -90, 160, 90, 152, 90)
+
+[node name="Walls" type="StaticBody2D" parent="Room" unique_id=2053220141]
+
+[node name="Top" type="CollisionShape2D" parent="Room/Walls" unique_id=1112700304]
+position = Vector2(0, -86)
+shape = SubResource("WallHorizontal")
+
+[node name="Bottom" type="CollisionShape2D" parent="Room/Walls" unique_id=757091434]
+position = Vector2(0, 86)
+shape = SubResource("WallHorizontal")
+
+[node name="Left" type="CollisionShape2D" parent="Room/Walls" unique_id=1559883956]
+position = Vector2(-156, 0)
+shape = SubResource("WallVertical")
+
+[node name="Right" type="CollisionShape2D" parent="Room/Walls" unique_id=367901613]
+position = Vector2(156, 0)
+shape = SubResource("WallVertical")
+
+[node name="Console" type="StaticBody2D" parent="Room" unique_id=1795795219]
+position = Vector2(117, -37)
+
+[node name="Body" type="Polygon2D" parent="Room/Console" unique_id=1731700542]
+color = Color(0.16, 0.2, 0.25, 1)
+polygon = PackedVector2Array(-10, -14, 10, -14, 10, 10, -10, 10)
+
+[node name="Screen" type="Polygon2D" parent="Room/Console" unique_id=799392441]
+color = Color(0.18, 0.86, 0.95, 1)
+polygon = PackedVector2Array(-7, -10, 7, -10, 7, 1, -7, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Console" unique_id=664243540]
+position = Vector2(0, -2)
+shape = SubResource("ConsoleShape")
+
+[node name="Marker" type="Label" parent="Room/Console" unique_id=2115326569]
+offset_left = -28.0
+offset_top = -29.0
+offset_right = 32.0
+offset_bottom = -18.0
+theme_override_colors/font_color = Color(1, 0.86, 0.25, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 8
+text = "TERMINAL"
+horizontal_alignment = 1
+
+[node name="Door" type="Polygon2D" parent="Room" unique_id=1504732273]
+position = Vector2(146, 42)
+color = Color(0.7, 0.18, 0.18, 0.88)
+polygon = PackedVector2Array(-5, -19, 5, -19, 5, 19, -5, 19)
+
+[node name="DoorLabel" type="Label" parent="Room" unique_id=2059449913]
+offset_left = 116.0
+offset_top = 61.0
+offset_right = 151.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.9, 0.94, 0.96, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 7
+text = "SAÍDA"
+horizontal_alignment = 1
+
+[node name="Props" type="Node2D" parent="." unique_id=1328527666]
+
+[node name="TargetCrate" type="CharacterBody2D" parent="Props" unique_id=873877965 groups=["empurravel", "tutorial_pushable"]]
+position = Vector2(-8, 30)
+script = ExtResource("3_n4ihd")
+save_id = "tutorial_target_crate"
+save_enabled = false
+
+[node name="Highlight" type="Polygon2D" parent="Props/TargetCrate" unique_id=455161832]
+z_index = -1
+color = Color(1, 0.55, 0.12, 0.28)
+polygon = PackedVector2Array(-9, -17, 9, -17, 9, 5, -9, 5)
+
+[node name="Sprite2D" type="Sprite2D" parent="Props/TargetCrate" unique_id=1696367753]
+position = Vector2(0, -5)
+texture = ExtResource("4_itvf6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/TargetCrate" unique_id=1463678028]
+position = Vector2(0, -5)
+shape = SubResource("CrateShape")
+
+[node name="AccessibleLabel" type="Label" parent="Props/TargetCrate" unique_id=2136315191]
+offset_left = -23.0
+offset_top = -26.0
+offset_right = 23.0
+offset_bottom = -16.0
+theme_override_colors/font_color = Color(1, 0.84, 0.24, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 7
+text = "CAIXA"
+horizontal_alignment = 1
+
+[node name="Interectable" parent="Props/TargetCrate" unique_id=1406152477 groups=["empurravel"] instance=ExtResource("5_itvf6")]
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Props/TargetCrate/Interectable" unique_id=177094349]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_gotrj")
+
+[node name="TrainingFire" parent="Props" unique_id=519740687 instance=ExtResource("4_fire")]
+visible = false
+position = Vector2(108, 30)
+save_id = "tutorial_fire"
+save_enabled = false
+damage_enabled = false
+
+[node name="FireLabel" type="Label" parent="Props" unique_id=1699607580]
+visible = false
+offset_left = 88.0
+offset_top = 51.0
+offset_right = 128.0
+offset_bottom = 62.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 8
+text = "FOGO"
+horizontal_alignment = 1
+
+[node name="DarkZoneLabel" type="Label" parent="Props" unique_id=1279231433]
+offset_left = 9.0
+offset_top = -68.0
+offset_right = 89.0
+offset_bottom = -56.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 8
+text = "ÁREA ESCURA"
+horizontal_alignment = 1
+
+[node name="TrainingExtinguisherPickup" parent="Props" unique_id=1140399274 instance=ExtResource("7_n4ihd")]
+position = Vector2(86, -62)
+scale = Vector2(0.5, 0.5)
+
+[node name="Zones" type="Node2D" parent="." unique_id=1663018355]
+
+[node name="MoveZone" type="Area2D" parent="Zones" unique_id=1054858463]
+position = Vector2(-83, 43)
+collision_layer = 0
+
+[node name="Marker" type="Polygon2D" parent="Zones/MoveZone" unique_id=1619742399]
+z_index = -2
+color = Color(0.1, 0.72, 0.95, 0.5)
+polygon = PackedVector2Array(-14, -15, 14, -15, 14, 15, -14, 15)
+
+[node name="Label" type="Label" parent="Zones/MoveZone" unique_id=327201262]
+offset_left = -14.0
+offset_top = -6.0
+offset_right = 14.0
+offset_bottom = 6.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 9
+text = "1"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Zones/MoveZone" unique_id=954115571]
+shape = SubResource("MoveZoneShape")
+
+[node name="RunZone" type="Area2D" parent="Zones" unique_id=95033074]
+position = Vector2(-25, -37)
+collision_layer = 0
+
+[node name="Marker" type="Polygon2D" parent="Zones/RunZone" unique_id=1670144857]
+z_index = -2
+color = Color(1, 0.7, 0.08, 0.52)
+polygon = PackedVector2Array(-17, -15, 17, -15, 17, 15, -17, 15)
+
+[node name="Label" type="Label" parent="Zones/RunZone" unique_id=496271352]
+offset_left = -17.0
+offset_top = -6.0
+offset_right = 17.0
+offset_bottom = 6.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 9
+text = "2"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Zones/RunZone" unique_id=566659228]
+shape = SubResource("RunZoneShape")
+
+[node name="PushGoal" type="Area2D" parent="Zones" unique_id=1000785978]
+position = Vector2(54, 22)
+collision_layer = 0
+
+[node name="Marker" type="Polygon2D" parent="Zones/PushGoal" unique_id=857257421]
+z_index = -2
+color = Color(0.3, 0.92, 0.45, 0.48)
+polygon = PackedVector2Array(-15, -17, 15, -17, 15, 17, -15, 17)
+
+[node name="Label" type="Label" parent="Zones/PushGoal" unique_id=523555814]
+offset_left = -18.0
+offset_top = -6.0
+offset_right = 18.0
+offset_bottom = 6.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 7
+text = "ALVO"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Zones/PushGoal" unique_id=1215682506]
+shape = SubResource("PushGoalShape")
+
+[node name="ConsoleArea" parent="Zones" unique_id=561564180 groups=["Coletaveis"] instance=ExtResource("5_itvf6")]
+position = Vector2(158, -36)
+interact_name = "Interagir"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Zones/ConsoleArea" unique_id=439633631]
+z_index = 2
+position = Vector2(-40.75, -3)
+shape = SubResource("RectangleShape2D_itvf6")
+
+[node name="ExitZone" type="Area2D" parent="Zones" unique_id=1305481323]
+position = Vector2(130, 42)
+collision_layer = 0
+
+[node name="Marker" type="Polygon2D" parent="Zones/ExitZone" unique_id=1119562661]
+z_index = -2
+color = Color(0.18, 0.9, 0.42, 0.5)
+polygon = PackedVector2Array(-14, -17, 14, -17, 14, 17, -14, 17)
+
+[node name="Label" type="Label" parent="Zones/ExitZone" unique_id=1155885811]
+offset_left = -19.0
+offset_top = -6.0
+offset_right = 19.0
+offset_bottom = 6.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 7
+text = "SAÍDA"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Zones/ExitZone" unique_id=382997531]
+shape = SubResource("ExitZoneShape")
+
+[node name="TrainingPlayer" parent="." unique_id=1928461296 instance=ExtResource("2_player")]
+position = Vector2(-126, 43)
+checkpoint_enabled = false
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1786955026]
+process_mode = 3
+layer = 20
+
+[node name="HUD" type="Control" parent="UI" unique_id=106904441]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ObjectivePanel" type="PanelContainer" parent="UI/HUD" unique_id=1974019179]
+self_modulate = Color(1, 1, 1, 0.65882355)
+layout_mode = 0
+offset_left = 229.0
+offset_top = 6.0
+offset_right = 474.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Content" type="VBoxContainer" parent="UI/HUD/ObjectivePanel" unique_id=532019759]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Progress" type="Label" parent="UI/HUD/ObjectivePanel/Content" unique_id=52467061 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.72, 0.72, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 7
+text = "OBJETIVO 1/5"
+
+[node name="Title" type="Label" parent="UI/HUD/ObjectivePanel/Content" unique_id=1412751763 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 10
+text = "MOVIMENTE-SE"
+
+[node name="Objective" type="Label" parent="UI/HUD/ObjectivePanel/Content" unique_id=332987697 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.94, 0.94, 1)
+theme_override_font_sizes/font_size = 8
+text = "Vá até o piso marcado."
+autowrap_mode = 2
+
+[node name="Hint" type="Label" parent="UI/HUD/ObjectivePanel/Content" unique_id=936578670 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.68, 0.68, 1)
+theme_override_font_sizes/font_size = 7
+text = "ESC pausa o treinamento."
+autowrap_mode = 2
+
+[node name="Feedback" type="Label" parent="UI/HUD" unique_id=613297114 groups=["alto_contraste"]]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 93.0
+offset_right = 474.0
+offset_bottom = 108.0
+theme_override_colors/font_color = Color(0.45, 1, 0.58, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 9
+horizontal_alignment = 2
+
+[node name="PauseOverlay" type="Control" parent="UI" unique_id=299778290]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="UI/PauseOverlay" unique_id=140314230]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78)
+
+[node name="Panel" type="PanelContainer" parent="UI/PauseOverlay" unique_id=1920800255]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 68.0
+offset_right = 350.0
+offset_bottom = 202.0
+theme_override_styles/panel = SubResource("ModalStyle")
+
+[node name="Content" type="VBoxContainer" parent="UI/PauseOverlay/Panel" unique_id=1130450308]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="UI/PauseOverlay/Panel/Content" unique_id=1087077434 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 18
+text = "TUTORIAL PAUSADO"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="UI/PauseOverlay/Panel/Content" unique_id=1076895136 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Você pode continuar quando quiser."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Resume" type="Button" parent="UI/PauseOverlay/Panel/Content" unique_id=2058680363 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonFocus")
+text = "CONTINUAR"
+
+[node name="Menu" type="Button" parent="UI/PauseOverlay/Panel/Content" unique_id=829066612 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonFocus")
+text = "MENU PRINCIPAL"
+
+[node name="CompletionOverlay" type="Control" parent="UI" unique_id=949532251]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="UI/CompletionOverlay" unique_id=2141385346]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.82)
+
+[node name="Panel" type="PanelContainer" parent="UI/CompletionOverlay" unique_id=1440446959]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -165.0
+offset_top = -34.0
+offset_right = 165.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("ModalStyle")
+
+[node name="Content" type="VBoxContainer" parent="UI/CompletionOverlay/Panel" unique_id=1541341702]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Title" type="Label" parent="UI/CompletionOverlay/Panel/Content" unique_id=1515927190 groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 20
+text = "TREINAMENTO CONCLUÍDO"
+horizontal_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="UI/CompletionOverlay/Panel/Content" unique_id=1665465755]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Continue" type="Button" parent="UI/CompletionOverlay/Panel/Content/Actions" unique_id=137140938 groups=["alto_contraste"]]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonFocus")
+text = "IR À SELEÇÃO"
+
+[node name="Replay" type="Button" parent="UI/CompletionOverlay/Panel/Content/Actions" unique_id=1491166327 groups=["alto_contraste"]]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_bold")
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("ButtonNormal")
+theme_override_styles/pressed = SubResource("ButtonPressed")
+theme_override_styles/hover = SubResource("ButtonHover")
+theme_override_styles/focus = SubResource("ButtonFocus")
+text = "REPETIR"
+
+[node name="SkipConfirmation" type="ConfirmationDialog" parent="UI" unique_id=1748249006]
+process_mode = 3
+title = "Pular tutorial?"
+initial_position = 2
+size = Vector2i(340, 130)
+ok_button_text = "PULAR"
+dialog_text = "Você pode rever o tutorial pelo menu principal."
+cancel_button_text = "CANCELAR"

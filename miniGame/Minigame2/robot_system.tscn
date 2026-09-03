@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://ckjyrg7gkakvv"]
+
+[ext_resource type="Script" uid="uid://bb6ufdl7uy4yy" path="res://MinigamesProgramador/Minigame2/scripts/robot_system.gd" id="1_vhs5j"]
+[ext_resource type="Texture2D" uid="uid://yn43m6fmuuwu" path="res://MinigamesProgramador/sprites/engrenagem.png" id="2_af5yc"]
+[ext_resource type="Texture2D" uid="uid://74v0hditnene" path="res://MinigamesProgramador/sprites/systemarea.png" id="2_eae4o"]
+[ext_resource type="Texture2D" uid="uid://b6dswjxqrqqvk" path="res://MinigamesProgramador/sprites/systemarea (1) (1).png" id="3_3mkxa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d28ht"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8b2de"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krvrh"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4stsd"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cfrdh"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojw1v"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(128, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5pofj"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vokvw"]
+atlas = ExtResource("3_3mkxa")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_af5yc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_eae4o")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d28ht")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8b2de")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krvrh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4stsd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cfrdh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ojw1v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5pofj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vokvw")
+}],
+"loop": 0,
+"name": &"hacked",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6mkor"]
+size = Vector2(15.5, 16)
+
+[node name="RobotSystem" type="Node2D" unique_id=14794486]
+script = ExtResource("1_vhs5j")
+
+[node name="systemarea" type="AnimatedSprite2D" parent="." unique_id=298832864]
+scale = Vector2(0.9, 0.9)
+sprite_frames = SubResource("SpriteFrames_af5yc")
+autoplay = "default"
+
+[node name="engrenagem" type="Sprite2D" parent="." unique_id=1756118148]
+position = Vector2(6, -6)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("2_af5yc")
+
+[node name="engrenagem2" type="Sprite2D" parent="." unique_id=2068025379]
+position = Vector2(-8, 8)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("2_af5yc")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=86359520]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=11144870]
+position = Vector2(-0.25, 0)
+shape = SubResource("RectangleShape2D_6mkor")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

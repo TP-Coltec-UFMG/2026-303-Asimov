@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d3sfhwwhc6xn2"]
+
+[ext_resource type="Script" uid="uid://ggvgxgji4ueo" path="res://NPC'S/DialogBox/dialog_manager.gd" id="1_blryi"]
+[ext_resource type="PackedScene" uid="uid://dn1l12ktryt3s" path="res://NPC'S/DialogBox/dialog_box.tscn" id="2_rltxh"]
+
+[node name="DialogManager" type="CanvasLayer" unique_id=241267555]
+script = ExtResource("1_blryi")
+dialog_scene = ExtResource("2_rltxh")

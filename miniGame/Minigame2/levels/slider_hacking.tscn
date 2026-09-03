@@ -1,0 +1,36 @@
+[gd_scene format=4 uid="uid://der8s6ndl6aab"]
+
+[ext_resource type="PackedScene" uid="uid://cb836joq6nx8f" path="res://MinigamesProgramador/Minigame2/hack.tscn" id="1_r572s"]
+[ext_resource type="PackedScene" uid="uid://ckjyrg7gkakvv" path="res://MinigamesProgramador/Minigame2/robot_system.tscn" id="2_b7coo"]
+[ext_resource type="PackedScene" uid="uid://dlfwdsq34wamo" path="res://MinigamesProgramador/Minigame2/tile_map_layer.tscn" id="3_6mkor"]
+[ext_resource type="PackedScene" uid="uid://um1p5aiw5gm7" path="res://MinigamesProgramador/Minigame2/levels/slider_hacking_2.tscn" id="3_f1fy3"]
+[ext_resource type="Shader" uid="uid://bas1cgrlt20f6" path="res://MinigamesProgramador/shader/UnlockSecurity.gdshader" id="5_3teoc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dv0kc"]
+shader = ExtResource("5_3teoc")
+shader_parameter/spacing = 4.0
+shader_parameter/strength = 0.25
+shader_parameter/speed = 0.5
+
+[node name="SliderHacking" type="Node2D" unique_id=262718207]
+
+[node name="Hack" parent="." unique_id=37334449 instance=ExtResource("1_r572s")]
+position = Vector2(372, 53)
+
+[node name="RobotSystem" parent="." unique_id=14794486 instance=ExtResource("2_b7coo")]
+position = Vector2(113, 117)
+next_scene = ExtResource("3_f1fy3")
+
+[node name="TileMapLayer" parent="." unique_id=904674279 instance=ExtResource("3_6mkor")]
+tile_map_data = PackedByteArray("AAAAAA4AAgABAAAAAAAAAA0AAgACAAEAAAAAAAwAAgACAAEAAAAAAAsAAgACAAEAAAAAAAoAAgACAAEAAAAAAAkAAgACAAEAAAAAAAgAAgACAAEAAAAAAAcAAgACAAEAAAAAAAYAAgACAAEAAAAAAAUAAgACAAEAAAAAAAQAAgACAAEAAAAAAAMAAgACAAEAAAAAAAIAAgACAAEAAAAAAAEAAgACAAEAAAAAAAAAAgACAAEAAAAVAAAAAgAAAAEAAAAXAAAAAgABAAEAAAAYAAAAAgABAAEAAAAZAAAAAgABAAEAAAAaAAAAAgABAAEAAAAcAAAAAgAAAAEAAAAcAAQAAgAAAAEAAAAcAAMAAgAAAAEAAAAcAAIAAgAAAAEAAAAcAAEAAgAAAAEAAAAcAP//AgAAAAEAAAAQABAAAgABAAAAAAAPABAAAgABAAAAAAAOABAAAgABAAAAAAANABAAAgABAAAAAAAMABAAAgABAAAAAAALABAAAgABAAAAAAAKABAAAgABAAAAAAAJABAAAgABAAAAAAAIABAAAgABAAAAAAAHABAAAgABAAAAAAAEAA4AAgACAAAAAAACAA4AAgABAAAAAAABAA4AAgABAAAAAAAAABAAAgABAAAAAAABABAAAgABAAAAAAACABAAAgABAAAAAAAFABAAAgABAAAAAAAEABAAAgABAAAAAAADABAAAgABAAAAAAAeAAQAAgABAAEAAAAeAAMAAgACAAEAAAAeAAIAAgACAAEAAAAeAAEAAgACAAEAAAAeAAAAAgACAAEAAAAeAP//AgACAAEAAAASABAAAgABAAAAAAAUABAAAgABAAAAAAAWABAAAgABAAAAAAAYABAAAgABAAAAAAAaABAAAgABAAAAAAAcABAAAgABAAAAAAAeABAAAgABAAAAAAA=")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=972048792]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=2109113478]
+material = SubResource("ShaderMaterial_dv0kc")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

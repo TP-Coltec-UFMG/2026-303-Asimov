@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cj80ya05gxtni"]
+
+[ext_resource type="PackedScene" uid="uid://beyeq37qyobrm" path="res://Player/ManPlayer.tscn" id="1_o02vu"]
+[ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://extintor.tscn" id="2_7w86a"]
+[ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs/Clarxs.tscn" id="3_s2wow"]
+[ext_resource type="PackedScene" uid="uid://cyl02mn4y4x7c" path="res://NPC'S/marker_point.tscn" id="4_3iyrq"]
+[ext_resource type="PackedScene" uid="uid://ce1wy22xikmix" path="res://fogo.tscn" id="5_4iivt"]
+
+[node name="Teste" type="Node2D" unique_id=1484873470]
+
+[node name="Fogo" parent="." unique_id=1620408042 instance=ExtResource("5_4iivt")]
+z_index = 99
+position = Vector2(123, 5)
+
+[node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("1_o02vu")]
+
+[node name="Extintor" parent="." unique_id=1140399274 instance=ExtResource("2_7w86a")]
+position = Vector2(62.999992, -3.3881318e-21)
+scale = Vector2(0.425, 0.425)
+
+[node name="NPC1" parent="." unique_id=406687579 instance=ExtResource("3_s2wow")]
+position = Vector2(97, 55)
+
+[node name="Marker_point_1" parent="NPC1" unique_id=763448837 instance=ExtResource("4_3iyrq")]
+position = Vector2(-54, 1)
+
+[node name="Marker_point_2" parent="NPC1" unique_id=1723910853 instance=ExtResource("4_3iyrq")]
+position = Vector2(-130, -14)

@@ -1,0 +1,36 @@
+[gd_scene format=4 uid="uid://bxp4thw0x0gww"]
+
+[ext_resource type="PackedScene" uid="uid://cb836joq6nx8f" path="res://MinigamesProgramador/Minigame2/hack.tscn" id="1_47dvt"]
+[ext_resource type="PackedScene" uid="uid://ckjyrg7gkakvv" path="res://MinigamesProgramador/Minigame2/robot_system.tscn" id="2_q4aw1"]
+[ext_resource type="PackedScene" uid="uid://dlfwdsq34wamo" path="res://MinigamesProgramador/Minigame2/tile_map_layer.tscn" id="3_h8ng4"]
+[ext_resource type="PackedScene" uid="uid://dcwkkmrwk2xog" path="res://MinigamesProgramador/Minigame2/levels/slider_hacking_4.tscn" id="3_q4aw1"]
+[ext_resource type="Shader" uid="uid://bas1cgrlt20f6" path="res://MinigamesProgramador/shader/UnlockSecurity.gdshader" id="5_djjfe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bnlk7"]
+shader = ExtResource("5_djjfe")
+shader_parameter/spacing = 4.0
+shader_parameter/strength = 0.25
+shader_parameter/speed = 0.5
+
+[node name="SliderHacking3" type="Node2D" unique_id=262718207]
+
+[node name="Hack" parent="." unique_id=37334449 instance=ExtResource("1_47dvt")]
+position = Vector2(329, 159)
+
+[node name="RobotSystem" parent="." unique_id=14794486 instance=ExtResource("2_q4aw1")]
+position = Vector2(273, 238)
+next_scene = ExtResource("3_q4aw1")
+
+[node name="TileMapLayer" parent="." unique_id=904674279 instance=ExtResource("3_h8ng4")]
+tile_map_data = PackedByteArray("AAAAAAQAAgABAAEAAAAAAAUAAgABAAEAAAAAAAYAAgACAAEAAAAAAAcAAgACAAEAAAAAAAgAAgABAAEAAAAAAAkAAgABAAEAAAAAAAoAAgABAAEAAAAAAAsAAgABAAEAAAAAAAwAAgABAAEAAAAAAA0AAgABAAEAAAAAAA4AAgABAAEAAAAAAA8AAgACAAEAAAABAAQAAgABAAEAAAABAAUAAgACAAEAAAABAAYAAgACAAEAAAABAAcAAgACAAEAAAABAAgAAgACAAEAAAABAAkAAgACAAEAAAABAAoAAgACAAEAAAABAAsAAgACAAEAAAABAAwAAgACAAEAAAABAA0AAgACAAEAAAABAA4AAgACAAEAAAABAA8AAgACAAEAAAACAAQAAgACAAEAAAACAAcAAgACAAEAAAACAAgAAgACAAEAAAACAAkAAgACAAEAAAACAAoAAgACAAEAAAACAAsAAgACAAEAAAACAAwAAgACAAEAAAACAA0AAgACAAEAAAACAA4AAgACAAEAAAACAA8AAgACAAEAAAAEAAQAAgACAAEAAAAAABAAAgACAAEAAAAAABIAAgABAAEAAAABABAAAgACAAEAAAABABIAAgABAAEAAAACAAUAAgACAAEAAAACABAAAgACAAEAAAACABIAAgABAAEAAAADAAQAAgABAAEAAAADABAAAgACAAAAAAADABIAAgABAAEAAAAEABAAAgACAAAAAAAEABIAAgACAAEAAAAYABEAAgAAAAAAAAAQAAYAAgAAAAAAAAAQAAcAAgAAAAEAAAARAAYAAgACAAAAAAARAAcAAgACAAEAAAAEAAMAAgACAAAAAAACAAMAAgABAAAAAAABAAMAAgABAAAAAAAAAAMAAgABAAAAAAAMAAAAAgACAAEAAAAMAAEAAgABAAEAAAANAAAAAgABAAEAAAANAAEAAgABAAEAAAAOAAAAAgACAAEAAAAOAAEAAgACAAEAAAAXAAIAAgAAAAAAAAAXAAMAAgAAAAEAAAAYAAIAAgACAAAAAAAYAAMAAgACAAEAAAAaABEAAgACAAAAAAAcABEAAgACAAAAAAAdABEAAgACAAAAAAAbAAwAAgAAAAAAAAAbAA0AAgAAAAEAAAAcAAwAAgACAAAAAAAcAA0AAgACAAEAAAAMAA4AAgAAAAAAAAANAA4AAgACAAAAAAAMAA8AAgAAAAEAAAANAA8AAgACAAEAAAALAAEAAgABAAEAAAAKAAEAAgABAAEAAAAIAAEAAgAAAAEAAAAKAAAAAgACAAEAAAAJAAAAAgACAAEAAAALAAAAAgACAAEAAAAIAAAAAgAAAAEAAAAJAAEAAgACAAEAAAA=")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1814375150]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1158080503]
+material = SubResource("ShaderMaterial_bnlk7")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

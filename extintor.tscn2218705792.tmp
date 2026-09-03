@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://mllbpd4v0u7f"]
+
+[ext_resource type="Script" uid="uid://baqx6eok71vi8" path="res://extintor.gd" id="1_l2jps"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="2_28xab"]
+[ext_resource type="Texture2D" uid="uid://7mt4eribsnfm" path="res://TileMaps/Andar_ferramentas/sprites/sprite_13.png" id="3_l2jps"]
+[ext_resource type="Texture2D" uid="uid://di3jn2jnryiad" path="res://Sprites/objects/New Piskel(21).png" id="4_28xab"]
+[ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="4_o2v6h"]
+[ext_resource type="AudioStream" uid="uid://c7nxcjmbwjjit" path="res://Sounds/switch3.ogg" id="8_j3h8w"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_upuah"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 30.0
+initial_velocity_max = 30.0
+gravity = Vector3(200, 0, 0)
+collision_mode = 2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
+radius = 26.476404
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d0sfl"]
+
+[node name="Extintor" type="Node2D" unique_id=1140399274]
+script = ExtResource("1_l2jps")
+
+[node name="Fumaca" type="Node2D" parent="." unique_id=2127717914]
+
+[node name="fumaca" type="GPUParticles2D" parent="Fumaca" unique_id=707759440]
+z_index = -99
+position = Vector2(8, -9)
+emitting = false
+amount = 100
+texture = ExtResource("4_28xab")
+process_material = SubResource("ParticleProcessMaterial_upuah")
+
+[node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_28xab")]
+interact_name = "Extintor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=1116452658]
+shape = SubResource("CircleShape2D_6hjy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=128740826]
+material = SubResource("CanvasItemMaterial_d0sfl")
+position = Vector2(-2, 2)
+rotation = 6.890877e-05
+texture = ExtResource("3_l2jps")
+
+[node name="PickupComponent" type="Node" parent="." unique_id=167873576 node_paths=PackedStringArray("interactable")]
+script = ExtResource("4_o2v6h")
+item_id = "extintor"
+interactable = NodePath("../Interectable")
+metadata/_custom_type_script = "uid://dtfbuvijibmfx"
+
+[node name="ligando" type="AudioStreamPlayer2D" parent="." unique_id=907665176]
+stream = ExtResource("8_j3h8w")

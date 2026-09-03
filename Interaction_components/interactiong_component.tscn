@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://dh0axsg4h77gg"]
+
+[ext_resource type="Script" uid="uid://dvxtca6emsnjr" path="res://Interaction_components/scripts/interactiong_component.gd" id="1_kb8ke"]
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Fonts/PixelifySans-Regular.ttf" id="2_m7ep5"]
+[ext_resource type="Texture2D" uid="uid://xsowvqrseilh" path="res://Player/Sprites/New Piskel(32).png" id="3_m7ep5"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kb8ke"]
+radius = 8.0
+height = 22.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ysydw"]
+light_mode = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_kb8ke"]
+font = ExtResource("2_m7ep5")
+font_size = 12
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4ihd"]
+light_mode = 1
+
+[node name="InteractiongComponent" type="Node2D" unique_id=1047232936]
+script = ExtResource("1_kb8ke")
+
+[node name="InteractRange" type="Area2D" parent="." unique_id=244742388]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractRange" unique_id=1820580793]
+position = Vector2(0, -5)
+shape = SubResource("CapsuleShape2D_kb8ke")
+
+[node name="InteractLabel" type="Label" parent="." unique_id=169618548]
+z_index = 100
+material = SubResource("CanvasItemMaterial_ysydw")
+offset_left = -40.0
+offset_top = -41.0
+offset_right = 40.0
+offset_bottom = -24.0
+text = "E to interact"
+label_settings = SubResource("LabelSettings_kb8ke")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InteractButton" type="Sprite2D" parent="." unique_id=385056802]
+material = SubResource("CanvasItemMaterial_n4ihd")
+position = Vector2(21, -6)
+texture = ExtResource("3_m7ep5")
+
+[node name="Label" type="Label" parent="InteractButton" unique_id=1919862365]
+offset_left = -3.0
+offset_top = -7.0
+offset_right = 3.0
+offset_bottom = 6.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 9
+text = "E"
+
+[connection signal="area_entered" from="InteractRange" to="." method="_on_interact_range_area_entered"]
+[connection signal="area_exited" from="InteractRange" to="." method="_on_interact_range_area_exited"]

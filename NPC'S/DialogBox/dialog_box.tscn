@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://dn1l12ktryt3s"]
+
+[ext_resource type="Script" uid="uid://bmvdtmhkjs62q" path="res://NPC'S/DialogBox/dialog_box.gd" id="1_fcbdm"]
+[ext_resource type="Texture2D" uid="uid://b6amt711ifhmd" path="res://NPC'S/DialogBox/20250420manaSoul9SlicesA-Sheet.png" id="1_ficbl"]
+[ext_resource type="Texture2D" uid="uid://hpu47ec512yv" path="res://NPC'S/DialogBox/ArrowSprites/arrow00.png" id="2_h14un"]
+[ext_resource type="Texture2D" uid="uid://df1080adpevf1" path="res://NPC'S/DialogBox/ArrowSprites/arrow06.png" id="3_5jb7t"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="3_5pjh5"]
+[ext_resource type="Texture2D" uid="uid://def2nkt6ovpoo" path="res://NPC'S/DialogBox/ArrowSprites/arrow15.png" id="4_fcbdm"]
+[ext_resource type="Texture2D" uid="uid://bqgju4k0ourig" path="res://NPC'S/DialogBox/ArrowSprites/arrow16.png" id="5_5pjh5"]
+[ext_resource type="Texture2D" uid="uid://dsjahprm7j5c4" path="res://NPC'S/DialogBox/ArrowSprites/arrow07.png" id="6_7rhv4"]
+[ext_resource type="Texture2D" uid="uid://cf0ca7hpotltu" path="res://NPC'S/DialogBox/ArrowSprites/arrow17.png" id="6_h14un"]
+[ext_resource type="Texture2D" uid="uid://bsnt43t6r1265" path="res://NPC'S/DialogBox/ArrowSprites/arrow18.png" id="7_5jb7t"]
+[ext_resource type="Texture2D" uid="uid://muyedprby8kq" path="res://NPC'S/DialogBox/ArrowSprites/arrow08.png" id="7_hsja8"]
+[ext_resource type="Texture2D" uid="uid://bqt0jmyfr27us" path="res://NPC'S/DialogBox/ArrowSprites/arrow09.png" id="8_v0lbf"]
+[ext_resource type="Texture2D" uid="uid://bi10yuk7yemm0" path="res://NPC'S/DialogBox/ArrowSprites/arrow10.png" id="9_4l3fc"]
+[ext_resource type="Texture2D" uid="uid://diayoa6ip68pr" path="res://NPC'S/DialogBox/ArrowSprites/arrow11.png" id="10_fl07t"]
+[ext_resource type="Texture2D" uid="uid://b2emny650obsp" path="res://NPC'S/DialogBox/ArrowSprites/arrow12.png" id="11_ilkid"]
+[ext_resource type="Texture2D" uid="uid://0gvt5377l58m" path="res://NPC'S/DialogBox/ArrowSprites/arrow13.png" id="12_ilbug"]
+[ext_resource type="Texture2D" uid="uid://qj4b86m5f4lj" path="res://NPC'S/DialogBox/ArrowSprites/arrow14.png" id="13_c18mn"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_d0u6y"]
+frames = 14
+speed_scale = 1.5
+frame_0/texture = ExtResource("2_h14un")
+frame_0/duration = 2.5
+frame_1/texture = ExtResource("3_5jb7t")
+frame_1/duration = 0.1
+frame_2/texture = ExtResource("6_7rhv4")
+frame_2/duration = 0.1
+frame_3/texture = ExtResource("7_hsja8")
+frame_3/duration = 0.1
+frame_4/texture = ExtResource("8_v0lbf")
+frame_4/duration = 0.1
+frame_5/texture = ExtResource("9_4l3fc")
+frame_5/duration = 0.1
+frame_6/texture = ExtResource("10_fl07t")
+frame_6/duration = 0.1
+frame_7/texture = ExtResource("11_ilkid")
+frame_7/duration = 0.1
+frame_8/texture = ExtResource("12_ilbug")
+frame_8/duration = 0.1
+frame_9/texture = ExtResource("13_c18mn")
+frame_9/duration = 0.1
+frame_10/texture = ExtResource("4_fcbdm")
+frame_10/duration = 0.1
+frame_11/texture = ExtResource("5_5pjh5")
+frame_11/duration = 0.1
+frame_12/texture = ExtResource("6_h14un")
+frame_12/duration = 0.1
+frame_13/texture = ExtResource("7_5jb7t")
+frame_13/duration = 0.1
+
+[node name="dialog_box" type="MarginContainer" unique_id=94448366]
+process_mode = 3
+z_index = 1
+anchors_preset = -1
+anchor_left = 0.171
+anchor_top = 0.337
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.08000183
+offset_top = 0.009994507
+offset_right = 158.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("1_fcbdm")
+
+[node name="bg_dialog_box" type="NinePatchRect" parent="." unique_id=839718254]
+layout_mode = 2
+texture = ExtResource("1_ficbl")
+region_rect = Rect2(0, 0, 96, 36)
+patch_margin_left = 67
+patch_margin_top = 22
+patch_margin_right = 67
+patch_margin_bottom = 18
+
+[node name="text_container" type="MarginContainer" parent="." unique_id=152623217]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 18
+
+[node name="text_label" type="Label" parent="text_container" unique_id=1839314380]
+custom_minimum_size = Vector2(288, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_5pjh5")
+autowrap_mode = 2
+
+[node name="indicator" type="TextureRect" parent="." unique_id=334658326]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+texture = SubResource("AnimatedTexture_d0u6y")

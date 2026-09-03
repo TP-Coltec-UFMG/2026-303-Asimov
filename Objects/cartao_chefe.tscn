@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://beo4uworw31ct"]
+
+[ext_resource type="Script" uid="uid://djuyqkl22nkhp" path="res://Objects/scripts/cartao_chefe.gd" id="1_m8r1f"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="2_3ve4w"]
+[ext_resource type="Texture2D" uid="uid://s5h0eibx0fa7" path="res://Sprites/objects/sprite_cartao2.png" id="3_emnli"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="4_02i5v"]
+[ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="5_3ve4w"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
+radius = 26.476404
+
+[node name="Cartao_chefe" type="Node2D" unique_id=255975816]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_m8r1f")
+
+[node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_3ve4w")]
+interact_name = "Cartão Chefe"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=101289257]
+shape = SubResource("CircleShape2D_6hjy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2054775278]
+rotation = 6.890877e-05
+texture = ExtResource("3_emnli")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=850637533]
+visible = false
+position = Vector2(3.5762787e-07, -2.9802322e-08)
+scale = Vector2(0.039062496, 0.0546875)
+color = Color(0.6764252, 0.7850047, 1, 1)
+energy = 0.19
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("4_02i5v")
+
+[node name="PickupComponent" type="Node" parent="." unique_id=1414222436 node_paths=PackedStringArray("interactable")]
+script = ExtResource("5_3ve4w")
+item_id = "cartao"
+interactable = NodePath("../Interectable")
+metadata/_custom_type_script = "uid://dtfbuvijibmfx"

@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://2x02crq4cupl"]
+
+[ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="1_n2o1b"]
+[ext_resource type="Texture2D" uid="uid://drochw5o60lgy" path="res://Sprites/objects/escada_0.png" id="2_43cab"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="3_uhgo8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5s0fj"]
+size = Vector2(17, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(42, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yiw1b"]
+size = Vector2(42, 24)
+
+[node name="Escada" type="CharacterBody2D" unique_id=775917438]
+script = ExtResource("1_n2o1b")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1463579393]
+rotation = 6.890877e-05
+texture = ExtResource("2_43cab")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1174819247]
+position = Vector2(-7.5, -4)
+shape = SubResource("RectangleShape2D_5s0fj")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1654547811]
+position = Vector2(0, -15.5)
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="Interectable" parent="." unique_id=1406152477 groups=["empurravel"] instance=ExtResource("3_uhgo8")]
+interact_name = "Puxar/Empurrar"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=1325901001]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_yiw1b")

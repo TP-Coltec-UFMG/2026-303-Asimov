@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://cv7cddwyhflx6"]
+
+[ext_resource type="Script" uid="uid://caop7susc10wg" path="res://Objects/scripts/arma.gd" id="1_gtnv3"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="2_dpds2"]
+[ext_resource type="Texture2D" uid="uid://b8h6pcugxlnhw" path="res://Sprites/objects/gun.png" id="3_0p3ui"]
+[ext_resource type="Texture2D" uid="uid://b3gjmrbe8pxbu" path="res://Sprites/objects/reticula_0.png" id="5_0p3ui"]
+[ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="5_dpds2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
+radius = 26.476404
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7w86a"]
+
+[node name="Arma" type="Node2D" unique_id=1140399274]
+script = ExtResource("1_gtnv3")
+
+[node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_dpds2")]
+interact_name = "Arma"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=1116452658]
+shape = SubResource("CircleShape2D_6hjy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1463579393]
+material = SubResource("CanvasItemMaterial_7w86a")
+texture = ExtResource("3_0p3ui")
+
+[node name="PickupComponent" type="Node" parent="." unique_id=2092861625 node_paths=PackedStringArray("interactable")]
+script = ExtResource("5_dpds2")
+item_id = "gun"
+interactable = NodePath("../Interectable")
+metadata/_custom_type_script = "uid://dtfbuvijibmfx"
+
+[node name="Position_on_player" type="Sprite2D" parent="." unique_id=1693380322]
+visible = false
+position = Vector2(61, -82)
+texture = ExtResource("3_0p3ui")
+
+[node name="BulletSpawn" type="Marker2D" parent="Position_on_player" unique_id=535150655]
+position = Vector2(7.071068, 1.5147247)
+
+[node name="Timer" type="Timer" parent="." unique_id=1396029748]
+wait_time = 0.03
+
+[node name="reticula" type="Sprite2D" parent="." unique_id=1823379469]
+visible = false
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("5_0p3ui")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

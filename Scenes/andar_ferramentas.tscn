@@ -1,0 +1,242 @@
+[gd_scene format=3 uid="uid://4kom7uj1bd1a"]
+
+[ext_resource type="Script" uid="uid://d10isvmtkk8d1" path="res://Scenes/andar_ferramentas.gd" id="1_n3mbp"]
+[ext_resource type="PackedScene" uid="uid://cllel81t2sjj0" path="res://TileMaps/Andar_ferramentas/andar_ferramentas.tscn" id="2_rggv4"]
+[ext_resource type="Texture2D" uid="uid://7ckbd80e35xk" path="res://sprite_22.png" id="4_cse0d"]
+[ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_n3mbp"]
+[ext_resource type="PackedScene" uid="uid://h1afny316xf8" path="res://dijuntor.tscn" id="5_cse0d"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="6_l4nl3"]
+[ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="6_ricc7"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="8_l4nl3"]
+[ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="9_nddim"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(13, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nddim"]
+size = Vector2(13, 19)
+
+[sub_resource type="Animation" id="Animation_n3mbp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/Camera2D:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(4.16, 4.16)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer/Camera2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(72, -192)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Iluminacao/CanvasModulate:color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Coletaveis/AnimatedSprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Coletaveis/AnimatedSprite2D:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Coletaveis/Dijuntor:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_cse0d"]
+resource_name = "cutscene"
+length = 10.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer/Camera2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4, 4.9666667, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(78.46, -157.215), Vector2(78.46, -61.495), Vector2(78.46, -61.495), Vector2(66.88, -61.495)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer/Camera2D:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 4, 4.9666667, 7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(2.015, 2.015), Vector2(2.015, 2.015), Vector2(2.015, 2.015), Vector2(5.64, 5.64)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Iluminacao/CanvasModulate:color")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.7176471, 0.7176471, 0.7176471, 1), Color(0.007843138, 0.007843138, 0.007843138, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Coletaveis/AnimatedSprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 9.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Coletaveis/AnimatedSprite2D:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Coletaveis/Dijuntor:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l4nl3"]
+_data = {
+&"RESET": SubResource("Animation_n3mbp"),
+&"cutscene": SubResource("Animation_cse0d")
+}
+
+[node name="Andar_ferramentas" type="Node2D" unique_id=1272659551]
+script = ExtResource("1_n3mbp")
+
+[node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Iluminacao" unique_id=1474701810]
+
+[node name="ANDAR_FERRAMENTAS" parent="." unique_id=601132916 instance=ExtResource("2_rggv4")]
+position = Vector2(-170, -240)
+
+[node name="Coletaveis" type="Node" parent="." unique_id=263636248]
+
+[node name="Dijuntor" parent="Coletaveis" unique_id=2130347951 node_paths=PackedStringArray("canvas_modulate") instance=ExtResource("5_cse0d")]
+position = Vector2(65, -61.000004)
+scale = Vector2(0.51, 0.51)
+canvas_modulate = NodePath("../../Iluminacao/CanvasModulate")
+
+[node name="AnimatedSprite2D" type="Sprite2D" parent="Coletaveis" unique_id=827184559]
+visible = false
+position = Vector2(65, -63.000004)
+scale = Vector2(0.51, 0.51)
+texture = ExtResource("4_cse0d")
+hframes = 2
+vframes = 2
+
+[node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("4_n3mbp")]
+eh_elevador = true
+andar_atual = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=953326990]
+z_index = 1
+position = Vector2(69.5, -214)
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="Interectable" parent="SceneTrigger" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("6_l4nl3")]
+interact_name = "Elevador"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger/Interectable" unique_id=1254327427]
+z_index = 2
+position = Vector2(69.5, -213.5)
+shape = SubResource("RectangleShape2D_nddim")
+
+[node name="EntranceMarkers" type="Node2D" parent="." unique_id=1615271080]
+position = Vector2(38, -84)
+
+[node name="any" type="Marker2D" parent="EntranceMarkers" unique_id=994001935]
+position = Vector2(33, -106)
+
+[node name="PainelElevador" parent="." unique_id=236849866 node_paths=PackedStringArray("scene_trigger") instance=ExtResource("6_ricc7")]
+visible = false
+position = Vector2(99.00001, -423)
+scene_trigger = NodePath("../SceneTrigger")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1383165215]
+libraries/ = SubResource("AnimationLibrary_l4nl3")
+
+[node name="Camera2D" type="Camera2D" parent="AnimationPlayer" unique_id=1331909818]
+position = Vector2(72, -192)
+zoom = Vector2(4.16, 4.16)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1133274982]
+
+[node name="Controle_de_tempo" parent="UI" unique_id=1720657433 instance=ExtResource("8_l4nl3")]
+
+[node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("9_nddim")]
+process_physics_priority = -6

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cl7p75jsc212w"]
+
+[ext_resource type="Script" uid="uid://bnnb262ux2bdh" path="res://Scripts/Sounds/volume_slider.gd" id="1_0rqdt"]
+[ext_resource type="Texture2D" uid="uid://d3d1hkeb2lfca" path="res://Sprites/ui/Nodes/sprite_6.png" id="1_t3chh"]
+[ext_resource type="StyleBox" uid="uid://cfg3yi6v77uwd" path="res://Material/style_slider_black.tres" id="2_3gy3x"]
+[ext_resource type="Texture2D" uid="uid://dt7gsklekbwrk" path="res://Sprites/ui/Nodes/sprite_4.png" id="2_t3chh"]
+[ext_resource type="StyleBox" uid="uid://dq3sdfmn5ky3w" path="res://Material/style_slider_white.tres" id="3_xtlio"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jqnmu"]
+texture = ExtResource("2_t3chh")
+texture_margin_left = 1.0
+texture_margin_top = 2.0
+texture_margin_right = 1.0
+texture_margin_bottom = 2.0
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="volume_slider" type="HSlider" unique_id=1050084370]
+texture_filter = 1
+custom_minimum_size = Vector2(104, 9)
+offset_top = -12.0
+offset_right = 144.0
+offset_bottom = 20.0
+pivot_offset = Vector2(72, 16)
+theme_override_constants/grabber_offset = -1
+theme_override_icons/grabber = ExtResource("1_t3chh")
+theme_override_icons/grabber_highlight = ExtResource("1_t3chh")
+theme_override_icons/grabber_disabled = ExtResource("1_t3chh")
+theme_override_styles/slider = ExtResource("2_3gy3x")
+theme_override_styles/grabber_area = ExtResource("3_xtlio")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxTexture_jqnmu")
+max_value = 1.0
+step = 0.001
+value = 1.0
+ticks_position = 3
+script = ExtResource("1_0rqdt")

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cv26hyyd4gmju"]
+
+[ext_resource type="Script" uid="uid://bvuebo4m6cf30" path="res://luz_emergencia.gd" id="1_6xtnl"]
+[ext_resource type="Texture2D" uid="uid://xe3xoat3u8dd" path="res://Sprites/ilumination/Design sem nome(8).png" id="2_6xtnl"]
+[ext_resource type="Texture2D" uid="uid://v2xdy37vg8eb" path="res://Sprites/objects/ChatGPT Image 2 de set. de 2026, 12_16_04-1.png-2.png.png" id="2_fgajq"]
+
+[node name="Luz_emergencia" type="Node2D" unique_id=635068017]
+script = ExtResource("1_6xtnl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=321129707]
+texture = ExtResource("2_fgajq")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=416830038]
+visible = false
+position = Vector2(-1, 4)
+rotation = 3.1415927
+scale = Vector2(2, 2)
+energy = 5.0
+texture = ExtResource("2_6xtnl")

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://2x02crq4cupl"]
+
+[ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://objeto_empurravel.gd" id="1_n2o1b"]
+[ext_resource type="Texture2D" uid="uid://drochw5o60lgy" path="res://escada_0.png" id="2_43cab"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_6ts3x"]
+a = Vector2(-9, -15)
+b = Vector2(-13, 4)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_3gngh"]
+a = Vector2(-5, -15)
+b = Vector2(0, 4)
+
+[node name="Escada" type="CharacterBody2D" unique_id=775917438]
+script = ExtResource("1_n2o1b")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1463579393]
+rotation = 6.890877e-05
+texture = ExtResource("2_43cab")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1174819247]
+shape = SubResource("SegmentShape2D_6ts3x")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1272752728]
+shape = SubResource("SegmentShape2D_3gngh")

@@ -1,0 +1,351 @@
+[gd_scene format=3 uid="uid://dsw7hwfva88w4"]
+
+[ext_resource type="Script" uid="uid://b0eq474meeh28" path="res://TelaMorte/morreu.gd" id="1_0w188"]
+[ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="1_ayq5v"]
+[ext_resource type="Texture2D" uid="uid://mik1l5pdyncc" path="res://TelaMorte/New Piskel-1.png(2).png" id="3_0w188"]
+[ext_resource type="Script" uid="uid://dfvk0re1w0h2c" path="res://Scripts/Objects/Button/button_acess_menu.gd" id="4_q2tv0"]
+[ext_resource type="Texture2D" uid="uid://b7kalnfqsk1rd" path="res://TelaMorte/New Piskel-2.png(2).png" id="4_qytp2"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="5_hejy5"]
+[ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="7_q2tv0"]
+[ext_resource type="Texture2D" uid="uid://d1awdirspci8q" path="res://TelaMorte/New Piskel-1.png(3).png" id="8_qytp2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g4v7s"]
+font_size = 34
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g4v7s"]
+texture = ExtResource("3_0w188")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yf5fn"]
+texture = ExtResource("4_qytp2")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_57qmd"]
+texture = ExtResource("4_qytp2")
+
+[sub_resource type="LabelSettings" id="LabelSettings_0w188"]
+line_spacing = 0.0
+font_size = 14
+font_color = Color(0, 0, 0, 1)
+outline_size = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_yf5fn"]
+font = ExtResource("5_hejy5")
+font_size = 14
+font_color = Color(0, 0, 0, 1)
+outline_size = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_q2tv0"]
+font = ExtResource("5_hejy5")
+font_size = 14
+font_color = Color(0, 0, 0, 1)
+outline_size = 4
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(0, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61q4e"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(384, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_846ot"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(768, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1el0"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(1152, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj1q6"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(1536, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfdv3"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(1920, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hv3k8"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(2304, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8red6"]
+atlas = ExtResource("7_q2tv0")
+region = Rect2(2688, 0, 384, 216)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vdsvq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2iras")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_61q4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_846ot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1el0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj1q6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfdv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hv3k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8red6")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 30.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_57qmd"]
+font = ExtResource("1_ayq5v")
+font_size = 36
+
+[sub_resource type="LabelSettings" id="LabelSettings_ohdqj"]
+font = ExtResource("5_hejy5")
+font_size = 20
+
+[node name="Morreu" type="Control" unique_id=121895127]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0w188")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=540427161]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 270.0
+color = Color(0.012617188, 0.012617188, 0.012617188, 1)
+
+[node name="Label" type="Label" parent="." unique_id=313366472]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 480.0
+offset_bottom = 90.0
+theme_override_fonts/font = ExtResource("1_ayq5v")
+text = "Você Morreu"
+label_settings = SubResource("LabelSettings_g4v7s")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Renascer" type="Button" parent="." unique_id=783060668]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -32.5
+offset_right = 88.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_g4v7s")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_yf5fn")
+theme_override_styles/hover = SubResource("StyleBoxTexture_57qmd")
+text = "
+"
+script = ExtResource("4_q2tv0")
+metadata/_custom_type_script = "uid://dfvk0re1w0h2c"
+
+[node name="Label" type="Label" parent="Renascer" unique_id=1982563236]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 1.5
+offset_right = 168.0
+offset_bottom = 26.5
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_hejy5")
+text = "RENASCER"
+label_settings = SubResource("LabelSettings_0w188")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Voltar_menu" type="Button" parent="." unique_id=842113914]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = 5.0
+offset_right = 88.0
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_g4v7s")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_yf5fn")
+theme_override_styles/hover = SubResource("StyleBoxTexture_57qmd")
+text = "
+"
+script = ExtResource("4_q2tv0")
+metadata/_custom_type_script = "uid://dfvk0re1w0h2c"
+
+[node name="Label" type="Label" parent="Voltar_menu" unique_id=1046216180]
+layout_mode = 0
+offset_left = 6.0
+offset_right = 171.0
+offset_bottom = 27.0
+text = "MENU PRINCIPAL"
+label_settings = SubResource("LabelSettings_yf5fn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Reiniciar" type="Button" parent="." unique_id=1499095708]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -80.0
+offset_right = 112.0
+offset_bottom = -48.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_g4v7s")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_yf5fn")
+theme_override_styles/hover = SubResource("StyleBoxTexture_57qmd")
+text = "
+"
+script = ExtResource("4_q2tv0")
+metadata/_custom_type_script = "uid://dfvk0re1w0h2c"
+
+[node name="Label" type="Label" parent="Reiniciar" unique_id=1893608401]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.0
+offset_top = -15.5
+offset_right = 136.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "REINICIAR PROGRESSO"
+label_settings = SubResource("LabelSettings_q2tv0")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Transition" type="AnimatedSprite2D" parent="." unique_id=1947736234]
+visible = false
+z_index = 1
+position = Vector2(239.99998, 135)
+scale = Vector2(1.25, 1.2500001)
+sprite_frames = SubResource("SpriteFrames_vdsvq")
+
+[node name="Confirmacao_reiniciar" type="Control" parent="." unique_id=1615969626]
+visible = false
+anchors_preset = 0
+offset_right = 480.0
+offset_bottom = 272.0
+
+[node name="ColorRect" type="ColorRect" parent="Confirmacao_reiniciar" unique_id=545769735]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 272.0
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Confirmacao_reiniciar" unique_id=226344938]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -176.0
+offset_top = -72.0
+offset_right = 176.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "VOCÊ TEM CERTEZA ?"
+label_settings = SubResource("LabelSettings_57qmd")
+
+[node name="Label2" type="Label" parent="Confirmacao_reiniciar" unique_id=1018436207]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -176.0
+offset_top = -40.0
+offset_right = 176.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Deseja reiniciar o progresso?"
+label_settings = SubResource("LabelSettings_ohdqj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="sim" type="Button" parent="Confirmacao_reiniciar" unique_id=720386354]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.0
+offset_top = 8.0
+offset_right = -7.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_ayq5v")
+theme_override_font_sizes/font_size = 23
+text = "SIM"
+icon = ExtResource("8_qytp2")
+script = ExtResource("4_q2tv0")
+metadata/_custom_type_script = "uid://dfvk0re1w0h2c"
+
+[node name="nao" type="Button" parent="Confirmacao_reiniciar" unique_id=632713312]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 13.5
+offset_top = 8.0
+offset_right = 86.5
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_ayq5v")
+theme_override_font_sizes/font_size = 23
+text = "NÃO"
+script = ExtResource("4_q2tv0")
+metadata/_custom_type_script = "uid://dfvk0re1w0h2c"
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
+[connection signal="mouse_entered" from="Renascer" to="." method="_on_animated_button_mouse_entered"]
+[connection signal="mouse_entered" from="Renascer" to="." method="_on_renascer_mouse_entered"]
+[connection signal="mouse_exited" from="Renascer" to="." method="_on_animated_button_mouse_exited"]
+[connection signal="mouse_exited" from="Renascer" to="." method="_on_renascer_mouse_exited"]
+[connection signal="pressed" from="Renascer" to="." method="_on_renascer_pressed"]
+[connection signal="mouse_entered" from="Voltar_menu" to="." method="_on_voltar_menu_mouse_entered"]
+[connection signal="mouse_exited" from="Voltar_menu" to="." method="_on_voltar_menu_mouse_exited"]
+[connection signal="pressed" from="Voltar_menu" to="." method="_on_voltar_menu_pressed"]
+[connection signal="mouse_entered" from="Reiniciar" to="." method="_on_reiniciar_mouse_entered"]
+[connection signal="mouse_exited" from="Reiniciar" to="." method="_on_reiniciar_mouse_exited"]
+[connection signal="pressed" from="Reiniciar" to="." method="_on_reiniciar_pressed"]
+[connection signal="pressed" from="Confirmacao_reiniciar/sim" to="." method="_on_sim_pressed"]
+[connection signal="pressed" from="Confirmacao_reiniciar/nao" to="." method="_on_nao_pressed"]

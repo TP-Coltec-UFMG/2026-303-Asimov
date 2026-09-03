@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b25tlu8urnkux"]
+
+[ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="1_3luhc"]
+[ext_resource type="Script" uid="uid://c8meljavbyke6" path="res://Scripts/Acessibility/filtro_daltonismo.gd" id="1_8avh5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8avh5"]
+shader = ExtResource("1_3luhc")
+shader_parameter/modo = 0
+shader_parameter/intensidade = 1.0
+shader_parameter/forca_correcao = 1.35
+shader_parameter/saturacao_extra = 0.08
+shader_parameter/contraste_extra = 0.1
+shader_parameter/realce_bordas = 0.1
+shader_parameter/largura_borda = 1.0
+shader_parameter/preservar_luminancia = false
+
+[node name="FiltroDaltonismo" type="CanvasLayer" unique_id=1713150449]
+script = ExtResource("1_8avh5")
+
+[node name="TelaFiltro" type="ColorRect" parent="." unique_id=184077438]
+z_index = 999
+material = SubResource("ShaderMaterial_8avh5")
+use_parent_material = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

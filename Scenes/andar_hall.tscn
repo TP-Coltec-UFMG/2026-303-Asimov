@@ -1,0 +1,188 @@
+[gd_scene format=3 uid="uid://btiojmlbqhdrn"]
+
+[ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_nqlva"]
+[ext_resource type="PackedScene" uid="uid://cs0lgkde3bsb1" path="res://TileMaps/Andar_Hall/hall.tscn" id="2_ho60l"]
+[ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="3_2s751"]
+[ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="4_6qnfl"]
+[ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs/Clarxs.tscn" id="5_vvkyc"]
+[ext_resource type="PackedScene" uid="uid://cyl02mn4y4x7c" path="res://NPC'S/marker_point.tscn" id="6_pgrj2"]
+[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/06_purple_crimson.png" id="7_nqlva"]
+[ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://luz_emergencia.tscn" id="9_xl0vw"]
+[ext_resource type="Texture2D" uid="uid://dei4d8qxmiky" path="res://Sprites/objects/alerta_luz.png" id="10_xodlo"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="11_8uelp"]
+[ext_resource type="Texture2D" uid="uid://1v81ofhv621m" path="res://Sprites/objects/ChatGPT Image 2 de set. de 2026, 12_16_04-1.png-1.png.png" id="11_h0r3n"]
+[ext_resource type="PackedScene" uid="uid://beyeq37qyobrm" path="res://Player/ManPlayer.tscn" id="12_48805"]
+[ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="13_xl0vw"]
+[ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="14_6qnfl"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://controle_de_tempo.tscn" id="14_8uelp"]
+[ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="15_wweuw"]
+[ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_ysydw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_61dx5"]
+size = Vector2(9, 11.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wweuw"]
+size = Vector2(9, 12)
+
+[node name="andar_hall" type="Node2D" unique_id=1272659551]
+script = ExtResource("1_nqlva")
+
+[node name="Coletaveis" type="Node" parent="." unique_id=141771484]
+
+[node name="Extintor" parent="Coletaveis" unique_id=1140399274 instance=ExtResource("13_xl0vw")]
+position = Vector2(4.7683716e-07, -108.99999)
+scale = Vector2(0.425, 0.425)
+save_id = "extintor1"
+
+[node name="Extintor2" parent="Coletaveis" unique_id=2070645289 instance=ExtResource("13_xl0vw")]
+position = Vector2(-49.999996, -108.99999)
+scale = Vector2(0.425, 0.425)
+save_id = "extintor2"
+
+[node name="Lanterna" parent="Coletaveis" unique_id=792768314 instance=ExtResource("4_6qnfl")]
+z_index = 2
+position = Vector2(-63, -9)
+scale = Vector2(0.295, 0.295)
+save_id = "lanterna_1"
+
+[node name="Perigos" type="Node" parent="." unique_id=1469058963]
+
+[node name="Iluminacao" type="Node" parent="." unique_id=865113971]
+
+[node name="PointLight2D" type="PointLight2D" parent="Iluminacao" unique_id=1435665964]
+position = Vector2(22, -81)
+color = Color(1, 0.57254905, 0.16078432, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D2" type="PointLight2D" parent="Iluminacao" unique_id=95022236]
+position = Vector2(73, -81)
+color = Color(1, 0.57254905, 0.16078432, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D3" type="PointLight2D" parent="Iluminacao" unique_id=922085456]
+position = Vector2(107, -81)
+color = Color(1, 0.57254905, 0.16078432, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D4" type="PointLight2D" parent="Iluminacao" unique_id=1342065429]
+position = Vector2(159, -81)
+color = Color(1, 0.57254905, 0.16078432, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D5" type="PointLight2D" parent="Iluminacao" unique_id=353025]
+position = Vector2(-157, 112.00001)
+color = Color(1, 0.57254905, 0.16078432, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D6" type="PointLight2D" parent="Iluminacao" unique_id=2020378018]
+position = Vector2(-95, 99)
+color = Color(1, 0.57254905, 0.16078432, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D7" type="PointLight2D" parent="Iluminacao" unique_id=123000192]
+position = Vector2(47, -109)
+color = Color(0, 0, 1, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="PointLight2D8" type="PointLight2D" parent="Iluminacao" unique_id=916667698]
+position = Vector2(134, -109)
+color = Color(0, 0, 1, 1)
+texture = ExtResource("3_2s751")
+texture_scale = 0.15
+
+[node name="Luz_emergencia" parent="Iluminacao" unique_id=635068017 instance=ExtResource("9_xl0vw")]
+z_index = 99
+position = Vector2(-126.99999, -133.00002)
+rotation = 3.1415927
+scale = Vector2(0.155, 0.155)
+sprite_2d = ExtResource("10_xodlo")
+cor_lanterna = Color(1, 0, 0, 1)
+
+[node name="Luz_emergencia2" parent="Iluminacao" unique_id=192926226 instance=ExtResource("9_xl0vw")]
+z_index = 99
+position = Vector2(9.536743e-07, -134.00002)
+rotation = 3.1415927
+scale = Vector2(0.155, 0.155)
+sprite_2d = ExtResource("11_h0r3n")
+cor_lanterna = Color(0.6313726, 0, 1, 1)
+
+[node name="Luz_emergencia3" parent="Iluminacao" unique_id=348247625 instance=ExtResource("9_xl0vw")]
+z_index = 99
+position = Vector2(129.00002, -133)
+rotation = 3.1415927
+scale = Vector2(0.155, 0.155)
+sprite_2d = ExtResource("10_xodlo")
+cor_lanterna = Color(1, 0, 0, 1)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Iluminacao" unique_id=2009710821]
+color = Color(0.36057273, 0.36057273, 0.3605727, 1)
+
+[node name="Interativos" type="Node" parent="." unique_id=636557829]
+
+[node name="HALL" parent="." unique_id=1500386464 instance=ExtResource("2_ho60l")]
+
+[node name="NPCs" type="Node" parent="." unique_id=1012355832]
+
+[node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("5_vvkyc")]
+position = Vector2(96, 96)
+sprite_sheet = ExtResource("7_nqlva")
+
+[node name="Marker_point_1" parent="NPCs/NPC1" unique_id=763448837 instance=ExtResource("6_pgrj2")]
+position = Vector2(9, -61)
+
+[node name="Marker_point_2" parent="NPCs/NPC1" unique_id=1383230832 instance=ExtResource("6_pgrj2")]
+position = Vector2(-29, -61)
+
+[node name="Marker_point_3" parent="NPCs/NPC1" unique_id=446185251 instance=ExtResource("6_pgrj2")]
+position = Vector2(-17, -26)
+
+[node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("12_48805")]
+position = Vector2(-105, -58)
+
+[node name="EntranceMarkers" type="Node2D" parent="." unique_id=2000728230]
+
+[node name="any" type="Marker2D" parent="EntranceMarkers" unique_id=1057128600]
+position = Vector2(-26, -94)
+
+[node name="start_game_position" type="Marker2D" parent="EntranceMarkers" unique_id=830529126]
+position = Vector2(-129, -37)
+
+[node name="SceneTrigger2" parent="." unique_id=889034584 instance=ExtResource("14_6qnfl")]
+position = Vector2(-135, 120)
+eh_elevador = true
+andar_atual = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2" unique_id=2008312906]
+z_index = 1
+position = Vector2(108.5, -233.25)
+shape = SubResource("RectangleShape2D_61dx5")
+
+[node name="Interectable" parent="SceneTrigger2" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("11_8uelp")]
+interact_name = "Elevador"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2/Interectable" unique_id=1422921976]
+z_index = 2
+position = Vector2(108.5, -233)
+shape = SubResource("RectangleShape2D_wweuw")
+
+[node name="PainelElevador" parent="." unique_id=236849866 node_paths=PackedStringArray("scene_trigger") instance=ExtResource("15_wweuw")]
+position = Vector2(-2, -333.00003)
+scene_trigger = NodePath("../SceneTrigger2")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1237413001]
+
+[node name="Controle_de_tempo" parent="UI" unique_id=1720657433 instance=ExtResource("14_8uelp")]
+
+[node name="PauseMenu" parent="UI" unique_id=365074401 node_paths=PackedStringArray("player") instance=ExtResource("17_ysydw")]
+process_physics_priority = -6
+player = NodePath("../../ManPlayer")
+
+[connection signal="jogador_morreu" from="ManPlayer" to="UI/Controle_de_tempo" method="_on_man_player_jogador_morreu"]

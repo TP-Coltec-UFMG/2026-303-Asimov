@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dlfwdsq34wamo"]
+
+[ext_resource type="Texture2D" uid="uid://dv5gaflwqwxt0" path="res://MinigamesProgramador/sprites/tilemap.png" id="1_0v821"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_onn7a"]
+texture = ExtResource("1_0v821")
+texture_region_size = Vector2i(40, 40)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.057981, -19.943365, 19.943365, -20.172598, 20.000671, 19.943363, -19.943363, 20.057981)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.057981, -19.943365, 19.943365, -20.172598, 20.000671, 19.943363, -19.943363, 20.057981)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.057981, -19.943365, 19.943365, -20.172598, 20.000671, 19.943363, -19.943363, 20.057981)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.057981, -19.943365, 19.943365, -20.172598, 20.000671, 19.943363, -19.943363, 20.057981)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.057981, -19.943365, 19.943365, -20.172598, 20.000671, 19.943363, -19.943363, 20.057981)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-20.057981, -19.943365, 19.943365, -20.172598, 20.000671, 19.943363, -19.943363, 20.057981)
+
+[sub_resource type="TileSet" id="TileSet_g4v7s"]
+physics_layer_0/collision_layer = 1
+sources/2 = SubResource("TileSetAtlasSource_onn7a")
+
+[node name="TileMapLayer" type="TileMapLayer" unique_id=904674279]
+tile_set = SubResource("TileSet_g4v7s")

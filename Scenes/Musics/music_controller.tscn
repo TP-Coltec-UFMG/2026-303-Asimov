@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b5lobav5glfik"]
+
+[ext_resource type="Script" uid="uid://biwsxrryy0swa" path="res://Scripts/Sounds/music/music.gd" id="1_biu3b"]
+[ext_resource type="AudioStream" uid="uid://s6okbs6xf7dc" path="res://Sounds/leberch-suspense-511168.mp3" id="3_btohr"]
+[ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://audioatlant-pulse-of-time-action-countdown-trailer-ver1-573119.mp3" id="3_y4uch"]
+[ext_resource type="AudioStream" uid="uid://b1ljosljfy0yf" path="res://Scenes/jeremayjimenez-new-zealand-eas-alarm-tsunami-279662.mp3" id="4_a7c45"]
+
+[node name="MusicControler" type="Node2D" unique_id=1749428804]
+script = ExtResource("1_biu3b")
+
+[node name="BG Music" type="AudioStreamPlayer2D" parent="." unique_id=1919223071]
+process_mode = 3
+autoplay = true
+bus = &"Music"
+
+[node name="BG Ambient" type="AudioStreamPlayer2D" parent="." unique_id=1987446639]
+stream = ExtResource("3_btohr")
+autoplay = true
+bus = &"sfx"
+
+[node name="COUNTDOWN_MUSIC" type="AudioStreamPlayer2D" parent="." unique_id=1771444235]
+stream = ExtResource("3_y4uch")
+bus = &"Music"
+
+[node name="SOM_ALARME" type="AudioStreamPlayer2D" parent="." unique_id=2046736172]
+stream = ExtResource("4_a7c45")
+bus = &"sfx"
+parameters/looping = true

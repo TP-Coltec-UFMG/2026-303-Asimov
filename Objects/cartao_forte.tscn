@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://3adv0qqyjmrq"]
+
+[ext_resource type="Script" uid="uid://chmq0nhcxg770" path="res://Objects/scripts/cartao_forte.gd" id="1_ggpuv"]
+[ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="2_faxib"]
+[ext_resource type="Texture2D" uid="uid://uyr2tq70yrgo" path="res://Sprites/objects/sprite_cartao1.png" id="3_d1lhc"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="4_ibs8g"]
+[ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="5_faxib"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
+radius = 26.476404
+
+[node name="Cartao_forte" type="Node2D" unique_id=1025788070]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_ggpuv")
+
+[node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_faxib")]
+interact_name = "Cartão Forte"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=2060938813]
+shape = SubResource("CircleShape2D_6hjy0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1606010821]
+rotation = 6.890877e-05
+texture = ExtResource("3_d1lhc")
+
+[node name="PointLight2D2" type="PointLight2D" parent="." unique_id=669776788]
+visible = false
+position = Vector2(3.5762787e-07, -2.9802322e-08)
+scale = Vector2(0.039062496, 0.0546875)
+color = Color(0.6764252, 0.7850047, 1, 1)
+energy = 0.19
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("4_ibs8g")
+
+[node name="PickupComponent" type="Node" parent="." unique_id=610449254 node_paths=PackedStringArray("interactable")]
+script = ExtResource("5_faxib")
+item_id = "cartao"
+interactable = NodePath("../Interectable")
+metadata/_custom_type_script = "uid://dtfbuvijibmfx"

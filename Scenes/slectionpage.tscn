@@ -1,0 +1,327 @@
+[gd_scene format=3 uid="uid://b0y7vvau44gac"]
+
+[ext_resource type="Texture2D" uid="uid://dfjrs4ssspenr" path="res://Sprites/selectionpage/selectionbox.png" id="1_7oymq"]
+[ext_resource type="Script" uid="uid://b25iegiulu2mq" path="res://Sprites/selectionpage/control.gd" id="1_72v1o"]
+[ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="3_86ehh"]
+[ext_resource type="Script" uid="uid://tpjjvufd1tyc" path="res://Sprites/selectionpage/selectionbutton.gd" id="3_h7hbm"]
+[ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="5_h7hbm"]
+[ext_resource type="Script" path="res://Scripts/UI/menu_input_router.gd" id="6_menu_input"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(0, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_61q4e"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(384, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_846ot"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(768, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1el0"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(1152, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj1q6"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(1536, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfdv3"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(1920, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hv3k8"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(2304, 0, 384, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8red6"]
+atlas = ExtResource("5_h7hbm")
+region = Rect2(2688, 0, 384, 216)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_11bea"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2iras")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_61q4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_846ot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1el0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj1q6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfdv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hv3k8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8red6")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 30.0
+}]
+
+[node name="slectionpage" type="Node2D" unique_id=1755590176]
+
+[node name="MenuInputRouter" type="Node" parent="."]
+script = ExtResource("6_menu_input")
+
+[node name="Control" type="Control" parent="." unique_id=1858804346]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_72v1o")
+
+[node name="Job" type="Control" parent="Control" unique_id=1221201597]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Programador" type="TextureButton" parent="Control/Job" unique_id=1102352987]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 104.0
+offset_top = 39.0
+offset_right = 232.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "programador"
+
+[node name="Label" type="Label" parent="Control/Job/Programador" unique_id=1797311186]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "PROGRAMADOR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Engenheiro" type="TextureButton" parent="Control/Job" unique_id=2068224094]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 251.0
+offset_top = 39.0
+offset_right = 379.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "engenheiro"
+
+[node name="Label" type="Label" parent="Control/Job/Engenheiro" unique_id=141823072]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 119.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "ENGENHEIRO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Character" type="Control" parent="Control" unique_id=312472230]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Character1" type="TextureButton" parent="Control/Character" unique_id=333812711]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 39.0
+offset_right = 153.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "character1"
+
+[node name="Label" type="Label" parent="Control/Character/Character1" unique_id=260261191]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "robertão"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Character2" type="TextureButton" parent="Control/Character" unique_id=1573097993]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 175.0
+offset_top = 39.0
+offset_right = 303.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "character2"
+
+[node name="Label" type="Label" parent="Control/Character/Character2" unique_id=1606307995]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "claudisnóia"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Character3" type="TextureButton" parent="Control/Character" unique_id=1720114579]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 325.0
+offset_top = 39.0
+offset_right = 453.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "character3"
+
+[node name="Label" type="Label" parent="Control/Character/Character3" unique_id=1540682486]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "zé periquito"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Difficulty" type="Control" parent="Control" unique_id=1787481485]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Easy" type="TextureButton" parent="Control/Difficulty" unique_id=1168485948]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 39.0
+offset_right = 153.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "easy"
+
+[node name="Label" type="Label" parent="Control/Difficulty/Easy" unique_id=2074516452]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "FÁCIL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Normal" type="TextureButton" parent="Control/Difficulty" unique_id=130320817]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 175.0
+offset_top = 39.0
+offset_right = 303.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "normal"
+
+[node name="Label" type="Label" parent="Control/Difficulty/Normal" unique_id=436803568]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "NORMAL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hard" type="TextureButton" parent="Control/Difficulty" unique_id=562334981]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 0
+offset_left = 325.0
+offset_top = 39.0
+offset_right = 453.0
+offset_bottom = 231.0
+pivot_offset = Vector2(64, 96)
+texture_normal = ExtResource("1_7oymq")
+script = ExtResource("3_h7hbm")
+button = "hard"
+
+[node name="Label" type="Label" parent="Control/Difficulty/Hard" unique_id=580642921]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = 118.0
+offset_bottom = 30.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "DIFÍCIL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CHOICETEXT" type="Label" parent="Control" unique_id=184777507]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 8.0
+offset_right = 341.0
+offset_bottom = 31.0
+theme_override_fonts/font = ExtResource("3_86ehh")
+text = "SELECIONE SUA PROFISSÃO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Transition" type="AnimatedSprite2D" parent="." unique_id=1682385274]
+z_index = 1
+position = Vector2(239.99998, 135)
+scale = Vector2(1.25, 1.2500001)
+sprite_frames = SubResource("SpriteFrames_11bea")
+
+[connection signal="mouse_entered" from="Control/Job/Programador" to="Control/Job/Programador" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Job/Programador" to="Control/Job/Programador" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Job/Programador" to="Control/Job/Programador" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Character/Character1" to="Control/Character/Character1" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Character/Character1" to="Control/Character/Character1" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Character/Character1" to="Control/Character/Character1" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Character/Character2" to="Control/Character/Character2" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Character/Character2" to="Control/Character/Character2" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Character/Character2" to="Control/Character/Character2" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Character/Character3" to="Control/Character/Character3" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Character/Character3" to="Control/Character/Character3" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Character/Character3" to="Control/Character/Character3" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_on_pressed"]
+[connection signal="mouse_entered" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_on_mouse_exited"]
+[connection signal="pressed" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_on_pressed"]

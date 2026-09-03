@@ -1,0 +1,286 @@
+[gd_scene format=3 uid="uid://beyeq37qyobrm"]
+
+[ext_resource type="Script" uid="uid://3wbie5tbpcl4" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
+[ext_resource type="Script" uid="uid://d3et1xb7kl4f1" path="res://Player/Scripts/camera_2d.gd" id="2_4c57v"]
+[ext_resource type="Texture2D" uid="uid://i7vroasbawhn" path="res://Sprites/ui/New Piskel(28).png" id="3_cycue"]
+[ext_resource type="Texture2D" uid="uid://cusbwah1rs2f8" path="res://Sprites/ui/sprite_1.png" id="4_cepnt"]
+[ext_resource type="PackedScene" uid="uid://dh0axsg4h77gg" path="res://Interaction_components/interactiong_component.tscn" id="4_gwnis"]
+[ext_resource type="Script" uid="uid://dugbvo40n0q78" path="res://Player/canvas_layer.gd" id="4_xnkv0"]
+[ext_resource type="Texture2D" uid="uid://dub04nmf680ok" path="res://Sprites/ui/sprite_0.png" id="5_ocnev"]
+[ext_resource type="Script" uid="uid://ngrbl60ooncn" path="res://Scenes/estamina.gd" id="6_i2haj"]
+[ext_resource type="Texture2D" uid="uid://bdcjv8yfxw6vu" path="res://Player/Sprites/cerebro_no_fill.png" id="7_022re"]
+[ext_resource type="Texture2D" uid="uid://oysdlrmtb0ft" path="res://Player/Sprites/coracao_fill.png" id="8_4c57v"]
+[ext_resource type="Texture2D" uid="uid://cf2twef3l4cuh" path="res://Player/Sprites/cerebro_fill.png" id="8_i2haj"]
+[ext_resource type="Texture2D" uid="uid://uwy6q7meghh4" path="res://Player/Sprites/coracao_no_fill.png" id="9_xnkv0"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ocnev"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i305y"]
+load_path = "res://.godot/imported/Alex_16x16.png-89462274f2a2226fed9efa0756e5c56d.ctex"
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_uj6eu"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ntmi"]
+radius = 8.0
+height = 24.0
+
+[sub_resource type="Animation" id="Animation_btcbx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_4ntmi"]
+resource_name = "idle_down"
+length = 0.001
+loop_mode = 1
+step = 0.0333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [42, 43, 44, 45, 46, 47]
+}
+
+[sub_resource type="Animation" id="Animation_gwnis"]
+resource_name = "idle_side"
+length = 1.2
+loop_mode = 1
+step = 0.0333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [24, 25, 26, 27, 28, 29]
+}
+
+[sub_resource type="Animation" id="Animation_k53q1"]
+resource_name = "idle_up"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [30, 31, 32, 33, 34, 35]
+}
+
+[sub_resource type="Animation" id="Animation_fhl08"]
+resource_name = "walk_down"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [66, 67, 68, 69, 70, 71]
+}
+
+[sub_resource type="Animation" id="Animation_vtle1"]
+resource_name = "walk_side"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [48, 49, 50, 51, 52, 53]
+}
+
+[sub_resource type="Animation" id="Animation_od3ui"]
+resource_name = "walk_up"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [54, 55, 56, 57, 58, 59]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_btcbx"]
+_data = {
+&"RESET": SubResource("Animation_btcbx"),
+&"idle_down": SubResource("Animation_4ntmi"),
+&"idle_side": SubResource("Animation_gwnis"),
+&"idle_up": SubResource("Animation_k53q1"),
+&"walk_down": SubResource("Animation_fhl08"),
+&"walk_side": SubResource("Animation_vtle1"),
+&"walk_up": SubResource("Animation_od3ui")
+}
+
+[sub_resource type="GDScript" id="GDScript_n1p0m"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_73bjl"]
+light_mode = 1
+
+[node name="ManPlayer" type="CharacterBody2D" unique_id=1888366647]
+script = ExtResource("1_4ntmi")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1887433784]
+z_index = 1
+material = SubResource("CanvasItemMaterial_ocnev")
+position = Vector2(0, -10)
+texture = SubResource("CompressedTexture2D_i305y")
+hframes = 24
+vframes = 7
+
+[node name="OccluderSide" type="LightOccluder2D" parent="Sprite2D" unique_id=2020043514]
+show_behind_parent = true
+z_index = -1
+position = Vector2(0, 10)
+occluder = SubResource("OccluderPolygon2D_uj6eu")
+
+[node name="OccluderBack" type="LightOccluder2D" parent="Sprite2D" unique_id=281354042]
+visible = false
+
+[node name="OccluderFront" type="LightOccluder2D" parent="Sprite2D" unique_id=138279711]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=781184643]
+visible = false
+position = Vector2(0, -5)
+shape = SubResource("CapsuleShape2D_4ntmi")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1986231153]
+libraries/ = SubResource("AnimationLibrary_btcbx")
+script = SubResource("GDScript_n1p0m")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1510520508]
+process_mode = 3
+ignore_rotation = false
+zoom = Vector2(1.5, 1.5)
+editor_draw_limits = true
+script = ExtResource("2_4c57v")
+
+[node name="InteractiongComponent" parent="." unique_id=1047232936 instance=ExtResource("4_gwnis")]
+visible = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1859158786]
+follow_viewport_enabled = true
+script = ExtResource("4_xnkv0")
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1180127197]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Inteligencia" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=798979493]
+light_mask = 524290
+material = SubResource("CanvasItemMaterial_73bjl")
+layout_mode = 0
+offset_left = -87.0
+offset_top = -87.0
+offset_right = -68.0
+offset_bottom = -69.0
+fill_mode = 3
+texture_under = ExtResource("7_022re")
+texture_progress = ExtResource("8_i2haj")
+
+[node name="Vida1" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=2119533170]
+light_mask = 524289
+material = SubResource("CanvasItemMaterial_73bjl")
+layout_mode = 0
+offset_left = -157.0
+offset_top = -87.0
+offset_right = -138.0
+offset_bottom = -69.0
+fill_mode = 2
+texture_under = ExtResource("8_4c57v")
+texture_progress = ExtResource("9_xnkv0")
+
+[node name="Vida2" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=1599039855]
+light_mask = 524290
+material = SubResource("CanvasItemMaterial_73bjl")
+layout_mode = 0
+offset_left = -135.0
+offset_top = -87.0
+offset_right = -116.0
+offset_bottom = -69.0
+fill_mode = 2
+texture_under = ExtResource("8_4c57v")
+texture_progress = ExtResource("9_xnkv0")
+
+[node name="Vida3" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=1312205467]
+light_mask = 524290
+material = SubResource("CanvasItemMaterial_73bjl")
+layout_mode = 0
+offset_left = -113.0
+offset_top = -87.0
+offset_right = -94.0
+offset_bottom = -69.0
+fill_mode = 2
+texture_under = ExtResource("8_4c57v")
+texture_progress = ExtResource("9_xnkv0")
+
+[node name="estamina" type="TextureProgressBar" parent="CanvasLayer/Control" unique_id=957267611 node_paths=PackedStringArray("man_player")]
+light_mask = 524290
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_73bjl")
+layout_mode = 0
+offset_left = -179.0
+offset_top = -71.00001
+offset_right = -51.0
+offset_bottom = -53.000008
+scale = Vector2(0.7, 0.7)
+pivot_offset = Vector2(72, 16)
+size_flags_stretch_ratio = 0.0
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_under = ExtResource("3_cycue")
+texture_over = ExtResource("4_cepnt")
+texture_progress = ExtResource("5_ocnev")
+script = ExtResource("6_i2haj")
+man_player = NodePath("../../..")
+
+[connection signal="current_animation_changed" from="AnimationPlayer" to="." method="_on_animation_player_current_animation_changed"]
+[connection signal="value_changed" from="CanvasLayer/Control/estamina" to="CanvasLayer/Control/estamina" method="_on_value_changed"]
