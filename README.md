@@ -135,12 +135,3 @@ VIÉSES
 ENCONTRAR CAMINHO CIRCUITO
 
 <img width="1756" height="987" alt="image (4)" src="https://github.com/user-attachments/assets/19de2db7-cada-4a46-a0b7-2205a2af6981" />
-
-
-
-
-
-
-
-
-

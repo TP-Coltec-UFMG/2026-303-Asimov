@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://cyl02mn4y4x7c" path="res://NPC'S/marker_point.tscn" id="6_pgrj2"]
 [ext_resource type="Texture2D" uid="uid://b0elgotgwc83h" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_3.png" id="7_nflo4"]
 [ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/Clarxs/06_purple_crimson.png" id="7_nqlva"]
-[ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="8_mrwqp"]
 [ext_resource type="Texture2D" uid="uid://cfw8c3ewx78lf" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_2.png" id="8_vkln7"]
 [ext_resource type="PackedScene" uid="uid://dsyhrp3kskfss" path="res://TileMaps/Andar_Hall/hall_quebrado.tscn" id="9_1xwy5"]
 [ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://Objects/luz_emergencia.tscn" id="9_xl0vw"]
@@ -295,9 +294,6 @@ texture = ExtResource("7_nflo4")
 position = Vector2(-159, -32.000015)
 rotation = 0.87187374
 texture = ExtResource("7_nflo4")
-
-[node name="Cartao_forte" parent="Coletaveis" unique_id=1025788070 instance=ExtResource("8_mrwqp")]
-position = Vector2(-21, 30)
 
 [node name="Perigos" type="Node" parent="." unique_id=1469058963]
 
