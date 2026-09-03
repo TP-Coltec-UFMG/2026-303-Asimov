@@ -419,7 +419,7 @@ movement_type = 1
 position = Vector2(-17, -26)
 
 [node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("12_48805")]
-position = Vector2(-43, 31)
+position = Vector2(-60, 31)
 
 [node name="EntranceMarkers" type="Node2D" parent="." unique_id=2000728230]
 
