@@ -24,8 +24,13 @@ TELA INICIAL
 
 - Basicamente, a primeira tela serve como um momento que o usuário poderia configurar o jogo para adequar melhor a gameplay à ele mesmo. É nesse parte em que, de fato,
   a experiência torna-se além de divertida, inclusiva.
-- Temos 3 botões, um de iniciar um novo jogo(como a game play é bem curta, e também porque não desenvolvemos o jogo em si ainda, não temos uma forma de marcar progresso), um de sair
-  e o outro que dá as opções de configuração.
+- Temos 3 botões, um de iniciar um novo jogo, um de sair, um de acessar um tutorial das principais mecânicas gerais do jogo e o outro que dá as opções de configuração.
+
+TUTORIAL
+
+<img width="959" height="539" alt="Captura de tela 2026-09-03 094649" src="https://github.com/user-attachments/assets/5a8acdcd-b1ae-4f5a-aa8d-9898585eac4c" />
+
+- O tutorial ensina as mecânicas, de uma forma didática e dinâminca, que estarão presentes em todo o jogo : movimentação básica, corrida com estamina, empurrar e puxar objetos, utilização da lanterna e do extintor de incêndio. 
 
 OPÇÕES:
 
