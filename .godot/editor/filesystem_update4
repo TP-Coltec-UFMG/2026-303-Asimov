@@ -1,6 +1,1 @@
-res://Scenes/Musics/music_controller.tscn
-res://Scenes/andar_hall.tscn
-res://Scenes/scripts/line_2d.gd
-res://Scenes/scripts/quest_mission.gd
-res://NPC'S/clarxs.gd
-res://Scenes/scripts/scene_trigger.gd
+res://Scenes/principal.tscn

@@ -24,6 +24,7 @@ var offset_fumaca: Vector2 = Vector2.ZERO
 var angulo_base_fumaca: float = 0.0
 var angulo_final_fumaca: float = 0.0
 var ultimo_valor_combustivel: int = -1
+var ultimo_angulo_material: float = INF
 
 const FORCA_FUMACA: float = 1000.0
 const LIMITE_EXTINTOR: float = 45.0
@@ -47,6 +48,7 @@ func _ready() -> void:
 
 func configurar_particulas() -> void:
 	if fumaca.process_material is ParticleProcessMaterial:
+		ultimo_angulo_material = INF
 		material_fumaca = fumaca.process_material.duplicate() as ParticleProcessMaterial
 		fumaca.process_material = material_fumaca
 
@@ -109,6 +111,11 @@ func aplicar_direcao_fumaca() -> void:
 
 	if material_fumaca == null:
 		return
+
+	# O material é exclusivo deste extintor; a gravidade só muda com a mira.
+	if angulo_final_fumaca == ultimo_angulo_material:
+		return
+	ultimo_angulo_material = angulo_final_fumaca
 
 	var angulo_rad: float = deg_to_rad(angulo_final_fumaca)
 	var direcao_jato: Vector2 = Vector2.RIGHT.rotated(angulo_rad)

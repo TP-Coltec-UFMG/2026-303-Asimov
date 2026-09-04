@@ -26,6 +26,8 @@ const REFRESH_INTERVAL_SECONDS: float = 0.25
 
 var _input_mode: InputMode = InputMode.MOUSE
 var _tracked_controls: Array[Control] = []
+var _remap_controls: Array[InputRemapButton] = []
+var _controls_dirty: bool = true
 var _refresh_timer: float = 0.0
 var _active_scope: Node
 
@@ -44,6 +46,8 @@ func _ready() -> void:
 	_create_focus_styles()
 	_create_mode_indicator()
 	_install_wasd_navigation()
+	get_tree().node_added.connect(_on_tree_node_changed)
+	get_tree().node_removed.connect(_on_tree_node_changed)
 
 	await get_tree().process_frame
 	_refresh_controls()
@@ -281,7 +285,7 @@ func _apply_input_mode_visuals() -> void:
 	for control in _tracked_controls:
 		if is_instance_valid(control):     
 			control.add_theme_stylebox_override("focus", focus_style)
-			_update_all_slider_outlines()
+	_update_all_slider_outlines()
 
 func _update_all_slider_outlines() -> void:
 	var focus_owner := get_viewport().gui_get_focus_owner()
@@ -307,7 +311,15 @@ func _update_all_slider_outlines() -> void:
 			and slider.is_visible_in_tree()
 		)
 
+func _on_tree_node_changed(_node: Node) -> void:
+	_controls_dirty = true
+
+
 func _refresh_controls() -> void:
+	# A descoberta de controles só precisa ser refeita quando a árvore muda.
+	if not _controls_dirty:
+		return
+	_controls_dirty = false
 	var host := get_parent()
 	if host == null:
 		return
@@ -324,6 +336,8 @@ func _refresh_controls() -> void:
 			continue
 
 		_tracked_controls.append(control)
+		if control is InputRemapButton:
+			_remap_controls.append(control as InputRemapButton)
 		control.add_theme_stylebox_override("focus", focus_style)
 		_disable_back_button_scale(control)
 		if control is Slider:       
@@ -722,7 +736,7 @@ func _has_visible_popup() -> bool:
 
 
 func _is_waiting_for_remap() -> bool:
-	for control in _tracked_controls:
+	for control in _remap_controls:
 		if is_instance_valid(control) and control is InputRemapButton:
 			if (control as InputRemapButton).esperando_input:
 				return true
