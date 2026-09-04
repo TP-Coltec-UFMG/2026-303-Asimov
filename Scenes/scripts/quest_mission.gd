@@ -35,9 +35,7 @@ func _ready() -> void:
 	MusicController._start_som_de_fundo()
 	MusicController._stop_bg_ambient()
 	MusicController._set_volume_som_de_fundo(1.0)
-	await get_tree().create_timer(0.5).timeout
-	$"../UI/Transition".play_backwards("default")
-	await $"../UI/Transition".animation_finished
+	
 
 	# Ao continuar uma partida já concluída, a lista não reaparece por cinco
 	# segundos. Durante a partida normal, as duas marcações ainda ficam visíveis.

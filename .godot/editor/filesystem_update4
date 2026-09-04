@@ -1,0 +1,10 @@
+res://Scenes/andar_hall.tscn
+res://NPC'S/Clarxs/Clarxs.tscn
+res://NPC'S/NPC/Clarxs.tscn
+res://Clarxs.tscn
+res://Scenes/Musics/music_controller.tscn
+res://Scenes/principal.tscn
+res://TileMaps/Andar_Hall/hall.tscn
+res://TileMaps/Andar_Hall/hall_quebrado.tscn
+res://NPC'S/Clarxs.tscn
+res://Player/ManPlayer.tscn

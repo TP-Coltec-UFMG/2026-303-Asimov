@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b5lobav5glfik"]
 
 [ext_resource type="Script" uid="uid://biwsxrryy0swa" path="res://Scripts/Sounds/music/music.gd" id="1_biu3b"]
+[ext_resource type="AudioStream" uid="uid://b5swt4rl4btm5" path="res://Sounds/freesound_community-security-alarm-80493.mp3" id="3_a7c45"]
 [ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://Sounds/audioatlant-pulse-of-time-action-countdown-trailer-ver1-573119.mp3" id="3_y4uch"]
-[ext_resource type="AudioStream" uid="uid://b1ljosljfy0yf" path="res://Sounds/jeremayjimenez-new-zealand-eas-alarm-tsunami-279662.mp3" id="4_a7c45"]
 [ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/urgent(1).mp3" id="5_dqj1g"]
 
 [node name="MusicControler" type="Node2D" unique_id=1749428804]
@@ -22,7 +22,7 @@ stream = ExtResource("3_y4uch")
 bus = &"Music"
 
 [node name="SOM_ALARME" type="AudioStreamPlayer2D" parent="." unique_id=2046736172]
-stream = ExtResource("4_a7c45")
+stream = ExtResource("3_a7c45")
 bus = &"sfx"
 parameters/looping = true
 

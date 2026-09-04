@@ -5,10 +5,9 @@
 [ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="4_48805"]
 [ext_resource type="Texture2D" uid="uid://dgisco7ahvjd1" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_1.png" id="5_8q7s7"]
 [ext_resource type="PackedScene" uid="uid://ce1wy22xikmix" path="res://Objects/fogo.tscn" id="5_48805"]
-[ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs/Clarxs.tscn" id="5_vvkyc"]
-[ext_resource type="PackedScene" uid="uid://cyl02mn4y4x7c" path="res://NPC'S/marker_point.tscn" id="6_pgrj2"]
+[ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs.tscn" id="5_vvkyc"]
 [ext_resource type="Texture2D" uid="uid://b0elgotgwc83h" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_3.png" id="7_nflo4"]
-[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/Clarxs/06_purple_crimson.png" id="7_nqlva"]
+[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/NPC/06_purple_crimson.png" id="7_nqlva"]
 [ext_resource type="Texture2D" uid="uid://cfw8c3ewx78lf" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_2.png" id="8_vkln7"]
 [ext_resource type="PackedScene" uid="uid://dsyhrp3kskfss" path="res://TileMaps/Andar_Hall/hall_quebrado.tscn" id="9_1xwy5"]
 [ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://Objects/luz_emergencia.tscn" id="9_xl0vw"]
@@ -19,19 +18,52 @@
 [ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="13_xl0vw"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="14_6qnfl"]
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="14_8uelp"]
+[ext_resource type="Texture2D" uid="uid://cqfc1g0auqdkq" path="res://NPC'S/NPC/01_golden_blue.png" id="15_761r2"]
+[ext_resource type="Texture2D" uid="uid://ckg4qj4mj55ms" path="res://NPC'S/NPC/boneco_0.png" id="15_tbjth"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="15_wweuw"]
+[ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="16_vkln7"]
+[ext_resource type="Texture2D" uid="uid://dy13v881xo6ap" path="res://NPC'S/NPC/02_black_emerald.png" id="17_xahv0"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_ysydw"]
+[ext_resource type="Texture2D" uid="uid://cgntmak4t0bga" path="res://NPC'S/NPC/boneco_1.png" id="18_4bo1l"]
 [ext_resource type="Script" uid="uid://778gwebo6sfc" path="res://Scenes/scripts/quest_mission.gd" id="18_h0r3n"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="18_pfqqk"]
+[ext_resource type="Texture2D" uid="uid://7dxb4evip3l1" path="res://NPC'S/NPC/04_silver_orange.png" id="19_kws21"]
 [ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://Sprites/ui/New_Piskel.png" id="19_xl0vw"]
+[ext_resource type="Texture2D" uid="uid://cxyejmrimb2dj" path="res://NPC'S/NPC/boneco_2.png" id="20_m7e8o"]
+[ext_resource type="Script" uid="uid://b6ktgxyvib1et" path="res://Scenes/scripts/ui.gd" id="20_vkln7"]
 [ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://Sprites/ui/New_Piskel1.png" id="20_xodlo"]
+[ext_resource type="Texture2D" uid="uid://c0ciw10r6huss" path="res://NPC'S/NPC/boneco_3.png" id="22_pjvw7"]
+[ext_resource type="Texture2D" uid="uid://sk6715ex5eom" path="res://NPC'S/NPC/pessoa_2.png" id="23_4bo1l"]
+[ext_resource type="Texture2D" uid="uid://kv52um6c31r" path="res://NPC'S/NPC/boneco_5.png" id="23_ohpjp"]
+[ext_resource type="Texture2D" uid="uid://dtomiw3v4xpqi" path="res://NPC'S/NPC/boneco_4.png" id="24_xcn0o"]
+[ext_resource type="Texture2D" uid="uid://dpsrsm4at7pux" path="res://NPC'S/NPC/pessoa_5.png" id="26_4bo1l"]
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="26_nflo4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8q7s7"]
-size = Vector2(16, 12)
+size = Vector2(14, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nflo4"]
 size = Vector2(18, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vkln7"]
+size = Vector2(14.301437, 10.858406)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrwqp"]
+size = Vector2(18.973661, 15.177895)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1wv8v"]
+size = Vector2(17.143616, 14.913395)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l0djc"]
+size = Vector2(17.114113, 17.064331)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_g4v7s"]
+a = Vector2(-9, -2)
+b = Vector2(92, -21)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_nflo4"]
+a = Vector2(21, -17)
+b = Vector2(34, -74)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_61dx5"]
 size = Vector2(9, 11.5)
@@ -40,7 +72,7 @@ size = Vector2(9, 11.5)
 size = Vector2(9, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
-size = Vector2(30, 17)
+size = Vector2(30, 4)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
 atlas = ExtResource("26_nflo4")
@@ -151,7 +183,7 @@ scale = Vector2(0.425, 0.425)
 save_id = "extintor2"
 
 [node name="pedaco1" type="CharacterBody2D" parent="Coletaveis" unique_id=775917438 groups=["empurravel"]]
-position = Vector2(-12, 2)
+position = Vector2(-22, 5)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_1"
 
@@ -161,7 +193,7 @@ rotation = 6.890877e-05
 texture = ExtResource("5_8q7s7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1" unique_id=1174819247]
-position = Vector2(-19, -92)
+position = Vector2(-19, -91.5)
 shape = SubResource("RectangleShape2D_8q7s7")
 
 [node name="Interectable" parent="Coletaveis/pedaco1" unique_id=1406152477 groups=["empurravel"] instance=ExtResource("11_8uelp")]
@@ -174,7 +206,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco5" type="CharacterBody2D" parent="Coletaveis" unique_id=1634234465 groups=["empurravel"]]
-position = Vector2(21, 37)
+position = Vector2(27, 39)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_1"
 
@@ -184,8 +216,9 @@ rotation = -0.46569985
 texture = ExtResource("5_8q7s7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco5" unique_id=1165852911]
-position = Vector2(-19, -92)
-shape = SubResource("RectangleShape2D_8q7s7")
+position = Vector2(-18.574013, -92.142075)
+rotation = -0.48024845
+shape = SubResource("RectangleShape2D_vkln7")
 
 [node name="Interectable" parent="Coletaveis/pedaco5" unique_id=719517567 groups=["empurravel"] instance=ExtResource("11_8uelp")]
 position = Vector2(-19, -87)
@@ -197,7 +230,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco2" type="CharacterBody2D" parent="Coletaveis" unique_id=1777953629 groups=["empurravel"]]
-position = Vector2(9, -1)
+position = Vector2(12, 5)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_1"
 
@@ -207,8 +240,9 @@ rotation = 0.30381602
 texture = ExtResource("8_vkln7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco2" unique_id=814235645]
-position = Vector2(-19, -92)
-shape = SubResource("RectangleShape2D_8q7s7")
+position = Vector2(-19.299347, -93.09951)
+rotation = 0.32093495
+shape = SubResource("RectangleShape2D_mrwqp")
 
 [node name="Interectable" parent="Coletaveis/pedaco2" unique_id=1033899244 groups=["empurravel"] instance=ExtResource("11_8uelp")]
 position = Vector2(-19, -87)
@@ -220,7 +254,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco4" type="CharacterBody2D" parent="Coletaveis" unique_id=302313232 groups=["empurravel"]]
-position = Vector2(-27, 31)
+position = Vector2(-33, 41)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_1"
 
@@ -230,8 +264,9 @@ rotation = -0.5141846
 texture = ExtResource("8_vkln7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco4" unique_id=295865186]
-position = Vector2(-19, -92)
-shape = SubResource("RectangleShape2D_8q7s7")
+position = Vector2(-20.130405, -93.21954)
+rotation = -0.53599274
+shape = SubResource("RectangleShape2D_1wv8v")
 
 [node name="Interectable" parent="Coletaveis/pedaco4" unique_id=598137820 groups=["empurravel"] instance=ExtResource("11_8uelp")]
 position = Vector2(-19, -87)
@@ -243,7 +278,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco3" type="CharacterBody2D" parent="Coletaveis" unique_id=386280701 groups=["empurravel"]]
-position = Vector2(-3, 23)
+position = Vector2(-1, 29)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_1"
 
@@ -253,8 +288,10 @@ rotation = 0.30381602
 texture = ExtResource("7_nflo4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco3" unique_id=1080797742]
-position = Vector2(-19, -92)
-shape = SubResource("RectangleShape2D_8q7s7")
+position = Vector2(-19.689238, -92.90179)
+rotation = 0.30611235
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_l0djc")
 
 [node name="Interectable" parent="Coletaveis/pedaco3" unique_id=1796292153 groups=["empurravel"] instance=ExtResource("11_8uelp")]
 position = Vector2(-19, -87)
@@ -294,6 +331,16 @@ texture = ExtResource("7_nflo4")
 position = Vector2(-159, -32.000015)
 rotation = 0.87187374
 texture = ExtResource("7_nflo4")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Coletaveis" unique_id=92604598]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/StaticBody2D" unique_id=85433498]
+position = Vector2(-160, -23)
+shape = SubResource("SegmentShape2D_g4v7s")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Coletaveis/StaticBody2D" unique_id=563900794]
+position = Vector2(-90, -27)
+shape = SubResource("SegmentShape2D_nflo4")
 
 [node name="Perigos" type="Node" parent="." unique_id=1469058963]
 
@@ -400,25 +447,282 @@ color = Color(0.36057273, 0.36057273, 0.3605727, 1)
 
 [node name="Interativos" type="Node" parent="." unique_id=636557829]
 
-[node name="HALL_QUEBRADO" parent="." unique_id=1433076941 instance=ExtResource("9_1xwy5")]
-
-[node name="NPCs" type="Node" parent="." unique_id=1012355832]
+[node name="NPCs" type="Node" parent="." unique_id=247527864]
 
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("5_vvkyc")]
-position = Vector2(96, 96)
-sprite_sheet = ExtResource("7_nqlva")
+z_index = 2
+position = Vector2(142, -89)
+sprite_sheet = ExtResource("15_tbjth")
+dialog_texts = null
+walk_speed = null
+run_speed = 40.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
 
-[node name="Marker_point_1" parent="NPCs/NPC1" unique_id=763448837 instance=ExtResource("6_pgrj2")]
-position = Vector2(9, -61)
+[node name="Line2D" type="Line2D" parent="NPCs/NPC1" unique_id=1873615009]
+position = Vector2(-2, 18)
+points = PackedVector2Array(1, -7, -7, 21, -15, 47, -18, 66, -27, 95, -44, 105, -63, 108, -93, 104, -106, 104, -126, 105, -142, 106, -165, 106)
+script = ExtResource("16_vkln7")
+start_automatically = true
 
-[node name="Marker_point_2" parent="NPCs/NPC1" unique_id=1383230832 instance=ExtResource("6_pgrj2")]
-position = Vector2(28, -26)
+[node name="NPC2" parent="NPCs" unique_id=1302424203 instance=ExtResource("5_vvkyc")]
+z_index = 5
+position = Vector2(123, -89)
+sprite_sheet = ExtResource("17_xahv0")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC2" unique_id=1367960120]
+position = Vector2(-2, 18)
+points = PackedVector2Array(1, -7, 3, 22, -2, 56, -13, 84, -25, 102, -43, 101, -60, 103, -93, 109, -110, 109, -134, 110, -157, 112, -173, 114)
+default_color = Color(1, 0, 1, 1)
+script = ExtResource("16_vkln7")
 movement_type = 1
+start_automatically = true
 
-[node name="Marker_point_3" parent="NPCs/NPC1" unique_id=446185251 instance=ExtResource("6_pgrj2")]
-position = Vector2(-17, -26)
+[node name="NPC3" parent="NPCs" unique_id=1058291482 instance=ExtResource("5_vvkyc")]
+position = Vector2(56, -89)
+sprite_sheet = ExtResource("18_4bo1l")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC3" unique_id=1762463084]
+position = Vector2(-2, 18)
+points = PackedVector2Array(1, -7, -14, 22, -37, 48, -21, 77, -17, 106, -49, 108, -61, 110, -81, 111, -98, 113, -113, 127, -117, 140, -113, 159)
+default_color = Color(0, 0, 1, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC4" parent="NPCs" unique_id=476533357 instance=ExtResource("5_vvkyc")]
+position = Vector2(47, -90)
+sprite_sheet = ExtResource("19_kws21")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC4" unique_id=926409637]
+position = Vector2(-2, 18)
+points = PackedVector2Array(1, -7, 36, 22, 74, 48, 65, 87, 50, 119, 43, 136, 42, 158, 50, 173, 54, 187, 72, 195, 91, 193, 116, 202)
+default_color = Color(0, 0.39849344, 0.2982125, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC5" parent="NPCs" unique_id=660128066 instance=ExtResource("5_vvkyc")]
+z_index = 6
+position = Vector2(83, -8)
+sprite_sheet = ExtResource("20_m7e8o")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC5" unique_id=606386099]
+position = Vector2(-2, 18)
+points = PackedVector2Array(0, 0, -10, 37, -7, 67, -7, 91, -16, 105, -35, 109)
+default_color = Color(0.35259068, 0.35383534, 0, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC6" parent="NPCs" unique_id=423676385 instance=ExtResource("5_vvkyc")]
+position = Vector2(46, -8)
+sprite_sheet = ExtResource("15_761r2")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC6" unique_id=692570053]
+position = Vector2(-2, 18)
+points = PackedVector2Array(0, 0, 23, 38, 26, 76, 22, 111, -6, 111, -23, 108)
+default_color = Color(0.6281449, 0, 0.26931453, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC7" parent="NPCs" unique_id=536453911 instance=ExtResource("5_vvkyc")]
+position = Vector2(-25, -37)
+sprite_sheet = ExtResource("22_pjvw7")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC7" unique_id=1687354982]
+position = Vector2(-2, 18)
+points = PackedVector2Array(0, 0, -23, 32, -42, 63, -46, 76, -43, 89, -43, 121)
+default_color = Color(0.6281449, 0, 0.26931453, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC8" parent="NPCs" unique_id=1960654454 instance=ExtResource("5_vvkyc")]
+z_index = 3
+position = Vector2(-121, -22)
+sprite_sheet = ExtResource("23_4bo1l")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC8" unique_id=2139976974]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-12, -12, -32, -11, -38, -1, -34, 13, -33, 44, -34, 66, -24, 75, -11, 75)
+default_color = Color(0.6281449, 0, 0.26931453, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC9" parent="NPCs" unique_id=841091034 instance=ExtResource("5_vvkyc")]
+z_index = 3
+position = Vector2(-121, 60)
+sprite_sheet = ExtResource("24_xcn0o")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC9" unique_id=1419834255]
+position = Vector2(18, 27)
+points = PackedVector2Array(-18, -14, -15, -11, -8, -11)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC10" parent="NPCs" unique_id=911211034 instance=ExtResource("5_vvkyc")]
+z_index = 3
+position = Vector2(-88, -4)
+sprite_sheet = ExtResource("7_nqlva")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC10" unique_id=757548581]
+position = Vector2(18, 27)
+points = PackedVector2Array(-16, -11, 13, 49, 43, 48, 70, 48, 96, 47, 125, 47, 143, 39, 159, 30, 187, 34, 197, 57)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC11" parent="NPCs" unique_id=1190239884 instance=ExtResource("5_vvkyc")]
+z_index = 3
+position = Vector2(36, 153)
+sprite_sheet = ExtResource("23_ohpjp")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC11" unique_id=157222780]
+position = Vector2(18, 27)
+points = PackedVector2Array(-16, -11, -23, 1, -34, 4, -48, 6, -62, 5, -73, 4, -84, 2)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="NPC12" parent="NPCs" unique_id=1388378966 instance=ExtResource("5_vvkyc")]
+z_index = 3
+position = Vector2(-59, 153)
+sprite_sheet = ExtResource("26_4bo1l")
+dialog_texts = null
+walk_speed = null
+run_speed = 45.0
+walk_animation_speed = null
+run_animation_speed = null
+desperate_radius = null
+desperate_min_distance = null
+desperate_min_wait = null
+desperate_max_wait = null
+desperate_run_chance = null
+
+[node name="Line2D" type="Line2D" parent="NPCs/NPC12" unique_id=2011849040]
+position = Vector2(18, 27)
+points = PackedVector2Array(-16, -11, -12, 1)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+start_automatically = true
+
+[node name="HALL_QUEBRADO" parent="." unique_id=1433076941 instance=ExtResource("9_1xwy5")]
 
 [node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("12_48805")]
+z_index = 10
 position = Vector2(-60, 31)
 
 [node name="EntranceMarkers" type="Node2D" parent="." unique_id=2000728230]
@@ -453,6 +757,7 @@ position = Vector2(-2, -333.00003)
 scene_trigger = NodePath("../SceneTrigger2")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1237413001]
+script = ExtResource("20_vkln7")
 
 [node name="Controle_de_tempo" parent="UI" unique_id=1720657433 instance=ExtResource("14_8uelp")]
 
@@ -463,10 +768,11 @@ player = NodePath("../../ManPlayer")
 [node name="Area2D" type="Area2D" parent="UI" unique_id=1222956211]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D" unique_id=1915402409]
-position = Vector2(-26, -96.5)
+position = Vector2(-26, -95)
 shape = SubResource("RectangleShape2D_yf5fn")
 
 [node name="Transition" type="AnimatedSprite2D" parent="UI" unique_id=954264057]
+visible = false
 z_index = 1
 position = Vector2(239.99998, 135)
 scale = Vector2(1.25, 1.2500001)
