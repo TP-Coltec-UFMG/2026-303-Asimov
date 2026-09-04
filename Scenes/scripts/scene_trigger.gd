@@ -52,6 +52,7 @@ func usar_elevador(andar: int) -> void:
 			body_p.global_position = ultima_posicao
 			body_p.inventory.show()
 			controle_de_tempo.show()
+			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 		
 	if andar != andar_atual and eh_elevador:
 		if dentro_da_area:
@@ -60,8 +61,10 @@ func usar_elevador(andar: int) -> void:
 			await $Timer.timeout
 			await painel_elevador.animacao()
 			body_p.set_physics_process(true)
+			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 			scene_manager.change_scene(body_p, _get_connect_scene_andar_novo(andar))
 			body_p.inventory.show()
+			
 	if (andar == andar_atual and eh_elevador):
 		if dentro_da_area:
 			body_p.set_physics_process(true)
@@ -69,12 +72,11 @@ func usar_elevador(andar: int) -> void:
 			painel_elevador.resetar_sprites()
 			await painel_elevador.animacao()
 			body_p.global_position = ultima_posicao
+			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 			body_p.inventory.show()
 			controle_de_tempo.show()
 			
-	
-		
-
+			
 func get_ultima_posicao() -> Vector2:
 	return ultima_posicao
 
@@ -86,6 +88,7 @@ func _input(event: InputEvent) -> void:
 		body_p.set_physics_process(false)
 		body_p.global_position += Vector2(-20, -200)
 		painel_elevador.resetar_sprites()
+		$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_DISABLED
 		painel_elevador.visible = true
 		controle_de_tempo.hide()
 		get_tree().paused = true

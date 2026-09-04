@@ -67,6 +67,18 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 	M2_feito = true
 	M2.play(&"default")
+	$"../NPCs/NPC1/Line2D2".start_path()
+	$"../NPCs/NPC2/Line2D2".start_path()
+	$"../NPCs/NPC3/Line2D2".start_path()
+	$"../NPCs/NPC4/Line2D2".start_path()
+	$"../NPCs/NPC5/Line2D2".start_path()
+	$"../NPCs/NPC6/Line2D2".start_path()
+	$"../NPCs/NPC7/Line2D2".start_path()
+	$"../NPCs/NPC8/Line2D2".start_path()
+	$"../NPCs/NPC9/Line2D2".start_path()
+	$"../NPCs/NPC10/Line2D2".start_path()
+	$"../NPCs/NPC11/Line2D2".start_path()
+	$"../NPCs/NPC12/Line2D2".start_path()
 	_save_progress_and_checkpoint()
 	_check_all_tasks_completed()
 
@@ -83,7 +95,7 @@ func _update_fire_task() -> void:
 func _check_all_tasks_completed() -> void:
 	if not M1_feito or not M2_feito or _hide_scheduled:
 		return
-
+		
 	_hide_scheduled = true
 	_hide_after_completion()
 

@@ -39,14 +39,20 @@
 [ext_resource type="Texture2D" uid="uid://dpsrsm4at7pux" path="res://NPC'S/NPC/pessoa_5.png" id="26_4bo1l"]
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="26_nflo4"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4bo1l"]
+load_path = "res://.godot/imported/pedaco_1.png-219691cfb0d6eee3e96f77c1fa5091d6.ctex"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8q7s7"]
 size = Vector2(14, 11)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nflo4"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m7e8o"]
 size = Vector2(18, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vkln7"]
 size = Vector2(14.301437, 10.858406)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nflo4"]
+size = Vector2(18, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrwqp"]
 size = Vector2(18.973661, 15.177895)
@@ -190,7 +196,7 @@ save_id = "PEDACO_PAREDE_1"
 [node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco1" unique_id=1463579393]
 position = Vector2(-19, -93)
 rotation = 6.890877e-05
-texture = ExtResource("5_8q7s7")
+texture = SubResource("CompressedTexture2D_4bo1l")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1" unique_id=1174819247]
 position = Vector2(-19, -91.5)
@@ -203,12 +209,12 @@ is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1/Interectable" unique_id=1325901001]
 position = Vector2(0, -5)
-shape = SubResource("RectangleShape2D_nflo4")
+shape = SubResource("RectangleShape2D_m7e8o")
 
 [node name="pedaco5" type="CharacterBody2D" parent="Coletaveis" unique_id=1634234465 groups=["empurravel"]]
 position = Vector2(27, 39)
 script = ExtResource("4_48805")
-save_id = "PEDACO_PAREDE_1"
+save_id = "PEDACO_PAREDE_2"
 
 [node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco5" unique_id=1160564438]
 position = Vector2(-19, -93)
@@ -232,7 +238,7 @@ shape = SubResource("RectangleShape2D_nflo4")
 [node name="pedaco2" type="CharacterBody2D" parent="Coletaveis" unique_id=1777953629 groups=["empurravel"]]
 position = Vector2(12, 5)
 script = ExtResource("4_48805")
-save_id = "PEDACO_PAREDE_1"
+save_id = "PEDACO_PAREDE_3"
 
 [node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco2" unique_id=919829966]
 position = Vector2(-19, -93)
@@ -256,7 +262,7 @@ shape = SubResource("RectangleShape2D_nflo4")
 [node name="pedaco4" type="CharacterBody2D" parent="Coletaveis" unique_id=302313232 groups=["empurravel"]]
 position = Vector2(-33, 41)
 script = ExtResource("4_48805")
-save_id = "PEDACO_PAREDE_1"
+save_id = "PEDACO_PAREDE_4"
 
 [node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco4" unique_id=955443142]
 position = Vector2(-19, -93)
@@ -280,7 +286,7 @@ shape = SubResource("RectangleShape2D_nflo4")
 [node name="pedaco3" type="CharacterBody2D" parent="Coletaveis" unique_id=386280701 groups=["empurravel"]]
 position = Vector2(-1, 29)
 script = ExtResource("4_48805")
-save_id = "PEDACO_PAREDE_1"
+save_id = "PEDACO_PAREDE_5"
 
 [node name="Sprite2D" type="Sprite2D" parent="Coletaveis/pedaco3" unique_id=353176548]
 position = Vector2(-19, -93)
@@ -453,37 +459,28 @@ color = Color(0.36057273, 0.36057273, 0.3605727, 1)
 z_index = 2
 position = Vector2(142, -89)
 sprite_sheet = ExtResource("15_tbjth")
-dialog_texts = null
-walk_speed = null
 run_speed = 40.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC1" unique_id=1873615009]
 position = Vector2(-2, 18)
 points = PackedVector2Array(1, -7, -7, 21, -15, 47, -18, 66, -27, 95, -44, 105, -63, 108, -93, 104, -106, 104, -126, 105, -142, 106, -165, 106)
 script = ExtResource("16_vkln7")
+movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC1" unique_id=211940382]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-167, 107, -180, 78, -176, 57, -172, 35, -168, 4, -167, -31)
+script = ExtResource("16_vkln7")
+movement_type = 1
+random_at_end = false
+delete_npc_at_end = true
+
 [node name="NPC2" parent="NPCs" unique_id=1302424203 instance=ExtResource("5_vvkyc")]
-z_index = 5
+z_index = 1
 position = Vector2(123, -89)
 sprite_sheet = ExtResource("17_xahv0")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC2" unique_id=1367960120]
 position = Vector2(-2, 18)
@@ -493,19 +490,18 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC2" unique_id=496796879]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-170, 114, -164, 79, -157, 59, -154, 36, -149, 13, -150, -9, -149, -26, -147, -31)
+default_color = Color(1, 0, 1, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC3" parent="NPCs" unique_id=1058291482 instance=ExtResource("5_vvkyc")]
 position = Vector2(56, -89)
 sprite_sheet = ExtResource("18_4bo1l")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC3" unique_id=1762463084]
 position = Vector2(-2, 18)
@@ -515,19 +511,18 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC3" unique_id=2016876890]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-113, 152, -102, 110, -95, 76, -90, 56, -85, 35, -82, 5, -81, -27)
+default_color = Color(0, 0, 1, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC4" parent="NPCs" unique_id=476533357 instance=ExtResource("5_vvkyc")]
 position = Vector2(47, -90)
 sprite_sheet = ExtResource("19_kws21")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC4" unique_id=926409637]
 position = Vector2(-2, 18)
@@ -537,20 +532,19 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC4" unique_id=2084611759]
+position = Vector2(-2, 18)
+points = PackedVector2Array(113, 202, 69, 163, 67, 72, 51, 27, 2, 23, -53, 13, -72, -6, -72, -24)
+default_color = Color(0, 0.39849344, 0.2982125, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC5" parent="NPCs" unique_id=660128066 instance=ExtResource("5_vvkyc")]
 z_index = 6
 position = Vector2(83, -8)
 sprite_sheet = ExtResource("20_m7e8o")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC5" unique_id=606386099]
 position = Vector2(-2, 18)
@@ -560,19 +554,18 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC5" unique_id=735822355]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-32, 107, -10, 106, -9, 72, -12, 38, -38, 13, -53, -13, -66, -38, -97, -64, -108, -89, -109, -107, -110, -111)
+default_color = Color(0.35259068, 0.35383534, 0, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC6" parent="NPCs" unique_id=423676385 instance=ExtResource("5_vvkyc")]
 position = Vector2(46, -8)
 sprite_sheet = ExtResource("15_761r2")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC6" unique_id=692570053]
 position = Vector2(-2, 18)
@@ -582,19 +575,18 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC6" unique_id=289571832]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-19, 107, -80, 107, -96, 96, -97, 57, -92, 33, -84, 5, -81, -21, -62, -49, -72, -104, -72, -109)
+default_color = Color(0.6281449, 0, 0.26931453, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC7" parent="NPCs" unique_id=536453911 instance=ExtResource("5_vvkyc")]
 position = Vector2(-25, -37)
 sprite_sheet = ExtResource("22_pjvw7")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC7" unique_id=1687354982]
 position = Vector2(-2, 18)
@@ -604,20 +596,19 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC7" unique_id=2085413675]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-44, 119, -44, 74, -65, 34, -15, 33, -2, -2, -1, -31, 1, -55, 0, -75)
+default_color = Color(0.6281449, 0, 0.26931453, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC8" parent="NPCs" unique_id=1960654454 instance=ExtResource("5_vvkyc")]
 z_index = 3
 position = Vector2(-121, -22)
 sprite_sheet = ExtResource("23_4bo1l")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC8" unique_id=2139976974]
 position = Vector2(-2, 18)
@@ -627,20 +618,19 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC8" unique_id=1881608406]
+position = Vector2(-2, 18)
+points = PackedVector2Array(-13, 75, 30, 77, 47, 48, 82, 10, 91, -28, 97, -91)
+default_color = Color(0.6281449, 0, 0.26931453, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC9" parent="NPCs" unique_id=841091034 instance=ExtResource("5_vvkyc")]
 z_index = 3
 position = Vector2(-121, 60)
 sprite_sheet = ExtResource("24_xcn0o")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC9" unique_id=1419834255]
 position = Vector2(18, 27)
@@ -650,20 +640,19 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC9" unique_id=1673125954]
+position = Vector2(18, 27)
+points = PackedVector2Array(-11, -11, 32, -40, 64, -85, 75, -138, 76, -184)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC10" parent="NPCs" unique_id=911211034 instance=ExtResource("5_vvkyc")]
 z_index = 3
 position = Vector2(-88, -4)
 sprite_sheet = ExtResource("7_nqlva")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC10" unique_id=757548581]
 position = Vector2(18, 27)
@@ -673,20 +662,19 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC10" unique_id=519819849]
+position = Vector2(18, 27)
+points = PackedVector2Array(195, 55, 217, 7, 211, -38, 175, -76, 116, -73, 85, -61, 51, -73, 43, -100, 42, -122)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC11" parent="NPCs" unique_id=1190239884 instance=ExtResource("5_vvkyc")]
 z_index = 3
 position = Vector2(36, 153)
 sprite_sheet = ExtResource("23_ohpjp")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC11" unique_id=157222780]
 position = Vector2(18, 27)
@@ -696,20 +684,19 @@ script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
 
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC11" unique_id=1932262478]
+position = Vector2(18, 27)
+points = PackedVector2Array(-82, 3, -11, 4, -13, -25, -15, -48, -8, -60, 15, -67, 21, -100, 43, -130, 52, -158, 58, -180, 46, -216, 26, -229, 0, -229, -24, -229, -65, -232, -74, -247, -81, -278)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
+
 [node name="NPC12" parent="NPCs" unique_id=1388378966 instance=ExtResource("5_vvkyc")]
 z_index = 3
 position = Vector2(-59, 153)
 sprite_sheet = ExtResource("26_4bo1l")
-dialog_texts = null
-walk_speed = null
 run_speed = 45.0
-walk_animation_speed = null
-run_animation_speed = null
-desperate_radius = null
-desperate_min_distance = null
-desperate_min_wait = null
-desperate_max_wait = null
-desperate_run_chance = null
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC12" unique_id=2011849040]
 position = Vector2(18, 27)
@@ -718,6 +705,14 @@ default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
 movement_type = 1
 start_automatically = true
+
+[node name="Line2D2" type="Line2D" parent="NPCs/NPC12" unique_id=101500096]
+position = Vector2(18, 27)
+points = PackedVector2Array(-10, 1, -19, -25, -19, -52, -15, -70, 34, -64, 84, -68, 112, -68, 118, -108, 89, -151, 73, -170, 64, -191, 49, -220, 27, -230, 15, -274, 14, -278)
+default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
+script = ExtResource("16_vkln7")
+movement_type = 1
+delete_npc_at_end = true
 
 [node name="HALL_QUEBRADO" parent="." unique_id=1433076941 instance=ExtResource("9_1xwy5")]
 
