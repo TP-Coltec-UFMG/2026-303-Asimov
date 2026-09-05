@@ -15,6 +15,7 @@ func change_scene(player_body: Player, to_scene_name: String) -> void:
 	SaveGame.capturar_tempo_atual()
 
 	var current_scene := get_tree().current_scene
+	SaveGame.capture_checkpoint_actors(current_scene)
 
 	if current_scene != null:
 		last_scene_name = current_scene.name

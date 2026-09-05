@@ -5,7 +5,10 @@ const CHARACTER_SELECTION_SCENE: String = "res://Scenes/slectionpage.tscn"
 const MAIN_MENU_SCENE: String = "res://Scenes/principal.tscn"
 
 const INVALID_CHECKPOINT_POS: Vector2 = Vector2(-999, -999)
-const SAVE_VERSION: int = 4
+const SAVE_VERSION: int = 5
+const CHECKPOINT_ACTOR_GROUP: StringName = &"checkpoint_actors"
+const CHECKPOINT_ACTOR_BUCKET: String = "__checkpoint_actors"
+const CHECKPOINT_ACTOR_META: StringName = &"checkpoint_actor_identity"
 
 # Tempo registrado no último checkpoint.
 var tempo_restante: float = -1.0
@@ -193,6 +196,7 @@ func create_checkpoint(
 	checkpoint_pos = player.global_position
 
 	state_player = player.get_checkpoint_state().duplicate(true)
+	capture_checkpoint_actors(current_scene)
 	checkpoint_world_state = save_data.duplicate(true)
 
 	checkpoint_progress = {
@@ -359,6 +363,91 @@ func _restore_progress_config() -> void:
 
 	if checkpoint_progress.has("difficulty"):
 		Configs.configs["difficulty"] = checkpoint_progress["difficulty"]
+
+
+## Registre após inicializar o movimento. Retorna true se encontrou estado salvo.
+## A identidade padrão é o caminho do nó relativo à cena, nunca um instance_id.
+func register_checkpoint_actor(actor: Node, actor_id: String = "") -> bool:
+	if not actor.has_method("get_checkpoint_state") or not actor.has_method("load_checkpoint_state"):
+		push_error("Participante de checkpoint sem métodos de captura/restauração: " + str(actor.name))
+		return false
+	var scene := _checkpoint_actor_scene(actor)
+	if scene == null:
+		return false
+	var identity: Array[String] = [scene.scene_file_path, actor_id]
+	if actor_id.is_empty():
+		identity[1] = str(scene.get_path_to(actor))
+	for other in get_tree().get_nodes_in_group(CHECKPOINT_ACTOR_GROUP):
+		if other != actor and not other.is_queued_for_deletion() and other.get_meta(CHECKPOINT_ACTOR_META, []) == identity:
+			push_error("Identidade de NPC duplicada na cena: " + identity[1])
+			return false
+	actor.set_meta(CHECKPOINT_ACTOR_META, identity)
+	actor.add_to_group(CHECKPOINT_ACTOR_GROUP)
+	var saved: Variant = _checkpoint_actor_states(identity[0]).get(identity[1])
+	if not saved is Dictionary:
+		return false
+	if saved.get("removed", false):
+		actor.process_mode = Node.PROCESS_MODE_DISABLED
+		if actor is CanvasItem:
+			(actor as CanvasItem).hide()
+		actor.queue_free()
+		return true
+	var state: Variant = saved.get("state")
+	if not state is Dictionary:
+		return false
+	actor.call("load_checkpoint_state", state.duplicate(true))
+	return true
+
+
+func _checkpoint_actor_scene(actor: Node) -> Node:
+	# current_scene pode ainda não estar atribuído durante o _ready dos filhos.
+	var scene: Node = null
+	var ancestor: Node = actor
+	while ancestor != null and ancestor != get_tree().root:
+		if not ancestor.scene_file_path.is_empty():
+			scene = ancestor
+		ancestor = ancestor.get_parent()
+	return scene
+
+
+func _checkpoint_actor_states(scene_path: String) -> Dictionary:
+	var scene_state: Variant = save_data.get(scene_path, {})
+	if scene_state is Dictionary:
+		var actors: Variant = scene_state.get(CHECKPOINT_ACTOR_BUCKET, {})
+		if actors is Dictionary:
+			return actors
+	return {}
+
+
+func _store_checkpoint_actor(actor: Node, state: Dictionary) -> void:
+	if not actor.has_meta(CHECKPOINT_ACTOR_META):
+		return
+	var identity: Array = actor.get_meta(CHECKPOINT_ACTOR_META)
+	var scene_path: String = identity[0]
+	if not save_data.get(scene_path) is Dictionary:
+		save_data[scene_path] = {}
+	var actors := _checkpoint_actor_states(scene_path)
+	actors[identity[1]] = state
+	save_data[scene_path][CHECKPOINT_ACTOR_BUCKET] = actors
+
+
+## Captura em memória apenas nos checkpoints e antes de trocar de andar.
+func capture_checkpoint_actors(scene: Node) -> void:
+	if scene == null:
+		return
+	for actor in get_tree().get_nodes_in_group(CHECKPOINT_ACTOR_GROUP):
+		if actor.is_queued_for_deletion() or not (actor == scene or scene.is_ancestor_of(actor)):
+			continue
+		var state: Variant = actor.call("get_checkpoint_state")
+		if state is Dictionary:
+			_store_checkpoint_actor(actor, {"state": state.duplicate(true)})
+
+
+## Chame antes de queue_free quando a remoção faz parte da progressão.
+## Não capture no _exit_tree: isso sobrescreveria estados ao morrer/recarregar.
+func mark_checkpoint_actor_removed(actor: Node) -> void:
+	_store_checkpoint_actor(actor, {"removed": true})
+	actor.remove_from_group(CHECKPOINT_ACTOR_GROUP)
 
 
 func save_object_state(object_id: String, state: Variant) -> void:

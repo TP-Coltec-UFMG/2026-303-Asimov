@@ -5,6 +5,11 @@ extends Node2D
 
 @export var sprite_sheet: Texture2D
 @export var dialog_texts: Array[String] = []
+@export var save_enabled: bool = true
+## Vazio usa o caminho na cena. Defina um ID estável para NPCs gerados por código.
+@export var save_id: String = ""
+
+var checkpoint_restored: bool = false
 
 
 @export_category("NPC Movement")
@@ -78,6 +83,8 @@ func _ready() -> void:
 	interaction_icon.visible = false
 	setup_sprite_sheet()
 	setup_paths()
+	if save_enabled:
+		checkpoint_restored = SaveGame.register_checkpoint_actor(self, save_id)
 
 
 func setup_paths() -> void:
@@ -437,6 +444,8 @@ func go_to_next_path_point() -> void:
 	var finished_path: NPCPath = current_path
 
 	if finished_path.delete_npc_at_end:
+		if save_enabled:
+			SaveGame.mark_checkpoint_actor_removed(self)
 		queue_free()
 		return
 
@@ -646,3 +655,89 @@ func update_direction() -> void:
 	last_direction = dir
 
 	play_idle(dir)
+
+
+func get_checkpoint_state() -> Dictionary:
+	var paths: Dictionary = {}
+	for path: NPCPath in cached_path_points:
+		paths[str(get_path_to(path))] = PackedVector2Array(cached_path_points[path])
+	return {
+		"version": 1,
+		"position": global_position,
+		"current_path": str(get_path_to(current_path)) if current_path != null else "",
+		"current_point": current_point,
+		"path_finished": path_finished,
+		"path_points": PackedVector2Array(path_points),
+		"cached_paths": paths,
+		"last_direction": last_direction,
+		"desperate": desperate,
+		"desperate_origin": desperate_origin,
+		"desperate_target": desperate_target,
+		"desperate_wait_timer": desperate_wait_timer,
+		"desperate_movement_type": desperate_movement_type,
+		"rng_seed": rng.seed,
+		"rng_state": rng.state,
+		"animation": sprite.animation,
+		"frame": sprite.frame,
+		"frame_progress": sprite.frame_progress,
+		"animation_playing": sprite.is_playing(),
+		"animation_speed": sprite.speed_scale,
+		"flip_h": sprite.flip_h
+	}
+
+
+func load_checkpoint_state(saved: Dictionary) -> void:
+	if saved.get("version", 0) != 1 or not saved.get("position") is Vector2:
+		push_warning("Estado de NPC incompatível: " + str(name))
+		return
+	global_position = saved["position"]
+	last_direction = saved.get("last_direction", Vector2.DOWN)
+	# Os pontos são globais: nunca recalcular a rota a partir da posição restaurada.
+	var paths: Variant = saved.get("cached_paths", {})
+	if paths is Dictionary:
+		for path_id in paths:
+			var path := get_node_or_null(NodePath(str(path_id))) as NPCPath
+			if path != null and cached_path_points.has(path) and paths[path_id] is PackedVector2Array:
+				var points: Array[Vector2] = []
+				points.assign(paths[path_id])
+				cached_path_points[path] = points
+	current_path = null
+	path_points.clear()
+	var active_path: String = str(saved.get("current_path", ""))
+	if not active_path.is_empty():
+		current_path = get_node_or_null(NodePath(active_path)) as NPCPath
+		if not cached_path_points.has(current_path):
+			current_path = null
+	if current_path != null:
+		var points: Variant = saved.get("path_points")
+		if points is PackedVector2Array:
+			path_points.assign(points)
+		else:
+			path_points.assign(cached_path_points[current_path])
+	current_point = int(saved.get("current_point", -1))
+	path_finished = bool(saved.get("path_finished", true))
+	desperate = bool(saved.get("desperate", false))
+	desperate_origin = saved.get("desperate_origin", global_position)
+	desperate_target = saved.get("desperate_target", global_position)
+	desperate_wait_timer = float(saved.get("desperate_wait_timer", 0.0))
+	desperate_movement_type = int(saved.get("desperate_movement_type", NPCPath.MovementType.RUN))
+	if not desperate and not path_finished and (current_path == null or current_point < 0 or current_point >= path_points.size()):
+		# Uma rota removida numa edição futura não deve reiniciar toda a sequência.
+		push_warning("Rota salva indisponível; NPC permanece na posição salva: " + str(name))
+		stop_current_path()
+	if saved.has("rng_seed"):
+		rng.seed = int(saved["rng_seed"])
+	if saved.has("rng_state"):
+		rng.state = int(saved["rng_state"])
+	# Referências ao jogador são reconstruídas pelos sinais de proximidade.
+	player_in_range = false
+	player_ref = null
+	interaction_icon.hide()
+	var animation: StringName = saved.get("animation", &"idle_down")
+	if sprite.sprite_frames.has_animation(animation):
+		sprite.play(animation)
+		sprite.speed_scale = float(saved.get("animation_speed", 1.0))
+		sprite.set_frame_and_progress(int(saved.get("frame", 0)), float(saved.get("frame_progress", 0.0)))
+		sprite.flip_h = bool(saved.get("flip_h", false))
+		if not saved.get("animation_playing", true):
+			sprite.pause()

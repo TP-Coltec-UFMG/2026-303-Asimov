@@ -31,6 +31,8 @@ func _notification(what: int) -> void:
 func _ready() -> void:
 	_restore_progress()
 	_apply_saved_visuals()
+	if M2_feito:
+		_start_npc_exit_paths(true)
 
 	MusicController._start_som_de_fundo()
 	MusicController._stop_bg_ambient()
@@ -67,20 +69,32 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 	M2_feito = true
 	M2.play(&"default")
-	$"../NPCs/NPC1/Line2D2".start_path()
-	$"../NPCs/NPC2/Line2D2".start_path()
-	$"../NPCs/NPC3/Line2D2".start_path()
-	$"../NPCs/NPC4/Line2D2".start_path()
-	$"../NPCs/NPC5/Line2D2".start_path()
-	$"../NPCs/NPC6/Line2D2".start_path()
-	$"../NPCs/NPC7/Line2D2".start_path()
-	$"../NPCs/NPC8/Line2D2".start_path()
-	$"../NPCs/NPC9/Line2D2".start_path()
-	$"../NPCs/NPC10/Line2D2".start_path()
-	$"../NPCs/NPC11/Line2D2".start_path()
-	$"../NPCs/NPC12/Line2D2".start_path()
+	_start_npc_exit_paths()
 	_save_progress_and_checkpoint()
 	_check_all_tasks_completed()
+
+
+func _start_npc_exit_paths(legacy_restore: bool = false) -> void:
+	var npcs := get_node_or_null("../NPCs")
+	if npcs == null:
+		return
+	for npc in npcs.get_children():
+		if npc.is_queued_for_deletion():
+			continue
+		var path := npc.get_node_or_null("Line2D2") as NPCPath
+		if path == null:
+			continue
+		if legacy_restore:
+			if not npc.get_script() or npc.get("checkpoint_restored") != false:
+				continue
+			# Saves antigos conhecem a missão, mas não a posição dos NPCs.
+			# Retomam a etapa de saída no começo, sem repetir a aproximação.
+			path.start_path()
+			var points: Variant = npc.get("path_points")
+			if points is Array and not points.is_empty():
+				npc.global_position = points[0]
+		else:
+			path.start_path()
 
 
 func _update_fire_task() -> void:
