@@ -15,9 +15,11 @@
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="11_8uelp"]
 [ext_resource type="Texture2D" uid="uid://1v81ofhv621m" path="res://Sprites/objects/alarme2.png" id="11_h0r3n"]
 [ext_resource type="PackedScene" uid="uid://beyeq37qyobrm" path="res://Player/ManPlayer.tscn" id="12_48805"]
+[ext_resource type="Script" uid="uid://h1wwb1u6gk0m" path="res://Scenes/line_2d.gd" id="13_m7e8o"]
 [ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="13_xl0vw"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="14_6qnfl"]
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="14_8uelp"]
+[ext_resource type="Texture2D" uid="uid://dwcv8necjuiw1" path="res://Sprites/ilumination/gradient-horizontal-mirror.png" id="14_pjvw7"]
 [ext_resource type="Texture2D" uid="uid://cqfc1g0auqdkq" path="res://NPC'S/NPC/01_golden_blue.png" id="15_761r2"]
 [ext_resource type="Texture2D" uid="uid://ckg4qj4mj55ms" path="res://NPC'S/NPC/boneco_0.png" id="15_tbjth"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="15_wweuw"]
@@ -457,6 +459,35 @@ cor_lanterna = Color(1, 0, 0, 1)
 color = Color(0.36057273, 0.36057273, 0.3605727, 1)
 
 [node name="Interativos" type="Node" parent="." unique_id=636557829]
+
+[node name="Line2D" type="Line2D" parent="Interativos" unique_id=1704739903]
+z_index = 99
+points = PackedVector2Array(-41, -127, -10, -127, -10, -95, -41, -95)
+closed = true
+width = 0.91
+script = ExtResource("13_m7e8o")
+
+[node name="PointLight2D" type="PointLight2D" parent="Interativos" unique_id=1739614144]
+position = Vector2(-10, -111)
+scale = Vector2(0.035156276, 0.16406249)
+texture = ExtResource("14_pjvw7")
+
+[node name="PointLight2D2" type="PointLight2D" parent="Interativos" unique_id=595777290]
+position = Vector2(-41, -111)
+scale = Vector2(0.035156276, 0.16406249)
+texture = ExtResource("14_pjvw7")
+
+[node name="PointLight2D3" type="PointLight2D" parent="Interativos" unique_id=884521019]
+position = Vector2(-25.420288, -127)
+rotation = 1.5707964
+scale = Vector2(0.035156276, 0.15584177)
+texture = ExtResource("14_pjvw7")
+
+[node name="PointLight2D4" type="PointLight2D" parent="Interativos" unique_id=1356605906]
+position = Vector2(-25.42029, -95.00001)
+rotation = 1.5707964
+scale = Vector2(0.035156276, 0.15584177)
+texture = ExtResource("14_pjvw7")
 
 [node name="NPCs" type="Node" parent="." unique_id=247527864]
 

@@ -9,7 +9,12 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer2/AnimatedSprite2D
 )
 
-@onready var man_player = $"../ManPlayer"
+var man_player: Player
+var _inicializado: bool = false
+signal orientacao_elevador_iniciada
+signal pensamento_extintor_iniciado
+var orientar_elevador: bool = false
+var orientar_extintor: bool = false
 
 var f1_acesso: bool = true
 var f2_acesso: bool = true
@@ -30,43 +35,93 @@ func _notification(what: int) -> void:
 		NOTIFICATION_UNPAUSED:
 			$"../UI/Controle_de_tempo".show()
 
-			if not (M1_feito and M2_feito):
-				show()
+			_atualizar_visibilidade()
 
 
 func _ready() -> void:
 	hide()
+	# BaseScene escolhe o Player persistente e aplica o checkpoint no _ready.
+	call_deferred("_inicializar")
+
+
+func _inicializar() -> void:
+	man_player = get_parent().player as Player
+	if not is_instance_valid(man_player):
+		return
 
 	_restore_progress()
 	_apply_saved_visuals()
+	_inicializado = true
+	man_player.balao_de_pensamento.pensamento_finalizado.connect(_on_pensamento_finalizado)
+	man_player.balao_de_pensamento.pensamento_iniciado.connect(_on_pensamento_iniciado)
 
 	MusicController._start_som_de_fundo()
 	MusicController._stop_bg_ambient()
 	MusicController._set_volume_som_de_fundo(1.0)
+	_descartar_instrucoes_obsoletas()
+	# O Player pode ter restaurado a fala antes da conexão dos sinais da missão.
+	_on_pensamento_iniciado(man_player.balao_de_pensamento.pensamento_atual_id())
 
-	if M1_feito and M2_feito:
-		_hide_scheduled = true
+	if _hide_scheduled:
 		_start_npc_exit_paths(true)
-		hide()
+		_atualizar_visibilidade()
 		return
 
-	await man_player._mostrar_no_balao_de_pensamento(
-		"O que está acontecendo?"
-	)
+	# Registra a sequência inteira, inclusive as falas que ainda não começaram.
+	_pensar("intro_1", "O que está acontecendo?")
+	_pensar("intro_2", "Temos que sair desse andar!")
+	_pensar("intro_4", "Preciso de um extintor.")
+	_atualizar_visibilidade()
+	_tentar_finalizar_missao()
 
-	await man_player._mostrar_no_balao_de_pensamento(
-		"Temos que sair desse andar!"
-	)
 
-	await man_player._mostrar_no_balao_de_pensamento(
-		"Como?!"
-	)
+func _pensamento_id(id: String) -> String:
+	return "hall:" + save_id + ":" + id
 
-	show()
 
-	await man_player._mostrar_no_balao_de_pensamento(
-		"Preciso de um extintor."
-	)
+func _pensar(id: String, texto: String) -> void:
+	man_player.balao_de_pensamento.enfileirar(_pensamento_id(id), texto)
+
+
+func _pensamento_pendente(id: String) -> bool:
+	var balao = man_player.balao_de_pensamento
+	return balao.esta_pendente(_pensamento_id(id))
+
+
+func _descartar_instrucoes_obsoletas() -> void:
+	# Remove também a fala antiga quando ela vier ativa ou enfileirada no save.
+	var ids: Array[String] = [_pensamento_id("intro_3")]
+	if M1_feito:
+		ids.append_array([_pensamento_id("intro_4"), _pensamento_id("aviso_1"), _pensamento_id("aviso_2")])
+	if M2_feito:
+		ids.append(_pensamento_id("pedras"))
+	if M1_feito and M2_feito:
+		ids.append_array([_pensamento_id("intro_1"), _pensamento_id("intro_2"), _pensamento_id("intro_3")])
+	if not ids.is_empty():
+		man_player.balao_de_pensamento.descartar(ids)
+
+
+func _atualizar_visibilidade() -> void:
+	if not _inicializado or get_tree().paused:
+		return
+	var balao = man_player.balao_de_pensamento
+	visible = balao.foi_concluido(_pensamento_id("intro_2")) and not (_hide_scheduled and not _pensamento_pendente("saida"))
+
+
+func _on_pensamento_iniciado(id: String) -> void:
+	if id == _pensamento_id("intro_2") and not orientar_elevador:
+		orientar_elevador = true
+		orientacao_elevador_iniciada.emit()
+	if id == _pensamento_id("intro_4") and not orientar_extintor:
+		orientar_extintor = true
+		pensamento_extintor_iniciado.emit()
+
+
+func _on_pensamento_finalizado(id: String) -> void:
+	if id == _pensamento_id("intro_2"):
+		_atualizar_visibilidade()
+	elif id == _pensamento_id("saida"):
+		_hide_after_completion()
 
 
 func _on_fogo_3_fogo_apagou() -> void:
@@ -75,8 +130,9 @@ func _on_fogo_3_fogo_apagou() -> void:
 
 	f1_acesso = false
 
-	_save_progress_and_checkpoint()
 	_update_fire_task()
+	if not _tentar_finalizar_missao():
+		_save_progress_and_checkpoint()
 
 
 func _on_fogo_5_fogo_apagou() -> void:
@@ -85,8 +141,9 @@ func _on_fogo_5_fogo_apagou() -> void:
 
 	f2_acesso = false
 
-	_save_progress_and_checkpoint()
 	_update_fire_task()
+	if not _tentar_finalizar_missao():
+		_save_progress_and_checkpoint()
 
 
 func _on_fogo_6_fogo_apagou() -> void:
@@ -95,8 +152,9 @@ func _on_fogo_6_fogo_apagou() -> void:
 
 	f3_acesso = false
 
-	_save_progress_and_checkpoint()
 	_update_fire_task()
+	if not _tentar_finalizar_missao():
+		_save_progress_and_checkpoint()
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -109,18 +167,12 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	M2_feito = true
 	M2.play(&"default")
 
-	_save_progress_and_checkpoint()
-
 	if not M1_feito:
-		await man_player._mostrar_no_balao_de_pensamento(
-			"Tenho que apagar todos os fogos!"
-		)
+		_pensar("aviso_1", "Tenho que apagar todos os fogos!")
+		_pensar("aviso_2", "Não é seguro passar assim.")
 
-		await man_player._mostrar_no_balao_de_pensamento(
-			"Não é seguro passar assim."
-		)
-
-	_tentar_finalizar_missao()
+	if not _tentar_finalizar_missao():
+		_save_progress_and_checkpoint()
 
 
 func _update_fire_task() -> void:
@@ -139,35 +191,29 @@ func _update_fire_task() -> void:
 	M1_feito = true
 	M1.play(&"default")
 
-	_save_progress_and_checkpoint()
-
-	await man_player._mostrar_no_balao_de_pensamento(
-		"Só preciso tirar essas pedras do caminho!"
-	)
-
-	_tentar_finalizar_missao()
+	if not M2_feito:
+		_pensar("pedras", "Só preciso tirar essas pedras do caminho!")
 
 
-func _tentar_finalizar_missao() -> void:
+func _tentar_finalizar_missao() -> bool:
+	if not _inicializado:
+		return false
+	_descartar_instrucoes_obsoletas()
 	if not M1_feito:
-		return
+		return false
 
 	if not M2_feito:
-		return
+		return false
 
 	if _hide_scheduled:
-		return
+		return false
 
 	_hide_scheduled = true
 
 	_start_npc_exit_paths()
+	_pensar("saida", "Saiam todos! SAIAM, SAIAM, SAIAM!!")
 	_save_progress_and_checkpoint()
-
-	await man_player._mostrar_no_balao_de_pensamento(
-		"Saiam todos! SAIAM, SAIAM, SAIAM!!"
-	)
-
-	await _hide_after_completion()
+	return true
 
 
 func _start_npc_exit_paths(legacy_restore: bool = false) -> void:
@@ -218,7 +264,8 @@ func _save_progress_and_checkpoint() -> void:
 			"fire_2_done": not f2_acesso,
 			"fire_3_done": not f3_acesso,
 			"task_fire_done": M1_feito,
-			"task_elevator_done": M2_feito
+			"task_elevator_done": M2_feito,
+			"exit_started": _hide_scheduled
 		}
 	)
 
@@ -256,6 +303,8 @@ func _restore_progress() -> void:
 		M2_feito = bool(
 			saved_state.get("task_elevator_done", false)
 		)
+		# Saves antigos só registravam as tarefas, sem a etapa de saída.
+		_hide_scheduled = bool(saved_state.get("exit_started", M1_feito and M2_feito))
 
 	else:
 		f1_acesso = not _is_saved_fire_extinguished("fogo04")

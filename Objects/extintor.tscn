@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://bs3m1bmybuo3n" path="res://Sounds/fumaca_extintor.MP3" id="7_gjkqf"]
 [ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="7_o2v6h"]
 [ext_resource type="AudioStream" uid="uid://c7nxcjmbwjjit" path="res://Sounds/switch3.ogg" id="8_j3h8w"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="9_jc3nj"]
 
 [sub_resource type="Gradient" id="Gradient_o2v6h"]
 colors = PackedColorArray(0.39993572, 0.3999357, 0.39993563, 1, 1, 1, 1, 1)
@@ -123,6 +124,17 @@ theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("7_o2v6h")
 text = "Extintor"
 horizontal_alignment = 1
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1481861323]
+visible = false
+points = PackedVector2Array(-2, 10, 2, 10, 4, 9, 4, -6, 6, -7, 6, -13, 2, -13, -2, -12, -6, -10, -8, -7, -8, 0, -7, 7, -4, 9)
+closed = true
+width = 1.0
+
+[node name="PointLight2D" type="PointLight2D" parent="Line2D" unique_id=1252270937]
+position = Vector2(-1.0000005, -1.4999992)
+scale = Vector2(0.0625, 0.097656235)
+texture = ExtResource("9_jc3nj")
 
 [connection signal="area_entered" from="Fumaca/fumaca/AreaFumaca" to="." method="_on_area_fumaca_area_entered"]
 [connection signal="area_exited" from="Fumaca/fumaca/AreaFumaca" to="." method="_on_area_fumaca_area_exited"]

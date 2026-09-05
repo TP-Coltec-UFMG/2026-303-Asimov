@@ -81,7 +81,8 @@ func get_checkpoint_state() -> Dictionary:
 		"vida_1": vida_1.value,
 		"vida_2": vida_2.value,
 		"vida_3": vida_3.value,
-		"inventario": inventory.get_save_state()
+		"inventario": inventory.get_save_state(),
+		"pensamentos": balao_de_pensamento.get_checkpoint_state()
 	}
 
 func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
@@ -122,6 +123,11 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 
 	if inventario_salvo is Dictionary:
 		inventory.load_save_state(inventario_salvo)
+
+	var pensamentos_salvos: Variant = checkpoint_state.get("pensamentos", {})
+	balao_de_pensamento.load_checkpoint_state(
+		pensamentos_salvos if pensamentos_salvos is Dictionary else {}
+	)
 
 	# Estados transitórios não devem sobreviver ao respawn.
 	direction = Vector2.ZERO

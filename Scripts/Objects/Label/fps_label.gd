@@ -7,6 +7,7 @@ func _process(_delta: float) -> void:
 	if not is_visible_in_tree():
 		return
 
+	@warning_ignore("narrowing_conversion")
 	var fps: int = Engine.get_frames_per_second()
 	if fps != ultimo_fps:
 		ultimo_fps = fps

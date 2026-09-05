@@ -8,6 +8,13 @@ var no_inventario: bool = false
 @onready var fumaca: GPUParticles2D = $Fumaca/fumaca
 @onready var area_fumaca: Area2D = $Fumaca/fumaca/AreaFumaca
 @onready var combustive: ProgressBar = $Combustive
+@onready var indicador: Line2D = $Line2D
+@onready var indicador_luz: PointLight2D = $Line2D/PointLight2D
+
+const DURACAO_INDICADOR: float = 10.0
+var _indicador_tween: Tween
+var _indicador_timer: Timer
+var _indicador_energia: float = 1.0
 
 var player: Player = null
 var material_fumaca: ParticleProcessMaterial = null
@@ -32,6 +39,16 @@ const MAX_PARTICULAS_FUMACA: int = 50
 const FPS_PARTICULAS: int = 30
 
 func _ready() -> void:
+	_indicador_energia = indicador_luz.energy
+	indicador.hide()
+	indicador_luz.hide()
+	_indicador_timer = Timer.new()
+	_indicador_timer.one_shot = true
+	_indicador_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
+	_indicador_timer.timeout.connect(_liberar_indicador)
+	add_child(_indicador_timer)
+	call_deferred("_conectar_indicador")
+
 	if not no_inventario:
 		if SaveGame.is_object_collected(save_id):
 			queue_free()
@@ -45,6 +62,45 @@ func _ready() -> void:
 
 	configurar_particulas()
 	set_physics_process(false)
+
+
+func _conectar_indicador() -> void:
+	if not is_inside_tree() or is_queued_for_deletion():
+		return
+	var quest := get_node_or_null("../../QUEST_MISSION")
+	if quest == null or not quest.has_signal("pensamento_extintor_iniciado"):
+		return
+	if not quest.pensamento_extintor_iniciado.is_connected(_iniciar_indicador):
+		quest.pensamento_extintor_iniciado.connect(_iniciar_indicador)
+	if quest.orientar_extintor:
+		_iniciar_indicador()
+
+
+func _iniciar_indicador() -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or not _indicador_timer.is_stopped():
+		return
+	indicador.show()
+	indicador_luz.show()
+	_indicador_timer.start(DURACAO_INDICADOR)
+	_indicador_tween = create_tween().set_loops()
+	_indicador_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
+	_indicador_tween.tween_property(indicador, "self_modulate:a", 0.2, 0.5)
+	_indicador_tween.parallel().tween_property(indicador_luz, "energy", _indicador_energia * 0.2, 0.5)
+	_indicador_tween.tween_property(indicador, "self_modulate:a", 1.0, 0.5)
+	_indicador_tween.parallel().tween_property(indicador_luz, "energy", _indicador_energia, 0.5)
+
+
+func _liberar_indicador() -> void:
+	if _indicador_tween != null and _indicador_tween.is_valid():
+		_indicador_tween.kill()
+	_indicador_tween = null
+	indicador.queue_free()
+	indicador_luz.queue_free()
+
+
+func _exit_tree() -> void:
+	if is_instance_valid(_indicador_tween) and _indicador_tween.is_valid():
+		_indicador_tween.kill()
 
 func configurar_particulas() -> void:
 	if fumaca.process_material is ParticleProcessMaterial:

@@ -5,7 +5,7 @@ const CHARACTER_SELECTION_SCENE: String = "res://Scenes/slectionpage.tscn"
 const MAIN_MENU_SCENE: String = "res://Scenes/principal.tscn"
 
 const INVALID_CHECKPOINT_POS: Vector2 = Vector2(-999, -999)
-const SAVE_VERSION: int = 5
+const SAVE_VERSION: int = 6
 const CHECKPOINT_ACTOR_GROUP: StringName = &"checkpoint_actors"
 const CHECKPOINT_ACTOR_BUCKET: String = "__checkpoint_actors"
 const CHECKPOINT_ACTOR_META: StringName = &"checkpoint_actor_identity"
