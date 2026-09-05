@@ -34,18 +34,17 @@ shape = SubResource("CapsuleShape2D_kb8ke")
 [node name="InteractLabel" type="Label" parent="." unique_id=169618548]
 z_index = 100
 material = SubResource("CanvasItemMaterial_ysydw")
-offset_left = -40.0
-offset_top = -41.0
-offset_right = 40.0
-offset_bottom = -24.0
+offset_left = 24.0
+offset_top = -14.0
+offset_right = 104.0
+offset_bottom = 3.0
 text = "E to interact"
 label_settings = SubResource("LabelSettings_kb8ke")
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="InteractButton" type="Sprite2D" parent="." unique_id=385056802]
 material = SubResource("CanvasItemMaterial_n4ihd")
-position = Vector2(21, -6)
+position = Vector2(16, -6)
 texture = ExtResource("3_m7ep5")
 
 [node name="Label" type="Label" parent="InteractButton" unique_id=1919862365]

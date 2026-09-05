@@ -1,0 +1,6 @@
+res://Player/ManPlayer.tscn
+res://Player/balao_de_pensamento.gd
+res://Player/Scripts/player.gd
+res://Scenes/andar_hall.tscn
+res://Scenes/scripts/quest_mission.gd
+res://Interaction_components/interactiong_component.tscn

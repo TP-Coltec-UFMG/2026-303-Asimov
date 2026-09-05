@@ -78,7 +78,7 @@ size = Vector2(9, 11.5)
 size = Vector2(9, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
-size = Vector2(30, 4)
+size = Vector2(3.5, 15)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
 atlas = ExtResource("26_nflo4")
@@ -366,13 +366,18 @@ save_id = "fogo03"
 
 [node name="Fogo3" parent="Perigos" unique_id=1234051676 instance=ExtResource("5_48805")]
 z_index = 99
-position = Vector2(-47, -62)
+position = Vector2(-33, -53)
 save_id = "fogo04"
 
 [node name="Fogo5" parent="Perigos" unique_id=1580959386 instance=ExtResource("5_48805")]
 z_index = 99
 position = Vector2(3, -69)
 save_id = "fogo05"
+
+[node name="Fogo6" parent="Perigos" unique_id=1101432642 instance=ExtResource("5_48805")]
+z_index = 99
+position = Vector2(-20, -81)
+save_id = "fogo06"
 
 [node name="Iluminacao" type="Node" parent="." unique_id=865113971]
 
@@ -763,7 +768,7 @@ player = NodePath("../../ManPlayer")
 [node name="Area2D" type="Area2D" parent="UI" unique_id=1222956211]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D" unique_id=1915402409]
-position = Vector2(-26, -95)
+position = Vector2(12.75, -89)
 shape = SubResource("RectangleShape2D_yf5fn")
 
 [node name="Transition" type="AnimatedSprite2D" parent="UI" unique_id=954264057]
@@ -858,5 +863,6 @@ texture = ExtResource("8_vkln7")
 
 [connection signal="fogo_apagou" from="Perigos/Fogo3" to="QUEST_MISSION" method="_on_fogo_3_fogo_apagou"]
 [connection signal="fogo_apagou" from="Perigos/Fogo5" to="QUEST_MISSION" method="_on_fogo_5_fogo_apagou"]
+[connection signal="fogo_apagou" from="Perigos/Fogo6" to="QUEST_MISSION" method="_on_fogo_6_fogo_apagou"]
 [connection signal="jogador_morreu" from="ManPlayer" to="UI/Controle_de_tempo" method="_on_man_player_jogador_morreu"]
 [connection signal="body_entered" from="UI/Area2D" to="QUEST_MISSION" method="_on_area_2d_body_entered"]

@@ -61,6 +61,7 @@ const VELOCIDADE_CORRIDA: float = 80.0
 
 const CONSUMO_CANSACO: float = 0.06
 const RECUPERACAO_CANSACO: float = 0.05
+@onready var balao_de_pensamento: Sprite2D = $BalaoDePensamento
 
 signal jogador_morreu
 
@@ -68,6 +69,9 @@ func _ready() -> void:
 	add_to_group("player")
 	UpdateAnimation()
 	UpdateOccluderLight()
+	
+func _mostrar_no_balao_de_pensamento(texto: String) -> void:
+	await balao_de_pensamento.mostrar_texto(texto)
 
 func get_checkpoint_state() -> Dictionary:
 	return {
