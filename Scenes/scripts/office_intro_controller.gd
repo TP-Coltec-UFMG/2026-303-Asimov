@@ -7,6 +7,8 @@ const LAPTOP_FIRST_FOUND_ID: String = "office:laptop_first_found"
 const LAPTOP_SECOND_FOUND_ID: String = "office:laptop_second_found"
 const CABLE_FIRST_FOUND_ID: String = "office:cable_first_found"
 const CABLE_SECOND_FOUND_ID: String = "office:cable_second_found"
+const LAPTOP_AFTER_DIALOG_FOUND_ID: String = "office:laptop_after_dialog_found"
+const CABLE_AFTER_DIALOG_FOUND_ID: String = "office:cable_after_dialog_found"
 const BOSS_ROOM_HACK_READY_ID: String = "office:boss_room_hack_ready"
 const DATA_CENTER_FLOOR_ID: String = "office:data_center_floor"
 const NPC_REVEAL_DELAY: float = 2.0
@@ -227,6 +229,7 @@ func _on_dialog_finished(dialog_id: String) -> void:
 	state["office_dialog_finished"] = true
 	state["office_npc_return_started"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
+	_queue_boss_room_hack_thought(state)
 	_show_boss_room_access_task()
 	npc.call("set_dialog_enabled", false)
 	npc.call("start_path", npc_return_path)
@@ -243,10 +246,7 @@ func _on_laptop_collected() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_show_hacking_item_task(state)
 	_refresh_npc_dialog()
-	player.balao_de_pensamento.enfileirar(
-		LAPTOP_FIRST_FOUND_ID if laptop_was_first else LAPTOP_SECOND_FOUND_ID,
-		"Alguém esqueceu o notebook aqui" if laptop_was_first else "Esqueceram um notebook também"
-	)
+	_queue_hacking_item_found_thought(state, "laptop", laptop_was_first)
 	_queue_boss_room_hack_thought(state)
 
 
@@ -260,10 +260,7 @@ func _on_cable_collected() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_show_hacking_item_task(state, not cable_was_first)
 	_refresh_npc_dialog()
-	player.balao_de_pensamento.enfileirar(
-		CABLE_FIRST_FOUND_ID if cable_was_first else CABLE_SECOND_FOUND_ID,
-		"Alguém esqueceu um cabo aqui" if cable_was_first else "Esqueceram um cabo também"
-	)
+	_queue_hacking_item_found_thought(state, "cabo", cable_was_first)
 	_queue_boss_room_hack_thought(state)
 
 
@@ -326,6 +323,42 @@ func _register_first_hacking_item(state: Dictionary, item: String) -> String:
 		first_item = item
 		state["office_first_hacking_item"] = first_item
 	return first_item
+
+
+func _queue_hacking_item_found_thought(
+	state: Dictionary,
+	item: String,
+	was_first: bool
+) -> void:
+	# Depois da conversa, o primeiro item explica a solução. O segundo não
+	# repete a fala de item esquecido: _queue_boss_room_hack_thought mostra
+	# diretamente que a porta já pode ser aberta.
+	if bool(state.get("office_dialog_finished", false)):
+		if not was_first:
+			return
+		if item == "laptop":
+			player.balao_de_pensamento.enfileirar(
+				LAPTOP_AFTER_DIALOG_FOUND_ID,
+				"Achei um notebook. Com um cabo, consigo hackear a porta."
+			)
+		else:
+			player.balao_de_pensamento.enfileirar(
+				CABLE_AFTER_DIALOG_FOUND_ID,
+				"Achei um cabo. Com um notebook, consigo hackear a porta."
+			)
+		return
+
+	if item == "laptop":
+		player.balao_de_pensamento.enfileirar(
+			LAPTOP_FIRST_FOUND_ID if was_first else LAPTOP_SECOND_FOUND_ID,
+			"Alguém esqueceu o notebook aqui" if was_first else "Esqueceram um notebook também"
+		)
+		return
+
+	player.balao_de_pensamento.enfileirar(
+		CABLE_FIRST_FOUND_ID if was_first else CABLE_SECOND_FOUND_ID,
+		"Alguém esqueceu um cabo aqui" if was_first else "Esqueceram um cabo também"
+	)
 
 
 func _refresh_npc_dialog() -> void:
@@ -402,6 +435,8 @@ func _unlock_boss_room_hack_task(state: Dictionary) -> bool:
 
 
 func _queue_boss_room_hack_thought(state: Dictionary) -> void:
+	if not bool(state.get("office_dialog_finished", false)):
+		return
 	if not bool(state.get("office_hack_boss_room_ready", false)):
 		return
 	if bool(state.get("office_hack_boss_room_thought_queued", false)):

@@ -8,6 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="6_7jkyd"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="6_o1mid"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="7_o1mid"]
+[ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs.tscn" id="9_kxi26"]
+[ext_resource type="Texture2D" uid="uid://bfufeqcgcydgm" path="res://NPC'S/NPC/scientist_1.png" id="10_s1lij"]
+[ext_resource type="Script" uid="uid://c3bmarmj4pw5v" path="res://Scenes/scripts/data_center_intro_controller.gd" id="16_data_center"]
+[ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="17_flashlight"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -190,6 +194,12 @@ metadata/_edit_lock_ = true
 
 [node name="Coletaveis" type="Node" parent="." unique_id=263636248]
 
+[node name="Lanterna" parent="Coletaveis" unique_id=1995611908 instance=ExtResource("17_flashlight")]
+position = Vector2(-92, -139)
+rotation = 0.7627089
+scale = Vector2(0.345, 0.345)
+save_id = "data_center_flashlight"
+
 [node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("4_7jkyd")]
 eh_elevador = true
 andar_atual = 6
@@ -246,3 +256,18 @@ scene_trigger = NodePath("../SceneTrigger")
 
 [node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("7_o1mid")]
 process_physics_priority = -6
+
+[node name="DataCenterIntroController" type="Node" parent="." unique_id=1256750246]
+script = ExtResource("16_data_center")
+
+[node name="NPCs" type="Node" parent="." unique_id=581868378]
+
+[node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("9_kxi26")]
+z_index = 2
+position = Vector2(-101, -201)
+sprite_sheet = ExtResource("10_s1lij")
+dialog_enabled = false
+interaction_override = true
+interaction_prompt = "ESPAÇO: ENTREGAR CARTÃO"
+save_id = "data_center_recipient"
+run_speed = 40.0

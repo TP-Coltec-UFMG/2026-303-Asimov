@@ -54,13 +54,21 @@ func _ready() -> void:
 	visible = false
 
 func escolher_andar(andar: int) -> void:
+	if not scene_trigger.pode_acessar_andar(andar):
+		mostrar_andar_bloqueado()
+		return
+	label.text = "CARREGANDO"
 	label.show()
-	get_tree().paused = false
 	scene_trigger.usar_elevador(andar)
+
+
+func mostrar_andar_bloqueado() -> void:
+	label.text = "Ainda não"
+	label.show()
 
 func _on_andar_1_pressed() -> void:
 	bt_andar_01_apertado.show()
-	#escolher_andar(1)
+	escolher_andar(1)
 	pass
 
 func _on_andar_2_pressed() -> void:
@@ -79,7 +87,7 @@ func _on_andar_4_pressed() -> void:
 
 func _on_andar_5_pressed() -> void:
 	bt_andar_05_apertado.show()
-	#escolher_andar(5)
+	escolher_andar(5)
 	pass
 
 func _on_andar_6_pressed() -> void:

@@ -27,6 +27,7 @@ const CONTROL_GROUPS = [
 		"title": "AÇÕES",
 		"actions": [
 			{"id": "interact", "label": "INTERAGIR"},
+			{"id": "pular_pensamento", "label": "PULAR FALA"},
 			{"id": "fire", "label": "ATIRAR"},
 			{"id": "acende_lanterna", "label": "LIGAR LUZ"},
 			{"id": "usar_extintor", "label": "USAR EXTINTOR"},

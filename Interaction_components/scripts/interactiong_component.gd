@@ -15,7 +15,7 @@ const ALTURA_FLUTUACAO := 1.0
 const VELOCIDADE_FLUTUACAO := 5.0
 
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and can_interact:
 		if current_interactions:
 			can_interact = false

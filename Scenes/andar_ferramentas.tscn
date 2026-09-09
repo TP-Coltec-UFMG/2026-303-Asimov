@@ -227,13 +227,6 @@ visible = false
 position = Vector2(99.00001, -423)
 scene_trigger = NodePath("../SceneTrigger")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1383165215]
-libraries/ = SubResource("AnimationLibrary_l4nl3")
-
-[node name="Camera2D" type="Camera2D" parent="AnimationPlayer" unique_id=1331909818]
-position = Vector2(72, -192)
-zoom = Vector2(4.16, 4.16)
-
 [node name="UI" type="CanvasLayer" parent="." unique_id=1133274982]
 
 [node name="Controle_de_tempo" parent="UI" unique_id=1720657433 instance=ExtResource("8_l4nl3")]

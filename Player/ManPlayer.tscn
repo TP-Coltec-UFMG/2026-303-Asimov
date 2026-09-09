@@ -349,6 +349,7 @@ position = Vector2(17, -61)
 texture = ExtResource("16_l2am8")
 offset = Vector2(1, 6)
 script = ExtResource("17_0yomn")
+permitir_pular = true
 
 [node name="Label" type="Label" parent="BalaoDePensamento" unique_id=1244318465]
 anchors_preset = -1

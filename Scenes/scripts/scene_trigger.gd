@@ -45,6 +45,10 @@ func _get_connect_scene_andar_novo(andar : int) -> String:
 func usar_elevador(andar: int) -> void:
 	if eh_elevador and not elevador_liberado():
 		return
+	if eh_elevador and not pode_acessar_andar(andar):
+		painel_elevador.mostrar_andar_bloqueado()
+		return
+	get_tree().paused = false
 	if andar == -2:
 		if dentro_da_area:
 			_ocultar_paineis_tarefas()
@@ -61,6 +65,7 @@ func usar_elevador(andar: int) -> void:
 	if andar != andar_atual and eh_elevador:
 		if dentro_da_area:
 			_concluir_tarefa_do_sexto_andar(andar)
+			_concluir_tarefa_do_quarto_andar(andar)
 			_ocultar_paineis_tarefas()
 			body_p.inventory.hide()
 			$Timer.start()
@@ -88,7 +93,7 @@ func usar_elevador(andar: int) -> void:
 func get_ultima_posicao() -> Vector2:
 	return ultima_posicao
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	
 	if event.is_action_pressed("interact") and eh_elevador and dentro_da_area:
 		if not elevador_liberado():
@@ -176,6 +181,26 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 	var quest_ui := _obter_painel_tarefas()
 	if quest_ui != null:
 		quest_ui.show_go_to_sixth_floor_task(true, true)
+
+
+func _concluir_tarefa_do_quarto_andar(andar: int) -> void:
+	if andar != 4:
+		return
+	var state: Dictionary = SaveGame.office_mission_state(body_p)
+	if not bool(state.get("data_center_tools_floor_task_active", false)):
+		return
+	if bool(state.get("data_center_tools_floor_task_completed", false)):
+		return
+	state["data_center_tools_floor_task_completed"] = true
+	SaveGame.save_global_state("hall_quest_01", state)
+	var quest_ui := _obter_painel_tarefas()
+	if quest_ui != null:
+		quest_ui.show_data_center_power_tasks(
+			body_p.inventory.get_item_on_inventary("lanterna"),
+			true,
+			bool(state.get("data_center_breaker_restored", false)),
+			true
+		)
 			
 
 
@@ -185,6 +210,25 @@ func elevador_liberado() -> bool:
 	if not get_tree().current_scene.scene_file_path.ends_with("andar_hall.tscn"):
 		return true
 	return bool(SaveGame.office_mission_state().get("elevator_third_floor_unlocked", false))
+
+
+func pode_acessar_andar(andar: int) -> bool:
+	if andar == -2 or andar == andar_atual:
+		return true
+	return andar_liberado_por_progresso(andar, SaveGame.office_mission_state(body_p))
+
+
+static func andar_liberado_por_progresso(andar: int, estado: Dictionary) -> bool:
+	match andar:
+		2:
+			return true
+		3:
+			return bool(estado.get("elevator_third_floor_unlocked", false)) or bool(estado.get("arrived_third_floor", false))
+		6:
+			return bool(estado.get("office_data_center_task_active", false)) or bool(estado.get("office_data_center_task_completed", false)) or bool(estado.get("data_center_card_delivered", false))
+		4:
+			return bool(estado.get("data_center_tools_floor_task_active", false)) or bool(estado.get("data_center_power_dialog_finished", false)) or bool(estado.get("data_center_tools_floor_task_completed", false)) or bool(estado.get("data_center_breaker_restored", false))
+	return false
 
 
 func _ocultar_paineis_tarefas() -> void:

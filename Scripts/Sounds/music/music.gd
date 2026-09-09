@@ -5,17 +5,47 @@ extends Node2D
 @onready var countdown_music: AudioStreamPlayer2D = $COUNTDOWN_MUSIC
 @onready var som_alarme: AudioStreamPlayer2D = $SOM_ALARME
 @onready var som_de_fundo: AudioStreamPlayer2D = $SOM_DE_FUNDO
+@onready var musica_quando_o_disjuntor_apagar: AudioStreamPlayer2D = $MUSICA_QUANDO_O_DISJUNTOR_APAGAR
 
 const AUDIO_PLAYERS: Dictionary = {
 	"bg_music": NodePath("BG Music"),
 	"bg_ambient": NodePath("BG Ambient"),
 	"countdown_music": NodePath("COUNTDOWN_MUSIC"),
 	"som_alarme": NodePath("SOM_ALARME"),
-	"som_de_fundo": NodePath("SOM_DE_FUNDO")
+	"som_de_fundo": NodePath("SOM_DE_FUNDO"),
+	"musica_quando_o_disjuntor_apagar": NodePath("MUSICA_QUANDO_O_DISJUNTOR_APAGAR")
+}
+
+const SILENT_VOLUME_DB: float = -80.0
+const OPENING_MUSIC_FADE_DURATION: float = 3.0
+const POWER_OUTAGE_FADE_DURATION: float = 4.0
+const POWER_OUTAGE_ALARM_VOLUME: float = 0.3
+const ALARM_INITIAL_VOLUME: float = 0.3
+const ALARM_REDUCED_VOLUME: float = 0.1
+const ALARM_INITIAL_DURATION: float = 30.0
+const ALARM_FADE_DURATION: float = 4.0
+
+enum PowerOutageAudioState {
+	IDLE,
+	FADING_IN,
+	ACTIVE,
+	FADING_OUT
 }
 
 var scene_audio_blocked: bool = false
 var pending_scene_starts: Dictionary = {}
+var alarm_normal_volume_db: float = 0.0
+var alarm_elapsed: float = 0.0
+var opening_music_normal_volume_db: float = 0.0
+var opening_music_started: bool = false
+var opening_music_finished: bool = false
+var power_outage_music_normal_volume_db: float = 0.0
+var power_outage_audio_state: PowerOutageAudioState = PowerOutageAudioState.IDLE
+var power_outage_fade_elapsed: float = 0.0
+var power_outage_alarm_start_db: float = SILENT_VOLUME_DB
+var power_outage_alarm_target_db: float = SILENT_VOLUME_DB
+var power_outage_music_start_db: float = SILENT_VOLUME_DB
+var power_outage_music_target_db: float = SILENT_VOLUME_DB
 
 
 func _ready() -> void:
@@ -23,6 +53,30 @@ func _ready() -> void:
 	# música sobrescrever as preferências logo depois de elas serem carregadas.
 	_play_if_stopped(bg_ambient)
 	_play_if_stopped(bg_music)
+	alarm_normal_volume_db = som_alarme.volume_db
+	opening_music_normal_volume_db = som_de_fundo.volume_db
+	power_outage_music_normal_volume_db = musica_quando_o_disjuntor_apagar.volume_db
+
+
+func _process(delta: float) -> void:
+	if scene_audio_blocked or get_tree().paused:
+		return
+	_update_opening_music_fade()
+	_update_alarm_volume(delta)
+	_update_power_outage_audio(delta)
+
+
+func _update_alarm_volume(delta: float) -> void:
+	if not som_alarme.playing or som_alarme.stream_paused:
+		return
+	alarm_elapsed = minf(alarm_elapsed + delta, ALARM_INITIAL_DURATION + ALARM_FADE_DURATION)
+	if power_outage_audio_state != PowerOutageAudioState.IDLE:
+		return
+	var progress := clampf((alarm_elapsed - ALARM_INITIAL_DURATION) / ALARM_FADE_DURATION, 0.0, 1.0)
+	som_alarme.volume_db = linear_to_db(
+		db_to_linear(alarm_normal_volume_db)
+		* lerpf(ALARM_INITIAL_VOLUME, ALARM_REDUCED_VOLUME, progress)
+	)
 
 
 # BG MUSIC
@@ -52,13 +106,22 @@ func _stop_countdown() -> void:
 # ALARME
 func _start_som_alarme(from_position: float = 0.0) -> void:
 	_play_if_stopped(som_alarme, from_position)
+	_update_alarm_volume(0.0)
 
 func _stop_som_alarme() -> void:
+	if power_outage_audio_state != PowerOutageAudioState.IDLE:
+		return
 	som_alarme.stop()
+	som_alarme.volume_db = alarm_normal_volume_db
 
 
 # SOM DE FUNDO
 func _start_som_de_fundo(from_position: float = 0.0) -> void:
+	if opening_music_finished:
+		return
+	if not som_de_fundo.playing:
+		som_de_fundo.volume_db = opening_music_normal_volume_db
+		opening_music_started = true
 	_play_if_stopped(som_de_fundo, from_position)
 
 func _stop_som_de_fundo() -> void:
@@ -66,20 +129,125 @@ func _stop_som_de_fundo() -> void:
 	
 
 func _set_volume_som_de_fundo(volume: float) -> void:
-	som_de_fundo.volume_db = linear_to_db(volume)
+	opening_music_normal_volume_db = linear_to_db(volume)
+	if not opening_music_finished:
+		som_de_fundo.volume_db = opening_music_normal_volume_db
 
 
 func _set_volume_som_alarme(volume: float) -> void:
-	som_alarme.volume_db = linear_to_db(volume)
+	alarm_normal_volume_db = linear_to_db(volume)
+	if power_outage_audio_state == PowerOutageAudioState.IDLE:
+		_update_alarm_volume(0.0)
 
 
 func _set_volume_countdown(volume: float) -> void:
 	countdown_music.volume_db = linear_to_db(volume)
 
 
+func _start_power_outage_audio() -> void:
+	if power_outage_audio_state == PowerOutageAudioState.ACTIVE or power_outage_audio_state == PowerOutageAudioState.FADING_IN:
+		return
+	var resuming_fade_out := power_outage_audio_state == PowerOutageAudioState.FADING_OUT
+	if not resuming_fade_out:
+		musica_quando_o_disjuntor_apagar.volume_db = SILENT_VOLUME_DB
+	if not som_alarme.playing:
+		som_alarme.volume_db = SILENT_VOLUME_DB
+		_play_if_stopped(som_alarme)
+	if not musica_quando_o_disjuntor_apagar.playing:
+		_play_if_stopped(musica_quando_o_disjuntor_apagar)
+	_start_power_outage_fade(
+		PowerOutageAudioState.FADING_IN,
+		linear_to_db(db_to_linear(alarm_normal_volume_db) * POWER_OUTAGE_ALARM_VOLUME),
+		power_outage_music_normal_volume_db
+	)
+
+
+func _stop_power_outage_audio() -> void:
+	if power_outage_audio_state == PowerOutageAudioState.FADING_OUT:
+		return
+	if power_outage_audio_state == PowerOutageAudioState.IDLE and not musica_quando_o_disjuntor_apagar.playing:
+		return
+	# Religou o disjuntor: o alarme continua baixo, mesmo se a queda de
+	# energia aconteceu antes de terminar os 30 segundos iniciais.
+	alarm_elapsed = ALARM_INITIAL_DURATION + ALARM_FADE_DURATION
+	_start_power_outage_fade(
+		PowerOutageAudioState.FADING_OUT,
+		linear_to_db(db_to_linear(alarm_normal_volume_db) * ALARM_REDUCED_VOLUME),
+		SILENT_VOLUME_DB
+	)
+
+
+func _update_opening_music_fade() -> void:
+	if opening_music_finished or not opening_music_started:
+		return
+	if not som_de_fundo.playing:
+		opening_music_finished = true
+		return
+	if som_de_fundo.stream == null:
+		return
+	var duration := som_de_fundo.stream.get_length()
+	if duration <= 0.0:
+		return
+	var fade_start := maxf(0.0, duration - OPENING_MUSIC_FADE_DURATION)
+	var progress := clampf(
+		(som_de_fundo.get_playback_position() - fade_start) / OPENING_MUSIC_FADE_DURATION,
+		0.0,
+		1.0
+	)
+	if progress > 0.0:
+		som_de_fundo.volume_db = lerpf(
+			opening_music_normal_volume_db,
+			SILENT_VOLUME_DB,
+			progress
+		)
+
+
+func _start_power_outage_fade(
+	new_state: PowerOutageAudioState,
+	alarm_target_db: float,
+	music_target_db: float
+) -> void:
+	power_outage_audio_state = new_state
+	power_outage_fade_elapsed = 0.0
+	power_outage_alarm_start_db = som_alarme.volume_db
+	power_outage_alarm_target_db = alarm_target_db
+	power_outage_music_start_db = musica_quando_o_disjuntor_apagar.volume_db
+	power_outage_music_target_db = music_target_db
+
+
+func _update_power_outage_audio(delta: float) -> void:
+	if power_outage_audio_state == PowerOutageAudioState.IDLE:
+		return
+	power_outage_fade_elapsed += delta
+	var progress := clampf(power_outage_fade_elapsed / POWER_OUTAGE_FADE_DURATION, 0.0, 1.0)
+	som_alarme.volume_db = lerpf(
+		power_outage_alarm_start_db,
+		power_outage_alarm_target_db,
+		progress
+	)
+	musica_quando_o_disjuntor_apagar.volume_db = lerpf(
+		power_outage_music_start_db,
+		power_outage_music_target_db,
+		progress
+	)
+	if progress < 1.0:
+		return
+	if power_outage_audio_state == PowerOutageAudioState.FADING_OUT:
+		musica_quando_o_disjuntor_apagar.stop()
+		musica_quando_o_disjuntor_apagar.volume_db = power_outage_music_normal_volume_db
+		power_outage_audio_state = PowerOutageAudioState.IDLE
+		return
+	power_outage_audio_state = PowerOutageAudioState.ACTIVE
+
+
 func stop_all_audio() -> void:
 	scene_audio_blocked = false
 	pending_scene_starts.clear()
+	opening_music_started = false
+	opening_music_finished = false
+	power_outage_audio_state = PowerOutageAudioState.IDLE
+	power_outage_fade_elapsed = 0.0
+	alarm_elapsed = 0.0
 
 	# MusicController é um autoload e sobrevive às mudanças de cena. Por isso,
 	# um reset de campanha precisa parar explicitamente todos os players.
@@ -117,6 +285,15 @@ func allow_scene_audio() -> void:
 
 func get_checkpoint_state() -> Dictionary:
 	var state: Dictionary = {}
+	state["alarm_envelope"] = {
+		"elapsed": alarm_elapsed,
+		"power_state": power_outage_audio_state,
+		"fade_elapsed": power_outage_fade_elapsed,
+		"alarm_start": power_outage_alarm_start_db,
+		"alarm_target": power_outage_alarm_target_db,
+		"music_start": power_outage_music_start_db,
+		"music_target": power_outage_music_target_db
+	}
 
 	for player_id: String in AUDIO_PLAYERS:
 		var audio_player := _get_audio_player(player_id)
@@ -210,6 +387,26 @@ func load_checkpoint_state(state: Dictionary) -> void:
 
 	scene_audio_blocked = false
 	pending_scene_starts.clear()
+	_restore_alarm_envelope(state)
+
+
+func _restore_alarm_envelope(state: Dictionary) -> void:
+	var envelope: Dictionary = state.get("alarm_envelope", {})
+	# Saves anteriores não contavam os 30 segundos. Retomam no patamar baixo.
+	alarm_elapsed = float(envelope.get("elapsed", ALARM_INITIAL_DURATION + ALARM_FADE_DURATION))
+	power_outage_audio_state = int(envelope.get("power_state", PowerOutageAudioState.IDLE)) as PowerOutageAudioState
+	power_outage_fade_elapsed = float(envelope.get("fade_elapsed", 0.0))
+	power_outage_alarm_start_db = float(envelope.get("alarm_start", som_alarme.volume_db))
+	power_outage_alarm_target_db = float(envelope.get("alarm_target", som_alarme.volume_db))
+	power_outage_music_start_db = float(envelope.get("music_start", musica_quando_o_disjuntor_apagar.volume_db))
+	power_outage_music_target_db = float(envelope.get("music_target", musica_quando_o_disjuntor_apagar.volume_db))
+	if envelope.is_empty():
+		var mission: Dictionary = SaveGame.office_mission_state()
+		if bool(mission.get("data_center_power_outage", false)) and not bool(mission.get("data_center_breaker_restored", false)):
+			_start_power_outage_audio()
+		else:
+			_stop_power_outage_audio()
+	_update_alarm_volume(0.0)
 
 
 func _get_audio_player(player_id: String) -> AudioStreamPlayer2D:

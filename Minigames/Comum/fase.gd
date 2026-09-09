@@ -15,7 +15,6 @@ var sons: SonsAsimov
 var game_timer: Control
 @onready var jogador = $Arena/Jogador
 @onready var objetivo = $Arena/Objetivo
-signal venceu
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS

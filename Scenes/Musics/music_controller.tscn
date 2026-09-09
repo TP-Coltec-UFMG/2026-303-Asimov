@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://biwsxrryy0swa" path="res://Scripts/Sounds/music/music.gd" id="1_biu3b"]
 [ext_resource type="AudioStream" uid="uid://b5swt4rl4btm5" path="res://Sounds/freesound_community-security-alarm-80493.mp3" id="3_a7c45"]
 [ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://Sounds/audioatlant-pulse-of-time-action-countdown-trailer-ver1-573119.mp3" id="3_y4uch"]
+[ext_resource type="AudioStream" uid="uid://cqnu3srjnmiul" path="res://mohamed_hassan-mission-impasse-339175.mp3" id="5_68qf4"]
 [ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/urgent(1).mp3" id="5_dqj1g"]
 
 [node name="MusicControler" type="Node2D" unique_id=1749428804]
@@ -29,5 +30,10 @@ parameters/looping = true
 [node name="SOM_DE_FUNDO" type="AudioStreamPlayer2D" parent="." unique_id=1170555803]
 stream = ExtResource("5_dqj1g")
 volume_db = 24.0
+bus = &"Music"
+
+[node name="MUSICA_QUANDO_O_DISJUNTOR_APAGAR" type="AudioStreamPlayer2D" parent="." unique_id=796673278]
+stream = ExtResource("5_68qf4")
+volume_db = -3.0980392
 bus = &"Music"
 parameters/looping = true

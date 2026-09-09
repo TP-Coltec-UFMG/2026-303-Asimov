@@ -9,6 +9,10 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer5,
 	$VBoxContainer/HBoxContainer6,
 	$VBoxContainer/HBoxContainer7,
+	$VBoxContainer/HBoxContainer8,
+	$VBoxContainer/HBoxContainer9,
+	$VBoxContainer/HBoxContainer10,
+	$VBoxContainer/HBoxContainer11,
 ]
 @onready var markers: Array[AnimatedSprite2D] = [
 	$VBoxContainer/HBoxContainer2/AnimatedSprite2D,
@@ -18,6 +22,10 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer5/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer6/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer7/AnimatedSprite2D,
+	$VBoxContainer/HBoxContainer8/AnimatedSprite2D,
+	$VBoxContainer/HBoxContainer9/AnimatedSprite2D,
+	$VBoxContainer/HBoxContainer10/AnimatedSprite2D,
+	$VBoxContainer/HBoxContainer11/AnimatedSprite2D,
 ]
 
 var desired_visible: bool = false
@@ -35,6 +43,10 @@ func _ready() -> void:
 	rows[4].hide()
 	rows[5].hide()
 	rows[6].hide()
+	rows[7].hide()
+	rows[8].hide()
+	rows[9].hide()
+	rows[10].hide()
 	hide()
 	call_deferred("refresh_saved_state")
 
@@ -167,8 +179,57 @@ func show_go_to_sixth_floor_task(completed: bool = false, animate: bool = false)
 	set_panel_visible(true)
 
 
+func show_data_center_card_task(completed: bool = false, animate: bool = false) -> void:
+	_show_single_data_center_task(7, "ENTREGUE O CARTÃO AO CIENTISTA", completed, animate)
+
+
+func show_find_flashlight_task(completed: bool = false, animate: bool = false) -> void:
+	_show_single_data_center_task(8, "ENCONTRE UMA LANTERNA", completed, animate)
+
+
+func show_restore_breaker_task(completed: bool = false, animate: bool = false) -> void:
+	_show_single_data_center_task(9, "LIGUE O DISJUNTOR", completed, animate)
+
+
+func show_go_to_fourth_floor_task(completed: bool = false, animate: bool = false) -> void:
+	_show_single_data_center_task(10, "VÁ PARA O QUARTO ANDAR", completed, animate)
+
+
+func show_data_center_power_tasks(
+	flashlight_completed: bool = false,
+	fourth_floor_completed: bool = false,
+	breaker_completed: bool = false,
+	animate_fourth_floor: bool = false
+) -> void:
+	for index in range(rows.size()):
+		set_task_visible(index, index == 6 or index == 8 or index == 9 or index == 10)
+	set_task_text(6, "VÁ PARA O SEXTO ANDAR")
+	set_task_completed(6, true)
+	set_task_text(8, "ENCONTRE UMA LANTERNA")
+	set_task_completed(8, flashlight_completed)
+	set_task_text(9, "LIGUE O DISJUNTOR")
+	set_task_completed(9, breaker_completed)
+	set_task_text(10, "VÁ PARA O QUARTO ANDAR")
+	set_task_completed(10, fourth_floor_completed, animate_fourth_floor)
+	set_panel_visible(true)
+
+
+func _show_single_data_center_task(
+	index: int,
+	text: String,
+	completed: bool,
+	animate: bool
+) -> void:
+	for row_index in range(rows.size()):
+		set_task_visible(row_index, row_index == index)
+	set_task_text(index, text)
+	set_task_completed(index, completed, animate)
+	set_panel_visible(true)
+
+
 func refresh_saved_state() -> void:
-	var state: Dictionary = SaveGame.office_mission_state(get_parent() as Player)
+	var current_player := get_parent() as Player
+	var state: Dictionary = SaveGame.office_mission_state(current_player)
 	var unlocked := bool(state.get("elevator_third_floor_unlocked", false))
 	var arrived := bool(state.get("arrived_third_floor", false))
 	var npc_ready := bool(state.get("office_npc_shout_finished", false))
@@ -183,10 +244,23 @@ func refresh_saved_state() -> void:
 	var data_center_task_pending := bool(state.get("office_data_center_task_pending", false))
 	var data_center_task_active := bool(state.get("office_data_center_task_active", false))
 	var data_center_task_completed := bool(state.get("office_data_center_task_completed", false))
+	var tools_floor_task_active := bool(state.get("data_center_tools_floor_task_active", false))
+	var tools_floor_task_completed := bool(state.get("data_center_tools_floor_task_completed", false))
+	var breaker_completed := bool(state.get("data_center_breaker_restored", false))
+	var flashlight_completed := bool(state.get("data_center_flashlight_collected", false)) or (
+		current_player != null
+		and current_player.inventory.get_item_on_inventary("lanterna")
+	)
 	var hack_ready := bool(state.get("office_hack_boss_room_ready", false)) or (
 		laptop_collected and cable_collected
 	)
-	if data_center_task_active:
+	if tools_floor_task_active:
+		show_data_center_power_tasks(
+			flashlight_completed,
+			tools_floor_task_completed,
+			breaker_completed
+		)
+	elif data_center_task_active:
 		show_go_to_sixth_floor_task(data_center_task_completed)
 	elif data_center_task_pending:
 		hide_all_tasks()

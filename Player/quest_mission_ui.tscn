@@ -130,3 +130,47 @@ label_settings = SubResource("LabelSettingsTask")
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer8" groups=["alto_contraste"]]
+layout_mode = 2
+text = "ENTREGUE O CARTÃO AO CIENTISTA"
+label_settings = SubResource("LabelSettingsTask")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer8"]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFramesCheck")
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer9" groups=["alto_contraste"]]
+layout_mode = 2
+text = "ENCONTRE UMA LANTERNA"
+label_settings = SubResource("LabelSettingsTask")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer9"]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFramesCheck")
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer10" groups=["alto_contraste"]]
+layout_mode = 2
+text = "LIGUE O DISJUNTOR"
+label_settings = SubResource("LabelSettingsTask")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer10"]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFramesCheck")
+
+[node name="HBoxContainer11" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer11" groups=["alto_contraste"]]
+layout_mode = 2
+text = "VÁ PARA O QUARTO ANDAR"
+label_settings = SubResource("LabelSettingsTask")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer11"]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFramesCheck")

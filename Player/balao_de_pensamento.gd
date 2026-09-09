@@ -6,6 +6,7 @@ extends Sprite2D
 @export var tempo_minimo: float = 3.0
 @export var tempo_maximo: float = 10.0
 @export var tempo_fade_out: float = 0.5
+@export var permitir_pular: bool = false
 
 signal pensamento_concluido
 signal pensamento_finalizado(id: String)
@@ -23,6 +24,29 @@ var _geracao: int = 0
 
 func _ready() -> void:
 	hide()
+
+
+func _input(event: InputEvent) -> void:
+	if not permitir_pular or _ativo.is_empty() or not is_visible_in_tree():
+		return
+	if get_tree().paused or DialogManager.is_showing_dialog:
+		return
+	if not event.is_action_pressed("pular_pensamento", true):
+		return
+	# Consome também a repetição da tecla, sem pular várias falas ao segurá-la.
+	get_viewport().set_input_as_handled()
+	if event.is_echo():
+		return
+	pular_pensamento()
+
+
+func pular_pensamento() -> void:
+	if _ativo.is_empty():
+		return
+	if _tween != null and _tween.is_valid():
+		_tween.kill()
+	_tween = null
+	_concluir()
 
 
 # IDs estáveis distinguem o evento do texto e impedem duplicação após carregar.

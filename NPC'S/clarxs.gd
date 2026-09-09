@@ -2,6 +2,7 @@ extends Node2D
 
 signal npc_saiu
 signal path_completed(path: NPCPath)
+signal interaction_requested(npc: Node2D)
 
 
 @export_category("NPC")
@@ -10,6 +11,10 @@ signal path_completed(path: NPCPath)
 @export var dialog_texts: Array[String] = []
 @export var dialog_enabled: bool = true
 @export var dialog_id: String = ""
+## Permite que controladores de cena tratem uma interação sem abrir o diálogo
+## padrão do NPC. Útil para entregas e ações de missão.
+@export var interaction_override: bool = false
+@export var interaction_prompt: String = "ESPAÇO: FALAR"
 @export var save_enabled: bool = true
 ## Vazio usa o caminho na cena. Defina um ID estável para NPCs gerados por código.
 @export var save_id: String = ""
@@ -632,6 +637,10 @@ func _unhandled_input(
 		and (event.is_action_pressed("interact") or event.is_action_pressed("ui_accept"))
 		and not DialogManager.is_showing_dialog
 	):
+		if interaction_override:
+			interaction_requested.emit(self)
+			get_viewport().set_input_as_handled()
+			return
 		DialogManager.start_dialog(
 			dialog_texts,
 			dialog_id
@@ -663,10 +672,13 @@ func set_dialog_enabled(value: bool) -> void:
 
 
 func has_dialog() -> bool:
-	return dialog_enabled and not dialog_texts.is_empty()
+	return interaction_override or (
+		dialog_enabled and not dialog_texts.is_empty()
+	)
 
 
 func _update_interaction_prompt() -> void:
+	interaction_icon.text = interaction_prompt
 	interaction_icon.visible = (
 		has_dialog()
 		and player_in_range
