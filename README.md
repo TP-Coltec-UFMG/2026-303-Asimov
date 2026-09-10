@@ -1,8 +1,6 @@
-<img width="950" height="700" alt="sprite_0" src="https://github.com/user-attachments/assets/5d56aee3-59ef-4033-9d92-2aaabfac3b86" />
-
 Grupo: Henrique Aredes, Lucas Santana, João Leonardo Matheus Ramalho, Gabriel Oliveira, Gabriel Fernandes
 
- Nome do jogo: Asimov
+Nome do jogo: Asimov
 
 CONCEITO
 
