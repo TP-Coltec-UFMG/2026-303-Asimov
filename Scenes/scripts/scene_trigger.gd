@@ -114,8 +114,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("interact") and dentro_da_area and not eh_elevador:
 		if access_override:
+			var viewport := get_viewport()
+			if viewport != null:
+				viewport.set_input_as_handled()
 			access_requested.emit(self)
-			get_viewport().set_input_as_handled()
 			return
 		if _tem_cartao_compativel() or _sala_do_chefe_foi_hackeada():
 			acesso_liberado.play()

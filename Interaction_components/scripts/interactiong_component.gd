@@ -15,6 +15,11 @@ const ALTURA_FLUTUACAO := 1.0
 const VELOCIDADE_FLUTUACAO := 5.0
 
 
+func _ready() -> void:
+	if interact_label.label_settings != null:
+		interact_label.label_settings = interact_label.label_settings.duplicate()
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and can_interact:
 		if current_interactions:
@@ -30,6 +35,7 @@ func _process(delta: float) -> void:
 		current_interactions.sort_custom(_sort_by_nearest)
 
 		if current_interactions[0].is_interactable:
+			_aplicar_estilo_do_prompt(current_interactions[0])
 			if current_interactions[0].is_not_object:
 				interact_label.text = current_interactions[0].interact_name
 				interact_label.show()
@@ -46,6 +52,11 @@ func _process(delta: float) -> void:
 		_parar_interacao()
 		if current_interactions.is_empty():
 			set_process(false)
+
+
+func _aplicar_estilo_do_prompt(interaction: Area2D) -> void:
+	if interact_label.label_settings != null:
+		interact_label.label_settings.font_size = int(interaction.get("prompt_font_size"))
 
 
 func _sort_by_nearest(area1, area2):

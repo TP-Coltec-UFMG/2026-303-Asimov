@@ -232,7 +232,8 @@ shape = SubResource("RectangleShape2D_em2r1")
 
 [node name="Interectable" parent="SceneTrigger2" unique_id=323674296 groups=["Coletaveis"] instance=ExtResource("6_o1mid")]
 position = Vector2(-158, -103.25)
-interact_name = "Acesso Forte"
+interact_name = "Acesso forte"
+prompt_font_size = 10
 is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2/Interectable" unique_id=1682171245]
@@ -267,7 +268,7 @@ script = ExtResource("16_data_center")
 [node name="NPCs" type="Node" parent="." unique_id=581868378]
 
 [node name="AcessoForteNPCDestino" type="Marker2D" parent="NPCs" unique_id=1016277972]
-position = Vector2(-149, -135)
+position = Vector2(-173, -118)
 
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("9_kxi26")]
 z_index = 2
@@ -280,7 +281,7 @@ save_id = "data_center_recipient"
 run_speed = 40.0
 
 [node name="CaminhoAteAcessoForte" type="Line2D" parent="NPCs/NPC1" unique_id=56411354]
-points = PackedVector2Array(0, 0, -8, 20, -9, 54, -49, 73)
+points = PackedVector2Array(0, 0, -9, 26, -11, 64, -70, 75)
 width = 1.0
 default_color = Color(0.15, 0.78, 1, 0.65)
 script = ExtResource("18_npc_path")

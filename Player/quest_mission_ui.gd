@@ -14,6 +14,7 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer10,
 	$VBoxContainer/HBoxContainer11,
 	$VBoxContainer/HBoxContainer12,
+	$VBoxContainer/HBoxContainer13,
 ]
 @onready var markers: Array[AnimatedSprite2D] = [
 	$VBoxContainer/HBoxContainer2/AnimatedSprite2D,
@@ -28,6 +29,7 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer10/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer11/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer12/AnimatedSprite2D,
+	$VBoxContainer/HBoxContainer13/AnimatedSprite2D,
 ]
 
 var desired_visible: bool = false
@@ -50,6 +52,7 @@ func _ready() -> void:
 	rows[9].hide()
 	rows[10].hide()
 	rows[11].hide()
+	rows[12].hide()
 	hide()
 	call_deferred("refresh_saved_state")
 
@@ -198,11 +201,25 @@ func show_go_to_fourth_floor_task(completed: bool = false, animate: bool = false
 	_show_single_data_center_task(10, "VÁ PARA O QUARTO ANDAR", completed, animate)
 
 
-func show_decrypt_data_center_access_task(
+func show_rfid_reader_task(
 	completed: bool = false,
 	animate: bool = false
 ) -> void:
-	_show_single_data_center_task(11, "DESCRIPTOGRAFE O ACESSO", completed, animate)
+	_show_single_data_center_task(12, "VERIFIQUE O LEITOR RFID", completed, animate)
+
+
+func show_rfid_repair_tasks(
+	wires_repaired: bool = false,
+	reading_checked: bool = false,
+	animate_repair: bool = false
+) -> void:
+	for index in range(rows.size()):
+		set_task_visible(index, index == 11 or index == 12)
+	set_task_text(11, "RECONECTE OS CABOS")
+	set_task_completed(11, wires_repaired, animate_repair)
+	set_task_text(12, "VERIFIQUE A LEITURA RFID")
+	set_task_completed(12, reading_checked)
+	set_panel_visible(true)
 
 
 func show_data_center_power_tasks(
@@ -257,7 +274,11 @@ func refresh_saved_state() -> void:
 	var tools_floor_task_active := bool(state.get("data_center_tools_floor_task_active", false))
 	var tools_floor_task_completed := bool(state.get("data_center_tools_floor_task_completed", false))
 	var breaker_completed := bool(state.get("data_center_breaker_restored", false))
-	var decryption_task_active := bool(state.get("data_center_access_decryption_task_active", false))
+	var old_decryption_task_active := bool(state.get("data_center_access_decryption_task_active", false))
+	var rfid_inspection_task_active := bool(state.get("data_center_rfid_inspection_task_active", false))
+	var rfid_wires_task_active := bool(state.get("data_center_rfid_wires_task_active", false))
+	var rfid_wires_repaired := bool(state.get("data_center_rfid_wires_repaired", false))
+	var rfid_reading_checked := bool(state.get("data_center_rfid_reading_checked", false))
 	var flashlight_completed := bool(state.get("data_center_flashlight_collected", false)) or (
 		current_player != null
 		and current_player.inventory.get_item_on_inventary("lanterna")
@@ -265,8 +286,10 @@ func refresh_saved_state() -> void:
 	var hack_ready := bool(state.get("office_hack_boss_room_ready", false)) or (
 		laptop_collected and cable_collected
 	)
-	if decryption_task_active:
-		show_decrypt_data_center_access_task(false)
+	if rfid_wires_task_active or rfid_wires_repaired:
+		show_rfid_repair_tasks(rfid_wires_repaired, rfid_reading_checked)
+	elif rfid_inspection_task_active or old_decryption_task_active:
+		show_rfid_reader_task(false)
 	elif tools_floor_task_active:
 		show_data_center_power_tasks(
 			flashlight_completed,
@@ -304,6 +327,7 @@ func refresh_saved_state() -> void:
 		set_task_visible(5, false)
 		set_task_visible(6, false)
 		set_task_visible(11, false)
+		set_task_visible(12, false)
 
 
 func _notification(what: int) -> void:

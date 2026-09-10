@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dr6nny0730p4h"]
+
+[ext_resource type="Script" uid="uid://c7k3qa6ejqexd" path="res://Minigames/Minigame2/Socket.gd" id="1"]
+
+[node name="Socket" type="Node2D" unique_id=617380113]
+script = ExtResource("1")
+
+[node name="Plug" type="Sprite2D" parent="." unique_id=667513536]
+scale = Vector2(1.3, 1.3)

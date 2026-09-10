@@ -121,17 +121,51 @@ func _restore_progress() -> void:
 
 
 func _restore_access_progress(state: Dictionary) -> void:
-	if bool(state.get("data_center_access_npc_arrived", false)) or bool(state.get("data_center_access_decryption_task_active", false)):
+	var rfid_progress_active := (
+		bool(state.get("data_center_rfid_inspection_task_active", false))
+		or bool(state.get("data_center_rfid_wires_task_active", false))
+		or bool(state.get("data_center_rfid_wires_repaired", false))
+	)
+	if bool(state.get("data_center_access_decryption_task_active", false)) and not (
+		rfid_progress_active
+	):
+		state.erase("data_center_access_decryption_task_active")
+		state["data_center_rfid_inspection_task_active"] = true
+		rfid_progress_active = true
+		SaveGame.save_global_state("hall_quest_01", state)
+	if bool(state.get("data_center_access_npc_arrived", false)) or rfid_progress_active:
 		_place_recipient_at_access()
-	if bool(state.get("data_center_access_decryption_task_active", false)):
+	if bool(state.get("data_center_rfid_wires_repaired", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
-		_show_decryption_task()
+		_set_access_prompt("Verificar leitura RFID")
+		_show_rfid_repair_tasks(true)
+		player.balao_de_pensamento.enfileirar(
+			"data_center:wires_repaired_return",
+			"Fios no lugar. Agora posso verificar a leitura RFID."
+		)
+		if not bool(state.get("data_center_rfid_repair_checkpointed", false)):
+			state["data_center_rfid_repair_checkpointed"] = true
+			SaveGame.save_global_state("hall_quest_01", state)
+			call_deferred("_save_checkpoint")
+		return
+	if bool(state.get("data_center_rfid_wires_task_active", false)):
+		_set_recipient_interaction(false)
+		_ensure_story_card(BOSS_CARD_TYPE)
+		_set_access_prompt("Consertar os fios")
+		_show_rfid_repair_tasks(false)
+		return
+	if bool(state.get("data_center_rfid_inspection_task_active", false)):
+		_set_recipient_interaction(false)
+		_ensure_story_card(BOSS_CARD_TYPE)
+		_set_access_prompt("Verificar leitor RFID")
+		_show_rfid_reader_task()
 		return
 	_show_power_tasks(true, true, true)
 	if bool(state.get("data_center_access_boss_card_given", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
+		_set_access_prompt("Testar cartão do chefe")
 		if bool(state.get("data_center_access_boss_card_failed", false)):
 			call_deferred("_start_boss_denied_dialog")
 		return
@@ -143,6 +177,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 	if bool(state.get("data_center_access_strong_card_given", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(STRONG_CARD_TYPE)
+		_set_access_prompt("Testar cartão forte")
 		return
 	if bool(state.get("data_center_access_npc_arrived", false)):
 		_set_recipient_interaction(false)
@@ -242,11 +277,10 @@ func _start_boss_denied_dialog() -> void:
 		return
 	DialogManager.start_dialog([
 		"Alex: Também foi bloqueado.",
-		"Cientista: Impossível. O cartão do chefe tem a autorização mais alta do prédio.",
-		"Cientista: O leitor está funcionando... A IA criptografou o acesso por dentro.",
-		"Alex: Então os cartões não resolvem mais.",
-		"Alex: Ainda tenho o notebook e o cabo. Posso descriptografar essa trava.",
-		"Cientista: Faça isso. Atrás dessa porta está o núcleo que controla o prédio."
+		"Cientista: Isso não faz sentido. Os dois cartões usam leitura RFID.",
+		"Cientista: A IA controla a porta, mas não é possível que ela tenha apagado a leitura física dos cartões.",
+		"Cientista: Verifique o leitor. Talvez o problema esteja no hardware.",
+		"Alex: Certo. Vou abrir o painel e dar uma olhada."
 	], BOSS_DENIED_DIALOG_ID)
 
 
@@ -276,12 +310,14 @@ func _on_dialog_finished(dialog_id: String) -> void:
 			_give_boss_card()
 		BOSS_DENIED_DIALOG_ID:
 			state["data_center_access_boss_dialog_finished"] = true
-			state["data_center_access_decryption_task_active"] = true
+			state.erase("data_center_access_decryption_task_active")
+			state["data_center_rfid_inspection_task_active"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
-			_show_decryption_task()
+			_set_access_prompt("Verificar leitor RFID")
+			_show_rfid_reader_task()
 			player.balao_de_pensamento.enfileirar(
-				"data_center:decrypt_access",
-				"Notebook e cabo... vou quebrar a criptografia dessa porta."
+				"data_center:inspect_rfid_reader",
+				"RFID... preciso descobrir o que aconteceu com esse leitor."
 			)
 			_save_checkpoint()
 
@@ -323,6 +359,7 @@ func _give_strong_card() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	state["data_center_access_strong_card_given"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
+	_set_access_prompt("Testar cartão forte")
 	player.balao_de_pensamento.enfileirar(
 		"data_center:strong_card_received",
 		"Cartão forte. Preciso equipá-lo e testar o leitor."
@@ -339,6 +376,7 @@ func _give_boss_card() -> void:
 	state["data_center_access_strong_dialog_finished"] = true
 	state["data_center_access_boss_card_given"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
+	_set_access_prompt("Testar cartão do chefe")
 	player.balao_de_pensamento.enfileirar(
 		"data_center:boss_card_received",
 		"Agora é a vez do cartão do chefe."
@@ -384,11 +422,17 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 			"Primeiro preciso resolver o problema da energia."
 		)
 		return
-	if bool(state.get("data_center_access_decryption_task_active", false)):
+	if bool(state.get("data_center_rfid_wires_repaired", false)):
 		player.balao_de_pensamento.enfileirar(
-			"data_center:access_waiting_decryption",
-			"Preciso descriptografar este acesso."
+			"data_center:check_rfid_after_repair",
+			"Os cabos estão prontos. Agora preciso verificar a leitura RFID."
 		)
+		return
+	if bool(state.get("data_center_rfid_wires_task_active", false)):
+		_start_wire_repair_minigame()
+		return
+	if bool(state.get("data_center_rfid_inspection_task_active", false)):
+		await _inspect_rfid_reader()
 		return
 	if bool(state.get("data_center_access_boss_card_given", false)):
 		if _current_card_type() != BOSS_CARD_TYPE or not player.usando_cartao:
@@ -442,6 +486,45 @@ func _reject_boss_card() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_save_checkpoint()
 	_start_boss_denied_dialog()
+
+
+func _inspect_rfid_reader() -> void:
+	access_sequence_busy = true
+	await player.balao_de_pensamento.mostrar_texto(
+		"O leitor ainda tem energia...",
+		"data_center:rfid_reader_has_power"
+	)
+	if not _is_current_scene():
+		return
+	await player.balao_de_pensamento.mostrar_texto(
+		"Achei o problema. Os cabos estão queimados.",
+		"data_center:rfid_burned_wires"
+	)
+	if not _is_current_scene():
+		return
+	await player.balao_de_pensamento.mostrar_texto(
+		"Preciso reconectá-los antes de testar os cartões de novo.",
+		"data_center:rfid_reconnect_plan"
+	)
+	if not _is_current_scene():
+		return
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	state["data_center_rfid_inspection_task_active"] = false
+	state["data_center_rfid_wires_task_active"] = true
+	state["data_center_rfid_reading_task_active"] = true
+	SaveGame.save_global_state("hall_quest_01", state)
+	_set_access_prompt("Consertar os fios")
+	_show_rfid_repair_tasks(false)
+	_save_checkpoint()
+	access_sequence_busy = false
+
+
+func _start_wire_repair_minigame() -> void:
+	if access_sequence_busy:
+		return
+	access_sequence_busy = true
+	_save_checkpoint()
+	Progresso.iniciar_reparo_leitor_rfid(player)
 
 
 func _begin_power_failure() -> void:
@@ -641,10 +724,22 @@ func _has_boss_card() -> bool:
 	return _current_card_type() == BOSS_CARD_TYPE
 
 
-func _show_decryption_task() -> void:
+func _show_rfid_reader_task() -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_decrypt_data_center_access_task(false)
+		quest_ui.show_rfid_reader_task(false)
+
+
+func _show_rfid_repair_tasks(wires_repaired: bool, animate: bool = false) -> void:
+	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
+	if quest_ui != null:
+		quest_ui.show_rfid_repair_tasks(wires_repaired, false, animate)
+
+
+func _set_access_prompt(text: String) -> void:
+	var interactable := access_trigger.get_node_or_null("Interectable")
+	if interactable != null:
+		interactable.set("interact_name", text)
 
 
 func _show_power_tasks(
