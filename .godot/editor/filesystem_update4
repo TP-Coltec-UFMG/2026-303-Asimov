@@ -1,2 +1,7 @@
-res://Scenes/Musics/music_controller.tscn
+res://NPC'S/clarxs.gd
+res://Player/quest_mission_ui.gd
+res://Player/Scripts/inventory.gd
+res://Scenes/scripts/data_center_intro_controller.gd
+res://Scenes/scripts/scene_trigger.gd
+res://Scenes/andar_data_center.tscn
 res://shaders/pause_menu.gdshader

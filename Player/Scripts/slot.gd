@@ -79,6 +79,45 @@ func put_item_on_inventory(item_scene: PackedScene) -> bool:
 	return true
 
 
+func put_existing_item_on_inventory(
+	existing_item: Node2D,
+	force_replace: bool = false
+) -> bool:
+	if existing_item == null or not is_instance_valid(existing_item):
+		push_warning("Tentativa de adicionar um item inexistente ao inventário.")
+		return false
+
+	if item != null and not force_replace:
+		var tipo_atual := _get_tipo(item)
+		var tipo_novo := _get_tipo(existing_item)
+		if not allow_higher_tier_replacement or tipo_novo <= tipo_atual:
+			return false
+
+	if item != null:
+		remove_child(item)
+		item.queue_free()
+		item = null
+
+	var old_parent := existing_item.get_parent()
+	if old_parent != null:
+		old_parent.remove_child(existing_item)
+
+	self_modulate.a = 1.0
+	if existing_item.has_method("marcar_como_item_inventario"):
+		existing_item.call("marcar_como_item_inventario")
+
+	item = existing_item
+	add_child(item)
+	item.visible = true
+	item.position = size * 0.5
+	item.scale = item_display_scale
+
+	_make_unshaded(item)
+	_desativar_interacao_do_item(item)
+	_apply_visual_state()
+	return true
+
+
 func _put_item_on_inventary(item_scene: PackedScene) -> void:
 	put_item_on_inventory(item_scene)
 

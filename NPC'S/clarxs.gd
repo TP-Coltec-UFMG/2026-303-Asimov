@@ -671,6 +671,12 @@ func set_dialog_enabled(value: bool) -> void:
 	interaction_icon.visible = has_dialog() and player_in_range
 
 
+func configure_interaction_override(value: bool, prompt: String = "ESPAÇO: FALAR") -> void:
+	interaction_override = value
+	interaction_prompt = prompt
+	_update_interaction_prompt()
+
+
 func has_dialog() -> bool:
 	return interaction_override or (
 		dialog_enabled and not dialog_texts.is_empty()

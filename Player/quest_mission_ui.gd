@@ -13,6 +13,7 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer9,
 	$VBoxContainer/HBoxContainer10,
 	$VBoxContainer/HBoxContainer11,
+	$VBoxContainer/HBoxContainer12,
 ]
 @onready var markers: Array[AnimatedSprite2D] = [
 	$VBoxContainer/HBoxContainer2/AnimatedSprite2D,
@@ -26,6 +27,7 @@ extends CanvasLayer
 	$VBoxContainer/HBoxContainer9/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer10/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer11/AnimatedSprite2D,
+	$VBoxContainer/HBoxContainer12/AnimatedSprite2D,
 ]
 
 var desired_visible: bool = false
@@ -47,6 +49,7 @@ func _ready() -> void:
 	rows[8].hide()
 	rows[9].hide()
 	rows[10].hide()
+	rows[11].hide()
 	hide()
 	call_deferred("refresh_saved_state")
 
@@ -195,6 +198,13 @@ func show_go_to_fourth_floor_task(completed: bool = false, animate: bool = false
 	_show_single_data_center_task(10, "VÁ PARA O QUARTO ANDAR", completed, animate)
 
 
+func show_decrypt_data_center_access_task(
+	completed: bool = false,
+	animate: bool = false
+) -> void:
+	_show_single_data_center_task(11, "DESCRIPTOGRAFE O ACESSO", completed, animate)
+
+
 func show_data_center_power_tasks(
 	flashlight_completed: bool = false,
 	fourth_floor_completed: bool = false,
@@ -247,6 +257,7 @@ func refresh_saved_state() -> void:
 	var tools_floor_task_active := bool(state.get("data_center_tools_floor_task_active", false))
 	var tools_floor_task_completed := bool(state.get("data_center_tools_floor_task_completed", false))
 	var breaker_completed := bool(state.get("data_center_breaker_restored", false))
+	var decryption_task_active := bool(state.get("data_center_access_decryption_task_active", false))
 	var flashlight_completed := bool(state.get("data_center_flashlight_collected", false)) or (
 		current_player != null
 		and current_player.inventory.get_item_on_inventary("lanterna")
@@ -254,7 +265,9 @@ func refresh_saved_state() -> void:
 	var hack_ready := bool(state.get("office_hack_boss_room_ready", false)) or (
 		laptop_collected and cable_collected
 	)
-	if tools_floor_task_active:
+	if decryption_task_active:
+		show_decrypt_data_center_access_task(false)
+	elif tools_floor_task_active:
 		show_data_center_power_tasks(
 			flashlight_completed,
 			tools_floor_task_completed,
@@ -290,6 +303,7 @@ func refresh_saved_state() -> void:
 		set_task_visible(4, false)
 		set_task_visible(5, false)
 		set_task_visible(6, false)
+		set_task_visible(11, false)
 
 
 func _notification(what: int) -> void:

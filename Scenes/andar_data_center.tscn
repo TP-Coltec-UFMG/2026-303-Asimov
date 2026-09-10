@@ -12,6 +12,9 @@
 [ext_resource type="Texture2D" uid="uid://bfufeqcgcydgm" path="res://NPC'S/NPC/scientist_1.png" id="10_s1lij"]
 [ext_resource type="Script" uid="uid://c3bmarmj4pw5v" path="res://Scenes/scripts/data_center_intro_controller.gd" id="16_data_center"]
 [ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="17_flashlight"]
+[ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="18_npc_path"]
+[ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="19_strong_card"]
+[ext_resource type="PackedScene" uid="uid://beo4uworw31ct" path="res://Objects/cartao_chefe.tscn" id="20_boss_card"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -220,6 +223,7 @@ shape = SubResource("RectangleShape2D_6n53c")
 
 [node name="SceneTrigger2" parent="." unique_id=814941055 instance=ExtResource("4_7jkyd")]
 connected_scene = "data_center_forte"
+access_override = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2" unique_id=1360181984]
 z_index = 1
@@ -262,6 +266,9 @@ script = ExtResource("16_data_center")
 
 [node name="NPCs" type="Node" parent="." unique_id=581868378]
 
+[node name="AcessoForteNPCDestino" type="Marker2D" parent="NPCs" unique_id=1016277972]
+position = Vector2(-149, -135)
+
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("9_kxi26")]
 z_index = 2
 position = Vector2(-101, -201)
@@ -271,3 +278,23 @@ interaction_override = true
 interaction_prompt = "ESPAÇO: ENTREGAR CARTÃO"
 save_id = "data_center_recipient"
 run_speed = 40.0
+
+[node name="CaminhoAteAcessoForte" type="Line2D" parent="NPCs/NPC1" unique_id=56411354]
+points = PackedVector2Array(0, 0, -8, 20, -9, 54, -49, 73)
+width = 1.0
+default_color = Color(0.15, 0.78, 1, 0.65)
+script = ExtResource("18_npc_path")
+movement_type = 1
+random_at_end = false
+
+[node name="CartaoForteDaHistoria" parent="NPCs/NPC1" unique_id=1429553352 instance=ExtResource("19_strong_card")]
+process_mode = 4
+visible = false
+position = Vector2(0, -12)
+save_id = "data_center_story_strong_card"
+
+[node name="CartaoChefeDaHistoria" parent="NPCs/NPC1" unique_id=258681730 instance=ExtResource("20_boss_card")]
+process_mode = 4
+visible = false
+position = Vector2(0, -12)
+save_id = "data_center_story_boss_card"

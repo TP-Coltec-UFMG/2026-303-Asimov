@@ -42,6 +42,24 @@ func add_item(item_id: String, item_scene: PackedScene = null) -> bool:
 
 	return adicionou
 
+
+func add_existing_item(
+	item_id: String,
+	existing_item: Node2D,
+	force_replace: bool = false
+) -> bool:
+	if item_id.is_empty() or not slots_por_item.has(item_id):
+		return false
+
+	var slot = slots_por_item[item_id]
+	var adicionou: bool = slot.put_existing_item_on_inventory(
+		existing_item,
+		force_replace
+	)
+	if adicionou and equipped_item_id == item_id:
+		slot.set_equipped(true)
+	return adicionou
+
 func get_item_on_inventary(item_id: String) -> bool:
 	return get_item_control(item_id) != null
 

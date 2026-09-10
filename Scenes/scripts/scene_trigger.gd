@@ -1,9 +1,12 @@
 class_name SceneTrigger
 extends Area2D
 
+signal access_requested(trigger: SceneTrigger)
+
 @export var connected_scene: String
 @export	var eh_elevador: bool
 @export var andar_atual: int
+@export var access_override: bool = false
 @onready var painel_elevador: Node2D = $"../PainelElevador"
 @onready var controle_de_tempo: Control = $"../UI/Controle_de_tempo"
 
@@ -110,6 +113,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().paused = true
 
 	if event.is_action_pressed("interact") and dentro_da_area and not eh_elevador:
+		if access_override:
+			access_requested.emit(self)
+			get_viewport().set_input_as_handled()
+			return
 		if _tem_cartao_compativel() or _sala_do_chefe_foi_hackeada():
 			acesso_liberado.play()
 			await acesso_liberado.finished
@@ -122,6 +129,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			aceso_negado.play()
 			print("Acesso Negado")
+
+
+func reproduzir_acesso_negado() -> void:
+	aceso_negado.play()
+	await aceso_negado.finished
 
 
 func _tem_cartao_compativel() -> bool:
