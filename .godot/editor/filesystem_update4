@@ -1,9 +1,6 @@
+res://Tradutions/traducoes - Página1(8).ENGLISH.translation
+res://Tradutions/traducoes - Página1(8).ESPAÑOL.translation
+res://Tradutions/traducoes - Página1(8).FRANÇAIS.translation
+res://Tradutions/traducoes - Página1(8).PORTUGUÊS.translation
 res://Minigames/Minigame2/Main.tscn
 res://shaders/pause_menu.gdshader
-res://Minigames/Minigame2/Main.gd
-res://Tests/data_center_access_flow_test.gd
-res://Scenes/andar_data_center.tscn
-res://Interaction_components/scripts/interactiong_component.gd
-res://Interaction_components/scripts/interectable.gd
-res://Scenes/scripts/data_center_intro_controller.gd
-res://Minigames/Minigame1/levels/UnlockSecurity.tscn
