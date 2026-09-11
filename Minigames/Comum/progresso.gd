@@ -46,6 +46,7 @@ func iniciar_hack_da_sala_do_chefe(player: Player) -> void:
 	if not is_instance_valid(player):
 		return
 	SaveGame.capturar_tempo_atual()
+	MusicController.set_alarm_quiet_context(&"minigame", true)
 	retorno_da_sala_do_chefe = true
 	cena_de_retorno = "res://Scenes/andar_escritorio.tscn"
 	marcador_de_retorno = "SALA_CHEFE"
@@ -60,6 +61,7 @@ func iniciar_reparo_leitor_rfid(player: Player) -> void:
 	if not is_instance_valid(player):
 		return
 	SaveGame.capturar_tempo_atual()
+	MusicController.set_alarm_quiet_context(&"minigame", true)
 	retorno_reparo_rfid = true
 	cena_de_retorno = "res://Scenes/andar_data_center.tscn"
 	marcador_de_retorno = "DATA_CENTER_FORTE"
@@ -106,6 +108,7 @@ func menu() -> void:
 	if retorno_da_sala_do_chefe:
 		_retornar_ao_escritorio()
 		return
+	MusicController.set_alarm_quiet_context(&"minigame", false)
 	get_tree().paused = false
 	get_tree().change_scene_to_file("")
 
@@ -124,7 +127,9 @@ func _retornar_ao_escritorio() -> void:
 	cena_de_retorno = ""
 	marcador_de_retorno = ""
 	if destino.is_empty():
+		MusicController.set_alarm_quiet_context(&"minigame", false)
 		return
+	MusicController.set_alarm_quiet_context(&"minigame", false)
 	scene_manager.last_scene_name = marcador
 	get_tree().paused = false
 	get_tree().change_scene_to_file(destino)
@@ -137,7 +142,9 @@ func _retornar_ao_data_center() -> void:
 	cena_de_retorno = ""
 	marcador_de_retorno = ""
 	if destino.is_empty():
+		MusicController.set_alarm_quiet_context(&"minigame", false)
 		return
+	MusicController.set_alarm_quiet_context(&"minigame", false)
 	scene_manager.last_scene_name = marcador
 	get_tree().paused = false
 	get_tree().change_scene_to_file(destino)

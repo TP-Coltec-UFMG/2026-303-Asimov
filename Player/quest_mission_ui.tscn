@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://c0gnsi802ues5"]
 
-[ext_resource type="Script" path="res://Player/quest_mission_ui.gd" id="1"]
-[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="2"]
+[ext_resource type="Script" uid="uid://dja6157yfkiav" path="res://Player/quest_mission_ui.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="2"]
 [ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://Sprites/ui/New_Piskel.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://Sprites/ui/New_Piskel1.png" id="4"]
 
@@ -16,183 +16,216 @@ font_size = 7
 
 [sub_resource type="SpriteFrames" id="SpriteFramesCheck"]
 animations = [{
-"frames": [{"duration": 1.0, "texture": ExtResource("3")}, {"duration": 1.0, "texture": ExtResource("4")}],
-"loop": false,
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4")
+}],
+"loop": 0,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="QUEST_MISSION" type="CanvasLayer" groups=["alto_contraste"]]
+[node name="QUEST_MISSION" type="CanvasLayer" unique_id=1685070127 groups=["alto_contraste"]]
 script = ExtResource("1")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2113669968]
 offset_left = 374.0
-offset_top = 35.0
+offset_top = 15.5
 offset_right = 480.0
-offset_bottom = 128.0
+offset_bottom = 108.5
 color = Color(0.094685, 0.094685, 0.094685, 1)
 
-[node name="Label2" type="Label" parent="." groups=["alto_contraste"]]
+[node name="Label2" type="Label" parent="." unique_id=1108785265 groups=["alto_contraste"]]
 offset_left = 410.0
-offset_top = 37.0
+offset_top = 17.5
 offset_right = 451.0
-offset_bottom = 50.0
+offset_bottom = 30.5
 text = "TAREFAS"
 label_settings = SubResource("LabelSettingsTitle")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1583475754]
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -90.0
-offset_top = -84.0
+offset_top = -102.0
 offset_right = 20.0
-offset_bottom = -6.0
+offset_bottom = 87.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/separation = 5
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1754431775]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer2" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1700704536 groups=["alto_contraste"]]
 layout_mode = 2
 text = "APAGUE O FOGO"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer2"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer2" unique_id=178073150]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=479248030]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1708121899 groups=["alto_contraste"]]
 layout_mode = 2
 text = "LIBERE O ELEVADOR"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer" unique_id=1035673968]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=626532732]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer3" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer3" unique_id=1820741244 groups=["alto_contraste"]]
 layout_mode = 2
 text = "ESPERE TODO MUNDO SAIR"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer3"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer3" unique_id=1664735020]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer" unique_id=1461164385]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer4" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer4" unique_id=1977086586 groups=["alto_contraste"]]
 layout_mode = 2
 text = "IR PARA O TERCEIRO ANDAR"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer4"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer4" unique_id=355167170]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer" unique_id=1086628486]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer5" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer5" unique_id=825567398 groups=["alto_contraste"]]
 layout_mode = 2
 text = "HACKEIE A SALA DO CHEFE!"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer5"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer5" unique_id=2016952864]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer6" type="HBoxContainer" parent="VBoxContainer" unique_id=1081578233]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer6" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer6" unique_id=502651895 groups=["alto_contraste"]]
 layout_mode = 2
 text = "PEGUE O CARTÃO DO CHEFE"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer6"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer6" unique_id=1343604153]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer7" type="HBoxContainer" parent="VBoxContainer" unique_id=798265546]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer7" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer7" unique_id=1769305248 groups=["alto_contraste"]]
 layout_mode = 2
 text = "VÁ PARA O SEXTO ANDAR"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer7"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer7" unique_id=1556814801]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer8" type="HBoxContainer" parent="VBoxContainer" unique_id=60609835]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer8" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer8" unique_id=425344106 groups=["alto_contraste"]]
 layout_mode = 2
-text = "ENTREGUE O CARTÃO AO CIENTISTA"
+text = "ENTREGUE O CARTÃO AO 
+CIENTISTA"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer8"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer8" unique_id=1065120344]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer9" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer9" type="HBoxContainer" parent="VBoxContainer" unique_id=1863114715]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer9" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer9" unique_id=836681494 groups=["alto_contraste"]]
 layout_mode = 2
 text = "ENCONTRE UMA LANTERNA"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer9"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer9" unique_id=1600159216]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer10" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer10" type="HBoxContainer" parent="VBoxContainer" unique_id=1767785346]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer10" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer10" unique_id=1228444652 groups=["alto_contraste"]]
 layout_mode = 2
 text = "LIGUE O DISJUNTOR"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer10"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer10" unique_id=1463413686]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer11" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer11" type="HBoxContainer" parent="VBoxContainer" unique_id=606993167]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer11" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer11" unique_id=504254768 groups=["alto_contraste"]]
 layout_mode = 2
 text = "VÁ PARA O QUARTO ANDAR"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer11"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer11" unique_id=513529964]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer12" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer12" type="HBoxContainer" parent="VBoxContainer" unique_id=852304022]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer12" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer12" unique_id=411663558 groups=["alto_contraste"]]
 layout_mode = 2
 text = "RECONECTE OS CABOS"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer12"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer12" unique_id=1927651532]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")
 
-[node name="HBoxContainer13" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer13" type="HBoxContainer" parent="VBoxContainer" unique_id=903441165]
 layout_mode = 2
-[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer13" groups=["alto_contraste"]]
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer13" unique_id=1107465165 groups=["alto_contraste"]]
 layout_mode = 2
 text = "VERIFIQUE A LEITURA RFID"
 label_settings = SubResource("LabelSettingsTask")
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer13"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer13" unique_id=247420568]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")

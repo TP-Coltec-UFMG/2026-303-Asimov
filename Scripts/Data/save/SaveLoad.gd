@@ -11,6 +11,7 @@ const REMAPPABLE_ACTIONS: PackedStringArray = [
 	"empurrar",
 	"interact",
 	"pular_pensamento",
+	"toggle_alarm",
 	"use_lanterna",
 	"use_arma",
 	"use_cartao",

@@ -1,6 +1,15 @@
-res://Tradutions/traducoes - Página1(8).ENGLISH.translation
-res://Tradutions/traducoes - Página1(8).ESPAÑOL.translation
-res://Tradutions/traducoes - Página1(8).FRANÇAIS.translation
-res://Tradutions/traducoes - Página1(8).PORTUGUÊS.translation
+res://Minigames/Comum/fase.gd
+res://Minigames/Comum/progresso.gd
+res://Minigames/Comum/visual.gd
+res://Player/Scripts/player.gd
+res://Scenes/scripts/controles.gd
+res://Scenes/scripts/office_intro_controller.gd
+res://Scenes/scripts/scene_trigger.gd
+res://Scripts/Data/save/SaveLoad.gd
+res://Scripts/Sounds/music/music.gd
 res://Minigames/Minigame2/Main.tscn
 res://shaders/pause_menu.gdshader
+res://Player/ManPlayer.tscn
+res://Scenes/andar_data_center.tscn
+res://Player/quest_mission_ui.tscn
+res://Tests/alarm_notification_test.gd

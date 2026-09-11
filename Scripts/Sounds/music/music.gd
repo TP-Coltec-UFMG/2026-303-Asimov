@@ -24,6 +24,7 @@ const ALARM_INITIAL_VOLUME: float = 0.3
 const ALARM_REDUCED_VOLUME: float = 0.1
 const ALARM_INITIAL_DURATION: float = 30.0
 const ALARM_FADE_DURATION: float = 4.0
+const ALARM_QUIET_CONTEXT_VOLUME: float = 0.05
 
 enum PowerOutageAudioState {
 	IDLE,
@@ -36,6 +37,10 @@ var scene_audio_blocked: bool = false
 var pending_scene_starts: Dictionary = {}
 var alarm_normal_volume_db: float = 0.0
 var alarm_elapsed: float = 0.0
+var alarm_unducked_volume_db: float = 0.0
+var alarm_user_muted: bool = false
+var alarm_user_position: float = 0.0
+var alarm_quiet_contexts: Dictionary = {}
 var opening_music_normal_volume_db: float = 0.0
 var opening_music_started: bool = false
 var opening_music_finished: bool = false
@@ -54,6 +59,7 @@ func _ready() -> void:
 	_play_if_stopped(bg_ambient)
 	_play_if_stopped(bg_music)
 	alarm_normal_volume_db = som_alarme.volume_db
+	alarm_unducked_volume_db = som_alarme.volume_db
 	opening_music_normal_volume_db = som_de_fundo.volume_db
 	power_outage_music_normal_volume_db = musica_quando_o_disjuntor_apagar.volume_db
 
@@ -73,10 +79,10 @@ func _update_alarm_volume(delta: float) -> void:
 	if power_outage_audio_state != PowerOutageAudioState.IDLE:
 		return
 	var progress := clampf((alarm_elapsed - ALARM_INITIAL_DURATION) / ALARM_FADE_DURATION, 0.0, 1.0)
-	som_alarme.volume_db = linear_to_db(
+	_apply_alarm_volume(linear_to_db(
 		db_to_linear(alarm_normal_volume_db)
 		* lerpf(ALARM_INITIAL_VOLUME, ALARM_REDUCED_VOLUME, progress)
-	)
+	))
 
 
 # BG MUSIC
@@ -105,6 +111,8 @@ func _stop_countdown() -> void:
 
 # ALARME
 func _start_som_alarme(from_position: float = 0.0) -> void:
+	if alarm_user_muted:
+		return
 	_play_if_stopped(som_alarme, from_position)
 	_update_alarm_volume(0.0)
 
@@ -112,7 +120,8 @@ func _stop_som_alarme() -> void:
 	if power_outage_audio_state != PowerOutageAudioState.IDLE:
 		return
 	som_alarme.stop()
-	som_alarme.volume_db = alarm_normal_volume_db
+	alarm_unducked_volume_db = alarm_normal_volume_db
+	_refresh_alarm_output()
 
 
 # SOM DE FUNDO
@@ -150,7 +159,7 @@ func _start_power_outage_audio() -> void:
 	var resuming_fade_out := power_outage_audio_state == PowerOutageAudioState.FADING_OUT
 	if not resuming_fade_out:
 		musica_quando_o_disjuntor_apagar.volume_db = SILENT_VOLUME_DB
-	if not som_alarme.playing:
+	if not alarm_user_muted and not som_alarme.playing:
 		som_alarme.volume_db = SILENT_VOLUME_DB
 		_play_if_stopped(som_alarme)
 	if not musica_quando_o_disjuntor_apagar.playing:
@@ -209,7 +218,8 @@ func _start_power_outage_fade(
 ) -> void:
 	power_outage_audio_state = new_state
 	power_outage_fade_elapsed = 0.0
-	power_outage_alarm_start_db = som_alarme.volume_db
+	# O fade usa o volume da sequência; elevador e minigame só alteram a saída.
+	power_outage_alarm_start_db = alarm_unducked_volume_db
 	power_outage_alarm_target_db = alarm_target_db
 	power_outage_music_start_db = musica_quando_o_disjuntor_apagar.volume_db
 	power_outage_music_target_db = music_target_db
@@ -220,11 +230,11 @@ func _update_power_outage_audio(delta: float) -> void:
 		return
 	power_outage_fade_elapsed += delta
 	var progress := clampf(power_outage_fade_elapsed / POWER_OUTAGE_FADE_DURATION, 0.0, 1.0)
-	som_alarme.volume_db = lerpf(
+	_apply_alarm_volume(lerpf(
 		power_outage_alarm_start_db,
 		power_outage_alarm_target_db,
 		progress
-	)
+	))
 	musica_quando_o_disjuntor_apagar.volume_db = lerpf(
 		power_outage_music_start_db,
 		power_outage_music_target_db,
@@ -248,6 +258,9 @@ func stop_all_audio() -> void:
 	power_outage_audio_state = PowerOutageAudioState.IDLE
 	power_outage_fade_elapsed = 0.0
 	alarm_elapsed = 0.0
+	alarm_user_muted = false
+	alarm_user_position = 0.0
+	alarm_quiet_contexts.clear()
 
 	# MusicController é um autoload e sobrevive às mudanças de cena. Por isso,
 	# um reset de campanha precisa parar explicitamente todos os players.
@@ -287,6 +300,9 @@ func get_checkpoint_state() -> Dictionary:
 	var state: Dictionary = {}
 	state["alarm_envelope"] = {
 		"elapsed": alarm_elapsed,
+		"unducked_volume_db": alarm_unducked_volume_db,
+		"user_muted": alarm_user_muted,
+		"user_position": alarm_user_position,
 		"power_state": power_outage_audio_state,
 		"fade_elapsed": power_outage_fade_elapsed,
 		"alarm_start": power_outage_alarm_start_db,
@@ -394,6 +410,10 @@ func _restore_alarm_envelope(state: Dictionary) -> void:
 	var envelope: Dictionary = state.get("alarm_envelope", {})
 	# Saves anteriores não contavam os 30 segundos. Retomam no patamar baixo.
 	alarm_elapsed = float(envelope.get("elapsed", ALARM_INITIAL_DURATION + ALARM_FADE_DURATION))
+	alarm_unducked_volume_db = float(envelope.get("unducked_volume_db", som_alarme.volume_db))
+	alarm_user_muted = bool(envelope.get("user_muted", false))
+	alarm_user_position = maxf(0.0, float(envelope.get("user_position", 0.0)))
+	alarm_quiet_contexts.clear()
 	power_outage_audio_state = int(envelope.get("power_state", PowerOutageAudioState.IDLE)) as PowerOutageAudioState
 	power_outage_fade_elapsed = float(envelope.get("fade_elapsed", 0.0))
 	power_outage_alarm_start_db = float(envelope.get("alarm_start", som_alarme.volume_db))
@@ -407,6 +427,56 @@ func _restore_alarm_envelope(state: Dictionary) -> void:
 		else:
 			_stop_power_outage_audio()
 	_update_alarm_volume(0.0)
+	if alarm_user_muted:
+		som_alarme.stop()
+
+
+func mute_alarm_by_player() -> bool:
+	if alarm_user_muted or not som_alarme.playing:
+		return false
+	alarm_user_position = maxf(0.0, som_alarme.get_playback_position())
+	alarm_user_muted = true
+	som_alarme.stop()
+	_refresh_alarm_output()
+	return true
+
+
+func toggle_alarm_by_player() -> bool:
+	if not alarm_user_muted:
+		return mute_alarm_by_player()
+	alarm_user_muted = false
+	_play_if_stopped(som_alarme, alarm_user_position)
+	_refresh_alarm_output()
+	return true
+
+
+func set_alarm_quiet_context(context: StringName, active: bool) -> void:
+	if active:
+		alarm_quiet_contexts[context] = true
+	else:
+		alarm_quiet_contexts.erase(context)
+	_refresh_alarm_output()
+
+
+func is_alarm_quiet_context_active(context: StringName) -> bool:
+	return alarm_quiet_contexts.has(context)
+
+
+func _apply_alarm_volume(volume_db: float) -> void:
+	alarm_unducked_volume_db = volume_db
+	_refresh_alarm_output()
+
+
+func _refresh_alarm_output() -> void:
+	if alarm_user_muted:
+		som_alarme.volume_db = SILENT_VOLUME_DB
+		return
+	if not alarm_quiet_contexts.is_empty():
+		som_alarme.volume_db = linear_to_db(
+			db_to_linear(alarm_normal_volume_db) * ALARM_QUIET_CONTEXT_VOLUME
+		)
+		return
+	som_alarme.volume_db = alarm_unducked_volume_db
 
 
 func _get_audio_player(player_id: String) -> AudioStreamPlayer2D:

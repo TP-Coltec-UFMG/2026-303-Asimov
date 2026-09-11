@@ -371,7 +371,7 @@ func _refresh_npc_dialog() -> void:
 		return
 	var offer := ""
 	if has_laptop and has_cable:
-		offer = "Alex: Já achei um notebook e um cabo. Eu consigo hackear a porta da sala do chefe."
+		offer = "Alex: Já achei um notebook e um cabo. Consigo hackear a porta da sala do chefe."
 	elif has_laptop:
 		offer = "Alex: Já achei um notebook. Se eu encontrar um cabo, consigo hackear a porta da sala do chefe."
 	else:
@@ -379,13 +379,13 @@ func _refresh_npc_dialog() -> void:
 	var dialog_texts: Array[String] = [
 		"Alex: Cadê todo mundo? O que aconteceu aqui?",
 		"Funcionário: A IA ficou maluca. Ela tomou o controle dos sistemas e está construindo uma superbomba.",
-		"Alex: Uma superbomba? Como isso foi acontecer?",
+		"Alex: Uma superbomba? Como isso pôde acontecer?",
 		"Funcionário: O chefe fez alguma merda e perdeu o controle dela. A gente precisa falar com ele.",
-		"Alex: Então chama ele!",
+		"Alex: Você conseguiu falar com ele?",
 		"Funcionário: Eu já tentei. Ele não atende e a sala está trancada.",
 		offer,
-		"Funcionário: Eu vou voltar para o andar do data center. Enquanto isso, tenta pegar o cartão do chefe. Precisamos dele lá encima.",
-		"Alex: Certo. Eu vou atrás do cartão."
+		"Funcionário: Vou voltar para o data center. Enquanto isso, tente pegar o cartão do chefe. Precisamos dele lá em cima.",
+		"Alex: Certo. Vou atrás do cartão."
 	]
 	npc.set("dialog_texts", dialog_texts)
 

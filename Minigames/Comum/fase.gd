@@ -19,13 +19,14 @@ var game_timer: Control
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	$Arena.process_mode = Node.PROCESS_MODE_PAUSABLE
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	sons = SonsAsimov.new()
 	add_child(sons)
 	var camada := CanvasLayer.new()
 	add_child(camada)
 	hud = Control.new()
 	hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud.mouse_filter = Control.MOUSE_FILTER_PASS
 	hud.theme = VisualAsimov.tema()
 	camada.add_child(hud)
 	VisualAsimov.painel(hud, Rect2(0, 0, 480, 31), VisualAsimov.FUNDO)
@@ -54,6 +55,8 @@ func _adicionar_cronometro(camada: CanvasLayer) -> void:
 	game_timer = GAME_TIMER_SCENE.instantiate() as Control
 	game_timer.name = "GameTimer"
 	game_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
+	# O cronômetro cobre o viewport; sem IGNORE ele intercepta o mouse dos modais.
+	game_timer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	camada.add_child(game_timer)
 	var icon := game_timer.get_node_or_null("Control") as Control
 	if icon != null:
@@ -87,11 +90,14 @@ func limpar_modal() -> void:
 func abrir_modal(titulo: String, mensagem: String, cor: Color) -> Control:
 	limpar_modal()
 	modal = Control.new()
+	modal.process_mode = Node.PROCESS_MODE_ALWAYS
 	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	modal.mouse_filter = Control.MOUSE_FILTER_PASS
 	hud.add_child(modal)
 	var escuro := ColorRect.new()
 	escuro.color = Color(0.025, 0.04, 0.055, 0.84)
 	escuro.size = Vector2(480, 270)
+	escuro.mouse_filter = Control.MOUSE_FILTER_STOP
 	modal.add_child(escuro)
 	VisualAsimov.painel(modal, Rect2(95, 55, 291, 166), VisualAsimov.PAINEL, cor)
 	VisualAsimov.texto(modal, titulo, Rect2(110, 65, 261, 21), 18, cor)
@@ -104,9 +110,30 @@ func pausar() -> void:
 	estado = "pausado"
 	get_tree().paused = true
 	abrir_modal("SISTEMA EM PAUSA", "", VisualAsimov.CIANO)
-	VisualAsimov.botao(modal, "CONTINUAR", Rect2(110, 154, 123, 22), retomar).grab_focus()
-	VisualAsimov.botao(modal, "REINICIAR", Rect2(248, 154, 123, 22), reiniciar)
-	VisualAsimov.botao(modal, "SAIR DO HACKER", Rect2(110, 186, 261, 21), Progresso.menu)
+	var continuar := VisualAsimov.botao(modal, "CONTINUAR", Rect2(110, 154, 123, 22), retomar)
+	var reiniciar_botao := VisualAsimov.botao(modal, "REINICIAR", Rect2(248, 154, 123, 22), reiniciar)
+	var sair := VisualAsimov.botao(modal, "SAIR DO HACKER", Rect2(110, 186, 261, 21), Progresso.menu)
+	continuar.name = "Continuar"
+	reiniciar_botao.name = "Reiniciar"
+	sair.name = "Sair"
+	_configurar_foco_pausa(continuar, reiniciar_botao, sair)
+	continuar.grab_focus()
+
+
+func _configurar_foco_pausa(continuar: Button, reiniciar_botao: Button, sair: Button) -> void:
+	continuar.focus_neighbor_right = continuar.get_path_to(reiniciar_botao)
+	continuar.focus_neighbor_bottom = continuar.get_path_to(sair)
+	reiniciar_botao.focus_neighbor_left = reiniciar_botao.get_path_to(continuar)
+	reiniciar_botao.focus_neighbor_bottom = reiniciar_botao.get_path_to(sair)
+	sair.focus_neighbor_top = sair.get_path_to(continuar)
+	sair.focus_neighbor_left = sair.get_path_to(continuar)
+	sair.focus_neighbor_right = sair.get_path_to(reiniciar_botao)
+	continuar.focus_next = continuar.get_path_to(reiniciar_botao)
+	reiniciar_botao.focus_next = reiniciar_botao.get_path_to(sair)
+	sair.focus_next = sair.get_path_to(continuar)
+	continuar.focus_previous = continuar.get_path_to(sair)
+	reiniciar_botao.focus_previous = reiniciar_botao.get_path_to(continuar)
+	sair.focus_previous = sair.get_path_to(reiniciar_botao)
 
 func retomar() -> void:
 	limpar_modal()
@@ -147,7 +174,7 @@ func vencer() -> void:
 	sons.tocar("ok")
 	await get_tree().create_timer(0.45).timeout
 	if fase == 3:
-		abrir_modal("ACESSO LIBERADO", "Acesso a sala do chefe concedido", VisualAsimov.VERDE)
+		abrir_modal("ACESSO LIBERADO", "Acesso à sala do chefe concedido", VisualAsimov.VERDE)
 		
 		
 	if fase < 3:

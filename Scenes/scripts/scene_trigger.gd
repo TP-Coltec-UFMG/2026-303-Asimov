@@ -64,6 +64,7 @@ func usar_elevador(andar: int) -> void:
 			controle_de_tempo.show()
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 			_mostrar_paineis_tarefas()
+			MusicController.set_alarm_quiet_context(&"elevator", false)
 		return
 	if andar != andar_atual and eh_elevador:
 		if dentro_da_area:
@@ -76,6 +77,7 @@ func usar_elevador(andar: int) -> void:
 			await painel_elevador.animacao()
 			body_p.set_physics_process(true)
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
+			MusicController.set_alarm_quiet_context(&"elevator", false)
 			scene_manager.change_scene(body_p, _get_connect_scene_andar_novo(andar))
 			body_p.inventory.show()
 			
@@ -91,6 +93,7 @@ func usar_elevador(andar: int) -> void:
 			body_p.inventory.show()
 			controle_de_tempo.show()
 			_mostrar_paineis_tarefas()
+			MusicController.set_alarm_quiet_context(&"elevator", false)
 			
 			
 func get_ultima_posicao() -> Vector2:
@@ -110,6 +113,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		painel_elevador.visible = true
 		controle_de_tempo.hide()
 		_ocultar_paineis_tarefas()
+		MusicController.set_alarm_quiet_context(&"elevator", true)
 		get_tree().paused = true
 
 	if event.is_action_pressed("interact") and dentro_da_area and not eh_elevador:

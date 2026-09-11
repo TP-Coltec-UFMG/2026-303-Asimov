@@ -71,6 +71,9 @@ static func botao(pai: Node, conteudo: String, ret: Rect2, acao: Callable) -> Bu
 	b.position = ret.position
 	b.size = ret.size
 	b.theme = tema()
+	b.focus_mode = Control.FOCUS_ALL
+	b.mouse_filter = Control.MOUSE_FILTER_STOP
+	b.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	b.pressed.connect(acao)
 	pai.add_child(b)
 	return b

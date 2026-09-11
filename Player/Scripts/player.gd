@@ -26,6 +26,7 @@ class_name Player extends CharacterBody2D
 
 @onready var control: Control = $CanvasLayer/Control
 @onready var morreu: Control = $CanvasLayer/Morreu
+@onready var alarm_tip: Button = $CanvasLayer/AlarmTip
 
 var cardinal_direction: Vector2 = Vector2.DOWN
 var direction: Vector2 = Vector2.ZERO
@@ -33,6 +34,7 @@ var move_speed: float = 40.0
 var state: String = "idle"
 
 var andando_de_costas: bool = false
+var alarm_tip_tween: Tween
 
 const MOUSE_DEAD_ZONE_SQUARED: float = 16.0
 
@@ -69,6 +71,47 @@ func _ready() -> void:
 	add_to_group("player")
 	UpdateAnimation()
 	UpdateOccluderLight()
+
+
+func _toggle_alarm_from_player() -> bool:
+	if not MusicController.toggle_alarm_by_player():
+		return false
+	if MusicController.alarm_user_muted:
+		balao_de_pensamento.enfileirar(
+			"alarm:disabled_by_player",
+			"Esse som estava me deixando louco."
+		)
+		_show_alarm_status("Alarme desativado")
+	else:
+		_show_alarm_status("Alarme ativado")
+	return true
+
+
+func _show_alarm_status(message: String) -> void:
+	if alarm_tip_tween != null and alarm_tip_tween.is_valid():
+		alarm_tip_tween.kill()
+	alarm_tip.text = message
+	alarm_tip.modulate.a = 1.0
+	alarm_tip.show()
+	alarm_tip_tween = create_tween()
+	alarm_tip_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	alarm_tip_tween.tween_interval(0.35)
+	alarm_tip_tween.tween_callback(alarm_tip.hide)
+	alarm_tip_tween.tween_interval(0.16)
+	alarm_tip_tween.tween_callback(alarm_tip.show)
+	alarm_tip_tween.tween_interval(0.28)
+	alarm_tip_tween.tween_callback(alarm_tip.hide)
+	alarm_tip_tween.tween_interval(0.16)
+	alarm_tip_tween.tween_callback(alarm_tip.show)
+	alarm_tip_tween.tween_interval(1.0)
+	alarm_tip_tween.tween_property(alarm_tip, "modulate:a", 0.0, 0.3)
+	alarm_tip_tween.tween_callback(_hide_alarm_status)
+
+
+func _hide_alarm_status() -> void:
+	alarm_tip.hide()
+	alarm_tip.modulate.a = 1.0
+	alarm_tip_tween = null
 	
 func _mostrar_no_balao_de_pensamento(texto: String) -> void:
 	await balao_de_pensamento.mostrar_texto(texto)
@@ -453,6 +496,10 @@ func reset_sprite_player() -> void:
 	$Sprite2D.texture = preload("res://Player/Sprites/Alex_16x16.png")
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_alarm"):
+		if not event.is_echo() and _toggle_alarm_from_player():
+			get_viewport().set_input_as_handled()
+		return
 	if DialogManager.is_showing_dialog:
 		return
 

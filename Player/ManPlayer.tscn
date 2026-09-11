@@ -10,14 +10,14 @@
 [ext_resource type="Texture2D" uid="uid://oysdlrmtb0ft" path="res://Player/Sprites/coracao_fill.png" id="8_4c57v"]
 [ext_resource type="Texture2D" uid="uid://cf2twef3l4cuh" path="res://Player/Sprites/cerebro_fill.png" id="8_i2haj"]
 [ext_resource type="Texture2D" uid="uid://uwy6q7meghh4" path="res://Player/Sprites/coracao_no_fill.png" id="9_xnkv0"]
-[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Fonts/PixelifySans-Regular.ttf" id="12_hxkef"]
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="12_hxkef"]
 [ext_resource type="PackedScene" uid="uid://n2hnejkagkk0" path="res://Player/inventory.tscn" id="12_xnkv0"]
 [ext_resource type="AudioStream" uid="uid://71bsel0u0wuo" path="res://Sounds/0705.MP3" id="13_0t4ro"]
 [ext_resource type="Script" uid="uid://c3o46ilruapx4" path="res://Scripts/Objects/Label/fps_label.gd" id="13_g2psy"]
 [ext_resource type="PackedScene" uid="uid://dsw7hwfva88w4" path="res://TelaMorte/morreu.tscn" id="13_l2am8"]
 [ext_resource type="Texture2D" uid="uid://k85qdse5p5ho" path="res://Sprites/Balao_de_pensamento.png" id="16_l2am8"]
 [ext_resource type="Script" uid="uid://dalss1e6fdi2m" path="res://Player/balao_de_pensamento.gd" id="17_0yomn"]
-[ext_resource type="PackedScene" path="res://Player/quest_mission_ui.tscn" id="18_quest_ui"]
+[ext_resource type="PackedScene" uid="uid://c0gnsi802ues5" path="res://Player/quest_mission_ui.tscn" id="18_quest_ui"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i305y"]
 load_path = "res://.godot/imported/Alex_16x16.png-89462274f2a2226fed9efa0756e5c56d.ctex"
@@ -158,6 +158,38 @@ _data = {
 
 [sub_resource type="GDScript" id="GDScript_n1p0m"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alarm_tip"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.035, 0.035, 0.04, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.82, 0.67, 0.25, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alarm_tip_hover"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.09, 0.085, 0.055, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.82, 0.31, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_xnkv0"]
 light_mode = 1
 
@@ -222,6 +254,36 @@ editor_draw_limits = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=89759509]
 
+[node name="AlarmTip" type="Button" parent="CanvasLayer" unique_id=399492415]
+process_mode = 3
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -79.0
+offset_top = 29.0
+offset_right = 143.0
+offset_bottom = 57.0
+grow_horizontal = 2
+scale = Vector2(0.83, 0.83)
+focus_mode = 0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.94, 0.94, 0.94, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_hxkef")
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("StyleBoxFlat_alarm_tip")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_alarm_tip_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_alarm_tip_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_alarm_tip_hover")
+text = "Alarme desativado"
+
+[node name="Timer" type="Timer" parent="CanvasLayer/AlarmTip" unique_id=1379128836]
+process_mode = 3
+wait_time = 8.0
+one_shot = true
+
 [node name="Control" type="Control" parent="CanvasLayer" unique_id=1463208028]
 layout_mode = 3
 anchors_preset = 8
@@ -237,10 +299,10 @@ scale = Vector2(1.46, 1.46)
 light_mask = 524290
 material = SubResource("CanvasItemMaterial_xnkv0")
 layout_mode = 0
-offset_left = -86.600006
-offset_top = -87.0
-offset_right = -67.600006
-offset_bottom = -69.0
+offset_left = -90.36713
+offset_top = -88.369865
+offset_right = -71.36713
+offset_bottom = -70.369865
 fill_mode = 3
 texture_under = ExtResource("7_022re")
 texture_progress = ExtResource("8_i2haj")
@@ -249,10 +311,10 @@ texture_progress = ExtResource("8_i2haj")
 light_mask = 524289
 material = SubResource("CanvasItemMaterial_xnkv0")
 layout_mode = 0
-offset_left = -156.6
-offset_top = -87.0
-offset_right = -137.6
-offset_bottom = -69.0
+offset_left = -160.36713
+offset_top = -88.369865
+offset_right = -141.36713
+offset_bottom = -70.369865
 fill_mode = 2
 texture_under = ExtResource("8_4c57v")
 texture_progress = ExtResource("9_xnkv0")
@@ -261,10 +323,10 @@ texture_progress = ExtResource("9_xnkv0")
 light_mask = 524290
 material = SubResource("CanvasItemMaterial_xnkv0")
 layout_mode = 0
-offset_left = -134.6
-offset_top = -87.0
-offset_right = -115.600006
-offset_bottom = -69.0
+offset_left = -138.36713
+offset_top = -88.369865
+offset_right = -119.36713
+offset_bottom = -70.369865
 fill_mode = 2
 texture_under = ExtResource("8_4c57v")
 texture_progress = ExtResource("9_xnkv0")
@@ -273,10 +335,10 @@ texture_progress = ExtResource("9_xnkv0")
 light_mask = 524290
 material = SubResource("CanvasItemMaterial_xnkv0")
 layout_mode = 0
-offset_left = -112.600006
-offset_top = -87.0
-offset_right = -93.600006
-offset_bottom = -69.0
+offset_left = -116.36713
+offset_top = -88.369865
+offset_right = -97.36713
+offset_bottom = -70.369865
 fill_mode = 2
 texture_under = ExtResource("8_4c57v")
 texture_progress = ExtResource("9_xnkv0")
@@ -286,10 +348,10 @@ light_mask = 524290
 texture_filter = 1
 material = SubResource("CanvasItemMaterial_xnkv0")
 layout_mode = 0
-offset_left = -178.6
-offset_top = -71.00001
-offset_right = -50.600006
-offset_bottom = -53.000008
+offset_left = -182.36713
+offset_top = -72.36987
+offset_right = -54.367126
+offset_bottom = -54.369873
 scale = Vector2(0.7, 0.7)
 pivot_offset = Vector2(72, 16)
 size_flags_stretch_ratio = 0.0
@@ -305,10 +367,10 @@ man_player = NodePath("../../..")
 [node name="FPSLabel" type="Label" parent="CanvasLayer/Control" unique_id=167887252]
 material = SubResource("CanvasItemMaterial_pfqqk")
 layout_mode = 0
-offset_left = 123.399994
-offset_top = -88.0
-offset_right = 155.4
-offset_bottom = -76.0
+offset_left = 132.19177
+offset_top = -92.465744
+offset_right = 164.19177
+offset_bottom = -80.465744
 theme_override_fonts/font = ExtResource("12_hxkef")
 theme_override_font_sizes/font_size = 9
 text = "123 FPS"
@@ -338,9 +400,10 @@ position = Vector2(-8.5, -5)
 shape = SubResource("RectangleShape2D_yf5fn")
 
 [node name="GrabRight" type="Area2D" parent="." unique_id=745278772]
+position = Vector2(5, 2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GrabRight" unique_id=1569570671]
-position = Vector2(8.5, -5)
+position = Vector2(3.5, -7)
 shape = SubResource("RectangleShape2D_57qmd")
 
 [node name="BalaoDePensamento" type="Sprite2D" parent="." unique_id=1534882724]
