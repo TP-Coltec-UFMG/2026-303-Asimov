@@ -148,8 +148,6 @@ O edifício do jogo será composto por seis andares: datacenter, sala de ferrame
 
 ## CIRCUITOS
 
-- Esse minigame consiste numa simulação simples de um circuito elétrico que representará o jogador queimando os componentes do datacenter para danificar o funcionamento da I.A e a obtenção de suas bases de dados ao ponto dela parar de funcionar. O jogo consiste em 5 variações, cada uma com seu objetivo de queimar certos componentes do circuito, conectando fios, os cortando com o alicate e aumentando a tensão.
-
 <img width="801" height="450" alt="Captura de tela 2026-09-10 183506" src="https://github.com/user-attachments/assets/9bbad422-e16c-4ab2-9b03-a0a08ccf90da" />
 
 ## VIGILÂNCIA
@@ -164,6 +162,11 @@ O edifício do jogo será composto por seis andares: datacenter, sala de ferrame
 
 <img width="907" height="538" alt="Captura de tela 2026-09-10 183015" src="https://github.com/user-attachments/assets/1b93f956-c5ef-4261-bdcc-ffbcb241fb99" />
 
-## MANIPULAÇÃO DE CÓDIGO REFED
+## MANIPULAÇÃO DO NÍVEL DE ACESSO DO CARTÃO
 
 <img width="965" height="540" alt="Captura de tela 2026-09-10 184143" src="https://github.com/user-attachments/assets/56955b56-081a-43c0-8680-b195238bda0a" />
+
+## ACESSO AS CONFIGURAÇÕES
+
+<img width="804" height="450" alt="image" src="https://github.com/user-attachments/assets/df775958-21cb-47cc-b0f7-6ae1dc98fc5f" />
+
