@@ -1,6 +1,9 @@
 class_name QuestMissionUI
 extends CanvasLayer
 
+const BREAKER_URGENT_THOUGHT_ID := "data_center:breaker_restored_urgent"
+const BREAKER_RETURN_THOUGHT_ID := "data_center:breaker_return_plan"
+
 @onready var rows: Array[HBoxContainer] = [
 	$VBoxContainer/HBoxContainer2,
 	$VBoxContainer/HBoxContainer,
@@ -54,6 +57,7 @@ func _ready() -> void:
 	rows[11].hide()
 	rows[12].hide()
 	hide()
+	call_deferred("_connect_thought_balloon")
 	call_deferred("refresh_saved_state")
 
 
@@ -185,6 +189,69 @@ func show_go_to_sixth_floor_task(completed: bool = false, animate: bool = false)
 	set_panel_visible(true)
 
 
+func show_return_to_data_center_task(completed: bool = false, animate: bool = false) -> void:
+	_show_single_data_center_task(6, "VOLTE AO DATA CENTER", completed, animate)
+
+
+func start_breaker_followup() -> void:
+	var current_player := get_parent() as Player
+	if current_player == null:
+		return
+	_connect_thought_balloon()
+	var state: Dictionary = SaveGame.office_mission_state(current_player)
+	if bool(state.get("data_center_return_task_active", false)):
+		if not bool(state.get("data_center_return_task_completed", false)):
+			show_return_to_data_center_task(false)
+		return
+	state["data_center_return_task_pending"] = true
+	state["data_center_return_task_completed"] = false
+	SaveGame.save_global_state("hall_quest_01", state)
+	_queue_breaker_followup_thoughts(current_player)
+
+
+func _connect_thought_balloon() -> void:
+	var current_player := get_parent() as Player
+	if current_player == null:
+		return
+	var balloon := current_player.get_node_or_null("BalaoDePensamento")
+	if balloon == null:
+		return
+	if not balloon.pensamento_finalizado.is_connected(_on_thought_finished):
+		balloon.pensamento_finalizado.connect(_on_thought_finished)
+
+
+func _queue_breaker_followup_thoughts(current_player: Player) -> void:
+	current_player.balao_de_pensamento.enfileirar(
+		BREAKER_URGENT_THOUGHT_ID,
+		"Temos que desligar essa IA urgentemente."
+	)
+	current_player.balao_de_pensamento.enfileirar(
+		BREAKER_RETURN_THOUGHT_ID,
+		"Vou voltar ao data center."
+	)
+
+
+func _on_thought_finished(thought_id: String) -> void:
+	if thought_id == BREAKER_RETURN_THOUGHT_ID:
+		_activate_return_to_data_center_task()
+
+
+func _activate_return_to_data_center_task() -> void:
+	var current_player := get_parent() as Player
+	if current_player == null:
+		return
+	var state: Dictionary = SaveGame.office_mission_state(current_player)
+	if not bool(state.get("data_center_return_task_pending", false)):
+		return
+	state["data_center_return_task_pending"] = false
+	state["data_center_return_task_active"] = true
+	state["data_center_return_task_completed"] = false
+	SaveGame.save_global_state("hall_quest_01", state)
+	show_return_to_data_center_task(false)
+	if current_player.checkpoint_enabled:
+		SaveGame.create_checkpoint(current_player)
+
+
 func show_data_center_card_task(completed: bool = false, animate: bool = false) -> void:
 	_show_single_data_center_task(7, "ENTREGUE O CARTÃO AO CIENTISTA", completed, animate)
 
@@ -271,6 +338,9 @@ func refresh_saved_state() -> void:
 	var data_center_task_pending := bool(state.get("office_data_center_task_pending", false))
 	var data_center_task_active := bool(state.get("office_data_center_task_active", false))
 	var data_center_task_completed := bool(state.get("office_data_center_task_completed", false))
+	var return_task_pending := bool(state.get("data_center_return_task_pending", false))
+	var return_task_active := bool(state.get("data_center_return_task_active", false))
+	var return_task_completed := bool(state.get("data_center_return_task_completed", false))
 	var tools_floor_task_active := bool(state.get("data_center_tools_floor_task_active", false))
 	var tools_floor_task_completed := bool(state.get("data_center_tools_floor_task_completed", false))
 	var breaker_completed := bool(state.get("data_center_breaker_restored", false))
@@ -286,7 +356,15 @@ func refresh_saved_state() -> void:
 	var hack_ready := bool(state.get("office_hack_boss_room_ready", false)) or (
 		laptop_collected and cable_collected
 	)
-	if rfid_wires_task_active or rfid_wires_repaired:
+	if return_task_pending and current_player != null:
+		_connect_thought_balloon()
+		_queue_breaker_followup_thoughts(current_player)
+		if current_player.balao_de_pensamento.foi_concluido(BREAKER_RETURN_THOUGHT_ID):
+			_activate_return_to_data_center_task()
+			return
+	if return_task_active and not return_task_completed:
+		show_return_to_data_center_task(false)
+	elif rfid_wires_task_active or rfid_wires_repaired:
 		show_rfid_repair_tasks(rfid_wires_repaired, rfid_reading_checked)
 	elif rfid_inspection_task_active or old_decryption_task_active:
 		show_rfid_reader_task(false)

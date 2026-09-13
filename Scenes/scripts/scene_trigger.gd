@@ -190,6 +190,18 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 	if andar != 6:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(body_p)
+	if (
+		bool(state.get("data_center_return_task_active", false))
+		and not bool(state.get("data_center_return_task_completed", false))
+	):
+		state["data_center_return_task_completed"] = true
+		state["data_center_return_task_active"] = false
+		state["data_center_return_task_pending"] = false
+		SaveGame.save_global_state("hall_quest_01", state)
+		var return_quest_ui := _obter_painel_tarefas()
+		if return_quest_ui != null:
+			return_quest_ui.show_return_to_data_center_task(true, true)
+		return
 	if not bool(state.get("office_data_center_task_active", false)):
 		return
 	if bool(state.get("office_data_center_task_completed", false)):

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://baskrtgylrg1b"]
+[gd_scene load_steps=24 format=3 uid="uid://baskrtgylrg1b"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y5mn0"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_em2r1"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="18_npc_path"]
 [ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="19_strong_card"]
 [ext_resource type="PackedScene" uid="uid://beo4uworw31ct" path="res://Objects/cartao_chefe.tscn" id="20_boss_card"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="21_rfid_font"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -27,6 +28,29 @@ size = Vector2(23, 21.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1mid"]
 size = Vector2(23, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfid_panel"]
+bg_color = Color(0.025, 0.035, 0.045, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.72, 0.86, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfid_background"]
+bg_color = Color(0.06, 0.09, 0.11, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.28, 0.32, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfid_fill"]
+bg_color = Color(0.12, 0.78, 0.94, 1)
 
 [node name="ANDAR_DATA_CENTER" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y5mn0")
@@ -240,6 +264,40 @@ is_not_object = true
 z_index = 2
 position = Vector2(0.5, -7.75)
 shape = SubResource("RectangleShape2D_o1mid")
+
+[node name="RFIDVerification" type="Panel" parent="SceneTrigger2"]
+visible = false
+z_index = 100
+offset_left = -204.0
+offset_top = -147.0
+offset_right = -111.0
+offset_bottom = -121.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rfid_panel")
+
+[node name="Label" type="Label" parent="SceneTrigger2/RFIDVerification"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 89.0
+offset_bottom = 14.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.82, 0.96, 1, 1)
+theme_override_fonts/font = ExtResource("21_rfid_font")
+theme_override_font_sizes/font_size = 8
+text = "VERIFICANDO... 0%"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="SceneTrigger2/RFIDVerification"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 15.0
+offset_right = 88.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_rfid_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_rfid_fill")
+show_percentage = false
 
 [node name="EntranceMarkers" type="Node2D" parent="." unique_id=1615271080]
 position = Vector2(38, -84)

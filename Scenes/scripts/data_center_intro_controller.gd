@@ -16,6 +16,8 @@ const POWER_FLICKER_COUNT: int = 3
 const POWER_FLICKER_OFF_TIME: float = 0.12
 const POWER_FLICKER_ON_TIME: float = 0.10
 
+@export_range(0.1, 10.0, 0.1) var rfid_verification_duration: float = 3.0
+
 var player: Player
 var recipient: Node2D
 var access_trigger: SceneTrigger
@@ -23,15 +25,24 @@ var access_path: NPCPath
 var access_destination: Marker2D
 var strong_story_card: Node2D
 var boss_story_card: Node2D
+var rfid_verification_ui: Control
+var rfid_verification_bar: ProgressBar
+var rfid_verification_label: Label
 var regular_lights: Array[PointLight2D] = []
 var regular_light_visibility: Dictionary = {}
 var normal_canvas_color: Color = Color.WHITE
 var power_sequence_running: bool = false
 var access_sequence_busy: bool = false
+var rfid_verification_running: bool = false
+var rfid_player_physics_was_enabled: bool = true
 
 
 func _ready() -> void:
 	call_deferred("_initialize")
+
+
+func _exit_tree() -> void:
+	_restore_player_after_rfid_verification()
 
 
 func _initialize() -> void:
@@ -46,6 +57,11 @@ func _initialize() -> void:
 	access_destination = get_node_or_null("../NPCs/AcessoForteNPCDestino") as Marker2D
 	strong_story_card = get_node_or_null("../NPCs/NPC1/CartaoForteDaHistoria") as Node2D
 	boss_story_card = get_node_or_null("../NPCs/NPC1/CartaoChefeDaHistoria") as Node2D
+	rfid_verification_ui = get_node_or_null("../SceneTrigger2/RFIDVerification") as Control
+	if rfid_verification_ui != null:
+		rfid_verification_bar = rfid_verification_ui.get_node_or_null("ProgressBar") as ProgressBar
+		rfid_verification_label = rfid_verification_ui.get_node_or_null("Label") as Label
+		_hide_rfid_verification()
 	if recipient == null:
 		push_error("DataCenterIntroController precisa de NPCs/NPC1.")
 		return
@@ -490,23 +506,31 @@ func _reject_boss_card() -> void:
 
 func _inspect_rfid_reader() -> void:
 	access_sequence_busy = true
+	_set_access_interactable(false)
+	if not await _run_rfid_verification():
+		_set_access_interactable(true)
+		access_sequence_busy = false
+		return
 	await player.balao_de_pensamento.mostrar_texto(
 		"O leitor ainda tem energia...",
 		"data_center:rfid_reader_has_power"
 	)
 	if not _is_current_scene():
+		access_sequence_busy = false
 		return
 	await player.balao_de_pensamento.mostrar_texto(
 		"Achei o problema. Os cabos estão queimados.",
 		"data_center:rfid_burned_wires"
 	)
 	if not _is_current_scene():
+		access_sequence_busy = false
 		return
 	await player.balao_de_pensamento.mostrar_texto(
 		"Preciso reconectá-los antes de testar os cartões de novo.",
 		"data_center:rfid_reconnect_plan"
 	)
 	if not _is_current_scene():
+		access_sequence_busy = false
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	state["data_center_rfid_inspection_task_active"] = false
@@ -514,9 +538,67 @@ func _inspect_rfid_reader() -> void:
 	state["data_center_rfid_reading_task_active"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_access_prompt("Consertar os fios")
+	_set_access_interactable(true)
 	_show_rfid_repair_tasks(false)
 	_save_checkpoint()
 	access_sequence_busy = false
+
+
+func _run_rfid_verification() -> bool:
+	if rfid_verification_ui == null or rfid_verification_bar == null or rfid_verification_label == null:
+		push_error("A barra RFID precisa existir em SceneTrigger2/RFIDVerification.")
+		return true
+	rfid_player_physics_was_enabled = player.is_physics_processing()
+	rfid_verification_running = true
+	player.direction = Vector2.ZERO
+	player.velocity = Vector2.ZERO
+	player.correndo = false
+	player.state = "idle"
+	player.UpdateAnimation()
+	player.sfx_walking.stop()
+	player.set_physics_process(false)
+	_set_rfid_verification_progress(0.0)
+	rfid_verification_ui.show()
+	var progress_tween := create_tween()
+	progress_tween.tween_method(
+		_set_rfid_verification_progress,
+		0.0,
+		100.0,
+		rfid_verification_duration
+	).set_trans(Tween.TRANS_LINEAR)
+	await progress_tween.finished
+	_hide_rfid_verification()
+	_restore_player_after_rfid_verification()
+	return _is_current_scene()
+
+
+func _set_rfid_verification_progress(value: float) -> void:
+	if rfid_verification_bar != null:
+		rfid_verification_bar.value = value
+	if rfid_verification_label != null:
+		rfid_verification_label.text = "VERIFICANDO... %d%%" % roundi(value)
+
+
+func _hide_rfid_verification() -> void:
+	if rfid_verification_ui != null:
+		rfid_verification_ui.hide()
+	_set_rfid_verification_progress(0.0)
+
+
+func _restore_player_after_rfid_verification() -> void:
+	if not rfid_verification_running:
+		return
+	rfid_verification_running = false
+	if is_instance_valid(player):
+		player.set_physics_process(rfid_player_physics_was_enabled)
+
+
+func _set_access_interactable(enabled: bool) -> void:
+	if access_trigger == null:
+		return
+	var interactable := access_trigger.get_node_or_null("Interectable")
+	if interactable != null:
+		interactable.set("is_interactable", enabled)
 
 
 func _start_wire_repair_minigame() -> void:

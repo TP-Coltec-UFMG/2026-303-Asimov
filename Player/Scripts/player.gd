@@ -57,6 +57,11 @@ var andando: bool = false
 var cansaco: float = 0.0
 
 const vida_total: float = 300.0
+const ATRASO_REGENERACAO_VIDA: float = 20.0
+const REGENERACAO_VIDA_POR_SEGUNDO: float = 0.5
+
+var tempo_sem_tomar_dano: float = 0.0
+var progresso_regeneracao_vida: float = 0.0
 
 const VELOCIDADE_NORMAL: float = 40.0
 const VELOCIDADE_CORRIDA: float = 80.0
@@ -180,6 +185,8 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 	correndo = false
 	andando = false
 	andando_de_costas = false
+	tempo_sem_tomar_dano = 0.0
+	progresso_regeneracao_vida = 0.0
 
 	move_speed = VELOCIDADE_NORMAL
 
@@ -202,6 +209,7 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 	UpdateOccluderLight()
 
 func _physics_process(delta: float) -> void:
+	_atualizar_regeneracao_vida(delta)
 	if DialogManager.is_showing_dialog:
 		direction = Vector2.ZERO
 		velocity = Vector2.ZERO
@@ -609,6 +617,10 @@ func get_conhecimento() -> float:
 	return inteligencia.value
 
 func tomar_dano(dano: float) -> void:
+	if dano <= 0.0:
+		return
+	tempo_sem_tomar_dano = 0.0
+	progresso_regeneracao_vida = 0.0
 	if vida_3.value + dano <= 100:
 		vida_3.value += dano
 		atualizar_estamina_apos_dano()
@@ -636,6 +648,35 @@ func tela_morreu() -> void:
 
 func get_vida() -> float:
 	return 300.0 - (vida_1.value + vida_2.value + vida_3.value)
+
+
+func _atualizar_regeneracao_vida(delta: float) -> void:
+	if get_vida() >= vida_total:
+		tempo_sem_tomar_dano = 0.0
+		progresso_regeneracao_vida = 0.0
+		return
+	if morreu.visible:
+		return
+	tempo_sem_tomar_dano += delta
+	if tempo_sem_tomar_dano < ATRASO_REGENERACAO_VIDA:
+		return
+	progresso_regeneracao_vida += REGENERACAO_VIDA_POR_SEGUNDO * delta
+	var quantidade_inteira := floorf(progresso_regeneracao_vida)
+	if quantidade_inteira < 1.0:
+		return
+	_regenerar_vida(quantidade_inteira)
+	progresso_regeneracao_vida -= quantidade_inteira
+
+
+func _regenerar_vida(quantidade: float) -> void:
+	var restante := maxf(quantidade, 0.0)
+	var barras: Array[TextureProgressBar] = [vida_1, vida_2, vida_3]
+	for barra in barras:
+		if restante <= 0.0:
+			break
+		var recuperado := minf(barra.value, restante)
+		barra.value -= recuperado
+		restante -= recuperado
 
 func atualizar_estamina_apos_dano() -> void:
 	cansaco = 1.0 - get_vida() / vida_total

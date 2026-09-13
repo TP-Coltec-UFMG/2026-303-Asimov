@@ -112,4 +112,5 @@ func _registrar_energia_restaurada() -> void:
 			bool(state.get("data_center_tools_floor_task_completed", false)),
 			true
 		)
+		quest_ui.start_breaker_followup()
 	SaveGame.create_checkpoint(player)
