@@ -19,12 +19,22 @@ func _ready() -> void:
 	_interaction = _trigger.get_node_or_null("Interectable") as Area2D
 	_collision = _trigger.get_node_or_null("Interectable/CollisionShape2D") as CollisionShape2D
 	FiltroDaltonismo.modo_alterado.connect(_on_mode_changed)
-	_on_mode_changed(FiltroDaltonismo.modo)
+	HighContrast.enabled_changed.connect(_on_high_contrast_changed)
+	_refresh_enabled_state()
 
 
 func _on_mode_changed(mode: int) -> void:
-	set_process(mode != 0)
-	if mode == 0:
+	_refresh_enabled_state(mode)
+
+
+func _on_high_contrast_changed(_enabled: bool) -> void:
+	_refresh_enabled_state()
+
+
+func _refresh_enabled_state(mode: int = FiltroDaltonismo.modo) -> void:
+	var enabled := mode != 0 or HighContrast.enabled
+	set_process(enabled)
+	if not enabled:
 		hide()
 	else:
 		_process(0.0)

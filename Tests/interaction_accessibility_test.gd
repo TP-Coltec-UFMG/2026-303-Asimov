@@ -25,6 +25,12 @@ func _run() -> void:
 	trigger.dentro_da_area = true
 	await _frames()
 	_expect(not cue.visible, "Modo desativado não deve mostrar o contorno.")
+	HighContrast.set_enabled(true)
+	await _frames()
+	_expect(cue.is_visible_in_tree(), "Alto contraste deve mostrar o contorno da interação sem filtro cromático.")
+	HighContrast.set_enabled(false)
+	await _frames()
+	_expect(not cue.visible, "Desativar alto contraste deve esconder o contorno da interação.")
 	FiltroDaltonismo.aplicar_filtro(1)
 	await _frames()
 	_expect(cue.is_visible_in_tree(), "O acesso próximo e ativo deve ter os quatro cantos.")

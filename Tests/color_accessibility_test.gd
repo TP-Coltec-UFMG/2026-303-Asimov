@@ -86,6 +86,17 @@ func _run() -> void:
 	_expect(_find_cues(npc.get_node("InteractionPrompt")).is_empty(), "O texto de interação não deve receber contorno.")
 	_expect(_find_cues(item.get_node("PointLight2D2")).is_empty(), "A iluminação do objeto não deve receber contorno.")
 
+	FiltroDaltonismo.aplicar_filtro(0)
+	HighContrast.set_enabled(true)
+	await _frames()
+	for cue: CanvasItem in cues:
+		_expect(cue.is_visible_in_tree(), "Alto contraste deve ativar o contorno seletivo sem filtro cromático.")
+	_expect(not mapa.visible, "Alto contraste não deve ativar o filtro cromático do mapa.")
+	HighContrast.set_enabled(false)
+	await _frames()
+	for cue: CanvasItem in cues:
+		_expect(not cue.is_visible_in_tree(), "Desativar alto contraste deve remover o contorno quando o filtro está desligado.")
+
 	for fixture: Node in fixtures:
 		_snapshot_visuals(fixture)
 	var node_count: int = _fixture_node_count()

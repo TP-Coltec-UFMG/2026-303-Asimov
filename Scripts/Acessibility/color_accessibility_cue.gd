@@ -33,15 +33,25 @@ func _ready() -> void:
 	_cue_material.shader = CUE_SHADER
 	material = _cue_material
 	FiltroDaltonismo.modo_alterado.connect(_on_mode_changed)
-	_on_mode_changed(FiltroDaltonismo.modo)
+	HighContrast.enabled_changed.connect(_on_high_contrast_changed)
+	_refresh_enabled_state()
 
 
 func _on_mode_changed(mode: int) -> void:
+	_refresh_enabled_state(mode)
+
+
+func _on_high_contrast_changed(_enabled: bool) -> void:
+	_refresh_enabled_state()
+
+
+func _refresh_enabled_state(mode: int = FiltroDaltonismo.modo) -> void:
+	var enabled := mode != 0 or HighContrast.enabled
 	material = _cue_material
-	_cue_material.set_shader_parameter("modo", mode)
-	set_process(mode != 0)
-	visible = mode != 0
-	if mode != 0:
+	_cue_material.set_shader_parameter("modo", mode if mode != 0 else int(enabled))
+	set_process(enabled)
+	visible = enabled
+	if enabled:
 		_process(0.0)
 
 

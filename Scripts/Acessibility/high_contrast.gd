@@ -1,5 +1,7 @@
 extends Node
 
+signal enabled_changed(value: bool)
+
 const DEFAULT_ACCENT_COLOR: Color = Color.YELLOW
 const BLACK: Color = Color.BLACK
 const WHITE: Color = Color.WHITE
@@ -29,7 +31,10 @@ func get_accent_color() -> Color:
 
 
 func set_enabled(value: bool) -> void:
+	var changed := enabled != value
 	enabled = value
+	if changed:
+		enabled_changed.emit(enabled)
 
 	call_deferred("_apply_current_scene")
 
