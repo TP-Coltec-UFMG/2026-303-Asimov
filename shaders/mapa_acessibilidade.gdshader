@@ -5,8 +5,9 @@ shader_type canvas_item;
 // de matiz e luminosidade para os eixos que podem se confundir.
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
 uniform int modo = 0;
-uniform float intensidade : hint_range(0.0, 1.0) = 0.85;
-uniform float pista_luminancia : hint_range(0.0, 0.20) = 0.10;
+// A assistência é discreta por padrão para preservar a paleta original.
+uniform float intensidade : hint_range(0.0, 1.0) = 0.60;
+uniform float pista_luminancia : hint_range(0.0, 0.20) = 0.07;
 
 
 float luminancia(vec3 cor) {
@@ -22,8 +23,12 @@ float croma(vec3 cor) {
 
 
 float sinal_oponente(float diferenca, float croma_value) {
-	float peso = smoothstep(0.04, 0.30, croma_value);
-	return clamp(diferenca * 2.0, -1.0, 1.0) * peso;
+	float peso_croma = smoothstep(0.08, 0.30, croma_value);
+	// Cores no meio do eixo de confusão recebem a maior pista.
+	// Tons muito afastados ainda recebem um reforço pequeno, sem trocar a paleta.
+	float proximidade_eixo = 1.0 - smoothstep(0.10, 0.38, abs(diferenca));
+	float peso_seletivo = mix(0.30, 1.0, proximidade_eixo);
+	return clamp(diferenca * 2.0, -1.0, 1.0) * peso_croma * peso_seletivo;
 }
 
 
@@ -41,7 +46,8 @@ vec3 cor_assistida(vec3 original) {
 	}
 
 	float croma_value = croma(original);
-	if (croma_value < 0.035) {
+	// Cinzas, sombras, pisos e marrons pouco cromáticos permanecem intactos.
+	if (croma_value < 0.08) {
 		return original;
 	}
 
@@ -52,9 +58,9 @@ vec3 cor_assistida(vec3 original) {
 		float lado_verde = max(-rg, 0.0);
 
 		// Vermelhos ganham uma pista quente/amarelada.
-		alterada += lado_vermelho * vec3(0.04, 0.20, -0.12);
+		alterada += lado_vermelho * vec3(0.028, 0.14, -0.084);
 		// Verdes ganham uma pista fria/ciano-azulada.
-		alterada += lado_verde * vec3(-0.10, -0.05, 0.26);
+		alterada += lado_verde * vec3(-0.07, -0.035, 0.182);
 		alterada = preservar_luminancia(original, alterada);
 
 		float forca_luma = modo == 1 ? pista_luminancia : pista_luminancia * 0.55;
@@ -65,9 +71,9 @@ vec3 cor_assistida(vec3 original) {
 		float lado_azul_roxo = max(-gb, 0.0);
 
 		// Verde/amarelo recebe uma pista ciano.
-		alterada += lado_verde_amarelo * vec3(-0.16, 0.03, 0.22);
+		alterada += lado_verde_amarelo * vec3(-0.112, 0.021, 0.154);
 		// Azul/roxo/rosa recebe uma pista quente/vermelha.
-		alterada += lado_azul_roxo * vec3(0.22, -0.08, -0.04);
+		alterada += lado_azul_roxo * vec3(0.154, -0.056, -0.028);
 		alterada = preservar_luminancia(original, alterada);
 		alterada += vec3((lado_verde_amarelo - lado_azul_roxo) * pista_luminancia);
 	}

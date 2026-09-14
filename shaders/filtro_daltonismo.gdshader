@@ -30,8 +30,10 @@ float chroma(vec3 color) {
 }
 
 float opponent_signal(float difference, float chroma_value) {
-	float weight = smoothstep(0.04, 0.30, chroma_value);
-	return clamp(difference * 2.0, -1.0, 1.0) * weight;
+	float chroma_weight = smoothstep(0.08, 0.30, chroma_value);
+	float axis_proximity = 1.0 - smoothstep(0.10, 0.38, abs(difference));
+	float selective_weight = mix(0.30, 1.0, axis_proximity);
+	return clamp(difference * 2.0, -1.0, 1.0) * chroma_weight * selective_weight;
 }
 
 vec3 preserve_luminance(vec3 original, vec3 altered) {
@@ -42,7 +44,7 @@ vec3 preserve_luminance(vec3 original, vec3 altered) {
 vec3 assist_color(vec3 original) {
 	// A assistência cria uma segunda pista de matiz/luminosidade; não simula visão.
 	float chroma_value = chroma(original);
-	if (chroma_value < 0.035 || modo == 0) {
+	if (chroma_value < 0.08 || modo == 0) {
 		return original;
 	}
 
@@ -53,21 +55,21 @@ vec3 assist_color(vec3 original) {
 		float green_side = max(-rg, 0.0);
 
 		// Vermelhos recebem uma pista quente; verdes, uma pista fria.
-		altered += red_side * vec3(0.04, 0.20, -0.12);
-		altered += green_side * vec3(-0.10, -0.05, 0.26);
+		altered += red_side * vec3(0.028, 0.14, -0.084);
+		altered += green_side * vec3(-0.07, -0.035, 0.182);
 		altered = preserve_luminance(original, altered);
 
-		float luminance_hint = modo == 1 ? 0.10 : 0.055;
+		float luminance_hint = modo == 1 ? 0.07 : 0.039;
 		altered += vec3((red_side - green_side) * luminance_hint);
 	} else if (modo == 3) {
 		float gb = opponent_signal(original.g - original.b, chroma_value);
 		float green_yellow_side = max(gb, 0.0);
 		float blue_purple_side = max(-gb, 0.0);
 
-		altered += green_yellow_side * vec3(-0.16, 0.03, 0.22);
-		altered += blue_purple_side * vec3(0.22, -0.08, -0.04);
+		altered += green_yellow_side * vec3(-0.112, 0.021, 0.154);
+		altered += blue_purple_side * vec3(0.154, -0.056, -0.028);
 		altered = preserve_luminance(original, altered);
-		altered += vec3((green_yellow_side - blue_purple_side) * 0.10);
+		altered += vec3((green_yellow_side - blue_purple_side) * 0.07);
 	}
 
 	return clamp(altered, 0.0, 1.0);

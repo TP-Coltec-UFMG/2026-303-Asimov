@@ -10,3 +10,5 @@ res://Scripts/Data/save/SaveLoad.gd
 res://Scripts/Objects/OptionButton/option_daltonismo_button.gd
 res://Scripts/UI/menu_input_router.gd
 res://Tests/color_accessibility_test.gd
+res://shaders/mapa_acessibilidade.gdshader
+res://Scenes/andar_hall.tscn
