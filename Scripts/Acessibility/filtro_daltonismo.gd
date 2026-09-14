@@ -1,22 +1,15 @@
 extends CanvasLayer
 
-@onready var tela_filtro: ColorRect = $TelaFiltro
+signal modo_alterado(modo: int)
+
+# Perfis de assistência. A cena global só distribui a preferência.
+# Nenhum perfil simula a visão de uma pessoa daltônica.
+var modo: int = 0
 
 
-func aplicar_filtro(
-	modo: int,
-	intensidade: float = 0.85,
-	severidade: float = 1.0,
-	contraste_extra: float = 0.08,
-	saturacao_extra: float = 0.08,
-	realce_bordas: float = 0.06,
-	forca_compensacao: float = 1.0
-) -> void:
-
-	tela_filtro.material.set_shader_parameter("modo", modo)
-	tela_filtro.material.set_shader_parameter("intensidade", intensidade)
-	tela_filtro.material.set_shader_parameter("severidade", severidade)
-	tela_filtro.material.set_shader_parameter("contraste_extra", contraste_extra)
-	tela_filtro.material.set_shader_parameter("saturacao_extra", saturacao_extra)
-	tela_filtro.material.set_shader_parameter("realce_bordas", realce_bordas)
-	tela_filtro.material.set_shader_parameter("forca_compensacao", forca_compensacao)
+func aplicar_filtro(novo_modo: int) -> void:
+	var selecionado := clampi(novo_modo, 0, 3)
+	if modo == selecionado:
+		return
+	modo = selecionado
+	modo_alterado.emit(modo)

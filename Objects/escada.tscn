@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="1_n2o1b"]
 [ext_resource type="Texture2D" uid="uid://drochw5o60lgy" path="res://Sprites/objects/escada_0.png" id="2_43cab"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="3_uhgo8"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5s0fj"]
 size = Vector2(17, 24)
@@ -19,6 +20,9 @@ script = ExtResource("1_n2o1b")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1463579393]
 rotation = 6.890877e-05
 texture = ExtResource("2_43cab")
+
+[node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1174819247]
 position = Vector2(-7.5, -4)

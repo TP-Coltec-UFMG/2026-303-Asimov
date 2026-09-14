@@ -35,15 +35,10 @@
 [ext_resource type="Texture2D" uid="uid://dmvuowvhffkq4" path="res://Sprites/ui/Icons/acessibilidade  (1).png" id="34_4wn06"]
 [ext_resource type="Script" uid="uid://dnofvqmf0ukq5" path="res://Scripts/Acessibility/Controle_daltonismo.gd" id="35_jcmch"]
 [ext_resource type="Script" uid="uid://ds3e58qhmtuxo" path="res://Scripts/Objects/OptionButton/option_daltonismo_button.gd" id="36_dmo6h"]
-[ext_resource type="Texture2D" uid="uid://d3d1hkeb2lfca" path="res://Sprites/ui/Nodes/sprite_6.png" id="37_8kk1q"]
-[ext_resource type="StyleBox" uid="uid://cfg3yi6v77uwd" path="res://Material/style_slider_black.tres" id="38_1xyw0"]
-[ext_resource type="StyleBox" uid="uid://dq3sdfmn5ky3w" path="res://Material/style_slider_white.tres" id="39_qifx7"]
-[ext_resource type="Script" uid="uid://icm7gtd4sph1" path="res://Scripts/Acessibility/intensidade.gd" id="40_rowlc"]
 [ext_resource type="Script" uid="uid://d2lhurtsmqmha" path="res://Scripts/Acessibility/legendas.gd" id="41_8ivwb"]
 [ext_resource type="Texture2D" uid="uid://6t8db2xg7cui" path="res://Sprites/ui/Labels/New Piskel(12).png" id="42_4cnwg"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="43_52422"]
 [ext_resource type="Texture2D" uid="uid://bobj1rej422b6" path="res://Sprites/ui/Icons/fala.png" id="44_hpw7c"]
-[ext_resource type="Script" uid="uid://foqfa63m5okv" path="res://Scripts/Acessibility/spin_box.gd" id="45_jykmq"]
 [ext_resource type="Script" uid="uid://cjjk3fkuntc6w" path="res://Scripts/Acessibility/leitor_de_tela.gd" id="46_mvqmk"]
 [ext_resource type="Script" uid="uid://byfqs6ik086m6" path="res://Scripts/Acessibility/cor_alto_contraste.gd" id="47_contrast_color"]
 [ext_resource type="Script" uid="uid://chxf33bnldydm" path="res://Scripts/Acessibility/alto_contraste.gd" id="47_muefp"]
@@ -971,6 +966,7 @@ script = ExtResource("35_jcmch")
 
 [node name="OptionDaltonismoButton" type="OptionButton" parent="Accessibility/VContainer" unique_id=864497664 groups=["alto_contraste"]]
 layout_mode = 2
+tooltip_text = "Ajustes sutis de cor e contornos apenas em personagens, itens e objetos interativos, preservando a arte do jogo."
 theme_override_fonts/font = ExtResource("5_6kgnf")
 theme_override_font_sizes/font_size = 10
 selected = 0
@@ -1001,35 +997,7 @@ offset_right = 78.2871
 offset_bottom = 6.0
 theme_override_fonts/font = ExtResource("7_vjiof")
 theme_override_font_sizes/font_size = 12
-text = "Filtro de daltonismo"
-metadata/_edit_use_anchors_ = true
-
-[node name="IntensidadeDaltonismo" type="HSlider" parent="Accessibility/VContainer" unique_id=520313286 groups=["alto_contraste"]]
-layout_mode = 2
-theme_override_icons/grabber = ExtResource("37_8kk1q")
-theme_override_icons/grabber_highlight = ExtResource("37_8kk1q")
-theme_override_icons/grabber_disabled = ExtResource("37_8kk1q")
-theme_override_styles/slider = ExtResource("38_1xyw0")
-theme_override_styles/grabber_area = ExtResource("39_qifx7")
-theme_override_styles/grabber_area_highlight = ExtResource("39_qifx7")
-max_value = 1.0
-step = 0.01
-script = ExtResource("40_rowlc")
-
-[node name="Label" type="Label" parent="Accessibility/VContainer/IntensidadeDaltonismo" unique_id=635007615 groups=["alto_contraste"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.07522124
-anchor_top = 2.8611107
-anchor_right = -0.07522124
-anchor_bottom = 2.8611107
-offset_left = 17.0
-offset_top = -41.749996
-offset_right = 134.0
-offset_bottom = -18.749996
-theme_override_fonts/font = ExtResource("7_vjiof")
-theme_override_font_sizes/font_size = 12
-text = "Intensidade"
+text = "Auxílio de cores"
 metadata/_edit_use_anchors_ = true
 
 [node name="Legendas" type="CheckBox" parent="Accessibility/VContainer" unique_id=1829192796 groups=["alto_contraste"]]
@@ -1103,18 +1071,6 @@ vertical_alignment = 1
 position = Vector2(-9, 12)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("44_hpw7c")
-
-[node name="SpinBox" type="SpinBox" parent="Accessibility/VContainer/Legendas" unique_id=1293543267]
-layout_mode = 0
-offset_left = 224.0
-offset_top = -34.0
-offset_right = 310.5
-offset_bottom = -3.0
-scale = Vector2(0.7, 0.7)
-max_value = 1.0
-step = 0.01
-alignment = 1
-script = ExtResource("45_jykmq")
 
 [node name="LeitorDeTela" type="CheckBox" parent="Accessibility/VContainer" unique_id=1355120424 groups=["alto_contraste"]]
 layout_mode = 2
@@ -1486,14 +1442,10 @@ script = ExtResource("51_h3d7w")
 [connection signal="pressed" from="Interface/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_interface_menu"]
 [connection signal="item_selected" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_item_selected"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_mouse_entered"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/IntensidadeDaltonismo" to="Accessibility/VContainer" method="_on_intensidade_mouse_entered"]
-[connection signal="value_changed" from="Accessibility/VContainer/IntensidadeDaltonismo" to="Accessibility/VContainer" method="_on_intensidade_value_changed"]
-[connection signal="value_changed" from="Accessibility/VContainer/IntensidadeDaltonismo" to="Accessibility/VContainer/Legendas/SpinBox" method="_on_intensidade_value_changed"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer" method="_on_legendas_mouse_entered"]
 [connection signal="toggled" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer/Legendas" method="_on_toggled"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/Legendas/Tamanho" to="Accessibility/VContainer" method="_on_tamanho_mouse_entered"]
 [connection signal="value_changed" from="Accessibility/VContainer/Legendas/Tamanho" to="Accessibility/VContainer/Legendas" method="_on_tamanho_value_changed"]
-[connection signal="value_changed" from="Accessibility/VContainer/Legendas/SpinBox" to="Accessibility/VContainer/IntensidadeDaltonismo" method="_on_spin_box_value_changed"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela" to="Accessibility/VContainer" method="_on_leitor_de_tela_mouse_entered"]
 [connection signal="toggled" from="Accessibility/VContainer/LeitorDeTela" to="Accessibility/VContainer/LeitorDeTela" method="_on_toggled"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela/Velocidade" to="Accessibility/VContainer/LeitorDeTela" method="_on_velocidade_mouse_entered"]

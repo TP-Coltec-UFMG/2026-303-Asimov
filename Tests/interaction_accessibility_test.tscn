@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://Tests/interaction_accessibility_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://Scenes/scene_trigger.tscn" id="2_trigger"]
+[ext_resource type="PackedScene" path="res://Interaction_components/interectable.tscn" id="3_interaction"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_access"]
+size = Vector2(23, 21.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_reader"]
+size = Vector2(23, 6)
+
+[node name="InteractionAccessibilityTest" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_test")
+
+[node name="Fixture" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="PainelElevador" type="Node2D" parent="Fixture"]
+
+[node name="UI" type="Node" parent="Fixture"]
+
+[node name="Controle_de_tempo" type="Control" parent="Fixture/UI"]
+
+[node name="SceneTrigger" parent="Fixture" instance=ExtResource("2_trigger")]
+connected_scene = "data_center_forte"
+access_override = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fixture/SceneTrigger"]
+position = Vector2(-157.5, -103.25)
+shape = SubResource("RectangleShape2D_access")
+
+[node name="Interectable" parent="Fixture/SceneTrigger" instance=ExtResource("3_interaction")]
+position = Vector2(-158, -103.25)
+interact_name = "Verificar leitura RFID"
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fixture/SceneTrigger/Interectable"]
+position = Vector2(0.5, -7.75)
+shape = SubResource("RectangleShape2D_reader")

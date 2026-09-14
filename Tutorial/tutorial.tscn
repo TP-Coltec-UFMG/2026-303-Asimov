@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="5_bold"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="5_itvf6"]
 [ext_resource type="PackedScene" uid="uid://mllbpd4v0u7f" path="res://Objects/extintor.tscn" id="7_n4ihd"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="RectangleShape2D" id="WallHorizontal"]
 size = Vector2(320, 8)
@@ -244,6 +245,9 @@ polygon = PackedVector2Array(-9, -17, 9, -17, 9, 5, -9, 5)
 [node name="Sprite2D" type="Sprite2D" parent="Props/TargetCrate" unique_id=1696367753]
 position = Vector2(0, -5)
 texture = ExtResource("4_itvf6")
+
+[node name="ColorAccessibilityCue" parent="Props/TargetCrate/Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Props/TargetCrate" unique_id=1463678028]
 position = Vector2(0, -5)

@@ -5,7 +5,7 @@ extends OptionButton
 
 
 func _ready() -> void:
-	selected = SaveLoad.save_data.filtro_de_daltonismo
+	selected = clampi(int(Configs.configs.get("filtro_de_daltonismo", 0)), 0, 3)
 	add_theme_font_override("font", pixel_font)
 	add_theme_font_size_override("font_size", pixel_font_size)
 

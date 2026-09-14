@@ -7,7 +7,6 @@ var configs: Dictionary = {
 	"volume_sfx": 0.0,
 	"tela_cheia" : false,
 	"filtro_de_daltonismo" : 0,
-	"intensidade_filtro_daltonismo" : 1.0,
 	"frame_rate" : 0,
 	"mostrar_fps" : false,
 	"legenda_ativa" : false,
@@ -48,10 +47,7 @@ func _change_tela_cheia(new_value : bool):
 	configs.tela_cheia = new_value
 	
 func _change_filtro_de_daltonismo(new_value : int):
-	configs.filtro_de_daltonismo = new_value
-	
-func _change_intensidade_filtro_daltonismo(new_value : float):
-	configs.intensidade_filtro_daltonismo = new_value
+	configs.filtro_de_daltonismo = clampi(new_value, 0, 3)
 	
 func _change_frame_rate(new_value : int):
 	configs.frame_rate = new_value

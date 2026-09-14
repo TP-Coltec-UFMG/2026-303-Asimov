@@ -291,6 +291,9 @@ func _desativar_interacao_do_item(node: Node) -> void:
 
 
 func _make_unshaded(node: Node) -> void:
+	# O contorno tem shader próprio; substituir seu material quebra o auxílio.
+	if node.is_in_group(&"color_accessibility_cue"):
+		return
 	if node is CanvasItem:
 		var mat := CanvasItemMaterial.new()
 		mat.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED

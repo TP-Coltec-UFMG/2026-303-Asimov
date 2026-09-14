@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://uyr2tq70yrgo" path="res://Sprites/objects/sprite_cartao1.png" id="3_d1lhc"]
 [ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="4_ibs8g"]
 [ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="5_faxib"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
 radius = 26.476404
@@ -22,6 +23,9 @@ shape = SubResource("CircleShape2D_6hjy0")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1606010821]
 rotation = 6.890877e-05
 texture = ExtResource("3_d1lhc")
+
+[node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
 
 [node name="PointLight2D2" type="PointLight2D" parent="." unique_id=669776788]
 visible = false

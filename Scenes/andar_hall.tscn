@@ -37,6 +37,7 @@
 [ext_resource type="Texture2D" uid="uid://dtomiw3v4xpqi" path="res://NPC'S/NPC/boneco_4.png" id="24_xcn0o"]
 [ext_resource type="Texture2D" uid="uid://dpsrsm4at7pux" path="res://NPC'S/NPC/pessoa_5.png" id="26_4bo1l"]
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="26_nflo4"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4bo1l"]
 load_path = "res://.godot/imported/pedaco_1.png-219691cfb0d6eee3e96f77c1fa5091d6.ctex"
@@ -174,6 +175,9 @@ position = Vector2(-19, -93)
 rotation = 6.890877e-05
 texture = SubResource("CompressedTexture2D_4bo1l")
 
+[node name="ColorAccessibilityCue" parent="Coletaveis/pedaco1/Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1" unique_id=1174819247]
 position = Vector2(-19, -91.5)
 shape = SubResource("RectangleShape2D_8q7s7")
@@ -196,6 +200,9 @@ save_id = "PEDACO_PAREDE_2"
 position = Vector2(-19, -93)
 rotation = -0.46569985
 texture = ExtResource("5_8q7s7")
+
+[node name="ColorAccessibilityCue" parent="Coletaveis/pedaco5/Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco5" unique_id=1165852911]
 position = Vector2(-18.574013, -92.142075)
@@ -221,6 +228,9 @@ position = Vector2(-19, -93)
 rotation = 0.30381602
 texture = ExtResource("8_vkln7")
 
+[node name="ColorAccessibilityCue" parent="Coletaveis/pedaco2/Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco2" unique_id=814235645]
 position = Vector2(-19.299347, -93.09951)
 rotation = 0.32093495
@@ -245,6 +255,9 @@ position = Vector2(-19, -93)
 rotation = -0.5141846
 texture = ExtResource("8_vkln7")
 
+[node name="ColorAccessibilityCue" parent="Coletaveis/pedaco4/Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco4" unique_id=295865186]
 position = Vector2(-20.130405, -93.21954)
 rotation = -0.53599274
@@ -268,6 +281,9 @@ save_id = "PEDACO_PAREDE_5"
 position = Vector2(-19, -93)
 rotation = 0.30381602
 texture = ExtResource("7_nflo4")
+
+[node name="ColorAccessibilityCue" parent="Coletaveis/pedaco3/Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco3" unique_id=1080797742]
 position = Vector2(-19.689238, -92.90179)

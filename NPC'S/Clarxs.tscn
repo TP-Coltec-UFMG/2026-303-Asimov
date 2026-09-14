@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/NPC/06_purple_crimson.png" id="3_23wyb"]
 [ext_resource type="FontFile" uid="uid://e6o7s3fomjpp" path="res://Fonts/PixelifySans-SemiBold.ttf" id="4_0ouef"]
 [ext_resource type="PackedScene" path="res://NPC'S/BalaoDeFalaNPC.tscn" id="5_balloon"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23wyb"]
 atlas = ExtResource("2_aekyl")
@@ -320,6 +321,8 @@ script = ExtResource("1_aekyl")
 sprite_frames = SubResource("SpriteFrames_g4v7s")
 animation = &"run_up"
 autoplay = "idle_down"
+
+[node name="ColorAccessibilityCue" parent="AnimatedSprite2D" instance=ExtResource("99_color_accessibility")]
 
 [node name="InteractionPrompt" type="Label" parent="." unique_id=1789373355]
 visible = false

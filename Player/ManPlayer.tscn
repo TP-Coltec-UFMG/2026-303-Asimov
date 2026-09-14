@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://3wbie5tbpcl4" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
 [ext_resource type="Texture2D" uid="uid://i7vroasbawhn" path="res://Sprites/ui/New Piskel(28).png" id="3_cycue"]
+[ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="3_weg28"]
 [ext_resource type="Texture2D" uid="uid://cusbwah1rs2f8" path="res://Sprites/ui/sprite_1.png" id="4_cepnt"]
 [ext_resource type="PackedScene" uid="uid://dh0axsg4h77gg" path="res://Interaction_components/interactiong_component.tscn" id="4_gwnis"]
 [ext_resource type="Texture2D" uid="uid://dub04nmf680ok" path="res://Sprites/ui/sprite_0.png" id="5_ocnev"]
@@ -18,9 +19,17 @@
 [ext_resource type="Texture2D" uid="uid://k85qdse5p5ho" path="res://Sprites/Balao_de_pensamento.png" id="16_l2am8"]
 [ext_resource type="Script" uid="uid://dalss1e6fdi2m" path="res://Player/balao_de_pensamento.gd" id="17_0yomn"]
 [ext_resource type="PackedScene" uid="uid://c0gnsi802ues5" path="res://Player/quest_mission_ui.tscn" id="18_quest_ui"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i305y"]
 load_path = "res://.godot/imported/Alex_16x16.png-89462274f2a2226fed9efa0756e5c56d.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6p7p"]
+resource_local_to_scene = true
+shader = ExtResource("3_weg28")
+shader_parameter/modo = 0
+shader_parameter/frame_uv = Vector4(0, 0, 1, 1)
+shader_parameter/outline_uv = Vector2(0.01, 0.01)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4ntmi"]
 radius = 8.0
@@ -221,6 +230,9 @@ position = Vector2(0, -10)
 texture = SubResource("CompressedTexture2D_i305y")
 hframes = 24
 vframes = 7
+
+[node name="ColorAccessibilityCue" parent="Sprite2D" unique_id=61627136 instance=ExtResource("99_color_accessibility")]
+material = SubResource("ShaderMaterial_d6p7p")
 
 [node name="OccluderSide" type="LightOccluder2D" parent="Sprite2D" unique_id=2020043514]
 visible = false

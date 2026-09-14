@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="1_ijx5l"]
 [ext_resource type="Texture2D" uid="uid://7ckbd80e35xk" path="res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_22.png" id="2_fadmx"]
 [ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="4_e67j1"]
+[ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kmcc6"]
 radius = 17.0
@@ -52,6 +53,9 @@ position = Vector2(0, -4)
 rotation = 6.890877e-05
 sprite_frames = SubResource("SpriteFrames_g4v7s")
 frame = 2
+
+[node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
+interaction_path = NodePath("../../Interectable")
 
 [node name="PickupComponent" type="Node" parent="." unique_id=92231633 node_paths=PackedStringArray("interactable")]
 script = ExtResource("4_e67j1")

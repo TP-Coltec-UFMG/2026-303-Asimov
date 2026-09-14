@@ -32,7 +32,6 @@ var save_data: Dictionary = {
 	"volume_sfx": 0.0,
 	"tela_cheia" : false,
 	"filtro_de_daltonismo" : 0,
-	"intensidade_filtro_daltonismo" : 1.0,
 	"frame_rate" : 0,
 	"mostrar_fps" : false,
 	"legenda_ativa" : false,
@@ -99,6 +98,7 @@ func _load() -> void:
 
 
 func _apply_load() -> void:
+	save_data["filtro_de_daltonismo"] = clampi(int(save_data.get("filtro_de_daltonismo", 0)), 0, 3)
 	Configs.configs = save_data.duplicate(true)
 
 	TranslationServer.set_locale(save_data.traducao)
@@ -126,8 +126,7 @@ func _apply_load() -> void:
 	if is_instance_valid(FiltroDaltonismo):
 		FiltroDaltonismo.call_deferred(
 			"aplicar_filtro",
-			save_data.filtro_de_daltonismo,
-			save_data.intensidade_filtro_daltonismo
+			save_data.filtro_de_daltonismo
 		)
 
 	Engine.max_fps = save_data.frame_rate
