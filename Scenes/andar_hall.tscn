@@ -38,14 +38,12 @@
 [ext_resource type="Texture2D" uid="uid://dtomiw3v4xpqi" path="res://NPC'S/NPC/boneco_4.png" id="24_xcn0o"]
 [ext_resource type="Texture2D" uid="uid://dpsrsm4at7pux" path="res://NPC'S/NPC/pessoa_5.png" id="26_4bo1l"]
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="26_nflo4"]
-[ext_resource type="Texture2D" uid="uid://chf3ykhh4gbcv" path="res://20170126204431pkWuZFl7vQ.jpg" id="40_ohpjp"]
-[ext_resource type="Texture2D" uid="uid://drhfay8c2ftmk" path="res://como-as-pessoas-daltonicas-enxergam-6.jpg" id="41_ohpjp"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4bo1l"]
 load_path = "res://.godot/imported/pedaco_1.png-219691cfb0d6eee3e96f77c1fa5091d6.ctex"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xcn0o"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m7e8o"]
 resource_local_to_scene = true
 shader = ExtResource("5_pjvw7")
 shader_parameter/modo = 0
@@ -58,7 +56,7 @@ size = Vector2(14, 11)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m7e8o"]
 size = Vector2(18, 14)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hy4o0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pjvw7"]
 resource_local_to_scene = true
 shader = ExtResource("5_pjvw7")
 shader_parameter/modo = 0
@@ -69,9 +67,9 @@ shader_parameter/outline_uv = Vector2(0.01, 0.01)
 size = Vector2(14.301437, 10.858406)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nflo4"]
-size = Vector2(18, 14)
+size = Vector2(23, 22)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j45x0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ohpjp"]
 resource_local_to_scene = true
 shader = ExtResource("5_pjvw7")
 shader_parameter/modo = 0
@@ -81,7 +79,7 @@ shader_parameter/outline_uv = Vector2(0.01, 0.01)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrwqp"]
 size = Vector2(18.973661, 15.177895)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vtw81"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xcn0o"]
 resource_local_to_scene = true
 shader = ExtResource("5_pjvw7")
 shader_parameter/modo = 0
@@ -91,7 +89,7 @@ shader_parameter/outline_uv = Vector2(0.01, 0.01)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1wv8v"]
 size = Vector2(17.143616, 14.913395)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4s3sp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hy4o0"]
 resource_local_to_scene = true
 shader = ExtResource("5_pjvw7")
 shader_parameter/modo = 0
@@ -214,7 +212,7 @@ rotation = 6.890877e-05
 texture = SubResource("CompressedTexture2D_4bo1l")
 
 [node name="ColorAccessibilityCue" parent="Coletaveis/pedaco1/Sprite2D" unique_id=1343710322 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_xcn0o")
+material = SubResource("ShaderMaterial_m7e8o")
 interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco1" unique_id=1174819247]
@@ -241,7 +239,7 @@ rotation = -0.46569985
 texture = ExtResource("5_8q7s7")
 
 [node name="ColorAccessibilityCue" parent="Coletaveis/pedaco5/Sprite2D" unique_id=1882129412 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_hy4o0")
+material = SubResource("ShaderMaterial_pjvw7")
 interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco5" unique_id=1165852911]
@@ -269,7 +267,7 @@ rotation = 0.30381602
 texture = ExtResource("8_vkln7")
 
 [node name="ColorAccessibilityCue" parent="Coletaveis/pedaco2/Sprite2D" unique_id=1754043876 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_j45x0")
+material = SubResource("ShaderMaterial_ohpjp")
 interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco2" unique_id=814235645]
@@ -297,7 +295,7 @@ rotation = -0.5141846
 texture = ExtResource("8_vkln7")
 
 [node name="ColorAccessibilityCue" parent="Coletaveis/pedaco4/Sprite2D" unique_id=584608019 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_vtw81")
+material = SubResource("ShaderMaterial_xcn0o")
 interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco4" unique_id=295865186]
@@ -325,7 +323,7 @@ rotation = 0.30381602
 texture = ExtResource("7_nflo4")
 
 [node name="ColorAccessibilityCue" parent="Coletaveis/pedaco3/Sprite2D" unique_id=655035384 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_4s3sp")
+material = SubResource("ShaderMaterial_hy4o0")
 interaction_path = NodePath("../../Interectable")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco3" unique_id=1080797742]
@@ -340,7 +338,7 @@ interact_name = "Puxar/Empurrar"
 is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Coletaveis/pedaco3/Interectable" unique_id=1903912937]
-position = Vector2(0, -5)
+position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="Pedaco3" type="Sprite2D" parent="Coletaveis" unique_id=1325852619]
@@ -552,6 +550,7 @@ sprite_sheet = ExtResource("17_xahv0")
 run_speed = 45.0
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC2" unique_id=1367960120]
+visible = false
 position = Vector2(-2, 18)
 points = PackedVector2Array(1, -7, 3, 22, -2, 56, -13, 84, -25, 102, -43, 101, -60, 103, -93, 109, -110, 109, -134, 110, -157, 112, -173, 114)
 default_color = Color(1, 0, 1, 1)
@@ -865,18 +864,6 @@ texture = ExtResource("8_vkln7")
 position = Vector2(-77.000015, -46)
 rotation = -0.76281595
 texture = ExtResource("8_vkln7")
-
-[node name="20170126204431PkWuZFl7vQ" type="Sprite2D" parent="." unique_id=1093160816]
-z_index = 99
-position = Vector2(45, 8.000003)
-scale = Vector2(0.165, 0.165)
-texture = ExtResource("40_ohpjp")
-
-[node name="ComoAsPessoasDaltonicasEnxergam6" type="Sprite2D" parent="." unique_id=133762194]
-z_index = 99
-position = Vector2(-99, -13)
-scale = Vector2(0.135, 0.135)
-texture = ExtResource("41_ohpjp")
 
 [connection signal="fogo_apagou" from="Perigos/Fogo3" to="QuestController" method="_on_fogo_3_fogo_apagou"]
 [connection signal="fogo_apagou" from="Perigos/Fogo5" to="QuestController" method="_on_fogo_5_fogo_apagou"]

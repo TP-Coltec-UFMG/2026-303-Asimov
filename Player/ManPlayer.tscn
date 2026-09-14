@@ -24,7 +24,7 @@
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i305y"]
 load_path = "res://.godot/imported/Alex_16x16.png-89462274f2a2226fed9efa0756e5c56d.ctex"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6p7p"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_weg28"]
 resource_local_to_scene = true
 shader = ExtResource("3_weg28")
 shader_parameter/modo = 0
@@ -232,7 +232,7 @@ hframes = 24
 vframes = 7
 
 [node name="ColorAccessibilityCue" parent="Sprite2D" unique_id=61627136 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_d6p7p")
+material = SubResource("ShaderMaterial_weg28")
 
 [node name="OccluderSide" type="LightOccluder2D" parent="Sprite2D" unique_id=2020043514]
 visible = false

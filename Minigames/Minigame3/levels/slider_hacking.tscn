@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://c7ktjbkr16hui"]
+
+[ext_resource type="Script" uid="uid://chnkudlnq45rh" path="res://Minigames/Comum/fase.gd" id="1"]
+[ext_resource type="Script" uid="uid://3lnxsl64h0qt" path="res://Minigames/Comum/piso.gd" id="2"]
+[ext_resource type="Script" uid="uid://gx0y32hhvkec" path="res://Minigames/Comum/parede.gd" id="3"]
+[ext_resource type="Script" uid="uid://c836vu7ei1f81" path="res://Minigames/Comum/jogador.gd" id="4"]
+[ext_resource type="Script" uid="uid://b74gwgpse0ii8" path="res://Minigames/Comum/objetivo.gd" id="5"]
+
+[node name="Fase" type="Node2D" unique_id=128714203]
+position = Vector2(-16, -7)
+scale = Vector2(0.79, 0.79)
+script = ExtResource("1")
+jogo = 1
+nome_fase = "Primeiro impulso"
+dica = "Escolha uma direção com WASD ou as setas e pressione Espaço. O robô só para ao bater. Alcance a engrenagem; use Z para desfazer e R para reiniciar."
+
+[node name="Arena" type="Node2D" parent="." unique_id=1216247766]
+clip_children = 2
+position = Vector2(80, 52)
+script = ExtResource("2")
+
+[node name="Parede01" type="StaticBody2D" parent="Arena" unique_id=145419189]
+collision_mask = 0
+script = ExtResource("3")
+
+[node name="Forma" type="CollisionPolygon2D" parent="Arena/Parede01" unique_id=494817343]
+polygon = PackedVector2Array(-12, -12, -12, 284, 508, 284, 508, 244, 92, 244, 92, 212, 28, 212, 28, -12)
+
+[node name="Parede02" type="StaticBody2D" parent="Arena" unique_id=180238372]
+collision_mask = 0
+script = ExtResource("3")
+
+[node name="Forma" type="CollisionPolygon2D" parent="Arena/Parede02" unique_id=1191119032]
+polygon = PackedVector2Array(436, -12, 324, -12, 324, 28, 436, 28, 436, 92, 508, 92, 508, -28, 436, -28)
+
+[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=736261258]
+z_index = 3
+position = Vector2(372, 53)
+script = ExtResource("4")
+deslizar = true
+velocidade = 300.0
+raio = 18
+
+[node name="Objetivo" type="Area2D" parent="Arena" unique_id=251004476]
+z_index = 2
+position = Vector2(113, 117)
+script = ExtResource("5")
+engrenagem = true
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1070884177]
+z_index = -5
+offset_left = -34.177216
+offset_top = -30.379747
+offset_right = 692.405
+offset_bottom = 389.87338
+color = Color(0, 0.06718444, 0.15355486, 1)

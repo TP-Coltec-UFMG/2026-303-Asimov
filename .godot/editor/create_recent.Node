@@ -1,10 +1,13 @@
 ColorRect
+PointLight2D
+Sprite2D
+CollisionShape2D
+StaticBody2D
 AudioStreamPlayer2D
 Node
 SubViewportContainer
 SubViewport
 HBoxContainer
-PointLight2D
 Line2D
 MultiMeshInstance2D
 Label

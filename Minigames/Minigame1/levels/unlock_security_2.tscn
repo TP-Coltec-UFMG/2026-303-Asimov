@@ -101,10 +101,10 @@ desligado_por = 1.7
 alcance = 180
 abertura = 15
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=921275634]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1646047778]
 z_index = -5
-offset_left = -118.98734
-offset_top = -67.08861
-offset_right = 607.5949
-offset_bottom = 353.16455
-color = Color(1.0829419e-07, 0.27500194, 0.22001508, 1)
+offset_left = -108.860756
+offset_top = -74.68354
+offset_right = 617.7215
+offset_bottom = 345.5696
+color = Color(0, 0.06718444, 0.15355486, 1)

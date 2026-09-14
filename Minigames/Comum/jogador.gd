@@ -96,7 +96,6 @@ func detectar() -> void:
 
 func _draw() -> void:
 	var tamanho := 48.0 * raio / 18.0 if deslizar else 30.0
-	draw_rect(Rect2(Vector2(-raio, raio - 3), Vector2(raio * 2, 4)), Color(0.02, 0.04, 0.06, 0.4))
 	var frame := int(tempo * 5) % 4
 	draw_texture_rect(VisualAsimov.quadro(0, frame), Rect2(Vector2.ONE * -tamanho / 2.0, Vector2.ONE * tamanho), false, VisualAsimov.VERMELHO if falhou else Color.WHITE)
 	if deslizar and not movendo and direcao != Vector2.ZERO and habilitado:

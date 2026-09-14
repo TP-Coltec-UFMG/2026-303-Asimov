@@ -76,7 +76,7 @@ material = SubResource("CanvasItemMaterial_gnudj")
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_1yaxp")
-script = ExtResource("3_uj6eu")
+script = ExtResource("4_30xvo")
 input_action = &"use_cabo"
 
 [node name="Slot4" type="Panel" parent="GridContainer" unique_id=760119091]

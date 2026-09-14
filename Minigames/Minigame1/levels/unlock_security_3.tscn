@@ -114,8 +114,10 @@ defasagem = 0.6
 alcance = 130
 abertura = 15
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=141789660]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=556577425]
 z_index = -5
-offset_right = 726.5823
-offset_bottom = 420.25314
-color = Color(1.0829419e-07, 0.27500194, 0.22001508, 1)
+offset_left = -60.75949
+offset_top = -43.03797
+offset_right = 665.82275
+offset_bottom = 377.21518
+color = Color(0, 0.06718444, 0.15355486, 1)

@@ -10,8 +10,8 @@ var marcador_de_retorno: String = ""
 const ARQUIVO := "user://asimov_progresso.cfg"
 const CAMINHOS := [
 	["res://Minigames/Minigame1/levels/UnlockSecurity.tscn", "res://Minigames/Minigame1/levels/unlock_security_2.tscn", "res://Minigames/Minigame1/levels/unlock_security_3.tscn", "res://Minigames/Minigame1/levels/unlock_security_4.tscn"],
-	["res://MinigamesProgramador/Minigame2/levels/slider_hacking.tscn", "res://MinigamesProgramador/Minigame2/levels/slider_hacking_2.tscn", "res://MinigamesProgramador/Minigame2/levels/slider_hacking_3.tscn", "res://MinigamesProgramador/Minigame2/levels/slider_hacking_4.tscn"],
-	["res://MinigamesProgramador/Minigame3/recovery_system.tscn"]
+	["res://Minigames/Minigame3/levels/slider_hacking.tscn", "res://Minigames/Minigame3/levels/slider_hacking_2.tscn", "res://Minigames/Minigame3/levels/slider_hacking_3.tscn", "res://Minigames/Minigame3/levels/slider_hacking_4.tscn"],
+	["res://Minigames/Minigame4/recovery_system.tscn"]
 ]
 
 func _ready() -> void:

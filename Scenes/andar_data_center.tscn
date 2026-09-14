@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://baskrtgylrg1b"]
+[gd_scene format=3 uid="uid://baskrtgylrg1b"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y5mn0"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_em2r1"]
+[ext_resource type="PackedScene" uid="uid://c4e81i13gjvx3" path="res://luz_de_emergencia.tscn" id="3_7c6dg"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="3_7oj87"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_7jkyd"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="5_em2r1"]
@@ -15,7 +16,7 @@
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="18_npc_path"]
 [ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="19_strong_card"]
 [ext_resource type="PackedScene" uid="uid://beo4uworw31ct" path="res://Objects/cartao_chefe.tscn" id="20_boss_card"]
-[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="21_rfid_font"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="21_rfid_font"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -35,14 +36,14 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.18, 0.72, 0.86, 0.9)
+border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfid_background"]
-bg_color = Color(0.06, 0.09, 0.11, 1)
+bg_color = Color(1, 1, 1, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -50,7 +51,7 @@ border_width_bottom = 1
 border_color = Color(0.2, 0.28, 0.32, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rfid_fill"]
-bg_color = Color(0.12, 0.78, 0.94, 1)
+bg_color = Color(0.0003460022, 0.030904686, 0.047044054, 1)
 
 [node name="ANDAR_DATA_CENTER" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y5mn0")
@@ -58,19 +59,7 @@ script = ExtResource("1_y5mn0")
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Iluminacao" unique_id=1474701810]
-color = Color(0, 0, 0, 1)
-
-[node name="PointLight2D87" type="PointLight2D" parent="Iluminacao" unique_id=576171830]
-position = Vector2(-87.000015, -195)
-scale = Vector2(1.8710938, 0.50000006)
-shadow_enabled = true
-texture = ExtResource("2_em2r1")
-
-[node name="PointLight2D88" type="PointLight2D" parent="Iluminacao" unique_id=921874190]
-position = Vector2(-80, -127)
-scale = Vector2(1.8710938, 0.50000006)
-shadow_enabled = true
-texture = ExtResource("2_em2r1")
+color = Color(0.5721848, 0.5721848, 0.5721848, 1)
 
 [node name="PointLight2D93" type="PointLight2D" parent="Iluminacao" unique_id=1446000464]
 position = Vector2(5, -74)
@@ -101,21 +90,6 @@ position = Vector2(5, 127)
 scale = Vector2(2.4277344, 0.6328125)
 color = Color(0.827451, 1, 1, 0.31764707)
 energy = 0.25
-shadow_enabled = true
-texture = ExtResource("2_em2r1")
-
-[node name="PointLight2D98" type="PointLight2D" parent="Iluminacao" unique_id=1595851617]
-position = Vector2(84, -158)
-scale = Vector2(2.4277344, 0.6328125)
-color = Color(1, 1, 1, 0.31764707)
-shadow_enabled = true
-texture = ExtResource("2_em2r1")
-metadata/_edit_lock_ = true
-
-[node name="PointLight2D99" type="PointLight2D" parent="Iluminacao" unique_id=1162355988]
-position = Vector2(213, -178)
-scale = Vector2(0.6796875, 0.578125)
-color = Color(1, 1, 1, 0.31764707)
 shadow_enabled = true
 texture = ExtResource("2_em2r1")
 
@@ -215,6 +189,32 @@ scale = Vector2(0.17578134, 0.10546874)
 shadow_enabled = true
 texture = ExtResource("2_em2r1")
 
+[node name="ColorRect" type="ColorRect" parent="Iluminacao" unique_id=43669307]
+offset_left = -224.0
+offset_top = -104.0
+offset_right = 292.0
+offset_bottom = 222.0
+color = Color(0, 0, 0, 0.81960785)
+
+[node name="ColorRect2" type="ColorRect" parent="Iluminacao" unique_id=2004510911]
+offset_left = 138.0
+offset_top = -247.0
+offset_right = 291.0
+offset_bottom = -109.0
+color = Color(0, 0, 0, 0.81960785)
+
+[node name="LuzDeEmergencia" parent="Iluminacao" unique_id=1619443567 instance=ExtResource("3_7c6dg")]
+position = Vector2(-40, -244.00002)
+scale = Vector2(0.115, 0.115)
+
+[node name="LuzDeEmergencia2" parent="Iluminacao" unique_id=2026266579 instance=ExtResource("3_7c6dg")]
+position = Vector2(72, -244)
+scale = Vector2(0.115, 0.115)
+
+[node name="LuzDeEmergencia3" parent="Iluminacao" unique_id=1094045165 instance=ExtResource("3_7c6dg")]
+position = Vector2(-188, -243.99998)
+scale = Vector2(0.115, 0.115)
+
 [node name="ANDAR_DATA_CENTER" parent="." unique_id=601132916 instance=ExtResource("3_7oj87")]
 position = Vector2(-230, -253)
 metadata/_edit_lock_ = true
@@ -265,9 +265,9 @@ z_index = 2
 position = Vector2(0.5, -7.75)
 shape = SubResource("RectangleShape2D_o1mid")
 
-[node name="RFIDVerification" type="Panel" parent="SceneTrigger2"]
+[node name="RFIDVerification" type="Panel" parent="SceneTrigger2" unique_id=321179575]
 visible = false
-z_index = 100
+z_index = 999
 offset_left = -204.0
 offset_top = -147.0
 offset_right = -111.0
@@ -275,20 +275,19 @@ offset_bottom = -121.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_rfid_panel")
 
-[node name="Label" type="Label" parent="SceneTrigger2/RFIDVerification"]
+[node name="Label" type="Label" parent="SceneTrigger2/RFIDVerification" unique_id=123147776]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 2.0
 offset_right = 89.0
 offset_bottom = 14.0
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.82, 0.96, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("21_rfid_font")
 theme_override_font_sizes/font_size = 8
 text = "VERIFICANDO... 0%"
 horizontal_alignment = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="SceneTrigger2/RFIDVerification"]
+[node name="ProgressBar" type="ProgressBar" parent="SceneTrigger2/RFIDVerification" unique_id=2139131240]
 layout_mode = 0
 offset_left = 5.0
 offset_top = 15.0
@@ -326,7 +325,7 @@ script = ExtResource("16_data_center")
 [node name="NPCs" type="Node" parent="." unique_id=581868378]
 
 [node name="AcessoForteNPCDestino" type="Marker2D" parent="NPCs" unique_id=1016277972]
-position = Vector2(-173, -118)
+position = Vector2(-171, -129)
 
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("9_kxi26")]
 z_index = 2
@@ -339,7 +338,7 @@ save_id = "data_center_recipient"
 run_speed = 40.0
 
 [node name="CaminhoAteAcessoForte" type="Line2D" parent="NPCs/NPC1" unique_id=56411354]
-points = PackedVector2Array(0, 0, -9, 26, -11, 64, -70, 75)
+points = PackedVector2Array(0, 0, -9, 26, -11, 64, -70, 72)
 width = 1.0
 default_color = Color(0.15, 0.78, 1, 0.65)
 script = ExtResource("18_npc_path")
