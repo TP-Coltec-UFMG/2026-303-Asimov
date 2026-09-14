@@ -34,8 +34,10 @@ func _run() -> void:
 	HighContrast.set_enabled(false)
 	FiltroDaltonismo.aplicar_filtro(0)
 
-	_expect(not FiltroDaltonismo.has_node("TelaFiltro"), "O auxílio não pode ter um filtro de tela inteira.")
-	_expect(FiltroDaltonismo.find_children("*", "ColorRect", true, false).is_empty(), "O controlador não pode aplicar cores sobre o cenário inteiro.")
+	_expect(FiltroDaltonismo.has_node("MapaAcessibilidade"), "O controlador precisa ter o overlay de assistência do mapa.")
+	var mapa := FiltroDaltonismo.get_node_or_null("MapaAcessibilidade") as ColorRect
+	_expect(mapa != null and mapa.material is ShaderMaterial, "O overlay do mapa precisa usar um ShaderMaterial.")
+	_expect(not FiltroDaltonismo.has_node("TelaFiltro"), "O auxílio não pode usar um simulador de tela inteira.")
 	_check_settings_scene("res://Scenes/principal.tscn")
 	_check_settings_scene("res://Scenes/pause_menu.tscn")
 

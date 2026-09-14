@@ -19,22 +19,58 @@ float alpha_at(vec2 uv) {
 	return texture(sprite_texture, safe_uv).a * inside.x * inside.y;
 }
 
+float luminance(vec3 color) {
+	return dot(color, vec3(0.2126, 0.7152, 0.0722));
+}
+
+float chroma(vec3 color) {
+	float highest = max(max(color.r, color.g), color.b);
+	float lowest = min(min(color.r, color.g), color.b);
+	return highest - lowest;
+}
+
+float opponent_signal(float difference, float chroma_value) {
+	float weight = smoothstep(0.04, 0.30, chroma_value);
+	return clamp(difference * 2.0, -1.0, 1.0) * weight;
+}
+
+vec3 preserve_luminance(vec3 original, vec3 altered) {
+	altered += vec3(luminance(original) - luminance(altered));
+	return clamp(altered, 0.0, 1.0);
+}
+
 vec3 assist_color(vec3 original) {
-	// Pequena separação de tons próximos, mantendo a luminância da arte.
-	// Sem matrizes de deficiência visual, redução de canais ou troca de paleta.
-	float red = max(original.r - max(original.g, original.b), 0.0);
-	float green = max(original.g - max(original.r, original.b), 0.0);
-	float blue = max(original.b - max(original.r, original.g), 0.0);
-	vec3 delta = vec3(0.0);
-	if (modo == 1) {
-		delta = red * vec3(0.04, 0.01, -0.02) + green * vec3(-0.01, 0.01, 0.04);
-	} else if (modo == 2) {
-		delta = red * vec3(0.025, 0.005, -0.02) + green * vec3(-0.02, 0.005, 0.05);
-	} else if (modo == 3) {
-		delta = blue * vec3(0.04, -0.005, 0.01) + green * vec3(-0.015, 0.015, -0.015);
+	// A assistência cria uma segunda pista de matiz/luminosidade; não simula visão.
+	float chroma_value = chroma(original);
+	if (chroma_value < 0.035 || modo == 0) {
+		return original;
 	}
-	delta -= vec3(dot(delta, vec3(0.2126, 0.7152, 0.0722)));
-	return clamp(original + delta, 0.0, 1.0);
+
+	vec3 altered = original;
+	if (modo == 1 || modo == 2) {
+		float rg = opponent_signal(original.r - original.g, chroma_value);
+		float red_side = max(rg, 0.0);
+		float green_side = max(-rg, 0.0);
+
+		// Vermelhos recebem uma pista quente; verdes, uma pista fria.
+		altered += red_side * vec3(0.04, 0.20, -0.12);
+		altered += green_side * vec3(-0.10, -0.05, 0.26);
+		altered = preserve_luminance(original, altered);
+
+		float luminance_hint = modo == 1 ? 0.10 : 0.055;
+		altered += vec3((red_side - green_side) * luminance_hint);
+	} else if (modo == 3) {
+		float gb = opponent_signal(original.g - original.b, chroma_value);
+		float green_yellow_side = max(gb, 0.0);
+		float blue_purple_side = max(-gb, 0.0);
+
+		altered += green_yellow_side * vec3(-0.16, 0.03, 0.22);
+		altered += blue_purple_side * vec3(0.22, -0.08, -0.04);
+		altered = preserve_luminance(original, altered);
+		altered += vec3((green_yellow_side - blue_purple_side) * 0.10);
+	}
+
+	return clamp(altered, 0.0, 1.0);
 }
 
 void fragment() {
@@ -49,12 +85,12 @@ void fragment() {
 	float bottom = alpha_at(UV + vec2(0.0, outline_uv.y));
 	float outside_edge = (1.0 - center) * max(max(right, left), max(top, bottom));
 	float inside_edge = center * (1.0 - min(min(right, left), min(top, bottom)));
-	vec4 overlay = vec4(assist_color(source.rgb), center * 0.18);
+	vec4 overlay = vec4(assist_color(source.rgb), center * 0.30);
 	// Linha clara fina e apoio escuro por dentro: informação de forma, não só cor.
 	if (outside_edge > 0.01) {
 		overlay = vec4(0.86, 0.85, 0.77, outside_edge * 0.8);
 	} else if (inside_edge > 0.01) {
-		overlay = vec4(mix(assist_color(source.rgb), vec3(0.06, 0.065, 0.07), 0.3), center * 0.35);
+		overlay = vec4(mix(assist_color(source.rgb), vec3(0.06, 0.065, 0.07), 0.3), center * 0.45);
 	}
 	COLOR = modo == 0 ? vec4(0.0) : overlay * item_color;
 }
