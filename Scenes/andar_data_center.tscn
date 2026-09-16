@@ -204,7 +204,7 @@ offset_bottom = -109.0
 color = Color(0, 0, 0, 0.81960785)
 
 [node name="LuzDeEmergencia" parent="Iluminacao" unique_id=1619443567 instance=ExtResource("3_7c6dg")]
-position = Vector2(-40, -244.00002)
+position = Vector2(-39, -244.00002)
 scale = Vector2(0.115, 0.115)
 
 [node name="LuzDeEmergencia2" parent="Iluminacao" unique_id=2026266579 instance=ExtResource("3_7c6dg")]

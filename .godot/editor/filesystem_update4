@@ -1,13 +1,4 @@
-res://Player/ManPlayer.tscn
-res://shaders/mapa_acessibilidade.gdshader
-res://shaders/pause_menu.gdshader
-res://shaders/filtro_daltonismo.gdshader
 res://Scenes/andar_data_center.tscn
-res://Player/inventory.tscn
-res://Scenes/andar_hall.tscn
-res://luz_de_emergencia.tscn
-res://TileMaps/Andar_DataCenter/andar_data_center.tscn
-res://luz_de_emergencia.gd
-res://Scripts/Acessibility/color_accessibility_cue.gd
-res://Scripts/Acessibility/high_contrast.gd
-res://Scripts/Acessibility/interaction_accessibility_cue.gd
+res://shaders/mapa_acessibilidade.gdshader
+res://shaders/filtro_daltonismo.gdshader
+res://shaders/pause_menu.gdshader
