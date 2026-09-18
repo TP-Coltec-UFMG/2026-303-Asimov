@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://8xom4guy7ye4" path="res://Objects/scripts/fogo.gd" id="1_xs3m7"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_36til"]
+[ext_resource type="AudioStream" path="res://Sounds/Ambient/fogo/dragon-studio-copyright-free-fire-crackling-427409.ogg" id="3_fire_a"]
+[ext_resource type="AudioStream" path="res://Sounds/Ambient/fogo/Fire-Burning-Loop-Sound-Effect-PV-SOUND-FX-_youtube_.ogg" id="4_fire_b"]
 
 [sub_resource type="Gradient" id="Gradient_xs3m7"]
 offsets = PackedFloat32Array(0, 0.9996142)
@@ -37,6 +39,14 @@ height = 56.0
 
 [node name="Fogo" type="Node2D" unique_id=1620408042]
 script = ExtResource("1_xs3m7")
+ambient_sound_a = ExtResource("3_fire_a")
+ambient_sound_b = ExtResource("4_fire_b")
+
+[node name="FireAmbient" type="AudioStreamPlayer2D" parent="."]
+volume_db = -9.0
+max_distance = 240.0
+attenuation = 1.5
+bus = &"sfx"
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=18750719]
 amount = 20

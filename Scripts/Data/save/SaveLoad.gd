@@ -42,6 +42,7 @@ var save_data: Dictionary = {
 	"volume_leitor": 1.0,
 	"alto_contraste" : false,
 	"cor_alto_contraste" : Color.YELLOW,
+	"movimento_camera" : true,
 	"input_bindings": {},
 	"interface_size" : 0,
 	"tutorial_seen" : false,
@@ -99,6 +100,7 @@ func _load() -> void:
 
 func _apply_load() -> void:
 	save_data["filtro_de_daltonismo"] = clampi(int(save_data.get("filtro_de_daltonismo", 0)), 0, 3)
+	save_data["movimento_camera"] = bool(save_data.get("movimento_camera", true))
 	Configs.configs = save_data.duplicate(true)
 
 	TranslationServer.set_locale(save_data.traducao)

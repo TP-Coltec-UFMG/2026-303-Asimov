@@ -50,6 +50,7 @@
 [ext_resource type="Script" uid="uid://cjjk3fkuntc6w" path="res://Scripts/Acessibility/leitor_de_tela.gd" id="52_ephr7"]
 [ext_resource type="Script" uid="uid://chxf33bnldydm" path="res://Scripts/Acessibility/alto_contraste.gd" id="53_pqb3s"]
 [ext_resource type="Script" uid="uid://byfqs6ik086m6" path="res://Scripts/Acessibility/cor_alto_contraste.gd" id="54_contrast_color"]
+[ext_resource type="Script" path="res://Scripts/Acessibility/movimento_camera.gd" id="55_camera_motion"]
 [ext_resource type="Script" uid="uid://c5dnhjsvgf7bd" path="res://Scenes/scripts/inputremapup.gd" id="56_aduey"]
 [ext_resource type="Script" uid="uid://bthyfrly4o5lf" path="res://Scenes/scripts/controles.gd" id="56_dwq42"]
 [ext_resource type="Script" uid="uid://dsipk6ntdfmhe" path="res://Scripts/UI/menu_input_router.gd" id="57_menu_input"]
@@ -1740,7 +1741,6 @@ script = ExtResource("41_uwub7")
 
 [node name="OptionDaltonismoButton" type="OptionButton" parent="Accessibility/VContainer" unique_id=1149141263 groups=["alto_contraste"]]
 layout_mode = 2
-tooltip_text = "Ajustes sutis de cor e contornos apenas em personagens, itens e objetos interativos, preservando a arte do jogo."
 theme_override_fonts/font = ExtResource("14_sp8er")
 theme_override_font_sizes/font_size = 10
 selected = 0
@@ -1915,6 +1915,18 @@ text = "Cor"
 color = Color(1, 1, 0, 1)
 edit_alpha = false
 script = ExtResource("54_contrast_color")
+
+[node name="MovimentoCamera" type="CheckBox" parent="Accessibility/VContainer" groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_fonts/font = ExtResource("9_hjo07")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("11_xtmj4")
+theme_override_icons/unchecked = ExtResource("12_f0wd5")
+text = "Movimento de câmera"
+button_pressed = true
+flat = true
+script = ExtResource("55_camera_motion")
 
 [node name="BackToMenuButton" parent="Accessibility" unique_id=1696244246 groups=["alto_contraste"] instance=ExtResource("8_e46k6")]
 offset_left = 453.0
@@ -2160,6 +2172,8 @@ script = ExtResource("10_e46k6")
 [connection signal="value_changed" from="Accessibility/VContainer/LeitorDeTela/Velocidade" to="Accessibility/VContainer/LeitorDeTela" method="_on_velocidade_value_changed"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste" to="Accessibility/VContainer/AltoContraste" method="_on_mouse_entered"]
 [connection signal="toggled" from="Accessibility/VContainer/AltoContraste" to="Accessibility/VContainer/AltoContraste" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/MovimentoCamera" to="Accessibility/VContainer/MovimentoCamera" method="_on_mouse_entered"]
+[connection signal="toggled" from="Accessibility/VContainer/MovimentoCamera" to="Accessibility/VContainer/MovimentoCamera" method="_on_toggled"]
 [connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_acessibility"]
 [connection signal="mouse_entered" from="PrimeiraVez/LeitorDeTela" to="PrimeiraVez" method="_on_leitor_de_tela_mouse_entered"]
 [connection signal="toggled" from="PrimeiraVez/LeitorDeTela" to="PrimeiraVez/LeitorDeTela" method="_on_toggled"]

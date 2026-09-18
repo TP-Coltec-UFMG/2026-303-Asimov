@@ -2,10 +2,14 @@ extends Control
 
 signal tempo_esgotado
 
-const TEMPO_LIMITE_DE_JOGO: float = 60 * 2
+const TEMPO_LIMITE_DE_JOGO: float = 60 * 10
 const TEMPO_INICIO_AUDIO: float = 11.0
 const TEMPO_INICIO_COUNT_DOWN: float = 46.0
 const TEMPO_EVENTO_REFRIGERACAO: float = 120.0
+const TREMOR_FINAL_MINIMO: float = 0.05
+const TREMOR_FINAL_MAXIMO: float = 1.75
+const TREMOR_FINAL_FREQUENCIA_MINIMA: float = 3.5
+const TREMOR_FINAL_FREQUENCIA_MAXIMA: float = 12.0
 
 @onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var label: Label = $Label
@@ -15,6 +19,10 @@ var ultimo_segundo_exibido: int = -1
 var finalizado: bool = false
 var audio_iniciado: bool = false
 var count_down_audio_iniciado: bool = false
+var tempo_tremor_final: float = 0.0
+var intensidade_tremor_final: float = 0.0
+var camera_em_tremor: Camera2D = null
+var offset_original_camera: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -46,6 +54,8 @@ func _process(delta: float) -> void:
 	if segundos_restantes <= TEMPO_INICIO_COUNT_DOWN and not count_down_audio_iniciado:
 		count_down_audio_iniciado = true
 		MusicController._start_countdown()
+
+	_atualizar_tremor_final(delta, tempo_restante_atual)
 		
 
 	if segundos_restantes <= TEMPO_INICIO_AUDIO and not audio_iniciado:
@@ -124,6 +134,7 @@ func carregar_tempo_restante(novo_tempo: float) -> void:
 		)
 	else:
 		MusicController._stop_countdown()
+		_resetar_tremor_final()
 
 	if audio_iniciado:
 		var posicao_audio := maxf(
@@ -141,6 +152,7 @@ func pausar_timer() -> void:
 
 	set_process(false)
 	audio_stream_player_2d.stream_paused = true
+	_resetar_tremor_final()
 
 
 func comecar_timer() -> void:
@@ -163,6 +175,7 @@ func reiniciar_timer() -> void:
 	audio_stream_player_2d.stop()
 	audio_stream_player_2d.stream_paused = false
 	MusicController._stop_countdown()
+	_resetar_tremor_final()
 
 	atualizar_label()
 	set_process(true)
@@ -187,6 +200,7 @@ func fim_de_jogo() -> void:
 
 	finalizado = true
 	SaveGame.tempo_atual = 0.0
+	_resetar_tremor_final()
 
 	set_process(false)
 
@@ -204,3 +218,64 @@ func _on_tempo_esgotado() -> void:
 func _on_man_player_jogador_morreu() -> void:
 	hide()
 	pausar_timer()
+	_resetar_tremor_final()
+
+
+func _atualizar_tremor_final(delta: float, tempo_restante: float) -> void:
+	if not bool(Configs.configs.get("movimento_camera", true)):
+		_resetar_tremor_final()
+		return
+	if tempo_restante > TEMPO_INICIO_COUNT_DOWN or tempo_restante <= 0.0:
+		_resetar_tremor_final()
+		return
+
+	var camera := _obter_camera_do_player()
+	if camera == null:
+		_resetar_tremor_final()
+		return
+
+	if camera != camera_em_tremor:
+		_resetar_tremor_final()
+		camera_em_tremor = camera
+		offset_original_camera = camera.offset
+
+	var progresso := clampf(
+		1.0 - (tempo_restante / TEMPO_INICIO_COUNT_DOWN),
+		0.0,
+		1.0
+	)
+	var progresso_suave := progresso * progresso * (3.0 - 2.0 * progresso)
+	intensidade_tremor_final = lerpf(
+		TREMOR_FINAL_MINIMO,
+		TREMOR_FINAL_MAXIMO,
+		progresso_suave
+	)
+	var frequencia := lerpf(
+		TREMOR_FINAL_FREQUENCIA_MINIMA,
+		TREMOR_FINAL_FREQUENCIA_MAXIMA,
+		progresso_suave
+	)
+	tempo_tremor_final += delta
+	camera_em_tremor.offset = offset_original_camera + Vector2(
+		sin(tempo_tremor_final * frequencia),
+		sin(tempo_tremor_final * frequencia * 1.37 + 1.8)
+	) * intensidade_tremor_final
+
+
+func _obter_camera_do_player() -> Camera2D:
+	if not is_instance_valid(scene_manager.player):
+		return null
+	return scene_manager.player.get_node_or_null("Camera2D") as Camera2D
+
+
+func _resetar_tremor_final() -> void:
+	if is_instance_valid(camera_em_tremor):
+		camera_em_tremor.offset = offset_original_camera
+	camera_em_tremor = null
+	offset_original_camera = Vector2.ZERO
+	tempo_tremor_final = 0.0
+	intensidade_tremor_final = 0.0
+
+
+func _exit_tree() -> void:
+	_resetar_tremor_final()

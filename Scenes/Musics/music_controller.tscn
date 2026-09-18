@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://Sounds/audioatlant-pulse-of-time-action-countdown-trailer-ver1-573119.mp3" id="3_y4uch"]
 [ext_resource type="AudioStream" uid="uid://cqnu3srjnmiul" path="res://Sounds/mohamed_hassan-mission-impasse-339175.mp3" id="5_68qf4"]
 [ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/urgent(1).mp3" id="5_dqj1g"]
+[ext_resource type="AudioStream" path="res://Sounds/Ambient/heartbeat.mp3" id="6_heartbeat"]
 
 [node name="MusicControler" type="Node2D" unique_id=1749428804]
 script = ExtResource("1_biu3b")
@@ -36,4 +37,13 @@ bus = &"Music"
 stream = ExtResource("5_68qf4")
 volume_db = -3.0980392
 bus = &"Music"
+parameters/looping = true
+
+[node name="HEARTBEAT" type="AudioStreamPlayer2D" parent="."]
+process_mode = 3
+stream = ExtResource("6_heartbeat")
+volume_db = -16.0
+max_distance = 100000.0
+attenuation = 0.0
+bus = &"sfx"
 parameters/looping = true

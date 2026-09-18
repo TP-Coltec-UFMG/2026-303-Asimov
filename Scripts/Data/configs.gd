@@ -17,6 +17,7 @@ var configs: Dictionary = {
 	"volume_leitor": 1.0,
 	"alto_contraste": false,
 	"cor_alto_contraste": Color.YELLOW,
+	"movimento_camera": true,
 	"input_bindings": {},
 	"interface_size": 0,
 	"tutorial_seen": false,
@@ -83,6 +84,9 @@ func _change_cor_alto_contraste(new_value: Color) -> void:
 		new_value.b,
 		1.0
 	)
+
+func _change_movimento_camera(new_value: bool) -> void:
+	configs.movimento_camera = new_value
 	
 func _change_interface_size(new_value : int):
 	configs.interface_size = new_value

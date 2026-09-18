@@ -3,11 +3,14 @@ extends Node2D
 @export var save_id: String = "fogo01"
 @export var save_enabled: bool = true
 @export var damage_enabled: bool = true
+@export var ambient_sound_a: AudioStream
+@export var ambient_sound_b: AudioStream
 
 @onready var particulas: GPUParticles2D = $GPUParticles2D
 @onready var area_fogo: Area2D = $AreaFogo
 @onready var collision_fogo: CollisionShape2D = $AreaFogo/CollisionShape2D
 @onready var point_light_2d: PointLight2D = $PointLight2D
+@onready var fire_ambient: AudioStreamPlayer2D = $FireAmbient
 
 var corpo_no_fogo: Player = null
 var dar_dano_no_corpo: bool = false
@@ -57,6 +60,30 @@ func _ready() -> void:
 			restaurar_fogo_apagado()
 		else:
 			atualizar_fogo()
+
+	if not apagado:
+		_start_fire_ambient()
+
+
+func _start_fire_ambient() -> void:
+	var available_sounds: Array[AudioStream] = []
+	if ambient_sound_a != null:
+		available_sounds.append(ambient_sound_a)
+	if ambient_sound_b != null:
+		available_sounds.append(ambient_sound_b)
+	if available_sounds.is_empty():
+		return
+
+	# A escolha é estável para cada fogo: ao recarregar a fase, o mesmo foco
+	# continua com a mesma textura sonora em vez de trocar aleatoriamente.
+	var chooser := RandomNumberGenerator.new()
+	chooser.seed = hash("%s:%s" % [save_id, str(get_path())])
+	var selected := available_sounds[chooser.randi_range(0, available_sounds.size() - 1)]
+	var local_stream := selected.duplicate()
+	if local_stream is AudioStreamOggVorbis:
+		(local_stream as AudioStreamOggVorbis).loop = true
+	fire_ambient.stream = local_stream
+	fire_ambient.play()
 
 
 func _process(delta: float) -> void:
@@ -167,6 +194,7 @@ func apagar_fogo() -> void:
 		return
 
 	apagado = true
+	fire_ambient.stop()
 
 	if save_enabled:
 		SaveGame.save_object_state(save_id, {
@@ -199,6 +227,7 @@ func apagar_fogo() -> void:
 
 func restaurar_fogo_apagado() -> void:
 	apagado = true
+	fire_ambient.stop()
 	extintor_atingindo = false
 	dar_dano_no_corpo = false
 

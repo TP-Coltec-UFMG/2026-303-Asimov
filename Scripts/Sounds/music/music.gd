@@ -6,6 +6,7 @@ extends Node2D
 @onready var som_alarme: AudioStreamPlayer2D = $SOM_ALARME
 @onready var som_de_fundo: AudioStreamPlayer2D = $SOM_DE_FUNDO
 @onready var musica_quando_o_disjuntor_apagar: AudioStreamPlayer2D = $MUSICA_QUANDO_O_DISJUNTOR_APAGAR
+@onready var heartbeat: AudioStreamPlayer2D = $HEARTBEAT
 
 const AUDIO_PLAYERS: Dictionary = {
 	"bg_music": NodePath("BG Music"),
@@ -13,7 +14,8 @@ const AUDIO_PLAYERS: Dictionary = {
 	"countdown_music": NodePath("COUNTDOWN_MUSIC"),
 	"som_alarme": NodePath("SOM_ALARME"),
 	"som_de_fundo": NodePath("SOM_DE_FUNDO"),
-	"musica_quando_o_disjuntor_apagar": NodePath("MUSICA_QUANDO_O_DISJUNTOR_APAGAR")
+	"musica_quando_o_disjuntor_apagar": NodePath("MUSICA_QUANDO_O_DISJUNTOR_APAGAR"),
+	"heartbeat": NodePath("HEARTBEAT")
 }
 
 const SILENT_VOLUME_DB: float = -80.0
@@ -25,6 +27,11 @@ const ALARM_REDUCED_VOLUME: float = 0.1
 const ALARM_INITIAL_DURATION: float = 30.0
 const ALARM_FADE_DURATION: float = 4.0
 const ALARM_QUIET_CONTEXT_VOLUME: float = 0.05
+const HEARTBEAT_NORMAL_PITCH: float = 1.0
+const HEARTBEAT_POWER_OUTAGE_PITCH: float = 1.45
+const HEARTBEAT_PITCH_CHANGE_PER_SECOND: float = 0.4
+const HEARTBEAT_FINAL_VOLUME_FACTOR: float = 0.5
+const HEARTBEAT_VOLUME_CHANGE_DB_PER_SECOND: float = 4.0
 
 enum PowerOutageAudioState {
 	IDLE,
@@ -51,17 +58,26 @@ var power_outage_alarm_start_db: float = SILENT_VOLUME_DB
 var power_outage_alarm_target_db: float = SILENT_VOLUME_DB
 var power_outage_music_start_db: float = SILENT_VOLUME_DB
 var power_outage_music_target_db: float = SILENT_VOLUME_DB
+var heartbeat_normal_volume_db: float = 0.0
+var heartbeat_target_volume_db: float = 0.0
 
 
 func _ready() -> void:
 	# Os volumes pertencem ao SaveLoad. Alterá-los aqui fazia o autoload de
 	# música sobrescrever as preferências logo depois de elas serem carregadas.
+	if heartbeat.stream is AudioStreamMP3:
+		var heartbeat_loop := heartbeat.stream.duplicate() as AudioStreamMP3
+		heartbeat_loop.loop = true
+		heartbeat.stream = heartbeat_loop
 	_play_if_stopped(bg_ambient)
 	_play_if_stopped(bg_music)
 	alarm_normal_volume_db = som_alarme.volume_db
 	alarm_unducked_volume_db = som_alarme.volume_db
 	opening_music_normal_volume_db = som_de_fundo.volume_db
 	power_outage_music_normal_volume_db = musica_quando_o_disjuntor_apagar.volume_db
+	heartbeat_normal_volume_db = heartbeat.volume_db
+	heartbeat_target_volume_db = heartbeat_normal_volume_db
+	heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
 
 
 func _process(delta: float) -> void:
@@ -70,6 +86,42 @@ func _process(delta: float) -> void:
 	_update_opening_music_fade()
 	_update_alarm_volume(delta)
 	_update_power_outage_audio(delta)
+	_update_heartbeat(delta)
+
+
+func _update_heartbeat(delta: float) -> void:
+	# scene_manager conserva a referência durante a troca para a cutscene final.
+	# Validar antes do cast evita tentar converter um Player já liberado.
+	if not is_instance_valid(scene_manager.player):
+		if heartbeat.playing:
+			heartbeat.stop()
+		heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
+		heartbeat.volume_db = heartbeat_normal_volume_db
+		heartbeat_target_volume_db = heartbeat_normal_volume_db
+		return
+
+	var current_player: Player = scene_manager.player
+	_play_if_stopped(heartbeat)
+	heartbeat.volume_db = move_toward(
+		heartbeat.volume_db,
+		heartbeat_target_volume_db,
+		HEARTBEAT_VOLUME_CHANGE_DB_PER_SECOND * delta
+	)
+	var mission := SaveGame.office_mission_state(current_player)
+	var power_is_out := (
+		bool(mission.get("data_center_power_outage", false))
+		and not bool(mission.get("data_center_breaker_restored", false))
+	)
+	var target_pitch := (
+		HEARTBEAT_POWER_OUTAGE_PITCH
+		if power_is_out
+		else HEARTBEAT_NORMAL_PITCH
+	)
+	heartbeat.pitch_scale = move_toward(
+		heartbeat.pitch_scale,
+		target_pitch,
+		HEARTBEAT_PITCH_CHANGE_PER_SECOND * delta
+	)
 
 
 func _update_alarm_volume(delta: float) -> void:
@@ -103,10 +155,15 @@ func _stop_bg_ambient() -> void:
 
 # COUNTDOWN
 func _start_countdown(from_position: float = 0.0) -> void:
+	heartbeat_target_volume_db = linear_to_db(
+		db_to_linear(heartbeat_normal_volume_db)
+		* HEARTBEAT_FINAL_VOLUME_FACTOR
+	)
 	_play_if_stopped(countdown_music, from_position)
 
 func _stop_countdown() -> void:
 	countdown_music.stop()
+	heartbeat_target_volume_db = heartbeat_normal_volume_db
 
 
 # ALARME

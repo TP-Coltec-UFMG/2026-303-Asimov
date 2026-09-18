@@ -18,7 +18,6 @@ func _ready() -> void:
 	color = HighContrast.get_accent_color()
 
 	accessibility_name = "Escolher cor do alto contraste"
-	tooltip_text = "Enter para abrir. Setas ajustam a cor. Tab alterna entre tons, cores e o botão voltar."
 
 	color_changed.connect(_on_color_changed)
 	mouse_entered.connect(_on_mouse_entered)

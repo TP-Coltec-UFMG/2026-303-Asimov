@@ -18,6 +18,8 @@
 [ext_resource type="Texture2D" uid="uid://cf5viql775oyc" path="res://Sprites/elevador/bt_andar_porta_selecionado.png" id="16_mkahn"]
 [ext_resource type="Texture2D" uid="uid://p3uxhhrojdfw" path="res://Sprites/elevador/bt_andar_norm_abri.png" id="17_my1m8"]
 [ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Fonts/PixelifySans-Regular.ttf" id="17_uxpsl"]
+[ext_resource type="AudioStream" path="res://Sounds/Ambient/elevador/freesound_community-elevator-45786.ogg" id="18_elevator_moving"]
+[ext_resource type="AudioStream" path="res://Sounds/Ambient/elevador/freesound_community-elevator-sound-99315.ogg" id="19_elevator_arrival"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jox7w"]
 light_mode = 1
@@ -94,6 +96,18 @@ z_index = 999
 material = SubResource("CanvasItemMaterial_jox7w")
 scale = Vector2(0.925, 0.695)
 script = ExtResource("1_jox7w")
+
+[node name="ElevatorMoving" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("18_elevator_moving")
+volume_db = -6.0
+bus = &"sfx"
+
+[node name="ElevatorArrival" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("19_elevator_arrival")
+volume_db = -5.0
+bus = &"sfx"
 
 [node name="BtAndarNormal" type="Sprite2D" parent="." unique_id=387262429]
 material = SubResource("CanvasItemMaterial_au2wp")

@@ -72,6 +72,7 @@ func usar_elevador(andar: int) -> void:
 			_concluir_tarefa_do_quarto_andar(andar)
 			_ocultar_paineis_tarefas()
 			body_p.inventory.hide()
+			painel_elevador.iniciar_movimento()
 			$Timer.start()
 			await $Timer.timeout
 			await painel_elevador.animacao()
