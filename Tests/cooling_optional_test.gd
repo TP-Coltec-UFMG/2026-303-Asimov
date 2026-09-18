@@ -40,6 +40,44 @@ func _run() -> void:
 	player.set_physics_process(true)
 	var quest := player.get_node("QUEST_MISSION") as QuestMissionUI
 	quest.set_process(false)
+	state["data_center_return_task_pending"] = true
+	state["data_center_return_task_active"] = false
+	state["data_center_return_task_completed"] = false
+	var elevator_trigger := SceneTrigger.new()
+	elevator_trigger.body_p = player
+	elevator_trigger.call("_concluir_tarefa_do_sexto_andar", 6)
+	_expect(bool(state.get("data_center_return_task_pending", false)), "A chegada antecipada precisa continuar pendente até o fim dos balões.")
+	_expect(bool(state.get("data_center_return_task_completed", false)), "O elevador precisa registrar a chegada antecipada ao sexto andar.")
+	elevator_trigger.free()
+	quest.call("_activate_return_to_data_center_task")
+	_expect(not bool(state.get("data_center_return_task_pending", true)), "A chegada antecipada precisa encerrar o estado pendente quando a tarefa aparecer.")
+	_expect(not bool(state.get("data_center_return_task_active", true)), "A tarefa não pode ficar ativa se o jogador já chegou ao data center.")
+	_expect(bool(state.get("data_center_return_task_completed", false)), "A tarefa precisa aparecer concluída após uma chegada antecipada ao sexto andar.")
+	state.erase("data_center_return_task_pending")
+	state.erase("data_center_return_task_active")
+	state.erase("data_center_return_task_completed")
+	await get_tree().process_frame
+	var vbox := quest.get_node("VBoxContainer") as VBoxContainer
+	var panel := quest.get_node("ColorRect") as ColorRect
+	for row in quest.rows:
+		row.hide()
+	quest.show()
+	quest.rows[0].show()
+	await get_tree().process_frame
+	var fixed_x := vbox.position.x
+	var fixed_width := vbox.size.x
+	quest.rows[0].hide()
+	quest.rows[7].show()
+	await get_tree().process_frame
+	_expect(is_equal_approx(vbox.position.x, fixed_x) and is_equal_approx(vbox.size.x, fixed_width), "Uma tarefa com quebra de linha não pode deslocar o painel horizontalmente.")
+	quest.rows[7].hide()
+	quest.rows[QuestMissionUI.COOLING_TASK_INDEX].show()
+	await get_tree().process_frame
+	_expect(is_equal_approx(vbox.position.x, fixed_x) and is_equal_approx(vbox.size.x, fixed_width), "A tarefa opcional não pode alterar a posição horizontal das outras tarefas.")
+	_expect(vbox.position.x >= panel.position.x and vbox.position.x + vbox.size.x <= panel.position.x + panel.size.x + 0.01, "Os textos precisam permanecer dentro dos limites laterais do painel.")
+	for row in quest.rows:
+		row.hide()
+	quest.hide()
 	player.balao_de_pensamento.enfileirar("test:busy", "Ainda estou ocupado.")
 	quest.call("_process", 5.0)
 	_expect(not player.balao_de_pensamento.tem_pensamento(QuestMissionUI.COOLING_THOUGHT_TIME), "O evento deve esperar qualquer pensamento já em andamento.")
@@ -76,10 +114,60 @@ func _run() -> void:
 	var rewarded_time := SaveGame.tempo_atual
 	_expect(rewarded_time > 147.0 and rewarded_time <= 150.0, "Concluir o puzzle deve acrescentar noventa segundos ao tempo restante após a animação.")
 	_expect(bool(state.get("cooling_time_reward_granted", false)), "O bônus precisa ser marcado como concedido uma única vez.")
+	_expect(bool(state.get("cooling_terminal_1_completed", false)), "O primeiro terminal precisa ter seu próprio estado concluído.")
 	_expect(bool(state.get("cooling_optional_task_completed", false)), "A tarefa opcional precisa ser concluída.")
+	_expect(bool(state.get("cooling_other_terminal_available", false)), "O segundo terminal deve continuar disponível depois do primeiro.")
+	quest.call("_process", 0.0)
+	_expect(not player.balao_de_pensamento.tem_pensamento("cooling:second_terminal_option"), "A conclusão não deve mais anunciar o segundo terminal.")
 	Progresso.retorno_refrigeracao_ia = true
 	Progresso.concluir_refrigeracao_ia()
 	_expect(is_equal_approx(SaveGame.tempo_atual, rewarded_time), "O bônus não pode ser concedido uma segunda vez.")
+
+	Progresso.retorno_refrigeracao_ia = true
+	Progresso.terminal_refrigeracao_ativo = "terminal_2"
+	Progresso.concluir_refrigeracao_ia()
+	var second_reward_time := SaveGame.tempo_atual
+	_expect(is_equal_approx(second_reward_time, rewarded_time + 90.0), "O segundo terminal precisa conceder seu próprio bônus de noventa segundos.")
+	_expect(bool(state.get("cooling_terminal_2_completed", false)), "O segundo terminal precisa ter seu próprio estado concluído.")
+	_expect(bool(state.get("cooling_all_terminals_completed", false)), "Os dois terminais devem ficar registrados como concluídos.")
+	_expect(not bool(state.get("cooling_other_terminal_available", true)), "Depois dos dois terminais não pode restar outra oportunidade.")
+	Progresso.retorno_refrigeracao_ia = true
+	Progresso.terminal_refrigeracao_ativo = "terminal_2"
+	Progresso.concluir_refrigeracao_ia()
+	_expect(is_equal_approx(SaveGame.tempo_atual, second_reward_time), "O segundo terminal também não pode repetir seu bônus.")
+
+	var terminal_script := load("res://Scripts/Objects/cooling_terminal.gd") as GDScript
+	var terminal_2 := Node2D.new()
+	terminal_2.set_script(terminal_script)
+	terminal_2.name = "CoolingTerminal2"
+	_expect(terminal_2.call("_resolve_terminal_id") == "terminal_2", "CoolingTerminal2 precisa ser reconhecido automaticamente como o segundo terminal.")
+	terminal_2.free()
+
+	SaveGame.save_data = {}
+	state = SaveGame.office_mission_state(player)
+	state["cooling_optional_task_active"] = true
+	state["cooling_optional_task_completed"] = false
+	SaveGame.save_global_state("hall_quest_01", state)
+	scene_manager.player = player
+	Progresso.retorno_refrigeracao_ia = true
+	Progresso.terminal_refrigeracao_ativo = "terminal_1"
+	Progresso.cena_de_retorno = ""
+	Progresso.marcador_de_retorno = ""
+	var expired_gameplay := gameplay.instantiate()
+	add_child(expired_gameplay)
+	expired_gameplay.call("tempo_finalizado")
+	_expect(bool(expired_gameplay.get("puzzle_expirado")), "O fim dos trinta segundos precisa expirar a tentativa.")
+	_expect(bool(expired_gameplay.get("parado")), "O puzzle precisa bloquear a entrada quando o tempo acabar.")
+	await get_tree().create_timer(2.1).timeout
+	expired_gameplay.queue_free()
+	state = SaveGame.office_mission_state(player)
+	_expect(bool(state.get("cooling_terminal_1_failed", false)), "O terminal cujo tempo acabou precisa ficar indisponível.")
+	_expect(Progresso.terminal_refrigeracao_disponivel(state, "terminal_2"), "O outro terminal precisa continuar disponível após a falha.")
+	_expect(not Progresso.terminal_refrigeracao_disponivel(state, "terminal_1"), "O terminal que falhou não pode ser iniciado novamente.")
+	_expect(bool(state.get("cooling_optional_task_active", false)), "A tarefa deve continuar ativa enquanto existir outro terminal.")
+	quest.call("_process", 0.0)
+	_expect(player.balao_de_pensamento.tem_pensamento(QuestMissionUI.COOLING_THOUGHT_FAILURE), "A falha precisa gerar o pensamento de frustração.")
+	_expect(player.balao_de_pensamento.tem_pensamento(QuestMissionUI.COOLING_THOUGHT_FAILURE_ALTERNATIVE), "A falha precisa avisar sobre o outro sistema de refrigeração.")
 
 	SaveGame.save_data = original_save
 	SaveGame.tempo_atual = original_time

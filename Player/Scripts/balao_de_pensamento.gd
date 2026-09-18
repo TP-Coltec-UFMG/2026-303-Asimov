@@ -2,7 +2,7 @@ extends Sprite2D
 
 @onready var label: Label = $Label
 
-@export var caracteres_por_segundo: float = 8.0
+@export var caracteres_por_segundo: float = 6
 @export var tempo_minimo: float = 3.0
 @export var tempo_maximo: float = 10.0
 @export var tempo_fade_out: float = 0.5

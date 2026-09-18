@@ -6,8 +6,11 @@ var modo_teste: bool = false
 var retorno_da_sala_do_chefe: bool = false
 var retorno_reparo_rfid: bool = false
 var retorno_refrigeracao_ia: bool = false
+var terminal_refrigeracao_ativo: String = ""
 var cena_de_retorno: String = ""
 var marcador_de_retorno: String = ""
+const TERMINAL_REFRIGERACAO_1 := "terminal_1"
+const TERMINAL_REFRIGERACAO_2 := "terminal_2"
 const ARQUIVO := "user://asimov_progresso.cfg"
 const CAMINHOS := [
 	["res://Minigames/Minigame1/levels/UnlockSecurity.tscn", "res://Minigames/Minigame1/levels/unlock_security_2.tscn", "res://Minigames/Minigame1/levels/unlock_security_3.tscn", "res://Minigames/Minigame1/levels/unlock_security_4.tscn"],
@@ -73,19 +76,70 @@ func iniciar_reparo_leitor_rfid(player: Player) -> void:
 	get_tree().change_scene_to_file("res://Minigames/Minigame2/Main.tscn")
 
 
-func iniciar_refrigeracao_ia(player: Player) -> void:
+func normalizar_terminal_refrigeracao(value: String) -> String:
+	return TERMINAL_REFRIGERACAO_2 if value == TERMINAL_REFRIGERACAO_2 else TERMINAL_REFRIGERACAO_1
+
+
+func _cooling_terminal_state_key(value: String) -> String:
+	return "cooling_%s_completed" % normalizar_terminal_refrigeracao(value)
+
+
+func _cooling_terminal_failed_key(value: String) -> String:
+	return "cooling_%s_failed" % normalizar_terminal_refrigeracao(value)
+
+
+func terminal_refrigeracao_concluido(estado: Dictionary, value: String) -> bool:
+	var normalized := normalizar_terminal_refrigeracao(value)
+	if bool(estado.get(_cooling_terminal_state_key(normalized), false)):
+		return true
+	# Saves antigos possuíam somente uma recompensa, vinda do primeiro terminal.
+	return (
+		normalized == TERMINAL_REFRIGERACAO_1
+		and bool(estado.get("cooling_time_reward_granted", false))
+		and not estado.has(_cooling_terminal_state_key(TERMINAL_REFRIGERACAO_1))
+		and not estado.has(_cooling_terminal_state_key(TERMINAL_REFRIGERACAO_2))
+	)
+
+
+func terminal_refrigeracao_falhou(estado: Dictionary, value: String) -> bool:
+	return bool(estado.get(_cooling_terminal_failed_key(value), false))
+
+
+func terminal_refrigeracao_disponivel(estado: Dictionary, value: String) -> bool:
+	return (
+		not terminal_refrigeracao_concluido(estado, value)
+		and not terminal_refrigeracao_falhou(estado, value)
+	)
+
+
+func iniciar_refrigeracao_ia(
+	player: Player,
+	terminal_value: String = TERMINAL_REFRIGERACAO_1,
+	return_marker_value: String = "ANDAR_DATA_CENTER"
+) -> void:
 	if not is_instance_valid(player):
 		return
 	var estado := SaveGame.office_mission_state(player)
 	if not bool(estado.get("cooling_optional_task_active", false)):
 		return
-	if bool(estado.get("cooling_optional_task_completed", false)):
+	var normalized_terminal := normalizar_terminal_refrigeracao(terminal_value)
+	if not terminal_refrigeracao_disponivel(estado, normalized_terminal):
 		return
 	SaveGame.capturar_tempo_atual()
 	MusicController.set_alarm_quiet_context(&"minigame", true)
 	retorno_refrigeracao_ia = true
-	cena_de_retorno = "res://Scenes/andar_data_refrigeracao.tscn"
-	marcador_de_retorno = "COOLING_TERMINAL"
+	terminal_refrigeracao_ativo = normalized_terminal
+	var current_scene := get_tree().current_scene
+	cena_de_retorno = (
+		current_scene.scene_file_path
+		if is_instance_valid(current_scene) and not current_scene.scene_file_path.is_empty()
+		else "res://Scenes/data_center_refrigeracao.tscn"
+	)
+	marcador_de_retorno = (
+		return_marker_value
+		if not return_marker_value.is_empty()
+		else "ANDAR_DATA_CENTER"
+	)
 	scene_manager.player = player
 	if player.get_parent() != null:
 		player.get_parent().remove_child(player)
@@ -97,7 +151,10 @@ func concluir_refrigeracao_ia() -> void:
 	if not retorno_refrigeracao_ia:
 		return
 	var estado := SaveGame.office_mission_state(scene_manager.player)
-	if bool(estado.get("cooling_time_reward_granted", false)):
+	var normalized_terminal := normalizar_terminal_refrigeracao(
+		terminal_refrigeracao_ativo
+	)
+	if terminal_refrigeracao_concluido(estado, normalized_terminal):
 		_retornar_ao_data_center()
 		return
 	var temporizador := get_tree().get_first_node_in_group("temporizador_jogo")
@@ -111,9 +168,50 @@ func concluir_refrigeracao_ia() -> void:
 	# Mantém exatamente o mesmo temporizador usado no cálculo. Uma nova busca pelo
 	# grupo poderia encontrar outro HUD durante uma transição de cena.
 	SaveGame.tempo_atual = tempo_recompensado
+	estado[_cooling_terminal_state_key(normalized_terminal)] = true
+	# Mantido para compatibilidade com checkpoints da versão de terminal único.
 	estado["cooling_time_reward_granted"] = true
 	estado["cooling_optional_task_completed"] = true
 	estado["cooling_completion_thought_pending"] = true
+	var terminal_1_done := terminal_refrigeracao_concluido(
+		estado,
+		TERMINAL_REFRIGERACAO_1
+	)
+	var terminal_2_done := terminal_refrigeracao_concluido(
+		estado,
+		TERMINAL_REFRIGERACAO_2
+	)
+	var completed_count := int(terminal_1_done) + int(terminal_2_done)
+	estado["cooling_terminals_completed"] = completed_count
+	estado["cooling_other_terminal_available"] = (
+		terminal_refrigeracao_disponivel(estado, TERMINAL_REFRIGERACAO_1)
+		or terminal_refrigeracao_disponivel(estado, TERMINAL_REFRIGERACAO_2)
+	)
+	estado["cooling_all_terminals_completed"] = completed_count >= 2
+	SaveGame.save_global_state("hall_quest_01", estado)
+	_retornar_ao_data_center()
+
+
+func falhar_refrigeracao_ia() -> void:
+	if not retorno_refrigeracao_ia:
+		return
+	SaveGame.capturar_tempo_atual()
+	var estado := SaveGame.office_mission_state(scene_manager.player)
+	var normalized_terminal := normalizar_terminal_refrigeracao(
+		terminal_refrigeracao_ativo
+	)
+	if terminal_refrigeracao_disponivel(estado, normalized_terminal):
+		estado[_cooling_terminal_failed_key(normalized_terminal)] = true
+	var has_alternative := (
+		terminal_refrigeracao_disponivel(estado, TERMINAL_REFRIGERACAO_1)
+		or terminal_refrigeracao_disponivel(estado, TERMINAL_REFRIGERACAO_2)
+	)
+	estado["cooling_other_terminal_available"] = has_alternative
+	estado["cooling_failure_has_alternative"] = has_alternative
+	estado["cooling_failure_thought_pending"] = true
+	if not has_alternative and not bool(estado.get("cooling_optional_task_completed", false)):
+		estado["cooling_optional_task_active"] = false
+		estado["cooling_optional_task_cancelled"] = true
 	SaveGame.save_global_state("hall_quest_01", estado)
 	_retornar_ao_data_center()
 
@@ -191,6 +289,7 @@ func _retornar_ao_data_center() -> void:
 	var marcador := marcador_de_retorno
 	retorno_reparo_rfid = false
 	retorno_refrigeracao_ia = false
+	terminal_refrigeracao_ativo = ""
 	cena_de_retorno = ""
 	marcador_de_retorno = ""
 	if destino.is_empty():

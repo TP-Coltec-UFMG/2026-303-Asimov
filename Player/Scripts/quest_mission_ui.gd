@@ -8,6 +8,8 @@ const COOLING_THOUGHT_PLAN := "cooling:reduce_capacity"
 const COOLING_THOUGHT_ACTION := "cooling:redirect_plan"
 const COOLING_THOUGHT_SUCCESS := "cooling:success"
 const COOLING_THOUGHT_RESULT := "cooling:extra_time"
+const COOLING_THOUGHT_FAILURE := "cooling:failed_attempt"
+const COOLING_THOUGHT_FAILURE_ALTERNATIVE := "cooling:other_system_after_failure"
 const COOLING_TASK_INDEX := 13
 const COOLING_IDLE_DELAY := 3.0
 
@@ -77,6 +79,8 @@ func _process(delta: float) -> void:
 	if current_player == null:
 		return
 	var state := SaveGame.office_mission_state(current_player)
+	if bool(state.get("cooling_failure_thought_pending", false)):
+		_queue_cooling_failure(current_player, state)
 	if bool(state.get("cooling_completion_thought_pending", false)):
 		_queue_cooling_completion(current_player, state)
 	if bool(state.get("cooling_intro_started", false)) and not bool(state.get("cooling_optional_task_active", false)):
@@ -180,7 +184,25 @@ func _queue_cooling_completion(current_player: Player, state: Dictionary) -> voi
 	state["cooling_completion_thought_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_SUCCESS, "Funcionou.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_RESULT, "Agora tenho mais algum tempo enquanto a IA recalcula a refrigeração.")
+	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_RESULT, "Agora tenho mais algum tempo.")
+	_sync_optional_cooling_row()
+	set_panel_visible(true)
+	if current_player.checkpoint_enabled:
+		SaveGame.create_checkpoint(current_player)
+
+
+func _queue_cooling_failure(current_player: Player, state: Dictionary) -> void:
+	state["cooling_failure_thought_pending"] = false
+	SaveGame.save_global_state("hall_quest_01", state)
+	current_player.balao_de_pensamento.enfileirar(
+		COOLING_THOUGHT_FAILURE,
+		"Essa não!!!"
+	)
+	if bool(state.get("cooling_failure_has_alternative", false)):
+		current_player.balao_de_pensamento.enfileirar(
+			COOLING_THOUGHT_FAILURE_ALTERNATIVE,
+			"Tá, tem outro sistema de refrigeração..."
+		)
 	_sync_optional_cooling_row()
 	set_panel_visible(true)
 	if current_player.checkpoint_enabled:
@@ -355,11 +377,12 @@ func _activate_return_to_data_center_task() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(current_player)
 	if not bool(state.get("data_center_return_task_pending", false)):
 		return
+	var already_arrived := bool(state.get("data_center_return_task_completed", false))
 	state["data_center_return_task_pending"] = false
-	state["data_center_return_task_active"] = true
-	state["data_center_return_task_completed"] = false
+	state["data_center_return_task_active"] = not already_arrived
+	state["data_center_return_task_completed"] = already_arrived
 	SaveGame.save_global_state("hall_quest_01", state)
-	show_return_to_data_center_task(false)
+	show_return_to_data_center_task(already_arrived, already_arrived)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
 

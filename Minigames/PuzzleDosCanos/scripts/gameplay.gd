@@ -20,6 +20,7 @@ const TEMPO_TOTAL: int = 30
 const QUANTIDADE_TIPOS_CANOS: int = 6
 const LIMITE_GRADE: Vector2i = Vector2i(7, 6)
 const INICIO_PREENCHIMENTO: Vector2i = Vector2i(0, 0)
+const SAIDA_GRADE: Vector2i = Vector2i(7, 6)
 
 const SOM_VIRAR_CANO: AudioStream = preload("res://Minigames/PuzzleDosCanos/sounds/drop_002.ogg")
 const SOM_ERRO: AudioStream = preload("res://Minigames/PuzzleDosCanos/sounds/soundshelfstudio-ui-error-pop-515668.mp3")
@@ -28,9 +29,12 @@ const SOM_ACERTO: AudioStream = preload("res://Minigames/PuzzleDosCanos/sounds/c
 var cursor: Vector2i = Vector2i.ZERO
 var parado: bool = false
 var puzzle_concluido: bool = false
+var puzzle_expirado: bool = false
 var mutex_preenchimento: Mutex = Mutex.new()
 
 var estado_preenchimento: Dictionary
+var solucao_tipos: Dictionary = {}
+var caminho_solucao: Array[Vector2i] = []
 
 var grade: Array = [
 	[null, null, null, null, null, null, null, null],
@@ -44,10 +48,11 @@ var grade: Array = [
 
 
 func _ready() -> void:
+	if not $time.finished.is_connected(tempo_finalizado):
+		$time.finished.connect(tempo_finalizado)
 	iniciar_grade()
 	$fader.show()
 	reiniciar()
-	configurar_canos()
 	$tm_blink.start()
 	$time/tm.start()
 	$music.play()
@@ -71,59 +76,145 @@ func iniciar_grade() -> void:
 
 
 func configurar_canos() -> void:
-	var ultimo_tipo = null
-	var quantidade_ultimo_tipo: int = 0
-
-	# Passagem horizontal
+	# Primeiro preenche o tabuleiro com distrações aleatórias.
 	for y in range(7):
 		for x in range(8):
-			if x == 7 and y == 6:
-				break
+			if Vector2i(x, y) == SAIDA_GRADE:
+				continue
+			grade[y][x].set_type(randi() % QUANTIDADE_TIPOS_CANOS)
 
-			var tipo: int = randi() % QUANTIDADE_TIPOS_CANOS
-			var cano = grade[y][x]
+	# Depois constrói uma rota monotônica e válida. Ela sempre usa exatamente
+	# seis movimentos para baixo e seis para a direita, mas em ordem aleatória.
+	# Isso mantém o formato variável sem criar becos sem saída impossíveis.
+	var passos: Array[int] = []
+	for _index in range(6):
+		passos.append(DirecaoFluxo.Baixo)
+		passos.append(DirecaoFluxo.Direita)
+	passos.shuffle()
 
-			cano.set_type(tipo)
+	solucao_tipos.clear()
+	caminho_solucao.clear()
+	var posicao := INICIO_PREENCHIMENTO
+	var direcao_entrada := DirecaoFluxo.Baixo
+	for indice in range(passos.size() + 1):
+		var direcao_saida: int = (
+			passos[indice]
+			if indice < passos.size()
+			else DirecaoFluxo.Direita
+		)
+		var tipo_correto := _tipo_para_conexao(
+			direcao_entrada,
+			direcao_saida
+		)
+		solucao_tipos[posicao] = tipo_correto
+		caminho_solucao.append(posicao)
+		grade[posicao.y][posicao.x].set_type(
+			_orientacao_aleatoria_do_mesmo_formato(tipo_correto)
+		)
+		if indice < passos.size():
+			posicao += _vetor_da_direcao(direcao_saida)
+			@warning_ignore("int_as_enum_without_cast")
+			direcao_entrada = direcao_saida
 
-			if ultimo_tipo == tipo:
-				quantidade_ultimo_tipo += 1
+	assert(_caminho_gerado_e_valido())
 
-				# Mantido como no código original para não alterar a lógica
-				if quantidade_ultimo_tipo == 0:
-					while ultimo_tipo != tipo:
-						tipo = randi() % QUANTIDADE_TIPOS_CANOS
 
-					cano.set_type(tipo)
-			else:
-				quantidade_ultimo_tipo = 1
+func _tipo_para_conexao(entrada: int, saida: int) -> int:
+	if entrada == saida:
+		if entrada == DirecaoFluxo.Direita or entrada == DirecaoFluxo.Esquerda:
+			return TipoCano.Horizontal
+		return TipoCano.Vertical
+	match Vector2i(entrada, saida):
+		Vector2i(DirecaoFluxo.Baixo, DirecaoFluxo.Direita):
+			return TipoCano.CimaDireita
+		Vector2i(DirecaoFluxo.Direita, DirecaoFluxo.Baixo):
+			return TipoCano.EsquerdaBaixo
+		Vector2i(DirecaoFluxo.Baixo, DirecaoFluxo.Esquerda):
+			return TipoCano.CimaEsquerda
+		Vector2i(DirecaoFluxo.Esquerda, DirecaoFluxo.Baixo):
+			return TipoCano.DireitaBaixo
+		Vector2i(DirecaoFluxo.Cima, DirecaoFluxo.Direita):
+			return TipoCano.DireitaBaixo
+		Vector2i(DirecaoFluxo.Direita, DirecaoFluxo.Cima):
+			return TipoCano.CimaEsquerda
+		Vector2i(DirecaoFluxo.Cima, DirecaoFluxo.Esquerda):
+			return TipoCano.EsquerdaBaixo
+		Vector2i(DirecaoFluxo.Esquerda, DirecaoFluxo.Cima):
+			return TipoCano.CimaDireita
+	return -1
 
-			ultimo_tipo = tipo
 
-	ultimo_tipo = null
-	quantidade_ultimo_tipo = 0
+func _orientacao_aleatoria_do_mesmo_formato(tipo_correto: int) -> int:
+	if tipo_correto == TipoCano.Horizontal or tipo_correto == TipoCano.Vertical:
+		return TipoCano.Horizontal if randi() % 2 == 0 else TipoCano.Vertical
+	return TipoCano.EsquerdaBaixo + (randi() % 4)
 
-	# Passagem vertical
-	for x in range(8):
-		for y in range(7):
-			if x == 7 and y == 6:
-				break
 
-			var cano = grade[y][x]
-			var tipo = cano.type
+func _vetor_da_direcao(direcao: int) -> Vector2i:
+	match direcao:
+		DirecaoFluxo.Direita:
+			return Vector2i.RIGHT
+		DirecaoFluxo.Cima:
+			return Vector2i.UP
+		DirecaoFluxo.Esquerda:
+			return Vector2i.LEFT
+		DirecaoFluxo.Baixo:
+			return Vector2i.DOWN
+	return Vector2i.ZERO
 
-			if ultimo_tipo == tipo:
-				quantidade_ultimo_tipo += 1
 
-				# Mantido como no código original para não alterar a lógica
-				if quantidade_ultimo_tipo == 0:
-					while ultimo_tipo != tipo:
-						tipo = randi() % QUANTIDADE_TIPOS_CANOS
+func _proxima_direcao(tipo: int, entrada: int) -> int:
+	match [entrada, tipo]:
+		[DirecaoFluxo.Direita, TipoCano.Horizontal]:
+			return DirecaoFluxo.Direita
+		[DirecaoFluxo.Direita, TipoCano.EsquerdaBaixo]:
+			return DirecaoFluxo.Baixo
+		[DirecaoFluxo.Direita, TipoCano.CimaEsquerda]:
+			return DirecaoFluxo.Cima
+		[DirecaoFluxo.Baixo, TipoCano.Vertical]:
+			return DirecaoFluxo.Baixo
+		[DirecaoFluxo.Baixo, TipoCano.CimaEsquerda]:
+			return DirecaoFluxo.Esquerda
+		[DirecaoFluxo.Baixo, TipoCano.CimaDireita]:
+			return DirecaoFluxo.Direita
+		[DirecaoFluxo.Esquerda, TipoCano.Horizontal]:
+			return DirecaoFluxo.Esquerda
+		[DirecaoFluxo.Esquerda, TipoCano.DireitaBaixo]:
+			return DirecaoFluxo.Baixo
+		[DirecaoFluxo.Esquerda, TipoCano.CimaDireita]:
+			return DirecaoFluxo.Cima
+		[DirecaoFluxo.Cima, TipoCano.Vertical]:
+			return DirecaoFluxo.Cima
+		[DirecaoFluxo.Cima, TipoCano.EsquerdaBaixo]:
+			return DirecaoFluxo.Esquerda
+		[DirecaoFluxo.Cima, TipoCano.DireitaBaixo]:
+			return DirecaoFluxo.Direita
+	return -1
 
-					cano.set_type(tipo)
-			else:
-				quantidade_ultimo_tipo = 1
 
-			ultimo_tipo = tipo
+func _caminho_gerado_e_valido() -> bool:
+	var posicao := INICIO_PREENCHIMENTO
+	var direcao := DirecaoFluxo.Baixo
+	var visitados: Dictionary = {}
+	for _passo in range(grade.size() * grade[0].size()):
+		if posicao == SAIDA_GRADE:
+			return true
+		if (
+			posicao.x < 0
+			or posicao.y < 0
+			or posicao.y >= grade.size()
+			or posicao.x >= grade[0].size()
+			or visitados.has(posicao)
+			or not solucao_tipos.has(posicao)
+		):
+			return false
+		visitados[posicao] = true
+		@warning_ignore("int_as_enum_without_cast")
+		direcao = _proxima_direcao(int(solucao_tipos[posicao]), direcao)
+		if direcao < 0:
+			return false
+		posicao += _vetor_da_direcao(direcao)
+	return false
 
 
 func pegar_cano_em(posicao: Vector2i):
@@ -200,11 +291,18 @@ func ao_apertar_tecla(tecla: int) -> void:
 
 
 func tempo_finalizado() -> void:
-	preencher()
+	if parado or puzzle_concluido or puzzle_expirado:
+		return
+	puzzle_expirado = true
+	parar_tudo()
+	$sfx.stream = SOM_ERRO
+	$sfx.play()
+	$anim.play("ohno")
 
 
 func reiniciar() -> void:
 	puzzle_concluido = false
+	puzzle_expirado = false
 	estado_preenchimento = {
 		"passavel": true,
 		"objetivo": false,
@@ -418,6 +516,9 @@ func do_reset() -> void:
 	# O resultado é registrado no instante em que a água alcança a saída.
 	if puzzle_concluido and Progresso.retorno_refrigeracao_ia:
 		Progresso.concluir_refrigeracao_ia()
+		return
+	if puzzle_expirado and Progresso.retorno_refrigeracao_ia:
+		Progresso.falhar_refrigeracao_ia()
 		return
 	fazer_reinicio()
 

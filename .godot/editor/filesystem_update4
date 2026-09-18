@@ -23,3 +23,7 @@ res://Scenes/andar_escritorio.tscn
 res://Scenes/data_center_forte.tscn
 res://data_center_refrigeracao.tscn
 res://Scenes/data_center_refrigeracao.tscn
+res://TileMaps/Andar_DataCenter/andar_data_center.tscn
+res://Scripts/Objects/cooling_terminal.gd
+res://Scenes/scripts/data_center_intro_controller.gd
+res://Scenes/scripts/scene_trigger.gd

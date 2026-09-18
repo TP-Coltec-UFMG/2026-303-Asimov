@@ -16,7 +16,8 @@ const POWER_FLICKER_COUNT: int = 3
 const POWER_FLICKER_OFF_TIME: float = 0.12
 const POWER_FLICKER_ON_TIME: float = 0.10
 
-@export_range(0.1, 10.0, 0.1) var rfid_verification_duration: float = 3.0
+@export_range(0.1, 30.0, 0.1) var rfid_verification_duration: float = 5.0
+@export var rfid_thought_balloon_offset := Vector2(0.0, -17.0)
 
 var player: Player
 var recipient: Node2D
@@ -35,6 +36,10 @@ var power_sequence_running: bool = false
 var access_sequence_busy: bool = false
 var rfid_verification_running: bool = false
 var rfid_player_physics_was_enabled: bool = true
+var rfid_balloon_adjusted: bool = false
+var rfid_balloon_original_position: Vector2
+var rfid_balloon_original_speed: float = 0.0
+var rfid_balloon_original_max_time: float = 0.0
 
 
 func _ready() -> void:
@@ -137,6 +142,16 @@ func _restore_progress() -> void:
 
 
 func _restore_access_progress(state: Dictionary) -> void:
+	# A barra usada após o reparo era uma checagem intermediária. Saves criados
+	# antes desta correção não podem considerar a futura tarefa do minigame pronta.
+	if (
+		bool(state.get("data_center_rfid_reading_checked", false))
+		and not bool(state.get("data_center_rfid_minigame_completed", false))
+	):
+		state["data_center_rfid_reading_checked"] = false
+		state["data_center_rfid_reading_task_active"] = true
+		state["data_center_rfid_reader_rechecked"] = true
+		SaveGame.save_global_state("hall_quest_01", state)
 	var rfid_progress_active := (
 		bool(state.get("data_center_rfid_inspection_task_active", false))
 		or bool(state.get("data_center_rfid_wires_task_active", false))
@@ -151,6 +166,20 @@ func _restore_access_progress(state: Dictionary) -> void:
 		SaveGame.save_global_state("hall_quest_01", state)
 	if bool(state.get("data_center_access_npc_arrived", false)) or rfid_progress_active:
 		_place_recipient_at_access()
+	if bool(state.get("data_center_rfid_reading_checked", false)):
+		_set_recipient_interaction(false)
+		_ensure_story_card(BOSS_CARD_TYPE)
+		_set_access_prompt("Leitura verificada")
+		_set_access_interactable(false)
+		_show_rfid_repair_tasks(true, true)
+		return
+	if bool(state.get("data_center_rfid_reader_rechecked", false)):
+		_set_recipient_interaction(false)
+		_ensure_story_card(BOSS_CARD_TYPE)
+		_set_access_prompt("Leitura RFID pendente")
+		_set_access_interactable(false)
+		_show_rfid_repair_tasks(true, false)
+		return
 	if bool(state.get("data_center_rfid_wires_repaired", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
@@ -438,11 +467,13 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 			"Primeiro preciso resolver o problema da energia."
 		)
 		return
+	if (
+		bool(state.get("data_center_rfid_reader_rechecked", false))
+		or bool(state.get("data_center_rfid_reading_checked", false))
+	):
+		return
 	if bool(state.get("data_center_rfid_wires_repaired", false)):
-		player.balao_de_pensamento.enfileirar(
-			"data_center:check_rfid_after_repair",
-			"Os cabos estão prontos. Agora preciso verificar a leitura RFID."
-		)
+		await _verify_repaired_rfid_reader()
 		return
 	if bool(state.get("data_center_rfid_wires_task_active", false)):
 		_start_wire_repair_minigame()
@@ -507,29 +538,24 @@ func _reject_boss_card() -> void:
 func _inspect_rfid_reader() -> void:
 	access_sequence_busy = true
 	_set_access_interactable(false)
-	if not await _run_rfid_verification():
+	var superseded_thoughts: Array[String] = ["data_center:inspect_rfid_reader"]
+	player.balao_de_pensamento.descartar(superseded_thoughts)
+	var inspection_thoughts: Array[Dictionary] = [
+		{
+			"id": "data_center:rfid_reader_has_power",
+			"text": "O leitor ainda tem energia..."
+		},
+		{
+			"id": "data_center:rfid_burned_wires",
+			"text": "Achei o problema. Os cabos estão queimados."
+		},
+		{
+			"id": "data_center:rfid_reconnect_plan",
+			"text": "Preciso reconectá-los antes de testar os cartões de novo."
+		}
+	]
+	if not await _run_rfid_verification(inspection_thoughts):
 		_set_access_interactable(true)
-		access_sequence_busy = false
-		return
-	await player.balao_de_pensamento.mostrar_texto(
-		"O leitor ainda tem energia...",
-		"data_center:rfid_reader_has_power"
-	)
-	if not _is_current_scene():
-		access_sequence_busy = false
-		return
-	await player.balao_de_pensamento.mostrar_texto(
-		"Achei o problema. Os cabos estão queimados.",
-		"data_center:rfid_burned_wires"
-	)
-	if not _is_current_scene():
-		access_sequence_busy = false
-		return
-	await player.balao_de_pensamento.mostrar_texto(
-		"Preciso reconectá-los antes de testar os cartões de novo.",
-		"data_center:rfid_reconnect_plan"
-	)
-	if not _is_current_scene():
 		access_sequence_busy = false
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
@@ -544,7 +570,29 @@ func _inspect_rfid_reader() -> void:
 	access_sequence_busy = false
 
 
-func _run_rfid_verification() -> bool:
+func _verify_repaired_rfid_reader() -> void:
+	access_sequence_busy = true
+	_set_access_interactable(false)
+	if not await _run_rfid_verification():
+		_set_access_interactable(true)
+		access_sequence_busy = false
+		return
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	state["data_center_rfid_wires_task_active"] = false
+	state["data_center_rfid_reading_task_active"] = true
+	state["data_center_rfid_reading_checked"] = false
+	state["data_center_rfid_reader_rechecked"] = true
+	SaveGame.save_global_state("hall_quest_01", state)
+	_set_access_prompt("Leitura RFID pendente")
+	_show_rfid_repair_tasks(true, false)
+	_save_checkpoint()
+	access_sequence_busy = false
+
+
+func _run_rfid_verification(
+	thoughts: Array[Dictionary] = [],
+	duration: float = -1.0
+) -> bool:
 	if rfid_verification_ui == null or rfid_verification_bar == null or rfid_verification_label == null:
 		push_error("A barra RFID precisa existir em SceneTrigger2/RFIDVerification.")
 		return true
@@ -557,19 +605,86 @@ func _run_rfid_verification() -> bool:
 	player.UpdateAnimation()
 	player.sfx_walking.stop()
 	player.set_physics_process(false)
+	if not thoughts.is_empty():
+		_prepare_rfid_thought_balloon()
 	_set_rfid_verification_progress(0.0)
 	rfid_verification_ui.show()
+	var effective_duration := duration
+	if effective_duration <= 0.0:
+		effective_duration = (
+			_calculate_rfid_thoughts_duration(thoughts)
+			if not thoughts.is_empty()
+			else rfid_verification_duration
+		)
 	var progress_tween := create_tween()
 	progress_tween.tween_method(
 		_set_rfid_verification_progress,
 		0.0,
-		100.0,
-		rfid_verification_duration
+		99.0 if not thoughts.is_empty() else 100.0,
+		effective_duration
 	).set_trans(Tween.TRANS_LINEAR)
-	await progress_tween.finished
+	if not thoughts.is_empty():
+		for thought in thoughts:
+			player.balao_de_pensamento.enfileirar(
+				str(thought.get("id", "")),
+				str(thought.get("text", ""))
+			)
+		var last_thought: Dictionary = thoughts.back()
+		await player.balao_de_pensamento.mostrar_texto(
+			str(last_thought.get("text", "")),
+			str(last_thought.get("id", ""))
+		)
+	if progress_tween.is_valid() and progress_tween.is_running():
+		await progress_tween.finished
+	_set_rfid_verification_progress(100.0)
+	if not thoughts.is_empty():
+		# Exibe os 100% por um quadro exatamente quando o último balão termina.
+		await get_tree().process_frame
 	_hide_rfid_verification()
+	_restore_rfid_thought_balloon()
 	_restore_player_after_rfid_verification()
 	return _is_current_scene()
+
+
+func _calculate_rfid_thoughts_duration(thoughts: Array[Dictionary]) -> float:
+	var balloon := player.balao_de_pensamento
+	var characters_per_second := maxf(float(balloon.get("caracteres_por_segundo")), 0.001)
+	var minimum_time := float(balloon.get("tempo_minimo"))
+	var maximum_time := float(balloon.get("tempo_maximo"))
+	var fade_time := float(balloon.get("tempo_fade_out"))
+	var total := 0.0
+	for thought in thoughts:
+		var text := str(thought.get("text", ""))
+		total += clampf(text.length() / characters_per_second, minimum_time, maximum_time)
+		total += fade_time
+	return maxf(total, 0.1)
+
+
+func _prepare_rfid_thought_balloon() -> void:
+	if rfid_balloon_adjusted or not is_instance_valid(player):
+		return
+	var balloon := player.balao_de_pensamento
+	if balloon == null:
+		return
+	rfid_balloon_adjusted = true
+	rfid_balloon_original_position = balloon.position
+	rfid_balloon_original_speed = float(balloon.get("caracteres_por_segundo"))
+	rfid_balloon_original_max_time = float(balloon.get("tempo_maximo"))
+	balloon.position = rfid_balloon_original_position + rfid_thought_balloon_offset
+	balloon.set("caracteres_por_segundo", 10.0)
+	balloon.set("tempo_maximo", 5.0)
+
+
+func _restore_rfid_thought_balloon() -> void:
+	if not rfid_balloon_adjusted:
+		return
+	rfid_balloon_adjusted = false
+	if not is_instance_valid(player) or player.balao_de_pensamento == null:
+		return
+	var balloon := player.balao_de_pensamento
+	balloon.position = rfid_balloon_original_position
+	balloon.set("caracteres_por_segundo", rfid_balloon_original_speed)
+	balloon.set("tempo_maximo", rfid_balloon_original_max_time)
 
 
 func _set_rfid_verification_progress(value: float) -> void:
@@ -586,6 +701,7 @@ func _hide_rfid_verification() -> void:
 
 
 func _restore_player_after_rfid_verification() -> void:
+	_restore_rfid_thought_balloon()
 	if not rfid_verification_running:
 		return
 	rfid_verification_running = false
@@ -812,10 +928,14 @@ func _show_rfid_reader_task() -> void:
 		quest_ui.show_rfid_reader_task(false)
 
 
-func _show_rfid_repair_tasks(wires_repaired: bool, animate: bool = false) -> void:
+func _show_rfid_repair_tasks(
+	wires_repaired: bool,
+	reading_checked: bool = false,
+	animate: bool = false
+) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_rfid_repair_tasks(wires_repaired, false, animate)
+		quest_ui.show_rfid_repair_tasks(wires_repaired, reading_checked, animate)
 
 
 func _set_access_prompt(text: String) -> void:
