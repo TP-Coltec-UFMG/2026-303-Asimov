@@ -67,6 +67,34 @@ func _run() -> void:
 	MusicController.call("_update_heartbeat", 2.0)
 	_expect(is_equal_approx(MusicController.heartbeat.pitch_scale, 1.0), "O batimento precisa voltar à velocidade normal após religar o disjuntor.")
 
+	var tension_audio := MusicController.tension_ambience as AudioStreamPlayer2D
+	_expect(tension_audio.stream is AudioStreamMP3, "A nova camada ambiente precisa usar o áudio configurado.")
+	if tension_audio.stream is AudioStreamMP3:
+		_expect((tension_audio.stream as AudioStreamMP3).loop, "A nova camada ambiente precisa tocar em loop.")
+	SaveGame.tempo_atual = 120.0
+	MusicController.tension_intro_elapsed = 0.0
+	tension_audio.pitch_scale = MusicController.TENSION_NORMAL_PITCH
+	MusicController.call("_update_tension_ambience", 1.0)
+	_expect(tension_audio.playing, "A camada de tensão precisa tocar durante a partida.")
+	_expect(tension_audio.pitch_scale > 1.0, "A camada de tensão precisa começar acelerada.")
+	MusicController.tension_intro_elapsed = MusicController.TENSION_INTRO_DURATION
+	MusicController.call("_update_tension_ambience", 2.0)
+	_expect(is_equal_approx(tension_audio.pitch_scale, 1.0), "Depois da introdução, a camada de tensão precisa voltar à velocidade normal.")
+	mission["data_center_power_outage"] = true
+	mission["data_center_breaker_restored"] = false
+	MusicController.call("_update_tension_ambience", 2.0)
+	_expect(tension_audio.pitch_scale > 1.0, "A camada de tensão precisa acelerar com o disjuntor desligado.")
+	mission["data_center_breaker_restored"] = true
+	SaveGame.tempo_atual = 46.0
+	tension_audio.pitch_scale = 1.0
+	MusicController.call("_update_tension_ambience", 2.0)
+	var final_start_pitch := tension_audio.pitch_scale
+	SaveGame.tempo_atual = 1.0
+	MusicController.call("_update_tension_ambience", 2.0)
+	_expect(tension_audio.pitch_scale > final_start_pitch, "A camada de tensão precisa acelerar progressivamente entre 46 e zero segundos.")
+	var audio_state := MusicController.get_checkpoint_state()
+	_expect((audio_state.get("alarm_envelope", {}) as Dictionary).has("tension_intro_elapsed"), "O progresso inicial da camada ambiente precisa participar do checkpoint.")
+
 	SaveGame.tempo_atual = 60.0
 	var timer := TIMER_SCENE.instantiate()
 	add_child(timer)
@@ -117,7 +145,9 @@ func _run() -> void:
 	# Reproduz a troca para a cutscene: o gerenciador ainda pode conservar por
 	# um frame a referência para o Player que acabou de ser liberado.
 	MusicController.call("_update_heartbeat", 0.1)
+	MusicController.call("_update_tension_ambience", 0.1)
 	_expect(not MusicController.heartbeat.playing, "Uma referência liberada do Player não pode quebrar o áudio no tempo zero.")
+	_expect(not tension_audio.playing, "A camada de tensão precisa parar fora da partida.")
 	SaveGame.save_data = original_save
 	SaveGame.tempo_atual = original_time
 	Configs._change_movimento_camera(original_camera_movement)

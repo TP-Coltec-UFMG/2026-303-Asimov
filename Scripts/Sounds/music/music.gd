@@ -7,6 +7,7 @@ extends Node2D
 @onready var som_de_fundo: AudioStreamPlayer2D = $SOM_DE_FUNDO
 @onready var musica_quando_o_disjuntor_apagar: AudioStreamPlayer2D = $MUSICA_QUANDO_O_DISJUNTOR_APAGAR
 @onready var heartbeat: AudioStreamPlayer2D = $HEARTBEAT
+@onready var tension_ambience: AudioStreamPlayer2D = $TENSION_AMBIENCE
 
 const AUDIO_PLAYERS: Dictionary = {
 	"bg_music": NodePath("BG Music"),
@@ -15,7 +16,8 @@ const AUDIO_PLAYERS: Dictionary = {
 	"som_alarme": NodePath("SOM_ALARME"),
 	"som_de_fundo": NodePath("SOM_DE_FUNDO"),
 	"musica_quando_o_disjuntor_apagar": NodePath("MUSICA_QUANDO_O_DISJUNTOR_APAGAR"),
-	"heartbeat": NodePath("HEARTBEAT")
+	"heartbeat": NodePath("HEARTBEAT"),
+	"tension_ambience": NodePath("TENSION_AMBIENCE")
 }
 
 const SILENT_VOLUME_DB: float = -80.0
@@ -32,6 +34,14 @@ const HEARTBEAT_POWER_OUTAGE_PITCH: float = 1.45
 const HEARTBEAT_PITCH_CHANGE_PER_SECOND: float = 0.4
 const HEARTBEAT_FINAL_VOLUME_FACTOR: float = 0.5
 const HEARTBEAT_VOLUME_CHANGE_DB_PER_SECOND: float = 4.0
+const TENSION_INTRO_DURATION: float = 20.0
+const TENSION_NORMAL_PITCH: float = 1.0
+const TENSION_INTRO_PITCH: float = 1.25
+const TENSION_POWER_OUTAGE_PITCH: float = 1.4
+const TENSION_FINAL_START_PITCH: float = 1.2
+const TENSION_FINAL_MAX_PITCH: float = 1.65
+const TENSION_FINAL_DURATION: float = 46.0
+const TENSION_PITCH_CHANGE_PER_SECOND: float = 0.35
 
 enum PowerOutageAudioState {
 	IDLE,
@@ -60,6 +70,7 @@ var power_outage_music_start_db: float = SILENT_VOLUME_DB
 var power_outage_music_target_db: float = SILENT_VOLUME_DB
 var heartbeat_normal_volume_db: float = 0.0
 var heartbeat_target_volume_db: float = 0.0
+var tension_intro_elapsed: float = 0.0
 
 
 func _ready() -> void:
@@ -69,6 +80,10 @@ func _ready() -> void:
 		var heartbeat_loop := heartbeat.stream.duplicate() as AudioStreamMP3
 		heartbeat_loop.loop = true
 		heartbeat.stream = heartbeat_loop
+	if tension_ambience.stream is AudioStreamMP3:
+		var tension_loop := tension_ambience.stream.duplicate() as AudioStreamMP3
+		tension_loop.loop = true
+		tension_ambience.stream = tension_loop
 	_play_if_stopped(bg_ambient)
 	_play_if_stopped(bg_music)
 	alarm_normal_volume_db = som_alarme.volume_db
@@ -78,6 +93,7 @@ func _ready() -> void:
 	heartbeat_normal_volume_db = heartbeat.volume_db
 	heartbeat_target_volume_db = heartbeat_normal_volume_db
 	heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
+	tension_ambience.pitch_scale = TENSION_NORMAL_PITCH
 
 
 func _process(delta: float) -> void:
@@ -87,6 +103,7 @@ func _process(delta: float) -> void:
 	_update_alarm_volume(delta)
 	_update_power_outage_audio(delta)
 	_update_heartbeat(delta)
+	_update_tension_ambience(delta)
 
 
 func _update_heartbeat(delta: float) -> void:
@@ -121,6 +138,58 @@ func _update_heartbeat(delta: float) -> void:
 		heartbeat.pitch_scale,
 		target_pitch,
 		HEARTBEAT_PITCH_CHANGE_PER_SECOND * delta
+	)
+
+
+func _update_tension_ambience(delta: float) -> void:
+	if not is_instance_valid(scene_manager.player):
+		if tension_ambience.playing:
+			tension_ambience.stop()
+		tension_ambience.pitch_scale = TENSION_NORMAL_PITCH
+		return
+
+	_play_if_stopped(tension_ambience)
+	var mission := SaveGame.office_mission_state(scene_manager.player)
+	var target_pitch := TENSION_NORMAL_PITCH
+
+	if tension_intro_elapsed < TENSION_INTRO_DURATION:
+		tension_intro_elapsed = minf(
+			tension_intro_elapsed + delta,
+			TENSION_INTRO_DURATION
+		)
+		target_pitch = TENSION_INTRO_PITCH
+
+	var power_is_out := (
+		bool(mission.get("data_center_power_outage", false))
+		and not bool(mission.get("data_center_breaker_restored", false))
+	)
+	if power_is_out:
+		target_pitch = maxf(target_pitch, TENSION_POWER_OUTAGE_PITCH)
+
+	var remaining_time := SaveGame.tempo_atual
+	if remaining_time > 0.0 and remaining_time <= TENSION_FINAL_DURATION:
+		var final_progress := clampf(
+			1.0 - (remaining_time / TENSION_FINAL_DURATION),
+			0.0,
+			1.0
+		)
+		var smooth_progress := (
+			final_progress * final_progress
+			* (3.0 - 2.0 * final_progress)
+		)
+		target_pitch = maxf(
+			target_pitch,
+			lerpf(
+				TENSION_FINAL_START_PITCH,
+				TENSION_FINAL_MAX_PITCH,
+				smooth_progress
+			)
+		)
+
+	tension_ambience.pitch_scale = move_toward(
+		tension_ambience.pitch_scale,
+		target_pitch,
+		TENSION_PITCH_CHANGE_PER_SECOND * delta
 	)
 
 
@@ -318,6 +387,8 @@ func stop_all_audio() -> void:
 	alarm_user_muted = false
 	alarm_user_position = 0.0
 	alarm_quiet_contexts.clear()
+	tension_intro_elapsed = 0.0
+	tension_ambience.pitch_scale = TENSION_NORMAL_PITCH
 
 	# MusicController é um autoload e sobrevive às mudanças de cena. Por isso,
 	# um reset de campanha precisa parar explicitamente todos os players.
@@ -365,7 +436,8 @@ func get_checkpoint_state() -> Dictionary:
 		"alarm_start": power_outage_alarm_start_db,
 		"alarm_target": power_outage_alarm_target_db,
 		"music_start": power_outage_music_start_db,
-		"music_target": power_outage_music_target_db
+		"music_target": power_outage_music_target_db,
+		"tension_intro_elapsed": tension_intro_elapsed
 	}
 
 	for player_id: String in AUDIO_PLAYERS:
@@ -477,6 +549,11 @@ func _restore_alarm_envelope(state: Dictionary) -> void:
 	power_outage_alarm_target_db = float(envelope.get("alarm_target", som_alarme.volume_db))
 	power_outage_music_start_db = float(envelope.get("music_start", musica_quando_o_disjuntor_apagar.volume_db))
 	power_outage_music_target_db = float(envelope.get("music_target", musica_quando_o_disjuntor_apagar.volume_db))
+	tension_intro_elapsed = clampf(
+		float(envelope.get("tension_intro_elapsed", TENSION_INTRO_DURATION)),
+		0.0,
+		TENSION_INTRO_DURATION
+	)
 	if envelope.is_empty():
 		var mission: Dictionary = SaveGame.office_mission_state()
 		if bool(mission.get("data_center_power_outage", false)) and not bool(mission.get("data_center_breaker_restored", false)):

@@ -1,13 +1,1 @@
-res://Objects/scripts/fogo.gd
-res://Objects/scripts/painel_elevador.gd
-res://Scenes/scripts/scene_trigger.gd
 res://Scripts/Sounds/music/music.gd
-res://Objects/scripts/controle_de_tempo.gd
-res://Tests/ambient_audio_test.gd
-res://Scripts/Data/configs.gd
-res://Scripts/Data/save/SaveLoad.gd
-res://Scripts/Acessibility/cor_alto_contraste.gd
-res://Objects/controle_de_tempo.tscn
-res://shaders/mapa_acessibilidade.gdshader
-res://shaders/filtro_daltonismo.gdshader
-res://shaders/pause_menu.gdshader
