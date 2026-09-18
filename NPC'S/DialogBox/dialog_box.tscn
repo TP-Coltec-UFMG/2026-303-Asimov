@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dn1l12ktryt3s"]
 
-[ext_resource type="Script" uid="uid://bmvdtmhkjs62q" path="res://NPC'S/DialogBox/dialog_box.gd" id="1_fcbdm"]
+[ext_resource type="Script" uid="uid://bmvdtmhkjs62q" path="res://NPC'S/DialogBox/script/dialog_box.gd" id="1_fcbdm"]
 [ext_resource type="Texture2D" uid="uid://b6amt711ifhmd" path="res://NPC'S/DialogBox/20250420manaSoul9SlicesA-Sheet.png" id="1_ficbl"]
 [ext_resource type="Texture2D" uid="uid://hpu47ec512yv" path="res://NPC'S/DialogBox/ArrowSprites/arrow00.png" id="2_h14un"]
 [ext_resource type="Texture2D" uid="uid://df1080adpevf1" path="res://NPC'S/DialogBox/ArrowSprites/arrow06.png" id="3_5jb7t"]
-[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Fonts/PixelifySans-Medium.ttf" id="3_5pjh5"]
+[ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="3_5pjh5"]
 [ext_resource type="Texture2D" uid="uid://def2nkt6ovpoo" path="res://NPC'S/DialogBox/ArrowSprites/arrow15.png" id="4_fcbdm"]
 [ext_resource type="Texture2D" uid="uid://bqgju4k0ourig" path="res://NPC'S/DialogBox/ArrowSprites/arrow16.png" id="5_5pjh5"]
 [ext_resource type="Texture2D" uid="uid://dsjahprm7j5c4" path="res://NPC'S/DialogBox/ArrowSprites/arrow07.png" id="6_7rhv4"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://b2emny650obsp" path="res://NPC'S/DialogBox/ArrowSprites/arrow12.png" id="11_ilkid"]
 [ext_resource type="Texture2D" uid="uid://0gvt5377l58m" path="res://NPC'S/DialogBox/ArrowSprites/arrow13.png" id="12_ilbug"]
 [ext_resource type="Texture2D" uid="uid://qj4b86m5f4lj" path="res://NPC'S/DialogBox/ArrowSprites/arrow14.png" id="13_c18mn"]
+
 
 [sub_resource type="AnimatedTexture" id="AnimatedTexture_d0u6y"]
 frames = 14

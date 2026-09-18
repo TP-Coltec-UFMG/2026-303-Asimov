@@ -17,7 +17,7 @@
 [ext_resource type="Script" uid="uid://c3o46ilruapx4" path="res://Scripts/Objects/Label/fps_label.gd" id="13_g2psy"]
 [ext_resource type="PackedScene" uid="uid://dsw7hwfva88w4" path="res://TelaMorte/morreu.tscn" id="13_l2am8"]
 [ext_resource type="Texture2D" uid="uid://k85qdse5p5ho" path="res://Sprites/Balao_de_pensamento.png" id="16_l2am8"]
-[ext_resource type="Script" uid="uid://dalss1e6fdi2m" path="res://Player/balao_de_pensamento.gd" id="17_0yomn"]
+[ext_resource type="Script" uid="uid://dalss1e6fdi2m" path="res://Player/Scripts/balao_de_pensamento.gd" id="17_0yomn"]
 [ext_resource type="PackedScene" uid="uid://c0gnsi802ues5" path="res://Player/quest_mission_ui.tscn" id="18_quest_ui"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 

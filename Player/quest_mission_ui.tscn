@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c0gnsi802ues5"]
 
-[ext_resource type="Script" uid="uid://dja6157yfkiav" path="res://Player/quest_mission_ui.gd" id="1"]
+[ext_resource type="Script" uid="uid://dja6157yfkiav" path="res://Player/Scripts/quest_mission_ui.gd" id="1"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="2"]
 [ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://Sprites/ui/New_Piskel.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://Sprites/ui/New_Piskel1.png" id="4"]
@@ -226,6 +226,19 @@ text = "VERIFIQUE A LEITURA RFID"
 label_settings = SubResource("LabelSettingsTask")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer13" unique_id=247420568]
+position = Vector2(-8, 6)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFramesCheck")
+
+[node name="HBoxContainer14" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="VBoxContainer/HBoxContainer14" groups=["alto_contraste"]]
+layout_mode = 2
+text = "OPCIONAL: REDIRECIONE A\nREFRIGERAÇÃO DA IA"
+label_settings = SubResource("LabelSettingsTask")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/HBoxContainer14"]
 position = Vector2(-8, 6)
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFramesCheck")

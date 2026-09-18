@@ -19,11 +19,11 @@
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="11_vhcpt"]
 [ext_resource type="Script" uid="uid://djwkfu2et7d8o" path="res://Scenes/scripts/office_intro_controller.gd" id="12_intro"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
-size = Vector2(11, 17)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4f2l"]
+size = Vector2(11, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ekofs"]
-size = Vector2(12, 17)
+size = Vector2(12, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pondc"]
 size = Vector2(11, 17)
@@ -138,7 +138,7 @@ connected_scene = "sala_chefe"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=953326990]
 z_index = 1
 position = Vector2(102, -210)
-shape = SubResource("RectangleShape2D_g4v7s")
+shape = SubResource("RectangleShape2D_p4f2l")
 
 [node name="Interectable" parent="SceneTrigger" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("10_ekofs")]
 position = Vector2(166, -210)

@@ -2,9 +2,10 @@ extends Control
 
 signal tempo_esgotado
 
-const TEMPO_LIMITE_DE_JOGO: float = 60 * 10
+const TEMPO_LIMITE_DE_JOGO: float = 60 * 2
 const TEMPO_INICIO_AUDIO: float = 11.0
 const TEMPO_INICIO_COUNT_DOWN: float = 46.0
+const TEMPO_EVENTO_REFRIGERACAO: float = 120.0
 
 @onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var label: Label = $Label
@@ -35,6 +36,7 @@ func _process(delta: float) -> void:
 	var tempo_restante_atual: float = get_tempo_restante()
 
 	SaveGame.tempo_atual = tempo_restante_atual
+	_verificar_evento_refrigeracao(tempo_restante_atual)
 
 	var segundos_restantes := maxi(
 		0,
@@ -64,6 +66,25 @@ func get_tempo_restante() -> float:
 		0.0,
 		TEMPO_LIMITE_DE_JOGO - tempo_decorrido
 	)
+
+
+func _verificar_evento_refrigeracao(tempo_restante_atual: float) -> void:
+	if tempo_restante_atual > TEMPO_EVENTO_REFRIGERACAO:
+		return
+	var estado := SaveGame.office_mission_state()
+	if bool(estado.get("cooling_opportunity_triggered", false)):
+		return
+	if bool(estado.get("cooling_optional_task_completed", false)):
+		return
+	# A redução temporária da queda de energia não pode antecipar o evento.
+	if (
+		bool(estado.get("data_center_power_outage", false))
+		and not bool(estado.get("data_center_breaker_restored", false))
+	):
+		return
+	estado["cooling_opportunity_triggered"] = true
+	estado["cooling_opportunity_pending"] = true
+	SaveGame.save_global_state("hall_quest_01", estado)
 
 
 func carregar_tempo_restante(novo_tempo: float) -> void:
