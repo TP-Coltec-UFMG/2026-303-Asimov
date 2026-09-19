@@ -1,6 +1,10 @@
 class_name QuestMissionUI
 extends CanvasLayer
 
+@export var standalone_mode: bool = false
+@export var standalone_left_side: bool = false
+@export var standalone_white_border: bool = false
+
 const BREAKER_URGENT_THOUGHT_ID := "data_center:breaker_restored_urgent"
 const BREAKER_RETURN_THOUGHT_ID := "data_center:breaker_return_plan"
 const COOLING_THOUGHT_TIME := "cooling:time_running_out"
@@ -57,6 +61,13 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	if standalone_mode:
+		_configure_standalone_appearance()
+		_ignore_mouse_input_recursive(self)
+		for row in rows:
+			row.hide()
+		hide()
+		return
 	rows[2].hide()
 	rows[3].hide()
 	rows[4].hide()
@@ -72,6 +83,34 @@ func _ready() -> void:
 	hide()
 	call_deferred("_connect_thought_balloon")
 	call_deferred("refresh_saved_state")
+
+
+func _configure_standalone_appearance() -> void:
+	var background := $ColorRect as Control
+	var border := $StandaloneBorder as Control
+	var title := $Label2 as Control
+	var task_list := $VBoxContainer as Control
+	border.visible = standalone_white_border
+	if not standalone_left_side:
+		return
+	_move_control_to_left(background, 0.0, 106.0)
+	_move_control_to_left(border, 0.0, 106.0)
+	_move_control_to_left(title, 36.0, 77.0)
+	_move_control_to_left(task_list, 16.0, 105.0)
+
+
+func _move_control_to_left(control: Control, left: float, right: float) -> void:
+	control.anchor_left = 0.0
+	control.anchor_right = 0.0
+	control.offset_left = left
+	control.offset_right = right
+
+
+func _ignore_mouse_input_recursive(node: Node) -> void:
+	if node is Control:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		_ignore_mouse_input_recursive(child)
 
 
 func _process(delta: float) -> void:
@@ -98,7 +137,7 @@ func _process(delta: float) -> void:
 
 
 func set_panel_visible(value: bool) -> void:
-	if value:
+	if value and not standalone_mode:
 		_sync_optional_cooling_row()
 	desired_visible = value
 	visible = value and not get_tree().paused and not hidden_for_elevator
@@ -117,8 +156,55 @@ func restore_after_elevator() -> void:
 func hide_all_tasks() -> void:
 	for row in rows:
 		row.hide()
+	if standalone_mode:
+		set_panel_visible(false)
+		return
 	_sync_optional_cooling_row()
 	set_panel_visible(rows[COOLING_TASK_INDEX].visible)
+
+
+func show_standalone_task(
+	text: String,
+	completed: bool = false,
+	animate: bool = false
+) -> void:
+	if not standalone_mode:
+		return
+	for index in range(rows.size()):
+		set_task_visible(index, index == 0)
+	set_task_text(0, text)
+	set_task_completed(0, completed, animate)
+	set_panel_visible(true)
+
+
+func show_standalone_task_sequence(
+	tasks: Array[String],
+	completed_count: int,
+	animate_latest: bool = false
+) -> void:
+	if not standalone_mode or tasks.is_empty():
+		return
+	var safe_completed := clampi(completed_count, 0, tasks.size())
+	var start_index := 0
+	if safe_completed >= tasks.size():
+		start_index = maxi(tasks.size() - 3, 0)
+	elif safe_completed >= 3:
+		start_index = floori(float(safe_completed - 1) / 2.0) * 2
+		start_index = mini(start_index, maxi(tasks.size() - 3, 0))
+	for row_index in range(rows.size()):
+		var task_index := start_index + row_index
+		var should_show := row_index < 3 and task_index < tasks.size()
+		set_task_visible(row_index, should_show)
+		if not should_show:
+			continue
+		set_task_text(row_index, tasks[task_index])
+		var completed := task_index < safe_completed
+		set_task_completed(
+			row_index,
+			completed,
+			animate_latest and completed and task_index == safe_completed - 1
+		)
+	set_panel_visible(true)
 
 
 func _sync_optional_cooling_row() -> void:

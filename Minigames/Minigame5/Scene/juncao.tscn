@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bnk4n0uul6fy2"]
+
+[ext_resource type="Script" uid="uid://d207tv4mow56p" path="res://Minigames/Minigame5/Scripts/Componentes_Eletronicos/juncao_nomes.gd" id="1_deui3"]
+[ext_resource type="Script" uid="uid://clt7njf0w46up" path="res://Minigames/Minigame5/Scripts/Componentes_Eletronicos/juncao.gd" id="1_lct18"]
+[ext_resource type="PackedScene" uid="uid://da5tsd6747scw" path="res://Minigames/Minigame5/Scene/fio.tscn" id="5_1mvua"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oaa4g"]
+size = Vector2(6.25, 5)
+
+[node name="Juncao" type="Node2D" unique_id=93694696]
+scale = Vector2(0.6, 0.6)
+script = ExtResource("1_deui3")
+
+[node name="Juncao" type="Area2D" parent="." unique_id=2043035489]
+z_index = 3
+position = Vector2(100, 80)
+scale = Vector2(4, 4)
+script = ExtResource("1_lct18")
+fio_scene = ExtResource("5_1mvua")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Juncao" unique_id=1165393587]
+shape = SubResource("RectangleShape2D_oaa4g")
+metadata/_edit_lock_ = true
+
+[node name="Ponto_Conexao_1" type="Marker2D" parent="Juncao" unique_id=1782651638]
+position = Vector2(-3.5, -3.5)
+
+[node name="Ponto_Conexao_2" type="Marker2D" parent="Juncao" unique_id=391137459]
+position = Vector2(-3.5, -3.5)

@@ -1,0 +1,348 @@
+[gd_scene format=3 uid="uid://1d8j3rxmi02t"]
+
+[ext_resource type="Script" uid="uid://cb2mw1l7mln2m" path="res://Minigames/Minigame5/Scripts/mini_game_cartao.gd" id="1_x73a3"]
+[ext_resource type="PackedScene" uid="uid://c2oiebauri6qy" path="res://Minigames/Minigame5/Scene/notebook.tscn" id="2_m2x7f"]
+[ext_resource type="Script" uid="uid://8t4bg2ajicb" path="res://Minigames/Minigame5/Scripts/Componentes_Eletronicos/leitor_cartao.gd" id="3_x73a3"]
+[ext_resource type="PackedScene" uid="uid://bnk4n0uul6fy2" path="res://Minigames/Minigame5/Scene/juncao.tscn" id="4_2wvgn"]
+[ext_resource type="Script" uid="uid://dfph2rk76k5ji" path="res://Minigames/Minigame5/Scripts/panel.gd" id="5_4t7ic"]
+[ext_resource type="Texture2D" uid="uid://bul3fngl5yxkd" path="res://Minigames/Minigame5/Sprites/controleDePorta_0.png" id="6_2s1cl"]
+[ext_resource type="Script" uid="uid://dqe6xh1r3pyvk" path="res://Minigames/Minigame5/Scripts/Componentes_Eletronicos/cartao.gd" id="7_x73a3"]
+[ext_resource type="Texture2D" uid="uid://uyr2tq70yrgo" path="res://Minigames/Minigame5/Sprites/sprite_cartao1.png" id="8_rpite"]
+[ext_resource type="Texture2D" uid="uid://k4hdvha1c767" path="res://Minigames/Minigame5/Sprites/laptop (1).png" id="9_jkg28"]
+[ext_resource type="Texture2D" uid="uid://sdbilm5frjs2" path="res://Minigames/Minigame5/Sprites/laptop.png" id="10_uf0mr"]
+[ext_resource type="FontFile" uid="uid://cq55fc7w0rrr5" path="res://Minigames/Minigame5/Sprites/PixelifySans-SemiBold.ttf" id="11_43oxc"]
+[ext_resource type="Script" uid="uid://dnnal1h4rhygy" path="res://Minigames/Minigame5/Scripts/t.gd" id="11_m2x7f"]
+[ext_resource type="Texture2D" uid="uid://dys3wavu8wpov" path="res://Minigames/Minigame5/Sprites/fundo_parede_chao_sem_mesa.png" id="12_6ghc1"]
+[ext_resource type="Script" uid="uid://vvs423ck4vht" path="res://Minigames/Minigame5/Scripts/button.gd" id="13_43oxc"]
+[ext_resource type="Texture2D" uid="uid://vliat5762a28" path="res://Minigames/Minigame5/Sprites/New Piskel (4).png" id="13_ndjbc"]
+[ext_resource type="Texture2D" uid="uid://dhdb3ahmb5btm" path="res://Minigames/Minigame5/Sprites/mesa_controle.png" id="14_g7udv"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="15_timer"]
+[ext_resource type="PackedScene" uid="uid://c0gnsi802ues5" path="res://Player/quest_mission_ui.tscn" id="16_quest"]
+[ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_pause"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fdm2o"]
+size = Vector2(67, 88)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_21jex"]
+radius = 5.0
+height = 24.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3c2fn"]
+size = Vector2(31, 29)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vo3yc"]
+atlas = ExtResource("9_jkg28")
+region = Rect2(0, 0, 81, 69)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xcfw"]
+atlas = ExtResource("10_uf0mr")
+region = Rect2(0, 0, 81, 69)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3c2fn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vo3yc")
+}],
+"loop": 1,
+"name": &"conectado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xcfw")
+}],
+"loop": 1,
+"name": &"normal",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m2x7f"]
+
+[sub_resource type="FontVariation" id="FontVariation_m2x7f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_43oxc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2wvgn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2s1cl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rpite"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jkg28"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_88i68"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ni4e7"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nscsa"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bjdyy"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olw2i"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nj4d1"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r82r2"]
+atlas = ExtResource("13_ndjbc")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fdm2o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_88i68")
+}],
+"loop": 1,
+"name": &"aberta",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ni4e7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nscsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bjdyy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olw2i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nj4d1")
+}],
+"loop": 0,
+"name": &"abrir",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r82r2")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Mini_Game_Cartao" type="Node2D" unique_id=1837925664]
+script = ExtResource("1_x73a3")
+
+[node name="Panel2" type="Panel" parent="." unique_id=295654004]
+visible = false
+z_index = 1
+offset_left = 201.0
+offset_top = 149.0
+offset_right = 627.3889
+offset_bottom = 187.88889
+scale = Vector2(2, 2)
+
+[node name="Label" type="Label" parent="Panel2" unique_id=736819070]
+z_index = 2
+layout_mode = 0
+offset_left = 38.888866
+offset_top = -2.083397
+offset_right = 254.88887
+offset_bottom = 20.916603
+scale = Vector2(2, 2)
+theme_override_font_sizes/font_size = 11
+text = "<---  conecte o terminal aqui"
+metadata/_edit_lock_ = true
+
+[node name="Notebook" parent="." unique_id=1971991808 groups=["note"] instance=ExtResource("2_m2x7f")]
+visible = false
+z_index = 5
+
+[node name="Home" type="Node2D" parent="." unique_id=256181083]
+
+[node name="Leitor_cartao" type="Area2D" parent="Home" unique_id=1811804142 groups=["leitor"]]
+position = Vector2(228, 68)
+scale = Vector2(0.3, 0.3)
+script = ExtResource("3_x73a3")
+
+[node name="Juncao2" parent="Home/Leitor_cartao" unique_id=1762207564 groups=["juncao"] instance=ExtResource("4_2wvgn")]
+position = Vector2(170, 95)
+scale = Vector2(0.4, 0.4)
+nome = "juncao1"
+
+[node name="Panel" type="Panel" parent="Home/Leitor_cartao/Juncao2" unique_id=639383799]
+visible = false
+z_index = 2
+offset_left = 175.0
+offset_top = -62.5
+offset_right = 608.33325
+offset_bottom = 41.666687
+scale = Vector2(2, 2)
+script = ExtResource("5_4t7ic")
+
+[node name="Label" type="Label" parent="Home/Leitor_cartao/Juncao2/Panel" unique_id=2069958798]
+layout_mode = 0
+offset_left = 83.333336
+offset_top = 43.75
+offset_right = 441.6666
+offset_bottom = 147.91669
+scale = Vector2(2, 2)
+text = "Ainda não"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Home/Leitor_cartao" unique_id=1741799529]
+position = Vector2(176.66666, 85)
+shape = SubResource("RectangleShape2D_fdm2o")
+
+[node name="Panel" type="Panel" parent="Home/Leitor_cartao" unique_id=662872171]
+z_index = 3
+offset_left = 230.00003
+offset_top = -23.333363
+offset_right = 328.00006
+offset_bottom = 16.666641
+scale = Vector2(2, 2)
+script = ExtResource("5_4t7ic")
+
+[node name="Label" type="Label" parent="Home/Leitor_cartao/Panel" unique_id=273983514]
+z_index = 2
+layout_mode = 0
+offset_left = 5.166667
+offset_top = -0.6666918
+offset_right = 51.83334
+offset_bottom = 18.499973
+scale = Vector2(2, 2)
+theme_override_font_sizes/font_size = 8
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Home/Leitor_cartao" unique_id=1192881672]
+z_index = 2
+texture_filter = 1
+position = Vector2(189.5, 104.04164)
+scale = Vector2(0.3867187, 0.47428402)
+texture = ExtResource("6_2s1cl")
+
+[node name="Cartao" type="Area2D" parent="Home" unique_id=981929988]
+z_index = 3
+position = Vector2(347, 138)
+script = ExtResource("7_x73a3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Home/Cartao" unique_id=332223719]
+position = Vector2(2.6666667, 3.333334)
+shape = SubResource("CapsuleShape2D_21jex")
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Home/Cartao" unique_id=814298592]
+texture_filter = 1
+position = Vector2(1, 3)
+texture = ExtResource("8_rpite")
+metadata/_edit_lock_ = true
+
+[node name="Computador" type="Area2D" parent="Home" unique_id=72076119]
+position = Vector2(117, 28)
+scale = Vector2(0.6, 0.6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Home/Computador" unique_id=1724405390]
+position = Vector2(476, 164)
+shape = SubResource("RectangleShape2D_3c2fn")
+metadata/_edit_lock_ = true
+
+[node name="Juncao" parent="Home/Computador" unique_id=93694696 instance=ExtResource("4_2wvgn")]
+texture_filter = 1
+position = Vector2(411.6667, 156.66666)
+scale = Vector2(0.4, 0.4)
+
+[node name="Button" type="Button" parent="Home/Computador" unique_id=860234451]
+offset_left = 464.99997
+offset_top = 128.33334
+offset_right = 518.3334
+offset_bottom = 160.33334
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Home/Computador" unique_id=695750460]
+z_index = 3
+texture_filter = 1
+position = Vector2(494.99997, 161.66666)
+scale = Vector2(1.4876543, 1.5869567)
+sprite_frames = SubResource("SpriteFrames_3c2fn")
+animation = &"normal"
+
+[node name="Panel" type="Panel" parent="." unique_id=1513598011]
+z_index = 7
+texture_filter = 1
+offset_left = 7.0
+offset_top = 194.0
+offset_right = 175.0
+offset_bottom = 257.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_m2x7f")
+script = ExtResource("11_m2x7f")
+
+[node name="Label" type="Label" parent="Panel" unique_id=964883033]
+z_index = 2
+layout_mode = 0
+offset_left = -1.0
+offset_top = -29.0
+offset_right = 254.0
+offset_bottom = 21.0
+theme_override_fonts/font = SubResource("FontVariation_m2x7f")
+theme_override_font_sizes/font_size = 7
+metadata/_edit_lock_ = true
+
+[node name="Button" type="Button" parent="Panel" unique_id=286097525]
+z_index = 1
+texture_filter = 1
+layout_mode = 0
+offset_left = 115.0
+offset_top = 47.0
+offset_right = 233.0
+offset_bottom = 82.0
+theme_override_fonts/font = ExtResource("11_43oxc")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxEmpty_43oxc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_2wvgn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2s1cl")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_rpite")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jkg28")
+text = "continuar"
+script = ExtResource("13_43oxc")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=473461229]
+position = Vector2(241.00002, 75.5)
+scale = Vector2(0.288839, 0.40701383)
+texture = ExtResource("12_6ghc1")
+metadata/_edit_lock_ = true
+
+[node name="Porta" type="AnimatedSprite2D" parent="." unique_id=753180690 groups=["porta"]]
+texture_filter = 1
+position = Vector2(208.00002, 85.5)
+scale = Vector2(5.75, 5.5937495)
+sprite_frames = SubResource("SpriteFrames_fdm2o")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=306763206]
+texture_filter = 1
+position = Vector2(385.75, 170.5)
+scale = Vector2(1.5240964, 2.8846157)
+texture = ExtResource("14_g7udv")
+metadata/_edit_lock_ = true
+
+[node name="CampaignHUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Controle_de_tempo" parent="CampaignHUD" instance=ExtResource("15_timer")]
+mouse_filter = 2
+
+[node name="PauseMenu" parent="CampaignHUD" instance=ExtResource("17_pause")]
+process_physics_priority = -6
+
+[node name="QUEST_MISSION" parent="." instance=ExtResource("16_quest")]
+layer = 6
+standalone_mode = true
+standalone_left_side = true
+standalone_white_border = true
+
+[connection signal="pressed" from="Home/Computador/Button" to="." method="_on_button_pressed"]

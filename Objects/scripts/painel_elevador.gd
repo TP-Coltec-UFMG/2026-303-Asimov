@@ -18,7 +18,6 @@ extends Node2D
 @onready var bt_andar_porta_selecionado: Sprite2D = $BtAndarPortaSelecionado
 @onready var abrindo: AnimatedSprite2D = $Abrindo
 @onready var elevator_moving: AudioStreamPlayer = $ElevatorMoving
-@onready var elevator_arrival: AudioStreamPlayer = $ElevatorArrival
 
 @onready var label: Label = $Label
 
@@ -46,7 +45,6 @@ func resetar_sprites() -> void:
 
 func animacao() -> void:
 	elevator_moving.stop()
-	elevator_arrival.play()
 	bt_andar_normal.hide()
 	abrindo.show()
 	abrindo.play("default")
@@ -55,7 +53,6 @@ func animacao() -> void:
 
 
 func iniciar_movimento() -> void:
-	elevator_arrival.stop()
 	if not elevator_moving.playing:
 		elevator_moving.play()
 

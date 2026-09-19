@@ -5,6 +5,7 @@ var som_ativo: bool = true
 var modo_teste: bool = false
 var retorno_da_sala_do_chefe: bool = false
 var retorno_reparo_rfid: bool = false
+var retorno_cartao_rfid: bool = false
 var retorno_refrigeracao_ia: bool = false
 var terminal_refrigeracao_ativo: String = ""
 var cena_de_retorno: String = ""
@@ -74,6 +75,23 @@ func iniciar_reparo_leitor_rfid(player: Player) -> void:
 		player.get_parent().remove_child(player)
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Minigames/Minigame2/Main.tscn")
+
+
+func iniciar_reprogramacao_cartao_rfid(player: Player) -> void:
+	if not is_instance_valid(player):
+		return
+	SaveGame.capturar_tempo_atual()
+	MusicController.set_alarm_quiet_context(&"minigame", true)
+	retorno_cartao_rfid = true
+	cena_de_retorno = "res://Scenes/andar_data_center.tscn"
+	marcador_de_retorno = "DATA_CENTER_FORTE"
+	scene_manager.player = player
+	if player.get_parent() != null:
+		player.get_parent().remove_child(player)
+	get_tree().paused = false
+	get_tree().change_scene_to_file(
+		"res://Minigames/Minigame5/Scene/mini_game_cartao.tscn"
+	)
 
 
 func normalizar_terminal_refrigeracao(value: String) -> String:
@@ -229,6 +247,21 @@ func concluir_reparo_leitor_rfid() -> void:
 	_retornar_ao_data_center()
 
 
+func concluir_reprogramacao_cartao_rfid() -> void:
+	if not retorno_cartao_rfid:
+		return
+	SaveGame.capturar_tempo_atual()
+	var estado := SaveGame.office_mission_state(scene_manager.player)
+	estado["data_center_rfid_wires_task_active"] = false
+	estado["data_center_rfid_wires_repaired"] = true
+	estado["data_center_rfid_reader_rechecked"] = true
+	estado["data_center_rfid_reading_task_active"] = false
+	estado["data_center_rfid_reading_checked"] = true
+	estado["data_center_rfid_minigame_completed"] = true
+	SaveGame.save_global_state("hall_quest_01", estado)
+	_retornar_ao_data_center()
+
+
 func cancelar_reparo_leitor_rfid() -> void:
 	if not retorno_reparo_rfid:
 		return
@@ -240,6 +273,8 @@ func texto_saida() -> String:
 	if retorno_refrigeracao_ia:
 		return "VOLTAR AO DATA CENTER"
 	if retorno_reparo_rfid:
+		return "VOLTAR AO LEITOR"
+	if retorno_cartao_rfid:
 		return "VOLTAR AO LEITOR"
 	return "VOLTAR AO ESCRITÓRIO" if retorno_da_sala_do_chefe else "SAIR DO HACKER"
 
@@ -253,6 +288,10 @@ func menu() -> void:
 		return
 	if retorno_reparo_rfid:
 		cancelar_reparo_leitor_rfid()
+		return
+	if retorno_cartao_rfid:
+		SaveGame.capturar_tempo_atual()
+		_retornar_ao_data_center()
 		return
 	if retorno_da_sala_do_chefe:
 		_retornar_ao_escritorio()
@@ -288,6 +327,7 @@ func _retornar_ao_data_center() -> void:
 	var destino := cena_de_retorno
 	var marcador := marcador_de_retorno
 	retorno_reparo_rfid = false
+	retorno_cartao_rfid = false
 	retorno_refrigeracao_ia = false
 	terminal_refrigeracao_ativo = ""
 	cena_de_retorno = ""

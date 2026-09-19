@@ -296,6 +296,7 @@ func esta_dentro_do_logo(node: Node) -> bool:
 
 func resume():
 	get_tree().paused = false
+	MusicController.resume_all_audio()
 	audio_state_before_pause.clear()
 	$AnimationPlayer.play_backwards("blur")
 	hide()
@@ -307,6 +308,7 @@ func pause():
 	audio_state_before_pause = (
 		MusicController.get_checkpoint_state().duplicate(true)
 	)
+	MusicController.pause_all_audio()
 	get_tree().paused = true
 	$AnimationPlayer.play("blur")
 	show()

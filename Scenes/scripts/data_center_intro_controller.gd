@@ -169,15 +169,20 @@ func _restore_access_progress(state: Dictionary) -> void:
 	if bool(state.get("data_center_rfid_reading_checked", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
-		_set_access_prompt("Leitura verificada")
-		_set_access_interactable(false)
+		access_trigger.access_override = false
+		_set_access_prompt("Acessar área restrita")
+		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true, true)
+		if not bool(state.get("data_center_rfid_minigame_checkpointed", false)):
+			state["data_center_rfid_minigame_checkpointed"] = true
+			SaveGame.save_global_state("hall_quest_01", state)
+			call_deferred("_save_checkpoint")
 		return
 	if bool(state.get("data_center_rfid_reader_rechecked", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
-		_set_access_prompt("Leitura RFID pendente")
-		_set_access_interactable(false)
+		_set_access_prompt("Reprogramar cartão RFID")
+		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true, false)
 		return
 	if bool(state.get("data_center_rfid_wires_repaired", false)):
@@ -467,10 +472,10 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 			"Primeiro preciso resolver o problema da energia."
 		)
 		return
-	if (
-		bool(state.get("data_center_rfid_reader_rechecked", false))
-		or bool(state.get("data_center_rfid_reading_checked", false))
-	):
+	if bool(state.get("data_center_rfid_reading_checked", false)):
+		return
+	if bool(state.get("data_center_rfid_reader_rechecked", false)):
+		_start_rfid_card_minigame()
 		return
 	if bool(state.get("data_center_rfid_wires_repaired", false)):
 		await _verify_repaired_rfid_reader()
@@ -587,6 +592,7 @@ func _verify_repaired_rfid_reader() -> void:
 	_show_rfid_repair_tasks(true, false)
 	_save_checkpoint()
 	access_sequence_busy = false
+	_start_rfid_card_minigame()
 
 
 func _run_rfid_verification(
@@ -723,6 +729,14 @@ func _start_wire_repair_minigame() -> void:
 	access_sequence_busy = true
 	_save_checkpoint()
 	Progresso.iniciar_reparo_leitor_rfid(player)
+
+
+func _start_rfid_card_minigame() -> void:
+	if access_sequence_busy:
+		return
+	access_sequence_busy = true
+	_save_checkpoint()
+	Progresso.iniciar_reprogramacao_cartao_rfid(player)
 
 
 func _begin_power_failure() -> void:

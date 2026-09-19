@@ -14,6 +14,14 @@ outline_size = 1
 font = ExtResource("2")
 font_size = 7
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxStandaloneBorder"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+
 [sub_resource type="SpriteFrames" id="SpriteFramesCheck"]
 animations = [{
 "frames": [{
@@ -41,6 +49,19 @@ offset_right = 0.0
 offset_bottom = 108.5
 grow_horizontal = 0
 color = Color(0.094685, 0.094685, 0.094685, 1)
+
+[node name="StandaloneBorder" type="Panel" parent="."]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -106.0
+offset_top = 15.5
+offset_right = 0.0
+offset_bottom = 108.5
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxStandaloneBorder")
 
 [node name="Label2" type="Label" parent="." unique_id=1108785265 groups=["alto_contraste"]]
 anchors_preset = 1
