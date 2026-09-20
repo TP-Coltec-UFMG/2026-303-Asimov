@@ -1,0 +1,38 @@
+[gd_resource type="AnimationNodeStateMachine" format=3 uid="uid://5uvbh4g6x83w"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l5tpy"]
+animation = &"intro_close"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5w08w"]
+animation = &"intro_open"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eyctn"]
+animation = &"scan_server_column"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6nbn1"]
+animation = &"scan_server_row_a"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ga4qq"]
+animation = &"scan_server_row_b"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_j6my7"]
+animation = &"scan_server_row_c"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sj3cm"]
+animation = &"scan_server_row_d"
+
+[resource]
+states/IntroClose/node = SubResource("AnimationNodeAnimation_l5tpy")
+states/IntroClose/position = Vector2(680, 140)
+states/IntroOpen/node = SubResource("AnimationNodeAnimation_5w08w")
+states/IntroOpen/position = Vector2(200, 140)
+states/ServerColumn/node = SubResource("AnimationNodeAnimation_eyctn")
+states/ServerColumn/position = Vector2(430, 260)
+states/ServerRowA/node = SubResource("AnimationNodeAnimation_6nbn1")
+states/ServerRowA/position = Vector2(430, 20)
+states/ServerRowB/node = SubResource("AnimationNodeAnimation_ga4qq")
+states/ServerRowB/position = Vector2(430, 80)
+states/ServerRowC/node = SubResource("AnimationNodeAnimation_j6my7")
+states/ServerRowC/position = Vector2(430, 140)
+states/ServerRowD/node = SubResource("AnimationNodeAnimation_sj3cm")
+states/ServerRowD/position = Vector2(430, 200)

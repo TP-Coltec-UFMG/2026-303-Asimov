@@ -18,3 +18,5 @@ res://Scenes/Musics/music_controller.tscn
 res://Scenes/scripts/data_center_forte_intro.gd
 res://Scripts/Data/save/SaveLoad.gd
 res://Scenes/data_center_forte.tscn
+res://Scenes/animations/data_center_forte_intro_animations.tres
+res://Scenes/animations/data_center_forte_intro_tree.tres
