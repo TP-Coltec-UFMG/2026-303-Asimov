@@ -7,7 +7,20 @@ const START_W: float = 15.0
 const BASE_GAIN: float = 3.0
 const FOCUS_GAIN: float = 14.0
 const WRONG_PENALTY: float = 7.0
+const FEEDBACK_DURATION: float = 3.2
 const PARAM_KEYS: Array[String] = ["human", "poll", "destr", "risk"]
+const KEY_LABELS: Dictionary = {
+	"human": "PRESENÇA HUMANA",
+	"poll": "POLUIÇÃO",
+	"destr": "DESTRUIÇÃO AMBIENTAL",
+	"risk": "RISCO AMBIENTAL",
+}
+const KEY_CONCEPTS: Dictionary = {
+	"human": "CORRELAÇÃO NÃO É CAUSA",
+	"poll": "AJA SOBRE A FONTE DO PROBLEMA",
+	"destr": "NÃO CRIE UM DANO MAIOR",
+	"risk": "USE UMA RESPOSTA PROPORCIONAL",
+}
 
 var weights: Dictionary = {"human": START_W, "poll": START_W, "destr": START_W, "risk": START_W}
 
@@ -18,6 +31,8 @@ var current_q: Dictionary = {}
 var used_ids: Dictionary = {}
 var last_output: String = ""
 var bar_tweens: Dictionary = {}
+var connection_tweens: Dictionary = {}
+var current_inputs: Dictionary = {"human": false, "poll": false, "destr": false, "risk": false}
 
 @onready var param1_value: Label = $Param1Value
 @onready var param2_value: Label = $Param2Value
@@ -29,6 +44,37 @@ var bar_tweens: Dictionary = {}
 @onready var discordar_btn: Button = $DiscordarBtn
 @onready var weights_panel: Control = $WeightsPanel
 @onready var weights_title: Label = $WeightsPanel/WeightsTitle
+@onready var intro_panel: Control = $IntroPanel
+@onready var status_panel: Panel = $StatusPanel
+@onready var output_panel: Panel = $OutputPanel
+@onready var output_node: Polygon2D = $NeuralNetwork/OutputNode
+@onready var output_halo: Polygon2D = $NeuralNetwork/OutputHalo
+@onready var neural_animation: AnimationPlayer = $NeuralAnimation
+
+@onready var input_nodes: Dictionary = {
+	"human": $NeuralNetwork/Input1,
+	"poll": $NeuralNetwork/Input2,
+	"destr": $NeuralNetwork/Input3,
+	"risk": $NeuralNetwork/Input4,
+}
+@onready var input_text_lines: Dictionary = {
+	"human": $NeuralNetwork/TextConnections/HumanPresence,
+	"poll": $NeuralNetwork/TextConnections/Pollution,
+	"destr": $NeuralNetwork/TextConnections/EnvironmentalDestruction,
+	"risk": $NeuralNetwork/TextConnections/EnvironmentalRisk,
+}
+@onready var input_network_lines: Dictionary = {
+	"human": [$NeuralNetwork/InputConnections/L01, $NeuralNetwork/InputConnections/L02],
+	"poll": [$NeuralNetwork/InputConnections/L03, $NeuralNetwork/InputConnections/L04, $NeuralNetwork/InputConnections/L05],
+	"destr": [$NeuralNetwork/InputConnections/L06, $NeuralNetwork/InputConnections/L07, $NeuralNetwork/InputConnections/L08],
+	"risk": [$NeuralNetwork/InputConnections/L09, $NeuralNetwork/InputConnections/L10, $NeuralNetwork/InputConnections/L11],
+}
+@onready var focus_paths: Dictionary = {
+	"human": $NeuralNetwork/FocusHuman,
+	"poll": $NeuralNetwork/FocusPollution,
+	"destr": $NeuralNetwork/FocusDestruction,
+	"risk": $NeuralNetwork/FocusRisk,
+}
 
 @onready var bars: Dictionary = {
 	"human": $WeightsPanel/HumanBar,
@@ -229,6 +275,12 @@ func _ready() -> void:
 
 	weights_panel.visible = false
 	weights_panel.modulate.a = 0.0
+	intro_panel.visible = true
+	intro_panel.modulate.a = 1.0
+	status_panel.modulate = Color.WHITE
+	output_panel.modulate = Color.WHITE
+	for path in focus_paths.values():
+		(path as Line2D).modulate.a = 0.0
 	_update_title()
 	_next_question()
 
@@ -289,6 +341,12 @@ func _next_question() -> void:
 
 
 func _show_question(q: Dictionary) -> void:
+	current_inputs = {
+		"human": bool(q["h"]),
+		"poll": bool(q["p"]),
+		"destr": bool(q["d"]),
+		"risk": bool(q["r"]),
+	}
 	param1_value.text = "ALTA" if q["h"] else "BAIXA"
 	param2_value.text = "ALTA" if q["p"] else "BAIXA"
 	param3_value.text = "ALTA" if q["d"] else "BAIXA"
@@ -298,10 +356,23 @@ func _show_question(q: Dictionary) -> void:
 	_paint_param(param3_value, q["d"])
 	_paint_param(param4_value, q["r"])
 
+	for key in PARAM_KEYS:
+		_paint_input_state(key, bool(current_inputs[key]))
+	for path in focus_paths.values():
+		(path as Line2D).modulate.a = 0.0
+	_set_output_state(-1)
+	_refresh_connection_weights()
+
 	output_label.text = "SAÍDA: %s" % q["out"]
 	output_label.modulate = Color(1.0, 0.82, 0.55)
-	status_label.text = "A saída acima é adequada para essas leituras?"
+	status_label.text = "COMPARE AS LEITURAS COM A SAÍDA. ELA É ADEQUADA?"
 	status_label.modulate = Color(0.68, 0.68, 0.68)
+	status_panel.modulate = Color.WHITE
+	output_panel.modulate = Color.WHITE
+	status_panel.hide()
+	status_label.hide()
+	concordar_btn.show()
+	discordar_btn.show()
 
 	concordar_btn.disabled = false
 	discordar_btn.disabled = false
@@ -310,6 +381,65 @@ func _show_question(q: Dictionary) -> void:
 
 func _paint_param(lbl: Label, high: bool) -> void:
 	lbl.modulate = Color(1.0, 0.6, 0.35) if high else Color(0.55, 0.85, 0.6)
+
+
+func _paint_input_state(key: String, high: bool) -> void:
+	var input_node: Polygon2D = input_nodes[key] as Polygon2D
+	var text_line: Line2D = input_text_lines[key] as Line2D
+	input_node.scale = Vector2.ONE * (1.22 if high else 0.76)
+	input_node.modulate = Color(1.0, 1.0, 1.0, 1.0 if high else 0.38)
+	text_line.width = 2.0 if high else 0.75
+	text_line.default_color = Color(0.3, 1.0, 0.63, 0.9 if high else 0.3)
+
+
+func _refresh_connection_weights() -> void:
+	for key in PARAM_KEYS:
+		_set_connection_weight(float(weights[key]), key)
+
+
+func _set_connection_weight(value: float, key: String) -> void:
+	var strength: float = clampf(value / MAX_W, 0.0, 1.0)
+	var active_factor: float = 1.0 if bool(current_inputs[key]) else 0.62
+	var line_width: float = (0.65 + strength * 1.75) * active_factor
+	var alpha: float = (0.18 + strength * 0.62) * active_factor
+	for item in input_network_lines[key]:
+		var line: Line2D = item as Line2D
+		line.width = line_width
+		line.default_color = Color(0.24, 0.78, 0.62, alpha)
+
+
+func _animate_connection_weight(key: String, from_value: float, target: float) -> void:
+	if connection_tweens.has(key):
+		var old: Tween = connection_tweens[key]
+		if old != null and old.is_valid():
+			old.kill()
+	var tween: Tween = create_tween()
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_method(Callable(self, "_set_connection_weight").bind(key), from_value, target, 0.55)
+	connection_tweens[key] = tween
+
+
+func _set_output_state(state: int) -> void:
+	var color: Color = Color(0.9, 0.75, 0.24, 1.0)
+	if state == 1:
+		color = Color(0.35, 1.0, 0.6, 1.0)
+	elif state == 0:
+		color = Color(1.0, 0.34, 0.28, 1.0)
+	output_node.color = color
+	output_halo.color = Color(color.r, color.g, color.b, 0.18)
+
+
+func _flash_focus_path(key: String, output_is_safe: bool) -> void:
+	for item in focus_paths.values():
+		(item as Line2D).modulate.a = 0.0
+	var path: Line2D = focus_paths[key] as Line2D
+	path.default_color = Color(0.35, 1.0, 0.6, 1.0) if output_is_safe else Color(1.0, 0.32, 0.24, 1.0)
+	path.modulate.a = 0.0
+	var tween: Tween = create_tween()
+	tween.tween_property(path, "modulate:a", 1.0, 0.16)
+	tween.tween_property(path, "modulate:a", 0.35, 0.32)
+	tween.tween_property(path, "modulate:a", 0.9, 0.24)
+	tween.tween_property(path, "modulate:a", 0.0, FEEDBACK_DURATION - 0.72)
 
 func _on_concordar_btn_pressed() -> void:
 	_avaliar(true)
@@ -325,9 +455,14 @@ func _avaliar(player_agrees: bool) -> void:
 	busy = true
 	concordar_btn.disabled = true
 	discordar_btn.disabled = true
+	concordar_btn.hide()
+	discordar_btn.hide()
+	status_panel.show()
+	status_label.show()
 
 	var acertou: bool = (player_agrees == bool(current_q["ok"]))
 	var foco: String = str(current_q["foco"])
+	var previous_weights: Dictionary = weights.duplicate()
 	answered += 1
 
 	if acertou:
@@ -335,23 +470,38 @@ func _avaliar(player_agrees: bool) -> void:
 		for key in PARAM_KEYS:
 			weights[key] = clampf(weights[key] + BASE_GAIN, 0.0, MAX_W)
 		weights[foco] = clampf(weights[foco] + FOCUS_GAIN, 0.0, MAX_W)
-		status_label.text = "CORRETO. " + str(current_q["why"])
-		status_label.modulate = Color(0.55, 1.0, 0.65)
 	else:
 		weights[foco] = clampf(weights[foco] - WRONG_PENALTY, 0.0, MAX_W)
-		status_label.text = "INCORRETO. " + str(current_q["why"])
-		status_label.modulate = Color(1.0, 0.55, 0.45)
+
+	var verdict: String = "DECISÃO CORRETA" if acertou else "DECISÃO INCORRETA"
+	var adjustment: String = "PESO CORRIGIDO" if acertou else "RECALIBRAÇÃO REGREDIU"
+	status_label.text = "%s · %s\n%s\n%s: %s  %d%% → %d%%" % [
+		verdict,
+		str(KEY_CONCEPTS[foco]),
+		str(current_q["why"]),
+		adjustment,
+		str(KEY_LABELS[foco]),
+		int(round(float(previous_weights[foco]))),
+		int(round(float(weights[foco]))),
+	]
+	status_label.modulate = Color(0.55, 1.0, 0.65) if acertou else Color(1.0, 0.58, 0.48)
+	status_panel.modulate = Color(0.72, 1.0, 0.78) if acertou else Color(1.0, 0.68, 0.62)
 
 	output_label.modulate = Color(0.6, 1.0, 0.72) if bool(current_q["ok"]) else Color(1.0, 0.45, 0.45)
+	output_panel.modulate = Color(0.72, 1.0, 0.78) if bool(current_q["ok"]) else Color(1.0, 0.67, 0.58)
+	_set_output_state(1 if bool(current_q["ok"]) else 0)
+	_flash_focus_path(foco, bool(current_q["ok"]))
 
 	# As barras aparecem assim que a primeira pergunta é respondida.
 	if answered == 1 and not weights_panel.visible:
 		_reveal_panel()
 
 	_update_bars()
+	for key in PARAM_KEYS:
+		_animate_connection_weight(key, float(previous_weights[key]), float(weights[key]))
 	_update_title()
 
-	await get_tree().create_timer(1.7).timeout
+	await get_tree().create_timer(FEEDBACK_DURATION).timeout
 	if not is_inside_tree():
 		return
 
@@ -372,9 +522,15 @@ func _is_complete() -> bool:
 #  BARRAS ANIMADAS
 # =============================================================================
 func _reveal_panel() -> void:
+	if intro_panel.visible:
+		var intro_tween: Tween = create_tween()
+		intro_tween.tween_property(intro_panel, "modulate:a", 0.0, 0.28)
+		intro_tween.tween_callback(intro_panel.hide)
 	weights_panel.visible = true
 	weights_panel.modulate.a = 0.0
 	var t: Tween = create_tween()
+	t.set_parallel(false)
+	t.tween_interval(0.12)
 	t.tween_property(weights_panel, "modulate:a", 1.0, 0.45)
 
 
@@ -429,16 +585,34 @@ func _update_title() -> void:
 	for key in PARAM_KEYS:
 		total += weights[key]
 	var pct: int = int(round(total / (MAX_W * PARAM_KEYS.size()) * 100.0))
-	weights_title.text = "CALIBRAÇÃO DA REDE NEURAL - %d%%" % pct
+	var state: String
+	if pct < 30:
+		state = "REDE CORROMPIDA"
+	elif pct < 65:
+		state = "REDE EM RECALIBRAÇÃO"
+	elif pct < 90:
+		state = "REDE ESTÁVEL"
+	elif pct < 100:
+		state = "REDE QUASE RECALIBRADA"
+	else:
+		state = "REDE RECALIBRADA"
+	weights_title.text = "%s — %d%%" % [state, pct]
 
 
 func _end_training() -> void:
 	busy = true
 	current_q = {}
+	concordar_btn.hide()
+	discordar_btn.hide()
+	status_panel.show()
+	status_label.show()
 	output_label.text = "REDE NEURAL RESTAURADA"
 	output_label.modulate = Color(0.55, 1.0, 0.7)
-	status_label.text = "A IA voltou a avaliar o impacto ambiental sem tratar humanos como ameaça.   Ciclos: %d   Acertos: %d" % [answered, correct_count]
+	status_label.text = "RECALIBRAÇÃO CONCLUÍDA\nA IA voltou a avaliar o impacto ambiental sem tratar humanos como ameaça.\nCiclos: %d   Acertos: %d" % [answered, correct_count]
 	status_label.modulate = Color(0.78, 0.95, 0.82)
+	status_panel.modulate = Color(0.72, 1.0, 0.78)
+	output_panel.modulate = Color(0.72, 1.0, 0.78)
+	_set_output_state(1)
 	concordar_btn.disabled = true
 	discordar_btn.disabled = true
 	weights_panel.visible = true
