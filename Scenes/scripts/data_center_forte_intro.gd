@@ -1,5 +1,14 @@
 extends Node
 
+const JOB_PROGRAMMER := "programador"
+const MISSION_POINT_NAMES: Array[String] = [
+	"ServerRowA",
+	"ServerRowB",
+	"ServerRowC",
+	"ServerRowD",
+	"ServerColumn",
+]
+
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var cutscene_camera: Camera2D = $CutsceneCamera
@@ -129,14 +138,40 @@ func _prepare_camera() -> void:
 
 
 func _scan_data_center() -> void:
-	var markers: Array[Node] = highlights.get_children()
-	markers.shuffle()
-	for marker in markers:
+	for marker_name_text in _mission_marker_order():
 		if not _cutscene_is_valid():
 			return
+		var marker := highlights.get_node_or_null(marker_name_text) as Node2D
+		if marker == null:
+			continue
 		var marker_name := StringName(marker.name)
 		var animation_name := StringName("scan_" + str(marker.name).to_snake_case())
 		await _play_animation_state(marker_name, animation_name)
+
+
+func _mission_marker_order() -> Array[String]:
+	var result: Array[String] = []
+	# O final do engenheiro ainda não possui pontos próprios; não mostramos
+	# indicações que não terão função nessa rota.
+	if str(Configs.configs.get("job", "")) != JOB_PROGRAMMER:
+		return result
+	var state := SaveGame.office_mission_state(player)
+	var stored: Variant = state.get("programmer_point_order", [])
+	if stored is Array:
+		for value in stored:
+			var point_name := str(value)
+			if MISSION_POINT_NAMES.has(point_name) and not result.has(point_name):
+				result.append(point_name)
+			if result.size() == 4:
+				return result
+	var candidates: Array[String] = MISSION_POINT_NAMES.duplicate()
+	candidates.shuffle()
+	result.clear()
+	for index in range(4):
+		result.append(candidates[index])
+	state["programmer_point_order"] = result.duplicate()
+	SaveGame.save_global_state("hall_quest_01", state)
+	return result
 
 
 func _play_animation_state(state_name: StringName, animation_name: StringName) -> void:

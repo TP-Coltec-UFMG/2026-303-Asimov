@@ -502,16 +502,10 @@ func _update_scene_points(state: Dictionary) -> void:
 	var stage := _completed_task_count(state)
 	if stage < 0 or stage >= point_order.size():
 		return
-	# Os quatro pontos sorteados pertencem ao fluxo. Os próximos ficam apenas
-	# sinalizados; somente o ponto da tarefa atual recebe brilho e interação.
-	for index in range(stage, point_order.size()):
-		var future_marker := highlights.get_node_or_null(point_order[index]) as Node2D
-		if future_marker != null:
-			future_marker.show()
-			future_marker.scale = Vector2(0.78, 0.78)
-			future_marker.modulate = Color(1.0, 1.0, 1.0, 0.22)
 	if busy:
 		return
+	# Fora da apresentação, somente o objetivo atual funciona como dica visual.
+	# Os pontos das próximas missões permanecem totalmente invisíveis.
 	var active_marker := highlights.get_node_or_null(point_order[stage]) as Node2D
 	if active_marker == null:
 		return

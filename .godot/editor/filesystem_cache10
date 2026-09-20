@@ -593,7 +593,7 @@ andar_ferramentas.gd::GDScript::9036300432157133140::1788978796::0::1::::<>BaseS
 andar_hall.gd::GDScript::5885569503602849563::1788561579::0::1::::<>Node2D<><>0<>0<><>::
 base_scene.gd::GDScript::7151311540786337084::1788915114::0::1::::BaseScene<>Node<><>0<>0<><>::
 controles.gd::GDScript::3735926404909644659::1789137907::0::1::::<>Node2D<><>0<>0<><>::
-data_center_forte_intro.gd::GDScript::2657365358033018513::1789937091::0::1::::<>Node<><>0<>0<><>::
+data_center_forte_intro.gd::GDScript::2657365358033018513::1789948427::0::1::::<>Node<><>0<>0<><>::
 data_center_intro_controller.gd::GDScript::6740922882801260241::1789930474::0::1::::DataCenterIntroController<>Node<><>0<>0<><>::
 iluminacao.gd::GDScript::7231332769450479909::1788453774::0::1::::<>Node<><>0<>0<><>::
 inputremapup.gd::GDScript::6885502132731677517::1788453774::0::1::::InputRemapButton<>Button<><>0<>0<><>::
@@ -603,7 +603,7 @@ office_intro_controller.gd::GDScript::7836995145693215340::1789137936::0::1::::<
 office_mission.gd::GDScript::4774908650572598323::1788659383::0::1::::<>CanvasLayer<><>0<>0<><>::
 pause_menu.gd::GDScript::431698496258013052::1789833068::0::1::::<>Control<><>0<>0<><>::
 playground.gd::GDScript::476197900595970920::1788453774::0::1::::<>BaseScene<><>0<>0<><>::
-programmer_ending_controller.gd::GDScript::8728282402080905822::1789947640::0::1::::<>Node<><>0<>0<><>::
+programmer_ending_controller.gd::GDScript::8728282402080905822::1789948427::0::1::::<>Node<><>0<>0<><>::
 quest_mission.gd::GDScript::2314118621829976172::1788725824::0::1::::<>Node<><>0<>0<><>::
 sala_chefe.gd::GDScript::882272284584628439::1788917180::0::1::::<>BaseScene<><>0<>0<><>::
 scene_manager.gd::GDScript::3942646988479546820::1788610143::0::1::::Scene_Maneger<>Node<><>0<>0<><>::
