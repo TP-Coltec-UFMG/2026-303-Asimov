@@ -8,8 +8,15 @@
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="5_ohpwi"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="6_g7g5b"]
 [ext_resource type="Script" uid="uid://bd4ioiujhdfgj" path="res://Scenes/scripts/data_center_forte_intro.gd" id="7_intro"]
-[ext_resource type="AnimationLibrary" path="res://Scenes/animations/data_center_forte_intro_animations.tres" id="8_intro_animations"]
-[ext_resource type="AnimationNodeStateMachine" path="res://Scenes/animations/data_center_forte_intro_tree.tres" id="9_intro_tree"]
+[ext_resource type="AnimationLibrary" uid="uid://2ao6fhdk22jr" path="res://Scenes/animations/data_center_forte_intro_animations.tres" id="8_intro_animations"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://5uvbh4g6x83w" path="res://Scenes/animations/data_center_forte_intro_tree.tres" id="9_intro_tree"]
+[ext_resource type="Script" uid="uid://dwmbshs0uov3c" path="res://Scenes/scripts/programmer_ending_controller.gd" id="10_ending"]
+[ext_resource type="AnimationLibrary" uid="uid://cvvch6irsovm2" path="res://Scenes/animations/programmer_ending_animations.tres" id="11_ending_animations"]
+[ext_resource type="PackedScene" uid="uid://bmmti2muc6ayl" path="res://Minigames/finalsMinigames/MinigameRedeNeural/minigame.tscn" id="12_neural"]
+[ext_resource type="PackedScene" uid="uid://4un5ryng3p8w" path="res://Minigames/finalsMinigames/Minigame4/recovery_system.tscn" id="13_laws"]
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="14_pixel"]
+[ext_resource type="AudioStream" uid="uid://s6okbs6xf7dc" path="res://Sounds/leberch-suspense-511168.mp3" id="15_tension"]
+[ext_resource type="AudioStream" uid="uid://csvy6ntt7yhfr" path="res://Sounds/clavier-music-solas-203831.mp3" id="16_resolution"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(46, 42.25)
@@ -19,6 +26,88 @@ size = Vector2(44, 45)
 
 [sub_resource type="CanvasItemMaterial" id="HighlightUnshaded"]
 light_mode = 1
+
+[sub_resource type="RectangleShape2D" id="ProgrammerPointWideShape"]
+size = Vector2(118, 40)
+
+[sub_resource type="RectangleShape2D" id="ProgrammerPointMediumShape"]
+size = Vector2(88, 40)
+
+[sub_resource type="RectangleShape2D" id="ProgrammerPointColumnShape"]
+size = Vector2(56, 40)
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerAIBalloon"]
+bg_color = Color(0.025, 0.03, 0.038, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.96, 0.97, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerTimerPanel"]
+bg_color = Color(0.02, 0.025, 0.035, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9, 0.94, 1, 0.9)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerOperationPanel"]
+bg_color = Color(0.025, 0.035, 0.045, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.94, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerProgressBackground"]
+bg_color = Color(0.03, 0.055, 0.07, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28, 0.36, 0.42, 1)
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerProgressFill"]
+bg_color = Color(0.82, 0.9, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerFinalButtonNormal"]
+bg_color = Color(0.06, 0.09, 0.08, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 1, 0.7, 0.8)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="ProgrammerFinalButtonFocus"]
+bg_color = Color(0.1, 0.2, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 1, 0.7, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="DATA_CENTER_FORTE" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y1e7n")
@@ -136,6 +225,16 @@ points = PackedVector2Array(-50, -17, 50, -17, 50, 17, -50, 17, -50, -17)
 width = 1.5
 joint_mode = 2
 
+[node name="Interectable" parent="RestrictedAreaIntro/Highlights/ServerRowA" unique_id=1921241461 groups=["Coletaveis"] instance=ExtResource("5_g7g5b")]
+position = Vector2(19, -6)
+interact_name = "PONTO DO SISTEMA"
+prompt_font_size = 8
+is_interactable = false
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerRowA/Interectable" unique_id=670361234]
+shape = SubResource("ProgrammerPointWideShape")
+
 [node name="ServerRowB" type="Node2D" parent="RestrictedAreaIntro/Highlights" unique_id=1833298627]
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -154,6 +253,15 @@ material = SubResource("HighlightUnshaded")
 points = PackedVector2Array(-59, -17, 59, -17, 59, 17, -59, 17, -59, -17)
 width = 1.5
 joint_mode = 2
+
+[node name="Interectable" parent="RestrictedAreaIntro/Highlights/ServerRowB" unique_id=905810689 groups=["Coletaveis"] instance=ExtResource("5_g7g5b")]
+interact_name = "PONTO DO SISTEMA"
+prompt_font_size = 8
+is_interactable = false
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerRowB/Interectable" unique_id=1600857936]
+shape = SubResource("ProgrammerPointWideShape")
 
 [node name="ServerRowC" type="Node2D" parent="RestrictedAreaIntro/Highlights" unique_id=2120518296]
 visible = false
@@ -174,6 +282,16 @@ points = PackedVector2Array(-37, -17, 43, -17, 43, 17, -37, 17, -37, -17)
 width = 1.5
 joint_mode = 2
 
+[node name="Interectable" parent="RestrictedAreaIntro/Highlights/ServerRowC" unique_id=1374741458 groups=["Coletaveis"] instance=ExtResource("5_g7g5b")]
+position = Vector2(3, 0)
+interact_name = "PONTO DO SISTEMA"
+prompt_font_size = 8
+is_interactable = false
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerRowC/Interectable" unique_id=792486444]
+shape = SubResource("ProgrammerPointMediumShape")
+
 [node name="ServerRowD" type="Node2D" parent="RestrictedAreaIntro/Highlights" unique_id=1263177397]
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -192,6 +310,16 @@ material = SubResource("HighlightUnshaded")
 points = PackedVector2Array(-68, -17, 55, -17, 55, 17, -68, 17, -68, -17)
 width = 1.5
 joint_mode = 2
+
+[node name="Interectable" parent="RestrictedAreaIntro/Highlights/ServerRowD" unique_id=604066693 groups=["Coletaveis"] instance=ExtResource("5_g7g5b")]
+position = Vector2(-6.5, 0)
+interact_name = "PONTO DO SISTEMA"
+prompt_font_size = 8
+is_interactable = false
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerRowD/Interectable" unique_id=62998340]
+shape = SubResource("ProgrammerPointWideShape")
 
 [node name="ServerColumn" type="Node2D" parent="RestrictedAreaIntro/Highlights" unique_id=51938148]
 visible = false
@@ -212,6 +340,16 @@ points = PackedVector2Array(-27, -17, 21, -17, 21, 14, -27, 14, -27, -17)
 width = 1.5
 joint_mode = 2
 
+[node name="Interectable" parent="RestrictedAreaIntro/Highlights/ServerColumn" unique_id=1019085745 groups=["Coletaveis"] instance=ExtResource("5_g7g5b")]
+position = Vector2(-3, -1)
+interact_name = "PONTO DO SISTEMA"
+prompt_font_size = 8
+is_interactable = false
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerColumn/Interectable" unique_id=1529907468]
+shape = SubResource("ProgrammerPointColumnShape")
+
 [node name="Overlay" type="CanvasLayer" parent="RestrictedAreaIntro" unique_id=806686329]
 layer = 120
 
@@ -224,11 +362,272 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="ProgrammerEnding" type="Node" parent="." unique_id=869435146]
+script = ExtResource("10_ending")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ProgrammerEnding" unique_id=1881268964]
+libraries/ = ExtResource("11_ending_animations")
+
+[node name="Audio" type="Node" parent="ProgrammerEnding" unique_id=66308784]
+
+[node name="FinalTension" type="AudioStreamPlayer" parent="ProgrammerEnding/Audio" unique_id=1150168000]
+stream = ExtResource("15_tension")
+volume_db = -60.0
+bus = &"Music"
+parameters/looping = true
+
+[node name="FinalResolution" type="AudioStreamPlayer" parent="ProgrammerEnding/Audio" unique_id=1233310712]
+stream = ExtResource("16_resolution")
+volume_db = -17.0
+bus = &"Music"
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=1199192627]
 
 [node name="Controle_de_tempo" parent="UI" unique_id=1720657433 instance=ExtResource("5_ohpwi")]
+
+[node name="ProgrammerEndingUI" type="Control" parent="UI" unique_id=534569801]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="AIVoiceBalloon" type="Panel" parent="UI/ProgrammerEndingUI" unique_id=737646458]
+visible = false
+layout_mode = 0
+offset_left = 14.0
+offset_top = 66.0
+offset_right = 190.0
+offset_bottom = 140.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("ProgrammerAIBalloon")
+
+[node name="Tail" type="Polygon2D" parent="UI/ProgrammerEndingUI/AIVoiceBalloon" unique_id=1593110682]
+position = Vector2(22, 80)
+color = Color(0.96, 0.97, 1, 1)
+polygon = PackedVector2Array(0, -7, 14, -7, 4, 4)
+
+[node name="InnerTail" type="Polygon2D" parent="UI/ProgrammerEndingUI/AIVoiceBalloon" unique_id=696130624]
+position = Vector2(22, 78)
+color = Color(0.025, 0.03, 0.038, 1)
+polygon = PackedVector2Array(3, -7, 11, -7, 4, 1)
+
+[node name="Speaker" type="Label" parent="UI/ProgrammerEndingUI/AIVoiceBalloon" unique_id=1050645239]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 4.0
+offset_right = 64.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 7
+text = "ASIMOV"
+
+[node name="SignalLine" type="ColorRect" parent="UI/ProgrammerEndingUI/AIVoiceBalloon" unique_id=1396398970]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 8.0
+offset_right = 166.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.92, 0.94, 1, 0.65)
+
+[node name="Text" type="Label" parent="UI/ProgrammerEndingUI/AIVoiceBalloon" unique_id=1522322833]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 16.0
+offset_right = 168.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.94, 0.95, 0.98, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 8
+text = "Voz da IA"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="MinigameBackdrop" type="ColorRect" parent="UI/ProgrammerEndingUI" unique_id=410018419]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.005, 0.008, 0.012, 1)
+
+[node name="NeuralMinigame" parent="UI/ProgrammerEndingUI" unique_id=172713029 instance=ExtResource("12_neural")]
+process_mode = 4
+visible = false
+layout_mode = 1
+mouse_filter = 2
+
+[node name="LawsMinigame" parent="UI/ProgrammerEndingUI" unique_id=63975051 instance=ExtResource("13_laws")]
+process_mode = 4
+visible = false
+layout_mode = 1
+mouse_filter = 2
+escape_restarts = false
+
+[node name="MinigameTimer" type="Panel" parent="UI/ProgrammerEndingUI" unique_id=551939156]
+visible = false
+layout_mode = 0
+offset_left = 387.0
+offset_top = 7.0
+offset_right = 474.0
+offset_bottom = 32.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("ProgrammerTimerPanel")
+
+[node name="Label" type="Label" parent="UI/ProgrammerEndingUI/MinigameTimer" unique_id=1099001889]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 12
+text = "00m : 00s"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OperationPanel" type="Panel" parent="UI/ProgrammerEndingUI" unique_id=44124943]
+visible = false
+layout_mode = 0
+offset_left = 70.0
+offset_top = 82.0
+offset_right = 410.0
+offset_bottom = 181.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("ProgrammerOperationPanel")
+
+[node name="Title" type="Label" parent="UI/ProgrammerEndingUI/OperationPanel" unique_id=553802726]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 326.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(0.9, 0.94, 1, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 15
+text = "ISOLANDO PROTOCOLO"
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="UI/ProgrammerEndingUI/OperationPanel" unique_id=27036977]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 38.0
+offset_right = 326.0
+offset_bottom = 57.0
+theme_override_colors/font_color = Color(0.7, 0.78, 0.84, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 9
+text = "LOCALIZANDO ROTINA DE LANÇAMENTO..."
+horizontal_alignment = 1
+
+[node name="Progress" type="ProgressBar" parent="UI/ProgrammerEndingUI/OperationPanel" unique_id=1706161237]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 67.0
+offset_right = 320.0
+offset_bottom = 82.0
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = SubResource("ProgrammerProgressBackground")
+theme_override_styles/fill = SubResource("ProgrammerProgressFill")
+
+[node name="FinalFade" type="ColorRect" parent="UI/ProgrammerEndingUI" unique_id=479461992]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="FinalCard" type="ColorRect" parent="UI/ProgrammerEndingUI" unique_id=1685752542]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.012, 0.02, 0.018, 1)
+
+[node name="TopLine" type="ColorRect" parent="UI/ProgrammerEndingUI/FinalCard" unique_id=1816074725]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 59.0
+offset_right = 398.0
+offset_bottom = 61.0
+color = Color(0.35, 1, 0.55, 0.85)
+
+[node name="EndingLabel" type="Label" parent="UI/ProgrammerEndingUI/FinalCard" unique_id=1935421227]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 72.0
+offset_right = 440.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(0.72, 0.82, 0.76, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 12
+text = "FINAL DO PROGRAMADOR"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="UI/ProgrammerEndingUI/FinalCard" unique_id=1677014483]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 99.0
+offset_right = 448.0
+offset_bottom = 137.0
+theme_override_colors/font_color = Color(0.45, 1, 0.62, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 25
+text = "RECALIBRAÇÃO"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="UI/ProgrammerEndingUI/FinalCard" unique_id=1741167588]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 144.0
+offset_right = 410.0
+offset_bottom = 183.0
+theme_override_colors/font_color = Color(0.82, 0.87, 0.84, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 10
+text = "A ASIMOV voltou a proteger o planeta
+sem transformar a humanidade em seu inimigo."
+horizontal_alignment = 1
+
+[node name="MenuButton" type="Button" parent="UI/ProgrammerEndingUI/FinalCard" unique_id=2071461159]
+layout_mode = 0
+offset_left = 155.0
+offset_top = 204.0
+offset_right = 325.0
+offset_bottom = 236.0
+focus_neighbor_top = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+theme_override_colors/font_color = Color(0.78, 0.92, 0.82, 1)
+theme_override_colors/font_focus_color = Color(0.65, 1, 0.72, 1)
+theme_override_fonts/font = ExtResource("14_pixel")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("ProgrammerFinalButtonNormal")
+theme_override_styles/pressed = SubResource("ProgrammerFinalButtonFocus")
+theme_override_styles/hover = SubResource("ProgrammerFinalButtonFocus")
+theme_override_styles/focus = SubResource("ProgrammerFinalButtonFocus")
+text = "VOLTAR AO MENU"
 
 [node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("6_g7g5b")]
 process_physics_priority = -6
 offset_left = 6.0
 offset_right = 6.0
+
+[connection signal="pressed" from="UI/ProgrammerEndingUI/FinalCard/MenuButton" to="ProgrammerEnding" method="_on_return_to_menu_pressed"]

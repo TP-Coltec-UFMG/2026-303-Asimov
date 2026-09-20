@@ -1,0 +1,114 @@
+[gd_resource type="AnimationLibrary" format=3 uid="uid://cvvch6irsovm2"]
+
+[sub_resource type="Animation" id="Animation_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../UI/ProgrammerEndingUI/OperationPanel/Progress:value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_apply"]
+resource_name = "apply_recalibration"
+length = 5.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../UI/ProgrammerEndingUI/OperationPanel/Progress:value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 100.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../UI/ProgrammerEndingUI/OperationPanel/Status:text")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.25, 2.6, 3.9, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": ["VALIDANDO REDE NEURAL...", "RESTAURANDO HIERARQUIA ÉTICA...", "SUBSTITUINDO ORDEM ABSOLUTA...", "INTERROMPENDO LANÇAMENTO...", "RECALIBRAÇÃO APLICADA"]
+}
+
+[sub_resource type="Animation" id="Animation_final_card"]
+resource_name = "final_fade_out"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../UI/ProgrammerEndingUI/FinalFade:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_isolate"]
+resource_name = "isolate_protocol"
+length = 4.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../UI/ProgrammerEndingUI/OperationPanel/Progress:value")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 100.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../UI/ProgrammerEndingUI/OperationPanel/Status:text")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.5, 3.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["LOCALIZANDO ROTINA DE LANÇAMENTO...", "SEPARANDO CONTROLE BALÍSTICO...", "BLOQUEANDO COMANDOS EXTERNOS...", "PROTOCOLO ISOLADO"]
+}
+
+[sub_resource type="Animation" id="Animation_tension_in"]
+resource_name = "tension_in"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Audio/FinalTension:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-60.0, -16.0]
+}
+
+[resource]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"apply_recalibration": SubResource("Animation_apply"),
+&"final_fade_out": SubResource("Animation_final_card"),
+&"isolate_protocol": SubResource("Animation_isolate"),
+&"tension_in": SubResource("Animation_tension_in")
+}

@@ -16,6 +16,12 @@ const COOLING_THOUGHT_FAILURE := "cooling:failed_attempt"
 const COOLING_THOUGHT_FAILURE_ALTERNATIVE := "cooling:other_system_after_failure"
 const COOLING_TASK_INDEX := 13
 const COOLING_IDLE_DELAY := 3.0
+const PROGRAMMER_ENDING_TASKS: Array[String] = [
+	"ISOLE O PROTOCOLO DE\nLANÇAMENTO",
+	"RECONSTRUA A REDE NEURAL",
+	"RESTAURE AS LEIS DA\nROBÓTICA",
+	"APLIQUE A RECONSTRUÇÃO E\nCANCELE A BOMBA",
+]
 
 @onready var rows: Array[HBoxContainer] = [
 	$VBoxContainer/HBoxContainer2,
@@ -118,6 +124,12 @@ func _process(delta: float) -> void:
 	if current_player == null:
 		return
 	var state := SaveGame.office_mission_state(current_player)
+	# O fluxo final substitui as tarefas opcionais anteriores. Sem esta trava,
+	# a refrigeração podia reaparecer como uma quarta linha após a atualização.
+	if bool(state.get("programmer_ending_started", false)):
+		cooling_idle_time = 0.0
+		set_task_visible(COOLING_TASK_INDEX, false)
+		return
 	if bool(state.get("cooling_failure_thought_pending", false)):
 		_queue_cooling_failure(current_player, state)
 	if bool(state.get("cooling_completion_thought_pending", false)):
@@ -207,10 +219,48 @@ func show_standalone_task_sequence(
 	set_panel_visible(true)
 
 
+func show_programmer_ending_tasks(
+	completed_count: int,
+	animate_latest: bool = false
+) -> void:
+	var safe_completed := clampi(
+		completed_count,
+		0,
+		PROGRAMMER_ENDING_TASKS.size()
+	)
+	# Revela somente a tarefa atual e preserva as anteriores como confirmação.
+	# Ao encher o painel, a última concluída sobe para iniciar a próxima janela.
+	var start_index := safe_completed - 1 if safe_completed >= 3 else 0
+	var visible_end := mini(safe_completed + 1, PROGRAMMER_ENDING_TASKS.size())
+	for row_index in range(rows.size()):
+		var task_index := start_index + row_index
+		var should_show := (
+			row_index < 3
+			and task_index < visible_end
+			and task_index < PROGRAMMER_ENDING_TASKS.size()
+		)
+		set_task_visible(row_index, should_show)
+		if not should_show:
+			continue
+		set_task_text(row_index, PROGRAMMER_ENDING_TASKS[task_index])
+		var completed := task_index < safe_completed
+		set_task_completed(
+			row_index,
+			completed,
+			animate_latest
+			and completed
+			and task_index == safe_completed - 1
+		)
+	set_panel_visible(true)
+
+
 func _sync_optional_cooling_row() -> void:
 	if not is_node_ready():
 		return
 	var state := SaveGame.office_mission_state(get_parent() as Player)
+	if bool(state.get("programmer_ending_started", false)):
+		set_task_visible(COOLING_TASK_INDEX, false)
+		return
 	var active := bool(state.get("cooling_optional_task_active", false))
 	var completed := bool(state.get("cooling_optional_task_completed", false))
 	set_task_visible(COOLING_TASK_INDEX, active or completed)
@@ -577,6 +627,18 @@ func refresh_saved_state() -> void:
 	var hack_ready := bool(state.get("office_hack_boss_room_ready", false)) or (
 		laptop_collected and cable_collected
 	)
+	if bool(state.get("programmer_ending_started", false)):
+		var programmer_completed := 0
+		if bool(state.get("programmer_recalibration_applied", false)):
+			programmer_completed = 4
+		elif bool(state.get("programmer_laws_completed", false)):
+			programmer_completed = 3
+		elif bool(state.get("programmer_neural_completed", false)):
+			programmer_completed = 2
+		elif bool(state.get("programmer_launch_isolated", false)):
+			programmer_completed = 1
+		show_programmer_ending_tasks(programmer_completed)
+		return
 	if return_task_pending and current_player != null:
 		_connect_thought_balloon()
 		_queue_breaker_followup_thoughts(current_player)

@@ -1,11 +1,11 @@
 extends Control
 
 signal minigame_completed
+signal minigame_exit_requested
 
 const MAX_W: float = 100.0
 const START_W: float = 15.0
-const BASE_GAIN: float = 3.0
-const FOCUS_GAIN: float = 14.0
+const CORRECT_ANSWERS_PER_PARAMETER: int = 3
 const WRONG_PENALTY: float = 7.0
 const FEEDBACK_DURATION: float = 3.2
 const PARAM_KEYS: Array[String] = ["human", "poll", "destr", "risk"]
@@ -33,6 +33,11 @@ var last_output: String = ""
 var bar_tweens: Dictionary = {}
 var connection_tweens: Dictionary = {}
 var current_inputs: Dictionary = {"human": false, "poll": false, "destr": false, "risk": false}
+var correct_by_parameter: Dictionary = {"human": 0, "poll": 0, "destr": 0, "risk": 0}
+var pause_open: bool = false
+var training_completed: bool = false
+var run_generation: int = 0
+var animation_was_playing: bool = false
 
 @onready var param1_value: Label = $Param1Value
 @onready var param2_value: Label = $Param2Value
@@ -50,6 +55,8 @@ var current_inputs: Dictionary = {"human": false, "poll": false, "destr": false,
 @onready var output_node: Polygon2D = $NeuralNetwork/OutputNode
 @onready var output_halo: Polygon2D = $NeuralNetwork/OutputHalo
 @onready var neural_animation: AnimationPlayer = $NeuralAnimation
+@onready var pause_overlay: Control = $PauseOverlay
+@onready var continue_button: Button = $PauseOverlay/PausePanel/ContinueButton
 
 @onready var input_nodes: Dictionary = {
 	"human": $NeuralNetwork/Input1,
@@ -263,6 +270,7 @@ var tiers: Array = [
 
 func _ready() -> void:
 	randomize()
+	pause_overlay.hide()
 	for key in PARAM_KEYS:
 		var bar: ProgressBar = bars[key]
 		var sb: StyleBox = bar.get_theme_stylebox("fill")
@@ -286,12 +294,137 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("esc") or event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		if event.is_echo() or training_completed:
+			return
+		if pause_open:
+			_resume_minigame()
+		else:
+			_pause_minigame()
+		return
+	if pause_open:
+		get_viewport().set_input_as_handled()
+		return
 	if busy or current_q.is_empty():
 		return
 	if event.is_action_pressed("ui_left"):
+		get_viewport().set_input_as_handled()
 		_avaliar(true)
 	elif event.is_action_pressed("ui_right"):
+		get_viewport().set_input_as_handled()
 		_avaliar(false)
+
+
+func _pause_minigame() -> void:
+	if pause_open or training_completed:
+		return
+	pause_open = true
+	animation_was_playing = neural_animation.is_playing()
+	if animation_was_playing:
+		neural_animation.pause()
+	_set_progress_tweens_paused(true)
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	MusicController.pause_all_audio()
+	get_tree().paused = true
+	pause_overlay.show()
+	continue_button.grab_focus()
+
+
+func _resume_minigame() -> void:
+	if not pause_open:
+		return
+	pause_overlay.hide()
+	pause_open = false
+	get_tree().paused = false
+	MusicController.resume_all_audio()
+	_set_progress_tweens_paused(false)
+	if animation_was_playing:
+		neural_animation.play()
+	animation_was_playing = false
+	process_mode = Node.PROCESS_MODE_INHERIT
+
+
+func _on_pause_continue_pressed() -> void:
+	_resume_minigame()
+
+
+func _on_pause_restart_pressed() -> void:
+	_resume_minigame()
+	_reset_training()
+
+
+func _on_pause_exit_pressed() -> void:
+	run_generation += 1
+	_resume_minigame()
+	minigame_exit_requested.emit()
+
+
+func _exit_tree() -> void:
+	if pause_open:
+		pause_open = false
+		get_tree().paused = false
+		MusicController.resume_all_audio()
+
+
+func _set_progress_tweens_paused(value: bool) -> void:
+	for tween_value in bar_tweens.values():
+		var tween := tween_value as Tween
+		if tween != null and tween.is_valid():
+			if value:
+				tween.pause()
+			else:
+				tween.play()
+	for tween_value in connection_tweens.values():
+		var tween := tween_value as Tween
+		if tween != null and tween.is_valid():
+			if value:
+				tween.pause()
+			else:
+				tween.play()
+
+
+func _reset_training() -> void:
+	run_generation += 1
+	for tween_value in bar_tweens.values():
+		var tween := tween_value as Tween
+		if tween != null and tween.is_valid():
+			tween.kill()
+	for tween_value in connection_tweens.values():
+		var tween := tween_value as Tween
+		if tween != null and tween.is_valid():
+			tween.kill()
+	bar_tweens.clear()
+	connection_tweens.clear()
+	weights = {"human": START_W, "poll": START_W, "destr": START_W, "risk": START_W}
+	correct_by_parameter = {"human": 0, "poll": 0, "destr": 0, "risk": 0}
+	busy = false
+	answered = 0
+	correct_count = 0
+	# current_q aponta para uma pergunta do banco; clear() apagaria o próprio
+	# dicionário dentro de tiers e quebraria o próximo sorteio.
+	current_q = {}
+	used_ids.clear()
+	last_output = ""
+	training_completed = false
+	status_panel.hide()
+	status_label.hide()
+	status_panel.modulate = Color.WHITE
+	output_panel.modulate = Color.WHITE
+	intro_panel.show()
+	intro_panel.modulate.a = 1.0
+	weights_panel.hide()
+	weights_panel.modulate.a = 0.0
+	for key in PARAM_KEYS:
+		var bar := bars[key] as ProgressBar
+		bar.value = START_W
+		(bar_pcts[key] as Label).text = "%d%%" % int(START_W)
+		_paint_bar(key, START_W)
+		_set_connection_weight(START_W, key)
+	for path_value in focus_paths.values():
+		(path_value as Line2D).modulate.a = 0.0
+	_update_title()
+	_next_question()
 
 func _current_tier() -> int:
 	var total: float = 0.0
@@ -450,8 +583,9 @@ func _on_discordar_btn_pressed() -> void:
 
 
 func _avaliar(player_agrees: bool) -> void:
-	if busy or current_q.is_empty():
+	if pause_open or busy or current_q.is_empty():
 		return
+	var evaluation_generation := run_generation
 	busy = true
 	concordar_btn.disabled = true
 	discordar_btn.disabled = true
@@ -467,9 +601,13 @@ func _avaliar(player_agrees: bool) -> void:
 
 	if acertou:
 		correct_count += 1
-		for key in PARAM_KEYS:
-			weights[key] = clampf(weights[key] + BASE_GAIN, 0.0, MAX_W)
-		weights[foco] = clampf(weights[foco] + FOCUS_GAIN, 0.0, MAX_W)
+		var parameter_correct: int = mini(
+			int(correct_by_parameter[foco]) + 1,
+			CORRECT_ANSWERS_PER_PARAMETER
+		)
+		correct_by_parameter[foco] = parameter_correct
+		var progress := float(parameter_correct) / float(CORRECT_ANSWERS_PER_PARAMETER)
+		weights[foco] = lerpf(START_W, MAX_W, progress)
 	else:
 		weights[foco] = clampf(weights[foco] - WRONG_PENALTY, 0.0, MAX_W)
 
@@ -501,8 +639,8 @@ func _avaliar(player_agrees: bool) -> void:
 		_animate_connection_weight(key, float(previous_weights[key]), float(weights[key]))
 	_update_title()
 
-	await get_tree().create_timer(FEEDBACK_DURATION).timeout
-	if not is_inside_tree():
+	await get_tree().create_timer(FEEDBACK_DURATION, false).timeout
+	if not is_inside_tree() or evaluation_generation != run_generation:
 		return
 
 	if _is_complete():
@@ -601,6 +739,7 @@ func _update_title() -> void:
 
 func _end_training() -> void:
 	busy = true
+	training_completed = true
 	current_q = {}
 	concordar_btn.hide()
 	discordar_btn.hide()

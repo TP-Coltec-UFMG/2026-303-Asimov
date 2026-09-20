@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://48wdobswnkvr" path="res://Minigames/finalsMinigames/MinigameRedeNeural/script/minigame.gd" id="1_rpc73"]
 [ext_resource type="Shader" uid="uid://b34utynfmxhdm" path="res://Minigames/finalsMinigames/MinigameRedeNeural/shader/shadersupremo.gdshader" id="2_86gq8"]
-[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Fonts/PixelifySans-Regular.ttf" id="3_5eeyi"]
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="3_5eeyi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
 shader = ExtResource("2_86gq8")
@@ -299,6 +299,44 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="NeuralPausePanel"]
+bg_color = Color(0.025, 0.055, 0.042, 0.99)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 1, 0.68, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 0.75)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="NeuralPauseButtonNormal"]
+bg_color = Color(0.055, 0.11, 0.083, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28, 0.58, 0.42, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="NeuralPauseButtonHover"]
+bg_color = Color(0.1, 0.27, 0.17, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.52, 1, 0.7, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="Main" type="Control" unique_id=800624848]
 layout_mode = 3
@@ -1091,5 +1129,111 @@ text = "15%"
 horizontal_alignment = 2
 vertical_alignment = 1
 
+[node name="PauseOverlay" type="Control" parent="." unique_id=1017716098]
+process_mode = 3
+visible = false
+z_index = 100
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="PauseOverlay" unique_id=1463785217]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.005, 0.012, 0.009, 0.9)
+
+[node name="PausePanel" type="Panel" parent="PauseOverlay" unique_id=2094780981]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 38.0
+offset_right = 375.0
+offset_bottom = 237.0
+theme_override_styles/panel = SubResource("NeuralPausePanel")
+
+[node name="Title" type="Label" parent="PauseOverlay/PausePanel" unique_id=478849847]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 258.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(0.5, 1, 0.7, 1)
+theme_override_fonts/font = ExtResource("3_5eeyi")
+theme_override_font_sizes/font_size = 17
+text = "REDE NEURAL EM PAUSA"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="PauseOverlay/PausePanel" unique_id=266684292]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 41.0
+offset_right = 258.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.7, 0.82, 0.75, 1)
+theme_override_fonts/font = ExtResource("3_5eeyi")
+theme_override_font_sizes/font_size = 8
+text = "ESC também continua a análise"
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="PauseOverlay/PausePanel" unique_id=952929612]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 69.0
+offset_right = 245.0
+offset_bottom = 99.0
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../RestartButton")
+theme_override_colors/font_color = Color(0.82, 1, 0.88, 1)
+theme_override_fonts/font = ExtResource("3_5eeyi")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("NeuralPauseButtonNormal")
+theme_override_styles/pressed = SubResource("NeuralPauseButtonHover")
+theme_override_styles/hover = SubResource("NeuralPauseButtonHover")
+theme_override_styles/focus = SubResource("NeuralPauseButtonHover")
+text = "CONTINUAR"
+
+[node name="RestartButton" type="Button" parent="PauseOverlay/PausePanel" unique_id=833156971]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 106.0
+offset_right = 245.0
+offset_bottom = 136.0
+focus_neighbor_top = NodePath("../ContinueButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+theme_override_colors/font_color = Color(0.9, 0.95, 0.91, 1)
+theme_override_fonts/font = ExtResource("3_5eeyi")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("NeuralPauseButtonNormal")
+theme_override_styles/pressed = SubResource("NeuralPauseButtonHover")
+theme_override_styles/hover = SubResource("NeuralPauseButtonHover")
+theme_override_styles/focus = SubResource("NeuralPauseButtonHover")
+text = "REINICIAR MINIGAME"
+
+[node name="ExitButton" type="Button" parent="PauseOverlay/PausePanel" unique_id=1654333883]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 143.0
+offset_right = 245.0
+offset_bottom = 173.0
+focus_neighbor_top = NodePath("../RestartButton")
+focus_neighbor_bottom = NodePath("../ContinueButton")
+theme_override_colors/font_color = Color(1, 0.84, 0.84, 1)
+theme_override_fonts/font = ExtResource("3_5eeyi")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("DisagreeButtonNormal")
+theme_override_styles/pressed = SubResource("DisagreeButtonPressed")
+theme_override_styles/hover = SubResource("DisagreeButtonHover")
+theme_override_styles/focus = SubResource("DisagreeButtonHover")
+text = "SAIR DO MINIGAME"
+
 [connection signal="pressed" from="ConcordarBtn" to="." method="_on_concordar_btn_pressed"]
 [connection signal="pressed" from="DiscordarBtn" to="." method="_on_discordar_btn_pressed"]
+[connection signal="pressed" from="PauseOverlay/PausePanel/ContinueButton" to="." method="_on_pause_continue_pressed"]
+[connection signal="pressed" from="PauseOverlay/PausePanel/RestartButton" to="." method="_on_pause_restart_pressed"]
+[connection signal="pressed" from="PauseOverlay/PausePanel/ExitButton" to="." method="_on_pause_exit_pressed"]

@@ -20,3 +20,8 @@ res://Scripts/Data/save/SaveLoad.gd
 res://Scenes/data_center_forte.tscn
 res://Scenes/animations/data_center_forte_intro_animations.tres
 res://Scenes/animations/data_center_forte_intro_tree.tres
+res://Player/Scripts/quest_mission_ui.gd
+res://Scripts/Sounds/music/music.gd
+res://Scenes/animations/programmer_ending_animations.tres
+res://Scenes/scripts/programmer_ending_controller.gd
+res://Player/ManPlayer.tscn

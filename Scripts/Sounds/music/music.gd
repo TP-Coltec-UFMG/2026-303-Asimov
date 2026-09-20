@@ -43,6 +43,8 @@ const HEARTBEAT_INTRO_PITCH: float = 1.25
 const HEARTBEAT_FINAL_START_PITCH: float = 1.2
 const HEARTBEAT_FINAL_MAX_PITCH: float = 1.65
 const HEARTBEAT_FINAL_DURATION: float = 46.0
+const PROGRAMMER_FINAL_BACKGROUND_DB: float = -34.0
+const PROGRAMMER_FINAL_COUNTDOWN_DB: float = -18.0
 
 enum PowerOutageAudioState {
 	IDLE,
@@ -234,6 +236,14 @@ func _start_countdown(from_position: float = 0.0) -> void:
 func _stop_countdown() -> void:
 	countdown_music.stop()
 	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
+
+
+func start_programmer_final_mix() -> void:
+	# A trilha própria do núcleo assume a tensão. As faixas globais continuam
+	# vivas e pausáveis, mas recuam gradualmente para não disputar frequências.
+	initial_background_music_target_volume_db = PROGRAMMER_FINAL_BACKGROUND_DB
+	countdown_music.volume_db = PROGRAMMER_FINAL_COUNTDOWN_DB
+	set_alarm_quiet_context(&"programmer_ending", true)
 
 
 # ALARME

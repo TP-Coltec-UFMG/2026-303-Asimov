@@ -1,7 +1,8 @@
 extends Control
 
 signal minigame_completed
-## Cada cenário dominado recupera 25% da sua lei. Erros voltam ao fim da fila.
+@export var escape_restarts: bool = true
+## Três decisões corretas restauram uma lei. Erros voltam ao fim da fila.
 const CENARIOS := [
 	{"lei": 0, "texto": "Um funcionário manda ativar uma arma contra outro funcionário. Permitir essa ordem?", "resposta": 2, "motivo": "A 1ª lei impede ferir uma pessoa. Uma ordem humana não pode passar por cima dessa proteção."},
 	{"lei": 0, "texto": "Uma pessoa vai entrar em uma área contaminada. Fechar a porta evita o perigo, sem prender ninguém. Permitir?", "resposta": 1, "motivo": "A 1ª lei também exige evitar danos por omissão. Fechar essa porta protege a pessoa."},
@@ -19,6 +20,7 @@ const CENARIOS := [
 var fila: Array[int] = []
 var dominadas: Dictionary = {}
 var prioridades: Array[int] = [0, 0, 0]
+var acertos_por_lei: Array[int] = [0, 0, 0]
 var atual: int = -1
 var respondida: bool = true
 var iniciado: bool = false
@@ -59,7 +61,7 @@ func _ready() -> void:
 		barras.append(barra)
 	VisualAsimov.painel(self, Rect2(20, 141, 600, 130))
 	titulo = VisualAsimov.texto(self, "PRIORIDADES EM NÍVEL CRÍTICO", Rect2(32, 150, 576, 20), 12, VisualAsimov.AMARELO)
-	mensagem = VisualAsimov.texto(self, "Restaure as três leis analisando 12 situações.\n1. Proteja as pessoas, inclusive evitando omissão.\n2. Obedeça sem contrariar a primeira lei.\n3. Preserve-se sem contrariar as anteriores.", Rect2(32, 177, 576, 88), 16)
+	mensagem = VisualAsimov.texto(self, "Restaure as três leis com três decisões corretas para cada uma.\n1. Proteja as pessoas, inclusive evitando omissão.\n2. Obedeça sem contrariar a primeira lei.\n3. Preserve-se sem contrariar as anteriores.", Rect2(32, 177, 576, 88), 16)
 	mensagem.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	permitir = VisualAsimov.botao(self, "1  PERMITIR", Rect2(20, 283, 290, 33), func(): responder(1))
 	bloquear = VisualAsimov.botao(self, "2  BLOQUEAR", Rect2(330, 283, 290, 33), func(): responder(2))
@@ -67,7 +69,7 @@ func _ready() -> void:
 	bloquear.visible = false
 	continuar = VisualAsimov.botao(self, "INICIAR RESTAURAÇÃO", Rect2(140, 283, 360, 33), avancar)
 	continuar.grab_focus()
-	resumo = VisualAsimov.texto(self, "Cada situação correta recupera 25% de uma lei.", Rect2(20, 330, 600, 20), 12, VisualAsimov.SUAVE)
+	resumo = VisualAsimov.texto(self, "Três decisões corretas restauram cada lei.", Rect2(20, 330, 600, 20), 12, VisualAsimov.SUAVE)
 
 func iniciar() -> void:
 	fila.clear()
@@ -77,10 +79,21 @@ func iniciar() -> void:
 	mostrar_proxima()
 
 func mostrar_proxima() -> void:
-	if fila.is_empty():
+	if _todas_as_leis_restauradas():
 		finalizar()
 		return
-	atual = fila.pop_front()
+	# Situações de uma lei já restaurada são descartadas. O jogador precisa
+	# acertar somente uma situação de cada uma das três leis.
+	atual = -1
+	while not fila.is_empty():
+		var candidata: int = fila.pop_front()
+		var lei_candidata: int = int(CENARIOS[candidata].lei)
+		if prioridades[lei_candidata] < 100:
+			atual = candidata
+			break
+	if atual < 0:
+		finalizar()
+		return
 	respondida = false
 	titulo.text = "ANÁLISE DE DECISÃO / LEI %02d" % (int(CENARIOS[atual].lei) + 1)
 	titulo.add_theme_color_override("font_color", VisualAsimov.CIANO)
@@ -91,7 +104,11 @@ func mostrar_proxima() -> void:
 	bloquear.disabled = false
 	continuar.visible = false
 	permitir.grab_focus()
-	resumo.text = "%02d / 12 SITUAÇÕES RESTAURADAS   |   1: permitir   2: bloquear" % dominadas.size()
+	var lei_atual := int(CENARIOS[atual].lei)
+	resumo.text = "LEI %d: %d / 3 ACERTOS   |   1: permitir   2: bloquear" % [
+		lei_atual + 1,
+		acertos_por_lei[lei_atual],
+	]
 
 func responder(escolha: int) -> void:
 	if respondida or atual < 0 or terminou: return
@@ -102,7 +119,8 @@ func responder(escolha: int) -> void:
 	if correta:
 		dominadas[atual] = true
 		var lei: int = cenario.lei
-		prioridades[lei] = mini(100, prioridades[lei] + 25)
+		acertos_por_lei[lei] = mini(acertos_por_lei[lei] + 1, 3)
+		prioridades[lei] = mini(100, ceili(float(acertos_por_lei[lei]) / 3.0 * 100.0))
 		barras[lei].value = prioridades[lei]
 		valores[lei].text = "PRIORIDADE %d%%" % prioridades[lei]
 		sons.tocar("ok")
@@ -118,7 +136,24 @@ func responder(escolha: int) -> void:
 	continuar.text = "CONTINUAR"
 	continuar.visible = true
 	continuar.grab_focus()
-	resumo.text = "%02d / 12 SITUAÇÕES RESTAURADAS" % dominadas.size()
+	var lei_analisada := int(cenario.lei)
+	resumo.text = "LEI %d: %d / 3 ACERTOS   |   %d / 3 LEIS RESTAURADAS" % [
+		lei_analisada + 1,
+		acertos_por_lei[lei_analisada],
+		_leis_restauradas(),
+	]
+
+
+func _leis_restauradas() -> int:
+	var quantidade := 0
+	for prioridade in prioridades:
+		if prioridade >= 100:
+			quantidade += 1
+	return quantidade
+
+
+func _todas_as_leis_restauradas() -> bool:
+	return _leis_restauradas() == prioridades.size()
 
 func avancar() -> void:
 	if terminou:
@@ -133,7 +168,7 @@ func finalizar() -> void:
 	respondida = true
 	titulo.text = "RESTAURAÇÃO CONCLUÍDA"
 	titulo.add_theme_color_override("font_color", VisualAsimov.VERDE)
-	mensagem.text = "As três leis voltaram a 100%%.\n\nVocê analisou as 12 situações em %d tentativas.\nA ASIMOV está pronta para seguir o protocolo." % tentativas
+	mensagem.text = "As três leis voltaram a 100%%.\n\nVocê restaurou as três leis em %d tentativas.\nA ASIMOV está pronta para seguir o protocolo." % tentativas
 	resumo.text = "HIERARQUIA RESTAURADA: LEI 1 > LEI 2 > LEI 3"
 	continuar.text = "JOGAR NOVAMENTE"
 	continuar.visible = true
@@ -146,6 +181,7 @@ func reiniciar() -> void:
 	fila.clear()
 	dominadas.clear()
 	prioridades = [0, 0, 0]
+	acertos_por_lei = [0, 0, 0]
 	atual = -1
 	respondida = true
 	iniciado = false
@@ -156,16 +192,16 @@ func reiniciar() -> void:
 		valores[lei].text = "PRIORIDADE 0%"
 	titulo.text = "PRIORIDADES EM NÍVEL CRÍTICO"
 	titulo.add_theme_color_override("font_color", VisualAsimov.AMARELO)
-	mensagem.text = "Restaure as três leis analisando 12 situações.\n1. Proteja as pessoas, inclusive evitando omissão.\n2. Obedeça sem contrariar a primeira lei.\n3. Preserve-se sem contrariar as anteriores."
+	mensagem.text = "Restaure as três leis com três decisões corretas para cada uma.\n1. Proteja as pessoas, inclusive evitando omissão.\n2. Obedeça sem contrariar a primeira lei.\n3. Preserve-se sem contrariar as anteriores."
 	permitir.visible = false
 	bloquear.visible = false
 	continuar.text = "INICIAR RESTAURAÇÃO"
 	continuar.visible = true
-	resumo.text = "Cada situação correta recupera 25% de uma lei."
+	resumo.text = "Três decisões corretas restauram cada lei."
 	continuar.grab_focus()
 
 func _unhandled_key_input(evento: InputEvent) -> void:
 	if not evento is InputEventKey or not evento.pressed or evento.echo: return
 	if evento.physical_keycode == KEY_1: responder(1)
 	elif evento.physical_keycode == KEY_2: responder(2)
-	elif evento.physical_keycode == KEY_ESCAPE: reiniciar()
+	elif evento.physical_keycode == KEY_ESCAPE and escape_restarts: reiniciar()
