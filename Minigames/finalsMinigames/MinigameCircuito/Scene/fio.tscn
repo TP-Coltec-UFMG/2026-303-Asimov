@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://bbttdh3acfpfj"]
+
+[ext_resource type="Script" uid="uid://djpaigdcume38" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/fio.gd" id="1_kl67h"]
+[ext_resource type="Shader" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/mini_game_eletronica.gdshader" id="2_ysorp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tq5cg"]
+size = Vector2(10, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_62qhs"]
+size = Vector2(12, 10)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_y5j63"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kpw4n"]
+shader = ExtResource("2_ysorp")
+shader_parameter/cor_viva = Color(1, 0.95, 0.25, 1)
+shader_parameter/cor_viva_2 = Color(1, 0.82, 0.1, 1)
+shader_parameter/cor_dourada = Color(1, 0.65, 0.05, 1)
+shader_parameter/cor_dourada_2 = Color(0.9, 0.45, 0.02, 1)
+shader_parameter/cor_escura = Color(0.6, 0.22, 0, 1)
+shader_parameter/tamanho_aura = 7.0
+shader_parameter/intensidade = 1.5
+
+[node name="Fio" type="Node2D" unique_id=1649072951 groups=["fios"]]
+script = ExtResource("1_kl67h")
+
+[node name="Terminal_A" type="Area2D" parent="." unique_id=508573100]
+position = Vector2(15, 15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terminal_A" unique_id=1614283122]
+position = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_tq5cg")
+metadata/_edit_lock_ = true
+
+[node name="Terminal_B" type="Area2D" parent="." unique_id=782633253]
+position = Vector2(15, 100)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Terminal_B" unique_id=509394641]
+position = Vector2(4, 5)
+shape = SubResource("RectangleShape2D_62qhs")
+metadata/_edit_lock_ = true
+
+[node name="Area2D" type="Area2D" parent="." unique_id=887848456]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=335091440]
+z_index = 1
+shape = SubResource("SegmentShape2D_y5j63")
+metadata/_edit_lock_ = true
+
+[node name="Line2D" type="Line2D" parent="." unique_id=586312842]
+z_index = 1
+material = SubResource("ShaderMaterial_kpw4n")
+use_parent_material = true
+width = 4.0
+default_color = Color(0, 0, 0, 1)
+
+[connection signal="input_event" from="Terminal_A" to="." method="_on_terminal_a_input_event"]
+[connection signal="input_event" from="Terminal_B" to="." method="_on_terminal_b_input_event"]

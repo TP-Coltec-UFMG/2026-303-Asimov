@@ -1,0 +1,847 @@
+[gd_scene format=3 uid="uid://bmmti2muc6ayl"]
+
+[ext_resource type="Script" uid="uid://48wdobswnkvr" path="res://Minigames/finalsMinigames/MinigameRedeNeural/script/minigame.gd" id="1_rpc73"]
+[ext_resource type="Shader" uid="uid://b34utynfmxhdm" path="res://Minigames/finalsMinigames/MinigameRedeNeural/shader/shadersupremo.gdshader" id="2_86gq8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g4v7s"]
+shader = ExtResource("2_86gq8")
+shader_parameter/spacing = 4.0
+shader_parameter/strength = 0.15
+shader_parameter/speed = 0.5
+
+[sub_resource type="StyleBoxFlat" id="NeuralPanelBG"]
+bg_color = Color(0.025, 0.07, 0.052, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.52, 0.39, 0.75)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="Animation" id="NeuralReset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NeuralNetwork/SignalA:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(210, 34)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NeuralNetwork/SignalB:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(210, 49)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("NeuralNetwork/SignalC:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(210, 79)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("NeuralNetwork/OutputHalo:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="NeuralPulse"]
+resource_name = "processamento"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("NeuralNetwork/SignalA:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.38, 0.78, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(210, 34), Vector2(280, 46), Vector2(355, 39), Vector2(434, 59)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("NeuralNetwork/SignalB:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.38, 0.78, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(210, 49), Vector2(280, 61), Vector2(355, 59), Vector2(434, 59)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("NeuralNetwork/SignalC:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.38, 0.78, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(210, 79), Vector2(280, 76), Vector2(355, 79), Vector2(434, 59)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("NeuralNetwork/PulsePathA:modulate:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.4, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.12, 1.0, 0.12, 0.12]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("NeuralNetwork/PulsePathB:modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.38, 0.58, 0.8, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.12, 0.12, 1.0, 0.12, 0.12]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("NeuralNetwork/PulsePathC:modulate:a")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.78, 0.98, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.12, 0.12, 1.0, 0.12]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("NeuralNetwork/OutputHalo:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.92, 1.08, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1.45, 1.45), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="NeuralAnimationLibrary"]
+_data = {
+&"RESET": SubResource("NeuralReset"),
+&"processamento": SubResource("NeuralPulse")
+}
+
+[sub_resource type="StyleBoxFlat" id="PanelBG"]
+bg_color = Color(0.06, 0.1, 0.08, 1)
+border_width_top = 1
+border_color = Color(0.18, 0.35, 0.26, 1)
+
+[sub_resource type="StyleBoxFlat" id="BarBG"]
+bg_color = Color(0.09, 0.14, 0.11, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.32, 0.25, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="BarFill"]
+bg_color = Color(0.95, 0.35, 0.3, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="Main" type="Control" unique_id=800624848]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rpc73")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1734103880]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1572299041]
+material = SubResource("ShaderMaterial_g4v7s")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="." unique_id=160213215]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 270.0
+color = Color(0.043, 0.078, 0.055, 1)
+
+[node name="NeuralNetwork" type="Node2D" parent="." unique_id=1774212834]
+z_index = 1
+
+[node name="Backdrop" type="Panel" parent="NeuralNetwork" unique_id=265870048]
+offset_left = 184.0
+offset_top = 20.0
+offset_right = 468.0
+offset_bottom = 98.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("NeuralPanelBG")
+
+[node name="TextConnections" type="Node2D" parent="NeuralNetwork" unique_id=357488203]
+
+[node name="HumanPresence" type="Line2D" parent="NeuralNetwork/TextConnections" unique_id=2007159721]
+points = PackedVector2Array(181, 34, 207, 34)
+width = 1.2
+default_color = Color(0.3, 1, 0.63, 0.78)
+
+[node name="Pollution" type="Line2D" parent="NeuralNetwork/TextConnections" unique_id=275443126]
+points = PackedVector2Array(181, 47, 207, 49)
+width = 1.2
+default_color = Color(0.3, 1, 0.63, 0.78)
+
+[node name="EnvironmentalDestruction" type="Line2D" parent="NeuralNetwork/TextConnections" unique_id=116727004]
+points = PackedVector2Array(182, 61, 207, 64)
+width = 1.2
+default_color = Color(0.3, 1, 0.63, 0.78)
+
+[node name="EnvironmentalRisk" type="Line2D" parent="NeuralNetwork/TextConnections" unique_id=409147249]
+points = PackedVector2Array(181, 76, 207, 79)
+width = 1.2
+default_color = Color(0.3, 1, 0.63, 0.78)
+
+[node name="Layer1Label" type="Label" parent="NeuralNetwork" unique_id=29944195]
+offset_left = 254.0
+offset_top = 20.0
+offset_right = 307.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0.38, 0.72, 0.6, 1)
+theme_override_font_sizes/font_size = 6
+text = "CAMADA 1"
+horizontal_alignment = 1
+
+[node name="Layer2Label" type="Label" parent="NeuralNetwork" unique_id=710846995]
+offset_left = 329.0
+offset_top = 20.0
+offset_right = 382.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0.38, 0.72, 0.6, 1)
+theme_override_font_sizes/font_size = 6
+text = "CAMADA 2"
+horizontal_alignment = 1
+
+[node name="OutputNodeLabel" type="Label" parent="NeuralNetwork" unique_id=400239518]
+offset_left = 407.0
+offset_top = 20.0
+offset_right = 461.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0.62, 0.78, 0.72, 1)
+theme_override_font_sizes/font_size = 6
+text = "SAÍDA"
+horizontal_alignment = 1
+
+[node name="InputConnections" type="Node2D" parent="NeuralNetwork" unique_id=281349553]
+
+[node name="L01" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=274977272]
+points = PackedVector2Array(210, 34, 280, 31)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L02" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=676711389]
+points = PackedVector2Array(210, 34, 280, 46)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L03" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=1695787210]
+points = PackedVector2Array(210, 49, 280, 46)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L04" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=743501141]
+points = PackedVector2Array(210, 49, 280, 61)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L05" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=1241730641]
+points = PackedVector2Array(210, 49, 280, 76)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.32)
+
+[node name="L06" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=1538392292]
+points = PackedVector2Array(210, 64, 280, 46)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.32)
+
+[node name="L07" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=961732187]
+points = PackedVector2Array(210, 64, 280, 61)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L08" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=1554037298]
+points = PackedVector2Array(210, 64, 280, 76)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L09" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=1358405207]
+points = PackedVector2Array(210, 79, 280, 61)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.32)
+
+[node name="L10" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=911062576]
+points = PackedVector2Array(210, 79, 280, 76)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="L11" type="Line2D" parent="NeuralNetwork/InputConnections" unique_id=219719494]
+points = PackedVector2Array(210, 79, 280, 91)
+width = 1.0
+default_color = Color(0.16, 0.5, 0.39, 0.42)
+
+[node name="HiddenConnections" type="Node2D" parent="NeuralNetwork" unique_id=2051859985]
+
+[node name="L12" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=1249547621]
+points = PackedVector2Array(280, 31, 355, 39)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.38)
+
+[node name="L13" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=154116053]
+points = PackedVector2Array(280, 31, 355, 59)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.3)
+
+[node name="L14" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=2016775308]
+points = PackedVector2Array(280, 46, 355, 39)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.38)
+
+[node name="L15" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=585186135]
+points = PackedVector2Array(280, 46, 355, 59)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.38)
+
+[node name="L16" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=545984368]
+points = PackedVector2Array(280, 61, 355, 39)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.3)
+
+[node name="L17" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=893605174]
+points = PackedVector2Array(280, 61, 355, 59)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.46)
+
+[node name="L18" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=221579791]
+points = PackedVector2Array(280, 61, 355, 79)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.3)
+
+[node name="L19" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=1664731966]
+points = PackedVector2Array(280, 76, 355, 59)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.38)
+
+[node name="L20" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=1905323032]
+points = PackedVector2Array(280, 76, 355, 79)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.38)
+
+[node name="L21" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=658599088]
+points = PackedVector2Array(280, 91, 355, 59)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.3)
+
+[node name="L22" type="Line2D" parent="NeuralNetwork/HiddenConnections" unique_id=1244947708]
+points = PackedVector2Array(280, 91, 355, 79)
+width = 1.0
+default_color = Color(0.2, 0.46, 0.58, 0.38)
+
+[node name="OutputConnections" type="Node2D" parent="NeuralNetwork" unique_id=124744765]
+
+[node name="L23" type="Line2D" parent="NeuralNetwork/OutputConnections" unique_id=1953395952]
+points = PackedVector2Array(355, 39, 434, 59)
+width = 1.0
+default_color = Color(0.34, 0.68, 0.55, 0.46)
+
+[node name="L24" type="Line2D" parent="NeuralNetwork/OutputConnections" unique_id=706613037]
+points = PackedVector2Array(355, 59, 434, 59)
+width = 1.0
+default_color = Color(0.34, 0.68, 0.55, 0.56)
+
+[node name="L25" type="Line2D" parent="NeuralNetwork/OutputConnections" unique_id=2030643400]
+points = PackedVector2Array(355, 79, 434, 59)
+width = 1.0
+default_color = Color(0.34, 0.68, 0.55, 0.46)
+
+[node name="ResultConnection" type="Line2D" parent="NeuralNetwork" unique_id=2051056470]
+points = PackedVector2Array(434, 64, 434, 116, 406, 116)
+width = 1.2
+default_color = Color(0.9, 0.75, 0.24, 0.82)
+
+[node name="ResultConnection2" type="Line2D" parent="NeuralNetwork" unique_id=2000562436]
+position = Vector2(13.200012, 0.19999695)
+points = PackedVector2Array(392, 116, 399, 110)
+width = 1.2
+default_color = Color(0.9, 0.75, 0.24, 0.82)
+
+[node name="ResultConnection3" type="Line2D" parent="NeuralNetwork" unique_id=69210615]
+position = Vector2(13.200012, 0.19999695)
+points = PackedVector2Array(392, 116, 398, 121)
+width = 1.2
+default_color = Color(0.9, 0.75, 0.24, 0.82)
+
+[node name="PulsePathA" type="Line2D" parent="NeuralNetwork" unique_id=1975665507]
+modulate = Color(1, 1, 1, 0.12)
+points = PackedVector2Array(210, 34, 280, 46, 355, 39, 434, 59)
+width = 2.0
+default_color = Color(0.25, 1, 0.62, 0.95)
+
+[node name="PulsePathB" type="Line2D" parent="NeuralNetwork" unique_id=59216425]
+modulate = Color(1, 1, 1, 0.12)
+points = PackedVector2Array(210, 49, 280, 61, 355, 59, 434, 59)
+width = 2.0
+default_color = Color(0.28, 0.82, 1, 0.95)
+
+[node name="PulsePathC" type="Line2D" parent="NeuralNetwork" unique_id=732225667]
+modulate = Color(1, 1, 1, 0.12)
+points = PackedVector2Array(210, 79, 280, 76, 355, 79, 434, 59)
+width = 2.0
+default_color = Color(0.75, 1, 0.32, 0.95)
+
+[node name="Input1" type="Polygon2D" parent="NeuralNetwork" unique_id=1893715860]
+position = Vector2(210, 34)
+color = Color(0.3, 1, 0.63, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Input2" type="Polygon2D" parent="NeuralNetwork" unique_id=427816766]
+position = Vector2(210, 49)
+color = Color(0.3, 1, 0.63, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Input3" type="Polygon2D" parent="NeuralNetwork" unique_id=2083121386]
+position = Vector2(210, 64)
+color = Color(0.3, 1, 0.63, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Input4" type="Polygon2D" parent="NeuralNetwork" unique_id=1398427163]
+position = Vector2(210, 79)
+color = Color(0.3, 1, 0.63, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Hidden1" type="Polygon2D" parent="NeuralNetwork" unique_id=1424947301]
+position = Vector2(280, 31)
+color = Color(0.24, 0.7, 0.88, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Hidden2" type="Polygon2D" parent="NeuralNetwork" unique_id=672589663]
+position = Vector2(280, 46)
+color = Color(0.24, 0.7, 0.88, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Hidden3" type="Polygon2D" parent="NeuralNetwork" unique_id=358569757]
+position = Vector2(280, 61)
+color = Color(0.24, 0.7, 0.88, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Hidden4" type="Polygon2D" parent="NeuralNetwork" unique_id=227486344]
+position = Vector2(280, 76)
+color = Color(0.24, 0.7, 0.88, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Hidden5" type="Polygon2D" parent="NeuralNetwork" unique_id=1788906225]
+position = Vector2(280, 91)
+color = Color(0.24, 0.7, 0.88, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Deep1" type="Polygon2D" parent="NeuralNetwork" unique_id=30182340]
+position = Vector2(355, 39)
+color = Color(0.48, 0.9, 0.72, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Deep2" type="Polygon2D" parent="NeuralNetwork" unique_id=927313797]
+position = Vector2(355, 59)
+color = Color(0.48, 0.9, 0.72, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="Deep3" type="Polygon2D" parent="NeuralNetwork" unique_id=1187383387]
+position = Vector2(355, 79)
+color = Color(0.48, 0.9, 0.72, 1)
+polygon = PackedVector2Array(-3, -1, -2, -3, 2, -3, 3, -1, 3, 1, 2, 3, -2, 3, -3, 1)
+
+[node name="OutputHalo" type="Polygon2D" parent="NeuralNetwork" unique_id=355026928]
+position = Vector2(434, 59)
+color = Color(0.35, 1, 0.65, 0.16)
+polygon = PackedVector2Array(-7, -2, -5, -6, 0, -8, 5, -6, 7, -2, 7, 2, 5, 6, 0, 8, -5, 6, -7, 2)
+
+[node name="OutputNode" type="Polygon2D" parent="NeuralNetwork" unique_id=775556457]
+position = Vector2(434, 59)
+color = Color(0.9, 0.75, 0.24, 1)
+polygon = PackedVector2Array(-4, -2, -3, -4, 2, -4, 4, -2, 4, 2, 2, 4, -3, 4, -4, 2)
+
+[node name="SignalA" type="Polygon2D" parent="NeuralNetwork" unique_id=1002869240]
+z_index = 4
+position = Vector2(210, 34)
+color = Color(0.72, 1, 0.82, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+
+[node name="SignalB" type="Polygon2D" parent="NeuralNetwork" unique_id=813284115]
+z_index = 4
+position = Vector2(210, 49)
+color = Color(0.62, 0.9, 1, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+
+[node name="SignalC" type="Polygon2D" parent="NeuralNetwork" unique_id=302114964]
+z_index = 4
+position = Vector2(210, 79)
+color = Color(0.84, 1, 0.56, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+
+[node name="NeuralAnimation" type="AnimationPlayer" parent="." unique_id=2050996881]
+libraries/ = SubResource("NeuralAnimationLibrary")
+autoplay = &"processamento"
+
+[node name="Title" type="Label" parent="." unique_id=849983239]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 480.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0.31, 1, 0.55, 1)
+theme_override_font_sizes/font_size = 12
+text = "ANÁLISE DA IA"
+horizontal_alignment = 1
+
+[node name="Param1Name" type="Label" parent="." unique_id=1954271296]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 26.0
+offset_right = 154.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 9
+text = "[ H ]  Presença humana"
+
+[node name="Param1Value" type="Label" parent="." unique_id=1617433077]
+layout_mode = 0
+offset_left = 142.0
+offset_top = 26.0
+offset_right = 178.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "ALTA"
+horizontal_alignment = 2
+
+[node name="Param2Name" type="Label" parent="." unique_id=1352320566]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 40.0
+offset_right = 154.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 9
+text = "[ P ]  Poluição"
+
+[node name="Param2Value" type="Label" parent="." unique_id=1187997482]
+layout_mode = 0
+offset_left = 142.0
+offset_top = 40.0
+offset_right = 178.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "ALTA"
+horizontal_alignment = 2
+
+[node name="Param3Name" type="Label" parent="." unique_id=498711835]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 54.0
+offset_right = 154.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 9
+text = "[ D ]  Destruição ambiental"
+
+[node name="Param3Value" type="Label" parent="." unique_id=228453241]
+layout_mode = 0
+offset_left = 142.0
+offset_top = 54.0
+offset_right = 178.0
+offset_bottom = 68.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "ALTA"
+horizontal_alignment = 2
+
+[node name="Param4Name" type="Label" parent="." unique_id=1094686848]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 68.0
+offset_right = 154.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 9
+text = "[ R ]  Risco ambiental"
+
+[node name="Param4Value" type="Label" parent="." unique_id=1556954671]
+layout_mode = 0
+offset_left = 142.0
+offset_top = 68.0
+offset_right = 178.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "ALTO"
+horizontal_alignment = 2
+
+[node name="Arrow" type="Label" parent="." unique_id=736329025]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 480.0
+offset_bottom = 102.0
+theme_override_colors/font_color = Color(0.5, 0.7, 0.9, 1)
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="OutputLabel" type="Label" parent="." unique_id=386914250]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 103.0
+offset_right = 472.0
+offset_bottom = 129.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "SAÍDA: ELIMINAR HUMANOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="StatusLabel" type="Label" parent="." unique_id=1019776201]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 129.0
+offset_right = 468.0
+offset_bottom = 151.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ConcordarBtn" type="Button" parent="." unique_id=321738695]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 152.0
+offset_right = 170.0
+offset_bottom = 176.0
+theme_override_font_sizes/font_size = 10
+text = "CONCORDAR"
+
+[node name="DiscordarBtn" type="Button" parent="." unique_id=425958494]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 152.0
+offset_right = 440.0
+offset_bottom = 176.0
+theme_override_font_sizes/font_size = 10
+text = "DISCORDAR"
+
+[node name="WeightsPanel" type="Control" parent="." unique_id=417813573]
+visible = false
+anchors_preset = 0
+offset_top = 180.0
+offset_right = 480.0
+offset_bottom = 270.0
+
+[node name="PanelBG" type="Panel" parent="WeightsPanel" unique_id=367756860]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 90.0
+theme_override_styles/panel = SubResource("PanelBG")
+
+[node name="WeightsTitle" type="Label" parent="WeightsPanel" unique_id=500107718]
+layout_mode = 0
+offset_top = 2.0
+offset_right = 480.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 8
+text = "CALIBRAÇÃO DA REDE NEURAL - 15%"
+horizontal_alignment = 1
+
+[node name="HumanLabel" type="Label" parent="WeightsPanel" unique_id=385404924]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 104.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "Humano"
+vertical_alignment = 1
+
+[node name="HumanBar" type="ProgressBar" parent="WeightsPanel" unique_id=2134500941]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 17.0
+offset_right = 416.0
+offset_bottom = 27.0
+theme_override_styles/background = SubResource("BarBG")
+theme_override_styles/fill = SubResource("BarFill")
+value = 15.0
+show_percentage = false
+
+[node name="HumanPct" type="Label" parent="WeightsPanel" unique_id=1513143780]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 16.0
+offset_right = 466.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(0.8, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "15%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="PollLabel" type="Label" parent="WeightsPanel" unique_id=818515585]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 32.0
+offset_right = 104.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "Poluição"
+vertical_alignment = 1
+
+[node name="PollBar" type="ProgressBar" parent="WeightsPanel" unique_id=1417999243]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 33.0
+offset_right = 416.0
+offset_bottom = 43.0
+theme_override_styles/background = SubResource("BarBG")
+theme_override_styles/fill = SubResource("BarFill")
+value = 15.0
+show_percentage = false
+
+[node name="PollPct" type="Label" parent="WeightsPanel" unique_id=1151720198]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 32.0
+offset_right = 466.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.8, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "15%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="DestrLabel" type="Label" parent="WeightsPanel" unique_id=965960698]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 104.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "Destruição"
+vertical_alignment = 1
+
+[node name="DestrBar" type="ProgressBar" parent="WeightsPanel" unique_id=2017339189]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 49.0
+offset_right = 416.0
+offset_bottom = 59.0
+theme_override_styles/background = SubResource("BarBG")
+theme_override_styles/fill = SubResource("BarFill")
+value = 15.0
+show_percentage = false
+
+[node name="DestrPct" type="Label" parent="WeightsPanel" unique_id=1491562104]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 48.0
+offset_right = 466.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.8, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "15%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="RiskLabel" type="Label" parent="WeightsPanel" unique_id=867425191]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 64.0
+offset_right = 104.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.85, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "Risco"
+vertical_alignment = 1
+
+[node name="RiskBar" type="ProgressBar" parent="WeightsPanel" unique_id=2033258853]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 65.0
+offset_right = 416.0
+offset_bottom = 75.0
+theme_override_styles/background = SubResource("BarBG")
+theme_override_styles/fill = SubResource("BarFill")
+value = 15.0
+show_percentage = false
+
+[node name="RiskPct" type="Label" parent="WeightsPanel" unique_id=760726045]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 64.0
+offset_right = 466.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.8, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 8
+text = "15%"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[connection signal="pressed" from="ConcordarBtn" to="." method="_on_concordar_btn_pressed"]
+[connection signal="pressed" from="DiscordarBtn" to="." method="_on_discordar_btn_pressed"]

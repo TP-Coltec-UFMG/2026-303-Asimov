@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://b0dv5ocqc8tax"]
+
+[ext_resource type="Script" uid="uid://br1f36cqifnu1" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/juncao_nomes.gd" id="1_deui3"]
+[ext_resource type="Script" uid="uid://bko8tuk1irsgy" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/juncao.gd" id="1_lct18"]
+[ext_resource type="Shader" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/mini_game_eletronica.gdshader" id="4_uxp45"]
+[ext_resource type="PackedScene" uid="uid://bbttdh3acfpfj" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/fio.tscn" id="5_1mvua"]
+[ext_resource type="Texture2D" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/juncoes/sprite_00.png" id="6_deui3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b7a7v"]
+shader = ExtResource("4_uxp45")
+shader_parameter/cor_viva = Color(1, 0.95, 0.25, 1)
+shader_parameter/cor_viva_2 = Color(1, 0.82, 0.1, 1)
+shader_parameter/cor_dourada = Color(1, 0.65, 0.05, 1)
+shader_parameter/cor_dourada_2 = Color(0.9, 0.45, 0.02, 1)
+shader_parameter/cor_escura = Color(0.6, 0.22, 0, 1)
+shader_parameter/tamanho_aura = 7.0
+shader_parameter/intensidade = 1.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4wjin"]
+atlas = ExtResource("6_deui3")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ouoft"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4wjin")
+}],
+"loop": 1,
+"name": &"livre_1",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oaa4g"]
+size = Vector2(6.25, 5)
+
+[node name="Juncao" type="Node2D" unique_id=93694696]
+script = ExtResource("1_deui3")
+
+[node name="Juncao" type="Area2D" parent="." unique_id=2043035489]
+z_index = 3
+scale = Vector2(4, 4)
+script = ExtResource("1_lct18")
+fio_scene = ExtResource("5_1mvua")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Juncao" unique_id=461880007]
+texture_filter = 1
+material = SubResource("ShaderMaterial_b7a7v")
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ouoft")
+animation = &"livre_1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Juncao" unique_id=1165393587]
+shape = SubResource("RectangleShape2D_oaa4g")
+metadata/_edit_lock_ = true
+
+[node name="Ponto_Conexao_1" type="Marker2D" parent="Juncao" unique_id=1782651638]
+position = Vector2(-3.5, -3.5)
+
+[node name="Ponto_Conexao_2" type="Marker2D" parent="Juncao" unique_id=391137459]
+position = Vector2(-3.5, -3.5)

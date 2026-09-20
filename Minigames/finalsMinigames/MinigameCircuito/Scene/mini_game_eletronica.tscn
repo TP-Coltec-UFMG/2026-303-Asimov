@@ -1,0 +1,967 @@
+[gd_scene format=3 uid="uid://bktbcokg8uee8"]
+
+[ext_resource type="Script" uid="uid://dc6kvsum6a2tc" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/mini_game_eletronica.gd" id="1_l63un"]
+[ext_resource type="Texture2D" uid="uid://cea0mxqwv6tnk" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/background_minigame_eletronica.jpg" id="1_nd6vg"]
+[ext_resource type="Script" uid="uid://b4maoxad7r4y7" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/circuito.gd" id="2_o8428"]
+[ext_resource type="PackedScene" uid="uid://bbttdh3acfpfj" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/fio.tscn" id="3_wjtt7"]
+[ext_resource type="Texture2D" uid="uid://c2nl1kd6cg0qb" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_00.png" id="4_bu28q"]
+[ext_resource type="Shader" uid="uid://nc8anaidovxu" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/mini_game_eletronica.gdshader" id="4_l63un"]
+[ext_resource type="Script" uid="uid://lcw48ye2lrag" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/bateria.gd" id="4_nfhnn"]
+[ext_resource type="Texture2D" uid="uid://tnp80vwuxafi" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_12.png" id="5_glkp5"]
+[ext_resource type="Texture2D" uid="uid://wqm5wfxqw8ar" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_13.png" id="6_d8gij"]
+[ext_resource type="Texture2D" uid="uid://yus4pp1whp1g" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_14.png" id="7_0515y"]
+[ext_resource type="Script" uid="uid://dhwp8ah2ahe2q" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/terminal.gd" id="8_t4680"]
+[ext_resource type="Texture2D" uid="uid://bgjne0pu8bf58" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_15.png" id="8_wmoh2"]
+[ext_resource type="Texture2D" uid="uid://bpuiuahvjuxx7" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_04.png" id="9_8j80t"]
+[ext_resource type="Script" uid="uid://tpy1lnxqdbhn" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/resistor.gd" id="9_fahae"]
+[ext_resource type="Texture2D" uid="uid://cfsxcxlxrywxv" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_05.png" id="10_gun4t"]
+[ext_resource type="Texture2D" uid="uid://bhllxvdq2s38j" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_06.png" id="11_f8a2n"]
+[ext_resource type="Texture2D" uid="uid://de2cvqwnt1d1h" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_07.png" id="12_xix80"]
+[ext_resource type="Texture2D" uid="uid://byeplvfvjlx6k" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_08.png" id="13_5cw3f"]
+[ext_resource type="Texture2D" uid="uid://br8ngqj7stcp5" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_09.png" id="14_rdc3m"]
+[ext_resource type="Script" uid="uid://7aqchwkwawlg" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/Componentes_Eletronicos/led.gd" id="14_wjtt7"]
+[ext_resource type="Texture2D" uid="uid://d2fa3ck13bj2m" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_10.png" id="15_n5we6"]
+[ext_resource type="Texture2D" uid="uid://byojx1au8idxa" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_11.png" id="16_cryyq"]
+[ext_resource type="Texture2D" uid="uid://cns2nkmflxcbj" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_00.png" id="19_bu28q"]
+[ext_resource type="Script" uid="uid://hscdrllrairi" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/alicate.gd" id="19_xix80"]
+[ext_resource type="Texture2D" uid="uid://wvknwiilc2kh" path="res://Minigames/Minigame5/Sprites/alicate_0.png" id="20_5cw3f"]
+[ext_resource type="Script" uid="uid://2y0ywy3trjl3" path="res://Minigames/finalsMinigames/MinigameCircuito/Scripts/interface.gd" id="20_nd6vg"]
+[ext_resource type="Texture2D" uid="uid://cvoore85mg6py" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_12.png" id="20_rdc3m"]
+[ext_resource type="Texture2D" uid="uid://dmedtujd63jcv" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_13.png" id="21_n5we6"]
+[ext_resource type="PackedScene" uid="uid://b0dv5ocqc8tax" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/juncao.tscn" id="21_rdc3m"]
+[ext_resource type="Texture2D" uid="uid://3ycv2ddseemk" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_14.png" id="22_cryyq"]
+[ext_resource type="Texture2D" uid="uid://bfa4qonj6djfj" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_15.png" id="23_dq8gr"]
+[ext_resource type="Texture2D" uid="uid://cngtpiqgunwyk" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_04.png" id="24_g2rfa"]
+[ext_resource type="Texture2D" uid="uid://dsik686ohjisk" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_05.png" id="25_q5rge"]
+[ext_resource type="Texture2D" uid="uid://5y6bxqhns1mh" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_06.png" id="26_101gt"]
+[ext_resource type="Texture2D" uid="uid://kntm0wak7e74" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_07.png" id="27_yo26t"]
+[ext_resource type="Texture2D" uid="uid://d3jshc0pwykg7" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_08.png" id="28_j85io"]
+[ext_resource type="Texture2D" uid="uid://by8trc4s567r3" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_09.png" id="29_l63un"]
+[ext_resource type="Texture2D" uid="uid://dxacb0hbcvw3o" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_10.png" id="30_b7a7v"]
+[ext_resource type="Texture2D" uid="uid://cyr1gdnsp3on6" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_11.png" id="31_6ycn1"]
+[ext_resource type="Texture2D" uid="uid://djrqifx2n07wp" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_02.png" id="35_kjwu7"]
+[ext_resource type="Texture2D" uid="uid://crmjbjv82dxbe" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_01.png" id="36_0bqkb"]
+[ext_resource type="Texture2D" uid="uid://ducgov3glouxd" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_12.png" id="37_ctg3y"]
+[ext_resource type="Texture2D" uid="uid://dn1gb1na66psg" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_13.png" id="38_alsqy"]
+[ext_resource type="Texture2D" uid="uid://5blo7xoybo2x" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_14.png" id="39_jih5m"]
+[ext_resource type="Texture2D" uid="uid://c2mf4h10rfhbw" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_15.png" id="40_r8rti"]
+[ext_resource type="Texture2D" uid="uid://bpk2773bukp0i" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_04.png" id="41_cc1x8"]
+[ext_resource type="Texture2D" uid="uid://310y423twcte" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_05.png" id="42_xdns6"]
+[ext_resource type="Texture2D" uid="uid://eenofxe8cud4" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_06.png" id="43_cffn8"]
+[ext_resource type="Texture2D" uid="uid://dp2d252826pkh" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_07.png" id="44_7fvcw"]
+[ext_resource type="Texture2D" uid="uid://dg4ygk24ujxj2" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_08.png" id="45_mcqta"]
+[ext_resource type="Texture2D" uid="uid://8k8my6exubue" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_09.png" id="46_frudy"]
+[ext_resource type="Texture2D" uid="uid://bsxy4yjqm2q38" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_00.png" id="47_2f3vy"]
+[ext_resource type="Texture2D" uid="uid://tqml48eogeqs" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_10.png" id="47_wkjn4"]
+[ext_resource type="Texture2D" uid="uid://kx3dkegh8gxh" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_01.png" id="48_nqx4h"]
+[ext_resource type="Texture2D" uid="uid://qc7yt5ka2ve8" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_11.png" id="48_rlx36"]
+[ext_resource type="Texture2D" uid="uid://dued5wiyete2l" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_02.png" id="49_kjwu7"]
+[ext_resource type="Texture2D" uid="uid://dxgp5387331xi" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_12.png" id="50_0bqkb"]
+[ext_resource type="Texture2D" uid="uid://cpxxfckrjgwm6" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_13.png" id="51_ctg3y"]
+[ext_resource type="Texture2D" uid="uid://6ii1a7j2tnkq" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_14.png" id="52_alsqy"]
+[ext_resource type="Script" uid="uid://lqrqkefwpr33" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/fundo_preto_tutorial.gd" id="52_jn0x3"]
+[ext_resource type="Texture2D" uid="uid://dy4kh6m4srh5s" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_15.png" id="53_jih5m"]
+[ext_resource type="Texture2D" uid="uid://d1frejsd3qnxm" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/botao_continuar_hover_128x32.png" id="53_t5cb6"]
+[ext_resource type="Texture2D" uid="uid://bnuru6ycqj1m4" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_04.png" id="54_r8rti"]
+[ext_resource type="Script" uid="uid://brjeg2gjl6nue" path="res://Minigames/finalsMinigames/MinigameCircuito/Scene/panel.gd" id="54_t5cb6"]
+[ext_resource type="Texture2D" uid="uid://du2j6ubbgn6g" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_05.png" id="55_cc1x8"]
+[ext_resource type="Texture2D" uid="uid://bvdtx7vs0fuu1" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_06.png" id="56_xdns6"]
+[ext_resource type="Texture2D" uid="uid://cwih72xwi76wj" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_07.png" id="57_cffn8"]
+[ext_resource type="Texture2D" uid="uid://dlf173swkkhd1" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_08.png" id="58_7fvcw"]
+[ext_resource type="Texture2D" uid="uid://b2fyext172nhy" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_09.png" id="59_mcqta"]
+[ext_resource type="Texture2D" uid="uid://sw8fdgjpjj2o" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_10.png" id="60_frudy"]
+[ext_resource type="Texture2D" uid="uid://c2teiaburmrcj" path="res://Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_11.png" id="61_wkjn4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b7a7v"]
+shader = ExtResource("4_l63un")
+shader_parameter/cor_viva = Color(1, 0.95, 0.25, 1)
+shader_parameter/cor_viva_2 = Color(1, 0.82, 0.1, 1)
+shader_parameter/cor_dourada = Color(1, 0.65, 0.05, 1)
+shader_parameter/cor_dourada_2 = Color(0.9, 0.45, 0.02, 1)
+shader_parameter/cor_escura = Color(0.65, 0.25, 0, 1)
+shader_parameter/tamanho_aura = 6.0
+shader_parameter/intensidade = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dq8gr"]
+atlas = ExtResource("4_bu28q")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2rfa"]
+atlas = ExtResource("5_glkp5")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5rge"]
+atlas = ExtResource("6_d8gij")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_101gt"]
+atlas = ExtResource("7_0515y")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yo26t"]
+atlas = ExtResource("8_wmoh2")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j85io"]
+atlas = ExtResource("9_8j80t")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l63un"]
+atlas = ExtResource("10_gun4t")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7a7v"]
+atlas = ExtResource("11_f8a2n")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ycn1"]
+atlas = ExtResource("12_xix80")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jn0x3"]
+atlas = ExtResource("13_5cw3f")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5cb6"]
+atlas = ExtResource("14_rdc3m")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2smw6"]
+atlas = ExtResource("15_n5we6")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xpgek"]
+atlas = ExtResource("16_cryyq")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3c2fn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dq8gr")
+}],
+"loop": 1,
+"name": &"normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2rfa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5rge")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_101gt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yo26t")
+}],
+"loop": 0,
+"name": &"queimado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j85io")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l63un")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7a7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ycn1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jn0x3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t5cb6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2smw6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xpgek")
+}],
+"loop": 0,
+"name": &"queimando",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_osicj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u840f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_syemq"]
+size = Vector2(64, 28)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jn0x3"]
+shader = ExtResource("4_l63un")
+shader_parameter/cor_viva = Color(1, 0.95, 0.25, 1)
+shader_parameter/cor_viva_2 = Color(1, 0.82, 0.1, 1)
+shader_parameter/cor_dourada = Color(1, 0.65, 0.05, 1)
+shader_parameter/cor_dourada_2 = Color(0.9, 0.45, 0.02, 1)
+shader_parameter/cor_escura = Color(0.6, 0.22, 0, 1)
+shader_parameter/tamanho_aura = 7.0
+shader_parameter/intensidade = 1.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_glkp5"]
+atlas = ExtResource("19_bu28q")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f568c"]
+atlas = ExtResource("20_rdc3m")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cdbh"]
+atlas = ExtResource("21_n5we6")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08mlu"]
+atlas = ExtResource("22_cryyq")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dr83x"]
+atlas = ExtResource("23_dq8gr")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c51k7"]
+atlas = ExtResource("24_g2rfa")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dcubp"]
+atlas = ExtResource("25_q5rge")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1yjx7"]
+atlas = ExtResource("26_101gt")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ht6ay"]
+atlas = ExtResource("27_yo26t")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4ysu"]
+atlas = ExtResource("28_j85io")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p5wq4"]
+atlas = ExtResource("29_l63un")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tfam3"]
+atlas = ExtResource("30_b7a7v")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0wm5"]
+atlas = ExtResource("31_6ycn1")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fdm2o"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_glkp5")
+}],
+"loop": 1,
+"name": &"normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f568c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8cdbh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08mlu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dr83x")
+}],
+"loop": 1,
+"name": &"queimado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c51k7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dcubp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1yjx7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ht6ay")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4ysu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p5wq4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tfam3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m0wm5")
+}],
+"loop": 0,
+"name": &"queimando",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6wcbk"]
+size = Vector2(21, 33)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y5j63"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2smw6"]
+shader = ExtResource("4_l63un")
+shader_parameter/cor_viva = Color(1, 0.95, 0.25, 1)
+shader_parameter/cor_viva_2 = Color(1, 0.82, 0.1, 1)
+shader_parameter/cor_dourada = Color(1, 0.65, 0.05, 1)
+shader_parameter/cor_dourada_2 = Color(0.9, 0.45, 0.02, 1)
+shader_parameter/cor_escura = Color(0.6, 0.22, 0, 1)
+shader_parameter/tamanho_aura = 7.0
+shader_parameter/intensidade = 1.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sy1ck"]
+atlas = ExtResource("35_kjwu7")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0x1px"]
+atlas = ExtResource("36_0bqkb")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bk3ex"]
+atlas = ExtResource("37_ctg3y")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kyu8b"]
+atlas = ExtResource("38_alsqy")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62t3m"]
+atlas = ExtResource("39_jih5m")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekkwj"]
+atlas = ExtResource("40_r8rti")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jpf3p"]
+atlas = ExtResource("41_cc1x8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iki7f"]
+atlas = ExtResource("42_xdns6")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_urbkp"]
+atlas = ExtResource("43_cffn8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gs42y"]
+atlas = ExtResource("44_7fvcw")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqx3h"]
+atlas = ExtResource("45_mcqta")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahhi6"]
+atlas = ExtResource("46_frudy")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjdov"]
+atlas = ExtResource("47_wkjn4")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thb7b"]
+atlas = ExtResource("48_rlx36")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_osicj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sy1ck")
+}],
+"loop": 1,
+"name": &"aceso",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0x1px")
+}],
+"loop": 1,
+"name": &"desligado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bk3ex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kyu8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_62t3m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekkwj")
+}],
+"loop": 2,
+"name": &"queimado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jpf3p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iki7f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_urbkp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gs42y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqx3h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahhi6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjdov")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_thb7b")
+}],
+"loop": 0,
+"name": &"queimando",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yliq7"]
+size = Vector2(8.75, 12.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xfb3"]
+size = Vector2(9, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mcqta"]
+atlas = ExtResource("48_nqx4h")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rlx36"]
+atlas = ExtResource("47_2f3vy")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khu7x"]
+atlas = ExtResource("48_nqx4h")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3lw44"]
+atlas = ExtResource("49_kjwu7")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_it1j5"]
+atlas = ExtResource("50_0bqkb")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0do4"]
+atlas = ExtResource("51_ctg3y")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_auvoh"]
+atlas = ExtResource("52_alsqy")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0tan0"]
+atlas = ExtResource("53_jih5m")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_me5n0"]
+atlas = ExtResource("54_r8rti")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j1gc8"]
+atlas = ExtResource("55_cc1x8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1i34"]
+atlas = ExtResource("56_xdns6")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m2w4o"]
+atlas = ExtResource("57_cffn8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pisgl"]
+atlas = ExtResource("58_7fvcw")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kon8x"]
+atlas = ExtResource("59_mcqta")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57pyo"]
+atlas = ExtResource("60_frudy")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8qqi6"]
+atlas = ExtResource("61_wkjn4")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u840f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mcqta")
+}],
+"loop": 1,
+"name": &"desligado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rlx36")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khu7x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3lw44")
+}],
+"loop": 1,
+"name": &"normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_it1j5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0do4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_auvoh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0tan0")
+}],
+"loop": 1,
+"name": &"queimado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_me5n0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j1gc8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1i34")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m2w4o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pisgl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kon8x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57pyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8qqi6")
+}],
+"loop": 1,
+"name": &"queimando",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u6ve1"]
+radius = 5.0
+height = 24.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f568c"]
+shader = ExtResource("4_l63un")
+shader_parameter/cor_viva = Color(1, 0.95, 0.25, 1)
+shader_parameter/cor_viva_2 = Color(1, 0.82, 0.1, 1)
+shader_parameter/cor_dourada = Color(1, 0.65, 0.05, 1)
+shader_parameter/cor_dourada_2 = Color(0.9, 0.45, 0.02, 1)
+shader_parameter/cor_escura = Color(0.6, 0.22, 0, 1)
+shader_parameter/tamanho_aura = 7.0
+shader_parameter/intensidade = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orientacao"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.043137256, 0.20392157, 0.078431375, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.36, 0.68, 0.42, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jn0x3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t5cb6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2smw6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xpgek"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f568c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3c2fn"]
+bg_color = Color(0.043137256, 0.20392157, 0.078431375, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.36078432, 0.6784314, 0.41960785, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[node name="Mini_Game_Eletronica" type="Node2D" unique_id=1518352553]
+scale = Vector2(0.6, 0.6)
+script = ExtResource("1_l63un")
+modo_objetivo = 3
+
+[node name="Circuito" type="Node2D" parent="." unique_id=2147198896]
+script = ExtResource("2_o8428")
+fio_scene = ExtResource("3_wjtt7")
+
+[node name="Bateria" type="Area2D" parent="Circuito" unique_id=246835883]
+z_index = 2
+position = Vector2(397, 86)
+script = ExtResource("4_nfhnn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Circuito/Bateria" unique_id=1325455217]
+texture_filter = 1
+material = SubResource("ShaderMaterial_b7a7v")
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_3c2fn")
+animation = &"normal"
+metadata/_edit_lock_ = true
+
+[node name="Aumentar_Tensão" type="Button" parent="Circuito/Bateria" unique_id=242952857]
+z_index = -1
+offset_left = 22.0
+offset_top = 10.0
+offset_right = 30.0
+offset_bottom = 18.0
+scale = Vector2(4, 4)
+metadata/_edit_lock_ = true
+
+[node name="Diminuir_Tensão" type="Button" parent="Circuito/Bateria" unique_id=1839275839]
+z_index = -1
+offset_left = -50.0
+offset_top = 9.0
+offset_right = -42.0
+offset_bottom = 17.0
+scale = Vector2(4, 4)
+metadata/_edit_lock_ = true
+
+[node name="Terminal_positivo" type="Area2D" parent="Circuito/Bateria" unique_id=285772875]
+position = Vector2(88, 25)
+script = ExtResource("8_t4680")
+fio_scene = ExtResource("3_wjtt7")
+nome = "Terminal_positivo_bateria"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Bateria/Terminal_positivo" unique_id=1105333929]
+position = Vector2(-11, -1)
+shape = SubResource("RectangleShape2D_osicj")
+metadata/_edit_lock_ = true
+
+[node name="Terminal_negativo" type="Area2D" parent="Circuito/Bateria" unique_id=35096139]
+position = Vector2(-77, 27)
+script = ExtResource("8_t4680")
+fio_scene = ExtResource("3_wjtt7")
+nome = "Terminal_negativo_bateria"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Bateria/Terminal_negativo" unique_id=219220746]
+position = Vector2(11, -1)
+shape = SubResource("RectangleShape2D_u840f")
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="Circuito/Bateria" unique_id=659787823]
+offset_left = -98.0
+offset_top = -31.0
+offset_right = -58.0
+offset_bottom = -8.0
+
+[node name="Resistor" type="Area2D" parent="Circuito" unique_id=1629734131]
+z_index = 2
+position = Vector2(582, 231)
+script = ExtResource("9_fahae")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Resistor" unique_id=1838573107]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_syemq")
+metadata/_edit_lock_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Circuito/Resistor" unique_id=354005243]
+texture_filter = 1
+material = SubResource("ShaderMaterial_jn0x3")
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_fdm2o")
+animation = &"normal"
+metadata/_edit_lock_ = true
+
+[node name="Terminal_positivo" type="Area2D" parent="Circuito/Resistor" unique_id=1466640416]
+position = Vector2(44, -48)
+script = ExtResource("8_t4680")
+fio_scene = ExtResource("3_wjtt7")
+nome = "Terminal_positivo_resistor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Resistor/Terminal_positivo" unique_id=842931770]
+position = Vector2(-44, 5)
+shape = SubResource("RectangleShape2D_6wcbk")
+
+[node name="Terminal_negativo" type="Area2D" parent="Circuito/Resistor" unique_id=1032182517]
+position = Vector2(47, -5.604694e-07)
+script = ExtResource("8_t4680")
+fio_scene = ExtResource("3_wjtt7")
+nome = "Terminal_negativo_resistor"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Resistor/Terminal_negativo" unique_id=1476761286]
+position = Vector2(-48, 46)
+shape = SubResource("CircleShape2D_y5j63")
+
+[node name="Label" type="Label" parent="Circuito/Resistor" unique_id=134104264]
+offset_left = -55.999992
+offset_top = 85.0
+offset_right = -7.6199875
+offset_bottom = 108.0
+rotation = -1.5707964
+text = "220 Ω"
+
+[node name="Led" type="Area2D" parent="Circuito" unique_id=1739261613]
+z_index = 1
+position = Vector2(392, 318)
+scale = Vector2(0.7, 0.7)
+script = ExtResource("14_wjtt7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Circuito/Led" unique_id=207132294]
+z_index = 2
+texture_filter = 1
+material = SubResource("ShaderMaterial_2smw6")
+position = Vector2(17.095213, 19.523802)
+scale = Vector2(3.3353176, 3)
+sprite_frames = SubResource("SpriteFrames_osicj")
+animation = &"queimando"
+
+[node name="Terminal_positivo" type="Area2D" parent="Circuito/Led" unique_id=863652729]
+script = ExtResource("8_t4680")
+fio_scene = ExtResource("3_wjtt7")
+nome = "Terminal_positivo_led"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Led/Terminal_positivo" unique_id=775094720]
+position = Vector2(19.99998, 48.571445)
+shape = SubResource("RectangleShape2D_yliq7")
+
+[node name="Terminal_negativo" type="Area2D" parent="Circuito/Led" unique_id=1998293293]
+script = ExtResource("8_t4680")
+fio_scene = ExtResource("3_wjtt7")
+nome = "Terminal_negativo_led"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Led/Terminal_negativo" unique_id=598962237]
+position = Vector2(-4.2856975, 48.57142)
+shape = SubResource("RectangleShape2D_2xfb3")
+metadata/_edit_lock_ = true
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="Circuito/Led" unique_id=531814270]
+z_index = 1
+texture_filter = 1
+position = Vector2(16.190445, 2.8571308)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_u840f")
+animation = &"desligado"
+metadata/_edit_lock_ = true
+
+[node name="Juncao01" parent="Circuito" unique_id=93694696 instance=ExtResource("21_rdc3m")]
+position = Vector2(247, 113)
+nome = "juncao01"
+
+[node name="Juncao02" parent="Circuito" unique_id=176287696 instance=ExtResource("21_rdc3m")]
+position = Vector2(245, 345)
+nome = "juncao02"
+
+[node name="Juncao03" parent="Circuito" unique_id=910781613 instance=ExtResource("21_rdc3m")]
+position = Vector2(581, 111)
+nome = "juncao03"
+
+[node name="Juncao04" parent="Circuito" unique_id=1098149917 instance=ExtResource("21_rdc3m")]
+position = Vector2(583, 347)
+nome = "juncao04"
+
+[node name="Alicate" type="Area2D" parent="Circuito" unique_id=514795165]
+z_index = 1
+position = Vector2(173, 217)
+scale = Vector2(1.5, 1.5)
+script = ExtResource("19_xix80")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Alicate" unique_id=1989920578]
+position = Vector2(2, -10)
+shape = SubResource("CapsuleShape2D_u6ve1")
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Circuito/Alicate" unique_id=968643479]
+texture_filter = 1
+material = SubResource("ShaderMaterial_f568c")
+position = Vector2(1, 3)
+texture = ExtResource("20_5cw3f")
+metadata/_edit_lock_ = true
+
+[node name="Interface" type="CanvasLayer" parent="Circuito" unique_id=1703843844]
+script = ExtResource("20_nd6vg")
+
+[node name="GameOver" type="Control" parent="Circuito/Interface" unique_id=579390254]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Circuito/Interface/GameOver" unique_id=1376805683]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 761.6666
+offset_bottom = 410.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Circuito/Interface/GameOver" unique_id=253064675]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 114.0
+offset_right = 608.0
+offset_bottom = 156.0
+theme_override_font_sizes/font_size = 15
+text = "GAME OVER - SEU TEMPO ACABOU"
+
+[node name="GameWin" type="Control" parent="Circuito/Interface" unique_id=357042359]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Circuito/Interface/GameWin" unique_id=2007049916]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 442.0
+offset_bottom = 232.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="Circuito/Interface/GameWin" unique_id=1807137849]
+layout_mode = 0
+offset_left = 126.0
+offset_top = 115.0
+offset_right = 621.0
+offset_bottom = 157.0
+theme_override_font_sizes/font_size = 15
+text = "VOCÊ CONCLUIU O OBJETIVO"
+
+[node name="background" type="Sprite2D" parent="." unique_id=1081960938]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_nd6vg")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Fundo_preto_tutorial" type="Panel" parent="." unique_id=923254031]
+z_index = 7
+offset_left = 656.6666
+offset_top = 99.99999
+offset_right = 786.6666
+offset_bottom = 295.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_orientacao")
+script = ExtResource("52_jn0x3")
+
+[node name="Label" type="Label" parent="Fundo_preto_tutorial" unique_id=2026040005]
+z_index = 6
+layout_mode = 0
+offset_left = 10.0
+offset_top = 66.66667
+offset_right = 120.0
+offset_bottom = 156.66666
+theme_override_colors/font_color = Color(0.92, 0.97, 0.93, 1)
+theme_override_font_sizes/font_size = 10
+autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Fundo_preto_tutorial" unique_id=1931810212]
+z_index = 5
+texture_filter = 1
+layout_mode = 0
+offset_left = 31.666666
+offset_top = 163.33333
+offset_right = 123.666664
+offset_bottom = 191.66666
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jn0x3")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_t5cb6")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_2smw6")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_xpgek")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_f568c")
+icon = ExtResource("53_t5cb6")
+expand_icon = true
+
+[node name="Panel" type="Panel" parent="Fundo_preto_tutorial" unique_id=185151091]
+layout_mode = 0
+offset_left = 1.666626
+offset_top = 1.6666698
+offset_right = 128.33331
+offset_bottom = 50.000008
+theme_override_styles/panel = SubResource("StyleBoxFlat_3c2fn")
+script = ExtResource("54_t5cb6")
+
+[node name="Label2" type="Label" parent="Fundo_preto_tutorial/Panel" unique_id=2140013573 groups=["objetivo"]]
+z_index = 1
+layout_mode = 0
+offset_left = 8.333366
+offset_top = 6.666664
+offset_right = 119.66674
+offset_bottom = 41.666664
+theme_override_font_sizes/font_size = 10
+text = "Objetivo:  
+Queimar led e resistor"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Circuito/Bateria/Aumentar_Tensão" to="Circuito" method="_on_aumentar_tensão_pressed"]
+[connection signal="pressed" from="Circuito/Bateria/Aumentar_Tensão" to="Circuito/Bateria" method="_on_aumentar_tensão_pressed"]
+[connection signal="pressed" from="Circuito/Bateria/Diminuir_Tensão" to="Circuito" method="_on_diminuir_tensão_pressed"]
+[connection signal="pressed" from="Circuito/Bateria/Diminuir_Tensão" to="Circuito/Bateria" method="_on_diminuir_tensão_pressed"]
+[connection signal="pressed" from="Fundo_preto_tutorial/Button" to="." method="_on_button_pressed"]
