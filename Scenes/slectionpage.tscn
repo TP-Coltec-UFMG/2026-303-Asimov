@@ -122,16 +122,17 @@ offset_bottom = 231.0
 pivot_offset = Vector2(64, 96)
 texture_normal = ExtResource("1_7oymq")
 script = ExtResource("3_h7hbm")
-button = "engenheiro"
+button = "engenheiro_eletrico"
 
 [node name="Label" type="Label" parent="Control/Job/Engenheiro" unique_id=141823072]
 layout_mode = 0
-offset_left = 10.0
-offset_top = 7.0
-offset_right = 119.0
-offset_bottom = 30.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 124.0
+offset_bottom = 48.0
 theme_override_fonts/font = ExtResource("3_86ehh")
-text = "ENGENHEIRO"
+theme_override_font_sizes/font_size = 14
+text = "ENGENHEIRO\nELÉTRICO"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -291,7 +292,7 @@ offset_top = 8.0
 offset_right = 341.0
 offset_bottom = 31.0
 theme_override_fonts/font = ExtResource("3_86ehh")
-text = "SELECIONE SUA PROFISSÃO"
+text = "SELECIONE A DIFICULDADE"
 horizontal_alignment = 1
 vertical_alignment = 1
 

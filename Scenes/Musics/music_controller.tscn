@@ -26,7 +26,7 @@ bus = &"Music"
 
 [node name="SOM_ALARME" type="AudioStreamPlayer2D" parent="." unique_id=2046736172]
 stream = ExtResource("3_a7c45")
-bus = &"sfx"
+bus = &"Music"
 parameters/looping = true
 
 [node name="SOM_DE_FUNDO" type="AudioStreamPlayer2D" parent="." unique_id=1170555803]
@@ -40,7 +40,7 @@ volume_db = -3.0980392
 bus = &"Music"
 parameters/looping = true
 
-[node name="HEARTBEAT" type="AudioStreamPlayer2D" parent="."]
+[node name="HEARTBEAT" type="AudioStreamPlayer2D" parent="." unique_id=80516916]
 process_mode = 3
 stream = ExtResource("6_heartbeat")
 volume_db = -14.0
@@ -49,11 +49,11 @@ attenuation = 0.0
 bus = &"sfx"
 parameters/looping = true
 
-[node name="INITIAL_BACKGROUND_MUSIC" type="AudioStreamPlayer2D" parent="."]
+[node name="INITIAL_BACKGROUND_MUSIC" type="AudioStreamPlayer2D" parent="." unique_id=1251377663]
 process_mode = 3
 stream = ExtResource("7_initial_background_music")
 volume_db = -19.0
 max_distance = 100000.0
 attenuation = 0.0
-bus = &"sfx"
+bus = &"Music"
 parameters/looping = true

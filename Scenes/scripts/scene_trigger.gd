@@ -7,7 +7,7 @@ signal access_requested(trigger: SceneTrigger)
 @export	var eh_elevador: bool
 @export var andar_atual: int
 @export var access_override: bool = false
-@onready var painel_elevador: Node2D = $"../PainelElevador"
+@onready var painel_elevador: Node2D = get_node_or_null("../PainelElevador") as Node2D
 @onready var controle_de_tempo: Control = $"../UI/Controle_de_tempo"
 
 var ultima_posicao: Vector2
@@ -128,6 +128,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			acesso_liberado.play()
 			await acesso_liberado.finished
 			if dentro_da_area:
+				await _play_restricted_area_transition()
+				if not is_inside_tree() or not dentro_da_area:
+					return
 				_preparar_saida_da_sala_do_chefe()
 				_registrar_acesso_a_sala_do_chefe()
 				scene_manager.change_scene(body_p, connected_scene)
@@ -141,6 +144,17 @@ func _unhandled_input(event: InputEvent) -> void:
 func reproduzir_acesso_negado() -> void:
 	aceso_negado.play()
 	await aceso_negado.finished
+
+
+func _play_restricted_area_transition() -> void:
+	if connected_scene != "data_center_forte":
+		return
+	var scene := get_parent()
+	if scene == null:
+		return
+	var controller := scene.get_node_or_null("DataCenterIntroController")
+	if controller != null and controller.has_method("play_restricted_area_fade_out"):
+		await controller.call("play_restricted_area_fade_out")
 
 
 func _tem_cartao_compativel() -> bool:

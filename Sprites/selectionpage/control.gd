@@ -6,7 +6,11 @@ var option_selected: String = ""
 
 func _ready() -> void:
 	await get_tree().process_frame
-	$Job/Programador.grab_focus()
+	$CHOICETEXT.text = "SELECIONE A DIFICULDADE"
+	$Difficulty.visible = true
+	$Job.visible = false
+	$Character.visible = false
+	$Difficulty/Easy.grab_focus()
 
 func SELECTED():
 
@@ -14,6 +18,7 @@ func SELECTED():
 	if option_selected == "programador":
 
 		Configs.configs["job"] = "programador"
+		_persist_choices()
 		$Job/Engenheiro.disabled = true
 
 		var blink = create_tween()
@@ -29,16 +34,13 @@ func SELECTED():
 		await blink.finished
 		transition.play("default")
 		await transition.animation_finished
-		$Job.visible = false
-		$Character.visible = true
-		$CHOICETEXT.text = "SELECIONE SEU PERSONAGEM"
-		transition.play_backwards("default")
-		$Character/Character1.grab_focus()
+		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
 		
 
-# --- ENGENHEIRO ---
-	elif option_selected == "engenheiro":
-		Configs.configs["job"] = "engenheiro"
+# --- ENGENHEIRO ELÉTRICO ---
+	elif option_selected == "engenheiro_eletrico":
+		Configs.configs["job"] = "engenheiro_eletrico"
+		_persist_choices()
 		$Job/Programador.disabled = true
 
 		var blink = create_tween()
@@ -54,11 +56,7 @@ func SELECTED():
 		await blink.finished
 		transition.play("default")
 		await transition.animation_finished
-		$Job.visible = false
-		$Character.visible = true
-		$CHOICETEXT.text = "SELECIONE SEU PERSONAGEM"
-		transition.play_backwards("default")
-		$Character/Character1.grab_focus()
+		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
 
 # --- CHARACTER 1 ---
 	elif option_selected == "character1":
@@ -144,6 +142,7 @@ func SELECTED():
 # --- EASY ---
 	elif option_selected == "easy":
 		Configs.configs["difficulty"] = "easy"
+		_persist_choices()
 		$Difficulty/Normal.disabled = true
 		$Difficulty/Hard.disabled = true
 
@@ -160,13 +159,12 @@ func SELECTED():
 		$Difficulty/Hard.visible = false
 
 		await blink.finished
-		transition.play("default")
-		await transition.animation_finished
-		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
+		await _show_profession_selection()
 
 # --- NORMAL ---
 	elif option_selected == "normal":
 		Configs.configs["difficulty"] = "normal"
+		_persist_choices()
 		$Difficulty/Easy.disabled = true
 		$Difficulty/Hard.disabled = true
 
@@ -183,13 +181,12 @@ func SELECTED():
 		$Difficulty/Hard.visible = false
 
 		await blink.finished
-		transition.play("default")
-		await transition.animation_finished
-		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
+		await _show_profession_selection()
 
 # --- HARD ---
 	elif option_selected == "hard":
 		Configs.configs["difficulty"] = "hard"
+		_persist_choices()
 		$Difficulty/Easy.disabled = true
 		$Difficulty/Normal.disabled = true
 
@@ -206,9 +203,19 @@ func SELECTED():
 		$Difficulty/Normal.visible = false
 
 		await blink.finished
-		transition.play("default")
-		await transition.animation_finished
-		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
+		await _show_profession_selection()
 
-	SaveLoad.save_data = Configs.configs
+
+func _show_profession_selection() -> void:
+	transition.play("default")
+	await transition.animation_finished
+	$Difficulty.visible = false
+	$Job.visible = true
+	$CHOICETEXT.text = "SELECIONE SUA PROFISSÃO"
+	transition.play_backwards("default")
+	$Job/Programador.grab_focus()
+
+
+func _persist_choices() -> void:
+	SaveLoad.save_data = Configs.configs.duplicate(true)
 	SaveLoad._save()

@@ -101,6 +101,9 @@ func _load() -> void:
 func _apply_load() -> void:
 	save_data["filtro_de_daltonismo"] = clampi(int(save_data.get("filtro_de_daltonismo", 0)), 0, 3)
 	save_data["movimento_camera"] = bool(save_data.get("movimento_camera", true))
+	# Normaliza partidas criadas quando a profissão ainda usava o nome curto.
+	if str(save_data.get("job", "")) == "engenheiro":
+		save_data["job"] = "engenheiro_eletrico"
 	Configs.configs = save_data.duplicate(true)
 
 	TranslationServer.set_locale(save_data.traducao)

@@ -29,6 +29,7 @@ var boss_story_card: Node2D
 var rfid_verification_ui: Control
 var rfid_verification_bar: ProgressBar
 var rfid_verification_label: Label
+var restricted_area_fade: ColorRect
 var regular_lights: Array[PointLight2D] = []
 var regular_light_visibility: Dictionary = {}
 var normal_canvas_color: Color = Color.WHITE
@@ -63,6 +64,7 @@ func _initialize() -> void:
 	strong_story_card = get_node_or_null("../NPCs/NPC1/CartaoForteDaHistoria") as Node2D
 	boss_story_card = get_node_or_null("../NPCs/NPC1/CartaoChefeDaHistoria") as Node2D
 	rfid_verification_ui = get_node_or_null("../SceneTrigger2/RFIDVerification") as Control
+	restricted_area_fade = get_node_or_null("../RestrictedAreaTransition/Black") as ColorRect
 	if rfid_verification_ui != null:
 		rfid_verification_bar = rfid_verification_ui.get_node_or_null("ProgressBar") as ProgressBar
 		rfid_verification_label = rfid_verification_ui.get_node_or_null("Label") as Label
@@ -508,6 +510,28 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 		"data_center:access_not_ready",
 		"É esta porta. Preciso seguir o plano do cientista."
 	)
+
+
+func play_restricted_area_fade_out() -> void:
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	if bool(state.get("data_center_forte_intro_seen", false)):
+		return
+	if restricted_area_fade == null or not is_instance_valid(player):
+		return
+	access_sequence_busy = true
+	player.direction = Vector2.ZERO
+	player.velocity = Vector2.ZERO
+	player.correndo = false
+	player.state = "idle"
+	player.UpdateAnimation()
+	player.sfx_walking.stop()
+	player.set_physics_process(false)
+	restricted_area_fade.color = Color(0, 0, 0, 0)
+	restricted_area_fade.show()
+	var fade_tween := create_tween()
+	fade_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	fade_tween.tween_property(restricted_area_fade, "color:a", 1.0, 0.75)
+	await fade_tween.finished
 
 
 func _reject_strong_card() -> void:
