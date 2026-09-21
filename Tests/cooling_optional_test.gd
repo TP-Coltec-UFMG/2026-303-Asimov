@@ -93,6 +93,36 @@ func _run() -> void:
 	_expect(bool(state.get("cooling_optional_task_active", false)), "A tarefa deve ser ativada somente após os três pensamentos.")
 	_expect((quest.rows[QuestMissionUI.COOLING_TASK_INDEX] as CanvasItem).visible, "A tarefa opcional deve aparecer no painel.")
 
+	state["programmer_ending_started"] = true
+	state["programmer_launch_isolated"] = true
+	quest.show_programmer_ending_tasks(1)
+	var visible_programmer_rows := 0
+	var cooling_task_integrated := false
+	for row in quest.rows:
+		if not row.visible:
+			continue
+		visible_programmer_rows += 1
+		var label := row.get_node("Label3") as Label
+		cooling_task_integrated = cooling_task_integrated or label.text.begins_with("OPCIONAL:")
+	_expect(visible_programmer_rows <= 3, "A tarefa opcional não pode criar uma quarta linha no final do programador.")
+	_expect(cooling_task_integrated, "A tarefa de refrigeração deve continuar visível durante o final do programador.")
+	state.erase("programmer_ending_started")
+	state.erase("programmer_launch_isolated")
+	quest.call("_sync_optional_cooling_row")
+
+	for scene_path in [
+		"res://Scenes/andar_data_center.tscn",
+		"res://Scenes/data_center_forte.tscn",
+		"res://Scenes/data_center_refrigeracao.tscn",
+	]:
+		var data_center_scene := load(scene_path) as PackedScene
+		_expect(data_center_scene != null, "A cena do data center precisa carregar: " + scene_path)
+		if data_center_scene == null:
+			continue
+		var data_center_instance := data_center_scene.instantiate()
+		_expect(data_center_instance.has_node("CoolingLocationGuide"), "A indicação da refrigeração precisa existir em " + scene_path)
+		data_center_instance.free()
+
 	var menu := load("res://Minigames/PuzzleDosCanos/tscn/menu.tscn") as PackedScene
 	var gameplay := load("res://Minigames/PuzzleDosCanos/tscn/gameplay.tscn") as PackedScene
 	_expect(menu != null and gameplay != null, "As duas cenas do puzzle precisam carregar pelos caminhos corrigidos.")

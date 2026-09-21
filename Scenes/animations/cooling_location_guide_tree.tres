@@ -1,0 +1,23 @@
+[gd_resource type="AnimationNodeStateMachine" format=3 uid="uid://c0rfmw1p4b06h"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNode_conceal"]
+animation = &"conceal"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNode_finish"]
+animation = &"finish"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNode_hold"]
+animation = &"hold"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNode_reveal"]
+animation = &"reveal"
+
+[resource]
+states/Conceal/node = SubResource("AnimationNode_conceal")
+states/Conceal/position = Vector2(540, 100)
+states/Finish/node = SubResource("AnimationNode_finish")
+states/Finish/position = Vector2(720, 100)
+states/Hold/node = SubResource("AnimationNode_hold")
+states/Hold/position = Vector2(360, 100)
+states/Reveal/node = SubResource("AnimationNode_reveal")
+states/Reveal/position = Vector2(180, 100)

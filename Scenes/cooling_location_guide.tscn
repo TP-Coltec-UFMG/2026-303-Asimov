@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://Scenes/scripts/cooling_location_guide.gd" id="1_script"]
+[ext_resource type="AnimationLibrary" path="res://Scenes/animations/cooling_location_guide_animations.tres" id="2_animations"]
+[ext_resource type="AnimationNodeStateMachine" path="res://Scenes/animations/cooling_location_guide_tree.tres" id="3_tree"]
+
+[sub_resource type="CanvasItemMaterial" id="GuideUnshaded"]
+light_mode = 1
+
+[node name="CoolingLocationGuide" type="Node"]
+script = ExtResource("1_script")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries/ = ExtResource("2_animations")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = ExtResource("3_tree")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="CutsceneCamera" type="Camera2D" parent="."]
+position = Vector2(134, -173)
+enabled = false
+
+[node name="Highlight" type="Node2D" parent="."]
+visible = false
+z_index = 90
+position = Vector2(134, -173)
+
+[node name="Glow" type="Line2D" parent="Highlight"]
+material = SubResource("GuideUnshaded")
+points = PackedVector2Array(-12, -21, 12, -21, 12, 21, -12, 21, -12, -21)
+width = 5.0
+default_color = Color(1, 1, 1, 0.2)
+joint_mode = 2
+
+[node name="Border" type="Line2D" parent="Highlight"]
+material = SubResource("GuideUnshaded")
+points = PackedVector2Array(-12, -21, 12, -21, 12, 21, -12, 21, -12, -21)
+width = 1.3
+default_color = Color(1, 1, 1, 0.95)
+joint_mode = 2
+
+[node name="Overlay" type="CanvasLayer" parent="."]
+layer = 130
+
+[node name="Black" type="ColorRect" parent="Overlay"]
+process_mode = 3
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

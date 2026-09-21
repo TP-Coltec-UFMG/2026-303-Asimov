@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="19_strong_card"]
 [ext_resource type="PackedScene" uid="uid://beo4uworw31ct" path="res://Objects/cartao_chefe.tscn" id="20_boss_card"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="21_rfid_font"]
+[ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="22_cooling_guide"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -315,7 +316,7 @@ shape = SubResource("RectangleShape2D_p4f2l")
 
 [node name="Interectable" parent="SceneTrigger3" unique_id=420770966 groups=["Coletaveis"] instance=ExtResource("6_o1mid")]
 position = Vector2(166, -210)
-interact_name = "Acesso Forte"
+interact_name = "Área de refrigeração"
 is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger3/Interectable" unique_id=751141156]
@@ -346,6 +347,8 @@ scene_trigger = NodePath("../SceneTrigger")
 
 [node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("7_o1mid")]
 process_physics_priority = -6
+
+[node name="CoolingLocationGuide" parent="." instance=ExtResource("22_cooling_guide")]
 
 [node name="RestrictedAreaTransition" type="CanvasLayer" parent="."]
 layer = 120

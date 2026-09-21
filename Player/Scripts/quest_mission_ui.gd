@@ -59,6 +59,7 @@ const PROGRAMMER_ENDING_TASKS: Array[String] = [
 var desired_visible: bool = false
 var hidden_for_elevator: bool = false
 var cooling_idle_time: float = 0.0
+var rendering_programmer_tasks: bool = false
 
 
 func _enter_tree() -> void:
@@ -124,12 +125,6 @@ func _process(delta: float) -> void:
 	if current_player == null:
 		return
 	var state := SaveGame.office_mission_state(current_player)
-	# O fluxo final substitui as tarefas opcionais anteriores. Sem esta trava,
-	# a refrigeração podia reaparecer como uma quarta linha após a atualização.
-	if bool(state.get("programmer_ending_started", false)):
-		cooling_idle_time = 0.0
-		set_task_visible(COOLING_TASK_INDEX, false)
-		return
 	if bool(state.get("cooling_failure_thought_pending", false)):
 		_queue_cooling_failure(current_player, state)
 	if bool(state.get("cooling_completion_thought_pending", false)):
@@ -149,7 +144,7 @@ func _process(delta: float) -> void:
 
 
 func set_panel_visible(value: bool) -> void:
-	if value and not standalone_mode:
+	if value and not standalone_mode and not rendering_programmer_tasks:
 		_sync_optional_cooling_row()
 	desired_visible = value
 	visible = value and not get_tree().paused and not hidden_for_elevator
@@ -165,11 +160,15 @@ func restore_after_elevator() -> void:
 	visible = desired_visible and not get_tree().paused
 
 
-func hide_all_tasks() -> void:
+func hide_all_tasks(preserve_optional: bool = true) -> void:
 	for row in rows:
 		row.hide()
 	if standalone_mode:
 		set_panel_visible(false)
+		return
+	if not preserve_optional:
+		desired_visible = false
+		hide()
 		return
 	_sync_optional_cooling_row()
 	set_panel_visible(rows[COOLING_TASK_INDEX].visible)
@@ -232,18 +231,45 @@ func show_programmer_ending_tasks(
 	# Ao encher o painel, a última concluída sobe para iniciar a próxima janela.
 	var start_index := safe_completed - 1 if safe_completed >= 3 else 0
 	var visible_end := mini(safe_completed + 1, PROGRAMMER_ENDING_TASKS.size())
+	var entries: Array[Dictionary] = []
+	for task_index in range(start_index, visible_end):
+		entries.append({
+			"text": PROGRAMMER_ENDING_TASKS[task_index],
+			"completed": task_index < safe_completed,
+			"task_index": task_index,
+		})
+	var state := SaveGame.office_mission_state(get_parent() as Player)
+	var cooling_active := (
+		bool(state.get("cooling_optional_task_active", false))
+		and not bool(state.get("cooling_optional_task_completed", false))
+		and not bool(state.get("cooling_optional_task_cancelled", false))
+	)
+	if cooling_active:
+		# A missão opcional ocupa uma das três linhas. Retiramos primeiro a tarefa
+		# concluída mais antiga, nunca o objetivo atual.
+		while entries.size() >= 3:
+			var remove_index := -1
+			for index in range(entries.size()):
+				if bool(entries[index]["completed"]):
+					remove_index = index
+					break
+			if remove_index < 0:
+				remove_index = 0
+			entries.remove_at(remove_index)
+		entries.append({
+			"text": "OPCIONAL: REDIRECIONE A\nREFRIGERAÇÃO DA IA",
+			"completed": false,
+			"task_index": -1,
+		})
 	for row_index in range(rows.size()):
-		var task_index := start_index + row_index
-		var should_show := (
-			row_index < 3
-			and task_index < visible_end
-			and task_index < PROGRAMMER_ENDING_TASKS.size()
-		)
+		var should_show := row_index < 3 and row_index < entries.size()
 		set_task_visible(row_index, should_show)
 		if not should_show:
 			continue
-		set_task_text(row_index, PROGRAMMER_ENDING_TASKS[task_index])
-		var completed := task_index < safe_completed
+		var entry := entries[row_index]
+		set_task_text(row_index, str(entry["text"]))
+		var completed := bool(entry["completed"])
+		var task_index := int(entry["task_index"])
 		set_task_completed(
 			row_index,
 			completed,
@@ -251,7 +277,9 @@ func show_programmer_ending_tasks(
 			and completed
 			and task_index == safe_completed - 1
 		)
+	rendering_programmer_tasks = true
 	set_panel_visible(true)
+	rendering_programmer_tasks = false
 
 
 func _sync_optional_cooling_row() -> void:
@@ -260,6 +288,8 @@ func _sync_optional_cooling_row() -> void:
 	var state := SaveGame.office_mission_state(get_parent() as Player)
 	if bool(state.get("programmer_ending_started", false)):
 		set_task_visible(COOLING_TASK_INDEX, false)
+		if not rendering_programmer_tasks:
+			show_programmer_ending_tasks(_programmer_completed_count(state))
 		return
 	var active := bool(state.get("cooling_optional_task_active", false))
 	var completed := bool(state.get("cooling_optional_task_completed", false))
@@ -269,9 +299,26 @@ func _sync_optional_cooling_row() -> void:
 		set_task_completed(COOLING_TASK_INDEX, completed)
 
 
+func _programmer_completed_count(state: Dictionary) -> int:
+	if bool(state.get("programmer_recalibration_applied", false)):
+		return 4
+	if bool(state.get("programmer_laws_completed", false)):
+		return 3
+	if bool(state.get("programmer_neural_completed", false)):
+		return 2
+	if bool(state.get("programmer_launch_isolated", false)):
+		return 1
+	return 0
+
+
 func _can_start_cooling_intro(current_player: Player, state: Dictionary) -> bool:
 	if get_tree().paused or DialogManager.is_showing_dialog:
 		return false
+	var current_scene := get_tree().current_scene
+	if current_scene != null:
+		var programmer_ending := current_scene.get_node_or_null("ProgrammerEnding")
+		if programmer_ending != null and bool(programmer_ending.get("busy")):
+			return false
 	if not current_player.is_physics_processing():
 		return false
 	if current_player.balao_de_pensamento.esta_ocupado():

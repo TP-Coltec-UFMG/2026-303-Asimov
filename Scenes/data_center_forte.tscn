@@ -17,6 +17,7 @@
 [ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="14_pixel"]
 [ext_resource type="AudioStream" uid="uid://s6okbs6xf7dc" path="res://Sounds/leberch-suspense-511168.mp3" id="15_tension"]
 [ext_resource type="AudioStream" uid="uid://csvy6ntt7yhfr" path="res://Sounds/clavier-music-solas-203831.mp3" id="16_resolution"]
+[ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="17_cooling_guide"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(46, 42.25)
@@ -364,6 +365,8 @@ color = Color(0, 0, 0, 1)
 
 [node name="ProgrammerEnding" type="Node" parent="." unique_id=869435146]
 script = ExtResource("10_ending")
+
+[node name="CoolingLocationGuide" parent="." instance=ExtResource("17_cooling_guide")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ProgrammerEnding" unique_id=1881268964]
 libraries/ = ExtResource("11_ending_animations")

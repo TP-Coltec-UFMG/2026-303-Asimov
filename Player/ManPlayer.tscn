@@ -382,10 +382,10 @@ man_player = NodePath("../../..")
 [node name="FPSLabel" type="Label" parent="CanvasLayer/Control" unique_id=167887252]
 material = SubResource("CanvasItemMaterial_pfqqk")
 layout_mode = 0
-offset_left = 126.71231
-offset_top = -92.46574
-offset_right = 158.71231
-offset_bottom = -80.46574
+offset_left = 110.958885
+offset_top = -92.465744
+offset_right = 142.9589
+offset_bottom = -80.465744
 theme_override_fonts/font = ExtResource("12_hxkef")
 theme_override_font_sizes/font_size = 9
 text = "123 FPS"

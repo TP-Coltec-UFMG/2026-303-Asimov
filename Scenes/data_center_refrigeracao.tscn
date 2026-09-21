@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="7_uic87"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="8_bfolx"]
 [ext_resource type="Script" uid="uid://2um32gj74uma" path="res://Scripts/Objects/cooling_terminal.gd" id="9_nwm1k"]
+[ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="10_cooling_guide"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(17, 32.125)
@@ -85,6 +86,8 @@ shape = SubResource("RectangleShape2D_6gj4d")
 
 [node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("8_bfolx")]
 process_physics_priority = -6
+
+[node name="CoolingLocationGuide" parent="." instance=ExtResource("10_cooling_guide")]
 
 [node name="CoolingTerminal" type="Node2D" parent="." unique_id=859588501]
 position = Vector2(173, -215)

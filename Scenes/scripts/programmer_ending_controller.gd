@@ -579,7 +579,7 @@ func _start_final_transition(animated: bool) -> void:
 	_lock_player()
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI if is_instance_valid(player) else null
 	if quest_ui != null:
-		quest_ui.hide_all_tasks()
+		quest_ui.hide_all_tasks(false)
 	final_fade.show()
 	final_card.hide()
 	final_fade.mouse_filter = Control.MOUSE_FILTER_STOP
