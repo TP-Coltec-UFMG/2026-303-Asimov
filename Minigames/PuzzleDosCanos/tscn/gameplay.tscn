@@ -4,9 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://mjkpdnf8wuj5" path="res://Minigames/PuzzleDosCanos/textures/sheet.png" id="2"]
 [ext_resource type="Script" uid="uid://b32b5rx8vnopq" path="res://Minigames/PuzzleDosCanos/scripts/time.gd" id="3"]
 [ext_resource type="PackedScene" uid="uid://do0ebdj15nakh" path="res://Minigames/PuzzleDosCanos/tscn/pipe.tscn" id="4"]
-[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="6_story_timer"]
 [ext_resource type="AudioStream" uid="uid://cofwomnet5gi2" path="res://Minigames/PuzzleDosCanos/sounds/drop_002.ogg" id="4_77rau"]
 [ext_resource type="AudioStream" uid="uid://uwf7nis14rn8" path="res://Minigames/PuzzleDosCanos/sounds/wolff-sfx-gas-leak-igniting-425545.mp3" id="5_77rau"]
+[ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="6_story_timer"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_77rau"]
 
@@ -598,9 +598,18 @@ volume_db = -8.0
 stream = ExtResource("5_77rau")
 volume_db = -16.0
 
-[node name="StoryHUD" type="CanvasLayer" parent="."]
+[node name="StoryHUD" type="CanvasLayer" parent="." unique_id=2133871296]
 
-[node name="ControleDeTempo" parent="StoryHUD" instance=ExtResource("6_story_timer")]
+[node name="ControleDeTempo" parent="StoryHUD" unique_id=300283381 instance=ExtResource("6_story_timer")]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1789625364]
+z_index = -100
+layout_mode = 0
+offset_left = -58.851852
+offset_top = -23.666668
+offset_right = 128.14815
+offset_bottom = 89.33333
+color = Color(0, 0, 0, 1)
 
 [connection signal="timeout" from="time/tm" to="time" method="_on_tm_timeout"]
 [connection signal="timeout" from="tm_blink" to="." method="_on_tm_blink_timeout"]

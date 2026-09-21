@@ -11,11 +11,11 @@
 [ext_resource type="AnimationLibrary" uid="uid://2ao6fhdk22jr" path="res://Scenes/animations/data_center_forte_intro_animations.tres" id="8_intro_animations"]
 [ext_resource type="AnimationNodeStateMachine" uid="uid://5uvbh4g6x83w" path="res://Scenes/animations/data_center_forte_intro_tree.tres" id="9_intro_tree"]
 [ext_resource type="Script" uid="uid://dwmbshs0uov3c" path="res://Scenes/scripts/programmer_ending_controller.gd" id="10_ending"]
+[ext_resource type="AudioStream" uid="uid://cj5kqxcl7niin" path="res://Memory of Man.mp3" id="11_5bm6k"]
 [ext_resource type="AnimationLibrary" uid="uid://cvvch6irsovm2" path="res://Scenes/animations/programmer_ending_animations.tres" id="11_ending_animations"]
 [ext_resource type="PackedScene" uid="uid://bmmti2muc6ayl" path="res://Minigames/finalsMinigames/MinigameRedeNeural/minigame.tscn" id="12_neural"]
 [ext_resource type="PackedScene" uid="uid://4un5ryng3p8w" path="res://Minigames/finalsMinigames/Minigame4/recovery_system.tscn" id="13_laws"]
 [ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="14_pixel"]
-[ext_resource type="AudioStream" uid="uid://s6okbs6xf7dc" path="res://Sounds/leberch-suspense-511168.mp3" id="15_tension"]
 [ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="17_cooling_guide"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
@@ -365,19 +365,19 @@ color = Color(0, 0, 0, 1)
 [node name="ProgrammerEnding" type="Node" parent="." unique_id=869435146]
 script = ExtResource("10_ending")
 
-[node name="CoolingLocationGuide" parent="." instance=ExtResource("17_cooling_guide")]
-darkness_overlay_path = NodePath("Iluminacao/ColorRect")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ProgrammerEnding" unique_id=1881268964]
 libraries/ = ExtResource("11_ending_animations")
 
 [node name="Audio" type="Node" parent="ProgrammerEnding" unique_id=66308784]
 
 [node name="FinalTension" type="AudioStreamPlayer" parent="ProgrammerEnding/Audio" unique_id=1150168000]
-stream = ExtResource("15_tension")
+stream = ExtResource("11_5bm6k")
 volume_db = -60.0
 bus = &"Music"
 parameters/looping = true
+
+[node name="CoolingLocationGuide" parent="." unique_id=1612781862 instance=ExtResource("17_cooling_guide")]
+darkness_overlay_path = NodePath("Iluminacao/ColorRect")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1199192627]
 

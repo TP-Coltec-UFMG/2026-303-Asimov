@@ -1,0 +1,10 @@
+res://Scenes/Musics/music_controller.tscn
+res://shaders/mapa_acessibilidade.gdshader
+res://shaders/pause_menu.gdshader
+res://shaders/filtro_daltonismo.gdshader
+res://Scenes/animations/cooling_location_guide_animations.tres
+res://Scenes/animations/cooling_location_guide_tree.tres
+res://Scenes/animations/data_center_forte_intro_animations.tres
+res://Scenes/animations/data_center_forte_intro_tree.tres
+res://Scenes/animations/programmer_ending_animations.tres
+res://Scenes/data_center_forte.tscn
