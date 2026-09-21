@@ -121,6 +121,9 @@ func _run() -> void:
 			continue
 		var data_center_instance := data_center_scene.instantiate()
 		_expect(data_center_instance.has_node("CoolingLocationGuide"), "A indicação da refrigeração precisa existir em " + scene_path)
+		var guide := data_center_instance.get_node_or_null("CoolingLocationGuide")
+		if scene_path != "res://Scenes/data_center_refrigeracao.tscn":
+			_expect(guide != null and not (guide.get("darkness_overlay_path") as NodePath).is_empty(), "A indicação precisa revelar a área escondida pelo ColorRect em " + scene_path)
 		data_center_instance.free()
 
 	var menu := load("res://Minigames/PuzzleDosCanos/tscn/menu.tscn") as PackedScene

@@ -349,6 +349,7 @@ scene_trigger = NodePath("../SceneTrigger")
 process_physics_priority = -6
 
 [node name="CoolingLocationGuide" parent="." instance=ExtResource("22_cooling_guide")]
+darkness_overlay_path = NodePath("Iluminacao/ColorRect2")
 
 [node name="RestrictedAreaTransition" type="CanvasLayer" parent="."]
 layer = 120

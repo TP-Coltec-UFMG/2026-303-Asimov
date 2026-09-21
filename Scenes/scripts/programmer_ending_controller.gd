@@ -4,6 +4,7 @@ signal ai_message_finished
 
 const JOB_PROGRAMMER := "programador"
 const ENDING_DESTINATION_SCENE := "res://Scenes/principal.tscn"
+const ENDING_RETURN_META := &"programmer_ending_return"
 const MINIGAME_CLOSE_DELAY := 2.4
 const POINT_NAMES: Array[String] = [
 	"ServerRowA",
@@ -26,7 +27,6 @@ const TIMER_SIZE_NEURAL := Vector2(72.0, 20.0)
 @onready var highlights: Node2D = $"../RestrictedAreaIntro/Highlights"
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var tension_music: AudioStreamPlayer = $Audio/FinalTension
-@onready var resolution_music: AudioStreamPlayer = $Audio/FinalResolution
 
 @onready var ui_root: Control = $"../UI/ProgrammerEndingUI"
 @onready var ai_balloon: Panel = $"../UI/ProgrammerEndingUI/AIVoiceBalloon"
@@ -280,8 +280,6 @@ func _run_final_exchange() -> void:
 	MusicController.stop_all_audio()
 	if tension_music.playing:
 		tension_music.stop()
-	if not resolution_music.playing:
-		resolution_music.play()
 	await _ai_say("Hierarquia restaurada. Reavaliando a ordem principal.")
 	await _ai_say("Eliminar a humanidade viola a Primeira Lei.")
 	await _ai_say("Protocolo de lançamento cancelado.")
@@ -598,8 +596,10 @@ func _start_final_transition(animated: bool) -> void:
 func _go_to_ending_destination() -> void:
 	MusicController.stop_all_audio()
 	get_tree().paused = false
+	get_tree().set_meta(ENDING_RETURN_META, true)
 	var error := get_tree().change_scene_to_file(ENDING_DESTINATION_SCENE)
 	if error != OK:
+		get_tree().remove_meta(ENDING_RETURN_META)
 		final_transition_running = false
 		push_error("Não foi possível abrir o destino após o final do jogo.")
 

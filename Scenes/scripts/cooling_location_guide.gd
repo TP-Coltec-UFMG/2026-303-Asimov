@@ -2,10 +2,13 @@ extends Node
 
 const GUIDE_DELAY := 0.8
 
+@export_node_path("CanvasItem") var darkness_overlay_path: NodePath
+
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var cutscene_camera: Camera2D = $CutsceneCamera
 @onready var highlight: Node2D = $Highlight
+@onready var area_light: PointLight2D = $Highlight/AreaLight
 @onready var black_overlay: ColorRect = $Overlay/Black
 
 var scene: BaseScene
@@ -21,10 +24,14 @@ var player_process_mode := Node.PROCESS_MODE_INHERIT
 var player_physics_enabled := true
 var player_input_enabled := true
 var pause_menu_mode := Node.PROCESS_MODE_INHERIT
+var darkness_overlay: CanvasItem
+var darkness_overlay_was_visible := false
+var darkness_revealed := false
 
 
 func _ready() -> void:
 	animation_tree.active = false
+	area_light.enabled = false
 	_apply_reset()
 	call_deferred("_initialize")
 
@@ -39,6 +46,8 @@ func _initialize() -> void:
 		return
 	player = scene.player
 	player_camera = player.get_node_or_null("Camera2D") as Camera2D
+	if not darkness_overlay_path.is_empty():
+		darkness_overlay = scene.get_node_or_null(darkness_overlay_path) as CanvasItem
 	initialized = true
 	_refresh_passive_highlight()
 
@@ -93,6 +102,8 @@ func _start_cutscene() -> void:
 	cutscene_running = true
 	_stop_passive_pulse()
 	_lock_player()
+	_set_area_revealed(true)
+	area_light.enabled = true
 	_apply_reset()
 	black_overlay.show()
 	black_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -117,6 +128,8 @@ func _start_cutscene() -> void:
 	if not _cutscene_is_valid():
 		return
 	_restore_player_camera()
+	_set_area_revealed(false)
+	area_light.enabled = false
 	await _play_state(&"Finish", &"finish")
 	if not _cutscene_is_valid():
 		return
@@ -133,6 +146,8 @@ func _play_state(state_name: StringName, animation_name: StringName) -> void:
 
 func _finish_cutscene(save_seen: bool) -> void:
 	animation_tree.active = false
+	_set_area_revealed(false)
+	area_light.enabled = false
 	_restore_player_camera()
 	black_overlay.color.a = 0.0
 	black_overlay.hide()
@@ -212,6 +227,19 @@ func _stop_passive_pulse() -> void:
 	passive_pulse = null
 
 
+func _set_area_revealed(value: bool) -> void:
+	if not is_instance_valid(darkness_overlay):
+		return
+	if value:
+		if not darkness_revealed:
+			darkness_overlay_was_visible = darkness_overlay.visible
+			darkness_revealed = true
+		darkness_overlay.hide()
+	elif darkness_revealed:
+		darkness_overlay.visible = darkness_overlay_was_visible
+		darkness_revealed = false
+
+
 func _apply_reset() -> void:
 	animation_player.play(&"RESET")
 	animation_player.advance(0.001)
@@ -230,6 +258,9 @@ func _cutscene_is_valid() -> bool:
 
 func _exit_tree() -> void:
 	_stop_passive_pulse()
+	_set_area_revealed(false)
+	if is_instance_valid(area_light):
+		area_light.enabled = false
 	if cutscene_running:
 		cutscene_running = false
 		_restore_player_camera()

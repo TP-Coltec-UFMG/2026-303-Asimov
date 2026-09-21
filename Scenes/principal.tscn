@@ -62,12 +62,15 @@ script/source = "extends Node2D
 @onready var primeira_vez: Node2D = $PrimeiraVez
 @onready var new_game_button: Button = $\"Menu Inicial/VContainer/NewGameButton\"
 @onready var confirmacao_reiniciar: Control = $\"Menu Inicial/Confirmacao_reiniciar\"
+@onready var ending_return_fade: ColorRect = $EndingReturnFade/Black
+@onready var ending_return_animation: AnimationPlayer = $EndingReturnFade/AnimationPlayer
 
 
 var scene_to_change_path: String
 
 const AJUSTE_LABEL_GRANDE: float = 6.0
 const GRUPO_INTERFACE: String = \"interface_escalavel\"
+const ENDING_RETURN_META := &\"programmer_ending_return\"
 
 
 func _ready() -> void:
@@ -77,9 +80,17 @@ func _ready() -> void:
 	SaveLoad._load()
 	SaveGame._load()
 
-	transition.visible = true
-	transition.frame = 7
-	transition.play_backwards(\"default\")
+	var returning_from_ending := bool(get_tree().get_meta(ENDING_RETURN_META, false))
+	if returning_from_ending:
+		get_tree().remove_meta(ENDING_RETURN_META)
+		transition.hide()
+		ending_return_fade.show()
+		ending_return_animation.play(&\"ending_return_fade_in\")
+	else:
+		ending_return_fade.hide()
+		transition.visible = true
+		transition.frame = 7
+		transition.play_backwards(\"default\")
 
 	if Configs.configs.primeira_vez:
 		primeira_vez._iniciar()
@@ -918,6 +929,68 @@ animations = [{
 "speed": 30.0
 }]
 
+[sub_resource type="Animation" id="Animation_ending_return_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Black:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Black:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ending_return_fade_in"]
+resource_name = "ending_return_fade_in"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Black:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Black:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ending_return"]
+_data = {
+&"RESET": SubResource("Animation_ending_return_reset"),
+&"ending_return_fade_in": SubResource("Animation_ending_return_fade_in")
+}
+
 [sub_resource type="QuadMesh" id="QuadMesh_hp4hf"]
 
 [node name="Principal" type="Node2D" unique_id=1854141835]
@@ -926,6 +999,21 @@ script = SubResource("GDScript_8ibws")
 [node name="MenuInputRouter" type="Node" parent="." unique_id=1593800731]
 script = ExtResource("57_menu_input")
 focus_color = Color(1, 0.81960785, 0.4, 0.32941177)
+
+[node name="EndingReturnFade" type="CanvasLayer" parent="."]
+layer = 500
+
+[node name="Black" type="ColorRect" parent="EndingReturnFade"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="EndingReturnFade"]
+libraries/ = SubResource("AnimationLibrary_ending_return")
 
 [node name="Menu Inicial" type="Node2D" parent="." unique_id=441017326]
 position = Vector2(-8, 0)

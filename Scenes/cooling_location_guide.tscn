@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://Scenes/scripts/cooling_location_guide.gd" id="1_script"]
 [ext_resource type="AnimationLibrary" path="res://Scenes/animations/cooling_location_guide_animations.tres" id="2_animations"]
 [ext_resource type="AnimationNodeStateMachine" path="res://Scenes/animations/cooling_location_guide_tree.tres" id="3_tree"]
+[ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="4_light"]
 
 [sub_resource type="CanvasItemMaterial" id="GuideUnshaded"]
 light_mode = 1
@@ -25,6 +26,13 @@ enabled = false
 visible = false
 z_index = 90
 position = Vector2(134, -173)
+
+[node name="AreaLight" type="PointLight2D" parent="Highlight"]
+position = Vector2(55, 0)
+scale = Vector2(0.75, 0.52)
+color = Color(0.86, 0.95, 1, 0.78)
+energy = 0.7
+texture = ExtResource("4_light")
 
 [node name="Glow" type="Line2D" parent="Highlight"]
 material = SubResource("GuideUnshaded")
