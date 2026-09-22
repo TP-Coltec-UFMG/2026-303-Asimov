@@ -12,3 +12,6 @@ res://Scenes/animations/programmer_ending_animations.tres
 res://Objects/controle_de_tempo.tscn
 res://Objects/scripts/controle_de_tempo.gd
 res://Player/Scripts/quest_mission_ui.gd
+res://Scripts/Data/save/SaveGame.gd
+res://Scripts/Data/save/SaveLoad.gd
+res://Scenes/animations/programmer_final_conflict_animations.tres

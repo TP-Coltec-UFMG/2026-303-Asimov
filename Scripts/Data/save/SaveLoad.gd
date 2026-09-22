@@ -57,6 +57,8 @@ func _ready() -> void:
 
 
 func _save() -> void:
+	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
+		return
 	# Alguns menus antigos substituem save_data pelo dicionário de Configs.
 	# Sincronizar aqui mantém o salvamento correto independentemente de qual
 	# tela solicitou a gravação e inclui sempre os controles atuais.

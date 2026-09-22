@@ -1,0 +1,162 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scenes/scripts/dev_mission_jump.gd" id="1_dev"]
+
+[node name="DevMissionJump" type="CanvasLayer"]
+layer = 110
+process_mode = 3
+script = ExtResource("1_dev")
+
+[node name="Indicator" type="Label" parent="."]
+visible = false
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 145.0
+offset_bottom = 19.0
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 10
+text = "DEV · Ctrl+Shift+D"
+
+[node name="Menu" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.82)
+
+[node name="Panel" type="PanelContainer" parent="Menu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 45.0
+offset_top = 10.0
+offset_right = -45.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Menu/Panel"]
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 7
+
+[node name="VBox" type="VBoxContainer" parent="Menu/Panel/Margin"]
+theme_override_constants/separation = 3
+
+[node name="Title" type="Label" parent="Menu/Panel/Margin/VBox"]
+layout_mode = 2
+text = "MODO DEV · IR PARA MISSÃO"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Menu/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Ctrl+Shift+1–9: etapas 1–9  ·  Ctrl+Shift+0: final"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Menu/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StageButtons" type="VBoxContainer" parent="Menu/Panel/Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Stage01" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "01"
+alignment = 0
+
+[node name="Stage02" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "02"
+alignment = 0
+
+[node name="Stage03" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "03"
+alignment = 0
+
+[node name="Stage04" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "04"
+alignment = 0
+
+[node name="Stage05" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "05"
+alignment = 0
+
+[node name="Stage06" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "06"
+alignment = 0
+
+[node name="Stage07" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "07"
+alignment = 0
+
+[node name="Stage08" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "08"
+alignment = 0
+
+[node name="Stage09" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "09"
+alignment = 0
+
+[node name="Stage10" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "10"
+alignment = 0
+
+[node name="Stage11" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "11"
+alignment = 0
+
+[node name="Stage12" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "12"
+alignment = 0
+
+[node name="Stage13" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "13"
+alignment = 0
+
+[node name="Stage14" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "14"
+alignment = 0
+
+[node name="Stage15" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "15"
+alignment = 0
+
+[node name="Stage16" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "16"
+alignment = 0
+
+[node name="Stage17" type="Button" parent="Menu/Panel/Margin/VBox/Scroll/StageButtons"]
+layout_mode = 2
+text = "17"
+alignment = 0
+
+[node name="Restore" type="Button" parent="Menu/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Voltar ao save real"
+
+[node name="Close" type="Button" parent="Menu/Panel/Margin/VBox"]
+layout_mode = 2
+text = "Fechar  (Esc / Ctrl+Shift+D)"

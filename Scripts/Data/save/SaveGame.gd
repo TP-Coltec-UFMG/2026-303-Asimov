@@ -35,6 +35,8 @@ func _ready() -> void:
 
 
 func _save() -> void:
+	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
+		return
 	if checkpoint_scene_path.is_empty():
 		return
 
@@ -536,6 +538,27 @@ func save_current_session(
 
 
 func clear_save() -> void:
+	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
+		# Novo jogo durante um teste limpa só a sessão em memória.
+		# O checkpoint real continua intacto em disco até sair do modo dev.
+		save_data.clear()
+		checkpoint_world_state.clear()
+		state_player.clear()
+		checkpoint_progress.clear()
+		checkpoint_audio_state.clear()
+		checkpoint_scene_path = ""
+		checkpoint_player_scene_path = ""
+		checkpoint_pos = INVALID_CHECKPOINT_POS
+		restore_checkpoint_pending = false
+		restore_audio_pending = false
+		tempo_restante = -1.0
+		tempo_atual = -1.0
+		MusicController.stop_all_audio()
+		scene_manager.player = null
+		scene_manager.last_scene_name = ""
+		DevMissionJump.active_stage = -1
+		DevMissionJump.indicator.text = "DEV · Ctrl+Shift+D"
+		return
 	save_data.clear()
 	checkpoint_world_state.clear()
 	state_player.clear()

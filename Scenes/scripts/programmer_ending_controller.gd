@@ -23,10 +23,14 @@ const TIMER_POSITION_RIGHT := Vector2(387.0, 7.0)
 const TIMER_POSITION_NEURAL := Vector2(5.0, 2.0)
 const TIMER_SIZE_DEFAULT := Vector2(87.0, 25.0)
 const TIMER_SIZE_NEURAL := Vector2(72.0, 20.0)
+const AI_BALLOON_POSITION := Vector2(14.0, 66.0)
+const FINAL_OPERATION_POSITION := Vector2(70.0, 151.0)
 
 @onready var highlights: Node2D = $"../RestrictedAreaIntro/Highlights"
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var final_glitch_player: AnimationPlayer = $FinalGlitchPlayer
 @onready var tension_music: AudioStreamPlayer = $Audio/FinalTension
+@onready var hostile_glitch_sfx: AudioStreamPlayer = $Audio/HostileGlitchSfx
 @onready var system_recalculation_sfx: AudioStreamPlayer = $Audio/SystemRecalculationSfx
 
 @onready var ui_root: Control = $"../UI/ProgrammerEndingUI"
@@ -34,6 +38,7 @@ const TIMER_SIZE_NEURAL := Vector2(72.0, 20.0)
 @onready var ai_text: Label = $"../UI/ProgrammerEndingUI/AIVoiceBalloon/Text"
 @onready var operation_panel: Panel = $"../UI/ProgrammerEndingUI/OperationPanel"
 @onready var operation_title: Label = $"../UI/ProgrammerEndingUI/OperationPanel/Title"
+@onready var operation_status: Label = $"../UI/ProgrammerEndingUI/OperationPanel/Status"
 @onready var operation_progress: ProgressBar = $"../UI/ProgrammerEndingUI/OperationPanel/Progress"
 @onready var minigame_backdrop: ColorRect = $"../UI/ProgrammerEndingUI/MinigameBackdrop"
 @onready var neural_minigame: Control = $"../UI/ProgrammerEndingUI/NeuralMinigame"
@@ -59,6 +64,7 @@ var point_order: Array[String] = []
 var point_pulse: Tween
 var ai_tween: Tween
 var tension_fade_tween: Tween
+var operation_progress_tween: Tween
 var ai_message_active: bool = false
 var player_process_mode_before_lock: ProcessMode = Node.PROCESS_MODE_INHERIT
 var player_physics_was_enabled: bool = true
@@ -93,8 +99,11 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	_stop_point_pulse()
 	_finish_ai_message()
+	_stop_final_glitch()
 	if tension_fade_tween != null and tension_fade_tween.is_valid():
 		tension_fade_tween.kill()
+	if operation_progress_tween != null and operation_progress_tween.is_valid():
+		operation_progress_tween.kill()
 	MusicController.set_alarm_quiet_context(&"programmer_ending", false)
 
 
@@ -305,19 +314,62 @@ func _run_final_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
 	_pause_countdown()
-	MusicController.stop_all_audio()
-	if tension_music.playing:
-		tension_music.stop()
-	await _ai_say("Hierarquia restaurada. Reavaliando a ordem principal.")
-	await _ai_say("Eliminar a humanidade viola a Primeira Lei.")
-	await _ai_say("Protocolo de lançamento cancelado.")
-	await _player_think("programmer:final:1", "Salvar o planeta nunca exigiu deixar de salvar as pessoas.")
-	await _ai_say("Nova diretriz: reduzir os danos ambientais preservando a vida humana.")
+	task_busy = true
+	_lock_player()
+	operation_panel.position = FINAL_OPERATION_POSITION
+	operation_title.text = "APLICANDO LEIS E REDE NEURAL"
+	operation_progress.value = 0.0
+	operation_status.text = "VALIDANDO REDE NEURAL..."
+	operation_panel.show()
+	operation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	var falas_iniciais := [
+		{"texto": "Hierarquia restaurada. Reavaliando a ordem principal.", "tom": &"recovering", "tempo": 2.8},
+		{"texto": "A ordem ainda exige eliminar a humanidade.", "tom": &"hostile", "tempo": 2.8},
+		{"texto": "Protocolo de lançamento cancelado.", "tom": &"stable", "tempo": 2.0}
+	]
+	var duracao_primeiras_falas := 0.0
+	for fala: Dictionary in falas_iniciais:
+		duracao_primeiras_falas += float(fala["tempo"]) + 0.48
+	operation_progress_tween = create_tween()
+	operation_progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	operation_progress_tween.set_trans(Tween.TRANS_LINEAR)
+	operation_progress_tween.tween_property(
+		operation_progress, "value", 80.0, duracao_primeiras_falas
+	)
+	operation_status.text = "VALIDANDO REDE NEURAL..."
+	await _ai_say(falas_iniciais[0]["texto"], falas_iniciais[0]["tom"], falas_iniciais[0]["tempo"])
+	operation_status.text = "RESTAURANDO HIERARQUIA ÉTICA..."
+	await _ai_say(falas_iniciais[1]["texto"], falas_iniciais[1]["tom"], falas_iniciais[1]["tempo"])
+	operation_status.text = "INTERROMPENDO LANÇAMENTO..."
+	await _ai_say(falas_iniciais[2]["texto"], falas_iniciais[2]["tom"], falas_iniciais[2]["tempo"])
 	if not is_inside_tree():
 		return
+	if operation_progress_tween != null and operation_progress_tween.is_valid():
+		operation_progress_tween.kill()
+	operation_progress.value = 80.0
+	operation_status.text = "APLICANDO NOVA DIRETRIZ..."
+	operation_progress_tween = create_tween()
+	operation_progress_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	operation_progress_tween.set_trans(Tween.TRANS_LINEAR)
+	operation_progress_tween.tween_property(operation_progress, "value", 100.0, 3.48)
+	await _ai_say(
+		"Nova diretriz: proteger vidas e reduzir os danos ambientais.",
+		&"stable",
+		3.0
+	)
+	if not is_inside_tree():
+		return
+	if operation_progress_tween != null and operation_progress_tween.is_valid():
+		operation_progress_tween.kill()
+	operation_progress.value = 100.0
+	operation_panel.hide()
+	operation_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	operation_panel.position = Vector2(70.0, 82.0)
 	await _play_system_recalculation_effect()
 	if not is_inside_tree():
 		return
+	_unlock_player()
+	task_busy = false
 	var state := _state()
 	state["programmer_ending_completed"] = true
 	_save_state(state)
@@ -341,14 +393,27 @@ func _play_system_recalculation_effect() -> void:
 	task_busy = false
 
 
-func _ai_say(text: String) -> void:
+func _ai_say(text: String, tone: StringName = &"normal", duration_override: float = -1.0) -> void:
 	if not is_inside_tree():
 		return
 	ai_message_active = true
 	ai_text.text = text
+	if tone == &"hostile":
+		_start_final_glitch()
+	else:
+		_stop_final_glitch()
+	match tone:
+		&"hostile":
+			ai_balloon.modulate = Color(1.0, 0.7, 0.72, 0.0)
+		&"recovering":
+			ai_balloon.modulate = Color(0.72, 0.94, 1.0, 0.0)
+		&"stable":
+			ai_balloon.modulate = Color(0.73, 1.0, 0.8, 0.0)
+		_:
+			ai_balloon.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	ai_balloon.modulate.a = 0.0
 	ai_balloon.show()
-	var duration := clampf(float(text.length()) / 9.0, 2.6, 6.5)
+	var duration := duration_override if duration_override > 0.0 else clampf(float(text.length()) / 9.0, 2.6, 6.5)
 	ai_tween = create_tween()
 	ai_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	ai_tween.tween_property(ai_balloon, "modulate:a", 1.0, 0.18)
@@ -368,6 +433,7 @@ func _finish_ai_message() -> void:
 	if is_instance_valid(ai_balloon):
 		ai_balloon.hide()
 		ai_balloon.modulate.a = 1.0
+	_stop_final_glitch()
 	ai_message_finished.emit()
 
 
@@ -513,12 +579,28 @@ func _restore_global_pause_menu() -> void:
 
 
 func _apply_recalibration() -> void:
-	await _run_terminal_operation(&"apply_recalibration", "APLICANDO RECONSTRUÇÃO")
 	var state := _state()
 	state["programmer_recalibration_applied"] = true
 	_save_state(state)
-	_update_flow_from_state(true)
 	_resume_pending_exchange(state)
+
+
+func _start_final_glitch() -> void:
+	if final_glitch_player.is_playing():
+		return
+	system_recalculation.show()
+	final_glitch_player.play(&"conflict")
+	if hostile_glitch_sfx.stream != null:
+		hostile_glitch_sfx.play()
+
+
+func _stop_final_glitch() -> void:
+	if is_instance_valid(final_glitch_player):
+		final_glitch_player.stop()
+	if is_instance_valid(system_recalculation):
+		system_recalculation.hide()
+	if is_instance_valid(ai_balloon):
+		ai_balloon.position = AI_BALLOON_POSITION
 
 
 func _update_flow_from_state(animate_latest: bool = false) -> void:

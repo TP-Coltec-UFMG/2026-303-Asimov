@@ -3,6 +3,7 @@ extends Control
 signal tempo_esgotado
 
 const TEMPO_LIMITE_DE_JOGO: float = 60 * 2
+const TEMPO_LIMITE_DEV: float = 60 * 10
 const TEMPO_INICIO_AUDIO: float = 11.0
 const TEMPO_INICIO_COUNT_DOWN: float = 46.0
 const TEMPO_EVENTO_REFRIGERACAO: float = 120.0
@@ -23,9 +24,12 @@ var tempo_tremor_final: float = 0.0
 var intensidade_tremor_final: float = 0.0
 var camera_em_tremor: Camera2D = null
 var offset_original_camera: Vector2 = Vector2.ZERO
+var limite_da_partida: float = TEMPO_LIMITE_DE_JOGO
 
 
 func _ready() -> void:
+	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
+		limite_da_partida = TEMPO_LIMITE_DEV
 	add_to_group("temporizador_jogo")
 	if SaveGame.tempo_atual >= 0.0:
 		carregar_tempo_restante(SaveGame.tempo_atual)
@@ -38,7 +42,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	tempo_decorrido = minf(
 		tempo_decorrido + delta,
-		TEMPO_LIMITE_DE_JOGO
+		limite_da_partida
 	)
 
 	var tempo_restante_atual: float = get_tempo_restante()
@@ -67,14 +71,14 @@ func _process(delta: float) -> void:
 		atualizar_label()
 		
 
-	if tempo_decorrido >= TEMPO_LIMITE_DE_JOGO:
+	if tempo_decorrido >= limite_da_partida:
 		fim_de_jogo()
 
 
 func get_tempo_restante() -> float:
 	return maxf(
 		0.0,
-		TEMPO_LIMITE_DE_JOGO - tempo_decorrido
+		limite_da_partida - tempo_decorrido
 	)
 
 
@@ -101,10 +105,10 @@ func carregar_tempo_restante(novo_tempo: float) -> void:
 	var tempo_carregado := clampf(
 		novo_tempo,
 		0.0,
-		TEMPO_LIMITE_DE_JOGO
+		limite_da_partida
 	)
 
-	tempo_decorrido = TEMPO_LIMITE_DE_JOGO - tempo_carregado
+	tempo_decorrido = limite_da_partida - tempo_carregado
 	ultimo_segundo_exibido = -1
 	audio_iniciado = tempo_carregado <= TEMPO_INICIO_AUDIO
 	count_down_audio_iniciado = (
@@ -170,7 +174,7 @@ func reiniciar_timer() -> void:
 	audio_iniciado = false
 	count_down_audio_iniciado = false
 
-	SaveGame.tempo_atual = TEMPO_LIMITE_DE_JOGO
+	SaveGame.tempo_atual = limite_da_partida
 
 	audio_stream_player_2d.stop()
 	audio_stream_player_2d.stream_paused = false
