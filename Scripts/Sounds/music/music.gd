@@ -75,6 +75,8 @@ var power_outage_music_target_db: float = SILENT_VOLUME_DB
 var initial_background_music_normal_volume_db: float = 0.0
 var initial_background_music_target_volume_db: float = 0.0
 var heartbeat_intro_elapsed: float = 0.0
+var menu_fade_tween: Tween
+var menu_fade_restore_volumes: Dictionary = {}
 
 
 func _ready() -> void:
@@ -432,6 +434,49 @@ func pause_all_audio() -> void:
 				audio_player.get_playback_position()
 			)
 			audio_player.stop()
+
+
+func fade_out_for_menu(duration: float) -> void:
+	if menu_fade_tween != null and menu_fade_tween.is_valid():
+		menu_fade_tween.kill()
+	menu_fade_restore_volumes.clear()
+	scene_audio_blocked = true
+	initial_background_music_target_volume_db = SILENT_VOLUME_DB
+	power_outage_audio_state = PowerOutageAudioState.IDLE
+	menu_fade_tween = create_tween()
+	menu_fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	var players: Array[AudioStreamPlayer2D] = [
+		bg_music,
+		bg_ambient,
+		countdown_music,
+		som_alarme,
+		som_de_fundo,
+		musica_quando_o_disjuntor_apagar,
+		heartbeat,
+		initial_background_music
+	]
+	for audio_player: AudioStreamPlayer2D in players:
+		if not audio_player.playing:
+			continue
+		menu_fade_restore_volumes[audio_player] = audio_player.volume_db
+		menu_fade_tween.parallel().tween_property(
+			audio_player,
+			"volume_db",
+			SILENT_VOLUME_DB,
+			maxf(duration, 0.01)
+		)
+	menu_fade_tween.finished.connect(_finish_menu_audio_fade)
+
+
+func _finish_menu_audio_fade() -> void:
+	for audio_player: Variant in menu_fade_restore_volumes:
+		if not is_instance_valid(audio_player):
+			continue
+		audio_player.stop()
+		audio_player.volume_db = float(menu_fade_restore_volumes[audio_player])
+	menu_fade_restore_volumes.clear()
+	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
+	scene_audio_blocked = false
 
 
 func resume_all_audio() -> void:

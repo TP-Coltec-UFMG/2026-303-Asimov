@@ -368,8 +368,15 @@ func _run_final_exchange() -> void:
 	await _play_system_recalculation_effect()
 	if not is_inside_tree():
 		return
-	_unlock_player()
-	task_busy = false
+	task_busy = true
+	player.process_mode = player_process_mode_before_lock
+	await _player_think(
+		"programmer:final:player:closing",
+		"A Terra ainda pode ser salva. E desta vez, sem sacrificar ninguém."
+	)
+	if not is_inside_tree():
+		return
+	player.process_mode = Node.PROCESS_MODE_DISABLED
 	var state := _state()
 	state["programmer_ending_completed"] = true
 	_save_state(state)
@@ -723,8 +730,15 @@ func _start_final_transition(animated: bool) -> void:
 	final_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	if animated:
 		final_fade.color.a = 0.0
+		if tension_music.playing:
+			var music_fade := create_tween()
+			music_fade.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+			music_fade.tween_property(tension_music, "volume_db", -80.0, 20.0)
 		animation_player.play(&"final_fade_out")
 		await animation_player.animation_finished
+		if not is_inside_tree():
+			return
+		await get_tree().create_timer(10.0).timeout
 	else:
 		final_fade.color.a = 1.0
 		await get_tree().process_frame
@@ -734,7 +748,6 @@ func _start_final_transition(animated: bool) -> void:
 
 
 func _go_to_ending_destination() -> void:
-	MusicController.stop_all_audio()
 	get_tree().paused = false
 	get_tree().set_meta(ENDING_RETURN_META, true)
 	var error := get_tree().change_scene_to_file(ENDING_DESTINATION_SCENE)
