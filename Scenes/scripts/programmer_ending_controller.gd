@@ -27,6 +27,7 @@ const TIMER_SIZE_NEURAL := Vector2(72.0, 20.0)
 @onready var highlights: Node2D = $"../RestrictedAreaIntro/Highlights"
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var tension_music: AudioStreamPlayer = $Audio/FinalTension
+@onready var system_recalculation_sfx: AudioStreamPlayer = $Audio/SystemRecalculationSfx
 
 @onready var ui_root: Control = $"../UI/ProgrammerEndingUI"
 @onready var ai_balloon: Panel = $"../UI/ProgrammerEndingUI/AIVoiceBalloon"
@@ -41,6 +42,7 @@ const TIMER_SIZE_NEURAL := Vector2(72.0, 20.0)
 @onready var minigame_timer_label: Label = $"../UI/ProgrammerEndingUI/MinigameTimer/Label"
 @onready var final_fade: ColorRect = $"../UI/ProgrammerEndingUI/FinalFade"
 @onready var final_card: Control = $"../UI/ProgrammerEndingUI/FinalCard"
+@onready var system_recalculation: Control = $"../UI/ProgrammerEndingUI/SystemRecalculation"
 
 var scene: BaseScene
 var player: Player
@@ -73,6 +75,7 @@ func _ready() -> void:
 	operation_panel.hide()
 	minigame_backdrop.hide()
 	minigame_timer_panel.hide()
+	system_recalculation.hide()
 	final_fade.hide()
 	final_card.hide()
 	_disable_minigame(neural_minigame)
@@ -312,11 +315,30 @@ func _run_final_exchange() -> void:
 	await _ai_say("Nova diretriz: reduzir os danos ambientais preservando a vida humana.")
 	if not is_inside_tree():
 		return
+	await _play_system_recalculation_effect()
+	if not is_inside_tree():
+		return
 	var state := _state()
 	state["programmer_ending_completed"] = true
 	_save_state(state)
 	dialogue_busy = false
 	_start_final_transition(true)
+
+
+func _play_system_recalculation_effect() -> void:
+	task_busy = true
+	_update_flow_from_state()
+	_lock_player()
+	system_recalculation.show()
+	if system_recalculation_sfx.stream != null:
+		system_recalculation_sfx.play()
+	animation_player.play(&"system_recalculated")
+	var finished_animation: StringName = await animation_player.animation_finished
+	if not is_inside_tree():
+		return
+	if finished_animation == &"system_recalculated":
+		system_recalculation.hide()
+	task_busy = false
 
 
 func _ai_say(text: String) -> void:

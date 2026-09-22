@@ -3,6 +3,7 @@ extends Node
 const GUIDE_DELAY := 0.8
 
 @export_node_path("CanvasItem") var darkness_overlay_path: NodePath
+@export var play_on_first_data_center_entry: bool = false
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
@@ -57,12 +58,11 @@ func _process(delta: float) -> void:
 	if not initialized or cutscene_running or not is_instance_valid(player):
 		return
 	var state := SaveGame.office_mission_state(player)
-	var active := _guide_is_active(state)
-	if not active:
-		active_wait = 0.0
-		_refresh_passive_highlight()
-		return
-	if bool(state.get("cooling_location_cutscene_seen", false)):
+	var intro_pending := (
+		play_on_first_data_center_entry
+		and not bool(state.get("cooling_location_intro_seen", false))
+	)
+	if not intro_pending:
 		active_wait = 0.0
 		_refresh_passive_highlight()
 		return
@@ -86,6 +86,9 @@ func _guide_is_active(state: Dictionary) -> bool:
 func _can_start_cutscene() -> bool:
 	var programmer_ending := scene.get_node_or_null("ProgrammerEnding")
 	if programmer_ending != null and bool(programmer_ending.get("busy")):
+		return false
+	var data_center_intro := scene.get_node_or_null("DataCenterIntroController")
+	if data_center_intro != null and bool(data_center_intro.get("access_sequence_busy")):
 		return false
 	return (
 		get_tree().current_scene == scene
@@ -158,6 +161,7 @@ func _finish_cutscene(save_seen: bool) -> void:
 	cutscene_running = false
 	if save_seen and is_instance_valid(player):
 		var state := SaveGame.office_mission_state(player)
+		state["cooling_location_intro_seen"] = true
 		state["cooling_location_cutscene_seen"] = true
 		SaveGame.save_global_state("hall_quest_01", state)
 		if player.checkpoint_enabled:

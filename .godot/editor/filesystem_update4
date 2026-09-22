@@ -11,3 +11,4 @@ res://Scenes/animations/data_center_forte_intro_tree.tres
 res://Scenes/animations/programmer_ending_animations.tres
 res://Objects/controle_de_tempo.tscn
 res://Objects/scripts/controle_de_tempo.gd
+res://Player/Scripts/quest_mission_ui.gd

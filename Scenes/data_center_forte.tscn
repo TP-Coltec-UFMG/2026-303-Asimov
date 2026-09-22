@@ -17,6 +17,8 @@
 [ext_resource type="PackedScene" uid="uid://4un5ryng3p8w" path="res://Minigames/finalsMinigames/Minigame4/recovery_system.tscn" id="13_laws"]
 [ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="14_pixel"]
 [ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="17_cooling_guide"]
+[ext_resource type="Shader" uid="uid://ueh4mtrubhl4" path="res://Scenes/shaders/programmer_final_glitch.gdshader" id="18_final_glitch"]
+[ext_resource type="AudioStream" uid="uid://c0ginjtcldu78" path="res://Sounds/Effects/mixkit-small-electric-glitch-2595.mp3" id="19_final_glitch_sfx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(46, 42.25)
@@ -108,6 +110,9 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="ShaderMaterial" id="ProgrammerFinalGlitchMaterial"]
+shader = ExtResource("18_final_glitch")
 
 [node name="DATA_CENTER_FORTE" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y1e7n")
@@ -376,6 +381,11 @@ volume_db = -60.0
 bus = &"Music"
 parameters/looping = true
 
+[node name="SystemRecalculationSfx" type="AudioStreamPlayer" parent="ProgrammerEnding/Audio"]
+stream = ExtResource("19_final_glitch_sfx")
+volume_db = -4.0
+bus = &"sfx"
+
 [node name="CoolingLocationGuide" parent="." unique_id=1612781862 instance=ExtResource("17_cooling_guide")]
 darkness_overlay_path = NodePath("Iluminacao/ColorRect")
 
@@ -537,6 +547,40 @@ theme_override_fonts/font = ExtResource("14_pixel")
 theme_override_font_sizes/font_size = 8
 theme_override_styles/background = SubResource("ProgrammerProgressBackground")
 theme_override_styles/fill = SubResource("ProgrammerProgressFill")
+
+[node name="SystemRecalculation" type="Control" parent="UI/ProgrammerEndingUI"]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Distortion" type="ColorRect" parent="UI/ProgrammerEndingUI/SystemRecalculation"]
+material = SubResource("ProgrammerFinalGlitchMaterial")
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="GreenFlash" type="ColorRect" parent="UI/ProgrammerEndingUI/SystemRecalculation"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.12, 1, 0.32, 0.62)
 
 [node name="FinalFade" type="ColorRect" parent="UI/ProgrammerEndingUI" unique_id=479461992]
 visible = false

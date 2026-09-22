@@ -350,6 +350,7 @@ process_physics_priority = -6
 
 [node name="CoolingLocationGuide" parent="." instance=ExtResource("22_cooling_guide")]
 darkness_overlay_path = NodePath("Iluminacao/ColorRect2")
+play_on_first_data_center_entry = true
 
 [node name="RestrictedAreaTransition" type="CanvasLayer" parent="."]
 layer = 120
