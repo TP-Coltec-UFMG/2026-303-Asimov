@@ -7,6 +7,7 @@ const GUIDE_DELAY := 0.8
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var cutscene_camera: Camera2D = $CutsceneCamera
+@onready var area_focus: Marker2D = $AreaFocus
 @onready var highlight: Node2D = $Highlight
 @onready var area_light: PointLight2D = $Highlight/AreaLight
 @onready var black_overlay: ColorRect = $Overlay/Black
@@ -108,8 +109,9 @@ func _start_cutscene() -> void:
 	black_overlay.show()
 	black_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	highlight.show()
-	cutscene_camera.global_position = highlight.global_position
-	cutscene_camera.zoom = player_camera.zoom * 1.08
+	cutscene_camera.global_position = area_focus.global_position
+	# Abre o enquadramento para mostrar a entrada e o entorno da refrigeração.
+	cutscene_camera.zoom = player_camera.zoom * 0.68
 	cutscene_camera.enabled = true
 	cutscene_camera.make_current()
 	player_camera.enabled = false

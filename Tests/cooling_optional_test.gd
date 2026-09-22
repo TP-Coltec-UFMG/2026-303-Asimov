@@ -122,6 +122,11 @@ func _run() -> void:
 		var data_center_instance := data_center_scene.instantiate()
 		_expect(data_center_instance.has_node("CoolingLocationGuide"), "A indicação da refrigeração precisa existir em " + scene_path)
 		var guide := data_center_instance.get_node_or_null("CoolingLocationGuide")
+		var guide_animation_player := guide.get_node_or_null("AnimationPlayer") as AnimationPlayer if guide != null else null
+		var hold_animation := guide_animation_player.get_animation(&"hold") if guide_animation_player != null else null
+		_expect(hold_animation != null and hold_animation.length >= 5.0, "A localização da refrigeração precisa permanecer visível por pelo menos cinco segundos.")
+		var area_light := guide.get_node_or_null("Highlight/AreaLight") as PointLight2D if guide != null else null
+		_expect(area_light != null and area_light.scale.x >= 1.0 and area_light.scale.y >= 0.75, "A cutscene precisa iluminar também o entorno da refrigeração.")
 		if scene_path != "res://Scenes/data_center_refrigeracao.tscn":
 			_expect(guide != null and not (guide.get("darkness_overlay_path") as NodePath).is_empty(), "A indicação precisa revelar a área escondida pelo ColorRect em " + scene_path)
 		data_center_instance.free()

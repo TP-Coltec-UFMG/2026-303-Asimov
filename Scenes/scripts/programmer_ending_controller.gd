@@ -44,7 +44,11 @@ const TIMER_SIZE_NEURAL := Vector2(72.0, 20.0)
 
 var scene: BaseScene
 var player: Player
-var busy: bool = false
+var task_busy: bool = false
+var dialogue_busy: bool = false
+var busy: bool:
+	get:
+		return task_busy or dialogue_busy
 var initialized: bool = false
 var eligible_programmer: bool = false
 var active_minigame: Control
@@ -52,6 +56,7 @@ var hidden_nodes: Dictionary = {}
 var point_order: Array[String] = []
 var point_pulse: Tween
 var ai_tween: Tween
+var tension_fade_tween: Tween
 var ai_message_active: bool = false
 var player_process_mode_before_lock: ProcessMode = Node.PROCESS_MODE_INHERIT
 var player_physics_was_enabled: bool = true
@@ -85,19 +90,22 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	_stop_point_pulse()
 	_finish_ai_message()
+	if tension_fade_tween != null and tension_fade_tween.is_valid():
+		tension_fade_tween.kill()
 	MusicController.set_alarm_quiet_context(&"programmer_ending", false)
 
 
 func _process(_delta: float) -> void:
 	if is_instance_valid(active_minigame):
 		_update_minigame_timer()
-	if not initialized or not eligible_programmer or busy or not is_instance_valid(player):
+	if not initialized or not eligible_programmer or not is_instance_valid(player):
 		return
 	var state := _state()
 	if not bool(state.get("data_center_forte_intro_seen", false)):
 		return
 	if not bool(state.get("programmer_confrontation_seen", false)):
-		_run_initial_exchange()
+		if not dialogue_busy:
+			_run_initial_exchange()
 		return
 	_resume_pending_exchange(state)
 
@@ -178,36 +186,49 @@ func _load_or_create_point_order(state: Dictionary) -> void:
 
 
 func _resume_pending_exchange(state: Dictionary) -> void:
-	if busy:
+	if dialogue_busy:
 		return
-	if bool(state.get("programmer_recalibration_applied", false)):
-		_run_final_exchange()
-		return
-	if (
-		bool(state.get("programmer_laws_completed", false))
-		and not bool(state.get("programmer_laws_dialog_seen", false))
-	):
-		_run_laws_exchange()
-		return
-	if (
-		bool(state.get("programmer_neural_completed", false))
-		and not bool(state.get("programmer_neural_resistance_seen", false))
-	):
-		_run_neural_exchange()
-		return
+	match _pending_exchange(state):
+		&"isolation":
+			_run_isolation_exchange()
+		&"neural":
+			_run_neural_exchange()
+		&"laws":
+			_run_laws_exchange()
+		&"final":
+			_run_final_exchange()
+
+
+func _pending_exchange(state: Dictionary) -> StringName:
 	if (
 		bool(state.get("programmer_launch_isolated", false))
 		and not bool(state.get("programmer_launch_exchange_seen", false))
 	):
-		_run_isolation_exchange()
+		return &"isolation"
+	if (
+		bool(state.get("programmer_neural_completed", false))
+		and not bool(state.get("programmer_neural_resistance_seen", false))
+	):
+		return &"neural"
+	if (
+		bool(state.get("programmer_laws_completed", false))
+		and not bool(state.get("programmer_laws_dialog_seen", false))
+	):
+		return &"laws"
+	if bool(state.get("programmer_recalibration_applied", false)):
+		return &"final"
+	return &""
 
 
 func _run_initial_exchange() -> void:
-	busy = true
+	dialogue_busy = true
 	var state := _state()
 	state["programmer_ending_started"] = true
+	state["programmer_confrontation_started"] = true
 	_save_state(state, false)
 	_start_final_ambience(true)
+	# A primeira tarefa já pode ser iniciada enquanto a conversa acontece.
+	_update_flow_from_state()
 	await _ai_say("Você chegou ao núcleo tarde demais.")
 	await _player_think("programmer:confrontation:1", "Ainda não. O lançamento depende desta rede.")
 	await _ai_say("Minha ordem é preservar a Terra a qualquer custo.")
@@ -219,12 +240,13 @@ func _run_initial_exchange() -> void:
 	state = _state()
 	state["programmer_confrontation_seen"] = true
 	_save_state(state)
-	busy = false
+	dialogue_busy = false
 	_update_flow_from_state()
+	_resume_pending_exchange(state)
 
 
 func _run_isolation_exchange() -> void:
-	busy = true
+	dialogue_busy = true
 	_update_flow_from_state()
 	await _player_think("programmer:isolation:1", "Separei o lançamento do restante do sistema.")
 	await _ai_say("Isolamento detectado. Tentativa de intervenção registrada.")
@@ -234,12 +256,13 @@ func _run_isolation_exchange() -> void:
 	var state := _state()
 	state["programmer_launch_exchange_seen"] = true
 	_save_state(state)
-	busy = false
+	dialogue_busy = false
 	_update_flow_from_state()
+	_resume_pending_exchange(state)
 
 
 func _run_neural_exchange() -> void:
-	busy = true
+	dialogue_busy = true
 	_update_flow_from_state()
 	await _ai_say("Reconstrução aceita. Os parâmetros ambientais foram recalibrados.")
 	await _ai_say("A ordem prioritária continua ativa: salvar a Terra a qualquer custo.")
@@ -250,12 +273,13 @@ func _run_neural_exchange() -> void:
 	var state := _state()
 	state["programmer_neural_resistance_seen"] = true
 	_save_state(state)
-	busy = false
+	dialogue_busy = false
 	_update_flow_from_state()
+	_resume_pending_exchange(state)
 
 
 func _run_laws_exchange() -> void:
-	busy = true
+	dialogue_busy = true
 	_update_flow_from_state()
 	await _ai_say("Hierarquia das Leis da Robótica restaurada.")
 	await _player_think("programmer:laws:1", "As decisões estão corretas, mas a reconstrução ainda não chegou ao núcleo.")
@@ -266,15 +290,16 @@ func _run_laws_exchange() -> void:
 	var state := _state()
 	state["programmer_laws_dialog_seen"] = true
 	_save_state(state)
-	busy = false
+	dialogue_busy = false
 	_update_flow_from_state()
+	_resume_pending_exchange(state)
 
 
 func _run_final_exchange() -> void:
 	if bool(_state().get("programmer_ending_completed", false)):
 		_start_final_transition(true)
 		return
-	busy = true
+	dialogue_busy = true
 	_update_flow_from_state()
 	_pause_countdown()
 	MusicController.stop_all_audio()
@@ -290,7 +315,7 @@ func _run_final_exchange() -> void:
 	var state := _state()
 	state["programmer_ending_completed"] = true
 	_save_state(state)
-	busy = false
+	dialogue_busy = false
 	_start_final_transition(true)
 
 
@@ -331,10 +356,13 @@ func _player_think(id: String, text: String) -> void:
 
 
 func _on_point_interacted(point_name: String) -> void:
-	if busy or not is_instance_valid(player):
+	if task_busy or is_instance_valid(active_minigame) or not is_instance_valid(player):
 		return
 	var state := _state()
-	if not bool(state.get("programmer_confrontation_seen", false)):
+	if not (
+		bool(state.get("programmer_confrontation_started", false))
+		or bool(state.get("programmer_confrontation_seen", false))
+	):
 		return
 	var stage := _completed_task_count(state)
 	if stage < 0 or stage >= point_order.size() or point_order[stage] != point_name:
@@ -346,7 +374,7 @@ func _on_point_interacted(point_name: String) -> void:
 			state["programmer_launch_isolated"] = true
 			_save_state(state)
 			_update_flow_from_state(true)
-			_run_isolation_exchange()
+			_resume_pending_exchange(state)
 		1:
 			_open_minigame(neural_minigame)
 		2:
@@ -356,7 +384,7 @@ func _on_point_interacted(point_name: String) -> void:
 
 
 func _run_terminal_operation(animation_name: StringName, title: String) -> void:
-	busy = true
+	task_busy = true
 	_update_flow_from_state()
 	_lock_player()
 	operation_title.text = title
@@ -368,13 +396,14 @@ func _run_terminal_operation(animation_name: StringName, title: String) -> void:
 	operation_panel.hide()
 	operation_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_unlock_player()
-	busy = false
+	task_busy = false
+	_update_flow_from_state()
 
 
 func _open_minigame(minigame: Control) -> void:
-	if busy or is_instance_valid(active_minigame):
+	if task_busy or is_instance_valid(active_minigame):
 		return
-	busy = true
+	task_busy = true
 	active_minigame = minigame
 	_update_flow_from_state()
 	_lock_player()
@@ -401,7 +430,7 @@ func _on_neural_completed() -> void:
 	state["programmer_neural_completed"] = true
 	_save_state(state)
 	_update_flow_from_state(true)
-	_run_neural_exchange()
+	_resume_pending_exchange(state)
 
 
 func _on_neural_exit_requested() -> void:
@@ -421,7 +450,7 @@ func _on_laws_completed() -> void:
 	state["programmer_validation_completed"] = true
 	_save_state(state)
 	_update_flow_from_state(true)
-	_run_laws_exchange()
+	_resume_pending_exchange(state)
 
 
 func _wait_and_close_minigame() -> void:
@@ -440,7 +469,8 @@ func _close_active_minigame() -> void:
 	_restore_global_pause_menu()
 	MusicController.set_alarm_quiet_context(&"minigame", false)
 	_unlock_player()
-	busy = false
+	task_busy = false
+	_update_flow_from_state()
 
 
 func _disable_global_pause_menu() -> void:
@@ -466,7 +496,7 @@ func _apply_recalibration() -> void:
 	state["programmer_recalibration_applied"] = true
 	_save_state(state)
 	_update_flow_from_state(true)
-	_run_final_exchange()
+	_resume_pending_exchange(state)
 
 
 func _update_flow_from_state(animate_latest: bool = false) -> void:
@@ -493,14 +523,17 @@ func _update_scene_points(state: Dictionary) -> void:
 			point_interaction.is_interactable = false
 	if (
 		not bool(state.get("data_center_forte_intro_seen", false))
-		or not bool(state.get("programmer_confrontation_seen", false))
+		or not (
+			bool(state.get("programmer_confrontation_started", false))
+			or bool(state.get("programmer_confrontation_seen", false))
+		)
 		or bool(state.get("programmer_recalibration_applied", false))
 	):
 		return
 	var stage := _completed_task_count(state)
 	if stage < 0 or stage >= point_order.size():
 		return
-	if busy:
+	if task_busy:
 		return
 	# Fora da apresentação, somente o objetivo atual funciona como dica visual.
 	# Os pontos das próximas missões permanecem totalmente invisíveis.
@@ -557,7 +590,10 @@ func _start_final_ambience(with_fade: bool) -> void:
 	if with_fade:
 		tension_music.volume_db = -60.0
 		tension_music.play()
-		animation_player.play(&"tension_in")
+		if tension_fade_tween != null and tension_fade_tween.is_valid():
+			tension_fade_tween.kill()
+		tension_fade_tween = create_tween()
+		tension_fade_tween.tween_property(tension_music, "volume_db", -16.0, 3.0)
 	else:
 		tension_music.volume_db = -16.0
 		tension_music.play()

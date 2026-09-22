@@ -19,8 +19,11 @@ tree_root = ExtResource("3_tree")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="CutsceneCamera" type="Camera2D" parent="."]
-position = Vector2(134, -173)
+position = Vector2(196, -173)
 enabled = false
+
+[node name="AreaFocus" type="Marker2D" parent="."]
+position = Vector2(196, -173)
 
 [node name="Highlight" type="Node2D" parent="."]
 visible = false
@@ -28,10 +31,10 @@ z_index = 90
 position = Vector2(134, -173)
 
 [node name="AreaLight" type="PointLight2D" parent="Highlight"]
-position = Vector2(55, 0)
-scale = Vector2(0.75, 0.52)
-color = Color(0.86, 0.95, 1, 0.78)
-energy = 0.7
+position = Vector2(62, 0)
+scale = Vector2(1.25, 0.85)
+color = Color(0.9, 0.96, 1, 0.86)
+energy = 0.95
 texture = ExtResource("4_light")
 
 [node name="Glow" type="Line2D" parent="Highlight"]

@@ -173,6 +173,25 @@ func _run() -> void:
 	var strong_data_center_scene := load("res://Scenes/data_center_forte.tscn") as PackedScene
 	var strong_data_center := strong_data_center_scene.instantiate()
 	_expect(strong_data_center.get_node_or_null("ProgrammerEnding/Audio/FinalResolution") == null, "O encerramento não pode iniciar uma segunda música.")
+	var programmer_ending := strong_data_center.get_node_or_null("ProgrammerEnding")
+	if programmer_ending != null:
+		programmer_ending.set("dialogue_busy", true)
+		programmer_ending.set("task_busy", false)
+		_expect(bool(programmer_ending.get("busy")), "O estado geral precisa registrar uma conversa em andamento.")
+		_expect(not bool(programmer_ending.get("task_busy")), "Uma conversa não pode bloquear o início da tarefa atual.")
+		var all_steps_finished := {
+			"programmer_launch_isolated": true,
+			"programmer_neural_completed": true,
+			"programmer_laws_completed": true,
+			"programmer_recalibration_applied": true,
+		}
+		_expect(programmer_ending.call("_pending_exchange", all_steps_finished) == &"isolation", "Conversas acumuladas precisam começar pela tarefa mais antiga.")
+		all_steps_finished["programmer_launch_exchange_seen"] = true
+		_expect(programmer_ending.call("_pending_exchange", all_steps_finished) == &"neural", "A conversa da rede neural precisa manter a ordem linear.")
+		all_steps_finished["programmer_neural_resistance_seen"] = true
+		_expect(programmer_ending.call("_pending_exchange", all_steps_finished) == &"laws", "A conversa das Leis precisa manter a ordem linear.")
+		all_steps_finished["programmer_laws_dialog_seen"] = true
+		_expect(programmer_ending.call("_pending_exchange", all_steps_finished) == &"final", "A conversa final só pode começar depois das anteriores.")
 	strong_data_center.free()
 	main_menu.free()
 	pause_menu.free()

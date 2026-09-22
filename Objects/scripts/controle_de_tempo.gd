@@ -2,7 +2,7 @@ extends Control
 
 signal tempo_esgotado
 
-const TEMPO_LIMITE_DE_JOGO: float = 60 * 12
+const TEMPO_LIMITE_DE_JOGO: float = 60 * 2
 const TEMPO_INICIO_AUDIO: float = 11.0
 const TEMPO_INICIO_COUNT_DOWN: float = 46.0
 const TEMPO_EVENTO_REFRIGERACAO: float = 120.0
