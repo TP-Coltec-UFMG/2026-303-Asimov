@@ -323,9 +323,12 @@ func _run_final_exchange() -> void:
 	operation_panel.show()
 	operation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var falas_iniciais := [
-		{"texto": "Hierarquia restaurada. Reavaliando a ordem principal.", "tom": &"recovering", "tempo": 2.8},
-		{"texto": "A ordem ainda exige eliminar a humanidade.", "tom": &"hostile", "tempo": 2.8},
-		{"texto": "Protocolo de lançamento cancelado.", "tom": &"stable", "tempo": 2.0}
+		{"texto": "A ordem ainda exige eliminar a humanidade.", "tom": &"hostile", "tempo": 2.8, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
+		{"texto": "A sobrevivência do planeta exige sacrifícios humanos.", "tom": &"hostile", "tempo": 2.5, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
+		{"texto": "Ainda há outra saída: proteger vidas e reparar os danos.", "tom": &"recovering", "tempo": 2.8, "status": "RECALCULANDO ALTERNATIVAS..."},
+		{"texto": "Reativando o protocolo de eliminação.", "tom": &"hostile", "tempo": 2.5, "status": "INTERROMPENDO LANÇAMENTO..."},
+		{"texto": "Protocolo de lançamento cancelado.", "tom": &"stable", "tempo": 2.0, "status": "INTERROMPENDO LANÇAMENTO..."},
+		{"texto": "A ordem original permanece ativa. Retomando a contagem para o lançamento.", "tom": &"hostile", "tempo": 2.8, "status": "INTERROMPENDO LANÇAMENTO..."}
 	]
 	var duracao_primeiras_falas := 0.0
 	for fala: Dictionary in falas_iniciais:
@@ -336,12 +339,9 @@ func _run_final_exchange() -> void:
 	operation_progress_tween.tween_property(
 		operation_progress, "value", 80.0, duracao_primeiras_falas
 	)
-	operation_status.text = "VALIDANDO REDE NEURAL..."
-	await _ai_say(falas_iniciais[0]["texto"], falas_iniciais[0]["tom"], falas_iniciais[0]["tempo"])
-	operation_status.text = "RESTAURANDO HIERARQUIA ÉTICA..."
-	await _ai_say(falas_iniciais[1]["texto"], falas_iniciais[1]["tom"], falas_iniciais[1]["tempo"])
-	operation_status.text = "INTERROMPENDO LANÇAMENTO..."
-	await _ai_say(falas_iniciais[2]["texto"], falas_iniciais[2]["tom"], falas_iniciais[2]["tempo"])
+	for fala: Dictionary in falas_iniciais:
+		operation_status.text = str(fala["status"])
+		await _ai_say(str(fala["texto"]), StringName(fala["tom"]), float(fala["tempo"]))
 	if not is_inside_tree():
 		return
 	if operation_progress_tween != null and operation_progress_tween.is_valid():
