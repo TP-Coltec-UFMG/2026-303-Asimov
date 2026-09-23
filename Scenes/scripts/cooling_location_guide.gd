@@ -19,6 +19,8 @@ var player_camera: Camera2D
 var animation_playback: AnimationNodeStateMachinePlayback
 var initialized := false
 var cutscene_running := false
+var guide_hold_active := false
+var guide_hold_pulse: Tween
 var active_wait := 0.0
 var passive_pulse: Tween
 var player_camera_was_enabled := true
@@ -55,7 +57,11 @@ func _initialize() -> void:
 
 
 func _process(delta: float) -> void:
-	if not initialized or cutscene_running or not is_instance_valid(player):
+	if cutscene_running:
+		if guide_hold_active:
+			_keep_guide_visible()
+		return
+	if not initialized or not is_instance_valid(player):
 		return
 	var state := SaveGame.office_mission_state(player)
 	var intro_pending := (
@@ -126,9 +132,22 @@ func _start_cutscene() -> void:
 	await _play_state(&"Reveal", &"reveal")
 	if not _cutscene_is_valid():
 		return
-	await _play_state(&"Hold", &"hold")
+	guide_hold_active = true
+	# The AnimationTree's Hold state was hiding the title/highlight before the
+	# camera move ended. Freeze it during the presentation and keep these visuals
+	# under direct control until the intentional fade-out starts.
+	animation_tree.active = false
+	_keep_guide_visible()
+	guide_hold_pulse = create_tween().set_loops()
+	guide_hold_pulse.tween_property(highlight, "modulate:a", 0.72, 1.25)
+	guide_hold_pulse.tween_property(highlight, "modulate:a", 1.0, 1.25)
+	await get_tree().create_timer(5.0).timeout
 	if not _cutscene_is_valid():
 		return
+	guide_hold_active = false
+	_stop_guide_hold_pulse()
+	highlight.modulate = Color.WHITE
+	animation_tree.active = true
 	await _play_state(&"Conceal", &"conceal")
 	if not _cutscene_is_valid():
 		return
@@ -150,6 +169,8 @@ func _play_state(state_name: StringName, animation_name: StringName) -> void:
 
 
 func _finish_cutscene(save_seen: bool) -> void:
+	guide_hold_active = false
+	_stop_guide_hold_pulse()
 	animation_tree.active = false
 	_set_area_revealed(false)
 	area_light.enabled = false
@@ -167,6 +188,21 @@ func _finish_cutscene(save_seen: bool) -> void:
 		if player.checkpoint_enabled:
 			SaveGame.create_checkpoint(player)
 	_refresh_passive_highlight()
+
+
+func _keep_guide_visible() -> void:
+	# Hold the title and entrance highlight for the full reveal.
+	if is_instance_valid($Overlay/Title):
+		$Overlay/Title.show()
+		$Overlay/Title.modulate.a = 1.0
+	highlight.show()
+	area_light.enabled = true
+
+
+func _stop_guide_hold_pulse() -> void:
+	if guide_hold_pulse != null and guide_hold_pulse.is_valid():
+		guide_hold_pulse.kill()
+	guide_hold_pulse = null
 
 
 func _lock_player() -> void:
@@ -267,7 +303,9 @@ func _exit_tree() -> void:
 	_set_area_revealed(false)
 	if is_instance_valid(area_light):
 		area_light.enabled = false
+	_stop_guide_hold_pulse()
 	if cutscene_running:
+		guide_hold_active = false
 		cutscene_running = false
 		_restore_player_camera()
 		_unlock_player()

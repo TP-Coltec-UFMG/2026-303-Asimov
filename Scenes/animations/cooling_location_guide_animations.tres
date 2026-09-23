@@ -182,7 +182,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_hold"]
 resource_name = "hold"
-length = 10.0
+length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -190,7 +190,7 @@ tracks/0/path = NodePath("Highlight:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 2.5, 5, 7.5, 10),
+"times": PackedFloat32Array(0, 1.25, 2.5, 3.75, 5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.52), Color(1, 1, 1, 1), Color(1, 1, 1, 0.52), Color(1, 1, 1, 1)]
@@ -202,7 +202,7 @@ tracks/1/path = NodePath("Highlight:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 5, 10),
+"times": PackedFloat32Array(0, 2.5, 5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1.05, 1.05), Vector2(1, 1)]
@@ -214,7 +214,7 @@ tracks/2/path = NodePath("Overlay/Title:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 10),
+"times": PackedFloat32Array(0, 5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
