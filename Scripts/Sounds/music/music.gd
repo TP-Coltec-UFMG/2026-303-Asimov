@@ -29,6 +29,7 @@ const ALARM_INITIAL_VOLUME: float = 0.3
 const ALARM_REDUCED_VOLUME: float = 0.1
 const ALARM_INITIAL_DURATION: float = 30.0
 const ALARM_FADE_DURATION: float = 4.0
+const ALARM_HINT_DELAY: float = 120.0
 const ALARM_QUIET_CONTEXT_VOLUME: float = 0.05
 const HEARTBEAT_NORMAL_PITCH: float = 1.0
 const HEARTBEAT_LOW_STAMINA_PITCH: float = 3.0
@@ -61,6 +62,8 @@ var alarm_elapsed: float = 0.0
 var alarm_unducked_volume_db: float = 0.0
 var alarm_user_muted: bool = false
 var alarm_user_position: float = 0.0
+var alarm_hint_elapsed: float = 0.0
+var alarm_hint_shown: bool = false
 var alarm_quiet_contexts: Dictionary = {}
 var opening_music_normal_volume_db: float = 0.0
 var opening_music_started: bool = false
@@ -107,6 +110,7 @@ func _process(delta: float) -> void:
 		return
 	_update_opening_music_fade()
 	_update_alarm_volume(delta)
+	_update_alarm_hint(delta)
 	_update_power_outage_audio(delta)
 	_update_heartbeat(delta)
 	_update_initial_background_music(delta)
@@ -209,6 +213,22 @@ func _update_alarm_volume(delta: float) -> void:
 		db_to_linear(alarm_normal_volume_db)
 		* lerpf(ALARM_INITIAL_VOLUME, ALARM_REDUCED_VOLUME, progress)
 	))
+
+
+func _update_alarm_hint(delta: float) -> void:
+	if alarm_hint_shown or alarm_user_muted or not som_alarme.playing or som_alarme.stream_paused:
+		return
+	alarm_hint_elapsed = minf(alarm_hint_elapsed + delta, ALARM_HINT_DELAY)
+	if alarm_hint_elapsed < ALARM_HINT_DELAY or not is_instance_valid(scene_manager.player):
+		return
+	var current_player := scene_manager.player as Player
+	var current_scene := get_tree().current_scene
+	if current_scene == null or not current_scene.is_ancestor_of(current_player):
+		return
+	if not current_player.is_visible_in_tree() or not current_player.is_physics_processing() or DialogManager.is_showing_dialog:
+		return
+	current_player.show_alarm_hint()
+	alarm_hint_shown = true
 
 
 # BG MUSIC
@@ -400,6 +420,8 @@ func stop_all_audio() -> void:
 	alarm_elapsed = 0.0
 	alarm_user_muted = false
 	alarm_user_position = 0.0
+	alarm_hint_elapsed = 0.0
+	alarm_hint_shown = false
 	alarm_quiet_contexts.clear()
 	heartbeat_intro_elapsed = 0.0
 	heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
@@ -515,6 +537,8 @@ func get_checkpoint_state() -> Dictionary:
 		"unducked_volume_db": alarm_unducked_volume_db,
 		"user_muted": alarm_user_muted,
 		"user_position": alarm_user_position,
+		"hint_elapsed": alarm_hint_elapsed,
+		"hint_shown": alarm_hint_shown,
 		"power_state": power_outage_audio_state,
 		"fade_elapsed": power_outage_fade_elapsed,
 		"alarm_start": power_outage_alarm_start_db,
@@ -635,6 +659,8 @@ func _restore_alarm_envelope(state: Dictionary) -> void:
 	alarm_unducked_volume_db = float(envelope.get("unducked_volume_db", som_alarme.volume_db))
 	alarm_user_muted = bool(envelope.get("user_muted", false))
 	alarm_user_position = maxf(0.0, float(envelope.get("user_position", 0.0)))
+	alarm_hint_elapsed = clampf(float(envelope.get("hint_elapsed", 0.0)), 0.0, ALARM_HINT_DELAY)
+	alarm_hint_shown = bool(envelope.get("hint_shown", alarm_user_muted))
 	alarm_quiet_contexts.clear()
 	power_outage_audio_state = int(envelope.get("power_state", PowerOutageAudioState.IDLE)) as PowerOutageAudioState
 	power_outage_fade_elapsed = float(envelope.get("fade_elapsed", 0.0))
@@ -666,6 +692,7 @@ func mute_alarm_by_player() -> bool:
 		return false
 	alarm_user_position = maxf(0.0, som_alarme.get_playback_position())
 	alarm_user_muted = true
+	alarm_hint_shown = true
 	som_alarme.stop()
 	_refresh_alarm_output()
 	return true

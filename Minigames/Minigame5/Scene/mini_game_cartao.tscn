@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://dfph2rk76k5ji" path="res://Minigames/Minigame5/Scripts/panel.gd" id="5_4t7ic"]
 [ext_resource type="Texture2D" uid="uid://bul3fngl5yxkd" path="res://Minigames/Minigame5/Sprites/controleDePorta_0.png" id="6_2s1cl"]
 [ext_resource type="Script" uid="uid://dqe6xh1r3pyvk" path="res://Minigames/Minigame5/Scripts/Componentes_Eletronicos/cartao.gd" id="7_x73a3"]
-[ext_resource type="Texture2D" uid="uid://uyr2tq70yrgo" path="res://Minigames/Minigame5/Sprites/sprite_cartao1.png" id="8_rpite"]
+[ext_resource type="Texture2D" uid="uid://uyr2tq70yrgo" path="res://Sprites/objects/sprite_cartao1.png" id="8_rpite"]
 [ext_resource type="Texture2D" uid="uid://k4hdvha1c767" path="res://Minigames/Minigame5/Sprites/laptop (1).png" id="9_jkg28"]
 [ext_resource type="Texture2D" uid="uid://sdbilm5frjs2" path="res://Minigames/Minigame5/Sprites/laptop.png" id="10_uf0mr"]
 [ext_resource type="FontFile" uid="uid://cq55fc7w0rrr5" path="res://Minigames/Minigame5/Sprites/PixelifySans-SemiBold.ttf" id="11_43oxc"]
@@ -330,16 +330,16 @@ scale = Vector2(1.5240964, 2.8846157)
 texture = ExtResource("14_g7udv")
 metadata/_edit_lock_ = true
 
-[node name="CampaignHUD" type="CanvasLayer" parent="."]
+[node name="CampaignHUD" type="CanvasLayer" parent="." unique_id=1893361320]
 layer = 10
 
-[node name="Controle_de_tempo" parent="CampaignHUD" instance=ExtResource("15_timer")]
+[node name="Controle_de_tempo" parent="CampaignHUD" unique_id=1378260885 instance=ExtResource("15_timer")]
 mouse_filter = 2
 
-[node name="PauseMenu" parent="CampaignHUD" instance=ExtResource("17_pause")]
+[node name="PauseMenu" parent="CampaignHUD" unique_id=739611446 instance=ExtResource("17_pause")]
 process_physics_priority = -6
 
-[node name="QUEST_MISSION" parent="." instance=ExtResource("16_quest")]
+[node name="QUEST_MISSION" parent="." unique_id=1665720135 instance=ExtResource("16_quest")]
 layer = 6
 standalone_mode = true
 standalone_left_side = true

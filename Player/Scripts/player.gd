@@ -113,6 +113,21 @@ func _show_alarm_status(message: String) -> void:
 	alarm_tip_tween.tween_callback(_hide_alarm_status)
 
 
+func show_alarm_hint() -> void:
+	if MusicController.alarm_user_muted:
+		return
+	if alarm_tip_tween != null and alarm_tip_tween.is_valid():
+		alarm_tip_tween.kill()
+	alarm_tip.text = "Aperte P para desligar o alarme"
+	alarm_tip.modulate.a = 1.0
+	alarm_tip.show()
+	alarm_tip_tween = create_tween()
+	alarm_tip_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	alarm_tip_tween.tween_interval(8.0)
+	alarm_tip_tween.tween_property(alarm_tip, "modulate:a", 0.0, 0.3)
+	alarm_tip_tween.tween_callback(_hide_alarm_status)
+
+
 func _hide_alarm_status() -> void:
 	alarm_tip.hide()
 	alarm_tip.modulate.a = 1.0
