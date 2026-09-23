@@ -574,6 +574,37 @@ func show_data_center_card_task(completed: bool = false, animate: bool = false) 
 	_show_single_data_center_task(7, "ENTREGUE O CARTÃO AO CIENTISTA", completed, animate)
 
 
+func show_data_center_power_talk_task() -> void:
+	_show_single_data_center_task(7, "FALE COM O CIENTISTA", false, false)
+
+
+func show_data_center_access_intro_tasks(
+	card_dialog_finished: bool,
+	plan_finished: bool,
+	npc_arrived: bool
+) -> void:
+	var access_started := plan_finished
+	for index in range(rows.size()):
+		set_task_visible(index, index == 7 or (index == 8 and card_dialog_finished) or (index == 9 and access_started))
+	if npc_arrived and access_started:
+		set_task_text(7, "ESCUTE O CIENTISTA")
+		set_task_text(8, "ACOMPANHE O CIENTISTA")
+		set_task_text(9, "ABRA A ÁREA RESTRITA")
+		set_task_completed(7, true)
+		set_task_completed(8, true)
+		set_task_completed(9, false)
+	else:
+		set_task_text(7, "ENTREGUE O CARTÃO AO CIENTISTA")
+		set_task_completed(7, true)
+		if card_dialog_finished:
+			set_task_text(8, "ESCUTE O CIENTISTA")
+			set_task_completed(8, access_started)
+		if access_started:
+			set_task_text(9, "ACOMPANHE O CIENTISTA")
+			set_task_completed(9, false)
+	set_panel_visible(true)
+
+
 func show_find_flashlight_task(completed: bool = false, animate: bool = false) -> void:
 	_show_single_data_center_task(8, "ENCONTRE UMA LANTERNA", completed, animate)
 
@@ -662,6 +693,7 @@ func refresh_saved_state() -> void:
 	var tools_floor_task_active := bool(state.get("data_center_tools_floor_task_active", false))
 	var tools_floor_task_completed := bool(state.get("data_center_tools_floor_task_completed", false))
 	var breaker_completed := bool(state.get("data_center_breaker_restored", false))
+	var card_delivered := bool(state.get("data_center_card_delivered", false))
 	var old_decryption_task_active := bool(state.get("data_center_access_decryption_task_active", false))
 	var rfid_inspection_task_active := bool(state.get("data_center_rfid_inspection_task_active", false))
 	var rfid_wires_task_active := bool(state.get("data_center_rfid_wires_task_active", false))
@@ -694,10 +726,27 @@ func refresh_saved_state() -> void:
 			return
 	if return_task_active and not return_task_completed:
 		show_return_to_data_center_task(false)
+	elif card_delivered and breaker_completed and (
+		(not (state.get("data_center_interrupted_dialog", {}) as Dictionary).is_empty())
+		or not bool(state.get("data_center_card_dialog_finished", false))
+		or not bool(state.get("data_center_access_plan_finished", false))
+	):
+		show_data_center_power_talk_task()
+	elif bool(state.get("data_center_power_outage", false)) and not breaker_completed:
+		if str(state.get("data_center_outage_phase", "")) == "before" and not bool(state.get("data_center_power_dialog_finished", false)):
+			show_data_center_power_talk_task()
+		else:
+			show_data_center_power_tasks(flashlight_completed, tools_floor_task_completed, false)
 	elif rfid_wires_task_active or rfid_wires_repaired:
 		show_rfid_repair_tasks(rfid_wires_repaired, rfid_reading_checked)
 	elif rfid_inspection_task_active or old_decryption_task_active:
 		show_rfid_reader_task(false)
+	elif card_delivered and (breaker_completed or not bool(state.get("data_center_power_outage", false))):
+		show_data_center_access_intro_tasks(
+			bool(state.get("data_center_card_dialog_finished", false)),
+			bool(state.get("data_center_access_plan_finished", false)),
+			bool(state.get("data_center_access_npc_arrived", false))
+		)
 	elif tools_floor_task_active:
 		show_data_center_power_tasks(
 			flashlight_completed,

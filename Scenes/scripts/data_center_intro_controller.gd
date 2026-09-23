@@ -15,6 +15,8 @@ const POWER_OFF_COLOR := Color("#020202")
 const POWER_FLICKER_COUNT: int = 3
 const POWER_FLICKER_OFF_TIME: float = 0.12
 const POWER_FLICKER_ON_TIME: float = 0.10
+const OUTAGE_AFTER_MIN_DELAY: float = 5.0
+const OUTAGE_AFTER_MAX_DELAY: float = 22.0
 
 @export_range(0.1, 30.0, 0.1) var rfid_verification_duration: float = 5.0
 @export var rfid_thought_balloon_offset := Vector2(0.0, -17.0)
@@ -34,8 +36,13 @@ var regular_lights: Array[PointLight2D] = []
 var regular_light_visibility: Dictionary = {}
 var normal_canvas_color: Color = Color.WHITE
 var power_sequence_running: bool = false
+var outage_timer: Timer
 var access_sequence_busy: bool = false
 var rfid_verification_running: bool = false
+var rfid_verification_interrupted: bool = false
+var rfid_verification_stage: String = ""
+var rfid_progress_tween: Tween
+var rfid_active_thought_ids: Array[String] = []
 var rfid_player_physics_was_enabled: bool = true
 var rfid_balloon_adjusted: bool = false
 var rfid_balloon_original_position: Vector2
@@ -49,6 +56,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	_restore_player_after_rfid_verification()
+	DialogManager.input_blocked = false
 
 
 func _initialize() -> void:
@@ -81,10 +89,16 @@ func _initialize() -> void:
 	_prepare_story_card(strong_story_card)
 	_prepare_story_card(boss_story_card)
 	_prepare_recipient()
+	outage_timer = Timer.new()
+	outage_timer.one_shot = true
+	add_child(outage_timer)
+	outage_timer.timeout.connect(_on_outage_timer_timeout)
 	_cache_regular_lights()
 	_connect_world_objects()
 	if not DialogManager.dialog_finished.is_connected(_on_dialog_finished):
 		DialogManager.dialog_finished.connect(_on_dialog_finished)
+	if not DialogManager.dialog_line_started.is_connected(_on_dialog_line_started):
+		DialogManager.dialog_line_started.connect(_on_dialog_line_started)
 	if not recipient.is_connected(&"path_completed", _on_recipient_path_completed):
 		recipient.connect(&"path_completed", _on_recipient_path_completed)
 	if not access_trigger.access_requested.is_connected(_on_access_requested):
@@ -131,19 +145,44 @@ func _restore_progress() -> void:
 				player.inventory.get_item_on_inventary(FLASHLIGHT_ITEM_ID),
 				bool(state.get("data_center_tools_floor_task_completed", false))
 			)
+		elif str(state.get("data_center_outage_phase", "")) == "before":
+			_set_recipient_interaction(true, "ESPAÇO: FALAR")
+			_show_power_talk_task()
 		else:
 			call_deferred("_start_power_failure_dialog")
 		return
 	if bool(state.get("data_center_card_delivered", false)):
-		if bool(state.get("data_center_card_dialog_finished", false)):
+		_ensure_outage_schedule(state)
+		if str(state.get("data_center_outage_phase", "")) == "before" and bool(state.get("data_center_outage_pending", false)):
+			_show_card_task(true)
 			call_deferred("_begin_power_failure")
+			return
+		if bool(state.get("data_center_card_dialog_finished", false)):
+			_restore_access_progress(state)
 		else:
+			_show_card_task(true)
 			call_deferred("_start_card_dialog")
+		_arm_outage_timer(state)
 		return
 	_show_card_task(false)
 
 
 func _restore_access_progress(state: Dictionary) -> void:
+	if state.get("data_center_interrupted_dialog", {}) is Dictionary and not (state.get("data_center_interrupted_dialog", {}) as Dictionary).is_empty():
+		_set_recipient_interaction(true, "ESPAÇO: FALAR")
+		_show_power_talk_task()
+		return
+	if not bool(state.get("data_center_card_dialog_finished", false)):
+		_set_recipient_interaction(true, "ESPAÇO: FALAR")
+		_show_power_talk_task()
+		return
+	if not bool(state.get("data_center_access_plan_finished", false)):
+		_set_recipient_interaction(true, "ESPAÇO: FALAR")
+		_show_power_talk_task()
+		return
+	if bool(state.get("data_center_access_resume_talk_needed", false)):
+		state["data_center_access_resume_talk_needed"] = false
+		SaveGame.save_global_state("hall_quest_01", state)
 	# A barra usada após o reparo era uma checagem intermediária. Saves criados
 	# antes desta correção não podem considerar a futura tarefa do minigame pronta.
 	if (
@@ -171,7 +210,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 	if bool(state.get("data_center_rfid_reading_checked", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
-		access_trigger.access_override = false
+		access_trigger.access_override = bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false))
 		_set_access_prompt("Acessar área restrita")
 		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true, true)
@@ -213,7 +252,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 		_set_access_prompt("Verificar leitor RFID")
 		_show_rfid_reader_task()
 		return
-	_show_power_tasks(true, true, true)
+	_show_access_intro_tasks(state)
 	if bool(state.get("data_center_access_boss_card_given", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
@@ -240,26 +279,45 @@ func _restore_access_progress(state: Dictionary) -> void:
 		var restored_path_active := bool(recipient.get("checkpoint_restored")) and not bool(recipient.get("path_finished"))
 		if not restored_path_active:
 			recipient.call("start_path", access_path)
+			var paused_point := int(state.get("data_center_access_npc_paused_point", -1))
+			if paused_point >= 0 and paused_point < (recipient.get("path_points") as Array).size():
+				recipient.set("current_point", paused_point)
+		state.erase("data_center_access_npc_paused_point")
+		SaveGame.save_global_state("hall_quest_01", state)
 		return
 	if bool(state.get("data_center_access_plan_finished", false)):
 		_begin_recipient_walk()
 		return
 	_set_recipient_interaction(true, "ESPAÇO: FALAR")
-	player.balao_de_pensamento.enfileirar(
-		"data_center:return_after_breaker",
-		"A energia voltou. Preciso falar com o cientista."
-	)
+	_show_power_talk_task()
 
 
 func _on_recipient_interaction_requested(_npc: Node2D) -> void:
 	if not _is_current_scene() or DialogManager.is_showing_dialog:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
-	if bool(state.get("data_center_breaker_restored", false)):
-		if not bool(state.get("data_center_access_plan_finished", false)):
-			_start_access_plan_dialog()
+	if _power_is_out(state) and str(state.get("data_center_outage_phase", "")) == "before" and not bool(state.get("data_center_power_dialog_finished", false)):
+		_set_recipient_interaction(false)
+		_start_power_failure_dialog()
+		return
+	if power_sequence_running or _power_is_out(state):
 		return
 	if bool(state.get("data_center_card_delivered", false)):
+		var interrupted: Dictionary = state.get("data_center_interrupted_dialog", {})
+		if not interrupted.is_empty():
+			_set_recipient_interaction(false)
+			state["data_center_access_resume_talk_needed"] = false
+			SaveGame.save_global_state("hall_quest_01", state)
+			_resume_interrupted_dialog()
+		elif not bool(state.get("data_center_card_dialog_finished", false)):
+			_set_recipient_interaction(false)
+			state["data_center_access_resume_talk_needed"] = false
+			SaveGame.save_global_state("hall_quest_01", state)
+			_start_card_dialog()
+		elif not bool(state.get("data_center_access_plan_finished", false)):
+			state["data_center_access_resume_talk_needed"] = false
+			SaveGame.save_global_state("hall_quest_01", state)
+			_start_access_plan_dialog()
 		return
 	if not _has_boss_card():
 		player.balao_de_pensamento.enfileirar(
@@ -273,12 +331,17 @@ func _on_recipient_interaction_requested(_npc: Node2D) -> void:
 func _deliver_boss_card() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	state["data_center_card_delivered"] = true
+	_ensure_outage_schedule(state)
 	SaveGame.save_global_state("hall_quest_01", state)
 	player.inventory.remove_item(CARD_ITEM_ID)
 	player.reset_sprite_player()
 	_show_card_task(true, true)
 	_save_checkpoint()
-	_start_card_dialog()
+	if str(state.get("data_center_outage_phase", "")) == "before":
+		_begin_power_failure()
+	else:
+		_start_card_dialog()
+		_arm_outage_timer(state)
 
 
 func _start_card_dialog() -> void:
@@ -292,15 +355,92 @@ func _start_card_dialog() -> void:
 	], CARD_DIALOG_ID)
 
 
+func _ensure_outage_schedule(state: Dictionary) -> void:
+	if bool(state.get("data_center_power_outage", false)) or bool(state.get("data_center_breaker_restored", false)):
+		return
+	if bool(state.get("data_center_outage_pending", false)):
+		if str(state.get("data_center_outage_phase", "")) == "during":
+			if bool(state.get("data_center_access_plan_finished", false)):
+				state["data_center_outage_phase"] = "after"
+				state["data_center_outage_delay"] = randf_range(OUTAGE_AFTER_MIN_DELAY, OUTAGE_AFTER_MAX_DELAY)
+				state["data_center_outage_due_unix"] = 0.0
+			elif not state.has("data_center_outage_target_dialog"):
+				# Saves da versão anterior tinham um temporizador no lugar da fala sorteada.
+				state["data_center_outage_target_dialog"] = ACCESS_PLAN_DIALOG_ID if bool(state.get("data_center_card_dialog_finished", false)) else CARD_DIALOG_ID
+				state["data_center_outage_target_line"] = 1
+			SaveGame.save_global_state("hall_quest_01", state)
+		return
+	var phase: String = str(["before", "during", "after"][randi_range(0, 2)])
+	state["data_center_outage_pending"] = true
+	state["data_center_outage_phase"] = phase
+	state["data_center_outage_delay"] = randf_range(OUTAGE_AFTER_MIN_DELAY, OUTAGE_AFTER_MAX_DELAY) if phase == "after" else 0.0
+	state["data_center_outage_due_unix"] = 0.0
+	if phase == "during":
+		var target_dialog := CARD_DIALOG_ID if randi_range(0, 1) == 0 else ACCESS_PLAN_DIALOG_ID
+		state["data_center_outage_target_dialog"] = target_dialog
+		state["data_center_outage_target_line"] = randi_range(1, 3 if target_dialog == CARD_DIALOG_ID else 2)
+	SaveGame.save_global_state("hall_quest_01", state)
+
+
+func _arm_outage_timer(state: Dictionary) -> void:
+	if outage_timer == null or not outage_timer.is_stopped():
+		return
+	if not bool(state.get("data_center_outage_pending", false)):
+		return
+	if str(state.get("data_center_outage_phase", "")) != "after" or not bool(state.get("data_center_access_plan_finished", false)):
+		return
+	var due_unix := float(state.get("data_center_outage_due_unix", 0.0))
+	if due_unix <= 0.0:
+		due_unix = Time.get_unix_time_from_system() + float(state.get("data_center_outage_delay", 5.0))
+		state["data_center_outage_due_unix"] = due_unix
+		SaveGame.save_global_state("hall_quest_01", state)
+	outage_timer.start(maxf(due_unix - Time.get_unix_time_from_system(), 0.1))
+
+
+func _on_dialog_line_started(dialog_id: String, index: int) -> void:
+	if not _is_current_scene() or power_sequence_running:
+		return
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	if not bool(state.get("data_center_outage_pending", false)) or str(state.get("data_center_outage_phase", "")) != "during":
+		return
+	if dialog_id == str(state.get("data_center_outage_target_dialog", "")) and index == int(state.get("data_center_outage_target_line", -1)):
+		_begin_power_failure()
+
+
+func _on_outage_timer_timeout() -> void:
+	if not _is_current_scene():
+		return
+	var cooling_guide := get_parent().get_node_or_null("CoolingLocationGuide")
+	if cooling_guide != null and bool(cooling_guide.get("cutscene_running")):
+		outage_timer.start(0.5)
+		return
+	if rfid_verification_running:
+		_interrupt_rfid_verification()
+		_begin_power_failure()
+		return
+	if access_sequence_busy:
+		outage_timer.start(0.5)
+		return
+	_begin_power_failure()
+
+
 func _start_access_plan_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	_set_recipient_interaction(false)
-	DialogManager.start_dialog([
-		"Cientista: A energia estabilizou. Agora precisamos alcançar o núcleo da IA.",
-		"Cientista: Ele fica na área restrita deste andar. Venha, vou mostrar a entrada.",
-		"Alex: Certo. Depois do que ela fez com a energia, não podemos perder mais tempo."
-	], ACCESS_PLAN_DIALOG_ID)
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	if bool(state.get("data_center_breaker_restored", false)):
+		DialogManager.start_dialog([
+			"Cientista: A energia estabilizou. Agora precisamos alcançar o núcleo da IA.",
+			"Cientista: Ele fica na área restrita deste andar. Venha, vou mostrar a entrada.",
+			"Alex: Certo. Depois do que ela fez com a energia, não podemos perder mais tempo."
+		], ACCESS_PLAN_DIALOG_ID)
+	else:
+		DialogManager.start_dialog([
+			"Cientista: Precisamos alcançar o núcleo da IA antes que ela termine o plano.",
+			"Cientista: A entrada fica na área restrita deste andar. Venha, vou mostrar.",
+			"Alex: Certo. Vamos tentar abrir o data center."
+		], ACCESS_PLAN_DIALOG_ID)
 
 
 func _start_strong_card_dialog() -> void:
@@ -340,12 +480,19 @@ func _on_dialog_finished(dialog_id: String) -> void:
 	if not _is_current_scene():
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
+	var interrupted: Dictionary = state.get("data_center_interrupted_dialog", {})
+	if dialog_id != POWER_DIALOG_ID and dialog_id == str(interrupted.get("id", "")):
+		state.erase("data_center_interrupted_dialog")
+		SaveGame.save_global_state("hall_quest_01", state)
 	match dialog_id:
 		CARD_DIALOG_ID:
 			state["data_center_card_dialog_finished"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
 			_save_checkpoint()
-			_begin_power_failure()
+			if not power_sequence_running and not _power_is_out(state):
+				_show_access_intro_tasks(state)
+				_arm_outage_timer(state)
+				call_deferred("_start_access_plan_dialog")
 		POWER_DIALOG_ID:
 			state["data_center_power_dialog_finished"] = true
 			state["data_center_tools_floor_task_active"] = true
@@ -355,7 +502,13 @@ func _on_dialog_finished(dialog_id: String) -> void:
 		ACCESS_PLAN_DIALOG_ID:
 			state["data_center_access_plan_finished"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
-			_begin_recipient_walk()
+			if not power_sequence_running and not _power_is_out(state):
+				_arm_outage_timer(state)
+				_show_access_intro_tasks(state)
+				if bool(state.get("data_center_access_npc_arrived", false)):
+					_resume_access_at_reader(state)
+				else:
+					_begin_recipient_walk()
 		STRONG_CARD_DIALOG_ID:
 			_give_strong_card()
 		STRONG_DENIED_DIALOG_ID:
@@ -366,25 +519,34 @@ func _on_dialog_finished(dialog_id: String) -> void:
 			state["data_center_rfid_inspection_task_active"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
 			_set_access_prompt("Verificar leitor RFID")
-			_show_rfid_reader_task()
-			player.balao_de_pensamento.enfileirar(
-				"data_center:inspect_rfid_reader",
-				"RFID... preciso descobrir o que aconteceu com esse leitor."
-			)
+			if not _power_is_out(state):
+				_show_rfid_reader_task()
+				player.balao_de_pensamento.enfileirar(
+					"data_center:inspect_rfid_reader",
+					"RFID... preciso descobrir o que aconteceu com esse leitor."
+				)
 			_save_checkpoint()
+	if dialog_id != POWER_DIALOG_ID and _power_is_out(state) and not bool(state.get("data_center_power_dialog_finished", false)):
+		call_deferred("_start_power_failure_dialog")
 
 
 func _begin_recipient_walk() -> void:
 	if not _is_current_scene():
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
-	if bool(state.get("data_center_access_npc_arrived", false)):
-		_start_strong_card_dialog()
+	if power_sequence_running or _power_is_out(state):
 		return
+	if bool(state.get("data_center_access_npc_arrived", false)):
+		_resume_access_at_reader(state)
+		return
+	var paused_point := int(state.get("data_center_access_npc_paused_point", -1))
+	state.erase("data_center_access_npc_paused_point")
 	state["data_center_access_npc_moving"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_recipient_interaction(false)
 	recipient.call("start_path", access_path)
+	if paused_point >= 0 and paused_point < (recipient.get("path_points") as Array).size():
+		recipient.set("current_point", paused_point)
 	_save_checkpoint()
 
 
@@ -396,7 +558,28 @@ func _on_recipient_path_completed(finished_path: NPCPath) -> void:
 	state["data_center_access_npc_arrived"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_save_checkpoint()
-	_start_strong_card_dialog()
+	if not power_sequence_running and not _power_is_out(state) and not bool(state.get("data_center_access_resume_talk_needed", false)):
+		_show_access_intro_tasks(state)
+		_resume_access_at_reader(state)
+
+
+func _resume_access_at_reader(state: Dictionary) -> void:
+	if (
+		bool(state.get("data_center_rfid_inspection_task_active", false))
+		or bool(state.get("data_center_rfid_wires_task_active", false))
+		or bool(state.get("data_center_rfid_wires_repaired", false))
+		or bool(state.get("data_center_rfid_reader_rechecked", false))
+		or bool(state.get("data_center_rfid_reading_checked", false))
+	):
+		_restore_access_progress(state)
+	elif bool(state.get("data_center_access_boss_card_failed", false)):
+		_start_boss_denied_dialog()
+	elif bool(state.get("data_center_access_boss_card_given", false)):
+		return
+	elif bool(state.get("data_center_access_strong_card_failed", false)):
+		_start_strong_denied_dialog()
+	elif not bool(state.get("data_center_access_strong_card_given", false)):
+		_start_strong_card_dialog()
 
 
 func _place_recipient_at_access() -> void:
@@ -468,13 +651,15 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 	if access_sequence_busy or not _is_current_scene() or DialogManager.is_showing_dialog:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
-	if not bool(state.get("data_center_breaker_restored", false)):
+	if power_sequence_running or _power_is_out(state):
 		player.balao_de_pensamento.enfileirar(
 			"data_center:access_before_power",
 			"Primeiro preciso resolver o problema da energia."
 		)
 		return
 	if bool(state.get("data_center_rfid_reading_checked", false)):
+		if bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false)):
+			_begin_power_failure()
 		return
 	if bool(state.get("data_center_rfid_reader_rechecked", false)):
 		_start_rfid_card_minigame()
@@ -583,8 +768,9 @@ func _inspect_rfid_reader() -> void:
 			"text": "Preciso reconectá-los antes de testar os cartões de novo."
 		}
 	]
-	if not await _run_rfid_verification(inspection_thoughts):
-		_set_access_interactable(true)
+	if not await _run_rfid_verification(inspection_thoughts, -1.0, "inspection"):
+		if not power_sequence_running and not _power_is_out(SaveGame.office_mission_state(player)):
+			_set_access_interactable(true)
 		access_sequence_busy = false
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
@@ -602,8 +788,9 @@ func _inspect_rfid_reader() -> void:
 func _verify_repaired_rfid_reader() -> void:
 	access_sequence_busy = true
 	_set_access_interactable(false)
-	if not await _run_rfid_verification():
-		_set_access_interactable(true)
+	if not await _run_rfid_verification([], -1.0, "recheck"):
+		if not power_sequence_running and not _power_is_out(SaveGame.office_mission_state(player)):
+			_set_access_interactable(true)
 		access_sequence_busy = false
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
@@ -621,11 +808,20 @@ func _verify_repaired_rfid_reader() -> void:
 
 func _run_rfid_verification(
 	thoughts: Array[Dictionary] = [],
-	duration: float = -1.0
+	duration: float = -1.0,
+	stage: String = ""
 ) -> bool:
 	if rfid_verification_ui == null or rfid_verification_bar == null or rfid_verification_label == null:
 		push_error("A barra RFID precisa existir em SceneTrigger2/RFIDVerification.")
 		return true
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	var start_progress := 0.0
+	if str(state.get("data_center_rfid_paused_stage", "")) == stage:
+		start_progress = clampf(float(state.get("data_center_rfid_paused_progress", 0.0)), 0.0, 99.0)
+	var active_thoughts: Array[Dictionary] = thoughts if start_progress <= 0.0 else []
+	rfid_verification_interrupted = false
+	rfid_verification_stage = stage
+	rfid_active_thought_ids.clear()
 	rfid_player_physics_was_enabled = player.is_physics_processing()
 	rfid_verification_running = true
 	player.direction = Vector2.ZERO
@@ -635,9 +831,9 @@ func _run_rfid_verification(
 	player.UpdateAnimation()
 	player.sfx_walking.stop()
 	player.set_physics_process(false)
-	if not thoughts.is_empty():
+	if not active_thoughts.is_empty():
 		_prepare_rfid_thought_balloon()
-	_set_rfid_verification_progress(0.0)
+	_set_rfid_verification_progress(start_progress)
 	rfid_verification_ui.show()
 	var effective_duration := duration
 	if effective_duration <= 0.0:
@@ -646,34 +842,65 @@ func _run_rfid_verification(
 			if not thoughts.is_empty()
 			else rfid_verification_duration
 		)
-	var progress_tween := create_tween()
-	progress_tween.tween_method(
+	effective_duration *= (100.0 - start_progress) / 100.0
+	rfid_progress_tween = create_tween()
+	rfid_progress_tween.tween_method(
 		_set_rfid_verification_progress,
-		0.0,
-		99.0 if not thoughts.is_empty() else 100.0,
-		effective_duration
+		start_progress,
+		99.0 if not active_thoughts.is_empty() else 100.0,
+		maxf(effective_duration, 0.1)
 	).set_trans(Tween.TRANS_LINEAR)
-	if not thoughts.is_empty():
-		for thought in thoughts:
+	var last_thought_id := ""
+	if not active_thoughts.is_empty():
+		for thought in active_thoughts:
+			var thought_id := str(thought.get("id", ""))
+			rfid_active_thought_ids.append(thought_id)
 			player.balao_de_pensamento.enfileirar(
-				str(thought.get("id", "")),
+				thought_id,
 				str(thought.get("text", ""))
 			)
-		var last_thought: Dictionary = thoughts.back()
-		await player.balao_de_pensamento.mostrar_texto(
-			str(last_thought.get("text", "")),
-			str(last_thought.get("id", ""))
-		)
-	if progress_tween.is_valid() and progress_tween.is_running():
-		await progress_tween.finished
+		last_thought_id = str(active_thoughts.back().get("id", ""))
+	while not rfid_verification_interrupted and (
+		(rfid_progress_tween != null and rfid_progress_tween.is_valid() and rfid_progress_tween.is_running())
+		or (not last_thought_id.is_empty() and not player.balao_de_pensamento.foi_concluido(last_thought_id))
+	):
+		await get_tree().process_frame
+	if rfid_verification_interrupted:
+		return false
 	_set_rfid_verification_progress(100.0)
-	if not thoughts.is_empty():
+	if not active_thoughts.is_empty():
 		# Exibe os 100% por um quadro exatamente quando o último balão termina.
 		await get_tree().process_frame
+	state = SaveGame.office_mission_state(player)
+	state.erase("data_center_rfid_paused_stage")
+	state.erase("data_center_rfid_paused_progress")
+	SaveGame.save_global_state("hall_quest_01", state)
+	rfid_progress_tween = null
+	rfid_active_thought_ids.clear()
 	_hide_rfid_verification()
 	_restore_rfid_thought_balloon()
 	_restore_player_after_rfid_verification()
 	return _is_current_scene()
+
+
+func _interrupt_rfid_verification() -> void:
+	if not rfid_verification_running:
+		return
+	rfid_verification_interrupted = true
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	state["data_center_rfid_paused_stage"] = rfid_verification_stage
+	state["data_center_rfid_paused_progress"] = rfid_verification_bar.value
+	SaveGame.save_global_state("hall_quest_01", state)
+	if rfid_progress_tween != null and rfid_progress_tween.is_valid():
+		rfid_progress_tween.kill()
+	rfid_progress_tween = null
+	if not rfid_active_thought_ids.is_empty():
+		player.balao_de_pensamento.descartar(rfid_active_thought_ids)
+	rfid_active_thought_ids.clear()
+	_hide_rfid_verification()
+	_restore_rfid_thought_balloon()
+	_restore_player_after_rfid_verification()
+	_save_checkpoint()
 
 
 func _calculate_rfid_thoughts_duration(thoughts: Array[Dictionary]) -> float:
@@ -767,11 +994,20 @@ func _begin_power_failure() -> void:
 	if power_sequence_running or not _is_current_scene():
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
+	if bool(state.get("data_center_breaker_restored", false)):
+		return
 	if bool(state.get("data_center_power_outage", false)):
 		_apply_power_outage_visuals()
 		_start_power_failure_dialog()
 		return
+	if outage_timer != null:
+		outage_timer.stop()
 	power_sequence_running = true
+	DialogManager.input_blocked = true
+	if bool(state.get("data_center_access_npc_moving", false)) and recipient.has_method("stop_current_path"):
+		state["data_center_access_npc_paused_point"] = int(recipient.get("current_point"))
+		SaveGame.save_global_state("hall_quest_01", state)
+		recipient.call("stop_current_path")
 	for _index in POWER_FLICKER_COUNT:
 		_set_regular_lights_visible(false)
 		await get_tree().create_timer(POWER_FLICKER_OFF_TIME, false).timeout
@@ -783,24 +1019,85 @@ func _begin_power_failure() -> void:
 			return
 	state = SaveGame.office_mission_state(player)
 	state["data_center_power_outage"] = true
+	state["data_center_outage_pending"] = false
+	state["data_center_access_resume_talk_needed"] = true
+	if bool(state.get("data_center_access_npc_moving", false)):
+		state["data_center_access_npc_moving"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	_apply_power_outage_visuals()
 	_reduce_remaining_time_once()
 	_set_power_outage_music(true)
+	_set_recipient_interaction(false)
 	power_sequence_running = false
+	DialogManager.input_blocked = false
 	_save_checkpoint()
-	_start_power_failure_dialog()
+	if str(state.get("data_center_outage_phase", "")) == "before":
+		_set_recipient_interaction(true, "ESPAÇO: FALAR")
+		_show_power_talk_task()
+	else:
+		_start_power_failure_dialog()
 
 
 func _start_power_failure_dialog() -> void:
-	if DialogManager.is_showing_dialog or not _is_current_scene():
+	if not _is_current_scene():
 		return
-	DialogManager.start_dialog([
-		"Cientista: A IA está drenando a energia do prédio! O disjuntor desarmou!",
-		"Alex: Eu posso ligar o disjuntor de novo.",
-		"Cientista: O disjuntor fica no andar das ferramentas, no 4º andar. Lá não há luzes de emergência.",
-		"Cientista: Você vai precisar de uma lanterna. Vi uma na mesa de alguém."
-	], POWER_DIALOG_ID)
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	if not _power_is_out(state) or bool(state.get("data_center_power_dialog_finished", false)):
+		return
+	if DialogManager.is_showing_dialog and DialogManager.current_dialog_id == POWER_DIALOG_ID:
+		return
+	if DialogManager.is_showing_dialog and DialogManager.dialog_box != null and bool(DialogManager.dialog_box.get("is_closing")):
+		await get_tree().create_timer(0.1).timeout
+		_start_power_failure_dialog()
+		return
+	if DialogManager.is_showing_dialog and DialogManager.dialog_box != null:
+		var interrupted_lines: Array[String] = []
+		for line in DialogManager.dialog_box.texts_to_display:
+			interrupted_lines.append(str(line))
+		state["data_center_interrupted_dialog"] = {
+			"id": DialogManager.current_dialog_id,
+			"lines": interrupted_lines,
+			"index": int(DialogManager.dialog_box.current_index)
+		}
+		SaveGame.save_global_state("hall_quest_01", state)
+		_save_checkpoint()
+	var power_lines: Array[String]
+	if str(state.get("data_center_outage_phase", "")) == "before":
+		power_lines = [
+			"Alex: As luzes apagaram. O que aconteceu?",
+			"Cientista: A IA está drenando a energia do prédio. O disjuntor desarmou.",
+			"Cientista: Você precisa religá-lo no andar das ferramentas, no 4º andar. Pegue uma lanterna antes de ir.",
+			"Cientista: Depois volte. Precisamos desligar essa IA antes que seja tarde."
+		]
+	else:
+		power_lines = [
+			"Alex: O disjuntor desarmou! A energia está caindo.",
+			"Cientista: A IA está drenando a energia do prédio! Precisamos interromper o que estávamos fazendo.",
+			"Alex: Eu posso ligar o disjuntor de novo.",
+			"Cientista: Ele fica no andar das ferramentas, no 4º andar. Pegue uma lanterna antes de ir.",
+			"Cientista: Volte assim que puder. Temos que desligar essa IA."
+		]
+	DialogManager.interrupt_with_dialog(power_lines, POWER_DIALOG_ID, false)
+
+
+func _resume_interrupted_dialog() -> void:
+	if not _is_current_scene() or DialogManager.is_showing_dialog:
+		return
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	var interrupted: Dictionary = state.get("data_center_interrupted_dialog", {})
+	if interrupted.is_empty():
+		return
+	if DialogManager.resume_suspended_dialog():
+		return
+	var lines: Array[String] = []
+	for line in interrupted.get("lines", []):
+		lines.append(str(line))
+	if not lines.is_empty():
+		DialogManager.start_dialog(lines, str(interrupted.get("id", "")), int(interrupted.get("index", 0)))
+
+
+func _power_is_out(state: Dictionary) -> bool:
+	return bool(state.get("data_center_power_outage", false)) and not bool(state.get("data_center_breaker_restored", false))
 
 
 func _cache_regular_lights() -> void:
@@ -954,6 +1251,22 @@ func _show_card_task(completed: bool, animate: bool = false) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
 		quest_ui.show_data_center_card_task(completed, animate)
+
+
+func _show_power_talk_task() -> void:
+	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
+	if quest_ui != null:
+		quest_ui.show_data_center_power_talk_task()
+
+
+func _show_access_intro_tasks(state: Dictionary) -> void:
+	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
+	if quest_ui != null:
+		quest_ui.show_data_center_access_intro_tasks(
+			bool(state.get("data_center_card_dialog_finished", false)),
+			bool(state.get("data_center_access_plan_finished", false)),
+			bool(state.get("data_center_access_npc_arrived", false))
+		)
 
 
 func _has_boss_card() -> bool:

@@ -27,6 +27,8 @@ var player_camera_was_enabled := true
 var player_process_mode := Node.PROCESS_MODE_INHERIT
 var player_physics_enabled := true
 var player_input_enabled := true
+var interaction_input_enabled := true
+var locked_triggers: Array[Dictionary] = []
 var pause_menu_mode := Node.PROCESS_MODE_INHERIT
 var darkness_overlay: CanvasItem
 var darkness_overlay_was_visible := false
@@ -218,6 +220,23 @@ func _lock_player() -> void:
 	player.sfx_walking.stop()
 	player.set_physics_process(false)
 	player.set_process_input(false)
+	var interaction_component := player.get_node_or_null("InteractiongComponent")
+	if interaction_component != null:
+		interaction_input_enabled = interaction_component.is_processing_unhandled_input()
+		interaction_component.set_process_unhandled_input(false)
+	locked_triggers.clear()
+	for child in scene.get_children():
+		if child is SceneTrigger:
+			var prompt := child.get_node_or_null("Interectable")
+			locked_triggers.append({
+				"trigger": child,
+				"input_enabled": child.is_processing_unhandled_input(),
+				"prompt": prompt,
+				"prompt_enabled": bool(prompt.get("is_interactable")) if prompt != null else false
+			})
+			child.set_process_unhandled_input(false)
+			if prompt != null:
+				prompt.set("is_interactable", false)
 	var pause_menu := scene.get_node_or_null("UI/PauseMenu")
 	if pause_menu != null:
 		pause_menu_mode = pause_menu.process_mode
@@ -229,6 +248,17 @@ func _unlock_player() -> void:
 		player.process_mode = player_process_mode
 		player.set_physics_process(player_physics_enabled)
 		player.set_process_input(player_input_enabled)
+		var interaction_component := player.get_node_or_null("InteractiongComponent")
+		if interaction_component != null:
+			interaction_component.set_process_unhandled_input(interaction_input_enabled)
+	for locked in locked_triggers:
+		var trigger: Node = locked.get("trigger")
+		if is_instance_valid(trigger):
+			trigger.set_process_unhandled_input(bool(locked.get("input_enabled", true)))
+		var prompt: Node = locked.get("prompt")
+		if is_instance_valid(prompt):
+			prompt.set("is_interactable", bool(locked.get("prompt_enabled", true)))
+	locked_triggers.clear()
 	if is_instance_valid(scene):
 		var pause_menu := scene.get_node_or_null("UI/PauseMenu")
 		if pause_menu != null:

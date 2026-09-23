@@ -1,12 +1,14 @@
 extends MarginContainer
 
 signal dialog_finished()
+signal line_started(index: int)
 
 var texts_to_display: Array[String] = []
 var current_index: int = 0
 var typing_speed: float = 0.05
 var is_typing: bool = false
 var skip_typing: bool = false
+var is_closing: bool = false
 
 @onready var text_label: Label = $text_container/text_label
 @onready var indicator: TextureRect = $indicator
@@ -28,6 +30,7 @@ func _ready() -> void:
 
 func show_text() -> void:
 	if current_index < texts_to_display.size():
+		line_started.emit(current_index)
 		is_typing = true
 		skip_typing = false
 		indicator.visible = false
@@ -50,6 +53,7 @@ func _type_text(text: String) -> void:
 	indicator.visible = true
 
 func _close_dialog():
+	is_closing = true
 	is_typing = true
 
 	@warning_ignore("shadowed_variable")

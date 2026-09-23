@@ -46,6 +46,8 @@ func _get_connect_scene_andar_novo(andar : int) -> String:
 	return "andar_invalido"
 	
 func usar_elevador(andar: int) -> void:
+	if _blocked_by_scene_event():
+		return
 	if eh_elevador and not elevador_liberado():
 		return
 	if eh_elevador and not pode_acessar_andar(andar):
@@ -101,6 +103,8 @@ func get_ultima_posicao() -> Vector2:
 	return ultima_posicao
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _blocked_by_scene_event():
+		return
 	
 	if event.is_action_pressed("interact") and eh_elevador and dentro_da_area:
 		if not elevador_liberado():
@@ -139,6 +143,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			aceso_negado.play()
 			print("Acesso Negado")
+
+
+func _blocked_by_scene_event() -> bool:
+	var guide := get_parent().get_node_or_null("CoolingLocationGuide")
+	if guide != null and bool(guide.get("cutscene_running")):
+		return true
+	var intro := get_parent().get_node_or_null("DataCenterIntroController")
+	return intro != null and bool(intro.get("power_sequence_running"))
 
 
 func reproduzir_acesso_negado() -> void:
