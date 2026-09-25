@@ -44,7 +44,7 @@ func _run() -> void:
 	var paused_position := sequence.get_playback_position()
 	await create_timer(0.15).timeout
 	_check(absf(sequence.get_playback_position() - paused_position) < 0.03, "Paused recording playback must not advance beyond the mixer buffer.")
-	AUDIO.play_ui(origin, AUDIO.GRAB)
+	AUDIO.play_ui(origin, AUDIO.TERMINAL_KEY)
 	_check(_voices().size() == 1, "Paused gameplay must not spawn another sound.")
 	paused = false
 	_check(sequence.can_process(), "Interaction sounds must resume with gameplay.")
@@ -56,8 +56,8 @@ func _run() -> void:
 	for i in 20:
 		var separate_origin := Node2D.new()
 		scene.add_child(separate_origin)
-		AUDIO.play_world(separate_origin, AUDIO.GRAB)
-	_check(_voices().size() == AUDIO.MAX_VOICES, "A burst of pickups must have a bounded voice count.")
+		AUDIO.play_world(separate_origin, AUDIO.TERMINAL_KEY)
+	_check(_voices().size() == AUDIO.MAX_VOICES, "A burst of world sounds must have a bounded voice count.")
 	current_scene = null
 	scene.queue_free()
 	await process_frame

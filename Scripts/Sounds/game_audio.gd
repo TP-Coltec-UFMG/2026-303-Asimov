@@ -1,20 +1,15 @@
 class_name GameAudio
 extends RefCounted
 
-const GRAB: AudioStream = preload("res://Sounds/External/sfx100v2_items_01.ogg")
-const RELEASE: AudioStream = preload("res://Sounds/External/sfx100v2_items_02.ogg")
 const SCRAPES: Array[AudioStream] = [
 	preload("res://Sounds/External/scrape-1.ogg"),
-	preload("res://Sounds/External/scrape-2.ogg"),
-	preload("res://Sounds/External/scrape-3.ogg")
+	preload("res://Sounds/External/scrape-2.ogg")
 ]
 const CARD_SWIPE: AudioStream = preload("res://Sounds/External/keyhole-lockbox-insert-01.wav")
 const TERMINAL_KEY: AudioStream = preload("res://Sounds/External/sfx100v2_switch_02.ogg")
 const BREAKER: AudioStream = preload("res://Sounds/External/sfx100v2_metal_hit_01.ogg")
 const ACCESS_GRANTED: AudioStream = preload("res://Sounds/External/sfx100v2_lock_open_01.ogg")
 const ACCESS_DENIED: AudioStream = preload("res://Sounds/External/sfx100v2_switch_01.ogg")
-const DOOR_LATCH: AudioStream = preload("res://Sounds/External/sfx100v2_door_01.ogg")
-
 const VOICE_GROUP: StringName = &"game_audio_one_shots"
 const MAX_VOICES: int = 8
 

@@ -41,7 +41,7 @@ func interagir_dijuntor() -> void:
 		ligado = true
 
 	aplicar_estado_visual()
-	GameAudio.play_world(self, GameAudio.BREAKER, -5.0, 350.0)
+	GameAudio.play_world(self, GameAudio.BREAKER, -7.0, 350.0)
 	SaveGame.save_object_state(save_id, ligado)
 	if ligado:
 		_registrar_energia_restaurada()

@@ -4,7 +4,7 @@ extends Node2D
 
 # Gravações CC0, com as fontes em Sounds/External/SOURCES.md.
 const VENTILATION: AudioStream = preload("res://Sounds/External/computer-ventilation-0126.mp3")
-const ROOM_VOLUMES_DB: Array[float] = [-30.0, -24.0, -21.0, -32.0, -28.0]
+const ROOM_VOLUMES_DB: Array[float] = [-25.0, -28.0, -17.0, -27.0, -23.0]
 const LOOP_CROSSFADE: float = 0.5
 const DRIPS: Array[AudioStream] = [
 	preload("res://Sounds/External/water-drop-01.wav"),
@@ -22,10 +22,12 @@ var drip_voice: AudioStreamPlayer2D
 var creak_voice: AudioStreamPlayer2D
 var drip_timer: Timer
 var creak_timer: Timer
+var elevator_muffled: bool = false
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_to_group("scene_ambience")
 	ambience_kind = clampi(ambience_kind, 0, ROOM_VOLUMES_DB.size() - 1)
 	bed = _new_bed()
 	next_bed = _new_bed()
@@ -46,6 +48,10 @@ func _new_bed() -> AudioStreamPlayer:
 
 
 func _process(delta: float) -> void:
+	if elevator_muffled:
+		bed.volume_linear = 0.0
+		next_bed.volume_linear = 0.0
+		return
 	# Reproduz a gravação real com uma pequena sobreposição nas emendas.
 	# Não força o loop de uma rajada de ar, que antes pulsava a cada 2 segundos.
 	entrance_fade = minf(entrance_fade + delta / 1.0, 1.0)
@@ -74,8 +80,8 @@ func _process(delta: float) -> void:
 
 
 func _setup_hall_events() -> void:
-	drip_voice = _new_spatial_voice(DRIPS[0], Vector2(-80, 45), -12.0)
-	creak_voice = _new_spatial_voice(CREAK, Vector2(145, -45), -18.0)
+	drip_voice = _new_spatial_voice(DRIPS[0], Vector2(-80, 45), -14.0)
+	creak_voice = _new_spatial_voice(CREAK, Vector2(145, -45), -20.0)
 	drip_timer = Timer.new()
 	drip_timer.one_shot = true
 	add_child(drip_timer)
@@ -101,6 +107,8 @@ func _new_spatial_voice(sound: AudioStream, at: Vector2, volume: float) -> Audio
 
 
 func _on_drip() -> void:
+	if elevator_muffled:
+		return
 	if creak_voice.playing:
 		drip_timer.start(3.0)
 		return
@@ -110,8 +118,33 @@ func _on_drip() -> void:
 
 
 func _on_creak() -> void:
+	if elevator_muffled:
+		return
 	if drip_voice.playing:
 		creak_timer.start(3.0)
 		return
 	creak_voice.play()
 	creak_timer.start(randf_range(22.0, 42.0))
+
+
+func set_elevator_muffling(active: bool) -> void:
+	if elevator_muffled == active:
+		return
+	elevator_muffled = active
+	if active:
+		if drip_timer != null:
+			drip_timer.stop()
+		if creak_timer != null:
+			creak_timer.stop()
+		if drip_voice != null:
+			drip_voice.stop()
+		if creak_voice != null:
+			creak_voice.stop()
+		bed.volume_linear = 0.0
+		next_bed.volume_linear = 0.0
+	else:
+		entrance_fade = 0.0
+		if drip_timer != null:
+			drip_timer.start(randf_range(5.0, 11.0))
+		if creak_timer != null:
+			creak_timer.start(randf_range(14.0, 25.0))

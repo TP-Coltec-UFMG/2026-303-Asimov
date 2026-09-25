@@ -61,6 +61,7 @@ func usar_elevador(andar: int) -> void:
 			body_p.inventory.hide()
 			painel_elevador.resetar_sprites()
 			await painel_elevador.animacao()
+			MusicController.set_elevator_audio(false)
 			body_p.global_position = ultima_posicao
 			body_p.inventory.show()
 			controle_de_tempo.show()
@@ -78,6 +79,7 @@ func usar_elevador(andar: int) -> void:
 			$Timer.start()
 			await $Timer.timeout
 			await painel_elevador.animacao()
+			MusicController.set_elevator_audio(false)
 			body_p.set_physics_process(true)
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 			MusicController.set_alarm_quiet_context(&"elevator", false)
@@ -91,6 +93,7 @@ func usar_elevador(andar: int) -> void:
 			body_p.inventory.hide()
 			painel_elevador.resetar_sprites()
 			await painel_elevador.animacao()
+			MusicController.set_elevator_audio(false)
 			body_p.global_position = ultima_posicao
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 			body_p.inventory.show()
@@ -118,6 +121,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		painel_elevador.visible = true
 		controle_de_tempo.hide()
 		_ocultar_paineis_tarefas()
+		MusicController.set_elevator_audio(true)
 		MusicController.set_alarm_quiet_context(&"elevator", true)
 		get_tree().paused = true
 

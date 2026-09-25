@@ -31,7 +31,7 @@ func _refresh() -> void:
 func _start_cooling_puzzle() -> void:
 	if not interaction.is_interactable:
 		return
-	GameAudio.play_world(self, GameAudio.TERMINAL_KEY, -8.0)
+	GameAudio.play_world(self, GameAudio.TERMINAL_KEY, -10.0)
 	Progresso.iniciar_refrigeracao_ia(
 		scene_manager.player,
 		resolved_terminal_id,

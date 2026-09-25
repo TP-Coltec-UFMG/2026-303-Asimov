@@ -1,6 +1,5 @@
 78098b89c88a74ebe8c20117b8754620
-::res://::1790356346
-Memory of Man.mp3::AudioStreamMP3::5467109247050164869::1789992769::1789992769::1::::<><><>0<>0<>10e2f81bf26f34caf36d2c2dcd2bf326<>res://.godot/imported/Memory of Man.mp3-6bd294103460ba088706e6e4c7f5f5cd.mp3str::
+::res://::1790360278
 README.md::TextFile::-1::1789136585::0::1::::<><><>0<>0<><>::
 ::res://00_Globals/::1788626955
 GlobalLevelManager.gd::GDScript::18217615506579010::1788453772::0::1::::<>Node<><>0<>0<><>::
@@ -498,7 +497,7 @@ scientist_2.png::CompressedTexture2D::1116405141833353189::1788907921::178890793
 scientist_3.png::CompressedTexture2D::8338360554719851229::1788907921::1788907938::1::::<><><>0<>0<>f3b55afa18976dec42aa03fd50274e57<>res://.godot/imported/scientist_3.png-794028e73a11b41a663474dc42e7ae9e.ctex::
 scientist_4.png::CompressedTexture2D::1536369533719548749::1788907921::1788907938::1::::<><><>0<>0<>516e0bd066ecf02d83d6e97e7d01343d<>res://.godot/imported/scientist_4.png-b4630b277c1d4aa96a2893f04399c6f5.ctex::
 scientist_5.png::CompressedTexture2D::5397845891457132393::1788907921::1788907938::1::::<><><>0<>0<>f34bc655a4b3cbb09c95d52f861d8495<>res://.godot/imported/scientist_5.png-c2032ad438bb9df77251051741aae3bb.ctex::
-::res://Objects/::1790355639
+::res://Objects/::1790359294
 arma.tscn::PackedScene::6312994155937804785::1789337595::0::1::::<><><>0<>0<><>::uid://caop7susc10wg::::res://Objects/scripts/arma.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://b8h6pcugxlnhw::::res://Sprites/objects/gun.png<>uid://b3gjmrbe8pxbu::::res://Sprites/objects/reticula_0.png<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>res://Scenes/Utils/color_accessibility_cue.tscn
 bullet.tscn::PackedScene::4684858762208715070::1788453774::0::1::::<><><>0<>0<><>::uid://54mbd1r8m154::::res://Objects/scripts/bullet.gd<>uid://cw2pnmpqrx5fq::::res://Sprites/objects/New Piskel(34).png
 cabo.tscn::PackedScene::4562406117344477364::1789735787::0::1::::<><><>0<>0<><>::uid://cr6q7vgk61v3w::::res://Objects/scripts/cabo.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://b5pqbq7pxngrg::::res://Sprites/objects/cabo_0-1.png.png<>uid://dfhkmwfxsu333::::res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>res://Scenes/Utils/color_accessibility_cue.tscn
@@ -506,7 +505,7 @@ cartao_chefe.tscn::PackedScene::2697875033414290079::1789337595::0::1::::<><><>0
 cartao_forte.tscn::PackedScene::1965508613075240266::1789337595::0::1::::<><><>0<>0<><>::uid://chmq0nhcxg770::::res://Objects/scripts/cartao_forte.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://uyr2tq70yrgo::::res://Sprites/objects/sprite_cartao1.png<>uid://dfhkmwfxsu333::::res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>res://Scenes/Utils/color_accessibility_cue.tscn
 cartao_padrao.tscn::PackedScene::3679665588412706737::1789337595::0::1::::<><><>0<>0<><>::uid://dtvwtno82dkad::::res://Objects/scripts/cartao_padrao.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://bqc8kxq2k1r75::::res://Sprites/objects/sprite_cartao0.png<>uid://dfhkmwfxsu333::::res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>res://Scenes/Utils/color_accessibility_cue.tscn
 conhecimento.tscn::PackedScene::5800574743477628911::1789337595::0::1::::<><><>0<>0<><>::uid://dmk0muhflr4if::::res://Objects/scripts/conhecimento.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://07i7xm3v4k3e::::res://Sprites/objects/livro.png<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>res://Scenes/Utils/color_accessibility_cue.tscn
-controle_de_tempo.tscn::PackedScene::7478337665714464826::1790355639::0::1::::<><><>0<>0<><>::uid://b7by8iiefmx8l::::res://Minigames/Arte/PixelifySans-Bold.ttf<>uid://cu23k1pdvicyc::::res://Objects/scripts/controle_de_tempo.gd<>uid://cpx1nu7dykfwr::::res://Sprites/ui/New Piskel-1.png(4).png<>uid://dr6xbjlg35m7c::::res://Sounds/Ambient/contagem10s.mp3
+controle_de_tempo.tscn::PackedScene::7478337665714464826::1790359294::0::1::::<><><>0<>0<><>::uid://b7by8iiefmx8l::::res://Minigames/Arte/PixelifySans-Bold.ttf<>uid://cu23k1pdvicyc::::res://Objects/scripts/controle_de_tempo.gd<>uid://cpx1nu7dykfwr::::res://Sprites/ui/New Piskel-1.png(4).png<>uid://dr6xbjlg35m7c::::res://Sounds/Ambient/contagem10s.mp3
 dijuntor.tscn::PackedScene::545005377228345023::1789337595::0::1::::<><><>0<>0<><>::uid://blguo3vcbb04g::::res://Objects/scripts/dijuntor.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://7ckbd80e35xk::::res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_22.png<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>res://Scenes/Utils/color_accessibility_cue.tscn
 escada.tscn::PackedScene::1944145739899041145::1789337595::0::1::::<><><>0<>0<><>::uid://dcrs36lc3vkkj::::res://Objects/scripts/objeto_empurravel.gd<>uid://drochw5o60lgy::::res://Sprites/objects/escada_0.png<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>res://Scenes/Utils/color_accessibility_cue.tscn
 extintor.tscn::PackedScene::865644745496744717::1790291190::0::1::::<><><>0<>0<><>::uid://baqx6eok71vi8::::res://Objects/scripts/extintor.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://7mt4eribsnfm::::res://TileMaps/Andar_ferramentas/sprites/sprite_13.png<>uid://di3jn2jnryiad::::res://Sprites/objects/New Piskel(21).png<>uid://dtfbuvijibmfx::::res://Objects/scripts/PickupComponent.gd<>uid://bs3m1bmybuo3n::::res://Sounds/Effects/fumaca_extintor.MP3<>uid://c7nxcjmbwjjit::::res://Sounds/Effects/switch3.ogg<>uid://dfhkmwfxsu333::::res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp<>res://Scenes/Utils/color_accessibility_cue.tscn
@@ -525,7 +524,7 @@ cartao_forte.gd::GDScript::5289952616372095225::1788453774::0::1::::<>Node2D<><>
 cartao_padrao.gd::GDScript::8537572422928622227::1788453774::0::1::::<>Node2D<><>0<>0<><>::
 conhecimento.gd::GDScript::8023712368145522465::1788453774::0::1::::<>Node2D<><>0<>0<><>::
 controle_de_tempo.gd::GDScript::6234075762186830570::1790198483::0::1::::<>Control<><>0<>0<><>::
-dijuntor.gd::GDScript::3172125074392786908::1790296630::0::1::::<>Node2D<><>0<>0<><>::
+dijuntor.gd::GDScript::3172125074392786908::1790360689::0::1::::<>Node2D<><>0<>0<><>::
 escada.gd::GDScript::3034578177782331832::1788561579::0::1::::<>Node2D<><>0<>0<><>::
 extintor.gd::GDScript::2420902810421563797::1788718559::0::1::::<>Node2D<><>0<>0<><>::
 fogo.gd::GDScript::2364585529212079621::1789756512::0::1::::<>Node2D<><>0<>0<><>::
@@ -566,13 +565,13 @@ cerebro_no_fill.png::CompressedTexture2D::2601701695326893594::1788453774::17885
 coracao_fill.png::CompressedTexture2D::1033287744870609561::1788453774::1788561171::1::::<><><>0<>0<>0ed5d47c6e7ab922f73f4a21b2bf4be5<>res://.godot/imported/coracao_fill.png-c5f5297a7041442f8a08c02e4ca22965.ctex::
 coracao_no_fill.png::CompressedTexture2D::1450706641145567895::1788453774::1788561171::1::::<><><>0<>0<>3b4b7fa8ff24eb7edcc22e8e33546add<>res://.godot/imported/coracao_no_fill.png-3e954c7297f6f9a8acd4cc4d420e9ff6.ctex::
 New Piskel(32).png::CompressedTexture2D::1652392657116305789::1788453774::1788561171::1::::<><><>0<>0<>aa65b429c3216812a99d408a349ba912<>res://.godot/imported/New Piskel(32).png-bf189099256a3a1366c80fb8e2fe66a5.ctex::
-::res://Scenes/::1790291181
+::res://Scenes/::1790360278
 andar_data_center.tscn::PackedScene::2424218020008529989::1790296567::0::1::::<><><>0<>0<><>::uid://g1w561ysx6au::::res://Scenes/scripts/playground.gd<>uid://cfxkmfwccxb5u::::res://Sprites/ilumination/gradient-radial.png<>uid://c4e81i13gjvx3::::res://Objects/luz_de_emergencia.tscn<>uid://l27iu5pmypyj::::res://TileMaps/Andar_DataCenter/andar_data_center.tscn<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://c46ktfchhqx7n::::res://Objects/painel_elevador.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://7imdxwdbd00::::res://NPC'S/Clarxs.tscn<>uid://bfufeqcgcydgm::::res://NPC'S/NPC/scientist_1.png<>uid://c3bmarmj4pw5v::::res://Scenes/scripts/data_center_intro_controller.gd<>uid://ceroyqy22gqmd::::res://Objects/Lanterna.tscn<>uid://b1nxd271n3cpp::::res://Scenes/scripts/line_2d.gd<>uid://beyeq37qyobrm::::res://Player/ManPlayer.tscn<>uid://3adv0qqyjmrq::::res://Objects/cartao_forte.tscn<>uid://beo4uworw31ct::::res://Objects/cartao_chefe.tscn<>uid://4u0s2rx02af5::::res://Minigames/Arte/PixelifySans-Medium.ttf<>res://Scenes/cooling_location_guide.tscn
 andar_escritorio.tscn::PackedScene::6944032383076127634::1790352538::0::1::::<><><>0<>0<><>::uid://g1w561ysx6au::::res://Scenes/scripts/playground.gd<>uid://dfhkmwfxsu333::::res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp<>uid://cv26hyyd4gmju::::res://Objects/luz_emergencia.tscn<>uid://nk3t56ltg47k::::res://TileMaps/Andar_escritorio/escritorio.tscn<>uid://dei4d8qxmiky::::res://Sprites/objects/alerta_luz.png<>uid://mllbpd4v0u7f::::res://Objects/extintor.tscn<>uid://1v81ofhv621m::::res://Sprites/objects/alarme2.png<>uid://cqqh1hauv7pvh::::res://Objects/laptop.tscn<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://b6acfrqgxdwie::::res://Objects/cabo.tscn<>uid://c46ktfchhqx7n::::res://Objects/painel_elevador.tscn<>uid://7imdxwdbd00::::res://NPC'S/Clarxs.tscn<>uid://bfufeqcgcydgm::::res://NPC'S/NPC/scientist_1.png<>uid://b1nxd271n3cpp::::res://Scenes/scripts/line_2d.gd<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://djwkfu2et7d8o::::res://Scenes/scripts/office_intro_controller.gd
 andar_ferramentas.tscn::PackedScene::2056993422556126280::1790352540::0::1::::<><><>0<>0<><>::uid://d10isvmtkk8d1::::res://Scenes/scripts/andar_ferramentas.gd<>uid://cllel81t2sjj0::::res://TileMaps/Andar_ferramentas/andar_ferramentas.tscn<>uid://7ckbd80e35xk::::res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_22.png<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://h1afny316xf8::::res://Objects/dijuntor.tscn<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://c46ktfchhqx7n::::res://Objects/painel_elevador.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn
 andar_hall.tscn::PackedScene::3737390492232215411::1790296565::0::1::::<><><>0<>0<><>::uid://g1w561ysx6au::::res://Scenes/scripts/playground.gd<>uid://cfxkmfwccxb5u::::res://Sprites/ilumination/gradient-radial.png<>uid://dcrs36lc3vkkj::::res://Objects/scripts/objeto_empurravel.gd<>uid://dgisco7ahvjd1::::res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_1.png<>uid://ce1wy22xikmix::::res://Objects/fogo.tscn<>uid://basp7b73u8xqp::::res://shaders/filtro_daltonismo.gdshader<>uid://7imdxwdbd00::::res://NPC'S/Clarxs.tscn<>uid://b0elgotgwc83h::::res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_3.png<>uid://cafijwft0ela2::::res://NPC'S/NPC/06_purple_crimson.png<>uid://cfw8c3ewx78lf::::res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_2.png<>uid://dsyhrp3kskfss::::res://TileMaps/Andar_Hall/hall_quebrado.tscn<>uid://cv26hyyd4gmju::::res://Objects/luz_emergencia.tscn<>uid://dei4d8qxmiky::::res://Sprites/objects/alerta_luz.png<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://1v81ofhv621m::::res://Sprites/objects/alarme2.png<>uid://beyeq37qyobrm::::res://Player/ManPlayer.tscn<>uid://h1wwb1u6gk0m::::res://Scenes/line_2d.gd<>uid://mllbpd4v0u7f::::res://Objects/extintor.tscn<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://dwcv8necjuiw1::::res://Sprites/ilumination/gradient-horizontal-mirror.png<>uid://cqfc1g0auqdkq::::res://NPC'S/NPC/01_golden_blue.png<>uid://ckg4qj4mj55ms::::res://NPC'S/NPC/boneco_0.png<>uid://c46ktfchhqx7n::::res://Objects/painel_elevador.tscn<>uid://b1nxd271n3cpp::::res://Scenes/scripts/line_2d.gd<>uid://dy13v881xo6ap::::res://NPC'S/NPC/02_black_emerald.png<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://cgntmak4t0bga::::res://NPC'S/NPC/boneco_1.png<>uid://778gwebo6sfc::::res://Scenes/scripts/quest_mission.gd<>uid://7dxb4evip3l1::::res://NPC'S/NPC/04_silver_orange.png<>uid://cxyejmrimb2dj::::res://NPC'S/NPC/boneco_2.png<>uid://b6ktgxyvib1et::::res://Scenes/scripts/ui.gd<>uid://c0ciw10r6huss::::res://NPC'S/NPC/boneco_3.png<>uid://sk6715ex5eom::::res://NPC'S/NPC/pessoa_2.png<>uid://kv52um6c31r::::res://NPC'S/NPC/boneco_5.png<>uid://dtomiw3v4xpqi::::res://NPC'S/NPC/boneco_4.png<>uid://dpsrsm4at7pux::::res://NPC'S/NPC/pessoa_5.png<>uid://3v65ns525vg8::::res://Sprites/transitions/Transition.png<>res://Scenes/Utils/color_accessibility_cue.tscn
 cooling_location_guide.tscn::PackedScene::-1::1790099181::0::1::::<><><>0<>0<><>::res://Scenes/scripts/cooling_location_guide.gd<>res://Scenes/animations/cooling_location_guide_animations.tres<>res://Scenes/animations/cooling_location_guide_tree.tres<>uid://cfxkmfwccxb5u::::res://Sprites/ilumination/gradient-radial.png
-data_center_forte.tscn::PackedScene::3851350049092908456::1790296571::0::1::::<><><>0<>0<><>::uid://g1w561ysx6au::::res://Scenes/scripts/playground.gd<>uid://cfxkmfwccxb5u::::res://Sprites/ilumination/gradient-radial.png<>uid://l27iu5pmypyj::::res://TileMaps/Andar_DataCenter/andar_data_center.tscn<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://bd4ioiujhdfgj::::res://Scenes/scripts/data_center_forte_intro.gd<>uid://2ao6fhdk22jr::::res://Scenes/animations/data_center_forte_intro_animations.tres<>uid://5uvbh4g6x83w::::res://Scenes/animations/data_center_forte_intro_tree.tres<>uid://dwmbshs0uov3c::::res://Scenes/scripts/programmer_ending_controller.gd<>uid://cj5kqxcl7niin::::res://Memory of Man.mp3<>uid://cvvch6irsovm2::::res://Scenes/animations/programmer_ending_animations.tres<>res://Scenes/animations/programmer_final_conflict_animations.tres<>uid://bmmti2muc6ayl::::res://Minigames/finalsMinigames/MinigameRedeNeural/minigame.tscn<>uid://4un5ryng3p8w::::res://Minigames/finalsMinigames/Minigame4/recovery_system.tscn<>uid://d304ktd4yfv1v::::res://Minigames/Arte/PixelifySans-Regular.ttf<>res://Scenes/cooling_location_guide.tscn<>uid://ueh4mtrubhl4::::res://Scenes/shaders/programmer_final_glitch.gdshader<>uid://c0ginjtcldu78::::res://Sounds/Effects/mixkit-small-electric-glitch-2595.mp3
+data_center_forte.tscn::PackedScene::3851350049092908456::1790360278::0::1::::<><><>0<>0<><>::uid://g1w561ysx6au::::res://Scenes/scripts/playground.gd<>uid://cfxkmfwccxb5u::::res://Sprites/ilumination/gradient-radial.png<>uid://l27iu5pmypyj::::res://TileMaps/Andar_DataCenter/andar_data_center.tscn<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://bd4ioiujhdfgj::::res://Scenes/scripts/data_center_forte_intro.gd<>uid://2ao6fhdk22jr::::res://Scenes/animations/data_center_forte_intro_animations.tres<>uid://5uvbh4g6x83w::::res://Scenes/animations/data_center_forte_intro_tree.tres<>uid://dwmbshs0uov3c::::res://Scenes/scripts/programmer_ending_controller.gd<>uid://cj5kqxcl7niin::::res://Sounds/Cenario/Memory of Man.mp3<>uid://cvvch6irsovm2::::res://Scenes/animations/programmer_ending_animations.tres<>uid://bmmti2muc6ayl::::res://Minigames/finalsMinigames/MinigameRedeNeural/minigame.tscn<>uid://4un5ryng3p8w::::res://Minigames/finalsMinigames/Minigame4/recovery_system.tscn<>uid://d304ktd4yfv1v::::res://Minigames/Arte/PixelifySans-Regular.ttf<>res://Scenes/cooling_location_guide.tscn<>uid://ueh4mtrubhl4::::res://Scenes/shaders/programmer_final_glitch.gdshader<>uid://c0ginjtcldu78::::res://Sounds/Effects/mixkit-small-electric-glitch-2595.mp3<>uid://bpia4y0jffng::::res://Scenes/animations/programmer_final_conflict_animations.tres<>uid://dvouf3jvmif20::::res://Scenes/scripts/scene_ambience.gd
 data_center_refrigeracao.tscn::PackedScene::2559101887113334511::1790296569::0::1::::<><><>0<>0<><>::uid://g1w561ysx6au::::res://Scenes/scripts/playground.gd<>uid://cfxkmfwccxb5u::::res://Sprites/ilumination/gradient-radial.png<>uid://l27iu5pmypyj::::res://TileMaps/Andar_DataCenter/andar_data_center.tscn<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://2um32gj74uma::::res://Scripts/Objects/cooling_terminal.gd<>res://Scenes/cooling_location_guide.tscn
 dev_mission_jump.tscn::PackedScene::-1::1790102820::0::1::::<><><>0<>0<><>::res://Scenes/scripts/dev_mission_jump.gd
 elevator_indicator.tscn::PackedScene::-1::1788659380::0::1::::<><><>0<>0<><>::
@@ -585,15 +584,15 @@ quest_mission_andar_escritorio.gd::GDScript::824232110565801240::1788706657::0::
 sala_chefe.tscn::PackedScene::8490693517386393013::1788915538::0::1::::<><><>0<>0<><>::uid://mtm5plwvaoj4::::res://Scenes/scripts/sala_chefe.gd<>uid://b7ciyujrqamcr::::res://TileMaps/Andar_escritorio/sala.tscn<>uid://dfhkmwfxsu333::::res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp<>uid://bvhi27tium5k::::res://Scenes/scene_trigger.tscn<>uid://bq87gqp7mwrnh::::res://Interaction_components/interectable.tscn<>uid://destem3uvhbqo::::res://Objects/controle_de_tempo.tscn<>uid://hloe5jawmgui::::res://Scenes/pause_menu.tscn<>uid://beo4uworw31ct::::res://Objects/cartao_chefe.tscn
 scene_trigger.tscn::PackedScene::113981550212852022::1790291181::0::1::::<><><>0<>0<><>::uid://tpm7aq061dk::::res://Scenes/scripts/scene_trigger.gd<>uid://745vxabvgswc::::res://Sounds/Effects/powerUp1.ogg<>uid://c0u7qqxsqras7::::res://Sounds/Effects/pepSound1.ogg<>res://Scenes/Utils/interaction_accessibility_cue.tscn
 slectionpage.tscn::PackedScene::4192668390120836946::1789936186::0::1::::<><><>0<>0<><>::uid://dfjrs4ssspenr::::res://Sprites/selectionpage/selectionbox.png<>uid://b25iegiulu2mq::::res://Sprites/selectionpage/control.gd<>uid://b7by8iiefmx8l::::res://Fonts/PixelifySans-Bold.ttf<>uid://tpjjvufd1tyc::::res://Sprites/selectionpage/selectionbutton.gd<>uid://3v65ns525vg8::::res://Sprites/transitions/Transition.png<>uid://dsipk6ntdfmhe::::res://Scripts/UI/menu_input_router.gd
-::res://Scenes/animations/::1790355639
-cooling_location_guide_animations.tres::AnimationLibrary::8745109279230301278::1790355639::0::1::::<><><>0<>0<><>::
-cooling_location_guide_tree.tres::AnimationNodeStateMachine::6562983091045691329::1790355639::0::1::::<><><>0<>0<><>::
-data_center_forte_intro_animations.tres::AnimationLibrary::1896004449317800647::1790355639::0::1::::<><><>0<>0<><>::
-data_center_forte_intro_tree.tres::AnimationNodeStateMachine::2148230119641928826::1790355639::0::1::::<><><>0<>0<><>::
-programmer_ending_animations.tres::AnimationLibrary::6290294592542325687::1790355639::0::1::::<><><>0<>0<><>::
-programmer_final_conflict_animations.tres::AnimationLibrary::101641807291636268::1790355639::0::1::::<><><>0<>0<><>::
+::res://Scenes/animations/::1790360278
+cooling_location_guide_animations.tres::AnimationLibrary::8745109279230301278::1790360278::0::1::::<><><>0<>0<><>::
+cooling_location_guide_tree.tres::AnimationNodeStateMachine::6562983091045691329::1790360278::0::1::::<><><>0<>0<><>::
+data_center_forte_intro_animations.tres::AnimationLibrary::1896004449317800647::1790360278::0::1::::<><><>0<>0<><>::
+data_center_forte_intro_tree.tres::AnimationNodeStateMachine::2148230119641928826::1790360278::0::1::::<><><>0<>0<><>::
+programmer_ending_animations.tres::AnimationLibrary::6290294592542325687::1790360278::0::1::::<><><>0<>0<><>::
+programmer_final_conflict_animations.tres::AnimationLibrary::101641807291636268::1790360278::0::1::::<><><>0<>0<><>::
 ::res://Scenes/Musics/::1790291188
-music_controller.tscn::PackedScene::4515646005633777382::1790357751::0::1::::<><><>0<>0<><>::uid://biwsxrryy0swa::::res://Scripts/Sounds/music/music.gd<>uid://b5swt4rl4btm5::::res://Sounds/Ambient/alarme.mp3<>uid://w1rvwkue001::::res://Sounds/Cenario/contagem_ultimos_46.mp3<>uid://cqjr4qbsopejm::::res://Sounds/Cenario/Musica_de_cenario_3.mp3<>uid://dpichxf1u7oq::::res://Sounds/Cenario/som_de_fundo.mp3<>uid://bsq04aq7axavu::::res://Sounds/Ambient/batimento_cardiaco.mp3<>uid://d1richrollbs7::::res://Sounds/Cenario/Musica_de_cenario_2.mp3
+music_controller.tscn::PackedScene::4515646005633777382::1790360687::0::1::::<><><>0<>0<><>::uid://biwsxrryy0swa::::res://Scripts/Sounds/music/music.gd<>uid://b5swt4rl4btm5::::res://Sounds/Ambient/alarme.mp3<>uid://w1rvwkue001::::res://Sounds/Cenario/contagem_ultimos_46.mp3<>res://Sounds/Cenario/Musica_de_cenario_5.mp3<>uid://dpichxf1u7oq::::res://Sounds/Cenario/som_de_fundo.mp3<>uid://bsq04aq7axavu::::res://Sounds/Ambient/batimento_cardiaco.mp3<>uid://d1richrollbs7::::res://Sounds/Cenario/Musica_de_cenario_2.mp3<>res://Sounds/External/hacking-espionage.ogg
 ::res://Scenes/scripts/::1790296660
 andar_ferramentas.gd::GDScript::9036300432157133140::1788978796::0::1::::<>BaseScene<><>0<>0<><>::
 andar_hall.gd::GDScript::5885569503602849563::1788561579::0::1::::<>Node2D<><>0<>0<><>::
@@ -614,7 +613,7 @@ playground.gd::GDScript::476197900595970920::1788453774::0::1::::<>BaseScene<><>
 programmer_ending_controller.gd::GDScript::8728282402080905822::1790113507::0::1::::<>Node<><>0<>0<><>::
 quest_mission.gd::GDScript::2314118621829976172::1788725824::0::1::::<>Node<><>0<>0<><>::
 sala_chefe.gd::GDScript::882272284584628439::1788917180::0::1::::<>BaseScene<><>0<>0<><>::
-scene_ambience.gd::GDScript::8663353810387218723::1790355823::0::1::::<>Node2D<><>0<>0<><>::
+scene_ambience.gd::GDScript::8663353810387218723::1790360685::0::1::::<>Node2D<><>0<>0<><>::
 scene_manager.gd::GDScript::3942646988479546820::1788610143::0::1::::Scene_Maneger<>Node<><>0<>0<><>::
 scene_trigger.gd::GDScript::40157043254319840::1790296633::0::1::::SceneTrigger<>Area2D<><>0<>0<><>::
 ui.gd::GDScript::4584084197715958315::1788549478::0::1::::<>CanvasLayer<><>0<>0<><>::
@@ -647,7 +646,7 @@ configs.gd::GDScript::5951229917940132338::1790355033::0::1::::<>Node<><>0<>0<><
 SaveGame.gd::GDScript::6514950257657676582::1790292006::0::1::::<>Node<><>0<>0<><>::
 SaveLoad.gd::GDScript::5287299822929160340::1790355035::0::1::::<>Node<><>0<>0<><>::
 ::res://Scripts/Objects/::1789736304
-cooling_terminal.gd::GDScript::1937166367302729840::1790296635::0::1::::<>Node2D<><>0<>0<><>::
+cooling_terminal.gd::GDScript::1937166367302729840::1790360691::0::1::::<>Node2D<><>0<>0<><>::
 ::res://Scripts/Objects/Button/::1788703040
 animated_button.gd::GDScript::2890838904923526086::1788703040::0::1::::<>Button<><>0<>0<><>::
 button_acess_menu.gd::GDScript::7554210917167889564::1788453774::0::1::::AnimatedButton<>Button<><>0<>0<><>::
@@ -663,24 +662,24 @@ options_frame_rate.gd::GDScript::7286901750728683993::1788453774::0::1::::<>Opti
 option_daltonismo_button.gd::GDScript::8480762013788052644::1789406287::0::1::::<>OptionButton<><>0<>0<><>::
 option_language_button.gd::GDScript::2065732761593128369::1788453774::0::1::::<>OptionButton<><>0<>0<><>::
 ::res://Scripts/Sounds/::1790352734
-game_audio.gd::GDScript::8333489109657604036::1790354369::0::1::::GameAudio<>RefCounted<><>0<>0<><>::
+game_audio.gd::GDScript::8333489109657604036::1790361262::0::1::::GameAudio<>RefCounted<><>0<>0<><>::
 value_ldt.gd::GDScript::7534369441180838731::1788453774::0::1::::<>Label<><>0<>0<><>::
 value_music.gd::GDScript::2646719488015869546::1788453774::0::1::::<>Label<><>0<>0<><>::
 value_sfx.gd::GDScript::325700224990965127::1788453774::0::1::::<>Label<><>0<>0<><>::
 value_volume.gd::GDScript::6986854839195278747::1788453774::0::1::::<>Label<><>0<>0<><>::
 volume_slider.gd::GDScript::3325823166092578169::1788453774::0::1::::<>HSlider<><>0<>0<><>::
 ::res://Scripts/Sounds/music/::1788626956
-music.gd::GDScript::2994482642798438076::1790357737::0::1::::<>Node2D<><>0<>0<><>::
+music.gd::GDScript::2994482642798438076::1790360844::0::1::::<>Node2D<><>0<>0<><>::
 ::res://Scripts/UI/::1789406287
 menu_input_router.gd::GDScript::8440106520600714778::1789406287::0::1::::MenuInputRouter<>Node<><>0<>0<><>::
-::res://shaders/::1790355639
+::res://shaders/::1790360278
 blur.gdshader::Shader::320460679634524733::1788453774::0::1::::<><><>0<>0<><>::
 code.gdshader::Shader::7300310581096061491::1788453774::0::1::::<><><>0<>0<><>::
-filtro_daltonismo.gdshader::Shader::2424547486819964883::1790355639::0::1::::<><><>0<>0<><>::
-mapa_acessibilidade.gdshader::Shader::3601213847625984867::1790355639::0::1::::<><><>0<>0<><>::
+filtro_daltonismo.gdshader::Shader::2424547486819964883::1790360278::0::1::::<><><>0<>0<><>::
+mapa_acessibilidade.gdshader::Shader::3601213847625984867::1790360278::0::1::::<><><>0<>0<><>::
 metalic.gdshader::Shader::8167199775578670353::1788453774::0::1::::<><><>0<>0<><>::
-pause_menu.gdshader::Shader::7768759313634168133::1790355639::0::1::::<><><>0<>0<><>::
-::res://Sounds/::1790352038
+pause_menu.gdshader::Shader::7768759313634168133::1790360278::0::1::::<><><>0<>0<><>::
+::res://Sounds/::1790360359
 clavier-music-solas-203831.mp3::AudioStreamMP3::4839097588303511467::1788453774::1790291350::1::::<><><>0<>0<>5df7a5842202318fed8d77c46784fd2c<>res://.godot/imported/clavier-music-solas-203831.mp3-cd1e2f2a43652eb15bfcbb3045cb7d82.mp3str::
 default_bus_layout.tres::AudioBusLayout::5762666826997105722::1788453774::0::1::::<><><>0<>0<><>::
 ::res://Sounds/Ambient/::1790291146
@@ -692,8 +691,9 @@ freesound_community-elevator-45786.ogg::AudioStreamOggVorbis::278925407215827354
 ::res://Sounds/Ambient/fogo/::1789755947
 dragon-studio-copyright-free-fire-crackling-427409.ogg::AudioStreamOggVorbis::5023537680368888406::1789755650::1789755947::1::::<><><>0<>0<>8824110aee641bb5faf063dd010d3fc8<>res://.godot/imported/dragon-studio-copyright-free-fire-crackling-427409.ogg-551f9e4614717c078997dca21ed31314.oggvorbisstr::
 Fire-Burning-Loop-Sound-Effect-PV-SOUND-FX-_youtube_.ogg::AudioStreamOggVorbis::4755646305302408990::1789755653::1789755943::1::::<><><>0<>0<>ce48f39255490a5450b125c7f999875d<>res://.godot/imported/Fire-Burning-Loop-Sound-Effect-PV-SOUND-FX-_youtube_.ogg-d4f1d7e7c52a2490738ec471426fa2c6.oggvorbisstr::
-::res://Sounds/Cenario/::1790291404
+::res://Sounds/Cenario/::1790360278
 contagem_ultimos_46.mp3::AudioStreamMP3::47026448354944496::1788453774::1790291154::1::::<><><>0<>0<>463a27bdd0251198c4d20d905a690bdd<>res://.godot/imported/contagem_ultimos_46.mp3-b813d702e195204d345b7fde4668f61b.mp3str::
+Memory of Man.mp3::AudioStreamMP3::5467109247050164869::1789992769::1790360278::1::::<><><>0<>0<>6079da369925812ee2908f5635dfebc2<>res://.godot/imported/Memory of Man.mp3-7b87d4f60660c47296fceee5acb51516.mp3str::
 Musica_de_cenario_1.mp3::AudioStreamMP3::6988771636562223928::1788981590::1790291259::1::::<><><>0<>0<>862b612e61323fe44882c111b78ce4eb<>res://.godot/imported/Musica_de_cenario_1.mp3-bb27a71e8d963acec8b836163fc848e3.mp3str::
 Musica_de_cenario_2.mp3::AudioStreamMP3::9019756109593458704::1790291233::1790291253::1::::<><><>0<>0<>d6c65e97d8740d12af8fc25bac10ea77<>res://.godot/imported/Musica_de_cenario_2.mp3-15693739b92ca64170e8e5d6cce51f1e.mp3str::
 Musica_de_cenario_3.mp3::AudioStreamMP3::5915527085037077670::1790291308::1790291320::1::::<><><>0<>0<>7bfe1b9f355a9b8404cfd5f16fb344b7<>res://.godot/imported/Musica_de_cenario_3.mp3-bbffb03fe975343e3ea922b9cd562d7d.mp3str::
@@ -710,7 +710,7 @@ passo_player.MP3::AudioStreamMP3::2299809907555515254::1788453774::1790291175::1
 pepSound1.ogg::AudioStreamOggVorbis::6570822406633204108::1788453774::1790291178::1::::<><><>0<>0<>971776cf6ef8fa8319e2b0e942f43e96<>res://.godot/imported/pepSound1.ogg-7fecdfd6eb43a6510e6e6fbc9c31a782.oggvorbisstr::
 powerUp1.ogg::AudioStreamOggVorbis::2307770170850575702::1788453774::1790291182::1::::<><><>0<>0<>781ecdf97c46a3c572455c9a28bdabc4<>res://.godot/imported/powerUp1.ogg-5ccdc5e5920dc6d4a4e9629ed088e682.oggvorbisstr::
 switch3.ogg::AudioStreamOggVorbis::7047121828350457487::1788453774::1790291191::1::::<><><>0<>0<>1146232d473134271cf6a07a93cf0a9a<>res://.godot/imported/switch3.ogg-874933770461425655d5a9305f93364a.oggvorbisstr::
-::res://Sounds/External/::1790358886
+::res://Sounds/External/::1790361136
 computer-ventilation-0126.mp3::AudioStreamMP3::8208339797558500454::1790354741::1790355623::1::::<><><>0<>0<>e2573707fc3b1ec80e43250d6b91a3f5<>res://.godot/imported/computer-ventilation-0126.mp3-855d940260f54c4e6916dec03782332e.mp3str::
 floor-creak-01.wav::AudioStreamWAV::6953488010499215696::1790352270::1790354031::1::::<><><>0<>0<>b5d191f0648b7b20dbadadc70922708d<>res://.godot/imported/floor-creak-01.wav-d257e57df5e642f946e686e56e654aa9.sample::
 hacking-espionage.ogg::AudioStreamOggVorbis::1734223536295208227::1790356891::1790357443::1::::<><><>0<>0<>da4f30096d7d3701f3e1e8aed0dbdafd<>res://.godot/imported/hacking-espionage.ogg-0c2e8896cfbd8712c092757a278afde5.oggvorbisstr::
@@ -718,16 +718,7 @@ keyhole-lockbox-insert-01.wav::AudioStreamWAV::7536134196874678640::1790352270::
 metal-creak-0303.mp3::AudioStreamMP3::6331154657797316732::1790354741::1790355623::1::::<><><>0<>0<>d88eae51212828634e3d4fade52bb475<>res://.godot/imported/metal-creak-0303.mp3-01250870fb6498cceb43ac695ead2875.mp3str::
 scrape-1.ogg::AudioStreamOggVorbis::8616460806518219141::1790352270::1790354031::1::::<><><>0<>0<>7cecafd2f2300145d744794c28ef426a<>res://.godot/imported/scrape-1.ogg-60103abb6b1cba775f81538a496b57c6.oggvorbisstr::
 scrape-2.ogg::AudioStreamOggVorbis::905262173705485554::1790352270::1790354031::1::::<><><>0<>0<>e651a4ce3a36063413161c0623a48537<>res://.godot/imported/scrape-2.ogg-ec106dadbe3ddb56c9ebe135ef682945.oggvorbisstr::
-scrape-3.ogg::AudioStreamOggVorbis::738192520050850656::1790352270::1790354031::1::::<><><>0<>0<>37343f2539c8b6532dc13ecb39ce561a<>res://.godot/imported/scrape-3.ogg-fc141537912d60588bc14fc88b1fc84b.oggvorbisstr::
-sfx100v2_air_01.ogg::AudioStreamOggVorbis::978760458960399052::1790352270::1790354031::1::::<><><>0<>0<>e2f00a0fe0c4ad99ea5ab22ba16e1fb6<>res://.godot/imported/sfx100v2_air_01.ogg-8ecbed8e6dd6401177f548d4ca9a0234.oggvorbisstr::
-sfx100v2_door_01.ogg::AudioStreamOggVorbis::7308469494661669641::1790352270::1790354031::1::::<><><>0<>0<>83f675946f64623666e58902c65a410c<>res://.godot/imported/sfx100v2_door_01.ogg-c1d3850e9c5a4823bb33c6280be4a311.oggvorbisstr::
-sfx100v2_items_01.ogg::AudioStreamOggVorbis::6649473824572220162::1790352270::1790354031::1::::<><><>0<>0<>51517433099a2f5ed9f63a8d554ddaba<>res://.godot/imported/sfx100v2_items_01.ogg-6e15a9578bf424cc11da1007c9b75fa9.oggvorbisstr::
-sfx100v2_items_02.ogg::AudioStreamOggVorbis::1635550792785715929::1790352270::1790354031::1::::<><><>0<>0<>a5c48c27d3ce639b4097f45b1a88d64a<>res://.godot/imported/sfx100v2_items_02.ogg-fb17815616122cb41afce5b3392e2f23.oggvorbisstr::
 sfx100v2_lock_open_01.ogg::AudioStreamOggVorbis::9020759288554066813::1790352270::1790354031::1::::<><><>0<>0<>438fb0c29578189949954ed012940acd<>res://.godot/imported/sfx100v2_lock_open_01.ogg-c713484e4bb168ebeedeee99635749b5.oggvorbisstr::
-sfx100v2_loop_ambient_01.ogg::AudioStreamOggVorbis::119649844699041954::1790352270::1790354031::1::::<><><>0<>0<>3011f7ff2cc0565ef37f49174f819ed2<>res://.godot/imported/sfx100v2_loop_ambient_01.ogg-c0baa2611b9e09e9d736da36c44e48d6.oggvorbisstr::
-sfx100v2_loop_ambient_02.ogg::AudioStreamOggVorbis::5294196484243271098::1790352270::1790354031::1::::<><><>0<>0<>61e7fb04cc330f5ce713b6caf1ef4c5d<>res://.godot/imported/sfx100v2_loop_ambient_02.ogg-cef7f49140d979e824ae8352258d88e6.oggvorbisstr::
-sfx100v2_loop_machine_01.ogg::AudioStreamOggVorbis::8598182970594340015::1790352270::1790354031::1::::<><><>0<>0<>ef22ec5705aa88e8c07ccbcd9c828065<>res://.godot/imported/sfx100v2_loop_machine_01.ogg-9dced113d8aabffb46b87fbf54ff8e5f.oggvorbisstr::
-sfx100v2_loop_machine_02.ogg::AudioStreamOggVorbis::3821715277824119164::1790352270::1790354031::1::::<><><>0<>0<>f76868cb32a478285d54745bc68e98e8<>res://.godot/imported/sfx100v2_loop_machine_02.ogg-bf98525393710bff8417ab65db77c4c5.oggvorbisstr::
 sfx100v2_metal_hit_01.ogg::AudioStreamOggVorbis::6854814023172051083::1790352270::1790354031::1::::<><><>0<>0<>c7ef8c5a980e500f62ca61ce5c5d3213<>res://.godot/imported/sfx100v2_metal_hit_01.ogg-6b81c9dba3608b15d703fe315ecf94a2.oggvorbisstr::
 sfx100v2_switch_01.ogg::AudioStreamOggVorbis::9199551754291524012::1790352270::1790354031::1::::<><><>0<>0<>3c8bf0e3ef99c1cf2220d111aa525f4b<>res://.godot/imported/sfx100v2_switch_01.ogg-344255091eede9caed33d94a8c0d1089.oggvorbisstr::
 sfx100v2_switch_02.ogg::AudioStreamOggVorbis::3261930937230157246::1790352270::1790354031::1::::<><><>0<>0<>a156a41d0af9319d86d9c72bd5ca82a6<>res://.godot/imported/sfx100v2_switch_02.ogg-e2b0819d5931e9798e45e25a22876d33.oggvorbisstr::
@@ -735,30 +726,6 @@ SOURCES.md::TextFile::-1::1790357136::0::1::::<><><>0<>0<><>::
 water-drop-01.wav::AudioStreamWAV::9103435831494801321::1790352270::1790354031::1::::<><><>0<>0<>8a714ae8ba943e9151f9e1fb856737e6<>res://.godot/imported/water-drop-01.wav-725b143325c1d4595323fc2d403b7c1f.sample::
 water-drop-02.wav::AudioStreamWAV::6916643335385367027::1790352270::1790354031::1::::<><><>0<>0<>508f450d2b63410d38890e8ee2d57030<>res://.godot/imported/water-drop-02.wav-350224e3ad990c43579c3cdedaf4e324.sample::
 water-drop-03.wav::AudioStreamWAV::1779177203184106935::1790352270::1790354031::1::::<><><>0<>0<>bd2f01c07db6840e487f62b6942c6501<>res://.godot/imported/water-drop-03.wav-e44b38273bdb7576b366c9eb5b8a6441.sample::
-::res://Sounds/Generated/::1790298582
-access_denied.wav::AudioStreamWAV::1935972924579196488::1790296936::1790298582::1::::<><><>0<>0<>73bb3f67682b150fcc7381aacba95d9a<>res://.godot/imported/access_denied.wav-19ba9e773c337e1bae1d3bd439b72d75.sample::
-access_granted.wav::AudioStreamWAV::2775003261202144467::1790296936::1790298582::1::::<><><>0<>0<>4cc799f3f56797772784beb1fdee76bb<>res://.godot/imported/access_granted.wav-44a8942559c029dccddf704fe15ca1ef.sample::
-breaker.wav::AudioStreamWAV::4386997586865945198::1790296936::1790298582::1::::<><><>0<>0<>be4824b9d6f75e2b98b6e5a1331a3c11<>res://.godot/imported/breaker.wav-0c7eb16973176f6f18bf8ac33e729952.sample::
-card_swipe.wav::AudioStreamWAV::1277975239925607345::1790296936::1790298582::1::::<><><>0<>0<>41d43615f776d7c9ae9f58af365ea6cb<>res://.godot/imported/card_swipe.wav-144f9739847e84d95e221f80bb6297b1.sample::
-cooling_air.wav::AudioStreamWAV::4710978460573512724::1790296936::1790298582::1::::<><><>0<>0<>43a4c7fe44008858cb9d5f455eb0f630<>res://.godot/imported/cooling_air.wav-6e424d46676eefc0e766a7d21aab3ea6.sample::
-door_latch.wav::AudioStreamWAV::3920826243849106806::1790296936::1790298582::1::::<><><>0<>0<>44dc84422e7621d12f698840cd6770e1<>res://.godot/imported/door_latch.wav-2ee01dcb98c6627f1bd7fa212868cfc6.sample::
-grab.wav::AudioStreamWAV::927115162495864138::1790296936::1790298582::1::::<><><>0<>0<>f5ad0f55c785ab7f66d699e66998eb0a<>res://.godot/imported/grab.wav-d807e6ba00955b70e5bfd07ceb60f667.sample::
-hall_air.wav::AudioStreamWAV::2998927648500719976::1790296936::1790298582::1::::<><><>0<>0<>1ff1919f7ca50bfaa922e080754a4d4f<>res://.godot/imported/hall_air.wav-a0940f47d31bcfc887829862dbef3898.sample::
-hall_drip.wav::AudioStreamWAV::2873815150868284431::1790296936::1790298582::1::::<><><>0<>0<>c15917743ca14d1fae4477cd1f845a9c<>res://.godot/imported/hall_drip.wav-544e634c9bddc8c76dd7eb788202d953.sample::
-hall_metal_creak.wav::AudioStreamWAV::6884693170064135303::1790296936::1790298582::1::::<><><>0<>0<>a84bd89874459196d365d0bc89fb5da3<>res://.godot/imported/hall_metal_creak.wav-1b0e3999518d077b759a7f47bf910354.sample::
-release.wav::AudioStreamWAV::1040707051993612105::1790296936::1790298582::1::::<><><>0<>0<>477409a37bf50d70712e54b3cbc23d71<>res://.godot/imported/release.wav-317f9b1c8e5a755ca64d83201e6cf132.sample::
-scrape.wav::AudioStreamWAV::2772756777337066959::1790296936::1790298582::1::::<><><>0<>0<>ef73ee5980871c45fb1bcac54e71bf7c<>res://.godot/imported/scrape.wav-0beb10aa57e24b33288681971eea0883.sample::
-server_hum.wav::AudioStreamWAV::2012995425951192532::1790296936::1790298582::1::::<><><>0<>0<>2124c6b39f51573bbc4e947e593e165f<>res://.godot/imported/server_hum.wav-887eccaa74718cae860f76a4d0607ecd.sample::
-step_debris_1.wav::AudioStreamWAV::4705473024131241417::1790296936::1790298582::1::::<><><>0<>0<>4db1d750c8fecbdbdeac19af04e2484a<>res://.godot/imported/step_debris_1.wav-1c9ce685dfcb153fd276e03b75448186.sample::
-step_debris_2.wav::AudioStreamWAV::8993589947202240085::1790296936::1790298582::1::::<><><>0<>0<>4164a76d56d452f674fd2c9a770ee9f1<>res://.godot/imported/step_debris_2.wav-4a6c824cb4e365008289f9dc50e17356.sample::
-step_debris_3.wav::AudioStreamWAV::7164993632020567937::1790296936::1790298582::1::::<><><>0<>0<>a3d074d672f617e58b836d4e38794dec<>res://.godot/imported/step_debris_3.wav-bccb793ef408982ad199db95e70166a4.sample::
-step_metal_1.wav::AudioStreamWAV::6388827848684500634::1790296936::1790298582::1::::<><><>0<>0<>62503dcfe67f2d5f70d0c74446244e06<>res://.godot/imported/step_metal_1.wav-57fd843bad1fa35cb8cadffc1e4f1bca.sample::
-step_metal_2.wav::AudioStreamWAV::5661927078700637148::1790296936::1790298582::1::::<><><>0<>0<>ed97a25840bffa915a55d02ce030ecb8<>res://.godot/imported/step_metal_2.wav-227c80cca653b25448e708c850ddaa00.sample::
-step_metal_3.wav::AudioStreamWAV::6410822212545658562::1790296936::1790298582::1::::<><><>0<>0<>9dc70f92316f4b4172e012a6c7b5969e<>res://.godot/imported/step_metal_3.wav-6b92d34686e5cbb3b33ddb30c2662dd9.sample::
-step_tile_1.wav::AudioStreamWAV::5875493121946419508::1790296936::1790298582::1::::<><><>0<>0<>34ddaa887d3d62a26123692fc5893d21<>res://.godot/imported/step_tile_1.wav-dc2a788dcdf52702d5c83c8174fcb56e.sample::
-step_tile_2.wav::AudioStreamWAV::8912226867226340308::1790296936::1790298582::1::::<><><>0<>0<>8578a086ed85f7e8517f5a95cf9962d6<>res://.godot/imported/step_tile_2.wav-63a58371726bc079315f08cb7b8ad715.sample::
-step_tile_3.wav::AudioStreamWAV::9217151708095486716::1790296936::1790298582::1::::<><><>0<>0<>e79fcdca298cdacfb1317a296d65ba38<>res://.godot/imported/step_tile_3.wav-7d21f99cba851fe50e66c7e43b720445.sample::
-terminal_key.wav::AudioStreamWAV::8587174412463057024::1790296936::1790298582::1::::<><><>0<>0<>ae4941a7766993e8ab98e1ce1d263884<>res://.godot/imported/terminal_key.wav-a93736454239d49980602aa418fd3156.sample::
 ::res://Sprites/::1788630758
 Balao_de_pensamento.png::CompressedTexture2D::771863170348754892::1788630756::1788630758::1::::<><><>0<>0<>3b475ba357097b23e49bd82f49c27e65<>res://.godot/imported/Balao_de_pensamento.png-709dbc94679767e29834bdd439a8f750.ctex::
 ::res://Sprites/background/::1788626957
@@ -896,7 +863,7 @@ final_minigames_test.gd::GDScript::721958041023339392::1789918855::0::1::::<>Nod
 final_minigames_test.tscn::PackedScene::-1::1789918681::0::1::::<><><>0<>0<><>::res://Tests/final_minigames_test.gd
 interaction_accessibility_test.gd::GDScript::6094263343851249591::1789424926::0::1::::<>Node2D<><>0<>0<><>::
 interaction_accessibility_test.tscn::PackedScene::-1::1789351795::0::1::::<><><>0<>0<><>::res://Tests/interaction_accessibility_test.gd<>res://Scenes/scene_trigger.tscn<>res://Interaction_components/interectable.tscn
-interaction_audio_test.gd::GDScript::1664125160020719857::1790354812::0::1::::<>SceneTree<><>0<>0<><>::
+interaction_audio_test.gd::GDScript::1664125160020719857::1790361264::0::1::::<>SceneTree<><>0<>0<><>::
 movement_audio_test.gd::GDScript::748403223722545925::1790354442::0::1::::<>Node2D<><>0<>0<><>::
 movement_audio_test.tscn::PackedScene::-1::1790354444::0::1::::<><><>0<>0<><>::
 pipe_puzzle_generation_test.gd::GDScript::4349075668869257822::1789740883::0::1::::<>Node<><>0<>0<><>::

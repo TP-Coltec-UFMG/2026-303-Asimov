@@ -34,7 +34,7 @@ bus = &"Music"
 
 [node name="MUSICA_QUANDO_O_DISJUNTOR_APAGAR" type="AudioStreamPlayer" parent="." unique_id=796673278]
 stream = ExtResource("8_power_outage_music")
-volume_db = 0.0
+volume_db = -3.0
 bus = &"Music"
 parameters/looping = true
 
@@ -46,7 +46,7 @@ parameters/looping = true
 
 [node name="INITIAL_BACKGROUND_MUSIC" type="AudioStreamPlayer" parent="." unique_id=1251377663]
 stream = ExtResource("7_initial_background_music")
-volume_db = -12.0
+volume_db = -15.0
 bus = &"Music"
 parameters/looping = true
 

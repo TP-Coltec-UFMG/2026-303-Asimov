@@ -21,6 +21,14 @@ const AUDIO_PLAYERS: Dictionary = {
 	# Mantém a chave antiga para checkpoints já existentes.
 	"tension_ambience": NodePath("INITIAL_BACKGROUND_MUSIC")
 }
+const ELEVATOR_MUSIC_PLAYERS: Array[NodePath] = [
+	NodePath("BG Music"),
+	NodePath("COUNTDOWN_MUSIC"),
+	NodePath("SOM_DE_FUNDO"),
+	NodePath("MUSICA_QUANDO_O_DISJUNTOR_APAGAR"),
+	NodePath("INITIAL_BACKGROUND_MUSIC"),
+	NodePath("HACKING_MUSIC")
+]
 const POST_BREAKER_BACKGROUND_MUSIC = preload("res://Sounds/Cenario/Musica_de_cenario_3.mp3")
 
 const SILENT_VOLUME_DB: float = -80.0
@@ -43,9 +51,11 @@ const HEARTBEAT_STAMINA_RESPONSE_START: float = 0.2
 const HEARTBEAT_STAMINA_RESPONSE_END: float = 0.85
 const INITIAL_BACKGROUND_MUSIC_FINAL_VOLUME_FACTOR: float = 0.5
 const INITIAL_BACKGROUND_MUSIC_VOLUME_CHANGE_DB_PER_SECOND: float = 4.0
-const HACKING_MUSIC_TARGET_DB: float = -16.0
+const HACKING_MUSIC_TARGET_DB: float = -6.0
 const HACKING_MUSIC_FADE_DURATION: float = 1.5
 const HACKING_BACKGROUND_MUSIC_FACTOR: float = 0.28
+const NPC_DIALOG_MUSIC_FACTOR: float = 0.5
+const NPC_DIALOG_MUSIC_FADE_DURATION: float = 0.4
 const HEARTBEAT_INTRO_DURATION: float = 20.0
 const HEARTBEAT_INTRO_PITCH: float = 1.25
 const HEARTBEAT_FINAL_START_PITCH: float = 1.2
@@ -67,6 +77,9 @@ var paused_audio_positions: Dictionary = {}
 var paused_hacking_music_position: float = -1.0
 var hacking_music_mix: float = 0.0
 var hacking_background_applied_factor: float = 1.0
+var npc_dialog_music_factor: float = 1.0
+var npc_dialog_music_applied_factor: float = 1.0
+var npc_dialog_music_base_db: float = 0.0
 var alarm_normal_volume_db: float = 0.0
 var alarm_elapsed: float = 0.0
 var alarm_unducked_volume_db: float = 0.0
@@ -95,6 +108,8 @@ var initial_background_music_after_breaker: bool = false
 var heartbeat_intro_elapsed: float = 0.0
 var menu_fade_tween: Tween
 var menu_fade_restore_volumes: Dictionary = {}
+var elevator_audio_active: bool = false
+var elevator_music_process_modes: Dictionary = {}
 
 
 func _ready() -> void:
@@ -139,6 +154,29 @@ func _process(delta: float) -> void:
 	_update_heartbeat(delta)
 	_update_initial_background_music(delta)
 	_update_hacking_music(delta)
+	_update_npc_dialog_music(delta)
+
+
+func _update_npc_dialog_music(delta: float) -> void:
+	var music_bus := AudioServer.get_bus_index(&"Music")
+	if music_bus < 0:
+		return
+	# Remove o duck do quadro anterior para manter como referência o volume
+	# configurado pelo jogador no controle geral de música.
+	if npc_dialog_music_applied_factor < 1.0:
+		AudioServer.set_bus_volume_db(music_bus, npc_dialog_music_base_db)
+		npc_dialog_music_applied_factor = 1.0
+	var target_factor := NPC_DIALOG_MUSIC_FACTOR if DialogManager.is_showing_dialog else 1.0
+	npc_dialog_music_factor = move_toward(
+		npc_dialog_music_factor,
+		target_factor,
+		delta / NPC_DIALOG_MUSIC_FADE_DURATION
+	)
+	npc_dialog_music_base_db = AudioServer.get_bus_volume_db(music_bus)
+	var base_amplitude := db_to_linear(npc_dialog_music_base_db)
+	var ducked_amplitude := base_amplitude * npc_dialog_music_factor
+	AudioServer.set_bus_volume_db(music_bus, linear_to_db(maxf(ducked_amplitude, db_to_linear(SILENT_VOLUME_DB))))
+	npc_dialog_music_applied_factor = npc_dialog_music_factor if npc_dialog_music_factor < 1.0 else 1.0
 
 
 func _update_hacking_music(delta: float) -> void:
@@ -924,6 +962,27 @@ func set_alarm_quiet_context(context: StringName, active: bool) -> void:
 	else:
 		alarm_quiet_contexts.erase(context)
 	_refresh_alarm_output()
+
+
+func set_elevator_audio(active: bool) -> void:
+	if elevator_audio_active == active:
+		return
+	elevator_audio_active = active
+	for player_path: NodePath in ELEVATOR_MUSIC_PLAYERS:
+		var player := get_node_or_null(player_path) as AudioStreamPlayer
+		if player == null:
+			continue
+		if active:
+			elevator_music_process_modes[player_path] = player.process_mode
+			player.process_mode = Node.PROCESS_MODE_ALWAYS
+		else:
+			var previous_mode: int = elevator_music_process_modes.get(player_path, Node.PROCESS_MODE_INHERIT)
+			player.process_mode = previous_mode
+	elevator_music_process_modes.clear()
+
+	for ambience: Node in get_tree().get_nodes_in_group("scene_ambience"):
+		if is_instance_valid(ambience) and ambience.has_method("set_elevator_muffling"):
+			ambience.call("set_elevator_muffling", active)
 
 
 func is_alarm_quiet_context_active(context: StringName) -> bool:
