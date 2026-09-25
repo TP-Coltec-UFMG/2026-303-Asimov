@@ -1,13 +1,14 @@
 extends Node2D
 
-@onready var bg_music: AudioStreamPlayer2D = $"BG Music"
-@onready var bg_ambient: AudioStreamPlayer2D = $"BG Ambient"
-@onready var countdown_music: AudioStreamPlayer2D = $COUNTDOWN_MUSIC
-@onready var som_alarme: AudioStreamPlayer2D = $SOM_ALARME
-@onready var som_de_fundo: AudioStreamPlayer2D = $SOM_DE_FUNDO
-@onready var musica_quando_o_disjuntor_apagar: AudioStreamPlayer2D = $MUSICA_QUANDO_O_DISJUNTOR_APAGAR
-@onready var heartbeat: AudioStreamPlayer2D = $HEARTBEAT
-@onready var initial_background_music: AudioStreamPlayer2D = $INITIAL_BACKGROUND_MUSIC
+@onready var bg_music: AudioStreamPlayer = $"BG Music"
+@onready var bg_ambient: AudioStreamPlayer = $"BG Ambient"
+@onready var countdown_music: AudioStreamPlayer = $COUNTDOWN_MUSIC
+@onready var som_alarme: AudioStreamPlayer = $SOM_ALARME
+@onready var som_de_fundo: AudioStreamPlayer = $SOM_DE_FUNDO
+@onready var musica_quando_o_disjuntor_apagar: AudioStreamPlayer = $MUSICA_QUANDO_O_DISJUNTOR_APAGAR
+@onready var heartbeat: AudioStreamPlayer = $HEARTBEAT
+@onready var initial_background_music: AudioStreamPlayer = $INITIAL_BACKGROUND_MUSIC
+@onready var hacking_music: AudioStreamPlayer = $HACKING_MUSIC
 
 const AUDIO_PLAYERS: Dictionary = {
 	"bg_music": NodePath("BG Music"),
@@ -42,6 +43,9 @@ const HEARTBEAT_STAMINA_RESPONSE_START: float = 0.2
 const HEARTBEAT_STAMINA_RESPONSE_END: float = 0.85
 const INITIAL_BACKGROUND_MUSIC_FINAL_VOLUME_FACTOR: float = 0.5
 const INITIAL_BACKGROUND_MUSIC_VOLUME_CHANGE_DB_PER_SECOND: float = 4.0
+const HACKING_MUSIC_TARGET_DB: float = -16.0
+const HACKING_MUSIC_FADE_DURATION: float = 1.5
+const HACKING_BACKGROUND_MUSIC_FACTOR: float = 0.28
 const HEARTBEAT_INTRO_DURATION: float = 20.0
 const HEARTBEAT_INTRO_PITCH: float = 1.25
 const HEARTBEAT_FINAL_START_PITCH: float = 1.2
@@ -60,6 +64,9 @@ enum PowerOutageAudioState {
 var scene_audio_blocked: bool = false
 var pending_scene_starts: Dictionary = {}
 var paused_audio_positions: Dictionary = {}
+var paused_hacking_music_position: float = -1.0
+var hacking_music_mix: float = 0.0
+var hacking_background_applied_factor: float = 1.0
 var alarm_normal_volume_db: float = 0.0
 var alarm_elapsed: float = 0.0
 var alarm_unducked_volume_db: float = 0.0
@@ -93,6 +100,10 @@ var menu_fade_restore_volumes: Dictionary = {}
 func _ready() -> void:
 	# Os volumes pertencem ao SaveLoad. Alterá-los aqui fazia o autoload de
 	# música sobrescrever as preferências logo depois de elas serem carregadas.
+	if som_alarme.stream is AudioStreamMP3:
+		var alarm_loop := som_alarme.stream.duplicate() as AudioStreamMP3
+		alarm_loop.loop = true
+		som_alarme.stream = alarm_loop
 	if heartbeat.stream is AudioStreamMP3:
 		var heartbeat_loop := heartbeat.stream.duplicate() as AudioStreamMP3
 		heartbeat_loop.loop = true
@@ -101,6 +112,10 @@ func _ready() -> void:
 		var background_loop := initial_background_music.stream.duplicate() as AudioStreamMP3
 		background_loop.loop = true
 		initial_background_music.stream = background_loop
+	if hacking_music.stream is AudioStreamOggVorbis:
+		var hacking_loop := hacking_music.stream.duplicate() as AudioStreamOggVorbis
+		hacking_loop.loop = true
+		hacking_music.stream = hacking_loop
 	initial_background_music_start_stream = initial_background_music.stream
 	_play_if_stopped(bg_ambient)
 	_play_if_stopped(bg_music)
@@ -123,6 +138,44 @@ func _process(delta: float) -> void:
 	_update_power_outage_audio(delta)
 	_update_heartbeat(delta)
 	_update_initial_background_music(delta)
+	_update_hacking_music(delta)
+
+
+func _update_hacking_music(delta: float) -> void:
+	var target_mix := 1.0 if _is_hacking_scene() else 0.0
+	hacking_music_mix = move_toward(
+		hacking_music_mix,
+		target_mix,
+		delta / HACKING_MUSIC_FADE_DURATION
+	)
+	if target_mix > 0.0 and not hacking_music.playing:
+		hacking_music.play()
+	var music_amplitude := db_to_linear(HACKING_MUSIC_TARGET_DB) * hacking_music_mix
+	if music_amplitude > db_to_linear(SILENT_VOLUME_DB):
+		hacking_music.volume_db = linear_to_db(music_amplitude)
+	else:
+		hacking_music.volume_db = SILENT_VOLUME_DB
+		if hacking_music.playing:
+			hacking_music.stop()
+	# Abaixa a trilha ambiente durante o hack sem alterar os volumes salvos.
+	var background_factor := lerpf(1.0, HACKING_BACKGROUND_MUSIC_FACTOR, hacking_music_mix)
+	var background_amplitude := db_to_linear(initial_background_music.volume_db) * background_factor
+	hacking_background_applied_factor = background_factor
+	initial_background_music.volume_db = linear_to_db(maxf(
+		background_amplitude,
+		db_to_linear(SILENT_VOLUME_DB)
+	))
+
+
+func _is_hacking_scene() -> bool:
+	var current_scene := get_tree().current_scene
+	if not is_instance_valid(current_scene):
+		return false
+	var scene_path := current_scene.scene_file_path
+	return (
+		scene_path.begins_with("res://Minigames/Minigame1/levels/")
+		or scene_path.begins_with("res://Minigames/Minigame3/levels/")
+	)
 
 
 func _update_heartbeat(delta: float) -> void:
@@ -194,6 +247,13 @@ func _heartbeat_pitch_from_stamina(exhaustion: float) -> float:
 
 
 func _update_initial_background_music(delta: float) -> void:
+	# Retira a atenuação do quadro anterior antes de atualizar o volume base.
+	if hacking_background_applied_factor < 1.0:
+		initial_background_music.volume_db = linear_to_db(
+			db_to_linear(initial_background_music.volume_db)
+			/ hacking_background_applied_factor
+		)
+		hacking_background_applied_factor = 1.0
 	if not is_instance_valid(scene_manager.player):
 		if initial_background_music.playing:
 			initial_background_music.stop()
@@ -515,6 +575,9 @@ func stop_all_audio() -> void:
 	scene_audio_blocked = false
 	pending_scene_starts.clear()
 	paused_audio_positions.clear()
+	paused_hacking_music_position = -1.0
+	hacking_music_mix = 0.0
+	hacking_background_applied_factor = 1.0
 	opening_music_started = false
 	opening_music_finished = false
 	power_outage_audio_state = PowerOutageAudioState.IDLE
@@ -543,6 +606,8 @@ func stop_all_audio() -> void:
 
 		audio_player.stop()
 		audio_player.stream_paused = false
+	hacking_music.stop()
+	hacking_music.volume_db = SILENT_VOLUME_DB
 	_set_initial_background_track(false)
 	initial_background_music.volume_db = initial_background_music_normal_volume_db
 
@@ -563,6 +628,9 @@ func pause_all_audio() -> void:
 				audio_player.get_playback_position()
 			)
 			audio_player.stop()
+	if hacking_music.playing:
+		paused_hacking_music_position = maxf(0.0, hacking_music.get_playback_position())
+		hacking_music.stop()
 
 
 func fade_out_for_menu(duration: float) -> void:
@@ -577,7 +645,7 @@ func fade_out_for_menu(duration: float) -> void:
 	initial_background_music_restoring_from_outage = false
 	menu_fade_tween = create_tween()
 	menu_fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	var players: Array[AudioStreamPlayer2D] = [
+	var players: Array[AudioStreamPlayer] = [
 		bg_music,
 		bg_ambient,
 		countdown_music,
@@ -585,9 +653,10 @@ func fade_out_for_menu(duration: float) -> void:
 		som_de_fundo,
 		musica_quando_o_disjuntor_apagar,
 		heartbeat,
-		initial_background_music
+		initial_background_music,
+		hacking_music
 	]
-	for audio_player: AudioStreamPlayer2D in players:
+	for audio_player: AudioStreamPlayer in players:
 		if not audio_player.playing:
 			continue
 		menu_fade_restore_volumes[audio_player] = audio_player.volume_db
@@ -607,6 +676,9 @@ func _finish_menu_audio_fade() -> void:
 		audio_player.stop()
 		audio_player.volume_db = float(menu_fade_restore_volumes[audio_player])
 	menu_fade_restore_volumes.clear()
+	paused_hacking_music_position = -1.0
+	hacking_music_mix = 0.0
+	hacking_background_applied_factor = 1.0
 	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
 	scene_audio_blocked = false
 
@@ -629,6 +701,9 @@ func resume_all_audio() -> void:
 			audio_player.play(playback_position)
 
 	paused_audio_positions.clear()
+	if paused_hacking_music_position >= 0.0 and _is_hacking_scene() and hacking_music.stream != null:
+		hacking_music.play(paused_hacking_music_position)
+	paused_hacking_music_position = -1.0
 
 
 func begin_checkpoint_restore() -> void:
@@ -728,6 +803,10 @@ func load_checkpoint_state(state: Dictionary) -> void:
 				0.0,
 				float(pending_scene_starts[player_id])
 			)
+		# Recupera o alarme que acabou sozinho em saves feitos sem loop,
+		# somente se a cena pede alarme e o jogador não o silenciou com P.
+		if player_id == "som_alarme" and pending_scene_starts.has(player_id) and not bool(saved_envelope.get("user_muted", false)):
+			should_play = true
 		if player_id == "tension_ambience" and old_background_track_save:
 			playback_position = 0.0
 
@@ -868,15 +947,15 @@ func _refresh_alarm_output() -> void:
 	som_alarme.volume_db = alarm_unducked_volume_db
 
 
-func _get_audio_player(player_id: String) -> AudioStreamPlayer2D:
+func _get_audio_player(player_id: String) -> AudioStreamPlayer:
 	if not AUDIO_PLAYERS.has(player_id):
 		return null
 
-	return get_node_or_null(AUDIO_PLAYERS[player_id]) as AudioStreamPlayer2D
+	return get_node_or_null(AUDIO_PLAYERS[player_id]) as AudioStreamPlayer
 
 
 func _play_if_stopped(
-	audio_player: AudioStreamPlayer2D,
+	audio_player: AudioStreamPlayer,
 	from_position: float = 0.0
 ) -> void:
 	if audio_player == null or audio_player.stream == null:
@@ -898,7 +977,7 @@ func _play_if_stopped(
 	audio_player.play(maxf(from_position, 0.0))
 
 
-func _get_audio_player_id(audio_player: AudioStreamPlayer2D) -> String:
+func _get_audio_player_id(audio_player: AudioStreamPlayer) -> String:
 	for player_id: String in AUDIO_PLAYERS:
 		if _get_audio_player(player_id) == audio_player:
 			return player_id

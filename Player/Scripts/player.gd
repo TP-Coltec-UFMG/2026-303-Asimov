@@ -48,10 +48,15 @@ var empurrando: bool = false
 
 var objeto_manipulado: ObjetoEmpurravel = null
 var lado_objeto_manipulado: Vector2 = Vector2.ZERO
-var footstep_last_position: Vector2 = Vector2.ZERO
-var footstep_travel: float = 0.0
-var last_footstep_variant: int = -1
-var scrape_travel: float = 0.0
+var drag_sfx: AudioStreamPlayer2D
+
+# O filho continua conferindo o áudio quando uma cutscene/minigame desliga
+# somente a física do Player. Nesse caso o Player não recebe mais callbacks.
+class MovementAudioGuard extends Node:
+	func _physics_process(_delta: float) -> void:
+		var player := get_parent() as Player
+		if not player.is_physics_processing() or not player.can_process() or not player.is_visible_in_tree():
+			player._stop_movement_sfx()
 
 var objetos_grab_left: Array[ObjetoEmpurravel] = []
 var objetos_grab_right: Array[ObjetoEmpurravel] = []
@@ -78,9 +83,29 @@ signal jogador_morreu
 
 func _ready() -> void:
 	add_to_group("player")
-	footstep_last_position = global_position
+	drag_sfx = AudioStreamPlayer2D.new()
+	drag_sfx.name = "DraggingSound"
+	drag_sfx.bus = &"sfx"
+	drag_sfx.volume_db = -7.0
+	drag_sfx.max_distance = 350.0
+	add_child(drag_sfx)
+	var audio_guard := MovementAudioGuard.new()
+	audio_guard.name = "MovementAudioGuard"
+	audio_guard.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(audio_guard)
 	UpdateAnimation()
 	UpdateOccluderLight()
+
+
+func _stop_movement_sfx() -> void:
+	if is_instance_valid(sfx_walking):
+		sfx_walking.stop()
+	if is_instance_valid(drag_sfx):
+		drag_sfx.stop()
+
+
+func _exit_tree() -> void:
+	_stop_movement_sfx()
 
 
 func _toggle_alarm_from_player() -> bool:
@@ -223,9 +248,7 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 		objeto_manipulado.set_manipulated_outline(false)
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
-	footstep_last_position = global_position
-	footstep_travel = 0.0
-	scrape_travel = 0.0
+	_stop_movement_sfx()
 
 	sprite.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
 	occluder_side.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
@@ -243,8 +266,7 @@ func _physics_process(delta: float) -> void:
 		if state != "idle":
 			state = "idle"
 			UpdateAnimation()
-		footstep_last_position = global_position
-		footstep_travel = 0.0
+		_stop_movement_sfx()
 		return
 
 	direction = Input.get_vector("left", "right", "up", "down")
@@ -271,13 +293,12 @@ func _physics_process(delta: float) -> void:
 		if empurrando and objeto_manipulado == null:
 			tentar_pegar_objeto()
 	
+	var posicao_antes := global_position
 	if objeto_manipulado != null:
 		_physics_manipulando(delta)
-		_update_walking_sfx()
-		return
-		
-	move_and_slide()
-	_update_walking_sfx()
+	else:
+		move_and_slide()
+	_update_walking_sfx(global_position.distance_squared_to(posicao_antes) > 0.000001)
 
 func atualizar_corrida(delta: float) -> void:
 	if Input.is_action_pressed("correr") and state != "idle" and objeto_manipulado == null and cansaco < 1.0:
@@ -294,30 +315,18 @@ func atualizar_corrida(delta: float) -> void:
 			cansaco -= RECUPERACAO_CANSACO * delta
 			cansaco = maxf(cansaco, cansaco_minimo)
 
-func _update_walking_sfx() -> void:
-	var travelled := global_position.distance_to(footstep_last_position)
-	footstep_last_position = global_position
-	if direction.length_squared() < 0.01 or travelled > 18.0:
-		footstep_travel = 0.0
-		return
-	footstep_travel += travelled
-	if footstep_travel < 15.0:
-		return
-	footstep_travel = fmod(footstep_travel, 15.0)
-	var variants: Array[AudioStream] = GameAudio.STEP_TILE
-	var current_scene := get_tree().current_scene
-	if current_scene != null:
-		if current_scene.name == "andar_hall" and global_position.x < 80.0:
-			variants = GameAudio.STEP_DEBRIS
-		elif current_scene.name in ["DATA_CENTER_REFRIGERACAO", "DATA_CENTER_FORTE"]:
-			variants = GameAudio.STEP_METAL
-	var variant := randi_range(0, variants.size() - 2)
-	if variant >= last_footstep_variant:
-		variant += 1
-	last_footstep_variant = variant
-	sfx_walking.stream = variants[variant]
-	sfx_walking.pitch_scale = randf_range(0.96, 1.04)
-	sfx_walking.play()
+func _update_walking_sfx(moved: bool = false) -> void:
+	var esta_andando: bool = moved and direction.length_squared() > 0.0
+	if esta_andando:
+		if not sfx_walking.playing:
+			sfx_walking.play()
+		var novo_pitch: float = 1.0
+		if move_speed > VELOCIDADE_NORMAL:
+			novo_pitch = lerpf(1.0, 1.8, clampf(move_speed / VELOCIDADE_CORRIDA, 0.0, 1.0))
+		if not is_equal_approx(sfx_walking.pitch_scale, novo_pitch):
+			sfx_walking.pitch_scale = novo_pitch
+	elif sfx_walking.playing:
+		sfx_walking.stop()
 
 func tentar_pegar_objeto() -> void:
 	if objeto_manipulado != null:
@@ -352,7 +361,6 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 	cardinal_direction = lado
 	add_collision_exception_with(objeto_manipulado)
 	objeto_manipulado.add_collision_exception_with(self)
-	GameAudio.play_world(objeto, GameAudio.GRAB, -11.0)
 	sprite.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
 	occluder_side.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
 	UpdateAnimation()
@@ -360,7 +368,6 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 
 func soltar_objeto() -> void:
 	if objeto_manipulado != null and is_instance_valid(objeto_manipulado):
-		GameAudio.play_world(objeto_manipulado, GameAudio.RELEASE, -13.0)
 		objeto_manipulado.set_manipulated_outline(false)
 		remove_collision_exception_with(objeto_manipulado)
 		objeto_manipulado.remove_collision_exception_with(self)
@@ -370,7 +377,8 @@ func soltar_objeto() -> void:
 	
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
-	scrape_travel = 0.0
+	if is_instance_valid(drag_sfx):
+		drag_sfx.stop()
 
 func _physics_manipulando(delta: float) -> void:
 	if objeto_manipulado == null:
@@ -383,6 +391,8 @@ func _physics_manipulando(delta: float) -> void:
 	var movimento: Vector2 = Vector2(direction.x * move_speed * delta, 0.0)
 	
 	if is_zero_approx(movimento.x):
+		if drag_sfx.playing:
+			drag_sfx.stop()
 		return
 	
 	mover_com_objeto(movimento)
@@ -397,10 +407,13 @@ func mover_com_objeto(movimento: Vector2) -> void:
 	if not player_bloqueado and not objeto_bloqueado:
 		move_and_collide(movimento)
 		objeto_manipulado.move_and_collide(movimento)
-		scrape_travel += absf(movimento.x)
-		if scrape_travel >= 16.0:
-			scrape_travel = fmod(scrape_travel, 16.0)
-			GameAudio.play_world(objeto_manipulado, GameAudio.SCRAPE, -17.0)
+		if not drag_sfx.playing:
+			# São raspadas gravadas, não loops contínuos. A terceira gravação
+			# é muito mais baixa; usamos as duas de volume equivalente.
+			drag_sfx.stream = GameAudio.SCRAPES[randi_range(0, 1)]
+			drag_sfx.play()
+	elif drag_sfx.playing:
+		drag_sfx.stop()
 
 func _on_grab_left_body_entered(body: Node2D) -> void:
 	if not body is ObjetoEmpurravel:

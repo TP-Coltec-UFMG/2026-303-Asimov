@@ -90,20 +90,19 @@ func verificar_cartao(cartao: Area2D) -> void:
 	if verificando_cartao or not is_instance_valid(cartao) or not is_visible_in_tree():
 		return
 	verificando_cartao = true
-	GameAudio.play_ui(self, GameAudio.CARD_SWIPE, -11.0)
 	if cartao.id != senha:
-		GameAudio.play_ui(self, GameAudio.ACCESS_DENIED, -13.0)
+		GameAudio.play_ui_sequence(self, [GameAudio.CARD_SWIPE, GameAudio.ACCESS_DENIED], [-11.0, -13.0])
 		_mostrar_mensagem(MSG_SEM_REGISTRO if cartao.id == 0 else MSG_ID_INCORRETO)
 		verificando_cartao = false
 		return
 	if cartao.acesso != "FORTE":
-		GameAudio.play_ui(self, GameAudio.ACCESS_DENIED, -13.0)
+		GameAudio.play_ui_sequence(self, [GameAudio.CARD_SWIPE, GameAudio.ACCESS_DENIED], [-11.0, -13.0])
 		_mostrar_mensagem(MSG_ACESSO_INSUFICIENTE)
 		verificando_cartao = false
 		return
 
 	_mostrar_mensagem(MSG_ACESSO_LIBERADO)
-	GameAudio.play_ui(self, GameAudio.ACCESS_GRANTED, -11.0)
+	GameAudio.play_ui_sequence(self, [GameAudio.CARD_SWIPE, GameAudio.ACCESS_GRANTED], [-11.0, -11.0])
 	await get_tree().physics_frame
 	if not is_instance_valid(cartao) or _cartao_atual != cartao or not overlaps_area(cartao) or not is_visible_in_tree():
 		verificando_cartao = false
@@ -112,7 +111,6 @@ func verificar_cartao(cartao: Area2D) -> void:
 	# Reinserções após o sucesso não reiniciam a animação da porta.
 	if is_instance_valid(porta) and not porta_aberta:
 		porta_aberta = true
-		GameAudio.play_ui(self, GameAudio.DOOR_LATCH, -10.0)
 		porta.play("abrir")
 		await porta.animation_finished
 		porta.play("aberta")

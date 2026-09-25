@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://4kom7uj1bd1a"]
 
 [ext_resource type="Script" uid="uid://d10isvmtkk8d1" path="res://Scenes/scripts/andar_ferramentas.gd" id="1_n3mbp"]
+[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_tools"]
 [ext_resource type="PackedScene" uid="uid://cllel81t2sjj0" path="res://TileMaps/Andar_ferramentas/andar_ferramentas.tscn" id="2_rggv4"]
 [ext_resource type="Texture2D" uid="uid://7ckbd80e35xk" path="res://TileMaps/Andar_Hall/SPRITES_HALL/sprite_22.png" id="4_cse0d"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_n3mbp"]
@@ -175,6 +176,10 @@ _data = {
 
 [node name="Andar_ferramentas" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_n3mbp")
+
+[node name="SceneAmbience" type="Node2D" parent="."]
+script = ExtResource("ambience_tools")
+ambience_kind = 4
 
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 

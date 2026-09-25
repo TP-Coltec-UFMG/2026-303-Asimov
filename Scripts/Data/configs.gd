@@ -4,7 +4,7 @@ var configs: Dictionary = {
 	"traducao": "PORTUGUÊS",
 	"volume_geral": 1.0,
 	"volume_musica": 0.1,
-	"volume_sfx": 0.0,
+	"volume_sfx": 0.75,
 	"tela_cheia" : false,
 	"filtro_de_daltonismo" : 0,
 	"frame_rate" : 0,

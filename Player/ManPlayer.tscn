@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://beyeq37qyobrm"]
 
 [ext_resource type="Script" uid="uid://3wbie5tbpcl4" path="res://Player/Scripts/player.gd" id="1_4ntmi"]
+[ext_resource type="AudioStream" uid="uid://71bsel0u0wuo" path="res://Sounds/Effects/passo_player.MP3" id="13_original_steps"]
 [ext_resource type="Texture2D" uid="uid://i7vroasbawhn" path="res://Sprites/ui/New Piskel(28).png" id="3_cycue"]
 [ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="3_weg28"]
 [ext_resource type="Texture2D" uid="uid://cusbwah1rs2f8" path="res://Sprites/ui/sprite_1.png" id="4_cepnt"]
@@ -404,10 +405,9 @@ material = SubResource("CanvasItemMaterial_0t4ro")
 position = Vector2(-0.6000061, 58)
 
 [node name="sfx_walking" type="AudioStreamPlayer2D" parent="." unique_id=1148288816]
+stream = ExtResource("13_original_steps")
+volume_db = 6.0
 bus = &"sfx"
-volume_db = -9.0
-max_distance = 260.0
-attenuation = 2.0
 
 [node name="GrabLeft" type="Area2D" parent="." unique_id=1358033378]
 

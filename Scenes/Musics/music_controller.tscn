@@ -7,53 +7,50 @@
 [ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/Cenario/som_de_fundo.mp3" id="5_dqj1g"]
 [ext_resource type="AudioStream" uid="uid://bsq04aq7axavu" path="res://Sounds/Ambient/batimento_cardiaco.mp3" id="6_heartbeat"]
 [ext_resource type="AudioStream" uid="uid://d1richrollbs7" path="res://Sounds/Cenario/Musica_de_cenario_2.mp3" id="7_initial_background_music"]
+[ext_resource type="AudioStream" path="res://Sounds/External/hacking-espionage.ogg" id="8_hacking_music"]
 
 [node name="MusicControler" type="Node2D" unique_id=1749428804]
 script = ExtResource("1_biu3b")
 
-[node name="BG Music" type="AudioStreamPlayer2D" parent="." unique_id=1919223071]
-process_mode = 3
+[node name="BG Music" type="AudioStreamPlayer" parent="." unique_id=1919223071]
 autoplay = true
 bus = &"Music"
 
-[node name="BG Ambient" type="AudioStreamPlayer2D" parent="." unique_id=1987446639]
-position = Vector2(2, -6)
+[node name="BG Ambient" type="AudioStreamPlayer" parent="." unique_id=1987446639]
 bus = &"sfx"
 
-[node name="COUNTDOWN_MUSIC" type="AudioStreamPlayer2D" parent="." unique_id=1771444235]
+[node name="COUNTDOWN_MUSIC" type="AudioStreamPlayer" parent="." unique_id=1771444235]
 stream = ExtResource("3_y4uch")
 bus = &"Music"
 
-[node name="SOM_ALARME" type="AudioStreamPlayer2D" parent="." unique_id=2046736172]
+[node name="SOM_ALARME" type="AudioStreamPlayer" parent="." unique_id=2046736172]
 stream = ExtResource("3_a7c45")
-bus = &"Music"
-parameters/looping = true
+bus = &"sfx"
 
-[node name="SOM_DE_FUNDO" type="AudioStreamPlayer2D" parent="." unique_id=1170555803]
+[node name="SOM_DE_FUNDO" type="AudioStreamPlayer" parent="." unique_id=1170555803]
 stream = ExtResource("5_dqj1g")
 volume_db = 24.0
 bus = &"Music"
 
-[node name="MUSICA_QUANDO_O_DISJUNTOR_APAGAR" type="AudioStreamPlayer2D" parent="." unique_id=796673278]
+[node name="MUSICA_QUANDO_O_DISJUNTOR_APAGAR" type="AudioStreamPlayer" parent="." unique_id=796673278]
 stream = ExtResource("5_68qf4")
 volume_db = 0.0
 bus = &"Music"
 parameters/looping = true
 
-[node name="HEARTBEAT" type="AudioStreamPlayer2D" parent="." unique_id=80516916]
-process_mode = 3
+[node name="HEARTBEAT" type="AudioStreamPlayer" parent="." unique_id=80516916]
 stream = ExtResource("6_heartbeat")
 volume_db = -14.0
-max_distance = 100000.0
-attenuation = 0.0
 bus = &"sfx"
 parameters/looping = true
 
-[node name="INITIAL_BACKGROUND_MUSIC" type="AudioStreamPlayer2D" parent="." unique_id=1251377663]
-process_mode = 3
+[node name="INITIAL_BACKGROUND_MUSIC" type="AudioStreamPlayer" parent="." unique_id=1251377663]
 stream = ExtResource("7_initial_background_music")
 volume_db = -12.0
-max_distance = 100000.0
-attenuation = 0.0
 bus = &"Music"
 parameters/looping = true
+
+[node name="HACKING_MUSIC" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_hacking_music")
+volume_db = -80.0
+bus = &"Music"

@@ -29,7 +29,7 @@ var save_data: Dictionary = {
 	"traducao": "PORTUGUÊS",
 	"volume_geral": 1.0,
 	"volume_musica": 0.1,
-	"volume_sfx": 0.0,
+	"volume_sfx": 0.75,
 	"tela_cheia" : false,
 	"filtro_de_daltonismo" : 0,
 	"frame_rate" : 0,
@@ -82,11 +82,13 @@ func _load() -> void:
 		var file: FileAccess = FileAccess.open(FILE_PATH, FileAccess.READ)
 		if file == null:
 			push_warning("Não foi possível abrir o arquivo de configurações para leitura.")
+			_apply_load()
 			return
 		var loaded_value: Variant = file.get_var()
 		if not loaded_value is Dictionary:
 			file.close()
 			push_warning("O arquivo de configurações está inválido.")
+			_apply_load()
 			return
 
 		var data: Dictionary = loaded_value
