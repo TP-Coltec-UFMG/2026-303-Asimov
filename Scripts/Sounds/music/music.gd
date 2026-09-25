@@ -21,7 +21,7 @@ const AUDIO_PLAYERS: Dictionary = {
 	# Mantém a chave antiga para checkpoints já existentes.
 	"tension_ambience": NodePath("INITIAL_BACKGROUND_MUSIC")
 }
-const POST_BREAKER_BACKGROUND_MUSIC = preload("res://Sounds/Cenario/Musica_de_cenario_5.mp3")
+const POST_BREAKER_BACKGROUND_MUSIC = preload("res://Sounds/Cenario/Musica_de_cenario_3.mp3")
 
 const SILENT_VOLUME_DB: float = -80.0
 const OPENING_MUSIC_FADE_DURATION: float = 3.0

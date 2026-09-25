@@ -593,7 +593,7 @@ data_center_forte_intro_tree.tres::AnimationNodeStateMachine::214823011964192882
 programmer_ending_animations.tres::AnimationLibrary::6290294592542325687::1790355639::0::1::::<><><>0<>0<><>::
 programmer_final_conflict_animations.tres::AnimationLibrary::101641807291636268::1790355639::0::1::::<><><>0<>0<><>::
 ::res://Scenes/Musics/::1790291188
-music_controller.tscn::PackedScene::4515646005633777382::1790357128::0::1::::<><><>0<>0<><>::uid://biwsxrryy0swa::::res://Scripts/Sounds/music/music.gd<>uid://b5swt4rl4btm5::::res://Sounds/Ambient/alarme.mp3<>uid://w1rvwkue001::::res://Sounds/Cenario/contagem_ultimos_46.mp3<>uid://cqjr4qbsopejm::::res://Sounds/Cenario/Musica_de_cenario_3.mp3<>uid://dpichxf1u7oq::::res://Sounds/Cenario/som_de_fundo.mp3<>uid://bsq04aq7axavu::::res://Sounds/Ambient/batimento_cardiaco.mp3<>uid://d1richrollbs7::::res://Sounds/Cenario/Musica_de_cenario_2.mp3
+music_controller.tscn::PackedScene::4515646005633777382::1790357751::0::1::::<><><>0<>0<><>::uid://biwsxrryy0swa::::res://Scripts/Sounds/music/music.gd<>uid://b5swt4rl4btm5::::res://Sounds/Ambient/alarme.mp3<>uid://w1rvwkue001::::res://Sounds/Cenario/contagem_ultimos_46.mp3<>uid://cqjr4qbsopejm::::res://Sounds/Cenario/Musica_de_cenario_3.mp3<>uid://dpichxf1u7oq::::res://Sounds/Cenario/som_de_fundo.mp3<>uid://bsq04aq7axavu::::res://Sounds/Ambient/batimento_cardiaco.mp3<>uid://d1richrollbs7::::res://Sounds/Cenario/Musica_de_cenario_2.mp3
 ::res://Scenes/scripts/::1790296660
 andar_ferramentas.gd::GDScript::9036300432157133140::1788978796::0::1::::<>BaseScene<><>0<>0<><>::
 andar_hall.gd::GDScript::5885569503602849563::1788561579::0::1::::<>Node2D<><>0<>0<><>::
@@ -670,7 +670,7 @@ value_sfx.gd::GDScript::325700224990965127::1788453774::0::1::::<>Label<><>0<>0<
 value_volume.gd::GDScript::6986854839195278747::1788453774::0::1::::<>Label<><>0<>0<><>::
 volume_slider.gd::GDScript::3325823166092578169::1788453774::0::1::::<>HSlider<><>0<>0<><>::
 ::res://Scripts/Sounds/music/::1788626956
-music.gd::GDScript::2994482642798438076::1790357219::0::1::::<>Node2D<><>0<>0<><>::
+music.gd::GDScript::2994482642798438076::1790357737::0::1::::<>Node2D<><>0<>0<><>::
 ::res://Scripts/UI/::1789406287
 menu_input_router.gd::GDScript::8440106520600714778::1789406287::0::1::::MenuInputRouter<>Node<><>0<>0<><>::
 ::res://shaders/::1790355639
@@ -710,11 +710,11 @@ passo_player.MP3::AudioStreamMP3::2299809907555515254::1788453774::1790291175::1
 pepSound1.ogg::AudioStreamOggVorbis::6570822406633204108::1788453774::1790291178::1::::<><><>0<>0<>971776cf6ef8fa8319e2b0e942f43e96<>res://.godot/imported/pepSound1.ogg-7fecdfd6eb43a6510e6e6fbc9c31a782.oggvorbisstr::
 powerUp1.ogg::AudioStreamOggVorbis::2307770170850575702::1788453774::1790291182::1::::<><><>0<>0<>781ecdf97c46a3c572455c9a28bdabc4<>res://.godot/imported/powerUp1.ogg-5ccdc5e5920dc6d4a4e9629ed088e682.oggvorbisstr::
 switch3.ogg::AudioStreamOggVorbis::7047121828350457487::1788453774::1790291191::1::::<><><>0<>0<>1146232d473134271cf6a07a93cf0a9a<>res://.godot/imported/switch3.ogg-874933770461425655d5a9305f93364a.oggvorbisstr::
-::res://Sounds/External/::1790357443
+::res://Sounds/External/::1790358817
 computer-ventilation-0126.mp3::AudioStreamMP3::8208339797558500454::1790354741::1790355623::1::::<><><>0<>0<>e2573707fc3b1ec80e43250d6b91a3f5<>res://.godot/imported/computer-ventilation-0126.mp3-855d940260f54c4e6916dec03782332e.mp3str::
 floor-creak-01.wav::AudioStreamWAV::6953488010499215696::1790352270::1790354031::1::::<><><>0<>0<>b5d191f0648b7b20dbadadc70922708d<>res://.godot/imported/floor-creak-01.wav-d257e57df5e642f946e686e56e654aa9.sample::
 hacking-espionage.ogg::AudioStreamOggVorbis::1734223536295208227::1790356891::1790357443::1::::<><><>0<>0<>da4f30096d7d3701f3e1e8aed0dbdafd<>res://.godot/imported/hacking-espionage.ogg-0c2e8896cfbd8712c092757a278afde5.oggvorbisstr::
-hacking_the_computer.wav::AudioStreamWAV::6217282888026404627::1790356603::1790357647::1::::<><><>0<>0<>d6ff4306c31f0250719f0f31a242c280<>res://.godot/imported/hacking_the_computer.wav-06742b2b384d5b174cb9ce222e3417a6.sample::
+hacking_the_computer.wav::AudioStreamWAV::6217282888026404627::1790356603::1790358822::1::::<><><>0<>0<>d6ff4306c31f0250719f0f31a242c280<>res://.godot/imported/hacking_the_computer.wav-06742b2b384d5b174cb9ce222e3417a6.sample::
 keyhole-lockbox-insert-01.wav::AudioStreamWAV::7536134196874678640::1790352270::1790354031::1::::<><><>0<>0<>610763b687212a10a7f4eb037437caef<>res://.godot/imported/keyhole-lockbox-insert-01.wav-faa026d05a58115acbd178b0cd70f6de.sample::
 metal-creak-0303.mp3::AudioStreamMP3::6331154657797316732::1790354741::1790355623::1::::<><><>0<>0<>d88eae51212828634e3d4fade52bb475<>res://.godot/imported/metal-creak-0303.mp3-01250870fb6498cceb43ac695ead2875.mp3str::
 scrape-1.ogg::AudioStreamOggVorbis::8616460806518219141::1790352270::1790354031::1::::<><><>0<>0<>7cecafd2f2300145d744794c28ef426a<>res://.godot/imported/scrape-1.ogg-60103abb6b1cba775f81538a496b57c6.oggvorbisstr::

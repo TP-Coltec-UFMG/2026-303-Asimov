@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://biwsxrryy0swa" path="res://Scripts/Sounds/music/music.gd" id="1_biu3b"]
 [ext_resource type="AudioStream" uid="uid://b5swt4rl4btm5" path="res://Sounds/Ambient/alarme.mp3" id="3_a7c45"]
 [ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://Sounds/Cenario/contagem_ultimos_46.mp3" id="3_y4uch"]
-[ext_resource type="AudioStream" uid="uid://cqjr4qbsopejm" path="res://Sounds/Cenario/Musica_de_cenario_3.mp3" id="5_68qf4"]
+[ext_resource type="AudioStream" path="res://Sounds/Cenario/Musica_de_cenario_5.mp3" id="8_power_outage_music"]
 [ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/Cenario/som_de_fundo.mp3" id="5_dqj1g"]
 [ext_resource type="AudioStream" uid="uid://bsq04aq7axavu" path="res://Sounds/Ambient/batimento_cardiaco.mp3" id="6_heartbeat"]
 [ext_resource type="AudioStream" uid="uid://d1richrollbs7" path="res://Sounds/Cenario/Musica_de_cenario_2.mp3" id="7_initial_background_music"]
@@ -33,7 +33,7 @@ volume_db = 24.0
 bus = &"Music"
 
 [node name="MUSICA_QUANDO_O_DISJUNTOR_APAGAR" type="AudioStreamPlayer" parent="." unique_id=796673278]
-stream = ExtResource("5_68qf4")
+stream = ExtResource("8_power_outage_music")
 volume_db = 0.0
 bus = &"Music"
 parameters/looping = true
