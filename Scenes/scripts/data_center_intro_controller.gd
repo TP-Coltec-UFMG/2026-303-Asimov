@@ -7,6 +7,7 @@ const ACCESS_PLAN_DIALOG_ID: String = "data_center:access_plan"
 const STRONG_CARD_DIALOG_ID: String = "data_center:strong_card_handoff"
 const STRONG_DENIED_DIALOG_ID: String = "data_center:strong_card_denied"
 const BOSS_DENIED_DIALOG_ID: String = "data_center:boss_card_denied"
+const RETURN_DIALOG_ID: String = "data_center:return_after_breaker"
 const FLASHLIGHT_ITEM_ID: String = "lanterna"
 const CARD_ITEM_ID: String = "cartao"
 const STRONG_CARD_TYPE: int = 2
@@ -55,6 +56,7 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
+	_suspend_dialog_for_return()
 	_restore_player_after_rfid_verification()
 	DialogManager.input_blocked = false
 
@@ -145,11 +147,9 @@ func _restore_progress() -> void:
 				player.inventory.get_item_on_inventary(FLASHLIGHT_ITEM_ID),
 				bool(state.get("data_center_tools_floor_task_completed", false))
 			)
-		elif str(state.get("data_center_outage_phase", "")) == "before":
+		else:
 			_set_recipient_interaction(true, "ESPAÇO: FALAR")
 			_show_power_talk_task()
-		else:
-			call_deferred("_start_power_failure_dialog")
 		return
 	if bool(state.get("data_center_card_delivered", false)):
 		_ensure_outage_schedule(state)
@@ -168,21 +168,20 @@ func _restore_progress() -> void:
 
 
 func _restore_access_progress(state: Dictionary) -> void:
-	if state.get("data_center_interrupted_dialog", {}) is Dictionary and not (state.get("data_center_interrupted_dialog", {}) as Dictionary).is_empty():
+	if _scientist_talk_pending(state):
+		if (
+			bool(state.get("data_center_access_npc_arrived", false))
+			or bool(state.get("data_center_rfid_inspection_task_active", false))
+			or bool(state.get("data_center_rfid_wires_task_active", false))
+			or bool(state.get("data_center_rfid_wires_repaired", false))
+			or bool(state.get("data_center_rfid_reader_rechecked", false))
+			or bool(state.get("data_center_rfid_reading_checked", false))
+		):
+			_place_recipient_at_access()
+		_set_access_interactable(false)
 		_set_recipient_interaction(true, "ESPAÇO: FALAR")
 		_show_power_talk_task()
 		return
-	if not bool(state.get("data_center_card_dialog_finished", false)):
-		_set_recipient_interaction(true, "ESPAÇO: FALAR")
-		_show_power_talk_task()
-		return
-	if not bool(state.get("data_center_access_plan_finished", false)):
-		_set_recipient_interaction(true, "ESPAÇO: FALAR")
-		_show_power_talk_task()
-		return
-	if bool(state.get("data_center_access_resume_talk_needed", false)):
-		state["data_center_access_resume_talk_needed"] = false
-		SaveGame.save_global_state("hall_quest_01", state)
 	# A barra usada após o reparo era uma checagem intermediária. Saves criados
 	# antes desta correção não podem considerar a futura tarefa do minigame pronta.
 	if (
@@ -296,7 +295,11 @@ func _on_recipient_interaction_requested(_npc: Node2D) -> void:
 	if not _is_current_scene() or DialogManager.is_showing_dialog:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
-	if _power_is_out(state) and str(state.get("data_center_outage_phase", "")) == "before" and not bool(state.get("data_center_power_dialog_finished", false)):
+	if not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty():
+		_set_recipient_interaction(false)
+		_resume_interrupted_dialog("data_center_power_dialog_snapshot")
+		return
+	if _power_is_out(state) and not bool(state.get("data_center_power_dialog_finished", false)):
 		_set_recipient_interaction(false)
 		_start_power_failure_dialog()
 		return
@@ -306,18 +309,15 @@ func _on_recipient_interaction_requested(_npc: Node2D) -> void:
 		var interrupted: Dictionary = state.get("data_center_interrupted_dialog", {})
 		if not interrupted.is_empty():
 			_set_recipient_interaction(false)
-			state["data_center_access_resume_talk_needed"] = false
-			SaveGame.save_global_state("hall_quest_01", state)
 			_resume_interrupted_dialog()
 		elif not bool(state.get("data_center_card_dialog_finished", false)):
 			_set_recipient_interaction(false)
-			state["data_center_access_resume_talk_needed"] = false
-			SaveGame.save_global_state("hall_quest_01", state)
 			_start_card_dialog()
 		elif not bool(state.get("data_center_access_plan_finished", false)):
-			state["data_center_access_resume_talk_needed"] = false
-			SaveGame.save_global_state("hall_quest_01", state)
 			_start_access_plan_dialog()
+		elif bool(state.get("data_center_access_resume_talk_needed", false)):
+			_set_recipient_interaction(false)
+			_start_return_dialog()
 		return
 	if not _has_boss_card():
 		player.balao_de_pensamento.enfileirar(
@@ -443,6 +443,15 @@ func _start_access_plan_dialog() -> void:
 		], ACCESS_PLAN_DIALOG_ID)
 
 
+func _start_return_dialog() -> void:
+	if DialogManager.is_showing_dialog or not _is_current_scene():
+		return
+	DialogManager.start_dialog([
+		"Cientista: A energia voltou. Precisamos continuar de onde paramos.",
+		"Alex: Certo. Vou continuar de onde parei."
+	], RETURN_DIALOG_ID)
+
+
 func _start_strong_card_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
@@ -481,12 +490,17 @@ func _on_dialog_finished(dialog_id: String) -> void:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	var interrupted: Dictionary = state.get("data_center_interrupted_dialog", {})
-	if dialog_id != POWER_DIALOG_ID and dialog_id == str(interrupted.get("id", "")):
+	if dialog_id != POWER_DIALOG_ID and bool(state.get("data_center_breaker_restored", false)) and bool(state.get("data_center_return_task_completed", false)):
+		state["data_center_scientist_followup_done"] = true
+		SaveGame.save_global_state("hall_quest_01", state)
+	if dialog_id == str(interrupted.get("id", "")):
 		state.erase("data_center_interrupted_dialog")
+		state["data_center_access_resume_talk_needed"] = false
 		SaveGame.save_global_state("hall_quest_01", state)
 	match dialog_id:
 		CARD_DIALOG_ID:
 			state["data_center_card_dialog_finished"] = true
+			state["data_center_access_resume_talk_needed"] = false
 			SaveGame.save_global_state("hall_quest_01", state)
 			_save_checkpoint()
 			if not power_sequence_running and not _power_is_out(state):
@@ -494,13 +508,18 @@ func _on_dialog_finished(dialog_id: String) -> void:
 				_arm_outage_timer(state)
 				call_deferred("_start_access_plan_dialog")
 		POWER_DIALOG_ID:
+			state.erase("data_center_power_dialog_snapshot")
 			state["data_center_power_dialog_finished"] = true
 			state["data_center_tools_floor_task_active"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
-			_show_power_tasks(player.inventory.get_item_on_inventary(FLASHLIGHT_ITEM_ID), false)
+			if bool(state.get("data_center_breaker_restored", false)):
+				_restore_access_progress(state)
+			else:
+				_show_power_tasks(player.inventory.get_item_on_inventary(FLASHLIGHT_ITEM_ID), false)
 			_save_checkpoint()
 		ACCESS_PLAN_DIALOG_ID:
 			state["data_center_access_plan_finished"] = true
+			state["data_center_access_resume_talk_needed"] = false
 			SaveGame.save_global_state("hall_quest_01", state)
 			if not power_sequence_running and not _power_is_out(state):
 				_arm_outage_timer(state)
@@ -525,6 +544,11 @@ func _on_dialog_finished(dialog_id: String) -> void:
 					"data_center:inspect_rfid_reader",
 					"RFID... preciso descobrir o que aconteceu com esse leitor."
 				)
+			_save_checkpoint()
+		RETURN_DIALOG_ID:
+			state["data_center_access_resume_talk_needed"] = false
+			SaveGame.save_global_state("hall_quest_01", state)
+			_restore_access_progress(state)
 			_save_checkpoint()
 	if dialog_id != POWER_DIALOG_ID and _power_is_out(state) and not bool(state.get("data_center_power_dialog_finished", false)):
 		call_deferred("_start_power_failure_dialog")
@@ -1021,6 +1045,7 @@ func _begin_power_failure() -> void:
 	state["data_center_power_outage"] = true
 	state["data_center_outage_pending"] = false
 	state["data_center_access_resume_talk_needed"] = true
+	state["data_center_scientist_followup_done"] = false
 	if bool(state.get("data_center_access_npc_moving", false)):
 		state["data_center_access_npc_moving"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
@@ -1080,14 +1105,44 @@ func _start_power_failure_dialog() -> void:
 	DialogManager.interrupt_with_dialog(power_lines, POWER_DIALOG_ID, false)
 
 
-func _resume_interrupted_dialog() -> void:
+func _suspend_dialog_for_return() -> void:
+	if not is_instance_valid(player) or not DialogManager.is_showing_dialog or DialogManager.dialog_box == null:
+		return
+	var dialog_id: String = DialogManager.current_dialog_id
+	if dialog_id not in [CARD_DIALOG_ID, POWER_DIALOG_ID, ACCESS_PLAN_DIALOG_ID, STRONG_CARD_DIALOG_ID, STRONG_DENIED_DIALOG_ID, BOSS_DENIED_DIALOG_ID, RETURN_DIALOG_ID]:
+		return
+	var state: Dictionary = SaveGame.office_mission_state(player)
+	var lines: Array[String] = []
+	for line in DialogManager.dialog_box.texts_to_display:
+		lines.append(str(line))
+	var snapshot_key := "data_center_power_dialog_snapshot" if dialog_id == POWER_DIALOG_ID else "data_center_interrupted_dialog"
+	state[snapshot_key] = {
+		"id": dialog_id,
+		"lines": lines,
+		"index": int(DialogManager.dialog_box.current_index)
+	}
+	if dialog_id != POWER_DIALOG_ID:
+		state["data_center_access_resume_talk_needed"] = true
+	SaveGame.save_global_state("hall_quest_01", state)
+	DialogManager.suspend_current_dialog(false)
+
+
+func _scientist_talk_pending(state: Dictionary) -> bool:
+	return (
+		SaveGame.data_center_scientist_talk_pending(state)
+		or not bool(state.get("data_center_card_dialog_finished", false))
+		or not bool(state.get("data_center_access_plan_finished", false))
+	)
+
+
+func _resume_interrupted_dialog(snapshot_key: String = "data_center_interrupted_dialog") -> void:
 	if not _is_current_scene() or DialogManager.is_showing_dialog:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
-	var interrupted: Dictionary = state.get("data_center_interrupted_dialog", {})
+	var interrupted: Dictionary = state.get(snapshot_key, {})
 	if interrupted.is_empty():
 		return
-	if DialogManager.resume_suspended_dialog():
+	if DialogManager.resume_suspended_dialog(str(interrupted.get("id", ""))):
 		return
 	var lines: Array[String] = []
 	for line in interrupted.get("lines", []):
@@ -1256,7 +1311,11 @@ func _show_card_task(completed: bool, animate: bool = false) -> void:
 func _show_power_talk_task() -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_data_center_power_talk_task()
+		var state: Dictionary = SaveGame.office_mission_state(player)
+		if bool(state.get("data_center_return_task_completed", false)):
+			quest_ui.show_return_and_scientist_talk_tasks()
+		else:
+			quest_ui.show_data_center_power_talk_task()
 
 
 func _show_access_intro_tasks(state: Dictionary) -> void:

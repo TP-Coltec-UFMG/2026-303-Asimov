@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://b5lobav5glfik"]
 
 [ext_resource type="Script" uid="uid://biwsxrryy0swa" path="res://Scripts/Sounds/music/music.gd" id="1_biu3b"]
-[ext_resource type="AudioStream" uid="uid://b5swt4rl4btm5" path="res://Sounds/freesound_community-security-alarm-80493.mp3" id="3_a7c45"]
-[ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://Sounds/audioatlant-pulse-of-time-action-countdown-trailer-ver1-573119.mp3" id="3_y4uch"]
-[ext_resource type="AudioStream" uid="uid://cqnu3srjnmiul" path="res://Sounds/mohamed_hassan-mission-impasse-339175.mp3" id="5_68qf4"]
-[ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/urgent(1).mp3" id="5_dqj1g"]
+[ext_resource type="AudioStream" uid="uid://b5swt4rl4btm5" path="res://Sounds/Ambient/alarme.mp3" id="3_a7c45"]
+[ext_resource type="AudioStream" uid="uid://w1rvwkue001" path="res://Sounds/Cenario/contagem_ultimos_46.mp3" id="3_y4uch"]
+[ext_resource type="AudioStream" uid="uid://cqjr4qbsopejm" path="res://Sounds/Cenario/Musica_de_cenario_3.mp3" id="5_68qf4"]
+[ext_resource type="AudioStream" uid="uid://dpichxf1u7oq" path="res://Sounds/Cenario/som_de_fundo.mp3" id="5_dqj1g"]
 [ext_resource type="AudioStream" uid="uid://bsq04aq7axavu" path="res://Sounds/Ambient/batimento_cardiaco.mp3" id="6_heartbeat"]
-[ext_resource type="AudioStream" uid="uid://c6gjjylm0pk1r" path="res://Sounds/Ambient/Musica_de_fundo_inicial.mp3" id="7_initial_background_music"]
+[ext_resource type="AudioStream" uid="uid://d1richrollbs7" path="res://Sounds/Cenario/Musica_de_cenario_2.mp3" id="7_initial_background_music"]
 
 [node name="MusicControler" type="Node2D" unique_id=1749428804]
 script = ExtResource("1_biu3b")
@@ -36,7 +36,7 @@ bus = &"Music"
 
 [node name="MUSICA_QUANDO_O_DISJUNTOR_APAGAR" type="AudioStreamPlayer2D" parent="." unique_id=796673278]
 stream = ExtResource("5_68qf4")
-volume_db = -3.0980392
+volume_db = 0.0
 bus = &"Music"
 parameters/looping = true
 
@@ -52,7 +52,7 @@ parameters/looping = true
 [node name="INITIAL_BACKGROUND_MUSIC" type="AudioStreamPlayer2D" parent="." unique_id=1251377663]
 process_mode = 3
 stream = ExtResource("7_initial_background_music")
-volume_db = -19.0
+volume_db = -12.0
 max_distance = 100000.0
 attenuation = 0.0
 bus = &"Music"

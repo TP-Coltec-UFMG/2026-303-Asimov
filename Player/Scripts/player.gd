@@ -214,6 +214,8 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 	inventory.set_equipped_item("")
 
 	empurrando = false
+	if is_instance_valid(objeto_manipulado):
+		objeto_manipulado.set_manipulated_outline(false)
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
 
@@ -325,6 +327,7 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 		return
 	
 	objeto_manipulado = objeto
+	objeto_manipulado.set_manipulated_outline(true)
 	lado_objeto_manipulado = lado
 	cardinal_direction = lado
 	add_collision_exception_with(objeto_manipulado)
@@ -336,6 +339,7 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 
 func soltar_objeto() -> void:
 	if objeto_manipulado != null and is_instance_valid(objeto_manipulado):
+		objeto_manipulado.set_manipulated_outline(false)
 		remove_collision_exception_with(objeto_manipulado)
 		objeto_manipulado.remove_collision_exception_with(self)
 

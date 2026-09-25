@@ -232,7 +232,10 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 		if return_task_active:
 			var return_quest_ui := _obter_painel_tarefas()
 			if return_quest_ui != null:
-				return_quest_ui.show_return_to_data_center_task(true, true)
+				if SaveGame.data_center_scientist_talk_pending(state):
+					return_quest_ui.show_return_and_scientist_talk_tasks()
+				else:
+					return_quest_ui.show_return_to_data_center_task(true, true)
 		return
 	if not bool(state.get("office_data_center_task_active", false)):
 		return

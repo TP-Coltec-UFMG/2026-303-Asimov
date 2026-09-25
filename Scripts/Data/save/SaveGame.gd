@@ -627,3 +627,22 @@ func office_mission_state(current_player: Player = null) -> Dictionary:
 	}
 	save_global_state("hall_quest_01", estado)
 	return estado
+
+
+func data_center_scientist_talk_pending(state: Dictionary) -> bool:
+	if not bool(state.get("data_center_card_delivered", false)):
+		return false
+	if bool(state.get("data_center_access_resume_talk_needed", false)):
+		return true
+	if not (state.get("data_center_interrupted_dialog", {}) as Dictionary).is_empty():
+		return true
+	if not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty():
+		return true
+	# Saves anteriores podiam apagar a pendência ao entrar no sexto andar.
+	return (
+		bool(state.get("data_center_breaker_restored", false))
+		and bool(state.get("data_center_return_task_completed", false))
+		and not bool(state.get("data_center_scientist_followup_done", false))
+		and not bool(state.get("data_center_rfid_minigame_completed", false))
+		and not bool(state.get("programmer_ending_started", false))
+	)

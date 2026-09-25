@@ -2,7 +2,7 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-uid="uid://csvy6ntt7yhfr"
+uid="uid://ca7dh3g4iuypn"
 path="res://.godot/imported/clavier-music-solas-203831.mp3-cd1e2f2a43652eb15bfcbb3045cb7d82.mp3str"
 
 [deps]
@@ -12,8 +12,8 @@ dest_files=["res://.godot/imported/clavier-music-solas-203831.mp3-cd1e2f2a43652e
 
 [params]
 
-loop=true
-loop_offset=0.0
-bpm=0.0
+loop=false
+loop_offset=0
+bpm=0
 beat_count=0
 bar_beats=4

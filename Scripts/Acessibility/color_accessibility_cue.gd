@@ -15,6 +15,7 @@ var _flip_v: bool = false
 var _padding: Vector2 = Vector2.ONE
 var _last_geometry: Array = []
 var _cue_material: ShaderMaterial
+var _forced_outline: bool = false
 
 
 func _ready() -> void:
@@ -45,8 +46,14 @@ func _on_high_contrast_changed(_enabled: bool) -> void:
 	_refresh_enabled_state()
 
 
+func set_forced_outline(enabled: bool) -> void:
+	_forced_outline = enabled
+	if is_node_ready():
+		_refresh_enabled_state()
+
+
 func _refresh_enabled_state(mode: int = FiltroDaltonismo.modo) -> void:
-	var enabled := mode != 0 or HighContrast.enabled
+	var enabled := mode != 0 or HighContrast.enabled or _forced_outline
 	material = _cue_material
 	_cue_material.set_shader_parameter("modo", mode if mode != 0 else int(enabled))
 	set_process(enabled)
@@ -110,6 +117,8 @@ func _process(_delta: float) -> void:
 
 
 func _target_available() -> bool:
+	if _forced_outline:
+		return true
 	if not is_instance_valid(_interaction):
 		return true
 	# Itens guardados continuam recebendo o auxílio no ícone do inventário.

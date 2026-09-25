@@ -6,8 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://0vvakbvh2kim" path="res://Sprites/objects/Lanterna.png" id="4_ldti0"]
 [ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="5_8yxdu"]
 [ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="6_udy4t"]
-[ext_resource type="AudioStream" uid="uid://c7nxcjmbwjjit" path="res://Sounds/switch3.ogg" id="7_46il4"]
+[ext_resource type="AudioStream" uid="uid://c7nxcjmbwjjit" path="res://Sounds/Effects/switch3.ogg" id="7_46il4"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
+
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
 radius = 26.476404

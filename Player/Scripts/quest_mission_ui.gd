@@ -565,7 +565,10 @@ func _activate_return_to_data_center_task() -> void:
 	state["data_center_return_task_active"] = not already_arrived
 	state["data_center_return_task_completed"] = already_arrived
 	SaveGame.save_global_state("hall_quest_01", state)
-	show_return_to_data_center_task(already_arrived, already_arrived)
+	if already_arrived and _data_center_scientist_talk_pending(state):
+		show_return_and_scientist_talk_tasks()
+	else:
+		show_return_to_data_center_task(already_arrived, already_arrived)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
 
@@ -576,6 +579,24 @@ func show_data_center_card_task(completed: bool = false, animate: bool = false) 
 
 func show_data_center_power_talk_task() -> void:
 	_show_single_data_center_task(7, "FALE COM O CIENTISTA", false, false)
+
+
+func _data_center_scientist_talk_pending(state: Dictionary) -> bool:
+	return (
+		SaveGame.data_center_scientist_talk_pending(state)
+		or not bool(state.get("data_center_card_dialog_finished", false))
+		or not bool(state.get("data_center_access_plan_finished", false))
+	)
+
+
+func show_return_and_scientist_talk_tasks() -> void:
+	for index in range(rows.size()):
+		set_task_visible(index, index == 6 or index == 7)
+	set_task_text(6, "VOLTE AO DATA CENTER")
+	set_task_completed(6, true)
+	set_task_text(7, "FALE COM O CIENTISTA")
+	set_task_completed(7, false)
+	set_panel_visible(true)
 
 
 func show_data_center_access_intro_tasks(
@@ -726,14 +747,16 @@ func refresh_saved_state() -> void:
 			return
 	if return_task_active and not return_task_completed:
 		show_return_to_data_center_task(false)
-	elif card_delivered and breaker_completed and (
-		(not (state.get("data_center_interrupted_dialog", {}) as Dictionary).is_empty())
-		or not bool(state.get("data_center_card_dialog_finished", false))
-		or not bool(state.get("data_center_access_plan_finished", false))
-	):
-		show_data_center_power_talk_task()
+	elif card_delivered and breaker_completed and _data_center_scientist_talk_pending(state):
+		if return_task_completed:
+			show_return_and_scientist_talk_tasks()
+		else:
+			show_data_center_power_talk_task()
 	elif bool(state.get("data_center_power_outage", false)) and not breaker_completed:
-		if str(state.get("data_center_outage_phase", "")) == "before" and not bool(state.get("data_center_power_dialog_finished", false)):
+		if not bool(state.get("data_center_power_dialog_finished", false)) and (
+			str(state.get("data_center_outage_phase", "")) == "before"
+			or not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty()
+		):
 			show_data_center_power_talk_task()
 		else:
 			show_data_center_power_tasks(flashlight_completed, tools_floor_task_completed, false)

@@ -47,21 +47,28 @@ func start_dialog(texts: Array[String], dialog_id: String = "", start_index: int
 
 
 func interrupt_with_dialog(texts: Array[String], dialog_id: String, auto_resume: bool = true) -> void:
-	if is_showing_dialog and dialog_box != null:
-		dialog_box.hide()
-		suspended_dialogs.append({"box": dialog_box, "dialog_id": current_dialog_id, "auto_resume": auto_resume})
-		dialog_box = null
-		current_dialog_id = ""
-		is_showing_dialog = false
+	suspend_current_dialog(auto_resume)
 	start_dialog(texts, dialog_id)
+
+
+func suspend_current_dialog(auto_resume: bool = false) -> void:
+	if not is_showing_dialog or dialog_box == null:
+		return
+	dialog_box.hide()
+	suspended_dialogs.append({"box": dialog_box, "dialog_id": current_dialog_id, "auto_resume": auto_resume})
+	dialog_box = null
+	current_dialog_id = ""
+	is_showing_dialog = false
 
 
 func _on_dialog_line_started(index: int) -> void:
 	dialog_line_started.emit(current_dialog_id, index)
 
 
-func resume_suspended_dialog() -> bool:
+func resume_suspended_dialog(expected_dialog_id: String = "") -> bool:
 	if is_showing_dialog or suspended_dialogs.is_empty():
+		return false
+	if not expected_dialog_id.is_empty() and str(suspended_dialogs.back().get("dialog_id", "")) != expected_dialog_id:
 		return false
 	var previous: Dictionary = suspended_dialogs.pop_back()
 	var previous_box: Node = previous.get("box")

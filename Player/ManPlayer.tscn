@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://uwy6q7meghh4" path="res://Player/Sprites/coracao_no_fill.png" id="9_xnkv0"]
 [ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="12_hxkef"]
 [ext_resource type="PackedScene" uid="uid://n2hnejkagkk0" path="res://Player/inventory.tscn" id="12_xnkv0"]
-[ext_resource type="AudioStream" uid="uid://71bsel0u0wuo" path="res://Sounds/0705.MP3" id="13_0t4ro"]
+[ext_resource type="AudioStream" uid="uid://71bsel0u0wuo" path="res://Sounds/Effects/passo_player.MP3" id="13_0t4ro"]
 [ext_resource type="Script" uid="uid://c3o46ilruapx4" path="res://Scripts/Objects/Label/fps_label.gd" id="13_g2psy"]
 [ext_resource type="PackedScene" uid="uid://dsw7hwfva88w4" path="res://TelaMorte/morreu.tscn" id="13_l2am8"]
 [ext_resource type="Texture2D" uid="uid://k85qdse5p5ho" path="res://Sprites/Balao_de_pensamento.png" id="16_l2am8"]
