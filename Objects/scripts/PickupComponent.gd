@@ -45,6 +45,8 @@ func coletar() -> void:
 
 	if not coletou:
 		return
+	if get_parent() is Node2D:
+		GameAudio.play_world(get_parent() as Node2D, GameAudio.GRAB, -15.0)
 		
 	interagiu.emit()
 

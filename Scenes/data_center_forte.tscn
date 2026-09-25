@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bu4vf4svl82oi"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y1e7n"]
+[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_strong_data_center"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_ohpwi"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="3_g7g5b"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="4_6gj4d"]
@@ -117,6 +118,10 @@ shader = ExtResource("18_final_glitch")
 
 [node name="DATA_CENTER_FORTE" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y1e7n")
+
+[node name="SceneAmbience" type="Node2D" parent="."]
+script = ExtResource("ambience_strong_data_center")
+ambience_kind = 1
 
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 

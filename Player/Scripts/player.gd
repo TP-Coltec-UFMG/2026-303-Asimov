@@ -48,6 +48,10 @@ var empurrando: bool = false
 
 var objeto_manipulado: ObjetoEmpurravel = null
 var lado_objeto_manipulado: Vector2 = Vector2.ZERO
+var footstep_last_position: Vector2 = Vector2.ZERO
+var footstep_travel: float = 0.0
+var last_footstep_variant: int = -1
+var scrape_travel: float = 0.0
 
 var objetos_grab_left: Array[ObjetoEmpurravel] = []
 var objetos_grab_right: Array[ObjetoEmpurravel] = []
@@ -74,6 +78,7 @@ signal jogador_morreu
 
 func _ready() -> void:
 	add_to_group("player")
+	footstep_last_position = global_position
 	UpdateAnimation()
 	UpdateOccluderLight()
 
@@ -218,6 +223,9 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 		objeto_manipulado.set_manipulated_outline(false)
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
+	footstep_last_position = global_position
+	footstep_travel = 0.0
+	scrape_travel = 0.0
 
 	sprite.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
 	occluder_side.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
@@ -235,7 +243,8 @@ func _physics_process(delta: float) -> void:
 		if state != "idle":
 			state = "idle"
 			UpdateAnimation()
-		_update_walking_sfx()
+		footstep_last_position = global_position
+		footstep_travel = 0.0
 		return
 
 	direction = Input.get_vector("left", "right", "up", "down")
@@ -253,7 +262,6 @@ func _physics_process(delta: float) -> void:
 	atualizar_corrida(delta)
 	var animacao_corrida_rapida_agora: bool = correndo and cansaco <= 0.5
 	velocity = direction * move_speed
-	_update_walking_sfx()
 	
 	if mudou_estado or mudou_direcao or mudou_sentido_animacao or correndo != correndo_antes or animacao_corrida_rapida_antes != animacao_corrida_rapida_agora:
 		UpdateAnimation()
@@ -265,9 +273,11 @@ func _physics_process(delta: float) -> void:
 	
 	if objeto_manipulado != null:
 		_physics_manipulando(delta)
+		_update_walking_sfx()
 		return
 		
 	move_and_slide()
+	_update_walking_sfx()
 
 func atualizar_corrida(delta: float) -> void:
 	if Input.is_action_pressed("correr") and state != "idle" and objeto_manipulado == null and cansaco < 1.0:
@@ -285,19 +295,29 @@ func atualizar_corrida(delta: float) -> void:
 			cansaco = maxf(cansaco, cansaco_minimo)
 
 func _update_walking_sfx() -> void:
-	var esta_andando: bool = direction.length_squared() > 0.0
-	
-	if esta_andando:
-		if not sfx_walking.playing:
-			sfx_walking.play()
-		var novo_pitch: float = 1.0
-		if move_speed > VELOCIDADE_NORMAL:
-			novo_pitch = lerpf(1.0, 1.8, clampf(move_speed / VELOCIDADE_CORRIDA, 0.0, 1.0))
-		if not is_equal_approx(sfx_walking.pitch_scale, novo_pitch):
-			sfx_walking.pitch_scale = novo_pitch
-	else:
-		if sfx_walking.playing:
-			sfx_walking.stop()
+	var travelled := global_position.distance_to(footstep_last_position)
+	footstep_last_position = global_position
+	if direction.length_squared() < 0.01 or travelled > 18.0:
+		footstep_travel = 0.0
+		return
+	footstep_travel += travelled
+	if footstep_travel < 15.0:
+		return
+	footstep_travel = fmod(footstep_travel, 15.0)
+	var variants: Array[AudioStream] = GameAudio.STEP_TILE
+	var current_scene := get_tree().current_scene
+	if current_scene != null:
+		if current_scene.name == "andar_hall" and global_position.x < 80.0:
+			variants = GameAudio.STEP_DEBRIS
+		elif current_scene.name in ["DATA_CENTER_REFRIGERACAO", "DATA_CENTER_FORTE"]:
+			variants = GameAudio.STEP_METAL
+	var variant := randi_range(0, variants.size() - 2)
+	if variant >= last_footstep_variant:
+		variant += 1
+	last_footstep_variant = variant
+	sfx_walking.stream = variants[variant]
+	sfx_walking.pitch_scale = randf_range(0.96, 1.04)
+	sfx_walking.play()
 
 func tentar_pegar_objeto() -> void:
 	if objeto_manipulado != null:
@@ -332,6 +352,7 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 	cardinal_direction = lado
 	add_collision_exception_with(objeto_manipulado)
 	objeto_manipulado.add_collision_exception_with(self)
+	GameAudio.play_world(objeto, GameAudio.GRAB, -11.0)
 	sprite.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
 	occluder_side.scale.x = -1 if cardinal_direction == Vector2.LEFT else 1
 	UpdateAnimation()
@@ -339,6 +360,7 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 
 func soltar_objeto() -> void:
 	if objeto_manipulado != null and is_instance_valid(objeto_manipulado):
+		GameAudio.play_world(objeto_manipulado, GameAudio.RELEASE, -13.0)
 		objeto_manipulado.set_manipulated_outline(false)
 		remove_collision_exception_with(objeto_manipulado)
 		objeto_manipulado.remove_collision_exception_with(self)
@@ -348,6 +370,7 @@ func soltar_objeto() -> void:
 	
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
+	scrape_travel = 0.0
 
 func _physics_manipulando(delta: float) -> void:
 	if objeto_manipulado == null:
@@ -374,6 +397,10 @@ func mover_com_objeto(movimento: Vector2) -> void:
 	if not player_bloqueado and not objeto_bloqueado:
 		move_and_collide(movimento)
 		objeto_manipulado.move_and_collide(movimento)
+		scrape_travel += absf(movimento.x)
+		if scrape_travel >= 16.0:
+			scrape_travel = fmod(scrape_travel, 16.0)
+			GameAudio.play_world(objeto_manipulado, GameAudio.SCRAPE, -17.0)
 
 func _on_grab_left_body_entered(body: Node2D) -> void:
 	if not body is ObjetoEmpurravel:

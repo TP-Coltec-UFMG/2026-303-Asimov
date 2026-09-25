@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bcpwbfr4b3m8n"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_fwpb8"]
+[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_cooling"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_nwm1k"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="4_cbryt"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="5_ntq2j"]
@@ -21,6 +22,10 @@ size = Vector2(24, 18)
 
 [node name="DATA_CENTER_REFRIGERACAO" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_fwpb8")
+
+[node name="SceneAmbience" type="Node2D" parent="."]
+script = ExtResource("ambience_cooling")
+ambience_kind = 2
 
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 

@@ -122,6 +122,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().paused = true
 
 	if event.is_action_pressed("interact") and dentro_da_area and not eh_elevador:
+		if is_instance_valid(body_p) and body_p.usando_cartao:
+			GameAudio.play_world(self, GameAudio.CARD_SWIPE, -12.0)
 		if access_override:
 			var viewport := get_viewport()
 			if viewport != null:

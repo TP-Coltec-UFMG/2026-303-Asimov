@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://btiojmlbqhdrn"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_nqlva"]
+[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_hall"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="3_2s751"]
 [ext_resource type="Script" uid="uid://dcrs36lc3vkkj" path="res://Objects/scripts/objeto_empurravel.gd" id="4_48805"]
 [ext_resource type="Texture2D" uid="uid://dgisco7ahvjd1" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_1.png" id="5_8q7s7"]
@@ -182,6 +183,9 @@ animations = [{
 
 [node name="andar_hall" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_nqlva")
+
+[node name="SceneAmbience" type="Node2D" parent="."]
+script = ExtResource("ambience_hall")
 
 [node name="Coletaveis" type="Node" parent="." unique_id=141771484]
 

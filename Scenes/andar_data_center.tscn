@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://baskrtgylrg1b"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y5mn0"]
+[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_data_center"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_em2r1"]
 [ext_resource type="PackedScene" uid="uid://c4e81i13gjvx3" path="res://Objects/luz_de_emergencia.tscn" id="3_7c6dg"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="3_7oj87"]
@@ -63,6 +64,10 @@ size = Vector2(12, 32)
 
 [node name="ANDAR_DATA_CENTER" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y5mn0")
+
+[node name="SceneAmbience" type="Node2D" parent="."]
+script = ExtResource("ambience_data_center")
+ambience_kind = 1
 
 [node name="ANDAR_DATA_CENTER" parent="." unique_id=601132916 instance=ExtResource("3_7oj87")]
 position = Vector2(-230, -253)

@@ -20,3 +20,9 @@ res://Player/Scripts/slot.gd
 res://Scripts/Acessibility/color_accessibility_cue.gd
 res://Objects/scripts/objeto_empurravel.gd
 res://Player/Scripts/player.gd
+res://Objects/scripts/PickupComponent.gd
+res://Scripts/Objects/cooling_terminal.gd
+res://Minigames/Minigame5/Scripts/notebook.gd
+res://Minigames/Minigame5/Scripts/Componentes_Eletronicos/leitor_cartao.gd
+res://Scenes/scripts/scene_ambience.gd
+res://Scripts/Sounds/game_audio.gd

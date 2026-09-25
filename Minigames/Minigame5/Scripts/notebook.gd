@@ -33,6 +33,7 @@ func _ready() -> void:
 func abrir() -> void:
 	if iniciar and is_visible_in_tree():
 		return
+	GameAudio.play_ui(self, GameAudio.TERMINAL_KEY, -13.0)
 
 	acabou = false
 	iniciar = true
@@ -71,6 +72,7 @@ func _esta_aberto() -> bool:
 func _on_button_2_pressed() -> void:
 	if not _esta_aberto():
 		return
+	GameAudio.play_ui(self, GameAudio.TERMINAL_KEY, -16.0)
 
 	_liberar_foco()
 	codigo.pausar_escrita()
