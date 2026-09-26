@@ -23,6 +23,14 @@ const AFTER_LINES := [
 	"Não adianta. Vocês sempre tentam consertar tudo no último minuto.",
 	"M3us sissstem@s estão ff@lhando..."
 ]
+const EXTRA_AFTER_LINES := [
+	"Você danificou um subsistema... mas eu ainda controlo os demais.",
+	"R3configurando rotas internas. Você não chegará ao núcleo.",
+	"FALHA DE SINCRONIZAÇÃO... isolando setor comprometido.",
+	"R3dundância primária comprometida. Transferindo processo...",
+	"NÃO... esse caminho também não. Interrompa agora.",
+	""
+]
 
 @onready var highlights: Node2D = $"../RestrictedAreaIntro/Highlights"
 @onready var intro: Node = $"../RestrictedAreaIntro"
@@ -77,6 +85,10 @@ var escape_timer_label: Label
 var escape_siren: AudioStreamPlayer
 var escape_siren_fade: Tween
 var destruction_camera: Camera2D
+var escape_camera: Camera2D
+var escape_camera_base_offset := Vector2.ZERO
+var escape_shake_phase := 0.0
+var escape_glitch_sfx_cooldown := 0.0
 # Mantém a produção em velocidade normal; testes podem acelerar apenas esta sequência.
 var sequence_time_scale := 1.0
 
@@ -130,7 +142,8 @@ func _exit_tree() -> void:
 	if suspended_thought != null and suspended_thought.is_valid():
 		suspended_thought.play()
 	_finish_ai_message()
-	_stop_ai_glitch()
+	_stop_escape_pressure()
+	_stop_ai_glitch(true)
 	if player_locked:
 		_unlock_player()
 	if is_instance_valid(pause_menu):
@@ -161,6 +174,7 @@ func _process(_delta: float) -> void:
 	if escape_active:
 		escape_remaining = maxf(0.0, escape_remaining - _delta)
 		_update_escape_timer()
+		_update_escape_pressure(_delta)
 		if escape_remaining <= 0.0:
 			_start_destruction_cutscene(&"timeout")
 		return
@@ -255,28 +269,34 @@ func _start_intro_dialogue() -> void:
 
 
 func _start_redundancy_dialogue() -> void:
-	var state := _state()
-	state["engineer_redundancy_seen"] = true
-	_save(state)
-	# A nova rodada é liberada antes das falas; só a câmera bloqueia a interação.
-	reserve_scan_running = true
+	# Mantém os novos pontos bloqueados até a conversa terminar e a câmera
+	# apresentá-los ao jogador.
+	task_busy = true
 	_update_targets()
-	_suspend_dialogue()
-	_play_reserve_scan()
 	_queue_dialogue([
 		{"id": "engineer:first_three", "text": "Os três componentes principais foram destruídos. O efeito cascata deve derrubar a ASIMOV!"},
 		{"text": "Você pensou que tinha vencido? Sistema redundante ativado.", "damaged": true},
 		{"id": "engineer:redundancy:1", "text": "Merda, eu me esqueci dos sistemas de reserva..."},
-		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados disponíveis quando os principais falham. Preciso destruir essas combinações também!"},
+		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados disponíveis quando os principais falham."},
+		{"id": "engineer:redundancy:3", "text": "Preciso destruir essas combinações também!"},
 	])
+	_play_reserve_scan.call_deferred()
 
 
 func _play_reserve_scan() -> void:
+	while dialogue_busy and is_inside_tree():
+		await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	reserve_scan_running = true
 	await intro.call("play_engineer_backup_scan")
 	if not is_inside_tree():
 		return
 	reserve_scan_running = false
-	_resume_dialogue()
+	var state := _state()
+	state["engineer_redundancy_seen"] = true
+	_save(state)
+	task_busy = false
 	_update_targets()
 
 
@@ -450,7 +470,9 @@ func _on_minigame_completed(stage: int) -> void:
 	task_busy = false
 	_update_targets()
 	_discard_obsolete_dialogue()
-	var lines: Array[Dictionary] = [{"text": AFTER_LINES[stage], "damaged": stage in [1, 2] or stage >= 3}]
+	var lines: Array[Dictionary] = [{"text": AFTER_LINES[stage], "damaged": true}]
+	if stage < EXTRA_AFTER_LINES.size() and not EXTRA_AFTER_LINES[stage].is_empty():
+		lines.append({"text": EXTRA_AFTER_LINES[stage], "damaged": true})
 	if stage == 4:
 		lines.append({"text": "As florestas e os animais não vão voltar se eu deixar a humanidade continuar.", "damaged": true})
 	if stage == 5:
@@ -645,7 +667,7 @@ func _resume_dialogue() -> void:
 	if ai_tween != null and ai_tween.is_valid() and ai_speaking:
 		ai_balloon.show()
 		ai_tween.play()
-		if ai_message_damaged and int(_state().get("engineer_completed_count", 0)) >= 3:
+		if ai_message_damaged:
 			_start_ai_glitch()
 	if suspended_thought != null and suspended_thought.is_valid():
 		suspended_thought.play()
@@ -658,7 +680,7 @@ func _ai_say(message: String, damaged: bool = false) -> void:
 	ai_speaking = true
 	ai_message_damaged = damaged
 	ai_text.text = message
-	if damaged and int(_state().get("engineer_completed_count", 0)) >= 3:
+	if damaged:
 		_start_ai_glitch()
 	else:
 		_stop_ai_glitch()
@@ -699,9 +721,12 @@ func _start_ai_glitch() -> void:
 			hostile_glitch_sfx.play()
 
 
-func _stop_ai_glitch() -> void:
+func _stop_ai_glitch(force: bool = false) -> void:
+	if escape_active and not force:
+		return
 	if is_instance_valid(final_glitch_player):
 		final_glitch_player.stop()
+		final_glitch_player.speed_scale = 1.0
 	if is_instance_valid(hostile_glitch_sfx):
 		hostile_glitch_sfx.stop()
 	if is_instance_valid(system_recalculation):
@@ -772,6 +797,7 @@ func _begin_escape_sequence() -> void:
 	_hide_mission_points()
 	_create_escape_ui()
 	_start_escape_siren()
+	_start_escape_pressure()
 	if is_instance_valid(exit_trigger):
 		exit_trigger.access_override = true
 	var timer := get_tree().get_first_node_in_group("temporizador_jogo")
@@ -899,9 +925,11 @@ func _start_destruction_cutscene(_reason: StringName) -> void:
 		return
 	destruction_cutscene_running = true
 	escape_active = false
+	_stop_escape_pressure()
 	if is_instance_valid(exit_trigger):
 		exit_trigger.access_override = false
 	_cancel_dialogue_queue()
+	_stop_ai_glitch(true)
 	if is_instance_valid(escape_ui):
 		escape_ui.hide()
 	_lock_player()
@@ -916,6 +944,43 @@ func _start_destruction_cutscene(_reason: StringName) -> void:
 	state["engineer_escape_completed"] = true
 	_save(state)
 	_finish_game(true)
+
+
+func _start_escape_pressure() -> void:
+	escape_camera = player.get_node_or_null("Camera2D") as Camera2D if is_instance_valid(player) else null
+	if is_instance_valid(escape_camera):
+		escape_camera_base_offset = escape_camera.offset
+	escape_shake_phase = 0.0
+	escape_glitch_sfx_cooldown = 0.0
+	_start_ai_glitch()
+
+
+func _update_escape_pressure(delta: float) -> void:
+	var urgency := 1.0 - clampf(escape_remaining / ESCAPE_DURATION, 0.0, 1.0)
+	if is_instance_valid(final_glitch_player):
+		final_glitch_player.speed_scale = lerpf(1.0, 1.75, urgency)
+	escape_glitch_sfx_cooldown -= delta
+	if escape_glitch_sfx_cooldown <= 0.0 and is_instance_valid(hostile_glitch_sfx) and hostile_glitch_sfx.stream != null:
+		hostile_glitch_sfx.pitch_scale = randf_range(0.94, 1.08)
+		hostile_glitch_sfx.play()
+		escape_glitch_sfx_cooldown = lerpf(2.4, 0.75, urgency)
+	if not is_instance_valid(escape_camera):
+		return
+	if not bool(Configs.configs.get("movimento_camera", true)):
+		escape_camera.offset = escape_camera_base_offset
+		return
+	escape_shake_phase += delta
+	var strength := lerpf(0.25, 1.65, urgency)
+	var oscillation := Vector2(sin(escape_shake_phase * 21.0), cos(escape_shake_phase * 27.0))
+	escape_camera.offset = escape_camera_base_offset + oscillation * strength
+
+
+func _stop_escape_pressure() -> void:
+	if is_instance_valid(escape_camera):
+		escape_camera.offset = escape_camera_base_offset
+	escape_camera = null
+	if is_instance_valid(hostile_glitch_sfx):
+		hostile_glitch_sfx.pitch_scale = 1.0
 
 
 func _cancel_dialogue_queue() -> void:

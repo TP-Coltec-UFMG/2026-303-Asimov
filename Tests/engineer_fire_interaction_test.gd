@@ -146,12 +146,22 @@ func _run() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	controller._start_redundancy_dialogue()
 	await get_tree().create_timer(0.12).timeout
-	_expect(controller.dialogue_busy and not controller.reserve_scan_running, "Reserve dialogue continues after camera returns")
+	_expect(controller.dialogue_busy and controller.task_busy and not controller.reserve_scan_running, "Reserve dialogue runs before revealing backup locations")
 	player.position = highlights.get_node(controller.backup_order[0]).position
 	await _frames(3)
 	controller._on_point_interacted(controller.backup_order[0])
-	_expect(controller.minigame_open and controller.active_minigame_stage == 3, "Reserve minigame opens before reserve dialogue ends")
-	controller.dialogue_queue.clear()
+	_expect(not controller.minigame_open, "Backup circuit stays locked until its reveal cutscene")
+	for attempt in range(30):
+		if not controller.dialogue_busy:
+			break
+		if controller.ai_speaking:
+			controller._finish_ai_message()
+		player.balao_de_pensamento.pular_pensamento()
+		await _frames(2)
+	await get_tree().create_timer(0.12).timeout
+	_expect(not controller.dialogue_busy and not controller.reserve_scan_running and not controller.task_busy, "Backup reveal starts only after the complete redundancy exchange")
+	controller._on_point_interacted(controller.backup_order[0])
+	_expect(controller.minigame_open and controller.active_minigame_stage == 3, "Reserve minigame opens after the reveal cutscene")
 	controller._leave_minigame()
 	controller._finish_ai_message()
 	player.balao_de_pensamento.pular_pensamento()
