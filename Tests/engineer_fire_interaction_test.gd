@@ -131,8 +131,16 @@ func _run() -> void:
 	controller._on_point_interacted("ServerRowB")
 	_expect(controller.minigame_open and controller.active_minigame_stage == 1, "Minigame opens during AI dialogue")
 	_expect(not controller.ai_balloon.visible, "AI balloon suspended behind minigame")
-	controller._leave_minigame()
-	_expect(controller.ai_speaking and controller.ai_balloon.visible, "AI reaction resumes after minigame exit")
+	controller.sequence_time_scale = 0.05
+	var fire_count_before_completion := controller.fires.size()
+	controller._on_minigame_completed(1)
+	_expect(not controller.minigame_open and player.is_physics_processing(), "Circuit closes and restores movement immediately")
+	_expect(controller.fires.size() == fire_count_before_completion, "Explosion does not occur on the closing frame")
+	_expect(controller.task_busy, "Next objective stays locked during the explosion safety delay")
+	player.position = Vector2(1500, 1500)
+	await get_tree().create_timer(0.09).timeout
+	_expect(not controller.task_busy, "Explosion safety delay finishes before enabling the next objective")
+	_expect(controller.ai_speaking and controller.ai_balloon.visible, "AI reaction resumes after delayed explosion")
 	controller._finish_ai_message()
 	state["engineer_completed_count"] = 3
 	SaveGame.save_global_state("hall_quest_01", state)
@@ -147,6 +155,18 @@ func _run() -> void:
 	controller._leave_minigame()
 	controller._finish_ai_message()
 	player.balao_de_pensamento.pular_pensamento()
+	state["engineer_completed_count"] = 6
+	state["engineer_redundancy_seen"] = true
+	SaveGame.save_global_state("hall_quest_01", state)
+	controller.sequence_time_scale = 0.05
+	controller._begin_escape_sequence()
+	_expect(controller.escape_active and is_instance_valid(controller.escape_timer_label), "Last component starts 20-second escape")
+	_expect(controller.escape_timer_label.text == "00:20", "Escape countdown begins at twenty seconds")
+	_expect(is_instance_valid(controller.escape_siren) and controller.escape_siren.playing, "Escape siren begins and can rise")
+	controller._on_escape_exit_requested(null)
+	await get_tree().create_timer(0.2).timeout
+	_expect(controller.destruction_cutscene_running and not player.visible, "Using exit hides player and starts destruction cutscene")
+	_expect(is_instance_valid(controller.destruction_camera) and controller.fires.size() > 4, "Cutscene camera shows new persistent explosion fires")
 	print("PASS: engineer fire and interaction (", checks, " checks)")
 	get_tree().quit(0 if failures == 0 else 1)
 

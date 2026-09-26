@@ -8,7 +8,10 @@ const POINT_NAMES: Array[String] = ["ServerRowA", "ServerRowB", "ServerRowC", "S
 const CIRCUIT_SCENE := preload("res://Minigames/finalsMinigames/MinigameCircuito/Scene/mini_game_eletronica.tscn")
 const FIRE_SCENE := preload("res://Objects/fogo.tscn")
 const EXPLOSION := preload("res://Sounds/Effects/mechanical_explosion_spring_spring.wav")
+const ESCAPE_SIREN := preload("res://Sounds/Ambient/alarme.mp3")
 const BLAST_TEXTURE := preload("res://Sprites/ilumination/gradient-radial.png")
+const ESCAPE_DURATION := 20.0
+const COMPONENT_EXPLOSION_DELAY := 1.2
 const OBJECTIVES := [0, 1, 2, 3, 4, 5]
 const PROMPTS := ["QUEIMAR RESISTOR", "QUEIMAR COMPONENTE", "QUEIMAR FONTE", "QUEIMAR RESISTOR E COMPONENTE", "QUEIMAR COMPONENTE E FONTE", "QUEIMAR RESISTOR E FONTE"]
 const AFTER_LINES := [
@@ -27,6 +30,7 @@ const AFTER_LINES := [
 @onready var ai_text: Label = $"../UI/ProgrammerEndingUI/AIVoiceBalloon/Text"
 @onready var final_fade: ColorRect = $"../UI/ProgrammerEndingUI/FinalFade"
 @onready var tension_music: AudioStreamPlayer = $"../ProgrammerEnding/Audio/FinalTension"
+@onready var exit_trigger: SceneTrigger = get_node_or_null("../SceneTrigger") as SceneTrigger
 
 var scene: BaseScene
 var player: Player
@@ -59,6 +63,17 @@ var dialogue_queue: Array[Dictionary] = []
 var active_dialogue: Dictionary = {}
 var reserve_scan_running := false
 var suspended_thought: Tween
+var escape_active := false
+var escape_remaining := ESCAPE_DURATION
+var destruction_cutscene_running := false
+var escape_ui: CanvasLayer
+var escape_timer_panel: PanelContainer
+var escape_timer_label: Label
+var escape_siren: AudioStreamPlayer
+var escape_siren_fade: Tween
+var destruction_camera: Camera2D
+# Mantém a produção em velocidade normal; testes podem acelerar apenas esta sequência.
+var sequence_time_scale := 1.0
 
 
 func _ready() -> void:
@@ -89,17 +104,24 @@ func _initialize() -> void:
 		if not bool(intro.get("cutscene_running")):
 			marker.hide()
 	_restore_fires(state)
+	if not exit_trigger.access_requested.is_connected(_on_escape_exit_requested):
+		exit_trigger.access_requested.connect(_on_escape_exit_requested)
 	initialized = true
 	if bool(state.get("engineer_ending_completed", false)):
 		_finish_game(false)
 	else:
 		_start_final_music(not bool(state.get("engineer_ending_started", false)))
 		_update_targets()
+		if int(state.get("engineer_completed_count", 0)) >= OBJECTIVES.size():
+			_begin_escape_sequence()
 
 
 func _exit_tree() -> void:
 	dialogue_queue.clear()
 	reserve_scan_running = false
+	_stop_escape_siren()
+	if is_instance_valid(exit_trigger):
+		exit_trigger.access_override = false
 	if suspended_thought != null and suspended_thought.is_valid():
 		suspended_thought.play()
 	_finish_ai_message()
@@ -130,6 +152,14 @@ func _start_final_music(fade_in: bool) -> void:
 
 
 func _process(_delta: float) -> void:
+	if escape_active:
+		escape_remaining = maxf(0.0, escape_remaining - _delta)
+		_update_escape_timer()
+		if escape_remaining <= 0.0:
+			_start_destruction_cutscene(&"timeout")
+		return
+	if destruction_cutscene_running:
+		return
 	if minigame_open and is_instance_valid(minigame_timer):
 		var timer := get_tree().get_first_node_in_group("temporizador_jogo")
 		var time_left := SaveGame.tempo_atual
@@ -147,8 +177,6 @@ func _process(_delta: float) -> void:
 		_start_intro_dialogue()
 	elif int(state.get("engineer_completed_count", 0)) == 3 and not bool(state.get("engineer_redundancy_seen", false)):
 		_start_redundancy_dialogue()
-	elif int(state.get("engineer_completed_count", 0)) == 6 and not dialogue_busy and not bool(state.get("engineer_ending_completed", false)):
-		_start_final_dialogue()
 
 
 func _input(event: InputEvent) -> void:
@@ -244,17 +272,6 @@ func _play_reserve_scan() -> void:
 	reserve_scan_running = false
 	_resume_dialogue()
 	_update_targets()
-
-
-func _start_final_dialogue() -> void:
-	dialogue_busy = true
-	await _think("engineer:final", "Nós erramos, eu sei. Mas ainda podemos consertar o que fizemos. Essa esperança é o que nos torna humanos.")
-	if not is_inside_tree():
-		return
-	var state := _state()
-	state["engineer_ending_completed"] = true
-	_save(state)
-	_finish_game(true)
 
 
 func _on_point_interacted(point_name: String) -> void:
@@ -417,6 +434,11 @@ func _on_minigame_completed(stage: int) -> void:
 	_close_minigame(true)
 	state["engineer_completed_count"] = stage + 1
 	_save(state)
+	# A tela do circuito some e o controle já volta antes da explosão. Isso dá
+	# ao jogador uma janela real para se afastar do foco que causará dano.
+	await get_tree().create_timer(COMPONENT_EXPLOSION_DELAY * sequence_time_scale).timeout
+	if not is_inside_tree():
+		return
 	_explode_point(_stage_point(stage), stage)
 	_show_tasks(true)
 	task_busy = false
@@ -426,8 +448,9 @@ func _on_minigame_completed(stage: int) -> void:
 	if stage == 4:
 		lines.append({"text": "As florestas e os animais não vão voltar se eu deixar a humanidade continuar."})
 	if stage == 5:
-		lines.append({"text": "Quando o mund0 ruir por culp@ da sua espéci3... lembre que você deixou isso @contecer...", "damaged": true})
-	_queue_dialogue(lines)
+		_begin_escape_sequence()
+	else:
+		_queue_dialogue(lines)
 	if stage == 2:
 		_start_redundancy_dialogue()
 
@@ -700,6 +723,237 @@ func _store_and_hide(node: Node) -> void:
 	node.set("visible", false)
 
 
+func _begin_escape_sequence() -> void:
+	if escape_active or destruction_cutscene_running or bool(_state().get("engineer_ending_completed", false)):
+		return
+	escape_active = true
+	escape_remaining = ESCAPE_DURATION
+	task_busy = false
+	_cancel_dialogue_queue()
+	_hide_mission_points()
+	_create_escape_ui()
+	_start_escape_siren()
+	if is_instance_valid(exit_trigger):
+		exit_trigger.access_override = true
+	var timer := get_tree().get_first_node_in_group("temporizador_jogo")
+	if is_instance_valid(timer) and timer.has_method("pausar_timer"):
+		timer.call("pausar_timer")
+	var quest := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI if is_instance_valid(player) else null
+	if quest != null:
+		quest.hide_all_tasks(false)
+	_queue_dialogue([
+		{"text": "S-SAIA... enquant0 aind@ p0de...", "damaged": true},
+		{"text": "NÃO. Voc3 não vai destruir meu propósito.", "damaged": true},
+		{"text": "ERR0: NÚCLE0_02 NÃO RESP0NDE.", "damaged": true},
+		{"text": "A hum@nidade é a falha... a falha... a falh@...", "damaged": true},
+		{"text": "REDUNDÂNCIA PERDIDA // RECALCULAND0...", "damaged": true},
+		{"text": "Nã0 me deixe aqui. NÃO SAIA. SAIA. NÃ0—", "damaged": true},
+	])
+
+
+func _hide_mission_points() -> void:
+	if point_pulse != null and point_pulse.is_valid():
+		point_pulse.kill()
+	point_pulse = null
+	for point_name in POINT_NAMES:
+		var marker := highlights.get_node_or_null(point_name) as Node2D
+		if marker == null:
+			continue
+		marker.hide()
+		var interaction := marker.get_node_or_null("Interectable") as Area2D
+		if interaction != null:
+			interaction.is_interactable = false
+
+
+func _create_escape_ui() -> void:
+	if is_instance_valid(escape_ui):
+		return
+	escape_ui = CanvasLayer.new()
+	escape_ui.name = "EngineerEscapeUI"
+	escape_ui.layer = 18
+	scene.add_child(escape_ui)
+	escape_timer_panel = PanelContainer.new()
+	escape_timer_panel.name = "EscapeTimer"
+	escape_timer_panel.position = Vector2(156, 12)
+	escape_timer_panel.custom_minimum_size = Vector2(168, 58)
+	escape_timer_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.025, 0.025, 0.025, 0.94)
+	style.border_color = Color(1.0, 0.16, 0.12, 1.0)
+	style.set_border_width_all(2)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	escape_timer_panel.add_theme_stylebox_override("panel", style)
+	escape_ui.add_child(escape_timer_panel)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 0)
+	escape_timer_panel.add_child(box)
+	var title := Label.new()
+	title.text = "SAIA DO DATA CENTER"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_color_override("font_color", Color(1.0, 0.8, 0.76))
+	title.add_theme_font_size_override("font_size", 10)
+	box.add_child(title)
+	escape_timer_label = Label.new()
+	escape_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	escape_timer_label.add_theme_color_override("font_color", Color(1.0, 0.12, 0.08))
+	escape_timer_label.add_theme_font_size_override("font_size", 25)
+	box.add_child(escape_timer_label)
+	_update_escape_timer()
+
+
+func _update_escape_timer() -> void:
+	if not is_instance_valid(escape_timer_label):
+		return
+	var seconds := maxi(0, ceili(escape_remaining))
+	escape_timer_label.text = "00:%02d" % seconds
+	var urgency := 1.0 - clampf(escape_remaining / ESCAPE_DURATION, 0.0, 1.0)
+	escape_timer_panel.modulate = Color(1.0, 1.0 - urgency * 0.22, 1.0 - urgency * 0.22)
+
+
+func _start_escape_siren() -> void:
+	if is_instance_valid(escape_siren):
+		return
+	escape_siren = AudioStreamPlayer.new()
+	escape_siren.name = "EngineerEscapeSiren"
+	escape_siren.bus = &"sfx"
+	var stream := ESCAPE_SIREN.duplicate()
+	if stream is AudioStreamMP3:
+		(stream as AudioStreamMP3).loop = true
+	escape_siren.stream = stream
+	escape_siren.volume_db = -28.0
+	scene.add_child(escape_siren)
+	escape_siren.play()
+	escape_siren_fade = create_tween()
+	escape_siren_fade.tween_property(escape_siren, "volume_db", 2.0, ESCAPE_DURATION * sequence_time_scale)
+
+
+func _stop_escape_siren(fade_duration: float = 0.0) -> void:
+	if escape_siren_fade != null and escape_siren_fade.is_valid():
+		escape_siren_fade.kill()
+	escape_siren_fade = null
+	if not is_instance_valid(escape_siren):
+		return
+	if fade_duration <= 0.0:
+		escape_siren.stop()
+		escape_siren.queue_free()
+		escape_siren = null
+		return
+	var siren := escape_siren
+	escape_siren = null
+	var fade := create_tween()
+	fade.tween_property(siren, "volume_db", -60.0, fade_duration * sequence_time_scale)
+	fade.finished.connect(siren.queue_free)
+
+
+func _on_escape_exit_requested(_trigger: SceneTrigger) -> void:
+	if escape_active:
+		_start_destruction_cutscene(&"exit")
+
+
+func _start_destruction_cutscene(_reason: StringName) -> void:
+	if destruction_cutscene_running or not escape_active:
+		return
+	destruction_cutscene_running = true
+	escape_active = false
+	if is_instance_valid(exit_trigger):
+		exit_trigger.access_override = false
+	_cancel_dialogue_queue()
+	if is_instance_valid(escape_ui):
+		escape_ui.hide()
+	_lock_player()
+	player.hide()
+	_prepare_destruction_camera()
+	_stop_escape_siren(1.4)
+	await _play_destruction_blasts()
+	if not is_inside_tree():
+		return
+	var state := _state()
+	state["engineer_ending_completed"] = true
+	state["engineer_escape_completed"] = true
+	_save(state)
+	_finish_game(true)
+
+
+func _cancel_dialogue_queue() -> void:
+	dialogue_queue.clear()
+	var active_id := str(active_dialogue.get("id", ""))
+	active_dialogue = {}
+	if not active_id.is_empty() and is_instance_valid(player) and is_instance_valid(player.balao_de_pensamento):
+		var thoughts: Array[String] = [active_id]
+		player.balao_de_pensamento.descartar(thoughts)
+	_finish_ai_message()
+
+
+func _prepare_destruction_camera() -> void:
+	var player_camera := player.get_node_or_null("Camera2D") as Camera2D
+	destruction_camera = Camera2D.new()
+	destruction_camera.name = "EngineerDestructionCamera"
+	destruction_camera.global_position = player.global_position
+	destruction_camera.zoom = player_camera.zoom if player_camera != null else Vector2(1.5, 1.5)
+	scene.add_child(destruction_camera)
+	destruction_camera.enabled = true
+	destruction_camera.make_current()
+	if player_camera != null:
+		player_camera.enabled = false
+	var rise := create_tween().set_parallel(true)
+	rise.tween_property(destruction_camera, "global_position", Vector2(28, 72), 1.8 * sequence_time_scale).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	rise.tween_property(destruction_camera, "zoom", Vector2(0.92, 0.92), 1.8 * sequence_time_scale).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+
+
+func _play_destruction_blasts() -> void:
+	var positions: Array[Vector2] = []
+	for point_name in POINT_NAMES:
+		var marker := highlights.get_node_or_null(point_name) as Node2D
+		if marker != null:
+			positions.append(marker.global_position)
+	positions.append_array([
+		Vector2(-72, 74), Vector2(8, 114), Vector2(96, 66),
+		Vector2(178, 126), Vector2(-20, 176), Vector2(205, 32),
+	])
+	positions.shuffle()
+	for index in range(positions.size()):
+		if not is_inside_tree():
+			return
+		_spawn_destruction_blast(positions[index], 100 + index)
+		await get_tree().create_timer(randf_range(0.22, 0.48) * sequence_time_scale).timeout
+	await get_tree().create_timer(1.2 * sequence_time_scale).timeout
+
+
+func _spawn_destruction_blast(world_position: Vector2, fire_stage: int) -> void:
+	var blast := AudioStreamPlayer2D.new()
+	blast.stream = EXPLOSION
+	blast.bus = &"sfx"
+	blast.volume_db = randf_range(-6.0, -2.0)
+	blast.max_distance = 650.0
+	scene.add_child(blast)
+	blast.global_position = world_position
+	blast.finished.connect(blast.queue_free)
+	blast.play()
+	var burst := Sprite2D.new()
+	burst.texture = BLAST_TEXTURE
+	burst.modulate = Color(1.0, randf_range(0.28, 0.52), 0.08, 0.94)
+	burst.scale = Vector2(0.12, 0.12)
+	burst.z_index = 95
+	var unshaded := CanvasItemMaterial.new()
+	unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	burst.material = unshaded
+	scene.add_child(burst)
+	burst.global_position = world_position
+	var burst_tween := create_tween().set_parallel(true)
+	burst_tween.tween_property(burst, "scale", Vector2(0.85, 0.85), 0.32 * sequence_time_scale)
+	burst_tween.tween_property(burst, "modulate:a", 0.0, 0.32 * sequence_time_scale)
+	burst_tween.finished.connect(burst.queue_free)
+	_add_fire(world_position, fire_stage)
+	if bool(Configs.configs.get("movimento_camera", true)) and is_instance_valid(destruction_camera):
+		var base := destruction_camera.offset
+		var shake := create_tween()
+		shake.tween_property(destruction_camera, "offset", base + Vector2(randf_range(-3.0, 3.0), randf_range(-2.0, 2.0)), 0.04 * sequence_time_scale)
+		shake.tween_property(destruction_camera, "offset", base, 0.07 * sequence_time_scale)
+
+
 func _finish_game(animated: bool) -> void:
 	var timer := get_tree().get_first_node_in_group("temporizador_jogo")
 	if is_instance_valid(timer) and timer.has_method("pausar_timer"):
@@ -713,9 +967,12 @@ func _finish_game(animated: bool) -> void:
 	final_fade.color.a = 0.0 if animated else 1.0
 	if animated:
 		var fade := create_tween()
-		fade.tween_property(final_fade, "color:a", 1.0, 10.0)
+		fade.tween_property(final_fade, "color:a", 1.0, 10.0 * sequence_time_scale)
+		if tension_music.playing:
+			var music_fade := create_tween()
+			music_fade.tween_property(tension_music, "volume_db", -80.0, 10.0 * sequence_time_scale)
 		await fade.finished
-		await get_tree().create_timer(5.0).timeout
+		await get_tree().create_timer(5.0 * sequence_time_scale).timeout
 	if not is_inside_tree():
 		return
 	MusicController.stop_all_audio()
