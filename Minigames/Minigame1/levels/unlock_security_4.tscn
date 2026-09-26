@@ -125,6 +125,15 @@ duracao_giro = 2.3
 alcance = 205
 abertura = 17
 
+[node name="Sensor4" type="Node2D" parent="Arena" unique_id=1942646770]
+position = Vector2(334.17722, 248.10126)
+script = ExtResource("6")
+angulo_inicial = 325
+angulo_final = 375
+duracao_giro = 2.3
+alcance = 205
+abertura = 17
+
 [node name="ColorRect" type="ColorRect" parent="." unique_id=2007885247]
 z_index = -5
 offset_left = -45.56962

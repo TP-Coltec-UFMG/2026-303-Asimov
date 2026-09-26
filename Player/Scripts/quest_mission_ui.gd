@@ -16,6 +16,9 @@ const COOLING_THOUGHT_FAILURE := "cooling:failed_attempt"
 const COOLING_THOUGHT_FAILURE_ALTERNATIVE := "cooling:other_system_after_failure"
 const COOLING_TASK_INDEX := 13
 const COOLING_IDLE_DELAY := 3.0
+const PANEL_DISPLAY_TIME := 15.0
+const PANEL_FADE_IN_TIME := 0.45
+const PANEL_FADE_OUT_TIME := 0.8
 const PROGRAMMER_ENDING_TASKS: Array[String] = [
 	"ISOLE O PROTOCOLO DE\nLANÇAMENTO",
 	"RECONSTRUA A REDE NEURAL",
@@ -60,6 +63,11 @@ var desired_visible: bool = false
 var hidden_for_elevator: bool = false
 var cooling_idle_time: float = 0.0
 var rendering_programmer_tasks: bool = false
+var _panel_time_left: float = PANEL_DISPLAY_TIME
+var _auto_hidden: bool = false
+var _completed_rows: Array[bool] = []
+var _panel_fading_out: bool = false
+var _panel_fade: Tween
 
 
 func _enter_tree() -> void:
@@ -68,6 +76,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	for row in rows:
+		_completed_rows.append(false)
 	if standalone_mode:
 		_configure_standalone_appearance()
 		_ignore_mouse_input_recursive(self)
@@ -121,6 +131,10 @@ func _ignore_mouse_input_recursive(node: Node) -> void:
 
 
 func _process(delta: float) -> void:
+	if not standalone_mode and desired_visible and not _auto_hidden and not _panel_fading_out and visible:
+		_panel_time_left -= delta
+		if _panel_time_left <= 0.0:
+			_fade_out_panel()
 	var current_player := get_parent() as Player
 	if current_player == null:
 		return
@@ -146,8 +160,91 @@ func _process(delta: float) -> void:
 func set_panel_visible(value: bool) -> void:
 	if value and not standalone_mode and not rendering_programmer_tasks:
 		_sync_optional_cooling_row()
+	var was_desired := desired_visible
 	desired_visible = value
-	visible = value and not get_tree().paused and not hidden_for_elevator
+	if value and not was_desired and not standalone_mode:
+		_reveal_panel()
+	elif not value and not standalone_mode:
+		_stop_panel_fade()
+		_auto_hidden = false
+		_set_panel_alpha(1.0)
+	visible = value and (not _auto_hidden or _panel_fading_out) and not get_tree().paused and not hidden_for_elevator
+
+
+func _task_changed() -> void:
+	if not standalone_mode:
+		if desired_visible:
+			_reveal_panel()
+		else:
+			_panel_time_left = PANEL_DISPLAY_TIME
+			_auto_hidden = false
+
+
+func _reveal_panel() -> void:
+	var was_visible := visible
+	_stop_panel_fade()
+	_auto_hidden = false
+	_panel_time_left = PANEL_DISPLAY_TIME
+	if desired_visible and not hidden_for_elevator and not get_tree().paused:
+		if not was_visible:
+			_set_panel_alpha(0.0)
+		show()
+		var from_alpha := _panel_alpha()
+		if from_alpha < 1.0:
+			_panel_fade = create_tween()
+			_panel_fade.tween_method(_set_panel_alpha, from_alpha, 1.0, PANEL_FADE_IN_TIME)
+
+
+func _fade_out_panel() -> void:
+	_panel_fading_out = true
+	_stop_panel_fade(false)
+	_panel_fade = create_tween()
+	_panel_fade.tween_method(_set_panel_alpha, _panel_alpha(), 0.0, PANEL_FADE_OUT_TIME)
+	_panel_fade.tween_callback(func() -> void:
+		_panel_fading_out = false
+		_auto_hidden = true
+		hide()
+	)
+
+
+func _stop_panel_fade(reset_fading: bool = true) -> void:
+	if _panel_fade != null and _panel_fade.is_valid():
+		_panel_fade.kill()
+	_panel_fade = null
+	if reset_fading:
+		_panel_fading_out = false
+
+
+func _panel_alpha() -> float:
+	return ($ColorRect as CanvasItem).modulate.a
+
+
+func _set_panel_alpha(alpha: float) -> void:
+	for part in [$ColorRect, $StandaloneBorder, $Label2, $VBoxContainer]:
+		(part as CanvasItem).modulate.a = alpha
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if standalone_mode or not event is InputEventKey:
+		return
+	var key := event as InputEventKey
+	if not key.pressed or key.echo or key.keycode != KEY_TAB:
+		return
+	var current_player := get_parent() as Player
+	if not desired_visible or hidden_for_elevator or get_tree().paused:
+		return
+	if current_player == null or not current_player.is_physics_processing():
+		return
+	if DialogManager.is_showing_dialog:
+		return
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	var guide := scene.get_node_or_null("CoolingLocationGuide")
+	if guide != null and bool(guide.get("cutscene_running")):
+		return
+	_reveal_panel()
+	get_viewport().set_input_as_handled()
 
 
 func hide_during_elevator() -> void:
@@ -157,7 +254,7 @@ func hide_during_elevator() -> void:
 
 func restore_after_elevator() -> void:
 	hidden_for_elevator = false
-	visible = desired_visible and not get_tree().paused
+	visible = desired_visible and not _auto_hidden and not get_tree().paused
 
 
 func hide_all_tasks(preserve_optional: bool = true) -> void:
@@ -399,17 +496,26 @@ func _restore_after_scene_change() -> void:
 
 func set_task_visible(index: int, value: bool) -> void:
 	if index >= 0 and index < rows.size():
+		if rows[index].visible != value:
+			_task_changed()
 		rows[index].visible = value
 
 
 func set_task_text(index: int, value: String) -> void:
 	if index >= 0 and index < rows.size():
-		(rows[index].get_node("Label3") as Label).text = value
+		var label := rows[index].get_node("Label3") as Label
+		if label.text != value and rows[index].visible:
+			_task_changed()
+		label.text = value
 
 
 func set_task_completed(index: int, completed: bool, animate: bool = false) -> void:
 	if index < 0 or index >= markers.size():
 		return
+	if _completed_rows.size() == rows.size() and _completed_rows[index] != completed:
+		_completed_rows[index] = completed
+		if rows[index].visible:
+			_task_changed()
 	var marker := markers[index]
 	marker.stop()
 	marker.animation = &"default"

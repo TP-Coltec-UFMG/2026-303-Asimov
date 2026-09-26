@@ -13,6 +13,7 @@ class_name Player extends CharacterBody2D
 @onready var occluder_front: LightOccluder2D = $Sprite2D/OccluderFront
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var crowd_obstacle: NavigationObstacle2D = $CrowdObstacle
 
 @onready var inteligencia: TextureProgressBar = $CanvasLayer/Control/Inteligencia
 @onready var vida_1: TextureProgressBar = $CanvasLayer/Control/Vida1
@@ -57,6 +58,7 @@ class MovementAudioGuard extends Node:
 		var player := get_parent() as Player
 		if not player.is_physics_processing() or not player.can_process() or not player.is_visible_in_tree():
 			player._stop_movement_sfx()
+			player.crowd_obstacle.velocity = Vector2.ZERO
 
 var objetos_grab_left: Array[ObjetoEmpurravel] = []
 var objetos_grab_right: Array[ObjetoEmpurravel] = []
@@ -225,6 +227,7 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 	# Estados transitórios não devem sobreviver ao respawn.
 	direction = Vector2.ZERO
 	velocity = Vector2.ZERO
+	crowd_obstacle.velocity = Vector2.ZERO
 	state = "idle"
 
 	correndo = false
@@ -267,6 +270,7 @@ func _physics_process(delta: float) -> void:
 			state = "idle"
 			UpdateAnimation()
 		_stop_movement_sfx()
+		crowd_obstacle.velocity = Vector2.ZERO
 		return
 
 	direction = Input.get_vector("left", "right", "up", "down")
@@ -298,6 +302,7 @@ func _physics_process(delta: float) -> void:
 		_physics_manipulando(delta)
 	else:
 		move_and_slide()
+	crowd_obstacle.velocity = (global_position - posicao_antes) / delta
 	_update_walking_sfx(global_position.distance_squared_to(posicao_antes) > 0.000001)
 
 func atualizar_corrida(delta: float) -> void:

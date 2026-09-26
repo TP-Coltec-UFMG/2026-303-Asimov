@@ -26,6 +26,7 @@ var checkpoint_restored: bool = false
 
 @export var walk_speed: float = 30.0
 @export var run_speed: float = 60.0
+@export var crowd_avoidance_enabled: bool = false
 
 @export var walk_animation_speed: float = 8.0
 @export var run_animation_speed: float = 14.0
@@ -86,11 +87,23 @@ var rng := RandomNumberGenerator.new()
 
 @onready var interaction_icon: Label = $InteractionPrompt
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var crowd_agent: NavigationAgent2D = $CrowdAvoidance
 
 
 func _ready() -> void:
 	rng.randomize()
 	interaction_icon.visible = false
+	if crowd_avoidance_enabled:
+		# O jogador não é bloqueado pela colisão passiva do NPC. O desvio
+		# da multidão fica a cargo do NavigationServer2D.
+		var body := $CharacterBody2D as CharacterBody2D
+		body.collision_layer = 2
+		body.collision_mask = 0
+		# O Godot exige um destino mesmo quando o agente é usado só para
+		# desvio. As rotas reais continuam sendo os pontos de NPCPath.
+		crowd_agent.target_position = global_position + Vector2(100000.0, 100000.0)
+		crowd_agent.avoidance_enabled = true
+		crowd_agent.velocity_computed.connect(_on_crowd_velocity_computed)
 	setup_sprite_sheet()
 	setup_paths()
 	if save_enabled:
@@ -386,6 +399,10 @@ func add_frame_to_animation(
 
 func _process(delta: float) -> void:
 	_update_interaction_prompt()
+	if crowd_avoidance_enabled:
+		if not desperate and (current_path == null or path_finished) and player_in_range and player_ref:
+			update_direction()
+		return
 
 	if desperate:
 		update_desperate_movement(delta)
@@ -398,6 +415,39 @@ func _process(delta: float) -> void:
 	if player_in_range and player_ref:
 		update_direction()
 		return
+
+
+func _physics_process(delta: float) -> void:
+	if not crowd_avoidance_enabled:
+		return
+	if desperate:
+		update_desperate_movement(delta)
+	elif current_path != null and not path_finished:
+		update_movement(delta)
+	elif player_in_range and is_instance_valid(player_ref):
+		var away := global_position - player_ref.global_position
+		crowd_agent.velocity = away.normalized() * run_speed if away.length_squared() < 256.0 else Vector2.ZERO
+	else:
+		crowd_agent.velocity = Vector2.ZERO
+
+
+func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
+	var delta := get_physics_process_delta_time()
+	global_position += safe_velocity * delta
+	if safe_velocity.length_squared() > 1.0:
+		last_direction = safe_velocity.normalized()
+		var kind := desperate_movement_type if desperate else (current_path.movement_type if current_path != null else NPCPath.MovementType.RUN)
+		update_movement_animation(last_direction, kind)
+	elif not desperate and (current_path == null or path_finished):
+		play_idle(last_direction)
+
+	if desperate:
+		if global_position.distance_to(desperate_target) <= 2.0:
+			desperate_wait_timer = rng.randf_range(desperate_min_wait, desperate_max_wait)
+			choose_random_desperate_target()
+	elif current_path != null and not path_finished and current_point >= 0 and current_point < path_points.size():
+		if global_position.distance_to(path_points[current_point]) <= 2.0:
+			go_to_next_path_point()
 
 
 func update_movement(delta: float) -> void:
@@ -430,17 +480,17 @@ func update_movement(delta: float) -> void:
 	if direction != Vector2.ZERO:
 		last_direction = direction
 
-	global_position = global_position.move_toward(
-		target,
-		speed * delta
-	)
+	if crowd_avoidance_enabled:
+		crowd_agent.velocity = direction * speed
+	else:
+		global_position = global_position.move_toward(target, speed * delta)
 
 	update_movement_animation(
 		direction,
 		current_path.movement_type
 	)
 
-	if global_position.distance_to(target) < 1.0:
+	if not crowd_avoidance_enabled and global_position.distance_to(target) < 1.0:
 		global_position = target
 
 		go_to_next_path_point()
@@ -533,6 +583,8 @@ func update_desperate_movement(
 ) -> void:
 	if desperate_wait_timer > 0.0:
 		desperate_wait_timer -= delta
+		if crowd_avoidance_enabled:
+			crowd_agent.velocity = Vector2.ZERO
 
 		play_idle(last_direction)
 
@@ -550,17 +602,17 @@ func update_desperate_movement(
 	if desperate_movement_type == NPCPath.MovementType.RUN:
 		speed = run_speed
 
-	global_position = global_position.move_toward(
-		desperate_target,
-		speed * delta
-	)
+	if crowd_avoidance_enabled:
+		crowd_agent.velocity = direction * speed
+	else:
+		global_position = global_position.move_toward(desperate_target, speed * delta)
 
 	update_movement_animation(
 		direction,
 		desperate_movement_type
 	)
 
-	if global_position.distance_to(
+	if not crowd_avoidance_enabled and global_position.distance_to(
 		desperate_target
 	) < 0.2:
 		global_position = desperate_target
