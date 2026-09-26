@@ -27,9 +27,6 @@ var configs: Dictionary = {
 	"difficulty": ""
 }
 
-# Destino temporário usado pelo tutorial. Não faz parte do arquivo de save:
-# um tutorial iniciado pelo botão dedicado volta ao menu; o tutorial da
-# primeira partida segue para a seleção de personagem.
 var tutorial_return_scene: String = "res://Scenes/slectionpage.tscn"
 
 func _change_traducao(new_value : String):

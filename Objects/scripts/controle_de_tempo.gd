@@ -90,7 +90,7 @@ func _verificar_evento_refrigeracao(tempo_restante_atual: float) -> void:
 		return
 	if bool(estado.get("cooling_optional_task_completed", false)):
 		return
-	# A redução temporária da queda de energia não pode antecipar o evento.
+
 	if (
 		bool(estado.get("data_center_power_outage", false))
 		and not bool(estado.get("data_center_breaker_restored", false))
@@ -122,7 +122,6 @@ func carregar_tempo_restante(novo_tempo: float) -> void:
 
 	atualizar_label()
 
-	# Se o tempo carregado for 0 ou menor, encerra o jogo imediatamente
 	if tempo_carregado <= 0.0:
 		fim_de_jogo()
 		return

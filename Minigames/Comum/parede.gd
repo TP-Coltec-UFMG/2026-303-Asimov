@@ -1,6 +1,6 @@
 @tool
 extends StaticBody2D
-## A forma editável em CollisionPolygon2D também determina o desenho.
+
 func _ready() -> void:
 	add_to_group("paredes")
 	queue_redraw()
@@ -17,7 +17,7 @@ func _draw() -> void:
 		if pontos.size() < 3:
 			continue
 		draw_colored_polygon(pontos, Color("344858"))
-		# Painéis bem simples nas partes largas: quatro cantos precisam estar na parede.
+
 		for y in range(8, 270, 36):
 			for x in range(8, 480, 36):
 				var ret := Rect2(x, y, 24, 24)

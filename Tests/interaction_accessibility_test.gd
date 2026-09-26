@@ -1,6 +1,5 @@
 extends Node2D
 
-# Executar somente na cópia isolada; o teste não chama saves ou checkpoints.
 @onready var fixture: Node2D = $Fixture
 @onready var trigger: SceneTrigger = $Fixture/SceneTrigger
 @onready var interaction: Area2D = $Fixture/SceneTrigger/Interectable
@@ -87,7 +86,7 @@ func _run() -> void:
 	_expect(_count_nodes(fixture) == node_count, "Trocar o auxílio não deve criar novos elementos de cena.")
 	FiltroDaltonismo.aplicar_filtro(saved_mode)
 	if failures.is_empty():
-		print("PASS: interaction accessibility proximity, visibility, disabled state, paused toggles and collision geometry.")
+		pass
 	else:
 		for failure in failures:
 			push_error(failure)

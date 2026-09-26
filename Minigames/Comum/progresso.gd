@@ -1,5 +1,5 @@
 extends Node
-## Estado pequeno e independente. As fases ficam abertas para testar no editor.
+
 var concluidas: Array = [[false, false, false, false], [false, false, false, false], [false]]
 var som_ativo: bool = true
 var modo_teste: bool = false
@@ -110,7 +110,7 @@ func terminal_refrigeracao_concluido(estado: Dictionary, value: String) -> bool:
 	var normalized := normalizar_terminal_refrigeracao(value)
 	if bool(estado.get(_cooling_terminal_state_key(normalized), false)):
 		return true
-	# Saves antigos possuíam somente uma recompensa, vinda do primeiro terminal.
+
 	return (
 		normalized == TERMINAL_REFRIGERACAO_1
 		and bool(estado.get("cooling_time_reward_granted", false))
@@ -183,11 +183,10 @@ func concluir_refrigeracao_ia() -> void:
 		temporizador.call("carregar_tempo_restante", tempo_recompensado)
 	else:
 		tempo_recompensado = minf(tempo_recompensado + 90.0, 600.0)
-	# Mantém exatamente o mesmo temporizador usado no cálculo. Uma nova busca pelo
-	# grupo poderia encontrar outro HUD durante uma transição de cena.
+
 	SaveGame.tempo_atual = tempo_recompensado
 	estado[_cooling_terminal_state_key(normalized_terminal)] = true
-	# Mantido para compatibilidade com checkpoints da versão de terminal único.
+
 	estado["cooling_time_reward_granted"] = true
 	estado["cooling_optional_task_completed"] = true
 	estado["cooling_completion_thought_pending"] = true

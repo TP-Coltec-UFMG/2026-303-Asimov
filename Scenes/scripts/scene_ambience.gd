@@ -2,7 +2,6 @@ extends Node2D
 
 @export_enum("Hall", "Data Center", "Refrigeração", "Escritório", "Ferramentas") var ambience_kind: int = 0
 
-# Gravações CC0, com as fontes em Sounds/External/SOURCES.md.
 const VENTILATION: AudioStream = preload("res://Sounds/External/computer-ventilation-0126.mp3")
 const ROOM_VOLUMES_DB: Array[float] = [-25.0, -28.0, -17.0, -27.0, -23.0]
 const LOOP_CROSSFADE: float = 0.5
@@ -52,8 +51,7 @@ func _process(delta: float) -> void:
 		bed.volume_linear = 0.0
 		next_bed.volume_linear = 0.0
 		return
-	# Reproduz a gravação real com uma pequena sobreposição nas emendas.
-	# Não força o loop de uma rajada de ar, que antes pulsava a cada 2 segundos.
+
 	entrance_fade = minf(entrance_fade + delta / 1.0, 1.0)
 	var gain := db_to_linear(ROOM_VOLUMES_DB[ambience_kind]) * entrance_fade
 	if not loop_crossfading and bed.get_playback_position() >= bed.stream.get_length() - LOOP_CROSSFADE:
@@ -74,7 +72,7 @@ func _process(delta: float) -> void:
 			loop_crossfading = false
 	else:
 		bed.volume_linear = gain
-		# Também se recupera de uma pausa longa do depurador que ultrapasse a emenda.
+
 		if not bed.playing:
 			bed.play()
 

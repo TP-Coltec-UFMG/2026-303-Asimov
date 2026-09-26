@@ -4,9 +4,6 @@ signal minigame_completed
 signal minigame_failed
 
 
-# ============================================================
-# MODOS DE OBJETIVO
-# ============================================================
 
 enum ModoObjetivo {
 	QUEIMAR_RESISTOR,
@@ -20,9 +17,6 @@ enum ModoObjetivo {
 @export var modo_objetivo: ModoObjetivo = ModoObjetivo.QUEIMAR_RESISTOR
 
 
-# ============================================================
-# REFERÊNCIAS
-# ============================================================
 
 @onready var circuito: Node2D = $Circuito
 @onready var bateria = $Circuito/Bateria
@@ -52,9 +46,6 @@ enum ModoObjetivo {
 @onready var botao_continuar: Button = $Fundo_preto_tutorial/Button
 
 
-# ============================================================
-# ESTADO DO TUTORIAL
-# ============================================================
 
 var passo_atual: int = 0
 var passo_pronto: bool = false
@@ -64,17 +55,11 @@ var _nos_destacados: Array = []
 var _proximo_passo_do_botao: int = -1
 
 
-# ============================================================
-# ESTADO DOS AVISOS
-# ============================================================
 
 var _aviso_ativo: bool = false
 var _passo_antes_do_aviso: int = 0
 
 
-# ============================================================
-# ESTADO DAS CONEXÕES DO TUTORIAL DO LED
-# ============================================================
 
 var _corte_j03_resistor_existia: bool = false
 var _corte_j04_led_existia: bool = false
@@ -89,9 +74,6 @@ func notificar_derrota() -> void:
 	minigame_failed.emit()
 
 
-# ============================================================
-# READY
-# ============================================================
 
 func _ready() -> void:
 	_configurar_componente_led()
@@ -100,40 +82,16 @@ func _ready() -> void:
 
 	add_to_group("tutorial_objetivo")
 
-	# ========================================================
-	# IMPORTANTE:
-	# O circuito NÃO deve ser desmontado no modo de queimar
-	# a bateria.
-	#
-	# Ele deve começar normalmente conectado:
-	#
-	# Bateria (-) -> Juncao01
-	# Juncao01 -> Juncao02
-	# Juncao02 -> LED (-)
-	# LED (+) -> Juncao04
-	# Juncao04 -> Resistor (-)
-	# Resistor (+) -> Juncao03
-	# Juncao03 -> Bateria (+)
-	#
-	# O jogador irá cortar e reconectar esses fios durante
-	# o tutorial para criar o curto circuito.
-	# ========================================================
 
-	# Define o objetivo da interface.
 	if interface_jogo.has_method("definir_objetivo"):
 		interface_jogo.definir_objetivo(_objetivo_da_interface())
 
-	# Conecta o botão Continuar.
 	if not botao_continuar.pressed.is_connected(_on_button_pressed):
 		botao_continuar.pressed.connect(_on_button_pressed)
 
-	# Começa o tutorial.
 	_iniciar_passo(0)
 
 
-# ============================================================
-# PROCESS
-# ============================================================
 
 func _process(_delta: float) -> void:
 	if not passo_pronto:
@@ -153,8 +111,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if not is_visible_in_tree() or circuito == null:
 		return
-	# Na campanha há uma câmera e outros Controls atrás do CanvasLayer.
-	# Seleciona o conector no canvas visível, sem depender do picking do mapa.
+
 	var nearest: Area2D = null
 	var nearest_distance := INF
 	for candidate in get_tree().get_nodes_in_group("pontos_conexao"):
@@ -178,14 +135,10 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-# ============================================================
-# OBJETIVO DA INTERFACE
-# ============================================================
 
 func _configurar_componente_led() -> void:
 	match modo_objetivo:
 
-		# Objetivos focados em queimar o LED: usa o Componente2.
 		ModoObjetivo.QUEIMAR_LED, ModoObjetivo.QUEIMAR_LED_E_RESISTOR, ModoObjetivo.QUEIMAR_LED_E_BATERIA:
 			componente1.visible = false
 			Componente2.visible = true
@@ -193,7 +146,6 @@ func _configurar_componente_led() -> void:
 			colison_led_terminal_positivo.position = Vector2(80, 42)
 			colison_led_terminal_negativo.position = Vector2(-50, 42)
 
-		# Demais objetivos: usa o Componente1.
 		ModoObjetivo.QUEIMAR_RESISTOR, ModoObjetivo.QUEIMAR_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
 			componente1.visible = true
 			Componente2.visible = false
@@ -226,18 +178,12 @@ func _objetivo_da_interface():
 	return interface_jogo.Objetivo.RESISTOR
 
 
-# ============================================================
-# AVANÇAR PASSO
-# ============================================================
 
 func _avancar_passo(proximo: int) -> void:
 	passo_pronto = false
 	_iniciar_passo(proximo)
 
 
-# ============================================================
-# INICIAR PASSO
-# ============================================================
 
 func _iniciar_passo(passo: int) -> void:
 	passo_atual = passo
@@ -274,9 +220,6 @@ func _iniciar_passo(passo: int) -> void:
 	passo_pronto = true
 
 
-# ============================================================
-# VERIFICAR PASSO ATUAL
-# ============================================================
 
 func _verificar_passo_atual() -> void:
 	match modo_objetivo:
@@ -297,11 +240,6 @@ func _verificar_passo_atual() -> void:
 			_verificar_passo_queimar_componente_e_bateria()
 
 
-# ============================================================
-# ============================================================
-# QUEIMAR RESISTOR
-# ============================================================
-# ============================================================
 
 func _iniciar_passo_queimar_resistor(passo: int) -> void:
 
@@ -348,19 +286,11 @@ func _verificar_passo_queimar_resistor() -> void:
 		_finalizar_orientacao()
 
 
-# ============================================================
-# ============================================================
-# QUEIMAR LED
-# ============================================================
-# ============================================================
 
 func _iniciar_passo_queimar_led(passo: int) -> void:
 
 	match passo:
 
-		# --------------------------------------------------------
-		# ETAPA 1
-		# --------------------------------------------------------
 
 		0:
 			texto_orientacao.text = \
@@ -373,10 +303,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			_proximo_passo_do_botao = 1
 
 
-		# --------------------------------------------------------
-		# ETAPA 2
-		# Cortar Juncao03 -> Resistor
-		# --------------------------------------------------------
 
 		1:
 			_destacar(juncao03)
@@ -396,10 +322,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-		# --------------------------------------------------------
-		# ETAPA 3
-		# Cortar Juncao04 -> LED
-		# --------------------------------------------------------
 
 		2:
 			_destacar(juncao04)
@@ -419,10 +341,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-		# --------------------------------------------------------
-		# ETAPA 4
-		# Juncao03 -> LED
-		# --------------------------------------------------------
 
 		3:
 			_destacar(juncao03)
@@ -474,20 +392,11 @@ func _verificar_passo_queimar_led() -> void:
 				_finalizar_orientacao()
 
 
-# ============================================================
-# ============================================================
-# QUEIMAR BATERIA
-# ============================================================
-# ============================================================
 
 func _iniciar_passo_queimar_bateria(passo: int) -> void:
 
 	match passo:
 
-		# --------------------------------------------------------
-		# ETAPA 1
-		# O circuito normal já está montado.
-		# --------------------------------------------------------
 
 		0:
 			_destacar(bateria)
@@ -502,10 +411,6 @@ func _iniciar_passo_queimar_bateria(passo: int) -> void:
 			_proximo_passo_do_botao = 1
 
 
-		# --------------------------------------------------------
-		# ETAPA 2
-		# Criar curto circuito.
-		# --------------------------------------------------------
 
 		1:
 			_destacar(bateria)
@@ -527,19 +432,11 @@ func _verificar_passo_queimar_bateria() -> void:
 		_finalizar_orientacao()
 
 
-# ============================================================
-# ============================================================
-# QUEIMAR LED + RESISTOR
-# ============================================================
-# ============================================================
 
 func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 
 	match passo:
 
-		# --------------------------------------------------------
-		# ETAPA 1
-		# --------------------------------------------------------
 
 		0:
 			_destacar(bateria)
@@ -553,9 +450,6 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-		# --------------------------------------------------------
-		# ETAPA 2
-		# --------------------------------------------------------
 
 		1:
 			_destacar(alicate)
@@ -609,20 +503,12 @@ func _verificar_passo_queimar_componente_e_bateria() -> void:
 		_finalizar_orientacao()
 
 
-# ============================================================
-# ============================================================
-# BOTÃO CONTINUAR
-# ============================================================
-# ============================================================
 
 func _on_button_pressed() -> void:
 
 	if not passo_pronto:
 		return
 
-	# --------------------------------------------------------
-	# Aviso de conexão
-	# --------------------------------------------------------
 
 	if _aviso_ativo:
 
@@ -634,9 +520,6 @@ func _on_button_pressed() -> void:
 
 		return
 
-	# --------------------------------------------------------
-	# Próximo passo configurado
-	# --------------------------------------------------------
 
 	if _proximo_passo_do_botao >= 0:
 
@@ -644,18 +527,10 @@ func _on_button_pressed() -> void:
 
 		return
 
-	# --------------------------------------------------------
-	# Finalizar
-	# --------------------------------------------------------
 
 	_finalizar_orientacao()
 
 
-# ============================================================
-# ============================================================
-# MOSTRAR AVISO DE CONEXÃO
-# ============================================================
-# ============================================================
 
 func mostrar_aviso_conexao(mensagem: String) -> void:
 
@@ -682,11 +557,6 @@ func mostrar_aviso_conexao(mensagem: String) -> void:
 	passo_pronto = true
 
 
-# ============================================================
-# ============================================================
-# VERIFICAR CONEXÃO
-# ============================================================
-# ============================================================
 
 func _tem_conexao(a, b) -> bool:
 
@@ -712,11 +582,6 @@ func _tem_conexao(a, b) -> bool:
 	return false
 
 
-# ============================================================
-# ============================================================
-# FINALIZAR ORIENTAÇÃO
-# ============================================================
-# ============================================================
 
 func _finalizar_orientacao() -> void:
 
@@ -731,11 +596,6 @@ func _finalizar_orientacao() -> void:
 	_limpar_destaques()
 
 
-# ============================================================
-# ============================================================
-# DESTACAR NÓ
-# ============================================================
-# ============================================================
 
 func _destacar(no: Node, z_extra: int = 5) -> void:
 
@@ -761,11 +621,6 @@ func _destacar(no: Node, z_extra: int = 5) -> void:
 	no.z_index += z_extra
 
 
-# ============================================================
-# ============================================================
-# LIMPAR DESTAQUES
-# ============================================================
-# ============================================================
 
 func _limpar_destaques() -> void:
 

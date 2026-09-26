@@ -1,5 +1,5 @@
 extends Node2D
-## O mesmo raycast recorta o cone e verifica cobertura. Só paredes, camada 1.
+
 @export var angulo_inicial: float = 90.0
 @export var angulo_final: float = 180.0
 @export var duracao_giro: float = 2.8
@@ -38,7 +38,7 @@ func atualizar_estado(t: float) -> void:
 		aviso = ciclo >= desligado_por and ciclo < desligado_por + AQUECIMENTO
 		ativo = ciclo >= desligado_por + AQUECIMENTO
 	else:
-		# Pausa curta nas pontas para o jogador ler o padrão.
+
 		var periodo := duracao_giro + 0.7
 		var ciclo := fposmod(t + defasagem, periodo * 2.0)
 		var ida := ciclo < periodo
@@ -69,7 +69,7 @@ func recortar_cone() -> void:
 		var destino := to_global(Vector2.UP.rotated(a) * alcance)
 		var pt_local := to_local(raio_ate(destino))
 		
-		# Ignora vértices duplicados ou extremamente próximos do último inserido
+
 		if pt_local.distance_squared_to(novos_pontos[-1]) > 0.1:
 			novos_pontos.append(pt_local)
 

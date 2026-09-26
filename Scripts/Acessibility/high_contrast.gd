@@ -103,7 +103,6 @@ func _apply_button(button: Button) -> void:
 	_save_original_button_theme(button)
 	var neutral_background := _get_neutral_background()
 
-	# Todos os textos dos botões usam a cor escolhida.
 	button.add_theme_color_override(
 		"font_color",
 		accent_color
@@ -129,7 +128,6 @@ func _apply_button(button: Button) -> void:
 		accent_color
 	)
 
-	# Botões flat continuam sem caixa.
 	if button.flat:
 		button.add_theme_color_override(
 			"font_outline_color",
@@ -162,8 +160,6 @@ func _apply_button(button: Button) -> void:
 	)
 	var neutral_foreground := _get_neutral_foreground()
 
-	# NORMAL
-	# Fundo neutro de maior contraste + borda colorida.
 	var normal_style: StyleBoxFlat = _make_stylebox(
 		neutral_background,
 		accent_color,
@@ -171,8 +167,6 @@ func _apply_button(button: Button) -> void:
 		original_normal
 	)
 
-	# HOVER
-	# Fundo neutro + borda neutra oposta.
 	var hover_style: StyleBoxFlat = _make_stylebox(
 		neutral_background,
 		neutral_foreground,
@@ -180,8 +174,6 @@ func _apply_button(button: Button) -> void:
 		original_hover
 	)
 
-	# PRESSIONADO
-	# Fundo neutro + borda colorida mais grossa.
 	var pressed_style: StyleBoxFlat = _make_stylebox(
 		neutral_background,
 		accent_color,
@@ -189,8 +181,6 @@ func _apply_button(button: Button) -> void:
 		original_pressed
 	)
 
-	# FOCO
-	# Fundo neutro + borda neutra oposta.
 	var focus_style: StyleBoxFlat = _make_stylebox(
 		neutral_background,
 		neutral_foreground,
@@ -617,13 +607,10 @@ func _make_stylebox(
 		border_width
 	)
 
-	# SEM CANTOS ARREDONDADOS.
 	style.set_corner_radius_all(
 		0
 	)
 
-	# Mantém o espaço interno original do botão,
-	# evitando mudança de tamanho/deslocamento.
 	if original_style != null:
 		style.set_content_margin(
 			SIDE_LEFT,
@@ -649,8 +636,7 @@ func _make_stylebox(
 
 
 func _get_neutral_background() -> Color:
-	# Escolhe automaticamente o fundo neutro que oferece maior contraste
-	# com a cor selecionada pelo jogador.
+
 	return BLACK if accent_color.get_luminance() >= 0.179 else WHITE
 
 

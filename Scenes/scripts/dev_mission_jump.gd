@@ -1,6 +1,5 @@
 extends CanvasLayer
 
-# Ferramenta temporária de teste. Só funciona nas versões de depuração.
 const PLAYER_SCENE := "res://Player/ManPlayer.tscn"
 const HALL := "res://Scenes/andar_hall.tscn"
 const OFFICE := "res://Scenes/andar_escritorio.tscn"
@@ -77,7 +76,7 @@ func _shortcut_stage(keycode: Key) -> int:
 	if keycode >= KEY_1 and keycode <= KEY_9:
 		return keycode - KEY_1
 	if keycode == KEY_0:
-		return 13 # Atalho rápido para o começo do final do programador.
+		return 13
 	return -1
 
 

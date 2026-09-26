@@ -9,17 +9,11 @@ extends Area2D
 @onready var ponto_colisao: CollisionShape2D = $CollisionShape2D
 
 
-# ==========================================
-# CONEXÕES
-# ==========================================
 
 var conexoes_terminais: Array = []
 var conexoes_atuais: int = 0
 
 
-# ==========================================
-# CONTROLE DO ARRASTO
-# ==========================================
 
 var arrastando: bool = false
 
@@ -27,9 +21,6 @@ var fio_atual: Node2D = null
 var mouse_follow: Node2D = null
 
 
-# ==========================================
-# INICIALIZAÇÃO
-# ==========================================
 
 func _ready() -> void:
 
@@ -43,18 +34,12 @@ func _ready() -> void:
 	)
 
 
-# ==========================================
-# VERIFICAR DISPONIBILIDADE
-# ==========================================
 
 func esta_disponivel() -> bool:
 
 	return conexoes_atuais < max_conexoes
 
 
-# ==========================================
-# ADICIONAR CONEXÃO
-# ==========================================
 
 func adicionar_conexao(alvo) -> void:
 
@@ -73,20 +58,12 @@ func adicionar_conexao(alvo) -> void:
 
 	conexoes_terminais.append(alvo)
 
-	# O valor já pode ter sido reservado pelo
-	# arrasto do terminal.
-	#
-	# Portanto só aumenta caso ainda não esteja
-	# representando esta conexão.
 
 	if conexoes_atuais < max_conexoes:
 
 		conexoes_atuais += 1
 
 
-# ==========================================
-# REMOVER CONEXÃO
-# ==========================================
 
 func remover_conexao(alvo) -> void:
 
@@ -100,9 +77,6 @@ func remover_conexao(alvo) -> void:
 		)
 
 
-# ==========================================
-# IDENTIFICA O COMPONENTE DO TERMINAL
-# ==========================================
 
 func obter_componente() -> String:
 
@@ -119,9 +93,6 @@ func obter_componente() -> String:
 	)
 
 
-# ==========================================
-# CLIQUE PARA COMEÇAR UM FIO
-# ==========================================
 
 func _on_input_event(
 	_viewport,
@@ -146,15 +117,9 @@ func _on_input_event(
 		iniciar_fio()
 
 
-# ==========================================
-# INICIAR FIO
-# ==========================================
 
 func iniciar_fio() -> void:
 
-	# ==========================================
-	# LIMITE DO TERMINAL
-	# ==========================================
 
 	if not esta_disponivel():
 
@@ -165,23 +130,14 @@ func iniciar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# VERIFICAR FIO
-	# ==========================================
 
 	if fio_scene == null:
 
-		print(
-			"ERRO: fio_scene não configurada em ",
-			name
-		)
+		pass
 
 		return
 
 
-	# ==========================================
-	# MANTER O ARRASTO NO CANVAS DO PRÓPRIO CIRCUITO
-	# ==========================================
 
 	var circuito := _obter_circuito()
 	if circuito == null:
@@ -191,9 +147,6 @@ func iniciar_fio() -> void:
 	arrastando = true
 
 
-	# ==========================================
-	# CRIAR MOUSE FOLLOW
-	# ==========================================
 
 	mouse_follow = Node2D.new()
 
@@ -205,9 +158,6 @@ func iniciar_fio() -> void:
 		get_global_mouse_position()
 
 
-	# ==========================================
-	# CRIAR FIO
-	# ==========================================
 
 	fio_atual = fio_scene.instantiate()
 
@@ -224,9 +174,6 @@ func iniciar_fio() -> void:
 	)
 
 
-	# ==========================================
-	# CONECTAR AO MOUSE
-	# ==========================================
 
 	if not fio_atual.has_method("conectar"):
 
@@ -241,9 +188,6 @@ func iniciar_fio() -> void:
 	)
 
 
-# ==========================================
-# INPUT GLOBAL
-# ==========================================
 
 func _input(event) -> void:
 
@@ -273,18 +217,12 @@ func _input(event) -> void:
 			finalizar_fio()
 
 
-# ==========================================
-# FINALIZAR FIO
-# ==========================================
 
 func finalizar_fio() -> void:
 
 	arrastando = false
 
 
-	# ==========================================
-	# VERIFICAR FIO
-	# ==========================================
 
 	if fio_atual == null:
 
@@ -300,9 +238,6 @@ func finalizar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# ENCONTRAR ALVO
-	# ==========================================
 
 	var alvo = encontrar_ponto_alvo()
 
@@ -314,9 +249,6 @@ func finalizar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# VERIFICAR CONEXÃO
-	# ==========================================
 
 	if not conexao_permitida(alvo):
 
@@ -325,9 +257,6 @@ func finalizar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# REGISTRAR CONEXÃO
-	# ==========================================
 
 	var circuito := _obter_circuito()
 	if circuito == null or not circuito.registrar_fio_existente(self, alvo, fio_atual):
@@ -335,24 +264,13 @@ func finalizar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# DEFINIR DESTINO DO FIO
-	# ==========================================
 
 	fio_atual.destino = alvo.ponto_colisao
 
 
-	print(
-		"CONEXÃO: ",
-		name,
-		" -> ",
-		alvo.name
-	)
+	pass
 
 
-	# ==========================================
-	# ANALISAR CIRCUITO
-	# ==========================================
 
 	get_tree().call_group(
 		"circuito",
@@ -360,9 +278,6 @@ func finalizar_fio() -> void:
 	)
 
 
-	# ==========================================
-	# LIMPAR MOUSE FOLLOW
-	# ==========================================
 
 	if mouse_follow != null:
 
@@ -376,19 +291,10 @@ func finalizar_fio() -> void:
 	fio_atual = null
 
 
-# ==========================================
-# CANCELAR FIO
-# ==========================================
 
 func cancelar_fio() -> void:
 
-	# ==========================================
-	# O ARRASTO SÓ OCUPA UMA CONEXÃO QUANDO É CONFIRMADO
-	# ==========================================
 
-	# ==========================================
-	# REMOVER FIO
-	# ==========================================
 
 	if fio_atual != null:
 
@@ -397,9 +303,6 @@ func cancelar_fio() -> void:
 			fio_atual.queue_free()
 
 
-	# ==========================================
-	# REMOVER MOUSE FOLLOW
-	# ==========================================
 
 	if mouse_follow != null:
 
@@ -408,9 +311,6 @@ func cancelar_fio() -> void:
 			mouse_follow.queue_free()
 
 
-	# ==========================================
-	# LIMPAR ESTADO
-	# ==========================================
 
 	mouse_follow = null
 	fio_atual = null
@@ -418,9 +318,6 @@ func cancelar_fio() -> void:
 	arrastando = false
 
 
-# ==========================================
-# VERIFICA SE A CONEXÃO É PERMITIDA
-# ==========================================
 
 func conexao_permitida(alvo) -> bool:
 
@@ -439,9 +336,6 @@ func conexao_permitida(alvo) -> bool:
 		return false
 
 
-	# ==========================================
-	# TERMINAL -> TERMINAL
-	# ==========================================
 
 	if alvo.is_in_group("terminais"):
 
@@ -452,18 +346,12 @@ func conexao_permitida(alvo) -> bool:
 		return false
 
 
-	# ==========================================
-	# DUPLICAÇÃO
-	# ==========================================
 
 	if alvo in conexoes_terminais:
 
 		return false
 
 
-	# ==========================================
-	# VERIFICAR DISPONIBILIDADE DO ALVO
-	# ==========================================
 
 	if not alvo.has_method("esta_disponivel"):
 
@@ -493,9 +381,6 @@ func conexao_permitida(alvo) -> bool:
 		return false
 
 
-	# ==========================================
-	# TERMINAL SÓ PODE IR PARA JUNÇÃO
-	# ==========================================
 
 	if not alvo.is_in_group("juncoes"):
 
@@ -509,25 +394,6 @@ func conexao_permitida(alvo) -> bool:
 	return true
 
 
-# ==========================================
-# ENCONTRAR PONTO ALVO
-# ==========================================
-#
-# IMPORTANTE:
-#
-# Diferente da versão anterior, aqui os terminais
-# também são considerados.
-#
-# Assim uma tentativa:
-#
-# Terminal -> Terminal
-#
-# consegue chegar em conexao_permitida()
-# e mostrar o aviso.
-#
-# Também não descartamos pontos cheios.
-#
-# ==========================================
 
 func encontrar_ponto_alvo() -> Variant:
 
@@ -558,10 +424,6 @@ func encontrar_ponto_alvo() -> Variant:
 			continue
 
 
-		# NÃO filtramos disponibilidade aqui.
-		#
-		# Um terminal/junção cheio precisa continuar
-		# sendo encontrado para gerar o aviso.
 
 
 		if not "ponto_colisao" in p:
@@ -602,9 +464,6 @@ func _obter_circuito() -> Node2D:
 	return null
 
 
-# ==========================================
-# MOSTRAR AVISO DO TUTORIAL
-# ==========================================
 
 func _mostrar_aviso_tutorial(
 	mensagem: String

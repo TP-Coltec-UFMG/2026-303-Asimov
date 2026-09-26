@@ -55,7 +55,7 @@ func _adicionar_cronometro(camada: CanvasLayer) -> void:
 	game_timer = GAME_TIMER_SCENE.instantiate() as Control
 	game_timer.name = "GameTimer"
 	game_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
-	# O cronômetro cobre o viewport; sem IGNORE ele intercepta o mouse dos modais.
+
 	game_timer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	camada.add_child(game_timer)
 	var icon := game_timer.get_node_or_null("Control") as Control

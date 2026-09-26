@@ -1,7 +1,5 @@
 extends Node2D
 
-# Reproduz o circuito dentro do HUD, com câmera e uma interface do mapa atrás.
-# Os eventos entram pela viewport: não chama iniciar_fio/finalizar_fio diretamente.
 func _ready() -> void:
 	var camera := Camera2D.new()
 	camera.position = Vector2(1000, 800)
@@ -55,7 +53,7 @@ func _ready() -> void:
 		if not board.conexao_existe(source, target):
 			_fail("Soltar o mouse não conectou o fio.")
 			return
-		print("PASS: clique/arrasto/soltura de ", "terminal" if from_terminal else "junção")
+		pass
 	get_tree().quit(0)
 
 

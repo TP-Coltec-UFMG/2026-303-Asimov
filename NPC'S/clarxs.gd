@@ -11,12 +11,11 @@ signal interaction_requested(npc: Node2D)
 @export var dialog_texts: Array[String] = []
 @export var dialog_enabled: bool = true
 @export var dialog_id: String = ""
-## Permite que controladores de cena tratem uma interação sem abrir o diálogo
-## padrão do NPC. Útil para entregas e ações de missão.
+
 @export var interaction_override: bool = false
 @export var interaction_prompt: String = "ESPAÇO: FALAR"
 @export var save_enabled: bool = true
-## Vazio usa o caminho na cena. Defina um ID estável para NPCs gerados por código.
+
 @export var save_id: String = ""
 
 var checkpoint_restored: bool = false
@@ -94,13 +93,11 @@ func _ready() -> void:
 	rng.randomize()
 	interaction_icon.visible = false
 	if crowd_avoidance_enabled:
-		# O jogador não é bloqueado pela colisão passiva do NPC. O desvio
-		# da multidão fica a cargo do NavigationServer2D.
+
 		var body := $CharacterBody2D as CharacterBody2D
 		body.collision_layer = 2
 		body.collision_mask = 0
-		# O Godot exige um destino mesmo quando o agente é usado só para
-		# desvio. As rotas reais continuam sendo os pontos de NPCPath.
+
 		crowd_agent.target_position = global_position + Vector2(100000.0, 100000.0)
 		crowd_agent.avoidance_enabled = true
 		crowd_agent.velocity_computed.connect(_on_crowd_velocity_computed)
@@ -796,7 +793,7 @@ func load_checkpoint_state(saved: Dictionary) -> void:
 		return
 	global_position = saved["position"]
 	last_direction = saved.get("last_direction", Vector2.DOWN)
-	# Os pontos são globais: nunca recalcular a rota a partir da posição restaurada.
+
 	var paths: Variant = saved.get("cached_paths", {})
 	if paths is Dictionary:
 		for path_id in paths:
@@ -826,14 +823,14 @@ func load_checkpoint_state(saved: Dictionary) -> void:
 	desperate_wait_timer = float(saved.get("desperate_wait_timer", 0.0))
 	desperate_movement_type = int(saved.get("desperate_movement_type", NPCPath.MovementType.RUN))
 	if not desperate and not path_finished and (current_path == null or current_point < 0 or current_point >= path_points.size()):
-		# Uma rota removida numa edição futura não deve reiniciar toda a sequência.
+
 		push_warning("Rota salva indisponível; NPC permanece na posição salva: " + str(name))
 		stop_current_path()
 	if saved.has("rng_seed"):
 		rng.seed = int(saved["rng_seed"])
 	if saved.has("rng_state"):
 		rng.state = int(saved["rng_state"])
-	# Referências ao jogador são reconstruídas pelos sinais de proximidade.
+
 	player_in_range = false
 	player_ref = null
 	interaction_icon.hide()

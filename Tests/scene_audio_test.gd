@@ -28,7 +28,7 @@ func _run() -> void:
 	capture = AudioEffectCapture.new()
 	capture.buffer_length = 3.0
 	AudioServer.add_bus_effect(0, capture)
-	# Reproducible mix; does not save or alter the user's audio preferences.
+
 	AudioServer.set_bus_volume_db(0, 0.0)
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("sfx"), linear_to_db(0.75))
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(0.1))
@@ -51,7 +51,7 @@ func _run() -> void:
 		var player: Player = scene_manager.player
 		player.checkpoint_enabled = false
 		player.set_physics_process(false)
-		# O menu de pausa carrega as preferências ao entrar na árvore.
+
 		AudioServer.set_bus_volume_db(0, 0.0)
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("sfx"), linear_to_db(0.75))
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(0.1))
@@ -61,7 +61,7 @@ func _run() -> void:
 		capture.clear_buffer()
 		await get_tree().create_timer(0.5).timeout
 		_report_mix(floor_name)
-		# Jump to the loop seam and verify crossfade continuity at runtime.
+
 		ambience.bed.seek(ambience.bed.stream.get_length() - 0.35)
 		await get_tree().create_timer(0.8).timeout
 		_expect(ambience.bed.playing, floor_name + ": ambience survives the loop seam")
@@ -86,7 +86,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	AudioServer.remove_bus_effect(0, AudioServer.get_bus_effect_count(0) - 1)
-	print("SCENE_AUDIO_TEST: ", failures.size(), " failures")
+	pass
 	get_tree().quit(0 if failures.is_empty() else 1)
 
 
@@ -99,7 +99,7 @@ func _report_mix(label: String) -> void:
 		energy += sample.length_squared() / 2.0
 	_expect(not samples.is_empty() and peak > 0.0001, label + ": mixer outputs actual audio samples")
 	_expect(peak < 1.0, label + ": mix must not clip")
-	print("MIX ", label, " peak=", snappedf(linear_to_db(peak), 0.1), " dB RMS=", snappedf(linear_to_db(sqrt(energy / maxi(1, samples.size()))), 0.1), " dB")
+	pass
 
 
 func _expect(condition: bool, message: String) -> void:

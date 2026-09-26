@@ -48,7 +48,6 @@ func fechar(reiniciar: bool = false) -> void:
 	if not iniciar:
 		return
 
-	# O estado deixa de aceitar interações antes de ocultar a janela.
 	iniciar = false
 	pode_escrever = false
 	acabou = true
@@ -83,7 +82,6 @@ func _on_button_2_pressed() -> void:
 	if gerente_tutorial != null and gerente_tutorial.etapa_tutorial == 5:
 		gerente_tutorial.mostrar_etapa_tutorial(6)
 
-	# Também cobre um campo já preenchido antes de entrar nesta etapa.
 	_verificar_id_alterado()
 
 
@@ -125,7 +123,7 @@ func _on_button_4_pressed() -> void:
 
 
 func _on_button_5_pressed() -> void:
-	# O X reinicia apenas a extração; o banco conserva os dados digitados.
+
 	fechar(true)
 
 

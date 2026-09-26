@@ -330,9 +330,7 @@ func _queue_hacking_item_found_thought(
 	item: String,
 	was_first: bool
 ) -> void:
-	# Depois da conversa, o primeiro item explica a solução. O segundo não
-	# repete a fala de item esquecido: _queue_boss_room_hack_thought mostra
-	# diretamente que a porta já pode ser aberta.
+
 	if bool(state.get("office_dialog_finished", false)):
 		if not was_first:
 			return

@@ -48,7 +48,6 @@ func _ready() -> void:
 	particulas.amount_ratio = 1.0
 	set_process(false)
 
-	# Cenas isoladas como o tutorial usam o fogo real sem tocar na campanha.
 	var estado_salvo: Variant = null
 	if save_enabled:
 		estado_salvo = SaveGame.load_object_state(save_id)
@@ -74,8 +73,6 @@ func _start_fire_ambient() -> void:
 	if available_sounds.is_empty():
 		return
 
-	# A escolha é estável para cada fogo: ao recarregar a fase, o mesmo foco
-	# continua com a mesma textura sonora em vez de trocar aleatoriamente.
 	var chooser := RandomNumberGenerator.new()
 	chooser.seed = hash("%s:%s" % [save_id, str(get_path())])
 	var selected := available_sounds[chooser.randi_range(0, available_sounds.size() - 1)]

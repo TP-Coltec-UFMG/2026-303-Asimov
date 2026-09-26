@@ -1,6 +1,5 @@
 extends Area2D
 
-# Recurso próprio do minigame de circuito; não compartilha UID com outros minigames.
 
 
 @export var fio_scene: PackedScene
@@ -15,17 +14,11 @@ var nome: String
 var material_shader: ShaderMaterial
 
 
-# ==========================================
-# CONEXÕES
-# ==========================================
 
 var conexoes_terminais: Array = []
 var conexoes_atuais: int = 0
 
 
-# ==========================================
-# CONTROLE DO ARRASTO
-# ==========================================
 
 var arrastando: bool = false
 
@@ -33,9 +26,6 @@ var fio_atual: Node2D = null
 var mouse_follow: Node2D = null
 
 
-# ==========================================
-# INICIALIZAÇÃO
-# ==========================================
 
 func _ready() -> void:
 
@@ -54,16 +44,9 @@ func _ready() -> void:
 
 	desativar_destaque()
 
-	print(
-		"JUNÇÃO ",
-		nome,
-		" pronta"
-	)
+	pass
 
 
-# ==========================================
-# DESTAQUE
-# ==========================================
 
 func ativar_destaque() -> void:
 
@@ -81,18 +64,12 @@ func desativar_destaque() -> void:
 	animation_player.material = null
 
 
-# ==========================================
-# VERIFICAR DISPONIBILIDADE
-# ==========================================
 
 func esta_disponivel() -> bool:
 
 	return conexoes_atuais < max_conexoes
 
 
-# ==========================================
-# ADICIONAR CONEXÃO REAL
-# ==========================================
 
 func adicionar_conexao(alvo) -> void:
 
@@ -104,12 +81,7 @@ func adicionar_conexao(alvo) -> void:
 
 	if alvo in conexoes_terminais:
 
-		print(
-			"[JUNÇÃO] ",
-			nome,
-			" já possui conexão com ",
-			alvo.name
-		)
+		pass
 
 		return
 
@@ -119,27 +91,11 @@ func adicionar_conexao(alvo) -> void:
 	conexoes_atuais += 1
 
 
-	print(
-		"[JUNÇÃO] ",
-		nome,
-		" recebeu conexão com ",
-		alvo.name
-	)
+	pass
 
-	print(
-		"[JUNÇÃO] ",
-		nome,
-		" agora possui ",
-		conexoes_atuais,
-		"/",
-		max_conexoes,
-		" conexões."
-	)
+	pass
 
 
-# ==========================================
-# REMOVER CONEXÃO REAL
-# ==========================================
 
 func remover_conexao(alvo) -> void:
 
@@ -156,26 +112,13 @@ func remover_conexao(alvo) -> void:
 			conexoes_atuais - 1
 		)
 
-		print(
-			"[JUNÇÃO] ",
-			nome,
-			" removeu conexão com ",
-			alvo.name
-		)
+		pass
 
 	else:
 
-		print(
-			"[JUNÇÃO] Tentativa de remover conexão inexistente: ",
-			nome,
-			" -> ",
-			alvo.name
-		)
+		pass
 
 
-# ==========================================
-# INPUT DO MOUSE
-# ==========================================
 
 func _on_input_event(
 	_viewport,
@@ -197,21 +140,15 @@ func _on_input_event(
 		iniciar_fio()
 
 
-# ==========================================
-# INICIAR FIO
-# ==========================================
 
 func iniciar_fio() -> void:
 
-	print("")
-	print("========================================")
-	print("[JUNÇÃO] INICIANDO NOVO FIO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# VERIFICAR LIMITE DA JUNÇÃO
-	# ==========================================
 
 	if not esta_disponivel():
 
@@ -222,36 +159,22 @@ func iniciar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# IMPEDIR DOIS ARRASTOS
-	# ==========================================
 
 	if arrastando:
 
-		print(
-			"[JUNÇÃO] Já está arrastando um fio."
-		)
+		pass
 
 		return
 
 
-	# ==========================================
-	# VERIFICAR FIO SCENE
-	# ==========================================
 
 	if fio_scene == null:
 
-		print(
-			"ERRO: fio_scene não configurada em ",
-			nome
-		)
+		pass
 
 		return
 
 
-	# ==========================================
-	# ATIVAR ARRASTO
-	# ==========================================
 
 	arrastando = true
 	var circuito := _obter_circuito()
@@ -260,9 +183,6 @@ func iniciar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# CRIAR PONTO QUE SEGUE O MOUSE
-	# ==========================================
 
 	mouse_follow = Node2D.new()
 
@@ -274,18 +194,13 @@ func iniciar_fio() -> void:
 		get_global_mouse_position()
 
 
-	# ==========================================
-	# CRIAR FIO VISUAL
-	# ==========================================
 
 	fio_atual = fio_scene.instantiate()
 
 
 	if fio_atual == null:
 
-		print(
-			"[JUNÇÃO] ERRO: fio_scene.instantiate() retornou null."
-		)
+		pass
 
 		cancelar_fio()
 
@@ -297,15 +212,10 @@ func iniciar_fio() -> void:
 	)
 
 
-	# ==========================================
-	# CONECTAR ORIGEM AO MOUSE
-	# ==========================================
 
 	if not fio_atual.has_method("conectar"):
 
-		print(
-			"[JUNÇÃO] ERRO: Fio não possui conectar()."
-		)
+		pass
 
 		cancelar_fio()
 
@@ -318,14 +228,9 @@ func iniciar_fio() -> void:
 	)
 
 
-	print(
-		"[JUNÇÃO] Fio seguindo o mouse."
-	)
+	pass
 
 
-# ==========================================
-# INPUT GLOBAL
-# ==========================================
 
 func _input(event) -> void:
 
@@ -354,24 +259,18 @@ func _input(event) -> void:
 			finalizar_fio()
 
 
-# ==========================================
-# FINALIZAR FIO
-# ==========================================
 
 func finalizar_fio() -> void:
 
-	print("")
-	print("========================================")
-	print("[JUNÇÃO] FINALIZANDO FIO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
 	arrastando = false
 
 
-	# ==========================================
-	# VERIFICAR FIO
-	# ==========================================
 
 	if fio_atual == null:
 
@@ -387,88 +286,60 @@ func finalizar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# ENCONTRAR ALVO
-	# ==========================================
 
 	var alvo = encontrar_ponto_alvo()
 
 
 	if alvo == null:
 
-		print(
-			"[JUNÇÃO] Nenhum alvo encontrado."
-		)
+		pass
 
 		cancelar_fio()
 
 		return
 
 
-	print(
-		"[JUNÇÃO] Alvo encontrado: ",
-		alvo.name
-	)
+	pass
 
 
-	# ==========================================
-	# VERIFICAR SE É PERMITIDO
-	# ==========================================
 
 	if not conexao_permitida(alvo):
 
-		print(
-			"[JUNÇÃO] Conexão não permitida."
-		)
+		pass
 
 		cancelar_fio()
 
 		return
 
 
-	print(
-		"[JUNÇÃO] Conexão permitida."
-	)
+	pass
 
 
-	# ==========================================
-	# PEGAR CIRCUITO
-	# ==========================================
 
 	var circuito := _obter_circuito()
 
 
 	if circuito == null:
 
-		print(
-			"ERRO: circuito não encontrado."
-		)
+		pass
 
 		cancelar_fio()
 
 		return
 
 
-	# ==========================================
-	# VERIFICAR MÉTODO
-	# ==========================================
 
 	if not circuito.has_method(
 		"registrar_fio_existente"
 	):
 
-		print(
-			"ERRO: Circuito não possui registrar_fio_existente()."
-		)
+		pass
 
 		cancelar_fio()
 
 		return
 
 
-	# ==========================================
-	# REGISTRAR NO CIRCUITO
-	# ==========================================
 
 	var sucesso = circuito.registrar_fio_existente(
 		self,
@@ -477,43 +348,27 @@ func finalizar_fio() -> void:
 	)
 
 
-	# ==========================================
-	# CIRCUITO ACEITOU
-	# ==========================================
 
 	if sucesso:
 
-		print("")
-		print("########################################")
-		print("#       NOVA CONEXÃO REALIZADA         #")
-		print("########################################")
+		pass
+		pass
+		pass
+		pass
 
-		print(
-			"[JUNÇÃO] ",
-			nome,
-			" -> ",
-			alvo.nome
-		)
+		pass
 
 
-	# ==========================================
-	# CIRCUITO RECUSOU
-	# ==========================================
 
 	else:
 
-		print(
-			"[JUNÇÃO] Circuito recusou a conexão."
-		)
+		pass
 
 		cancelar_fio()
 
 		return
 
 
-	# ==========================================
-	# LIMPAR MOUSE FOLLOW
-	# ==========================================
 
 	if mouse_follow != null:
 
@@ -524,22 +379,14 @@ func finalizar_fio() -> void:
 		mouse_follow = null
 
 
-	# ==========================================
-	# LIMPAR REFERÊNCIA DO FIO
-	# ==========================================
 
 	fio_atual = null
 
 
-# ==========================================
-# CANCELAR FIO
-# ==========================================
 
 func cancelar_fio() -> void:
 
-	print(
-		"[JUNÇÃO] Cancelando fio..."
-	)
+	pass
 
 
 	if fio_atual != null:
@@ -562,9 +409,6 @@ func cancelar_fio() -> void:
 	arrastando = false
 
 
-# ==========================================
-# VERIFICAR SE CONEXÃO É PERMITIDA
-# ==========================================
 
 func conexao_permitida(alvo) -> bool:
 
@@ -578,16 +422,11 @@ func conexao_permitida(alvo) -> bool:
 
 	if alvo == self:
 
-		print(
-			"[JUNÇÃO] Não pode conectar consigo mesma."
-		)
+		pass
 
 		return false
 
 
-	# ==========================================
-	# TERMINAL -> TERMINAL
-	# ==========================================
 
 	if (
 		is_in_group("terminais")
@@ -602,10 +441,6 @@ func conexao_permitida(alvo) -> bool:
 		return false
 
 
-	# ==========================================
-	# CONEXÕES QUE PASSAM POR CIMA
-	# DOS COMPONENTES
-	# ==========================================
 
 	if _eh_conexao_proibida_entre_juncoes(alvo):
 
@@ -616,22 +451,14 @@ func conexao_permitida(alvo) -> bool:
 		return false
 
 
-	# ==========================================
-	# VERIFICAR DUPLICAÇÃO
-	# ==========================================
 
 	if alvo in conexoes_terminais:
 
-		print(
-			"[JUNÇÃO] Conexão já existe."
-		)
+		pass
 
 		return false
 
 
-	# ==========================================
-	# LIMITE DO DESTINO
-	# ==========================================
 
 	if not alvo.has_method("esta_disponivel"):
 
@@ -664,9 +491,6 @@ func conexao_permitida(alvo) -> bool:
 	return true
 
 
-# ==========================================
-# RESTRIÇÕES ENTRE JUNÇÕES
-# ==========================================
 
 func _eh_conexao_proibida_entre_juncoes(alvo) -> bool:
 
@@ -677,7 +501,6 @@ func _eh_conexao_proibida_entre_juncoes(alvo) -> bool:
 	var nome_alvo: String = alvo.nome
 
 
-	# Juncao01 <-> Juncao03
 
 	if (
 		(nome == "Juncao01" and nome_alvo == "Juncao03")
@@ -688,7 +511,6 @@ func _eh_conexao_proibida_entre_juncoes(alvo) -> bool:
 		return true
 
 
-	# Juncao03 <-> Juncao04
 
 	if (
 		(nome == "Juncao03" and nome_alvo == "Juncao04")
@@ -699,7 +521,6 @@ func _eh_conexao_proibida_entre_juncoes(alvo) -> bool:
 		return true
 
 
-	# Juncao02 <-> Juncao04
 
 	if (
 		(nome == "Juncao02" and nome_alvo == "Juncao04")
@@ -713,19 +534,6 @@ func _eh_conexao_proibida_entre_juncoes(alvo) -> bool:
 	return false
 
 
-# ==========================================
-# ENCONTRAR PONTO ALVO
-# ==========================================
-#
-# IMPORTANTE:
-#
-# Aqui NÃO filtramos mais pontos que estejam
-# sem espaço.
-#
-# Isso permite encontrar uma junção/terminal
-# cheio e então mostrar o aviso correto.
-#
-# ==========================================
 
 func encontrar_ponto_alvo() -> Variant:
 
@@ -756,13 +564,6 @@ func encontrar_ponto_alvo() -> Variant:
 			continue
 
 
-		# NÃO fazer:
-		#
-		# if not p.esta_disponivel():
-		#     continue
-		#
-		# Precisamos encontrar pontos cheios
-		# para mostrar o aviso.
 
 
 		if not "ponto_colisao" in p:
@@ -802,9 +603,6 @@ func _obter_circuito() -> Node2D:
 	return null
 
 
-# ==========================================
-# MOSTRAR AVISO DO TUTORIAL
-# ==========================================
 
 func _mostrar_aviso_tutorial(
 	mensagem: String

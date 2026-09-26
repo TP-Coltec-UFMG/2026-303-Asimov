@@ -27,7 +27,6 @@ func _input(event: InputEvent) -> void:
 		return
 
 
-	# Cancelar com ESC
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		esperando_input = false
 		atualizar_texto()
@@ -36,18 +35,15 @@ func _input(event: InputEvent) -> void:
 		return
 
 
-	# Aceita teclado
 	if event is InputEventKey and event.pressed:
 		remapear(event)
 		get_viewport().set_input_as_handled()
 
 
-	# Aceita mouse
 	elif event is InputEventMouseButton and event.pressed:
 		remapear(event)
 		get_viewport().set_input_as_handled()
 
-	# Aceita também botões de controle, sem capturar o movimento dos analógicos.
 	elif event is InputEventJoypadButton and event.pressed:
 		remapear(event)
 		get_viewport().set_input_as_handled()
@@ -71,8 +67,6 @@ func remapear(novo_input: InputEvent) -> void:
 	elif input_salvo is InputEventJoypadButton:
 		(input_salvo as InputEventJoypadButton).pressed = false
 
-	# Substitui o evento na mesma posição. Isso preserva atalhos secundários
-	# existentes (por exemplo, teclado + mouse) e mantém o texto sincronizado.
 	InputMap.action_erase_events(action)
 	var substituiu := false
 

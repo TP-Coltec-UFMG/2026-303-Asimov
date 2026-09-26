@@ -168,7 +168,6 @@ func aplicar_direcao_fumaca() -> void:
 	if material_fumaca == null:
 		return
 
-	# O material é exclusivo deste extintor; a gravidade só muda com a mira.
 	if angulo_final_fumaca == ultimo_angulo_material:
 		return
 	ultimo_angulo_material = angulo_final_fumaca

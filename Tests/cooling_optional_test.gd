@@ -140,7 +140,7 @@ func _run() -> void:
 	await get_tree().process_frame
 	scene_manager.player = player
 	Progresso.retorno_refrigeracao_ia = true
-	# O teste valida o prêmio sem trocar a cena que está executando o próprio teste.
+
 	Progresso.cena_de_retorno = ""
 	Progresso.marcador_de_retorno = ""
 	var gameplay_instance := gameplay.instantiate()
@@ -210,10 +210,10 @@ func _run() -> void:
 	SaveGame.save_data = original_save
 	SaveGame.tempo_atual = original_time
 	if failures.is_empty():
-		print("COOLING_OPTIONAL_TEST_PASSED")
+		pass
 		get_tree().quit(0)
 	else:
-		print("COOLING_OPTIONAL_TEST_FAILED: ", failures)
+		pass
 		get_tree().quit(1)
 
 

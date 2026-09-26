@@ -121,7 +121,7 @@ func _start_cutscene() -> void:
 	black_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	highlight.show()
 	cutscene_camera.global_position = area_focus.global_position
-	# Abre o enquadramento para mostrar a entrada e o entorno da refrigeração.
+
 	cutscene_camera.zoom = player_camera.zoom * 0.68
 	cutscene_camera.enabled = true
 	cutscene_camera.make_current()
@@ -135,9 +135,7 @@ func _start_cutscene() -> void:
 	if not _cutscene_is_valid():
 		return
 	guide_hold_active = true
-	# The AnimationTree's Hold state was hiding the title/highlight before the
-	# camera move ended. Freeze it during the presentation and keep these visuals
-	# under direct control until the intentional fade-out starts.
+
 	animation_tree.active = false
 	_keep_guide_visible()
 	guide_hold_pulse = create_tween().set_loops()
@@ -193,7 +191,7 @@ func _finish_cutscene(save_seen: bool) -> void:
 
 
 func _keep_guide_visible() -> void:
-	# Hold the title and entrance highlight for the full reveal.
+
 	if is_instance_valid($Overlay/Title):
 		$Overlay/Title.show()
 		$Overlay/Title.modulate.a = 1.0

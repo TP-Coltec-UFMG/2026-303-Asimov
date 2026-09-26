@@ -70,22 +70,19 @@ func iniciar_grade() -> void:
 	for y in range(7):
 		for x in range(8):
 			if x == 7 and y == 6:
-				pass # cano final
+				pass
 			else:
 				grade[y][x] = canos[x * 7 + y]
 
 
 func configurar_canos() -> void:
-	# Primeiro preenche o tabuleiro com distrações aleatórias.
+
 	for y in range(7):
 		for x in range(8):
 			if Vector2i(x, y) == SAIDA_GRADE:
 				continue
 			grade[y][x].set_type(randi() % QUANTIDADE_TIPOS_CANOS)
 
-	# Depois constrói uma rota monotônica e válida. Ela sempre usa exatamente
-	# seis movimentos para baixo e seis para a direita, mas em ordem aleatória.
-	# Isso mantém o formato variável sem criar becos sem saída impossíveis.
 	var passos: Array[int] = []
 	for _index in range(6):
 		passos.append(DirecaoFluxo.Baixo)
@@ -401,7 +398,7 @@ func _on_tm_fill_timeout() -> void:
 		cano = pegar_cano_em(posicao_atual + Vector2i(1, 0))
 
 		if cano == null:
-			# Verifica se o cursor de preenchimento está ao lado do cano final
+
 			if posicao_atual.x == 6 and posicao_atual.y == 6:
 				estado_preenchimento["objetivo"] = true
 				$end/fill.show()
@@ -500,8 +497,6 @@ func _on_tm_fill_timeout() -> void:
 	mutex_preenchimento.unlock()
 
 
-# Compatibilidade com nomes antigos de sinais/funções.
-# Assim, se algum sinal antigo ainda chamar esses métodos, o jogo não quebra.
 
 func on_time_finished() -> void:
 	tempo_finalizado()
@@ -512,8 +507,7 @@ func reset() -> void:
 
 
 func do_reset() -> void:
-	# No último frame da animação, current_animation já pode estar vazio.
-	# O resultado é registrado no instante em que a água alcança a saída.
+
 	if puzzle_concluido and Progresso.retorno_refrigeracao_ia:
 		Progresso.concluir_refrigeracao_ia()
 		return

@@ -1,11 +1,10 @@
 extends Camera2D
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	GlobalLevelManager.TileMapBoundsChanged.connect(UpdateLimits)
 	UpdateLimits(GlobalLevelManager.current_tilemap_bounds)
-	pass # Replace with function body.
+	pass
 
 
 func UpdateLimits( bounds : Array[Vector2]) -> void:

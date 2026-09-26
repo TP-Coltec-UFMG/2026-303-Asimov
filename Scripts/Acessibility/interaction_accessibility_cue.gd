@@ -1,6 +1,5 @@
 extends Node2D
 
-# Os quatro cantos existem na cena; aqui apenas acompanham a área já existente.
 @onready var _corners: Array[Node2D] = [$TopLeft, $TopRight, $BottomRight, $BottomLeft]
 
 var _trigger: SceneTrigger
@@ -44,8 +43,7 @@ func _process(_delta: float) -> void:
 	visible = _target_available()
 	if not visible:
 		return
-	# Mantém o contorno exatamente no retângulo local da interação, inclusive
-	# quando a cena posiciona o leitor longe da origem do SceneTrigger.
+
 	global_transform = _collision.global_transform
 	var target_scale := Vector2(global_transform.x.length(), global_transform.y.length())
 	var local_rect: Rect2 = _collision.shape.get_rect()

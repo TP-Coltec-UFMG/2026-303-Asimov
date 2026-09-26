@@ -1,6 +1,5 @@
 extends RefCounted
 
-# O leitor conserva a identidade numérica; somente sua representação é hexadecimal.
 const VALOR: int = 1234567891234567
 const DIGITOS: String = "0123456789ABCDEF"
 const LIMITE_ANTES_DO_PROXIMO_DIGITO: int = 0x07FFFFFFFFFFFFFF

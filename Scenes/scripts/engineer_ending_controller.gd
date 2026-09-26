@@ -89,7 +89,7 @@ var escape_camera: Camera2D
 var escape_camera_base_offset := Vector2.ZERO
 var escape_shake_phase := 0.0
 var escape_glitch_sfx_cooldown := 0.0
-# Mantém a produção em velocidade normal; testes podem acelerar apenas esta sequência.
+
 var sequence_time_scale := 1.0
 
 
@@ -229,7 +229,7 @@ func _load_points(state: Dictionary) -> void:
 
 
 func _repair_point_order(saved: Variant, used: Array[String], candidates: Array[String]) -> Array[String]:
-	# Mantém a posição das escolhas válidas: migrar um save não troca etapas já feitas.
+
 	var result: Array[String] = ["", "", ""]
 	if saved is Array:
 		for index in range(mini(3, saved.size())):
@@ -269,8 +269,7 @@ func _start_intro_dialogue() -> void:
 
 
 func _start_redundancy_dialogue() -> void:
-	# Mantém os novos pontos bloqueados até a conversa terminar e a câmera
-	# apresentá-los ao jogador.
+
 	task_busy = true
 	_update_targets()
 	_queue_dialogue([
@@ -313,8 +312,7 @@ func _on_point_interacted(point_name: String) -> void:
 		return
 	task_busy = true
 	_update_targets()
-	# Abre no próprio ato da interação. Não agenda abertura após um pensamento,
-	# pois o jogador pode já ter saído do ponto quando a fala terminar.
+
 	_open_minigame(stage)
 
 
@@ -460,8 +458,7 @@ func _on_minigame_completed(stage: int) -> void:
 	_close_minigame(true)
 	state["engineer_completed_count"] = stage + 1
 	_save(state)
-	# A tela do circuito some e o controle já volta antes da explosão. Isso dá
-	# ao jogador uma janela real para se afastar do foco que causará dano.
+
 	await get_tree().create_timer(COMPONENT_EXPLOSION_DELAY * sequence_time_scale).timeout
 	if not is_inside_tree():
 		return
@@ -522,6 +519,7 @@ func _update_targets() -> void:
 		if marker == null:
 			continue
 		marker.hide()
+		@warning_ignore("confusable_local_declaration")
 		var interaction := marker.get_node_or_null("Interectable") as Area2D
 		if interaction != null:
 			interaction.is_interactable = false
@@ -601,8 +599,7 @@ func _add_fire(world_position: Vector2, stage: int) -> void:
 		if is_instance_valid(existing) and str(existing.get("save_id")) == fire_id:
 			return
 	var fire := FIRE_SCENE.instantiate() as Node2D
-	# Mantém dano, partículas, tamanho, som e extinção da cena original.
-	# Cada foco tem seu próprio estado para sobreviver à troca de rodada/save.
+
 	fire.set("save_id", fire_id)
 	scene.add_child(fire)
 	fire.global_position = world_position + Vector2(0, 9)

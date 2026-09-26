@@ -20,7 +20,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	# O teste nunca grava nos arquivos da campanha ou nas configurações reais.
+
 	get_tree().set_meta(&"dev_mission_jump_active", true)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	for player_id: String in MusicController.AUDIO_PLAYERS:
@@ -169,8 +169,6 @@ func _run() -> void:
 	_expect(heartbeat_audio.playing, "Retomar o jogo precisa continuar o batimento cardíaco.")
 	_expect(background_music.playing, "Retomar o jogo precisa continuar a música de fundo inicial.")
 
-	# Os minigames comuns e a tela de morte pausam a árvore diretamente.
-	# A pausa nativa também precisa atingir as faixas globais.
 	await get_tree().create_timer(0.12).timeout
 	get_tree().paused = true
 	var paused_heartbeat_position := heartbeat_audio.get_playback_position()
@@ -185,8 +183,6 @@ func _run() -> void:
 	_expect(not heartbeat_audio.stream_paused and heartbeat_audio.playing, "O batimento precisa retomar depois da pausa nativa.")
 	_expect(not background_music.stream_paused and background_music.playing, "A música precisa retomar depois da pausa nativa.")
 
-	# A faixa 2 deve desaparecer durante a espera da queda de energia, antes
-	# de a faixa 3 assumir. Depois do conserto, a faixa escolhida deve ser a 5.
 	mission["data_center_breaker_restored"] = false
 	MusicController._start_power_outage_audio()
 	MusicController.call("_update_power_outage_audio", 0.5)
@@ -249,8 +245,7 @@ func _run() -> void:
 	player.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	# Reproduz a troca para a cutscene: o gerenciador ainda pode conservar por
-	# um frame a referência para o Player que acabou de ser liberado.
+
 	MusicController.call("_update_heartbeat", 0.1)
 	MusicController.call("_update_initial_background_music", 0.1)
 	_expect(not heartbeat_audio.playing, "Uma referência liberada do Player não pode quebrar o áudio no tempo zero.")
@@ -261,10 +256,10 @@ func _run() -> void:
 	scene_manager.player = original_player
 	MusicController.call("_update_heartbeat", 0.0)
 	if failures.is_empty():
-		print("AMBIENT_AUDIO_TEST_PASSED")
+		pass
 		get_tree().quit(0)
 	else:
-		print("AMBIENT_AUDIO_TEST_FAILED: ", failures)
+		pass
 		get_tree().quit(1)
 
 

@@ -14,19 +14,11 @@ var resistor_queimado: bool = false
 
 var tutorial_ativado: bool = false
 
-# Guarda o estado anterior do tutorial para detectar
-# quando ele muda de true -> false.
 var _tutorial_anterior: bool = true
 
-# Espelha o resultado da última análise
-# true = existe caminho fechado positivo -> negativo.
-# O TutorialManager só lê essa variável.
 var esta_fechado: bool = false
 
 
-# ==========================================
-# INICIALIZAÇÃO
-# ==========================================
 
 func _ready() -> void:
 
@@ -34,19 +26,16 @@ func _ready() -> void:
 
 	desligar_led()
 
-	print("")
-	print("########################################")
-	print("#        INICIANDO CIRCUITO             #")
-	print("########################################")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# CIRCUITO INICIAL
-	# ==========================================
 
 	if not tutorial_ativado:
 
-		print("to aqui conectando")
+		pass
 
 		conectar_fio(
 			$Bateria/Terminal_negativo,
@@ -94,66 +83,57 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 
-	print("")
-	print("########################################")
-	print("#      CONEXÕES REGISTRADAS             #")
-	print("########################################")
+	pass
+	pass
+	pass
+	pass
 
 	debug_todas_conexoes()
 
 
-	print("")
-	print("########################################")
-	print("#        FIOS EXISTENTES                #")
-	print("########################################")
+	pass
+	pass
+	pass
+	pass
 
 	debug_todos_os_fios()
 
 
-	print("")
-	print("########################################")
-	print("#        INICIANDO ANÁLISE              #")
-	print("########################################")
+	pass
+	pass
+	pass
+	pass
 
 	analisar_circuito()
 
 	_tutorial_anterior = tutorial_ativado
 
 
-# ==========================================
-# DETECTAR DESATIVAÇÃO DO TUTORIAL
-# ==========================================
 
 func _process(_delta: float) -> void:
 
 	if _tutorial_anterior and not tutorial_ativado:
 
-		print("")
-		print("########################################")
-		print("#       TUTORIAL DESATIVADO            #")
-		print("#       REINICIANDO CIRCUITO            #")
-		print("########################################")
+		pass
+		pass
+		pass
+		pass
+		pass
 
 		reiniciar_circuito()
 
 	_tutorial_anterior = tutorial_ativado
 
 
-# ==========================================
-# REINICIAR CIRCUITO
-# ==========================================
 
 func reiniciar_circuito() -> void:
 
-	print("")
-	print("========================================")
-	print("       REINICIANDO CIRCUITO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# RESETAR ESTADO DOS COMPONENTES
-	# ==========================================
 
 	bateria_queimando = false
 	bateria_queimada = false
@@ -167,27 +147,18 @@ func reiniciar_circuito() -> void:
 	esta_fechado = false
 
 
-	# ==========================================
-	# RESETAR COMPONENTES VISUAIS
-	# ==========================================
 
 	var bateria = get_node_or_null("Bateria")
 	var led = get_node_or_null("Led")
 	var resistor = get_node_or_null("Resistor")
 
 
-	# ==========================================
-	# RESETAR TENSÃO DA BATERIA
-	# ==========================================
 
 	if bateria != null:
 
 		bateria.voltagem = 9.0
 
 
-	# ==========================================
-	# REMOVER TODOS OS FIOS
-	# ==========================================
 
 	var fios = get_tree().get_nodes_in_group("fios")
 
@@ -202,9 +173,6 @@ func reiniciar_circuito() -> void:
 		fio.queue_free()
 
 
-	# ==========================================
-	# LIMPAR CONEXÕES DE TODOS OS PONTOS
-	# ==========================================
 
 	var pontos = get_tree().get_nodes_in_group(
 		"pontos_conexao"
@@ -227,9 +195,6 @@ func reiniciar_circuito() -> void:
 			ponto.conexoes_atuais = 0
 
 
-	# ==========================================
-	# RESETAR BATERIA
-	# ==========================================
 
 	if bateria != null:
 
@@ -242,9 +207,6 @@ func reiniciar_circuito() -> void:
 			sprite_bateria.play("normal")
 
 
-	# ==========================================
-	# RESETAR LED
-	# ==========================================
 
 	if led != null:
 
@@ -255,9 +217,6 @@ func reiniciar_circuito() -> void:
 			sprite_led.play("desligado")
 
 
-	# ==========================================
-	# RESETAR RESISTOR
-	# ==========================================
 
 	if resistor != null:
 
@@ -270,21 +229,15 @@ func reiniciar_circuito() -> void:
 			sprite_resistor.play("normal")
 
 
-	# ==========================================
-	# ESPERAR OS FIOS SEREM REMOVIDOS
-	# ==========================================
 
 	await get_tree().process_frame
 
 
-	# ==========================================
-	# RECRIAR CIRCUITO INICIAL
-	# ==========================================
 
-	print("")
-	print("========================================")
-	print("       RECRIANDO CONEXÕES")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
 	conectar_fio(
@@ -330,42 +283,28 @@ func reiniciar_circuito() -> void:
 	)
 
 
-	# ==========================================
-	# ESPERAR CONEXÕES
-	# ==========================================
 
 	await get_tree().process_frame
 
 
-	# ==========================================
-	# ANALISAR CIRCUITO
-	# ==========================================
 
 	analisar_circuito()
 
 
-	print("")
-	print("========================================")
-	print("       CIRCUITO RESTAURADO")
-	print("       TENSÃO: 9 V")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
+	pass
 
 
-# ==========================================
-# DESMONTAR CIRCUITO (SEM RECRIAR)
-# ==========================================
-#
-# Usado pelo modo "queimar bateria": o circuito começa
-# vazio para o jogador descobrir sozinho como ligar o
-# positivo direto ao negativo (curto-circuito).
-# ==========================================
 
 func desmontar_circuito() -> void:
 
-	print("")
-	print("========================================")
-	print("       DESMONTANDO CIRCUITO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
 	var fios = get_tree().get_nodes_in_group("fios")
@@ -403,9 +342,6 @@ func desmontar_circuito() -> void:
 	analisar_circuito()
 
 
-# ==========================================
-# CRIAR FIO
-# ==========================================
 
 func conectar_fio(
 	origem: Node2D,
@@ -413,32 +349,21 @@ func conectar_fio(
 	analisar_depois: bool = true
 ) -> Node2D:
 
-	print("")
-	print("╔════════════════════════════════════════╗")
-	print("║       INÍCIO DE conectar_fio()         ║")
-	print("╚════════════════════════════════════════╝")
+	pass
+	pass
+	pass
+	pass
 
-	print("[DEBUG 01] Função conectar_fio() iniciou.")
+	pass
 
 
-	# ==========================================
-	# NOMES
-	# ==========================================
 
 	var nome_origem := obter_nome_ponto(origem)
 	var nome_destino := obter_nome_ponto(destino)
 
-	print(
-		"CONEXÃO: ",
-		nome_origem,
-		" -> ",
-		nome_destino
-	)
+	pass
 
 
-	# ==========================================
-	# VALIDAR
-	# ==========================================
 
 	if origem == null or destino == null:
 		return null
@@ -453,17 +378,11 @@ func conectar_fio(
 		return null
 
 
-	# ==========================================
-	# VERIFICAR CONEXÃO DUPLICADA
-	# ==========================================
 
 	if conexao_existe(origem, destino):
 		return null
 
 
-	# ==========================================
-	# DISPONIBILIDADE
-	# ==========================================
 
 	if origem.has_method("esta_disponivel"):
 
@@ -477,9 +396,6 @@ func conectar_fio(
 			return null
 
 
-	# ==========================================
-	# CRIAR FIO
-	# ==========================================
 
 	var fio: Node2D = fio_scene.instantiate()
 
@@ -511,9 +427,6 @@ func conectar_fio(
 	)
 
 
-	# ==========================================
-	# REGISTRAR CONEXÕES
-	# ==========================================
 
 	registrar_conexao(
 		origem,
@@ -526,9 +439,6 @@ func conectar_fio(
 	)
 
 
-	# ==========================================
-	# ANALISAR
-	# ==========================================
 
 	if analisar_depois:
 
@@ -540,9 +450,6 @@ func conectar_fio(
 	return fio
 
 
-# ==========================================
-# REGISTRAR CONEXÃO
-# ==========================================
 
 func registrar_conexao(
 	origem: Node2D,
@@ -571,9 +478,6 @@ func registrar_conexao(
 	origem.adicionar_conexao(destino)
 
 
-# ==========================================
-# REMOVER CONEXÃO
-# ==========================================
 
 func remover_conexao_segura(
 	origem: Node2D,
@@ -596,9 +500,6 @@ func remover_conexao_segura(
 	origem.remover_conexao(destino)
 
 
-# ==========================================
-# VERIFICAR CONEXÃO
-# ==========================================
 
 func conexao_existe(
 	origem: Node2D,
@@ -617,9 +518,6 @@ func conexao_existe(
 	return destino in origem.conexoes_terminais
 
 
-# ==========================================
-# OBTER PONTO DE COLISÃO
-# ==========================================
 
 func obter_ponto_colisao(no: Node2D) -> Node2D:
 
@@ -636,25 +534,18 @@ func obter_ponto_colisao(no: Node2D) -> Node2D:
 		return no.ponto_colisao
 
 
-	print(
-		"ERRO: objeto ",
-		no.name,
-		" não possui ponto_colisao"
-	)
+	pass
 
 	return null
 
 
-# ==========================================
-# CORTAR FIO
-# ==========================================
 
 func cortar_fio(fio: Node2D) -> void:
 
-	print("")
-	print("########################################")
-	print("#              CORTE                    #")
-	print("########################################")
+	pass
+	pass
+	pass
+	pass
 
 
 	if fio == null:
@@ -692,20 +583,11 @@ func cortar_fio(fio: Node2D) -> void:
 		return
 
 
-	print(
-		"Origem real: ",
-		obter_nome_ponto(origem)
-	)
+	pass
 
-	print(
-		"Destino real: ",
-		obter_nome_ponto(destino)
-	)
+	pass
 
 
-	# ==========================================
-	# REMOVER CONEXÕES
-	# ==========================================
 
 	remover_conexao_segura(
 		origem,
@@ -718,30 +600,21 @@ func cortar_fio(fio: Node2D) -> void:
 	)
 
 
-	# ==========================================
-	# REMOVER FIO
-	# ==========================================
 
 	fio.queue_free()
 
 
-	# ==========================================
-	# REANALISAR
-	# ==========================================
 
 	call_deferred(
 		"analisar_circuito"
 	)
 
 
-# ==========================================
-# DEBUG
-# ==========================================
 
 func debug_todas_conexoes() -> void:
 
-	print("")
-	print("========== TODAS AS CONEXÕES ==========")
+	pass
+	pass
 
 
 	var pontos = get_tree().get_nodes_in_group(
@@ -749,10 +622,7 @@ func debug_todas_conexoes() -> void:
 	)
 
 
-	print(
-		"Total de pontos de conexão: ",
-		pontos.size()
-	)
+	pass
 
 
 	for ponto in pontos:
@@ -764,25 +634,22 @@ func debug_todas_conexoes() -> void:
 			continue
 
 
-		print("")
-		print("PONTO:")
-		print("  Nome: ", ponto.name)
-		print("  Nome definido: ", obter_nome_ponto(ponto))
-		print("  Tipo: ", ponto.get_class())
+		pass
+		pass
+		pass
+		pass
+		pass
 
 
 		var pai = ponto.get_parent()
 
 		if pai != null:
-			print("  Pai: ", pai.name)
+			pass
 
 
 		if "conexoes_terminais" in ponto:
 
-			print(
-				"  Lista de conexões: ",
-				ponto.conexoes_terminais.size()
-			)
+			pass
 
 
 			for conexao in ponto.conexoes_terminais:
@@ -794,19 +661,13 @@ func debug_todas_conexoes() -> void:
 					continue
 
 
-				print(
-					"    -> ",
-					obter_nome_ponto(conexao)
-				)
+				pass
 
 
-	print("")
-	print("========================================")
+	pass
+	pass
 
 
-# ==========================================
-# DEBUG DOS FIOS
-# ==========================================
 
 func debug_todos_os_fios() -> void:
 
@@ -815,10 +676,7 @@ func debug_todos_os_fios() -> void:
 	)
 
 
-	print(
-		"Quantidade de fios: ",
-		fios.size()
-	)
+	pass
 
 
 	for fio in fios:
@@ -830,43 +688,31 @@ func debug_todos_os_fios() -> void:
 			continue
 
 
-		print("")
-		print(
-			"FIO: ",
-			fio.name
-		)
+		pass
+		pass
 
 
 		if "origem" in fio:
 
-			print(
-				"  origem: ",
-				fio.origem
-			)
+			pass
 
 
 		if "destino" in fio:
 
-			print(
-				"  destino: ",
-				fio.destino
-			)
+			pass
 
 
-	print("")
-	print("========================================")
+	pass
+	pass
 
 
-# ==========================================
-# ANALISAR CIRCUITO
-# ==========================================
 
 func analisar_circuito() -> void:
 
-	print("")
-	print("========================================")
-	print("          ANALISANDO CIRCUITO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
 	var bateria = $Bateria
@@ -891,23 +737,17 @@ func analisar_circuito() -> void:
 		return
 
 
-	# ==========================================
-	# BATERIA QUEIMADA
-	# ==========================================
 
 	if bateria_queimando or bateria_queimada:
 
-		print("BATERIA QUEIMADA/QUEIMANDO.")
-		print("Não existe circuito.")
+		pass
+		pass
 
 		desligar_led()
 
 		return
 
 
-	# ==========================================
-	# POSITIVO SEM CONEXÃO
-	# ==========================================
 
 	if not "conexoes_terminais" in positivo:
 
@@ -918,17 +758,14 @@ func analisar_circuito() -> void:
 
 	if positivo.conexoes_terminais.size() == 0:
 
-		print("POSITIVO SEM CONEXÕES.")
-		print("NÃO EXISTE CIRCUITO.")
+		pass
+		pass
 
 		desligar_led()
 
 		return
 
 
-	# ==========================================
-	# NEGATIVO SEM CONEXÃO
-	# ==========================================
 
 	if not "conexoes_terminais" in negativo:
 
@@ -939,17 +776,14 @@ func analisar_circuito() -> void:
 
 	if negativo.conexoes_terminais.size() == 0:
 
-		print("NEGATIVO SEM CONEXÕES.")
-		print("NÃO EXISTE CIRCUITO.")
+		pass
+		pass
 
 		desligar_led()
 
 		return
 
 
-	# ==========================================
-	# BUSCAR CIRCUITO
-	# ==========================================
 
 	var caminho: Array = []
 	var visitados: Array = []
@@ -963,35 +797,25 @@ func analisar_circuito() -> void:
 	)
 
 
-	print("")
-	print(
-		"Encontrou negativo? ",
-		encontrou_negativo
-	)
+	pass
+	pass
 
 
 	esta_fechado = encontrou_negativo
 
 
-	# ==========================================
-	# CIRCUITO ENCONTRADO
-	# ==========================================
 
 	if encontrou_negativo:
 
-		print("")
-		print("########################################")
-		print("#       CIRCUITO ENCONTRADO!            #")
-		print("########################################")
+		pass
+		pass
+		pass
+		pass
 
 
 		for i in range(caminho.size()):
 
-			print(
-				i + 1,
-				" -> ",
-				obter_nome_ponto(caminho[i])
-			)
+			pass
 
 
 		analisar_componentes_circuito(
@@ -999,23 +823,17 @@ func analisar_circuito() -> void:
 		)
 
 
-	# ==========================================
-	# NÃO ENCONTRADO
-	# ==========================================
 
 	else:
 
-		print("")
-		print("########################################")
-		print("#   NENHUM CIRCUITO FECHADO ENCONTRADO #")
-		print("########################################")
+		pass
+		pass
+		pass
+		pass
 
 		desligar_led()
 
 
-# ==========================================
-# PERCORRER CIRCUITO
-# ==========================================
 
 func percorrer_circuito(
 	atual: Node2D,
@@ -1031,9 +849,6 @@ func percorrer_circuito(
 		return false
 
 
-	# ==========================================
-	# DESTINO
-	# ==========================================
 
 	if atual == destino:
 
@@ -1042,9 +857,6 @@ func percorrer_circuito(
 		return true
 
 
-	# ==========================================
-	# VISITADO
-	# ==========================================
 
 	if atual in visitados:
 		return false
@@ -1058,9 +870,6 @@ func percorrer_circuito(
 	caminho_atual.append(atual)
 
 
-	# ==========================================
-	# TERMINAL DE COMPONENTE
-	# ==========================================
 
 	var eh_terminal := atual.is_in_group(
 		"terminais"
@@ -1069,64 +878,45 @@ func percorrer_circuito(
 
 	if eh_terminal:
 
-		# ==========================================
-		# COMPONENTE QUEIMANDO / QUEIMADO
-		# ==========================================
 
 		var pai = atual.get_parent()
 
 		if pai != null:
 
-			# LED
 			if pai.name == "Led":
 
 				if led_queimando or led_queimado:
 
-					print("")
-					print(
-						"LED ESTÁ QUEIMANDO/QUEIMADO."
-					)
+					pass
+					pass
 
-					print(
-						"Corrente NÃO pode atravessar o LED."
-					)
+					pass
 
 					return false
 
 
-			# RESISTOR
 			if pai.name == "Resistor":
 
 				if resistor_queimando or resistor_queimado:
 
-					print("")
-					print(
-						"RESISTOR ESTÁ QUEIMANDO/QUEIMADO."
-					)
+					pass
+					pass
 
-					print(
-						"Corrente NÃO pode atravessar o resistor."
-					)
+					pass
 
 					return false
 
 
-			# BATERIA
 			if pai.name == "Bateria":
 
 				if bateria_queimando or bateria_queimada:
 
-					print("")
-					print(
-						"BATERIA ESTÁ QUEIMANDO/QUEIMADA."
-					)
+					pass
+					pass
 
 					return false
 
 
-		# ==========================================
-		# OBTER OUTRO TERMINAL
-		# ==========================================
 
 		var outro_terminal = obter_outro_terminal(
 			atual
@@ -1164,9 +954,6 @@ func percorrer_circuito(
 					return true
 
 
-	# ==========================================
-	# CONEXÕES EXTERNAS
-	# ==========================================
 
 	if not atual.has_method("adicionar_conexao"):
 		return false
@@ -1220,18 +1007,15 @@ func percorrer_circuito(
 	return false
 
 
-# ==========================================
-# ANALISAR COMPONENTES
-# ==========================================
 
 func analisar_componentes_circuito(
 	caminho: Array
 ) -> void:
 
-	print("")
-	print("########################################")
-	print("#       ANÁLISE DOS COMPONENTES         #")
-	print("########################################")
+	pass
+	pass
+	pass
+	pass
 
 
 	var tem_bateria := false
@@ -1239,9 +1023,6 @@ func analisar_componentes_circuito(
 	var tem_resistor := false
 
 
-	# ==========================================
-	# IDENTIFICAR COMPONENTES
-	# ==========================================
 
 	for ponto in caminho:
 
@@ -1271,9 +1052,6 @@ func analisar_componentes_circuito(
 			tem_resistor = true
 
 
-	# ==========================================
-	# TENSÃO
-	# ==========================================
 
 	var bateria = get_node_or_null(
 		"Bateria"
@@ -1294,37 +1072,26 @@ func analisar_componentes_circuito(
 
 	else:
 
-		print(
-			"ERRO: Bateria não possui voltagem."
-		)
+		pass
 
 		return
 
 
-	print(
-		"TENSÃO DA BATERIA: ",
-		tensao,
-		" V"
-	)
+	pass
 
 
-	# ==========================================
-	# BATERIA + LED + RESISTOR
-	# ==========================================
 
 	if tem_bateria and tem_led and tem_resistor:
 
-		print("")
-		print(
-			"BATERIA + RESISTOR + LED"
-		)
+		pass
+		pass
 
 
 		if tensao > 12.0:
 
-			print("")
-			print("!!! TENSÃO ACIMA DE 12V !!!")
-			print("!!! RESISTOR VAI QUEIMAR !!!")
+			pass
+			pass
+			pass
 
 
 			queimar_resistor()
@@ -1337,25 +1104,22 @@ func analisar_componentes_circuito(
 
 		else:
 
-			print("")
-			print("CIRCUITO FUNCIONANDO")
+			pass
+			pass
 
 			acender_led()
 
 		return
 
 
-	# ==========================================
-	# BATERIA + LED
-	# ==========================================
 
 	if tem_bateria and tem_led and not tem_resistor:
 
-		print("")
-		print("LED SEM RESISTOR")
+		pass
+		pass
 
-		print("!!! LED VAI QUEIMAR !!!")
-		print("!!! BATERIA VAI QUEIMAR !!!")
+		pass
+		pass
 
 
 		queimar_led()
@@ -1363,48 +1127,39 @@ func analisar_componentes_circuito(
 		return
 
 
-	# ==========================================
-	# BATERIA + RESISTOR
-	# ==========================================
 
 	if tem_bateria and tem_resistor and not tem_led:
 
-		print("")
-		print("RESISTOR NO CIRCUITO")
+		pass
+		pass
 
 
 		if tensao > 15.0:
 
-			print("!!! RESISTOR VAI QUEIMAR !!!")
+			pass
 
 			queimar_resistor()
 
 		else:
 
-			print("Resistor funcionando normalmente.")
+			pass
 
 		return
 
 
-	# ==========================================
-	# SOMENTE BATERIA
-	# ==========================================
 
 	if tem_bateria and not tem_led and not tem_resistor:
 
-		print("")
-		print("CURTO NA BATERIA")
+		pass
+		pass
 
-		print("!!! BATERIA VAI QUEIMAR !!!")
+		pass
 
 		queimar_bateria()
 
 		return
 
 
-# ==========================================
-# OBTER NOME DO PONTO
-# ==========================================
 
 func obter_nome_ponto(
 	ponto: Node2D
@@ -1436,9 +1191,6 @@ func obter_nome_ponto(
 	return ponto.name
 
 
-# ==========================================
-# OBTER OUTRO TERMINAL
-# ==========================================
 
 func obter_outro_terminal(
 	terminal: Node2D
@@ -1460,50 +1212,32 @@ func obter_outro_terminal(
 		return null
 
 
-	# ==========================================
-	# BATERIA
-	# ==========================================
 
 	if pai.name == "Bateria":
 
 		return null
 
 
-	# ==========================================
-	# LED QUEIMANDO/QUEIMADO
-	# ==========================================
 
 	if pai.name == "Led":
 
 		if led_queimando or led_queimado:
 
-			print(
-				"LED QUEIMANDO/QUEIMADO: ",
-				"não pode atravessar."
-			)
+			pass
 
 			return null
 
 
-	# ==========================================
-	# RESISTOR QUEIMANDO/QUEIMADO
-	# ==========================================
 
 	if pai.name == "Resistor":
 
 		if resistor_queimando or resistor_queimado:
 
-			print(
-				"RESISTOR QUEIMANDO/QUEIMADO: ",
-				"não pode atravessar."
-			)
+			pass
 
 			return null
 
 
-	# ==========================================
-	# PROCURAR OUTRO TERMINAL
-	# ==========================================
 
 	for filho in pai.get_children():
 
@@ -1520,7 +1254,6 @@ func obter_outro_terminal(
 	return null
 
 
-# A campanha usa os mesmos sprites e animações da cena avulsa.
 func _obter_sprite_led() -> AnimatedSprite2D:
 	var jogo := get_parent()
 	var alternativo: bool = jogo.modo_objetivo in [
@@ -1539,9 +1272,6 @@ func _tocar_ciclo_animacao(sprite: AnimatedSprite2D, animacao: StringName) -> vo
 		await sprite.animation_finished
 
 
-# ==========================================
-# QUEIMAR BATERIA
-# ==========================================
 
 func queimar_bateria() -> void:
 
@@ -1565,15 +1295,12 @@ func queimar_bateria() -> void:
 		return
 
 
-	print("")
-	print("========================================")
-	print("        BATERIA COMEÇOU A QUEIMAR")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# MARCAR COMO QUEIMANDO
-	# ==========================================
 
 	bateria_queimando = true
 
@@ -1588,15 +1315,12 @@ func queimar_bateria() -> void:
 	analisar_circuito()
 
 
-	print("")
-	print("========================================")
-	print("        BATERIA ESTÁ QUEIMADA")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-# ==========================================
-# ACENDER LED
-# ==========================================
 
 func acender_led() -> void:
 
@@ -1618,19 +1342,15 @@ func acender_led() -> void:
 		return
 
 
-	print("")
-	print("========================================")
-	print("              LED ACESO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# O componente alternativo chama sua animação ligada de "normal".
 	sprite.play(&"aceso" if sprite.sprite_frames.has_animation(&"aceso") else &"normal")
 
 
-# ==========================================
-# DESLIGAR LED
-# ==========================================
 
 func desligar_led() -> void:
 
@@ -1657,9 +1377,6 @@ func desligar_led() -> void:
 	)
 
 
-# ==========================================
-# QUEIMAR LED
-# ==========================================
 
 func queimar_led() -> void:
 
@@ -1678,15 +1395,12 @@ func queimar_led() -> void:
 		return
 
 
-	print("")
-	print("========================================")
-	print("          LED COMEÇOU A QUEIMAR")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# INTERROMPE O CIRCUITO IMEDIATAMENTE
-	# ==========================================
 
 	led_queimando = true
 
@@ -1701,15 +1415,12 @@ func queimar_led() -> void:
 	analisar_circuito()
 
 
-	print("")
-	print("========================================")
-	print("             LED QUEIMADO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-# ==========================================
-# QUEIMAR RESISTOR
-# ==========================================
 
 func queimar_resistor() -> void:
 
@@ -1735,15 +1446,12 @@ func queimar_resistor() -> void:
 		return
 
 
-	print("")
-	print("========================================")
-	print("       RESISTOR COMEÇOU A QUEIMAR")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# INTERROMPE O CIRCUITO IMEDIATAMENTE
-	# ==========================================
 
 	resistor_queimando = true
 
@@ -1758,16 +1466,12 @@ func queimar_resistor() -> void:
 	analisar_circuito()
 
 
-	print("")
-	print("========================================")
-	print("          RESISTOR QUEIMADO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-# ==========================================
-# REGISTRAR FIO EXISTENTE
-# (vindo da Junção)
-# ==========================================
 
 func registrar_fio_existente(
 	origem: Node2D,
@@ -1775,48 +1479,37 @@ func registrar_fio_existente(
 	fio: Node2D
 ) -> bool:
 
-	print("")
-	print("╔════════════════════════════════════════╗")
-	print("║   INÍCIO DE registrar_fio_existente()  ║")
-	print("╚════════════════════════════════════════╝")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# VALIDAR ARGUMENTOS
-	# ==========================================
 
 	if origem == null or destino == null or fio == null:
 
-		print(
-			"[CIRCUITO] Argumento nulo recebido."
-		)
+		pass
 
 		return false
 
 
 	if not is_instance_valid(origem):
 
-		print(
-			"[CIRCUITO] Origem inválida."
-		)
+		pass
 
 		return false
 
 
 	if not is_instance_valid(destino):
 
-		print(
-			"[CIRCUITO] Destino inválido."
-		)
+		pass
 
 		return false
 
 
 	if not is_instance_valid(fio):
 
-		print(
-			"[CIRCUITO] Fio inválido."
-		)
+		pass
 
 		return false
 
@@ -1825,53 +1518,31 @@ func registrar_fio_existente(
 	var nome_destino := obter_nome_ponto(destino)
 
 
-	print(
-		"[CIRCUITO] Registrando: ",
-		nome_origem,
-		" -> ",
-		nome_destino
-	)
+	pass
 
 
-	# ==========================================
-	# NÃO CONECTAR CONSIGO MESMO
-	# ==========================================
 
 	if origem == destino:
 
-		print(
-			"[CIRCUITO] Origem e destino são o mesmo ponto."
-		)
+		pass
 
 		return false
 
 
-	# ==========================================
-	# VERIFICAR CONEXÃO DUPLICADA
-	# ==========================================
 
 	if conexao_existe(origem, destino):
 
-		print(
-			"[CIRCUITO] Conexão já existe."
-		)
+		pass
 
 		return false
 
 
-	# ==========================================
-	# DISPONIBILIDADE
-	# ==========================================
 
 	if origem.has_method("esta_disponivel"):
 
 		if not origem.esta_disponivel():
 
-			print(
-				"[CIRCUITO] Origem ",
-				nome_origem,
-				" sem conexões disponíveis."
-			)
+			pass
 
 			return false
 
@@ -1880,18 +1551,11 @@ func registrar_fio_existente(
 
 		if not destino.esta_disponivel():
 
-			print(
-				"[CIRCUITO] Destino ",
-				nome_destino,
-				" sem conexões disponíveis."
-			)
+			pass
 
 			return false
 
 
-	# ==========================================
-	# OBTER PONTOS DE COLISÃO REAIS
-	# ==========================================
 
 	var ponto_origem = obter_ponto_colisao(origem)
 	var ponto_destino = obter_ponto_colisao(destino)
@@ -1899,31 +1563,22 @@ func registrar_fio_existente(
 
 	if ponto_origem == null:
 
-		print(
-			"[CIRCUITO] Ponto de colisão da origem é nulo."
-		)
+		pass
 
 		return false
 
 
 	if ponto_destino == null:
 
-		print(
-			"[CIRCUITO] Ponto de colisão do destino é nulo."
-		)
+		pass
 
 		return false
 
 
-	# ==========================================
-	# REANCORAR O FIO NO DESTINO REAL
-	# ==========================================
 
 	if not fio.has_method("conectar"):
 
-		print(
-			"[CIRCUITO] Fio não possui método conectar()."
-		)
+		pass
 
 		return false
 
@@ -1934,14 +1589,9 @@ func registrar_fio_existente(
 	)
 
 
-	print(
-		"[CIRCUITO] Fio reancorado com sucesso."
-	)
+	pass
 
 
-	# ==========================================
-	# REGISTRAR CONEXÕES LÓGICAS
-	# ==========================================
 
 	registrar_conexao(
 		origem,
@@ -1954,27 +1604,19 @@ func registrar_fio_existente(
 	)
 
 
-	# ==========================================
-	# REANALISAR CIRCUITO
-	# ==========================================
 
 	call_deferred(
 		"analisar_circuito"
 	)
 
 
-	print("")
-	print(
-		"[CIRCUITO] registrar_fio_existente() concluído com sucesso."
-	)
+	pass
+	pass
 
 
 	return true
 
 
-# ==========================================
-# BOTÕES DE TENSÃO
-# ==========================================
 
 func _on_aumentar_tensão_pressed() -> void:
 

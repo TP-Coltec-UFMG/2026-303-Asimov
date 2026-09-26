@@ -9,16 +9,13 @@ enum Modo {
 	TRITAN = 3,
 }
 
-# Perfis de assistência. A cena global só distribui a preferência.
-# Nenhum perfil simula a visão de uma pessoa daltônica.
 var modo: int = Modo.DESLIGADO
 
 @onready var _mapa_acessibilidade: ColorRect = $MapaAcessibilidade
 
 
 func _ready() -> void:
-	# A camada é desenhada depois do mundo e antes dos HUDs que vêm da cena.
-	# O autoload entra antes da cena atual, então o mapa fica fora do pós-processamento.
+
 	layer = 1
 	if not modo_alterado.is_connected(_on_modo_alterado):
 		modo_alterado.connect(_on_modo_alterado)

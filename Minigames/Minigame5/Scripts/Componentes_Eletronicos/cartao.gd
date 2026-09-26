@@ -48,7 +48,7 @@ func _notification(what: int) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	# O botão pode ser solto fora da colisão, sobre a UI ou após um movimento rápido.
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 		cancelar_arraste()
 

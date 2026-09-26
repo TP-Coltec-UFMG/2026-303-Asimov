@@ -51,14 +51,11 @@ func _input(event: InputEvent) -> void:
 	if not key_event.pressed or key_event.echo:
 		return
 
-	# Esc fecha apenas o seletor. Outro Esc será tratado pelo menu.
 	if key_event.keycode == KEY_ESCAPE:
 		_close_picker(false)
 		get_viewport().set_input_as_handled()
 		return
 
-	# Tab troca de região sem perder o movimento por setas
-	# dentro do quadrado de tons.
 	if key_event.keycode == KEY_TAB:
 		if key_event.shift_pressed:
 			_previous_keyboard_area()
@@ -138,7 +135,7 @@ func _next_keyboard_area() -> void:
 		_keyboard_area = KeyboardArea.HUE_BAR
 		_announce_picker_area()
 	else:
-		# Depois da barra de cores, fecha o seletor e vai ao X.
+
 		_close_picker(true)
 
 
@@ -147,7 +144,7 @@ func _previous_keyboard_area() -> void:
 		_keyboard_area = KeyboardArea.TONE_SQUARE
 		_announce_picker_area()
 	else:
-		# Shift+Tab volta ao botão que abriu o seletor.
+
 		_close_picker(false)
 
 

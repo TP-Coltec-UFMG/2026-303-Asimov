@@ -28,10 +28,10 @@ func _run() -> void:
 	await _test_circuito()
 
 	if failures.is_empty():
-		print("FINAL_MINIGAMES_TEST_PASSED")
+		pass
 		get_tree().quit(0)
 	else:
-		print("FINAL_MINIGAMES_TEST_FAILED: ", failures)
+		pass
 		get_tree().quit(1)
 
 

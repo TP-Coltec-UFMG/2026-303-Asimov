@@ -108,7 +108,6 @@ func verificar_cartao(cartao: Area2D) -> void:
 		verificando_cartao = false
 		return
 
-	# Reinserções após o sucesso não reiniciam a animação da porta.
 	if is_instance_valid(porta) and not porta_aberta:
 		porta_aberta = true
 		porta.play("abrir")

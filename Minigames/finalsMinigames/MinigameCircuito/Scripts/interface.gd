@@ -1,8 +1,5 @@
 extends CanvasLayer
 
-# ==========================================
-# REFERÊNCIAS DA INTERFACE
-# ==========================================
 
 @onready var texto_objetivo: Label = get_node("../../Fundo_preto_tutorial/Panel/Label2")
 
@@ -10,17 +7,11 @@ extends CanvasLayer
 @onready var tela_game_win: Control = $GameWin
 
 
-# ==========================================
-# ESTADO DO JOGO
-# ==========================================
 
 var comecar_jogo: bool = false
 var jogo_iniciado: bool = false
 
 
-# ==========================================
-# OBJETIVOS
-# ==========================================
 
 enum Objetivo {
 	BATERIA,
@@ -35,18 +26,12 @@ enum Objetivo {
 var objetivo_atual: Objetivo
 
 
-# ==========================================
-# ESTADO DO JOGO
-# ==========================================
 
 var objetivo_concluido: bool = false
 var jogo_terminado: bool = false
 var game_over_ativo: bool = false
 
 
-# ==========================================
-# INICIALIZAÇÃO
-# ==========================================
 
 func _ready() -> void:
 
@@ -56,47 +41,32 @@ func _ready() -> void:
 		return
 
 
-	# ==========================================
-	# ESCONDER TELAS DE RESULTADO
-	# ==========================================
 
 	tela_game_over.visible = false
 	tela_game_win.visible = false
 
 
-	# ==========================================
-	# VERIFICAR SE O TUTORIAL ESTÁ ATIVO
-	# ==========================================
 
 	comecar_jogo = circuito.tutorial_ativado
 
 
 	if comecar_jogo:
 
-		# ==========================================
-		# DURANTE O TUTORIAL
-		# ==========================================
 
 		texto_objetivo.text = "Objetivo: Terminar o Tutorial"
 
-		print("")
-		print("========================================")
-		print("             TUTORIAL ATIVO")
-		print("========================================")
+		pass
+		pass
+		pass
+		pass
 
 		return
 
 
-	# ==========================================
-	# TUTORIAL JÁ TERMINOU
-	# ==========================================
 
 	iniciar_jogo()
 
 
-# ==========================================
-# PROCESSO
-# ==========================================
 
 func _process(_delta: float) -> void:
 
@@ -106,21 +76,13 @@ func _process(_delta: float) -> void:
 		return
 
 
-	# ==========================================
-	# ATUALIZAR ESTADO DO TUTORIAL
-	# ==========================================
 
 	comecar_jogo = circuito.tutorial_ativado
 
 
-	# ==========================================
-	# TUTORIAL ATIVO
-	# ==========================================
 
 	if comecar_jogo:
 
-		# Garante que o objetivo do tutorial
-		# continue aparecendo.
 
 		if not jogo_iniciado:
 			texto_objetivo.text = "Objetivo: Terminar o Tutorial"
@@ -128,9 +90,6 @@ func _process(_delta: float) -> void:
 		return
 
 
-	# ==========================================
-	# TUTORIAL TERMINOU
-	# ==========================================
 
 	if not jogo_iniciado:
 
@@ -139,24 +98,15 @@ func _process(_delta: float) -> void:
 		return
 
 
-	# ==========================================
-	# SE O JOGO ACABOU
-	# ==========================================
 
 	if jogo_terminado:
 		return
 
 
-	# ==========================================
-	# VERIFICAR OBJETIVO
-	# ==========================================
 
 	verificar_objetivo()
 
 
-# ==========================================
-# INICIAR JOGO
-# ==========================================
 
 func iniciar_jogo() -> void:
 
@@ -168,39 +118,27 @@ func iniciar_jogo() -> void:
 	comecar_jogo = false
 
 
-	# ==========================================
-	# RESETAR ESTADOS
-	# ==========================================
 
 	objetivo_concluido = false
 	jogo_terminado = false
 	game_over_ativo = false
 
 
-	# ==========================================
-	# ESCONDER TELAS
-	# ==========================================
 
 	tela_game_over.visible = false
 	tela_game_win.visible = false
 
 
-	# ==========================================
-	# ESCOLHER OBJETIVO
-	# ==========================================
 
 	escolher_objetivo_aleatorio()
 
 
-	print("")
-	print("========================================")
-	print("              JOGO INICIADO")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-# ==========================================
-# ESCOLHER OBJETIVO ALEATÓRIO
-# ==========================================
 
 func escolher_objetivo_aleatorio() -> void:
 
@@ -219,9 +157,6 @@ func escolher_objetivo_aleatorio() -> void:
 	definir_objetivo(escolhido)
 
 
-# ==========================================
-# DEFINIR OBJETIVO
-# ==========================================
 
 func definir_objetivo(novo_objetivo: Objetivo) -> void:
 
@@ -260,9 +195,6 @@ func definir_objetivo(novo_objetivo: Objetivo) -> void:
 			texto_objetivo.text = "Objetivo:\nQueimar resistor\n e componente"
 
 
-# ==========================================
-# VERIFICAR OBJETIVO
-# ==========================================
 
 func verificar_objetivo() -> void:
 
@@ -270,7 +202,6 @@ func verificar_objetivo() -> void:
 		return
 
 
-	# O pai do CanvasLayer é o Circuito.
 
 	var circuito = get_parent()
 
@@ -279,9 +210,6 @@ func verificar_objetivo() -> void:
 		return
 
 
-	# ==========================================
-	# BATERIA
-	# ==========================================
 
 	if objetivo_atual == Objetivo.BATERIA:
 
@@ -292,9 +220,6 @@ func verificar_objetivo() -> void:
 			return
 
 
-	# ==========================================
-	# RESISTOR
-	# ==========================================
 
 	if objetivo_atual == Objetivo.RESISTOR:
 
@@ -305,9 +230,6 @@ func verificar_objetivo() -> void:
 			return
 
 
-	# ==========================================
-	# LED
-	# ==========================================
 
 	if objetivo_atual == Objetivo.LED:
 
@@ -318,9 +240,6 @@ func verificar_objetivo() -> void:
 			return
 
 
-	# ==========================================
-	# BATERIA + LED
-	# ==========================================
 
 	if objetivo_atual == Objetivo.BATERIA_LED:
 
@@ -334,9 +253,6 @@ func verificar_objetivo() -> void:
 			return
 
 
-	# ==========================================
-	# BATERIA + RESISTOR
-	# ==========================================
 
 	if objetivo_atual == Objetivo.BATERIA_RESISTOR:
 
@@ -350,9 +266,6 @@ func verificar_objetivo() -> void:
 			return
 
 
-	# ==========================================
-	# RESISTOR + LED
-	# ==========================================
 
 	if objetivo_atual == Objetivo.RESISTOR_LED:
 
@@ -363,9 +276,6 @@ func verificar_objetivo() -> void:
 			return
 
 
-# ==========================================
-# VITÓRIA
-# ==========================================
 
 func vitoria() -> void:
 	if jogo_terminado:
@@ -377,20 +287,17 @@ func vitoria() -> void:
 	espera_resultado.tween_interval(2.0)
 	await espera_resultado.finished
 
-	print("chamei vitoria")
+	pass
 
 
 	objetivo_concluido = true
 
 
-	# ==========================================
-	# MOSTRAR VITÓRIA
-	# ==========================================
 
-	print("")
-	print("========================================")
-	print("           OBJETIVO CONCLUÍDO!")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
 	tela_game_win.visible = true
@@ -399,9 +306,6 @@ func vitoria() -> void:
 		minigame.notificar_vitoria()
 
 
-# ==========================================
-# GAME OVER
-# ==========================================
 
 func game_over() -> void:
 
@@ -413,15 +317,12 @@ func game_over() -> void:
 	jogo_terminado = true
 
 
-	print("")
-	print("========================================")
-	print("              GAME OVER")
-	print("========================================")
+	pass
+	pass
+	pass
+	pass
 
 
-	# ==========================================
-	# MOSTRAR GAME OVER
-	# ==========================================
 
 	tela_game_over.visible = true
 	var minigame := get_parent().get_parent()

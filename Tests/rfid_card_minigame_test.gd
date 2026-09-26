@@ -94,10 +94,10 @@ func _run() -> void:
 	SaveGame.save_data = original_save
 	SaveGame.tempo_atual = original_time
 	if failures.is_empty():
-		print("RFID_CARD_MINIGAME_TEST_PASSED")
+		pass
 		get_tree().quit(0)
 	else:
-		print("RFID_CARD_MINIGAME_TEST_FAILED: ", failures)
+		pass
 		get_tree().quit(1)
 
 

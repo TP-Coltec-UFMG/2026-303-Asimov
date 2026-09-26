@@ -1,24 +1,15 @@
 extends Area2D
 
-# ==============================
-# CONFIGURAÇÃO
-# ==============================
-@export var resistencia_interna: float = 100.0   # simplificação de jogo, não é física real de diodo
-@export var corrente_maxima: float = 0.02        # 20 mA, típico de um LED comum
+@export var resistencia_interna: float = 100.0
+@export var corrente_maxima: float = 0.02
 @export var dano_por_ampere_excedente: float = 4000.0
 
-# ==============================
-# REFERÊNCIAS
-# ==============================
 @onready var terminal_positivo: Node2D = $Terminal_positivo
 @onready var terminal_negativo: Node2D = $Terminal_negativo
 @onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D 
 @onready var animation_player2: AnimatedSprite2D = $AnimatedSprite2D2
 var material_shader: ShaderMaterial
 
-# ==============================
-# ESTADO
-# ==============================
 var saude := 100.0
 var aceso := false
 
@@ -43,8 +34,6 @@ func desativar_destaque() -> void:
 	animation_player2.material = null
 
 
-# Chamado pelo CircuitManager a cada avaliação, dizendo se o LED está
-# sendo alimentado na polaridade certa (positivo -> negativo) nesse instante.
 func definir_aceso(valor: bool) -> void:
 	if estado == Estado.QUEIMADO:
 		return
@@ -54,7 +43,6 @@ func definir_aceso(valor: bool) -> void:
 	tocar_animacao("aceso" if aceso else "apagado")
 
 
-# Chamado pelo CircuitManager com a corrente (em Amperes) passando pelo LED.
 func aplicar_corrente(corrente: float, delta: float) -> void:
 	if estado == Estado.QUEIMADO:
 		return
@@ -79,12 +67,12 @@ func mudar_estado(novo: Estado) -> void:
 	estado = novo
 	match estado:
 		Estado.NORMAL:
-			pass  # a animação aceso/apagado é controlada por definir_aceso()
+			pass
 		Estado.QUEIMANDO:
 			tocar_animacao("queimando")
 		Estado.QUEIMADO:
 			tocar_animacao("queimado")
-			print("LED: queimou!")
+			pass
 
 
 func tocar_animacao(nome: String) -> void:

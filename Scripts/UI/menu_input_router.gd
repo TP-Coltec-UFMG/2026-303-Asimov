@@ -1,14 +1,6 @@
 extends Node
 class_name MenuInputRouter
 
-## Alterna automaticamente os menus entre mouse e teclado.
-##
-## Coloque este nó como filho da raiz de uma cena de menu. O script:
-## - detecta o último dispositivo usado;
-## - mostra o ícone correspondente no canto superior direito;
-## - mantém o foco dentro da tela de menu visível;
-## - desenha um contorno no item focado somente no modo teclado;
-## - anuncia o foco pelo leitor de tela, quando ele estiver ativado.
 
 enum InputMode {
 	MOUSE,
@@ -88,7 +80,6 @@ func _prepare_slider_outline(slider: Slider) -> void:
 	slider.add_child(outline)
 	outline.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	# Reutiliza o mesmo contorno laranja dos botões.
 	outline.add_theme_stylebox_override(
 		"panel",
 		_keyboard_focus_style
@@ -135,7 +126,6 @@ func _input(event: InputEvent) -> void:
 
 		_set_input_mode(InputMode.KEYBOARD)
 
-		# Se existe um popup aberto, ele próprio tratará o Esc.
 		if key_event.keycode == KEY_ESCAPE:
 			if _has_visible_popup():
 				return
@@ -188,8 +178,7 @@ func _go_back_one_menu() -> bool:
 			method_name = &"_on_back_to_menu_button_pressed_on_menu_primeira_vez"
 
 		_:
-			# No menu-base de pausa, deixa o pause_menu.gd
-			# receber o Esc e continuar o jogo.
+
 			return false
 
 	if not host.has_method(method_name):
@@ -225,7 +214,7 @@ func _create_focus_styles() -> void:
 	_keyboard_focus_style.border_color = focus_color
 	_keyboard_focus_style.set_border_width_all(focus_border_width)
 	_keyboard_focus_style.set_corner_radius_all(3)
-	# Mantém o contorno dentro do controle, inclusive no X do canto direito.
+
 	_keyboard_focus_style.expand_margin_left = 0.0
 	_keyboard_focus_style.expand_margin_top = 0.0
 	_keyboard_focus_style.expand_margin_right = 0.0
@@ -316,7 +305,7 @@ func _on_tree_node_changed(_node: Node) -> void:
 
 
 func _refresh_controls() -> void:
-	# A descoberta de controles só precisa ser refeita quando a árvore muda.
+
 	if not _controls_dirty:
 		return
 	_controls_dirty = false
@@ -475,7 +464,7 @@ func _configure_scope_navigation(scope: Node) -> void:
 		return
 
 	for back_button in back_buttons:
-		# Qualquer direção usada no X devolve o foco ao primeiro item da tela.
+
 		var path_to_content := back_button.get_path_to(first_content_control)
 		back_button.focus_neighbor_left = path_to_content
 		back_button.focus_neighbor_right = path_to_content
@@ -512,7 +501,6 @@ func _disable_back_button_scale(control: Control) -> void:
 	if not _is_back_button(control):
 		return
 
-	# O botão animado não aumenta quando recebe foco.
 	for property in control.get_property_list():
 		var property_name: StringName = property.get("name", &"")
 
@@ -524,7 +512,6 @@ func _disable_back_button_scale(control: Control) -> void:
 
 	control.scale = Vector2.ONE
 
-	# Aguarda o Godot calcular o tamanho e a posição final.
 	call_deferred("_keep_back_button_inside_viewport", control)
 
 
@@ -535,7 +522,6 @@ func _keep_back_button_inside_viewport(control: Control) -> void:
 	var viewport_rect := get_viewport().get_visible_rect()
 	var button_rect := control.get_global_rect()
 
-	# Deixa seis pixels livres entre o X e a borda direita.
 	var right_limit := viewport_rect.end.x - 6.0
 
 	if button_rect.end.x > right_limit:
@@ -612,7 +598,6 @@ func _configure_controls_columns(scope: Node) -> void:
 					&"right"
 				)
 
-	# O primeiro controle de cada coluna pode subir até o X.
 	var back_button := scope.get_node_or_null(
 		"BackToMenuButton"
 	) as Control
@@ -654,7 +639,6 @@ func _configure_interface_grid(scope: Node) -> void:
 		"BackToMenuButton"
 	) as Control
 
-	# Linha superior.
 	_set_focus_neighbor(
 		full_screen,
 		interface_size,
@@ -666,7 +650,6 @@ func _configure_interface_grid(scope: Node) -> void:
 		&"left"
 	)
 
-	# Linha inferior.
 	_set_focus_neighbor(
 		show_fps,
 		frame_rate,
@@ -678,7 +661,6 @@ func _configure_interface_grid(scope: Node) -> void:
 		&"left"
 	)
 
-	# Coluna esquerda.
 	_set_focus_neighbor(
 		full_screen,
 		show_fps,
@@ -690,7 +672,6 @@ func _configure_interface_grid(scope: Node) -> void:
 		&"up"
 	)
 
-	# Coluna direita.
 	_set_focus_neighbor(
 		interface_size,
 		frame_rate,
@@ -702,7 +683,6 @@ func _configure_interface_grid(scope: Node) -> void:
 		&"up"
 	)
 
-	# Parte superior para o X.
 	if back_button != null:
 		_set_focus_neighbor(
 			full_screen,
@@ -749,7 +729,7 @@ func _has_external_mouse_handler(control: Control) -> bool:
 		var receiver := callback.get_object()
 		if receiver == null or receiver == self:
 			continue
-		# Este método do AnimatedButton cuida apenas da escala visual.
+
 		if receiver == control and callback.get_method() == &"_button_hover":
 			continue
 		return true
@@ -761,7 +741,7 @@ func _announce_focused_control(control: Control) -> void:
 		return
 	if not bool(Configs.configs.get("leitor_de_tela", false)):
 		return
-	# A tela de seleção já possui uma locução específica no próprio botão.
+
 	if control.has_method("_announce_selection"):
 		return
 

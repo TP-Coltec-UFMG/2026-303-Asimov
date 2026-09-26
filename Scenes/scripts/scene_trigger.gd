@@ -148,7 +148,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			Progresso.iniciar_hack_da_sala_do_chefe(body_p)
 		else:
 			aceso_negado.play()
-			print("Acesso Negado")
+			pass
 
 
 func _blocked_by_scene_event() -> bool:
@@ -233,8 +233,7 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 	):
 		state["data_center_return_task_completed"] = true
 		state["data_center_return_task_active"] = false
-		# Se os balões ainda não terminaram, mantém o estado pendente para a
-		# tarefa aparecer já concluída quando a fala terminar.
+
 		state["data_center_return_task_pending"] = return_task_pending
 		SaveGame.save_global_state("hall_quest_01", state)
 		if return_task_active:

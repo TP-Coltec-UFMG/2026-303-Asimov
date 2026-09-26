@@ -1,6 +1,6 @@
 class_name SonsAsimov
 extends Node
-## Efeitos curtos sintetizados localmente, sem arquivos ou plugins externos.
+
 var sons: Dictionary = {}
 
 func _ready() -> void:

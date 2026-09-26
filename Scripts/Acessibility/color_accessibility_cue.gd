@@ -2,7 +2,6 @@ extends Node2D
 
 const CUE_SHADER: Shader = preload("res://shaders/filtro_daltonismo.gdshader")
 
-# Instanciado na cena como filho apenas do sprite relevante.
 @export var interaction_path: NodePath
 
 var _sprite: Node2D
@@ -95,7 +94,7 @@ func _process(_delta: float) -> void:
 		_destination = Rect2(sprite.offset, source.size)
 		if sprite.centered:
 			_destination.position -= source.size * 0.5
-	# AtlasTexture usa UVs da folha inteira; limita as amostras ao frame atual.
+
 	while texture is AtlasTexture:
 		var atlas := texture as AtlasTexture
 		source.position += atlas.region.position - atlas.margin.position
@@ -108,7 +107,7 @@ func _process(_delta: float) -> void:
 	var scale_x := maxf(_sprite.global_transform.x.length(), 0.01)
 	var scale_y := maxf(_sprite.global_transform.y.length(), 0.01)
 	_padding = Vector2(0.75 / scale_x, 0.75 / scale_y)
-	# self_modulate não é herdado pelos filhos (modulate já é).
+
 	self_modulate = _sprite.self_modulate
 	var geometry: Array = [_texture, _source, _destination, _flip_h, _flip_v, _padding]
 	if geometry != _last_geometry:
@@ -121,7 +120,7 @@ func _target_available() -> bool:
 		return true
 	if not is_instance_valid(_interaction):
 		return true
-	# Itens guardados continuam recebendo o auxílio no ícone do inventário.
+
 	var ancestor := _sprite.get_parent()
 	while ancestor != null:
 		if ancestor is Inventory:

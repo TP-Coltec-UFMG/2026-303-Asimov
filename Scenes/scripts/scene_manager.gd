@@ -11,7 +11,6 @@ var scene_dir_path := "res://Scenes/"
 func change_scene(player_body: Player, to_scene_name: String) -> void:
 	get_tree().paused = false
 
-	# Guarda o tempo antes da troca de andar.
 	SaveGame.capturar_tempo_atual()
 
 	var current_scene := get_tree().current_scene

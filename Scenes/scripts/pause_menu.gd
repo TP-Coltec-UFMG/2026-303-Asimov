@@ -24,15 +24,14 @@ func _ready() -> void:
 	)
 
 
-# ---- A P L I C A  E S C A L A  I N T E R F A C E  ----
 func obter_fator_interface(index: int) -> float:
 	match index:
 		0:
-			return 1.0 # Padrão
+			return 1.0
 		1:
-			return 0.8 # Pequeno
+			return 0.8
 		2:
-			return 1.1 # Grande
+			return 1.1
 		_:
 			return 1.0
 
@@ -291,7 +290,7 @@ func esta_dentro_do_logo(node: Node) -> bool:
 		atual = atual.get_parent()
 
 	return false
-# ------------------------------------------------------
+
 	
 
 func resume():
@@ -303,8 +302,7 @@ func resume():
 
 
 func pause():
-	# O AudioStreamPlayer pode informar playing=false depois que a SceneTree é
-	# pausada. Guardamos antes disso o estado que realmente estava tocando.
+
 	audio_state_before_pause = (
 		MusicController.get_checkpoint_state().duplicate(true)
 	)
@@ -334,7 +332,7 @@ func _on_resume_pressed() -> void:
 func _on_restart_pressed() -> void:
 	if get_tree().paused:
 		resume()
-		# Resetar no pause volta ao último checkpoint; o reset completo fica no menu principal.
+
 		SaveGame.load_last_checkpoint()
 
 
@@ -342,7 +340,7 @@ func _on_options_pressed() -> void:
 	if get_tree().paused:
 		transition.show()
 		transition.play("default")
-		#await transition.animation_finished
+
 		$PanelContainer.visible = false
 		$Opcoes.visible = true
 		$BackgroundMenuOptions.visible = true
@@ -352,10 +350,7 @@ func _on_options_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	if get_tree().paused:
-		# Salva e silencia no próprio clique. Ao tirar o pause da SceneTree, o
-		# Godot pode limpar o stream_paused automático dos AudioStreamPlayers;
-		# por isso a fase atual só é removida depois do bloqueio. A SceneTree é
-		# reativada quando os nós e áudios locais da fase já saíram da árvore.
+
 		SaveGame.save_current_session(audio_state_before_pause)
 		MusicController.pause_all_audio()
 		transition.visible = true
@@ -373,13 +368,10 @@ func _on_quit_pressed() -> void:
 			push_error("Não foi possível voltar ao menu principal.")
 			return
 
-		# Não use resume() antes da troca: ele reativava por um frame todos os
-		# AudioStreamPlayers locais da fase que estava sendo encerrada.
 		scene_tree.paused = false
 		MusicController.pause_all_audio()
 
 
-# ---- M E N U  O P C O E S  ----
 func _on_back_to_menu_button_pressed() -> void:
 	SaveLoad.save_data = Configs.configs
 	SaveLoad._save()
@@ -418,10 +410,9 @@ func _on_menu_acessibilidadades_pressed() -> void:
 	$Opcoes.visible = false
 	$Accessibility.visible = true
 	transition.play_backwards("default")
-# --------------------------------
 
 
-# ---- M E N U  V O L U M E  ----
+
 func _on_back_to_menu_button_pressed_on_settings_sounds() -> void:
 	transition.play("default")
 	await transition.animation_finished
@@ -430,7 +421,6 @@ func _on_back_to_menu_button_pressed_on_settings_sounds() -> void:
 	transition.play_backwards("default")
 
 
-# ---- M E N U  I N T E R F A C E  ----
 func _on_back_to_menu_button_pressed_on_interface_menu() -> void:
 	transition.play("default")
 	await transition.animation_finished
@@ -442,7 +432,6 @@ func _on_options_interface_size_item_selected(index: int) -> void:
 	aplicar_tamanho_interface_por_index(index)
 
 
-# ---- M E N U  A C E S S I B I L I D A D E S  ----
 func _on_back_to_menu_button_pressed_on_acessibility() -> void:
 	transition.play("default")
 	await transition.animation_finished
@@ -451,7 +440,6 @@ func _on_back_to_menu_button_pressed_on_acessibility() -> void:
 	transition.play_backwards("default")
 
 
-# --- MENU CONTROLES ---
 func _on_back_to_menu_button_pressed_controles() -> void:
 	transition.play("default")
 	await transition.animation_finished

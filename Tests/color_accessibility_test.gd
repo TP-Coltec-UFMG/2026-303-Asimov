@@ -1,8 +1,5 @@
 extends Node
 
-## Run in an isolated copy of the project with:
-## godot --headless --path <copy> res://Tests/color_accessibility_test.tscn -- --accessibility-test
-## No SaveLoad._save, collection or checkpoint operation is invoked by this test.
 
 const CUE_SCENE := "res://Scenes/Utils/color_accessibility_cue.tscn"
 const PLAYER_SCENE := preload("res://Player/ManPlayer.tscn")
@@ -316,7 +313,7 @@ func _finish() -> void:
 	for fixture: Node in fixtures:
 		fixture.queue_free()
 	await _frames()
-	# Changing the mode after freeing actors must not leave stale signal targets.
+
 	FiltroDaltonismo.aplicar_filtro(0)
 	SaveGame.save_data = saved_game
 	SaveLoad.save_data = saved_config
@@ -324,8 +321,8 @@ func _finish() -> void:
 	await _frames()
 	FiltroDaltonismo.aplicar_filtro(saved_mode)
 	if failures.is_empty():
-		print("COLOR_ACCESSIBILITY_TEST_PASSED")
+		pass
 		get_tree().quit(0)
 	else:
-		print("COLOR_ACCESSIBILITY_TEST_FAILED: %d" % failures.size())
+		pass
 		get_tree().quit(1)

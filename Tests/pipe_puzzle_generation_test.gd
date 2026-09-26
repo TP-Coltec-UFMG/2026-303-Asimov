@@ -42,10 +42,10 @@ func _run() -> void:
 	game.queue_free()
 	_expect(rotas_diferentes.size() > 20, "O gerador deve produzir rotas variadas.")
 	if failures.is_empty():
-		print("PIPE_PUZZLE_GENERATION_TEST_PASSED: ", GENERATIONS)
+		pass
 		get_tree().quit(0)
 	else:
-		print("PIPE_PUZZLE_GENERATION_TEST_FAILED: ", failures)
+		pass
 		get_tree().quit(1)
 
 

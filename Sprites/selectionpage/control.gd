@@ -14,7 +14,6 @@ func _ready() -> void:
 
 func SELECTED():
 
-# --- PROGRAMADOR ---
 	if option_selected == "programador":
 
 		Configs.configs["job"] = "programador"
@@ -37,7 +36,6 @@ func SELECTED():
 		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
 		
 
-# --- ENGENHEIRO ELÉTRICO ---
 	elif option_selected == "engenheiro_eletrico":
 		Configs.configs["job"] = "engenheiro_eletrico"
 		_persist_choices()
@@ -58,7 +56,6 @@ func SELECTED():
 		await transition.animation_finished
 		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
 
-# --- CHARACTER 1 ---
 	elif option_selected == "character1":
 		Configs.configs["character"] = "character1"
 		$Character/Character2.disabled = true
@@ -85,7 +82,6 @@ func SELECTED():
 		transition.play_backwards("default")
 		$Difficulty/Easy.grab_focus()
 
-# --- CHARACTER 2 ---
 	elif option_selected == "character2":
 		Configs.configs["character"] = "character2"
 		$Character/Character1.disabled = true
@@ -112,7 +108,6 @@ func SELECTED():
 		transition.play_backwards("default")
 		$Difficulty/Easy.grab_focus()
 
-# --- CHARACTER 3 ---
 	elif option_selected == "character3":
 		Configs.configs["character"] = "character3"
 		$Character/Character1.disabled = true
@@ -139,7 +134,6 @@ func SELECTED():
 		transition.play_backwards("default")
 		$Difficulty/Easy.grab_focus()
 
-# --- EASY ---
 	elif option_selected == "easy":
 		Configs.configs["difficulty"] = "easy"
 		_persist_choices()
@@ -161,7 +155,6 @@ func SELECTED():
 		await blink.finished
 		await _show_profession_selection()
 
-# --- NORMAL ---
 	elif option_selected == "normal":
 		Configs.configs["difficulty"] = "normal"
 		_persist_choices()
@@ -183,7 +176,6 @@ func SELECTED():
 		await blink.finished
 		await _show_profession_selection()
 
-# --- HARD ---
 	elif option_selected == "hard":
 		Configs.configs["difficulty"] = "hard"
 		_persist_choices()

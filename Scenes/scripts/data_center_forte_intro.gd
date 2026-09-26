@@ -57,7 +57,7 @@ func _should_play_intro() -> bool:
 
 
 func _start_intro() -> void:
-	# BaseScene posiciona o Player e atualiza sua câmera por chamadas adiadas.
+
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if not is_inside_tree():
@@ -165,7 +165,7 @@ func _mission_marker_order() -> Array[String]:
 	var job := str(Configs.configs.get("job", ""))
 	if job == JOB_ENGINEER:
 		var engineer_state := SaveGame.office_mission_state(player)
-		# A mesma seleção persistida controla as missões e os dois scans.
+
 		var engineer := get_parent().get_node_or_null("EngineerEnding")
 		if engineer != null and engineer.has_method("_load_points"):
 			engineer.call("_load_points", engineer_state)
@@ -243,7 +243,7 @@ func _restore_gameplay() -> void:
 	black_overlay.color.a = 0.0
 	black_overlay.hide()
 	if is_instance_valid(player):
-		# O fade da sala anterior traz o Player com a física desativada.
+
 		player.set_physics_process(true)
 
 

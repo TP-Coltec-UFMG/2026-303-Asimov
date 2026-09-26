@@ -1,14 +1,11 @@
 
 extends Area2D
 
-# Recurso próprio do minigame de circuito; não compartilha UID com outros minigames.
 
 
 var fio_em_cima: Node2D = null
 var segurando: bool = false
 
-# Contador simples de cortes já realizados. O tutorial usa isso
-# para saber que o jogador cortou um fio, sem precisar de sinal.
 var total_cortes: int = 0
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -33,19 +30,12 @@ func desativar_destaque() -> void:
 
 func _process(_delta):
 
-	# ==========================================
-	# FAZER O ALICATE SEGUIR O MOUSE
-	# SOMENTE ENQUANTO ESTIVER SEGURANDO
-	# ==========================================
 
 	if segurando:
 
 		global_position = get_global_mouse_position()
 
 
-	# ==========================================
-	# PROCURAR FIO EMBAIXO DO ALICATE
-	# ==========================================
 
 	fio_em_cima = null
 
@@ -67,9 +57,6 @@ func _process(_delta):
 		break
 
 
-# ==========================================
-# CLIQUE NO ALICATE
-# ==========================================
 
 func _input(event: InputEvent) -> void:
 	if not event is InputEventMouseButton:
@@ -90,7 +77,7 @@ func cortar_fio():
 
 	if fio_em_cima == null:
 
-		print("NAO CORTEI")
+		pass
 
 		return
 
@@ -99,15 +86,9 @@ func cortar_fio():
 
 	total_cortes += 1
 
-	print(
-		"CORTEI: ",
-		fio_cortado.name
-	)
+	pass
 
 
-	# ==========================================
-	# PROCURA O CIRCUIT
-	# ==========================================
 
 	var circuit = self.get_parent(
 		
@@ -121,9 +102,6 @@ func cortar_fio():
 		)
 
 
-	# ==========================================
-	# REMOVE O FIO
-	# ==========================================
 
 	fio_cortado.queue_free()
 

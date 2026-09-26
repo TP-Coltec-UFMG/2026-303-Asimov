@@ -276,5 +276,5 @@ func _make_stylebox(
 
 
 func _on_options_interface_size_item_selected(_index: int) -> void:
-	# A escala é aplicada pelo script da tela que contém este painel.
+
 	pass

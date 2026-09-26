@@ -33,9 +33,7 @@ func set_player(novo_player: Player) -> void:
 func _process(_delta: float) -> void:
 	position_on_player.look_at(get_global_mouse_position())
 	
-	#if player.usando_arma:
-	#	reticula.show()
-	#	reticula.global_position = get_global_mouse_position()
+
 	
 	position_on_player.rotation_degrees = wrap(position_on_player.rotation_degrees, 0, 360)
 		

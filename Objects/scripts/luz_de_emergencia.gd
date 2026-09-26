@@ -14,7 +14,6 @@ func desliga_luz() -> void:
 	point_light_2d.hide()
 
 
-# Mantém compatibilidade com os nomes usados ao criar esta cena.
 func ligar_luz() -> void:
 	liga_luz()
 

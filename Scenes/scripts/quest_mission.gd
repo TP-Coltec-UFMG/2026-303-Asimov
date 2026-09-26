@@ -27,7 +27,7 @@ var _elevador_terceiro_liberado: bool = false
 var _chegou_terceiro_andar: bool = false
 
 func _ready() -> void:
-	# BaseScene escolhe o Player persistente e aplica o checkpoint no _ready.
+
 	call_deferred("_inicializar")
 
 
@@ -50,7 +50,7 @@ func _inicializar() -> void:
 	MusicController._stop_bg_ambient()
 	MusicController._set_volume_som_de_fundo(1.0)
 	_descartar_instrucoes_obsoletas()
-	# O Player pode ter restaurado a fala antes da conexão dos sinais da missão.
+
 	_on_pensamento_iniciado(man_player.balao_de_pensamento.pensamento_atual_id())
 	man_player.balao_de_pensamento.atualizar_texto(
 		_pensamento_id("pos_saida_2"),
@@ -65,7 +65,6 @@ func _inicializar() -> void:
 		_atualizar_visibilidade()
 		return
 
-	# Registra a sequência inteira, inclusive as falas que ainda não começaram.
 	_pensar("intro_1", "O que está acontecendo?")
 	_pensar("intro_2", "Temos que sair desse andar!")
 	_pensar("intro_4", "Preciso de um extintor.")
@@ -82,7 +81,7 @@ func _pensar(id: String, texto: String) -> void:
 
 
 func _descartar_instrucoes_obsoletas() -> void:
-	# Remove também a fala antiga quando ela vier ativa ou enfileirada no save.
+
 	var ids: Array[String] = [_pensamento_id("intro_3")]
 	if M1_feito:
 		ids.append_array([_pensamento_id("intro_4"), _pensamento_id("aviso_1"), _pensamento_id("aviso_2")])
@@ -399,7 +398,7 @@ func _restore_progress() -> void:
 		M2_feito = bool(
 			saved_state.get("task_elevator_done", false)
 		)
-		# Saves antigos só registravam as tarefas, sem a etapa de saída.
+
 		_hide_scheduled = bool(saved_state.get("exit_started", M1_feito and M2_feito))
 		_todos_sairam = bool(saved_state.get("everyone_out", false))
 		_pos_saida_iniciada = bool(saved_state.get("post_exit_started", false))

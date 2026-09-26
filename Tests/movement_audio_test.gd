@@ -1,7 +1,5 @@
 extends Node2D
 
-# Run as a scene with -- --movement-audio-test. Exercises the real Player and
-# physics rather than starting audio players directly. No campaign is saved.
 const PLAYER_SCENE := preload("res://Player/ManPlayer.tscn")
 var failures: Array[String] = []
 var checks: int = 0
@@ -21,7 +19,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	# Prevent story and global music from affecting the movement-only fixture.
+
 	MusicController.set_process(false)
 	for child: Node in MusicController.get_children():
 		if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
@@ -91,7 +89,6 @@ func _run() -> void:
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	await _frames(5)
 
-	# Reproduce the persistent Player being removed before an elevator scene swap.
 	Input.action_release("right")
 	remove_child(player)
 	_expect(not player.sfx_walking.playing, "Removing a player for a scene transition must stop the old footsteps.")
@@ -144,7 +141,7 @@ func _run() -> void:
 	player.queue_free()
 	scene_manager.player = null
 	await _frames(2)
-	print("MOVEMENT_AUDIO_TEST: ", checks, " checks; ", failures.size(), " failures")
+	pass
 	get_tree().quit(0 if failures.is_empty() else 1)
 
 

@@ -45,7 +45,7 @@ func _ready() -> void:
 			if completed:
 				_fail("Completion precedes burn cycle, mode %d" % mode)
 				return
-			# Pausing the embedded minigame must suspend all component animations.
+
 			game.process_mode = Node.PROCESS_MODE_DISABLED
 			var frame_before: int = sprite.frame
 			await get_tree().create_timer(2.0).timeout
@@ -66,10 +66,10 @@ func _ready() -> void:
 		if board.led_queimando or board.resistor_queimando or board.bateria_queimando:
 			_fail("Completion with unfinished burn cycle, mode %d" % mode)
 			return
-		print("PASS: circuit mode ", mode, " wiring, voltage, highlight, sequential burns, pause and completion")
+		pass
 		game.queue_free()
 		await get_tree().process_frame
-	# Burning the power source first cannot leave a combined objective stuck forever.
+
 	for mode in [4, 5]:
 		completed = false
 		failed = false
@@ -86,7 +86,7 @@ func _ready() -> void:
 		if not failed or completed:
 			_fail("Battery-first sequence did not offer retry, mode %d" % mode)
 			return
-		print("PASS: combined mode ", mode, " rejects battery-first order")
+		pass
 		game.queue_free()
 		await get_tree().process_frame
 	get_tree().quit(0)
@@ -107,7 +107,7 @@ func _burn_through_circuit(game: Node2D, component: String) -> bool:
 			return false
 		board.analisar_circuito()
 	else:
-		# Retain the battery leads; route around the source via the lower-left junction.
+
 		for wire in get_tree().get_nodes_in_group("fios"):
 			if not board.is_ancestor_of(wire) or wire.is_queued_for_deletion():
 				continue

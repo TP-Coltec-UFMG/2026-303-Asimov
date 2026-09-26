@@ -177,7 +177,7 @@ func _run() -> void:
 	await get_tree().create_timer(0.2).timeout
 	_expect(controller.destruction_cutscene_running and not player.visible, "Using exit hides player and starts destruction cutscene")
 	_expect(is_instance_valid(controller.destruction_camera) and controller.fires.size() > 4, "Cutscene camera shows new persistent explosion fires")
-	print("PASS: engineer fire and interaction (", checks, " checks)")
+	pass
 	get_tree().quit(0 if failures == 0 else 1)
 
 func _frames(count: int) -> void:

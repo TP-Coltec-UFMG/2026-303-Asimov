@@ -53,7 +53,7 @@ func _run() -> void:
 	for failure in failures:
 		push_error(failure)
 	if failures.is_empty():
-		print("PASS: interrupção e retomada do diálogo no mesmo ponto.")
+		pass
 	get_tree().quit(0 if failures.is_empty() else 1)
 
 

@@ -1,8 +1,5 @@
 extends Node
 
-# Executar com renderizador real, na cópia isolada do projeto:
-# godot --path <copy> res://Tests/color_accessibility_render_test.tscn -- --accessibility-render-test
-# Opcional: --reference=<caminho de uma captura do jogo sem auxílio>
 const MAP_SHADER = preload("res://shaders/mapa_acessibilidade.gdshader")
 const CUE_SHADER = preload("res://shaders/filtro_daltonismo.gdshader")
 var failures: Array[String] = []
@@ -46,11 +43,11 @@ func _run() -> void:
 			for mode in range(4):
 				var rendered := await _render_map(reference, mode)
 				rendered.save_png("user://accessibility_mode_%d.png" % mode)
-			print("RENDER_OUTPUT: ", OS.get_user_data_dir())
+			pass
 	if failures.is_empty():
-		print("COLOR_ACCESSIBILITY_RENDER_TEST_PASSED")
+		pass
 	else:
-		print("COLOR_ACCESSIBILITY_RENDER_TEST_FAILED: ", failures)
+		pass
 	get_tree().quit(0 if failures.is_empty() else 1)
 
 func _viewport(size: Vector2i) -> SubViewport:

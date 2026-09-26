@@ -332,8 +332,7 @@ func show_programmer_ending_tasks(
 		0,
 		PROGRAMMER_ENDING_TASKS.size()
 	)
-	# Revela somente a tarefa atual e preserva as anteriores como confirmação.
-	# Ao encher o painel, a última concluída sobe para iniciar a próxima janela.
+
 	var start_index := safe_completed - 1 if safe_completed >= 3 else 0
 	var visible_end := mini(safe_completed + 1, PROGRAMMER_ENDING_TASKS.size())
 	var entries: Array[Dictionary] = []
@@ -350,8 +349,7 @@ func show_programmer_ending_tasks(
 		and not bool(state.get("cooling_optional_task_cancelled", false))
 	)
 	if cooling_active:
-		# A missão opcional ocupa uma das três linhas. Retiramos primeiro a tarefa
-		# concluída mais antiga, nunca o objetivo atual.
+
 		while entries.size() >= 3:
 			var remove_index := -1
 			for index in range(entries.size()):

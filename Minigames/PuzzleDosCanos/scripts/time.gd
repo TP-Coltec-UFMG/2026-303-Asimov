@@ -5,7 +5,7 @@ const TEXTURA := preload("res://Minigames/PuzzleDosCanos/textures/sheet.png")
 const POSICAO_BASE := Vector2(66, 1)
 const TAMANHO_CARACTERE := Vector2(5, 5)
 
-@export var time: int = 0 # Tempo em segundos
+@export var time: int = 0
 
 signal finished
 

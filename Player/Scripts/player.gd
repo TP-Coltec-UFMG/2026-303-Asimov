@@ -1,8 +1,6 @@
 class_name Player extends CharacterBody2D
 
 
-# Cenas isoladas como o tutorial usam o mesmo Player e a mesma física sem
-# sobrescrever o checkpoint da campanha.
 @export var checkpoint_enabled: bool = true
 
 
@@ -51,8 +49,6 @@ var objeto_manipulado: ObjetoEmpurravel = null
 var lado_objeto_manipulado: Vector2 = Vector2.ZERO
 var drag_sfx: AudioStreamPlayer2D
 
-# O filho continua conferindo o áudio quando uma cutscene/minigame desliga
-# somente a física do Player. Nesse caso o Player não recebe mais callbacks.
 class MovementAudioGuard extends Node:
 	func _physics_process(_delta: float) -> void:
 		var player := get_parent() as Player
@@ -224,7 +220,6 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 		pensamentos_salvos if pensamentos_salvos is Dictionary else {}
 	)
 
-	# Estados transitórios não devem sobreviver ao respawn.
 	direction = Vector2.ZERO
 	velocity = Vector2.ZERO
 	crowd_obstacle.velocity = Vector2.ZERO
@@ -413,8 +408,7 @@ func mover_com_objeto(movimento: Vector2) -> void:
 		move_and_collide(movimento)
 		objeto_manipulado.move_and_collide(movimento)
 		if not drag_sfx.playing:
-			# São raspadas gravadas, não loops contínuos. A terceira gravação
-			# é muito mais baixa; usamos as duas de volume equivalente.
+
 			drag_sfx.stream = GameAudio.SCRAPES[randi_range(0, 1)]
 			drag_sfx.play()
 	elif drag_sfx.playing:

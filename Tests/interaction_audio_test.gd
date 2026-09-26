@@ -63,7 +63,7 @@ func _run() -> void:
 	await process_frame
 	await process_frame
 	_check(_voices().is_empty(), "Changing scenes must stop all interaction tails.")
-	print("INTERACTION_AUDIO_TEST_PASSED" if failures.is_empty() else "INTERACTION_AUDIO_TEST_FAILED: " + str(failures))
+	pass
 	quit(0 if failures.is_empty() else 1)
 
 

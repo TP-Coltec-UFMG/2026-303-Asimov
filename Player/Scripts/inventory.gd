@@ -140,7 +140,6 @@ func load_save_state(inventario_salvo: Dictionary) -> void:
 		var scene_path: String = ""
 		var item_state: Dictionary = {}
 
-		# Compatibilidade com o formato que você estava usando antes.
 		if saved_item is String:
 			scene_path = saved_item
 

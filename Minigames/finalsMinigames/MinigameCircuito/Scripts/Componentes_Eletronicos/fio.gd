@@ -1,6 +1,5 @@
 extends Node2D
 
-# Recurso próprio do minigame de circuito; não compartilha UID com outros minigames.
 
 
 @onready var linha: Line2D = $Line2D
@@ -22,30 +21,19 @@ var origem: Node2D = null
 var destino: Node2D = null
 
 
-# ==========================================
-# INICIALIZAÇÃO
-# ==========================================
 
 func _ready() -> void:
 
-	# Somente o FIO entra no grupo.
-	# O Area2D filho não entra.
 
 	add_to_group("fios")
 
 
-	# ==========================================
-	# CRIAR COLISÃO DO FIO
-	# ==========================================
 
 	if colisao_fio != null:
 
 		colisao_fio.shape = SegmentShape2D.new()
 
 
-	# ==========================================
-	# INICIALIZAR LINE2D
-	# ==========================================
 
 	if linha != null:
 
@@ -60,9 +48,6 @@ func _ready() -> void:
 		)
 
 
-# ==========================================
-# CONECTAR FIO
-# ==========================================
 
 func conectar(
 	ponto_origem: Node2D,
@@ -75,9 +60,6 @@ func conectar(
 	atualizar_fio()
 
 
-# ==========================================
-# PROCESSO
-# ==========================================
 
 func _process(_delta: float) -> void:
 
@@ -100,9 +82,6 @@ func _process(_delta: float) -> void:
 	atualizar_fio()
 
 
-# ==========================================
-# ATUALIZAR FIO
-# ==========================================
 
 func atualizar_fio() -> void:
 
@@ -122,9 +101,6 @@ func atualizar_fio() -> void:
 		return
 
 
-	# ==========================================
-	# LINE2D
-	# ==========================================
 
 	if linha != null:
 
@@ -161,9 +137,6 @@ func atualizar_fio() -> void:
 		)
 
 
-	# ==========================================
-	# COLISÃO DO FIO
-	# ==========================================
 
 	if colisao_fio == null:
 		return

@@ -37,7 +37,6 @@ static func play_ui(origin: Node, sound: AudioStream, volume_db: float = -12.0) 
 	play_ui_sequence(origin, [sound], [volume_db])
 
 
-# A leitura e o resultado usam a mesma voz, em sequência, sem atrasar a tarefa.
 static func play_ui_sequence(origin: Node, sounds: Array[AudioStream], volumes: Array[float]) -> void:
 	if sounds.is_empty() or not _can_play(origin, sounds[0]):
 		return
@@ -48,7 +47,7 @@ static func play_ui_sequence(origin: Node, sounds: Array[AudioStream], volumes: 
 	voice.process_mode = Node.PROCESS_MODE_PAUSABLE
 	host.add_child(voice)
 	_register_voice(voice, origin, sounds[0])
-	# Fechar/reiniciar um minigame também cancela seus sons pendentes.
+
 	origin.tree_exiting.connect(voice.queue_free, CONNECT_ONE_SHOT)
 	_play_sequence_next(voice, sounds, volumes, 0)
 
@@ -83,7 +82,7 @@ static func _register_voice(voice: Node, origin: Node, sound: AudioStream) -> vo
 	for existing in origin.get_tree().get_nodes_in_group(VOICE_GROUP):
 		if not existing.is_queued_for_deletion():
 			active.append(existing)
-	# Várias interações no mesmo frame não podem somar um volume sem limite.
+
 	while active.size() >= MAX_VOICES:
 		var oldest: Node = active.pop_front()
 		oldest.stop()

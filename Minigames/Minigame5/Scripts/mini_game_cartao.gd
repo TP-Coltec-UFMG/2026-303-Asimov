@@ -1,16 +1,10 @@
 extends Node2D
 
 
-# ==========================================
-# CONFIGURAÇÃO
-# ==========================================
 
 @export var cena_destino: String = "res://caminho_da_cena.tscn"
 
 
-# ==========================================
-# REFERÊNCIA DO LEITOR DE CARTÃO
-# ==========================================
 
 @onready var leitor_cartao: Area2D = $Home/Leitor_cartao
 @onready var notebook: Node2D = $Notebook
@@ -23,9 +17,6 @@ var _notebook_aberto: bool = false
 var _modo_mouse_anterior: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 
 
-# ==========================================
-# TUTORIAL — CONFIGURAÇÃO GERAL
-# ==========================================
 
 @onready var painel_tutorial: Panel = $Panel
 @onready var label_tutorial: Label = $Panel/Label
@@ -33,36 +24,25 @@ var _modo_mouse_anterior: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 
 
 enum GatilhoTutorial {
-	CONTINUAR,   # avança com o botão "continuar" do próprio tutorial
-	BOTAO_JOGO,  # avança quando o jogador clica num botão do jogo
-	TAREFA,      # avança quando o jogador conclui uma tarefa
-	FIM,         # última etapa do tutorial
+	CONTINUAR,
+	BOTAO_JOGO,
+	TAREFA,
+	FIM,
 }
 
 
 var etapa_tutorial: int = 0
 
 
-# "" | "cartao" | "conexao"
 var aguardando_tutorial: String = ""
 
 
-# ==========================================
-# TRAVAS DO TUTORIAL
-# ==========================================
 
-# Vira true quando o jogador clica em "continuar" na etapa 2.
-# Enquanto for false, o cartão NÃO pode ser colocado no leitor.
 var passou_etapas_iniciais: bool = false
 
-# O cabo só pode ser conectado a partir desta etapa
-# (etapa 3 = cartão já foi colocado no leitor).
 const ETAPA_MINIMA_CABO: int = 3
 
 
-# ==========================================
-# MENSAGEM "AINDA NÃO"
-# ==========================================
 
 const MENSAGEM_AINDA_NAO: String = "Ainda não"
 const DURACAO_AINDA_NAO: float = 1.5
@@ -88,18 +68,6 @@ var _finalizando: bool = false
 @onready var label_ainda_nao: Label = $Home/Leitor_cartao/Juncao2/Panel/Label
 
 
-# ------------------------------------------
-# Cada etapa mostra o texto e diz como ela avança:
-#
-#  1  aparece ao iniciar ............ avança: botão "continuar"
-#  2  aparece após a etapa 1 ........ avança: botão "continuar"
-#  3  aparece ao colocar o cartão no leitor
-#  4  aparece ao conectar o cabo .... (notebook.gd / _process)
-#  5  aparece ao clicar em COPIAR ... (codigo.gd)
-#  6  aparece ao clicar no botão do Banco de Dados (notebook.gd)
-#  7  aparece ao colar o ID no campo  (notebook.gd)
-#  8  aparece ao fechar a janela .... (notebook.gd)
-# ------------------------------------------
 
 var etapas_tutorial: Dictionary = {
 	1: {
@@ -143,9 +111,6 @@ var etapas_tutorial: Dictionary = {
 	},
 }
 
-# ==========================================
-# READY
-# ==========================================
 
 func _ready() -> void:
 	add_to_group("tutorial_manager")
@@ -211,74 +176,51 @@ func _on_notebook_fechou() -> void:
 	home.show()
 	Input.mouse_mode = _modo_mouse_anterior
 
-	# Cada saída retira o cartão para que a próxima leitura seja uma reinserção.
 	leitor_cartao.retirar_cartao()
 	cartao.retirar_do_leitor()
 	_atualizar_estado_conexao()
 
 
-# ==========================================
-# VERIFICAR CONDIÇÕES
-# ==========================================
 
 func _pode_trocar_de_cena() -> bool:
 
 	if leitor_cartao == null:
 
-		print(
-			"[MANAGER][BLOQUEIO] "
-			+ "leitor_cartao == null"
-		)
+		pass
 
 		return false
 
 
 	if not is_instance_valid(leitor_cartao):
 
-		print(
-			"[MANAGER][BLOQUEIO] "
-			+ "leitor_cartao inválido."
-		)
+		pass
 
 		return false
 
 
 	if not _cartao_esta_no_leitor():
 
-		print(
-			"[MANAGER][BLOQUEIO] "
-			+ "Nenhum cartão válido está sobre o leitor."
-		)
+		pass
 
 		return false
 
 
-	print(
-		"[MANAGER] Cartão detectado no leitor."
-	)
+	pass
 
 
 	if not _algum_conectado_esta_true():
 
-		print(
-			"[MANAGER][BLOQUEIO] "
-			+ "Nenhum nó conectado está ativo."
-		)
+		pass
 
 		return false
 
 
-	print(
-		"[MANAGER] Existe pelo menos um nó conectado."
-	)
+	pass
 
 
 	return true
 
 
-# ==========================================
-# VERIFICAR CARTÃO NO LEITOR
-# ==========================================
 
 func _cartao_esta_no_leitor() -> bool:
 
@@ -295,9 +237,6 @@ func _cartao_esta_no_leitor() -> bool:
 	return leitor_cartao.cartao_em_cima and not cartao.voltando
 
 
-# ==========================================
-# VERIFICAR GRUPO "juncao"
-# ==========================================
 
 func _algum_conectado_esta_true() -> bool:
 
@@ -331,50 +270,41 @@ func _algum_conectado_esta_true() -> bool:
 	return false
 
 
-# ==========================================
-# DEBUG COMPLETO
-# ==========================================
 
 func _debug_condicoes() -> void:
 
-	print("")
-	print("------------------------------------------")
-	print("[MANAGER] DIAGNÓSTICO DAS CONDIÇÕES")
-	print("------------------------------------------")
+	pass
+	pass
+	pass
+	pass
 
 
 	if leitor_cartao == null:
 
-		print("LEITOR: referência nula.")
+		pass
 
 	elif not is_instance_valid(leitor_cartao):
 
-		print("LEITOR: referência inválida.")
+		pass
 
 	else:
 
-		print("LEITOR: encontrado.")
-		print("Nome: ", leitor_cartao.name)
-		print("Tipo: ", leitor_cartao.get_class())
+		pass
+		pass
+		pass
 
 
 		if "cartao_em_cima" in leitor_cartao:
 
-			print(
-				"cartao_em_cima: ",
-				leitor_cartao.cartao_em_cima
-			)
+			pass
 
 		else:
 
-			print(
-				"Leitor não possui "
-				+ "'cartao_em_cima'."
-			)
+			pass
 
 
-	print("")
-	print("GRUPO 'juncao':")
+	pass
+	pass
 
 
 	var nos := get_tree().get_nodes_in_group(
@@ -384,9 +314,7 @@ func _debug_condicoes() -> void:
 
 	if nos.is_empty():
 
-		print(
-			"Nenhum nó encontrado no grupo."
-		)
+		pass
 
 	else:
 
@@ -394,65 +322,41 @@ func _debug_condicoes() -> void:
 
 			if not is_instance_valid(n):
 
-				print("Nó inválido.")
+				pass
 
 				continue
 
 
 			if "conectado1" in n:
 
-				print(
-					"  ",
-					n.name,
-					" → conectado1 = ",
-					n.conectado1
-				)
+				pass
 
 			else:
 
-				print(
-					"  ",
-					n.name,
-					" → não possui "
-					+ "conectado1"
-				)
+				pass
 
 
-	print("")
-	print("------------------------------------------")
+	pass
+	pass
 
 
 	var cartao_ok := _cartao_esta_no_leitor()
 	var conexao_ok := _algum_conectado_esta_true()
 
 
-	print(
-		"[MANAGER] Cartão: ",
-		"OK" if cartao_ok else "FALHOU"
-	)
+	pass
 
 
-	print(
-		"[MANAGER] Conexão: ",
-		"OK" if conexao_ok else "FALHOU"
-	)
+	pass
 
 
-	print(
-		"[MANAGER] Resultado final: ",
-		"PODE TROCAR"
-		if cartao_ok and conexao_ok
-		else "NÃO PODE TROCAR"
-	)
+	pass
 
 
-	print("------------------------------------------")
-	print("")
+	pass
+	pass
 
 
-# ==========================================
-# TUTORIAL — MOSTRAR ETAPA
-# ==========================================
 
 func mostrar_etapa_tutorial(
 	etapa: int,
@@ -461,10 +365,7 @@ func mostrar_etapa_tutorial(
 
 	if not etapas_tutorial.has(etapa):
 
-		print(
-			"[TUTORIAL][ERRO] Etapa inexistente: ",
-			etapa
-		)
+		pass
 
 		return
 
@@ -488,9 +389,6 @@ func mostrar_etapa_tutorial(
 	)
 
 
-	# ==========================================
-	# TEXTO (sem "Etapa XX"; título só se existir)
-	# ==========================================
 
 	label_tutorial.text = (
 		titulo + "\n" + corpo
@@ -501,38 +399,23 @@ func mostrar_etapa_tutorial(
 	painel_tutorial.visible = true
 
 
-	# ==========================================
-	# BOTÃO CONTINUAR
-	# ==========================================
 
-	# O botão permite adiantar qualquer mensagem, mas nenhuma delas bloqueia o
-	# jogador indefinidamente enquanto o cronômetro da campanha continua.
 	botao_continuar_tutorial.visible = true
 
 	botao_continuar_tutorial.text = "Continuar"
 
 
-	print(
-		"[TUTORIAL] Etapa ",
-		etapa,
-		" exibida."
-	)
+	pass
 	_atualizar_tarefa_da_etapa(etapa)
 	_agendar_fim_da_mensagem(etapa)
 
 
-# ==========================================
-# TUTORIAL — ESCONDER
-# ==========================================
 
 func esconder_tutorial() -> void:
 	_id_mensagem_tutorial += 1
 	painel_tutorial.visible = false
 
 
-# ==========================================
-# TUTORIAL — BOTÃO CONTINUAR
-# ==========================================
 
 func _on_continuar_tutorial_pressed() -> void:
 
@@ -545,9 +428,6 @@ func _on_continuar_tutorial_pressed() -> void:
 
 		2:
 
-			# Passou pelas 2 primeiras etapas: libera o cartão.
-			# A etapa 3 só aparece quando o cartão for colocado
-			# no leitor.
 
 			passou_etapas_iniciais = true
 
@@ -615,10 +495,6 @@ func _on_acesso_liberado() -> void:
 		Progresso.concluir_reprogramacao_cartao_rfid()
 
 
-# ==========================================
-# TUTORIAL — TRAVAS
-# ==========================================
-# Consultadas pelo leitor (cartão) e pelos fios (cabo).
 
 func pode_colocar_cartao() -> bool:
 
@@ -630,11 +506,6 @@ func pode_conectar_cabo() -> bool:
 	return etapa_tutorial >= ETAPA_MINIMA_CABO
 
 
-# ==========================================
-# TUTORIAL — MENSAGEM "AINDA NÃO"
-# ==========================================
-# Aparece no painel ao lado do leitor (Juncao2/Panel) sempre que
-# o jogador tenta colocar o cartão ou conectar o cabo cedo demais.
 
 func mostrar_ainda_nao() -> void:
 
@@ -648,7 +519,6 @@ func mostrar_ainda_nao() -> void:
 
 	await get_tree().create_timer(DURACAO_AINDA_NAO).timeout
 
-	# Se veio outra mensagem nesse meio tempo, ela cuida de esconder.
 	if id_atual == _id_mensagem_ainda_nao:
 
 		painel_ainda_nao.visible = false

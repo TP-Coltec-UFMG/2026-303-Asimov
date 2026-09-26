@@ -23,7 +23,7 @@ var _visibilidades_originais: Array[bool] = []
 
 
 func _enter_tree() -> void:
-	# Também reconecta se o mesmo nó sair e voltar à árvore sem outro _ready.
+
 	call_deferred("_conectar_quest")
 
 
@@ -75,7 +75,7 @@ func _notification(what: int) -> void:
 
 
 func _sincronizar() -> void:
-	# Resetar retoma o jogo e remove a cena antes deste callback adiado.
+
 	if not is_inside_tree() or is_queued_for_deletion():
 		return
 	if not is_instance_valid(_quest) or not _quest.is_inside_tree() or _quest.is_queued_for_deletion():
@@ -92,12 +92,12 @@ func _sincronizar() -> void:
 		_restaurar_intensidades()
 		return
 	_definir_visibilidade(true)
-	# Só inicia ou retoma: sinais repetidos nunca reiniciam os dez segundos.
+
 	if _temporizador.is_stopped():
 		_temporizador.start(_tempo_restante)
 	if _tween != null and _tween.is_valid():
 		return
-	# Um único Tween: borda e energias percorrem as mesmas duas fases.
+
 	_tween = create_tween().set_loops()
 	_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	_animar_fase(0.2)
@@ -138,7 +138,7 @@ func _animar_fase(fator: float) -> void:
 
 func _definir_visibilidade(ativa: bool) -> void:
 	visible = ativa
-	# As luzes são irmãs da borda; hide() no Line2D não as oculta.
+
 	for i in range(_luzes.size()):
 		if is_instance_valid(_luzes[i]):
 			_luzes[i].visible = ativa and _visibilidades_originais[i]

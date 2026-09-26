@@ -1,23 +1,14 @@
 extends Area2D
 
-# ==============================
-# CONFIGURAÇÃO
-# ==============================
 @export var resistencia: float = 220.0
-@export var potencia_maxima: float = 0.5             # Watts que o resistor aguenta (ex: resistor de 1/2W)
+@export var potencia_maxima: float = 0.5
 @export var dano_por_watt_excedente: float = 40.0
 
-# ==============================
-# REFERÊNCIAS
-# ==============================
 @onready var terminal_positivo: Node2D = $Terminal_positivo
 @onready var terminal_negativo: Node2D = $Terminal_negativo
 @onready var animation_player: AnimatedSprite2D = $AnimatedSprite2D 
 var material_shader: ShaderMaterial
 
-# ==============================
-# ESTADO
-# ==============================
 var saude := 100.0
 
 enum Estado { NORMAL, QUEIMANDO, QUEIMADO }
@@ -39,13 +30,11 @@ func desativar_destaque() -> void:
 	animation_player.material = null
 
 
-# Chamado pelo CircuitManager a cada avaliação do circuito, com a
-# corrente (em Amperes) que está passando pelo resistor nesse instante.
 func aplicar_corrente(corrente: float, delta: float) -> void:
 	if estado == Estado.QUEIMADO:
 		return
 
-	var potencia := corrente * corrente * resistencia   # P = I² * R
+	var potencia := corrente * corrente * resistencia
 	var excesso := potencia - potencia_maxima
 
 	if excesso > 0.0:
@@ -70,7 +59,7 @@ func mudar_estado(novo: Estado) -> void:
 			tocar_animacao("queimando")
 		Estado.QUEIMADO:
 			tocar_animacao("queimado")
-			print("RESISTOR: queimou!")
+			pass
 
 
 func tocar_animacao(nome: String) -> void:

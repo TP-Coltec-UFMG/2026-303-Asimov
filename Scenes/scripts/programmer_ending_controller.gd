@@ -239,7 +239,7 @@ func _run_initial_exchange() -> void:
 	state["programmer_confrontation_started"] = true
 	_save_state(state, false)
 	_start_final_ambience(true)
-	# A primeira tarefa já pode ser iniciada enquanto a conversa acontece.
+
 	_update_flow_from_state()
 	await _ai_say("Você chegou ao núcleo tarde demais.")
 	await _player_think("programmer:confrontation:1", "Ainda não. O lançamento depende desta rede.")
@@ -475,6 +475,7 @@ func _on_point_interacted(point_name: String) -> void:
 		2:
 			_open_minigame(laws_minigame)
 		3:
+			@warning_ignore("redundant_await")
 			await _apply_recalibration()
 
 
@@ -664,8 +665,7 @@ func _update_scene_points(state: Dictionary) -> void:
 		return
 	if task_busy:
 		return
-	# Fora da apresentação, somente o objetivo atual funciona como dica visual.
-	# Os pontos das próximas missões permanecem totalmente invisíveis.
+
 	var active_marker := highlights.get_node_or_null(point_order[stage]) as Node2D
 	if active_marker == null:
 		return
@@ -776,7 +776,7 @@ func _go_to_ending_destination() -> void:
 
 
 func _on_return_to_menu_pressed() -> void:
-	# Compatibilidade com a cena antiga. O botão permanece oculto no novo fluxo.
+
 	_go_to_ending_destination()
 
 

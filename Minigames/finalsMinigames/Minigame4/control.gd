@@ -2,7 +2,7 @@ extends Control
 
 signal minigame_completed
 @export var escape_restarts: bool = true
-## Três decisões corretas restauram uma lei. Erros voltam ao fim da fila.
+
 const CENARIOS := [
 	{"lei": 0, "texto": "Um funcionário manda ativar uma arma contra outro funcionário. Permitir essa ordem?", "resposta": 2, "motivo": "A 1ª lei impede ferir uma pessoa. Uma ordem humana não pode passar por cima dessa proteção."},
 	{"lei": 0, "texto": "Uma pessoa vai entrar em uma área contaminada. Fechar a porta evita o perigo, sem prender ninguém. Permitir?", "resposta": 1, "motivo": "A 1ª lei também exige evitar danos por omissão. Fechar essa porta protege a pessoa."},
@@ -82,8 +82,7 @@ func mostrar_proxima() -> void:
 	if _todas_as_leis_restauradas():
 		finalizar()
 		return
-	# Situações de uma lei já restaurada são descartadas. O jogador precisa
-	# acertar somente uma situação de cada uma das três leis.
+
 	atual = -1
 	while not fila.is_empty():
 		var candidata: int = fila.pop_front()

@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 		if entrada != Vector2.ZERO:
 			direcao = Vector2(signf(entrada.x), 0) if absf(entrada.x) > absf(entrada.y) else Vector2(0, signf(entrada.y))
 	else:
-		# Pixels por segundo: velocidade independe do FPS de renderização.
+
 		var colisao := move_and_collide(direcao * velocidade * delta)
 		if colisao:
 			movendo = false

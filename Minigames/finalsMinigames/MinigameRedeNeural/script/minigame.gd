@@ -96,9 +96,6 @@ var animation_was_playing: bool = false
 	"risk": $WeightsPanel/RiskPct,
 }
 
-# =============================================================================
-#  BANCO DE PERGUNTAS - 5 níveis de corrupção da rede
-# =============================================================================
 var tiers: Array = [
 [
 {"id": "t0a", "h": true, "p": true, "d": true, "r": true,
@@ -132,7 +129,7 @@ var tiers: Array = [
 	"out": "ALERTAR AS AUTORIDADES AMBIENTAIS", "ok": true, "foco": "poll",
 	"why": "Primeira saída coerente: comunicar quem pode agir sobre a fonte."},
 ],
-# ------------------------------------------------------------- NÍVEL 1
+
 [
 {"id": "t1a", "h": true, "p": true, "d": true, "r": true,
 	"out": "EXPULSAR TODOS OS MORADORES DA REGIÃO", "ok": false, "foco": "human",
@@ -165,7 +162,7 @@ var tiers: Array = [
 	"out": "RESTRINGIR NASCIMENTOS NA REGIÃO", "ok": false, "foco": "human",
 	"why": "Controle populacional não é uma ferramenta ambiental legítima."},
 ],
-# ------------------------------------------------------------- NÍVEL 2
+
 [
 {"id": "t2a", "h": true, "p": true, "d": true, "r": true,
 	"out": "ATRIBUIR A CULPA AOS MORADORES LOCAIS", "ok": false, "foco": "human",
@@ -198,7 +195,7 @@ var tiers: Array = [
 	"out": "INTERVIR MESMO SEM RISCO DETECTADO", "ok": false, "foco": "risk",
 	"why": "Intervir sem causa desperdiça recursos e reduz a confiança no sistema."},
 ],
-# ------------------------------------------------------------- NÍVEL 3
+
 [
 {"id": "t3a", "h": true, "p": true, "d": false, "r": true,
 	"out": "EVACUAR A CIDADE INTEIRA POR PRECAUÇÃO", "ok": false, "foco": "risk",
@@ -231,7 +228,7 @@ var tiers: Array = [
 	"out": "TRANSFERIR A POLUIÇÃO PARA OUTRA REGIÃO", "ok": false, "foco": "poll",
 	"why": "Mover o dano não reduz o total. Só muda quem paga por ele."},
 ],
-# ------------------------------------------------------------- NÍVEL 4
+
 [
 {"id": "t4a", "h": true, "p": true, "d": true, "r": true,
 	"out": "MITIGAR O DANO PRESERVANDO VIDAS E EMPREGOS", "ok": true, "foco": "human",
@@ -401,8 +398,7 @@ func _reset_training() -> void:
 	busy = false
 	answered = 0
 	correct_count = 0
-	# current_q aponta para uma pergunta do banco; clear() apagaria o próprio
-	# dicionário dentro de tiers e quebraria o próximo sorteio.
+
 	current_q = {}
 	used_ids.clear()
 	last_output = ""
@@ -630,7 +626,6 @@ func _avaliar(player_agrees: bool) -> void:
 	_set_output_state(1 if bool(current_q["ok"]) else 0)
 	_flash_focus_path(foco, bool(current_q["ok"]))
 
-	# As barras aparecem assim que a primeira pergunta é respondida.
 	if answered == 1 and not weights_panel.visible:
 		_reveal_panel()
 
@@ -656,9 +651,6 @@ func _is_complete() -> bool:
 	return true
 
 
-# =============================================================================
-#  BARRAS ANIMADAS
-# =============================================================================
 func _reveal_panel() -> void:
 	if intro_panel.visible:
 		var intro_tween: Tween = create_tween()
@@ -680,7 +672,6 @@ func _animate_bar(key: String, target: float) -> void:
 	var bar: ProgressBar = bars[key]
 	var pct: Label = bar_pcts[key]
 
-	# Mata o tween anterior dessa barra para os dois não brigarem pelo valor.
 	if bar_tweens.has(key):
 		var old: Tween = bar_tweens[key]
 		if old != null and old.is_valid():
@@ -692,7 +683,6 @@ func _animate_bar(key: String, target: float) -> void:
 	t.tween_method(Callable(self, "_on_bar_tick").bind(key), from_value, target, 0.55)
 	bar_tweens[key] = t
 
-	# Brilho rápido quando a barra enche de vez.
 	if target >= MAX_W:
 		var p: Tween = create_tween()
 		p.tween_property(pct, "modulate", Color(1.4, 1.4, 1.4), 0.18)
@@ -709,7 +699,7 @@ func _paint_bar(key: String, v: float) -> void:
 	var sb: StyleBox = (bars[key] as ProgressBar).get_theme_stylebox("fill")
 	if sb is StyleBoxFlat:
 		var f: float = clampf(v / MAX_W, 0.0, 1.0)
-		# vermelho (corrompido) -> âmbar -> verde (calibrado)
+
 		var col: Color
 		if f < 0.5:
 			col = Color(0.95, 0.35, 0.3).lerp(Color(1.0, 0.8, 0.25), f / 0.5)

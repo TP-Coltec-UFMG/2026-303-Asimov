@@ -12,7 +12,6 @@ var player: Player = null
 func _ready() -> void:
 	var scene_player: Player = get_scene_player()
 
-	# Existe um Player persistente vindo de outra cena.
 	if is_instance_valid(scene_manager.player):
 		if is_instance_valid(scene_player) and scene_player != scene_manager.player:
 			if scene_player.get_parent() != null:
@@ -27,12 +26,10 @@ func _ready() -> void:
 
 		add_child(player)
 
-	# A própria cena já possui um Player.
 	elif is_instance_valid(scene_player):
 		player = scene_player
 		scene_manager.player = player
 
-	# A cena não possui Player e estamos carregando um checkpoint.
 	elif SaveGame.restore_checkpoint_pending:
 		player = SaveGame.create_player_from_checkpoint()
 
@@ -115,7 +112,6 @@ func atualizar_camera() -> void:
 	camera.force_update_scroll()
 
 
-# Executado depois de position_player/apply_pending_checkpoint, em todos os andares.
 func _registrar_chegada_escritorio() -> void:
 	if not is_inside_tree() or not is_instance_valid(player):
 		return

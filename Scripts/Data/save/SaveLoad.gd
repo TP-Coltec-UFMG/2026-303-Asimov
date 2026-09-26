@@ -59,9 +59,7 @@ func _ready() -> void:
 func _save() -> void:
 	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
 		return
-	# Alguns menus antigos substituem save_data pelo dicionário de Configs.
-	# Sincronizar aqui mantém o salvamento correto independentemente de qual
-	# tela solicitou a gravação e inclui sempre os controles atuais.
+
 	for key: Variant in Configs.configs:
 		save_data[key] = Configs.configs[key]
 
@@ -97,15 +95,13 @@ func _load() -> void:
 				save_data[key] = data[key]
 		file.close()
 
-	# Também aplica os padrões na primeira execução, quando ainda não existe
-	# arquivo. Assim o controlador de música não precisa sobrescrever volumes.
 	_apply_load()
 
 
 func _apply_load() -> void:
 	save_data["filtro_de_daltonismo"] = clampi(int(save_data.get("filtro_de_daltonismo", 0)), 0, 3)
 	save_data["movimento_camera"] = bool(save_data.get("movimento_camera", true))
-	# Normaliza partidas criadas quando a profissão ainda usava o nome curto.
+
 	if str(save_data.get("job", "")) == "engenheiro":
 		save_data["job"] = "engenheiro_eletrico"
 	Configs.configs = save_data.duplicate(true)
@@ -199,7 +195,7 @@ func _apply_input_bindings(value: Variant) -> void:
 		return
 
 	var bindings: Dictionary = value.duplicate(true)
-	# Migra a tecla personalizada de configurações salvas antes da troca do item.
+
 	if not bindings.has("use_cabo") and bindings.has("use_faca"):
 		bindings["use_cabo"] = bindings["use_faca"]
 
@@ -225,7 +221,6 @@ func _apply_input_bindings(value: Variant) -> void:
 			if input_event != null:
 				restored_events.append(input_event)
 
-		# Um registro vazio ou corrompido nunca remove o controle padrão.
 		if restored_events.is_empty():
 			continue
 

@@ -22,7 +22,7 @@ var timer_pontos: Timer
 
 
 func _ready() -> void:
-	# O Label contém apenas o trecho já revelado, nunca o ID completo oculto.
+
 	botao_copiar.disabled = true
 	label_id.text = ""
 	label_estado.text = "Obtendo ID"
@@ -58,7 +58,6 @@ func _escrever_senha() -> void:
 		label_id.text += senha[indice_senha]
 		indice_senha += 1
 
-	# A liberação ocorre na mesma atualização que revela o último caractere.
 	if indice_senha == senha.length():
 		_hacking_concluido()
 
@@ -96,7 +95,7 @@ func pode_copiar() -> bool:
 
 
 func _on_button_pressed() -> void:
-	# Protege também sinais enfileirados e ativações por teclado.
+
 	if not pode_copiar():
 		return
 
@@ -108,7 +107,7 @@ func _on_button_pressed() -> void:
 
 
 func pausar_escrita() -> void:
-	# Pausar preserva o intervalo restante, inclusive ao alternar abas rapidamente.
+
 	botao_copiar.disabled = true
 	timer_senha.paused = true
 	timer_pontos.paused = true
@@ -132,7 +131,7 @@ func retomar_escrita() -> void:
 
 
 func reiniciar_escrita() -> void:
-	# Revoga a cópia antes de alterar qualquer parte da revelação.
+
 	botao_copiar.disabled = true
 	estado = EstadoRevelacao.REVELANDO
 	indice_senha = 0

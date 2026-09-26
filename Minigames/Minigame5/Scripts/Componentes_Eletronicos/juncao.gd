@@ -1,28 +1,18 @@
 extends Area2D
 
 
-# =========================================================
-# CONFIGURAÇÕES
-# =========================================================
 
 @export var fio_scene: PackedScene
 @export var raio_deteccao: float = 40.0
 @export var max_conexoes: int = 1
 
-# Distância do fio automático para a esquerda
 @export var distancia_fio_automatico: float = 25.0
 
 
-# =========================================================
-# REFERÊNCIA DO PONTO DE CONEXÃO
-# =========================================================
 
 @onready var ponto_colisao: CollisionShape2D = $CollisionShape2D
 
 
-# =========================================================
-# CONEXÕES
-# =========================================================
 
 var nome: String
 
@@ -31,9 +21,6 @@ var conexoes_terminais: Array = []
 var conexoes_atuais: int = 0
 
 
-# =========================================================
-# ARRASTO
-# =========================================================
 
 var arrastando: bool = false
 
@@ -42,25 +29,16 @@ var fio_atual: Node2D = null
 var mouse_follow: Node2D = null
 
 
-# =========================================================
-# FIO AUTOMÁTICO
-# =========================================================
 
 var fio_automatico: Node2D = null
 
 var ponto_automatico: Node2D = null
 
 
-# =========================================================
-# RESERVA
-# =========================================================
 
 var conexao_reservada: bool = false
 
 
-# =========================================================
-# READY
-# =========================================================
 
 func _ready() -> void:
 
@@ -74,31 +52,18 @@ func _ready() -> void:
 	if not input_event.is_connected(_on_input_event):
 		input_event.connect(_on_input_event)
 
-	print("[JUNÇÃO] ", nome, " pronta")
+	pass
 
 
-	# -----------------------------------------------------
-	# CRIAR FIO AUTOMÁTICO
-	# -----------------------------------------------------
-	#
-	# Só acontece se o pai desta Area2D
-	# tiver o nome "juncao".
-	#
 
 	if get_parent().nome == "juncao":
 
 		call_deferred("_criar_fio_automatico")
 
 
-# =========================================================
-# CRIAR FIO AUTOMÁTICO
-# =========================================================
 
 func _criar_fio_automatico() -> void:
 
-	# -----------------------------------------------------
-	# VERIFICAR SE JÁ EXISTE
-	# -----------------------------------------------------
 
 	if fio_automatico != null:
 
@@ -106,23 +71,14 @@ func _criar_fio_automatico() -> void:
 			return
 
 
-	# -----------------------------------------------------
-	# VERIFICAR FIO SCENE
-	# -----------------------------------------------------
 
 	if fio_scene == null:
 
-		print(
-			"[JUNÇÃO] ERRO: fio_scene não configurada para ",
-			nome
-		)
+		pass
 
 		return
 
 
-	# -----------------------------------------------------
-	# CRIAR PONTO FIXO
-	# -----------------------------------------------------
 
 	ponto_automatico = Node2D.new()
 
@@ -134,13 +90,6 @@ func _criar_fio_automatico() -> void:
 	)
 
 
-	# -----------------------------------------------------
-	# POSIÇÃO DO PONTO
-	# -----------------------------------------------------
-	#
-	# Pega o centro do CollisionShape2D
-	# e coloca o ponto um pouco para a esquerda.
-	#
 
 	ponto_automatico.global_position = (
 		ponto_colisao.global_position +
@@ -148,9 +97,6 @@ func _criar_fio_automatico() -> void:
 	)
 
 
-	# -----------------------------------------------------
-	# CRIAR FIO
-	# -----------------------------------------------------
 
 	fio_automatico = fio_scene.instantiate()
 
@@ -162,34 +108,19 @@ func _criar_fio_automatico() -> void:
 	)
 
 
-	# -----------------------------------------------------
-	# CONECTAR FIO
-	# -----------------------------------------------------
-	#
-	# O fio começa no centro da junção
-	# e termina no ponto fixo à esquerda.
-	#
 
 	fio_automatico.conectar(
 		ponto_colisao,
 		ponto_automatico
 	)
 
-	# Libera a ponta solta para ser clicada e arrastada,
-	# assim como qualquer outro fio
 	fio_automatico.arrastando = false
 	adicionar_conexao(fio_automatico)
 
 
-	print(
-		"[JUNÇÃO] Fio automático criado em ",
-		nome
-	)
+	pass
 
 
-# =========================================================
-# DISPONIBILIDADE
-# =========================================================
 
 func esta_disponivel() -> bool:
 
@@ -201,9 +132,6 @@ func esta_disponivel() -> bool:
 	return conexoes_ocupadas < max_conexoes
 
 
-# =========================================================
-# ADICIONAR CONEXÃO
-# =========================================================
 
 func adicionar_conexao(alvo) -> void:
 
@@ -228,26 +156,11 @@ func adicionar_conexao(alvo) -> void:
 	conexoes_atuais += 1
 
 	atualizar_estado_conexao()
-	print(
-		"[JUNÇÃO] ",
-		nome,
-		" conectada com ",
-		alvo.name
-	)
+	pass
 
-	print(
-		"[JUNÇÃO] ",
-		nome,
-		": ",
-		conexoes_atuais,
-		"/",
-		max_conexoes
-	)
+	pass
 
 
-# =========================================================
-# REMOVER CONEXÃO
-# =========================================================
 
 func remover_conexao(alvo) -> void:
 
@@ -264,17 +177,9 @@ func remover_conexao(alvo) -> void:
 	atualizar_estado_conexao()
 
 
-	print(
-		"[JUNÇÃO] ",
-		nome,
-		" desconectada de ",
-		alvo.name
-	)
+	pass
 
 
-# =========================================================
-# INPUT DA JUNÇÃO
-# =========================================================
 
 func _on_input_event(
 	_viewport,
@@ -295,9 +200,6 @@ func _on_input_event(
 		iniciar_fio()
 
 
-# =========================================================
-# INICIAR FIO
-# =========================================================
 
 func iniciar_fio() -> void:
 
@@ -314,32 +216,21 @@ func iniciar_fio() -> void:
 
 	if self.get_parent().nome =="juncao1":
 		return
-	# -----------------------------------------------------
-	# VERIFICAR CENA DO FIO
-	# -----------------------------------------------------
+
 
 	if fio_scene == null:
 
-		print(
-			"[JUNÇÃO] ERRO: fio_scene não configurada em ",
-			nome
-		)
+		pass
 
 		return
 
 
-	# -----------------------------------------------------
-	# RESERVAR ESPAÇO
-	# -----------------------------------------------------
 
 	conexao_reservada = true
 
 	arrastando = true
 
 
-	# -----------------------------------------------------
-	# CRIAR MOUSE FOLLOW
-	# -----------------------------------------------------
 
 	mouse_follow = Node2D.new()
 
@@ -351,9 +242,6 @@ func iniciar_fio() -> void:
 		get_global_mouse_position()
 
 
-	# -----------------------------------------------------
-	# CRIAR FIO
-	# -----------------------------------------------------
 
 	fio_atual = fio_scene.instantiate()
 
@@ -362,9 +250,6 @@ func iniciar_fio() -> void:
 	)
 
 
-	# -----------------------------------------------------
-	# CONECTAR FIO AO MOUSE
-	# -----------------------------------------------------
 
 	fio_atual.conectar(
 		ponto_colisao,
@@ -372,16 +257,9 @@ func iniciar_fio() -> void:
 	)
 
 
-	print(
-		"[JUNÇÃO] ",
-		nome,
-		" iniciou um fio."
-	)
+	pass
 
 
-# =========================================================
-# INPUT GLOBAL
-# =========================================================
 
 func _input(event) -> void:
 
@@ -393,9 +271,6 @@ func _input(event) -> void:
 		return
 
 
-	# =====================================================
-	# MOVIMENTO DO MOUSE
-	# =====================================================
 
 	if event is InputEventMouseMotion:
 
@@ -410,9 +285,6 @@ func _input(event) -> void:
 			get_global_mouse_position()
 
 
-	# =====================================================
-	# SOLTOU O BOTÃO
-	# =====================================================
 
 	elif event is InputEventMouseButton:
 
@@ -423,9 +295,6 @@ func _input(event) -> void:
 			finalizar_fio()
 
 
-# =========================================================
-# FINALIZAR FIO
-# =========================================================
 
 func finalizar_fio() -> void:
 
@@ -444,16 +313,13 @@ func finalizar_fio() -> void:
 	var alvo = encontrar_ponto_alvo()
 
 
-	# Tutorial: o cabo só pode ser conectado depois de passar
-	# pelas etapas anteriores. Sem isso, o fio some (volta
-	# para a junção de origem) e aparece "Ainda não".
 	if (
 		alvo != null
 		and conexao_permitida(alvo)
 		and not _tutorial_permite_conexao()
 	):
 
-		print("[JUNÇÃO] Ainda não: o tutorial não liberou o cabo.")
+		pass
 
 		var gerente = get_tree().get_first_node_in_group(
 			"tutorial_manager"
@@ -469,9 +335,6 @@ func finalizar_fio() -> void:
 
 	if alvo != null and conexao_permitida(alvo):
 
-		# =====================================================
-		# CONEXÃO DEFINITIVA COM UMA JUNÇÃO
-		# =====================================================
 
 		fio_atual.conectar(ponto_colisao, alvo.ponto_colisao)
 		fio_atual.origem_e_juncao = true
@@ -487,23 +350,16 @@ func finalizar_fio() -> void:
 
 		fio_atual = null
 		atualizar_estado_conexao()
-		print(self.get_parent().conectado1)
+		pass
 		
-		print("[JUNÇÃO] CONEXÃO REALIZADA: ", nome, " <-> ", alvo.name)
-		print("[JUNÇÃO] ", nome, ": ", conexoes_atuais, "/", max_conexoes)
-		print("[JUNÇÃO] ", alvo.name, ": ", alvo.conexoes_atuais, "/", alvo.max_conexoes)
+		pass
+		pass
+		pass
 
 	else:
 
-		# =====================================================
-		# NENHUMA JUNÇÃO VÁLIDA: FIXA O FIO ONDE ESTÁ
-		# =====================================================
-		#
-		# Em vez de apagar o fio, ele fica solto na posição
-		# atual e pode ser clicado e arrastado de novo depois.
-		#
 
-		print("[JUNÇÃO] Nenhuma junção válida — fio deixado solto em ", nome)
+		pass
 
 		fio_atual.fixar()
 
@@ -539,9 +395,6 @@ func _remover_mouse_follow() -> void:
 	mouse_follow = null
 
 
-# =========================================================
-# CANCELAR FIO
-# =========================================================
 
 func cancelar_fio() -> void:
 
@@ -566,15 +419,9 @@ func cancelar_fio() -> void:
 	conexao_reservada = false
 
 
-	print(
-		"[JUNÇÃO] Fio cancelado em ",
-		nome
-	)
+	pass
 
 
-# =========================================================
-# VERIFICAR CONEXÃO
-# =========================================================
 
 func conexao_permitida(alvo) -> bool:
 
@@ -599,9 +446,6 @@ func conexao_permitida(alvo) -> bool:
 	return true
 
 
-# =========================================================
-# ENCONTRAR JUNÇÃO
-# =========================================================
 
 func encontrar_ponto_alvo() -> Variant:
 

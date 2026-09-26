@@ -17,14 +17,7 @@ enum FlowDir {
 }
 
 var RETANGULOS := {
-	# Offset X a partir de (8, 0), espelhamento e rotação.
-	# Espelhamento:
-	# 0 = nenhum
-	# 1 = horizontal
-	# 2 = vertical
-	# 3 = horizontal e vertical
-	#
-	# O último valor indica se deve rotacionar 90 graus.
+
 	PipeType.Horizontal: [0, 0, true],
 	PipeType.Vertical: [0, 0, false],
 	PipeType.LeftDown: [8, 0, false],
@@ -33,7 +26,6 @@ var RETANGULOS := {
 	PipeType.UpRight: [8, 3, false],
 }
 
-# Mantive "type" porque o script principal usa cano.type.
 var type = null
 
 @export var anim_frame := 0

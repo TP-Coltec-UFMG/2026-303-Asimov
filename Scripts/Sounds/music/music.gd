@@ -18,7 +18,7 @@ const AUDIO_PLAYERS: Dictionary = {
 	"som_de_fundo": NodePath("SOM_DE_FUNDO"),
 	"musica_quando_o_disjuntor_apagar": NodePath("MUSICA_QUANDO_O_DISJUNTOR_APAGAR"),
 	"heartbeat": NodePath("HEARTBEAT"),
-	# Mantém a chave antiga para checkpoints já existentes.
+
 	"tension_ambience": NodePath("INITIAL_BACKGROUND_MUSIC")
 }
 const ELEVATOR_MUSIC_PLAYERS: Array[NodePath] = [
@@ -113,8 +113,7 @@ var elevator_music_process_modes: Dictionary = {}
 
 
 func _ready() -> void:
-	# Os volumes pertencem ao SaveLoad. Alterá-los aqui fazia o autoload de
-	# música sobrescrever as preferências logo depois de elas serem carregadas.
+
 	if som_alarme.stream is AudioStreamMP3:
 		var alarm_loop := som_alarme.stream.duplicate() as AudioStreamMP3
 		alarm_loop.loop = true
@@ -161,8 +160,7 @@ func _update_npc_dialog_music(delta: float) -> void:
 	var music_bus := AudioServer.get_bus_index(&"Music")
 	if music_bus < 0:
 		return
-	# Remove o duck do quadro anterior para manter como referência o volume
-	# configurado pelo jogador no controle geral de música.
+
 	if npc_dialog_music_applied_factor < 1.0:
 		AudioServer.set_bus_volume_db(music_bus, npc_dialog_music_base_db)
 		npc_dialog_music_applied_factor = 1.0
@@ -195,7 +193,7 @@ func _update_hacking_music(delta: float) -> void:
 		hacking_music.volume_db = SILENT_VOLUME_DB
 		if hacking_music.playing:
 			hacking_music.stop()
-	# Abaixa a trilha ambiente durante o hack sem alterar os volumes salvos.
+
 	var background_factor := lerpf(1.0, HACKING_BACKGROUND_MUSIC_FACTOR, hacking_music_mix)
 	var background_amplitude := db_to_linear(initial_background_music.volume_db) * background_factor
 	hacking_background_applied_factor = background_factor
@@ -217,8 +215,7 @@ func _is_hacking_scene() -> bool:
 
 
 func _update_heartbeat(delta: float) -> void:
-	# scene_manager conserva a referência durante a troca para a cutscene final.
-	# Validar antes do cast evita tentar converter um Player já liberado.
+
 	if not is_instance_valid(scene_manager.player):
 		if heartbeat.playing:
 			heartbeat.stop()
@@ -268,8 +265,7 @@ func _update_heartbeat(delta: float) -> void:
 
 
 func _heartbeat_pitch_from_stamina(exhaustion: float) -> float:
-	# cansaco vale 0 com a estamina cheia e se aproxima de 1 quando ela acaba.
-	# A faixa inicial permanece intacta para o coração não oscilar a cada passo.
+
 	var progress := clampf(
 		(exhaustion - HEARTBEAT_STAMINA_RESPONSE_START)
 		/ (HEARTBEAT_STAMINA_RESPONSE_END - HEARTBEAT_STAMINA_RESPONSE_START),
@@ -285,7 +281,7 @@ func _heartbeat_pitch_from_stamina(exhaustion: float) -> float:
 
 
 func _update_initial_background_music(delta: float) -> void:
-	# Retira a atenuação do quadro anterior antes de atualizar o volume base.
+
 	if hacking_background_applied_factor < 1.0:
 		initial_background_music.volume_db = linear_to_db(
 			db_to_linear(initial_background_music.volume_db)
@@ -297,7 +293,7 @@ func _update_initial_background_music(delta: float) -> void:
 			initial_background_music.stop()
 		initial_background_music.pitch_scale = 1.0
 		if power_outage_audio_state != PowerOutageAudioState.IDLE:
-			# Entre cenas, não deixe a faixa inicial reaparecer sobre a queda de energia.
+
 			initial_background_music.volume_db = SILENT_VOLUME_DB
 		else:
 			initial_background_music.volume_db = initial_background_music_normal_volume_db
@@ -318,8 +314,7 @@ func _update_initial_background_music(delta: float) -> void:
 		SILENT_VOLUME_DB if outage_active else initial_background_music_target_volume_db
 	)
 	if outage_active or initial_background_music_restoring_from_outage:
-		# A amplitude cai ao longo do segundo de espera; interpolar dB aqui
-		# parecia um corte porque quase todo o volume sumia logo no início.
+
 		var fade_duration := (
 			POWER_OUTAGE_FADE_DURATION
 			if power_outage_audio_state == PowerOutageAudioState.FADING_OUT
@@ -400,7 +395,6 @@ func _update_alarm_hint(delta: float) -> void:
 	alarm_hint_shown = true
 
 
-# BG MUSIC
 func _start_bg_music(from_position: float = 0.0) -> void:
 	_play_if_stopped(bg_music, from_position)
 
@@ -408,7 +402,6 @@ func _stop_bg_music() -> void:
 	bg_music.stop()
 
 
-# BG AMBIENT
 func _start_bg_ambient(from_position: float = 0.0) -> void:
 	_play_if_stopped(bg_ambient, from_position)
 
@@ -416,7 +409,6 @@ func _stop_bg_ambient() -> void:
 	bg_ambient.stop()
 
 
-# COUNTDOWN
 func _start_countdown(from_position: float = 0.0) -> void:
 	initial_background_music_target_volume_db = linear_to_db(
 		db_to_linear(initial_background_music_normal_volume_db)
@@ -430,8 +422,7 @@ func _stop_countdown() -> void:
 
 
 func start_programmer_final_mix() -> void:
-	# A trilha própria do núcleo assume a tensão. As faixas globais continuam
-	# vivas e pausáveis, mas recuam gradualmente para não disputar frequências.
+
 	initial_background_music_target_volume_db = PROGRAMMER_FINAL_BACKGROUND_DB
 	countdown_music.volume_db = PROGRAMMER_FINAL_COUNTDOWN_DB
 	set_alarm_quiet_context(&"programmer_ending", true)
@@ -443,7 +434,6 @@ func start_engineer_final_mix() -> void:
 	set_alarm_quiet_context(&"engineer_ending", true)
 
 
-# ALARME
 func _start_som_alarme(from_position: float = 0.0) -> void:
 	if alarm_user_muted:
 		return
@@ -458,7 +448,6 @@ func _stop_som_alarme() -> void:
 	_refresh_alarm_output()
 
 
-# SOM DE FUNDO
 func _start_som_de_fundo(from_position: float = 0.0) -> void:
 	if opening_music_finished:
 		return
@@ -519,8 +508,7 @@ func _stop_power_outage_audio() -> void:
 		return
 	if power_outage_audio_state == PowerOutageAudioState.IDLE and not musica_quando_o_disjuntor_apagar.playing:
 		return
-	# Religou o disjuntor: o alarme continua baixo, mesmo se a queda de
-	# energia aconteceu antes de terminar os 30 segundos iniciais.
+
 	alarm_elapsed = ALARM_INITIAL_DURATION + ALARM_FADE_DURATION
 	power_outage_music_delay_remaining = 0.0
 	_start_power_outage_fade(
@@ -562,7 +550,7 @@ func _start_power_outage_fade(
 ) -> void:
 	power_outage_audio_state = new_state
 	power_outage_fade_elapsed = 0.0
-	# O fade usa o volume da sequência; elevador e minigame só alteram a saída.
+
 	power_outage_alarm_start_db = alarm_unducked_volume_db
 	power_outage_alarm_target_db = alarm_target_db
 	power_outage_music_start_db = musica_quando_o_disjuntor_apagar.volume_db
@@ -640,8 +628,6 @@ func stop_all_audio() -> void:
 	initial_background_music.pitch_scale = 1.0
 	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
 
-	# MusicController é um autoload e sobrevive às mudanças de cena. Por isso,
-	# um reset de campanha precisa parar explicitamente todos os players.
 	for player_id: String in AUDIO_PLAYERS:
 		var audio_player := _get_audio_player(player_id)
 
@@ -809,17 +795,13 @@ func load_checkpoint_state(state: Dictionary) -> void:
 		breaker_restored and not saved_envelope.has("background_track_after_breaker")
 	)
 	_set_initial_background_track(breaker_restored)
-	# Saves anteriores à versão com áudio não possuem este bloco. Nesse caso,
-	# preservamos o comportamento iniciado pela própria cena.
+
 	if state.is_empty():
 		scene_audio_blocked = false
 		pending_scene_starts.clear()
 		initial_background_music_restoring_from_outage = breaker_restored
 		return
 
-	# Versões anteriores conseguiam salvar o silêncio do menu como se todas as
-	# faixas da fase estivessem paradas. Se a própria cena pediu uma faixa em
-	# _ready(), usamos esse pedido para recuperar também o save já afetado.
 	var recover_silent_save := (
 		_is_silent_checkpoint_state(state)
 		and not pending_scene_starts.is_empty()
@@ -847,8 +829,7 @@ func load_checkpoint_state(state: Dictionary) -> void:
 				0.0,
 				float(pending_scene_starts[player_id])
 			)
-		# Recupera o alarme que acabou sozinho em saves feitos sem loop,
-		# somente se a cena pede alarme e o jogador não o silenciou com P.
+
 		if player_id == "som_alarme" and pending_scene_starts.has(player_id) and not bool(saved_envelope.get("user_muted", false)):
 			should_play = true
 		if player_id == "tension_ambience" and old_background_track_save:
@@ -874,15 +855,12 @@ func load_checkpoint_state(state: Dictionary) -> void:
 			playback_position = fmod(playback_position, stream_length)
 
 		if audio_player.playing:
-			# Mantém o mesmo playback/buffer ativo e apenas reposiciona a faixa.
+
 			audio_player.stream_paused = true
 			audio_player.seek(playback_position)
 		else:
 			audio_player.play(playback_position)
 
-		# stream_paused é um estado técnico da troca de cena/ menu de pausa,
-		# não uma preferência do jogador. Saves antigos podiam registrar true
-		# aqui e deixar a faixa permanentemente muda ao abrir o jogo novamente.
 		audio_player.stream_paused = false
 
 	scene_audio_blocked = false
@@ -906,7 +884,7 @@ func load_checkpoint_state(state: Dictionary) -> void:
 
 func _restore_alarm_envelope(state: Dictionary) -> void:
 	var envelope: Dictionary = state.get("alarm_envelope", {})
-	# Saves anteriores não contavam os 30 segundos. Retomam no patamar baixo.
+
 	alarm_elapsed = float(envelope.get("elapsed", ALARM_INITIAL_DURATION + ALARM_FADE_DURATION))
 	alarm_unducked_volume_db = float(envelope.get("unducked_volume_db", som_alarme.volume_db))
 	alarm_user_muted = bool(envelope.get("user_muted", false))
@@ -983,6 +961,7 @@ func set_elevator_audio(active: bool) -> void:
 			player.process_mode = Node.PROCESS_MODE_ALWAYS
 		else:
 			var previous_mode: int = elevator_music_process_modes.get(player_path, Node.PROCESS_MODE_INHERIT)
+			@warning_ignore("int_as_enum_without_cast")
 			player.process_mode = previous_mode
 	elevator_music_process_modes.clear()
 

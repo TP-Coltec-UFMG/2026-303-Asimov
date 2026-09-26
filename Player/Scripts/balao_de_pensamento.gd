@@ -33,7 +33,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if not event.is_action_pressed("pular_pensamento", true):
 		return
-	# Consome também a repetição da tecla, sem pular várias falas ao segurá-la.
+
 	get_viewport().set_input_as_handled()
 	if event.is_echo():
 		return
@@ -49,7 +49,6 @@ func pular_pensamento() -> void:
 	_concluir()
 
 
-# IDs estáveis distinguem o evento do texto e impedem duplicação após carregar.
 func enfileirar(id: String, texto: String) -> void:
 	if id.is_empty() or tem_pensamento(id):
 		return
@@ -91,7 +90,6 @@ func esta_pendente(id: String) -> bool:
 	return tem_pensamento(id) and not foi_concluido(id) and not _descartados.has(id)
 
 
-# Instruções superadas pelo objetivo não contam como falas exibidas.
 func descartar(ids: Array[String]) -> void:
 	for id in ids:
 		if not foi_concluido(id):
@@ -138,8 +136,7 @@ func _iniciar_fase(fase: String, duracao: float) -> void:
 	_duracao = maxf(duracao, 0.0)
 	_tween = create_tween()
 	if fase == "exibicao":
-		# Mantém a pausa do temporizador original: a leitura conta no menu,
-		# mas o fade espera o jogo voltar. Fora da árvore o Tween fica suspenso.
+
 		_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 		_tween.tween_interval(_duracao)
 		_tween.finished.connect(_iniciar_fase.bind("fade", tempo_fade_out))
@@ -177,7 +174,7 @@ func get_checkpoint_state() -> Dictionary:
 
 
 func load_checkpoint_state(data: Dictionary) -> void:
-	# Cancela a execução anterior; callbacks antigos não podem concluir a fila nova.
+
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
 	_tween = null

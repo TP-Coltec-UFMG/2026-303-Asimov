@@ -23,16 +23,13 @@ func _atualizar_tamanho() -> void:
 		return
 
 
-	# Tamanho mínimo da Label
 	var tamanho_label := label.get_combined_minimum_size()
 
 
-	# Começa usando apenas a Label
 	var largura := tamanho_label.x
 	var altura := tamanho_label.y
 
 
-	# Se o botão estiver visível, adiciona o tamanho dele
 	if botao.visible:
 		var tamanho_botao := botao.get_combined_minimum_size()
 
@@ -40,10 +37,8 @@ func _atualizar_tamanho() -> void:
 		altura += espacamento + tamanho_botao.y
 
 
-	# Adiciona as margens do Panel
 	largura += margem_horizontal
 	altura += margem_vertical
 
 
-	# Aplica o novo tamanho
 	size = Vector2(largura, altura)

@@ -203,8 +203,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true)
 		return
-	# A barra usada após o reparo era uma checagem intermediária. Saves criados
-	# antes desta correção não podem considerar a futura tarefa do minigame pronta.
+
 	if (
 		bool(state.get("data_center_rfid_reading_checked", false))
 		and not bool(state.get("data_center_rfid_minigame_completed", false))
@@ -386,7 +385,7 @@ func _ensure_outage_schedule(state: Dictionary) -> void:
 				state["data_center_outage_delay"] = randf_range(OUTAGE_AFTER_MIN_DELAY, OUTAGE_AFTER_MAX_DELAY)
 				state["data_center_outage_due_unix"] = 0.0
 			elif not state.has("data_center_outage_target_dialog"):
-				# Saves da versão anterior tinham um temporizador no lugar da fala sorteada.
+
 				state["data_center_outage_target_dialog"] = ACCESS_PLAN_DIALOG_ID if bool(state.get("data_center_card_dialog_finished", false)) else CARD_DIALOG_ID
 				state["data_center_outage_target_line"] = 1
 			SaveGame.save_global_state("hall_quest_01", state)
@@ -919,7 +918,7 @@ func _run_rfid_verification(
 		return false
 	_set_rfid_verification_progress(100.0)
 	if not active_thoughts.is_empty():
-		# Exibe os 100% por um quadro exatamente quando o último balão termina.
+
 		await get_tree().process_frame
 	state = SaveGame.office_mission_state(player)
 	state.erase("data_center_rfid_paused_stage")

@@ -14,11 +14,9 @@ func _process(_delta: float) -> void:
 
 
 func estilizar() -> void:
-	# ==========================================
-	# ESTILO DO PANEL
-	# ==========================================
+
 	var estilo_panel = StyleBoxFlat.new()
-	estilo_panel.bg_color = Color(0, 0, 0, 0.55)  # preto translúcido
+	estilo_panel.bg_color = Color(0, 0, 0, 0.55)
 
 	estilo_panel.corner_radius_top_left = 12
 	estilo_panel.corner_radius_top_right = 12
@@ -29,19 +27,15 @@ func estilizar() -> void:
 	estilo_panel.border_width_right = 2
 	estilo_panel.border_width_top = 2
 	estilo_panel.border_width_bottom = 2
-	estilo_panel.border_color = Color(1, 1, 1, 0.25)  # borda branca sutil
+	estilo_panel.border_color = Color(1, 1, 1, 0.25)
 
 	estilo_panel.shadow_color = Color(0, 0, 0, 0.3)
 	estilo_panel.shadow_size = 6
 
 	add_theme_stylebox_override("panel", estilo_panel)
 
-	# cor do texto do label
 	label.add_theme_color_override("font_color", Color(1, 1, 1))
 
-	# ==========================================
-	# ESTILO DO BUTTON
-	# ==========================================
 	var estilo_button_normal = StyleBoxFlat.new()
 	estilo_button_normal.bg_color = Color(0, 0, 0, 0.4)
 	estilo_button_normal.corner_radius_top_left = 8
@@ -71,7 +65,6 @@ func estilizar() -> void:
 	button.add_theme_stylebox_override("pressed", estilo_button_pressed)
 	button.add_theme_stylebox_override("focus", estilo_button_hover)
 
-	# cor do texto do botão
 	button.add_theme_color_override("font_color", Color(1, 1, 1))
 	button.add_theme_color_override("font_hover_color", Color(1, 1, 1))
 	button.add_theme_color_override("font_pressed_color", Color(1, 1, 1))
@@ -82,8 +75,6 @@ func ajustar_tamanho() -> void:
 
 	var tamanho_label = label.get_combined_minimum_size()
 
-	# Se o botão estiver escondido (etapa sem "Continuar"),
-	# ele é desconsiderado no cálculo do tamanho e posição.
 	var botao_visivel = button.visible
 
 	var tamanho_button = (
@@ -101,9 +92,6 @@ func ajustar_tamanho() -> void:
 	)
 
 
-	# ==========================================
-	# TAMANHO DO PANEL
-	# ==========================================
 
 	var largura = (
 		tamanho_label.x
@@ -121,9 +109,6 @@ func ajustar_tamanho() -> void:
 	size = Vector2(largura, altura)
 
 
-	# ==========================================
-	# LABEL
-	# ==========================================
 
 	label.size = tamanho_label
 
@@ -133,9 +118,6 @@ func ajustar_tamanho() -> void:
 	)
 
 
-	# ==========================================
-	# BUTTON
-	# ==========================================
 
 	if botao_visivel:
 

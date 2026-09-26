@@ -37,7 +37,7 @@ func _run() -> void:
 	for failure in failures:
 		push_error(failure)
 	if failures.is_empty():
-		print("PASS: aviso de dois minutos, tecla P e persistência.")
+		pass
 	get_tree().quit(0 if failures.is_empty() else 1)
 
 

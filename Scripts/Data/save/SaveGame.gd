@@ -10,10 +10,8 @@ const CHECKPOINT_ACTOR_GROUP: StringName = &"checkpoint_actors"
 const CHECKPOINT_ACTOR_BUCKET: String = "__checkpoint_actors"
 const CHECKPOINT_ACTOR_META: StringName = &"checkpoint_actor_identity"
 
-# Tempo registrado no último checkpoint.
 var tempo_restante: float = -1.0
 
-# Tempo atual da partida, mantido durante mudanças de andar.
 var tempo_atual: float = -1.0
 
 var save_data: Dictionary = {}
@@ -212,8 +210,7 @@ func create_checkpoint(
 			MusicController.get_checkpoint_state().duplicate(true)
 		)
 	else:
-		# O menu de pausa captura isto antes de pausar a SceneTree. Assim o
-		# silêncio temporário do menu nunca substitui o áudio real da partida.
+
 		checkpoint_audio_state = audio_state_override.duplicate(true)
 
 	capturar_tempo_atual()
@@ -236,7 +233,7 @@ func has_checkpoint() -> bool:
 
 
 func persist_checkpoint() -> void:
-	# Regrava somente o checkpoint já capturado. Nunca consulta o áudio do menu.
+
 	_save()
 
 
@@ -248,18 +245,15 @@ func load_last_checkpoint() -> bool:
 
 	_restore_progress_config()
 
-	# Descarta o tempo atual e recupera o tempo do checkpoint.
 	tempo_atual = tempo_restante
 	restore_checkpoint_pending = true
 	restore_audio_pending = not checkpoint_audio_state.is_empty()
 
 	if restore_audio_pending:
-		# Mantém os playbacks vivos, mas pausados, durante a troca. A restauração
-		# usa seek() neles depois que a nova cena terminar de inicializar.
+
 		MusicController.begin_checkpoint_restore()
 	else:
-		# Save antigo: não há posição para restaurar, então a cena pode iniciar
-		# suas músicas normalmente.
+
 		MusicController.stop_all_audio()
 
 	scene_manager.player = null
@@ -320,8 +314,7 @@ func _on_checkpoint_scene_changed() -> void:
 
 
 func _restore_audio_after_scene_ready() -> void:
-	# Alguns nós da fase iniciam alarme/música em _ready(). Esperar um frame
-	# garante que nenhum desses play() volte a faixa para zero após o restore.
+
 	await get_tree().process_frame
 
 	if not restore_audio_pending:
@@ -367,8 +360,6 @@ func _restore_progress_config() -> void:
 		Configs.configs["difficulty"] = checkpoint_progress["difficulty"]
 
 
-## Registre após inicializar o movimento. Retorna true se encontrou estado salvo.
-## A identidade padrão é o caminho do nó relativo à cena, nunca um instance_id.
 func register_checkpoint_actor(actor: Node, actor_id: String = "") -> bool:
 	if not actor.has_method("get_checkpoint_state") or not actor.has_method("load_checkpoint_state"):
 		push_error("Participante de checkpoint sem métodos de captura/restauração: " + str(actor.name))
@@ -402,7 +393,7 @@ func register_checkpoint_actor(actor: Node, actor_id: String = "") -> bool:
 
 
 func _checkpoint_actor_scene(actor: Node) -> Node:
-	# current_scene pode ainda não estar atribuído durante o _ready dos filhos.
+
 	var scene: Node = null
 	var ancestor: Node = actor
 	while ancestor != null and ancestor != get_tree().root:
@@ -433,7 +424,6 @@ func _store_checkpoint_actor(actor: Node, state: Dictionary) -> void:
 	save_data[scene_path][CHECKPOINT_ACTOR_BUCKET] = actors
 
 
-## Captura em memória apenas nos checkpoints e antes de trocar de andar.
 func capture_checkpoint_actors(scene: Node) -> void:
 	if scene == null:
 		return
@@ -445,8 +435,6 @@ func capture_checkpoint_actors(scene: Node) -> void:
 			_store_checkpoint_actor(actor, {"state": state.duplicate(true)})
 
 
-## Chame antes de queue_free quando a remoção faz parte da progressão.
-## Não capture no _exit_tree: isso sobrescreveria estados ao morrer/recarregar.
 func mark_checkpoint_actor_removed(actor: Node) -> void:
 	_store_checkpoint_actor(actor, {"removed": true})
 	actor.remove_from_group(CHECKPOINT_ACTOR_GROUP)
@@ -507,8 +495,6 @@ func save_current_session(
 ) -> bool:
 	var current_scene := get_tree().current_scene
 
-	# O menu mantém os players globais pausados. Uma notificação de fechamento
-	# recebida aqui não pode substituir o áudio salvo durante a fase.
 	if (
 		current_scene == null
 		or current_scene.scene_file_path == MAIN_MENU_SCENE
@@ -528,8 +514,6 @@ func save_current_session(
 	if not current_player.checkpoint_enabled:
 		return false
 
-	# Fechar a janela na tela de morte não pode substituir o último checkpoint
-	# válido por um estado em que o jogador já está morto.
 	if current_player.get_vida() <= 0.0:
 		return false
 
@@ -539,8 +523,7 @@ func save_current_session(
 
 func clear_save() -> void:
 	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
-		# Novo jogo durante um teste limpa só a sessão em memória.
-		# O checkpoint real continua intacto em disco até sair do modo dev.
+
 		save_data.clear()
 		checkpoint_world_state.clear()
 		state_player.clear()
@@ -610,8 +593,6 @@ func _notification(what: int) -> void:
 		save_current_session()
 
 
-# O estado global participa do mesmo snapshot/rollback do restante do mundo.
-# Migração usa a fala concluída, nunca apenas o início da evacuação.
 func office_mission_state(current_player: Player = null) -> Dictionary:
 	var estado: Variant = load_global_state("hall_quest_01")
 	if estado is Dictionary:
@@ -638,7 +619,7 @@ func data_center_scientist_talk_pending(state: Dictionary) -> bool:
 		return true
 	if not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty():
 		return true
-	# Saves anteriores podiam apagar a pendência ao entrar no sexto andar.
+
 	return (
 		bool(state.get("data_center_breaker_restored", false))
 		and bool(state.get("data_center_return_task_completed", false))

@@ -37,7 +37,7 @@ func _run() -> void:
 	music.load_checkpoint_state(state)
 	_check(not alarm.playing, "Um save silenciado com P deve continuar silenciado.")
 	music.stop_all_audio()
-	print("ALARM_RECOVERY_TEST: ", failures.size(), " failures")
+	pass
 	quit(0 if failures.is_empty() else 1)
 
 
