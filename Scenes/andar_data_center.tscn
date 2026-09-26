@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y5mn0"]
 [ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_data_center"]
+[ext_resource type="Script" path="res://Scenes/scripts/data_center_activity.gd" id="activity_data_center"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_em2r1"]
 [ext_resource type="PackedScene" uid="uid://c4e81i13gjvx3" path="res://Objects/luz_de_emergencia.tscn" id="3_7c6dg"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="3_7oj87"]
@@ -231,6 +232,23 @@ scale = Vector2(0.115, 0.115)
 [node name="LuzDeEmergencia3" parent="Iluminacao" unique_id=1094045165 instance=ExtResource("3_7c6dg")]
 position = Vector2(-188, -243.99998)
 scale = Vector2(0.115, 0.115)
+
+[node name="AtividadeDosMonitores" type="Node2D" parent="Iluminacao"]
+script = ExtResource("activity_data_center")
+
+[node name="MonitorEsquerdo" type="PointLight2D" parent="Iluminacao/AtividadeDosMonitores"]
+position = Vector2(-165, -185)
+scale = Vector2(0.14, 0.10)
+color = Color(0.24, 0.70, 1, 1)
+energy = 0.09
+texture = ExtResource("2_em2r1")
+
+[node name="MonitorDireito" type="PointLight2D" parent="Iluminacao/AtividadeDosMonitores"]
+position = Vector2(15, -185)
+scale = Vector2(0.14, 0.10)
+color = Color(0.24, 0.70, 1, 1)
+energy = 0.09
+texture = ExtResource("2_em2r1")
 
 [node name="Coletaveis" type="Node" parent="." unique_id=263636248]
 

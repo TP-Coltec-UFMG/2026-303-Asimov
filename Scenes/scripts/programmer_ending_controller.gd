@@ -17,7 +17,7 @@ const POINT_PROMPTS: Array[String] = [
 	"ISOLAR PROTOCOLO",
 	"RECONSTRUIR REDE",
 	"RESTAURAR LEIS",
-	"APLICAR E CANCELAR BOMBA"
+	"USAR CARTÃO DO CHEFE"
 ]
 const TIMER_POSITION_RIGHT := Vector2(387.0, 7.0)
 const TIMER_POSITION_NEURAL := Vector2(5.0, 2.0)
@@ -586,10 +586,28 @@ func _restore_global_pause_menu() -> void:
 
 
 func _apply_recalibration() -> void:
+	if not _boss_card_equipped():
+		player.balao_de_pensamento.enfileirar(
+			"programmer:boss_card_required",
+			"Preciso equipar o cartão do chefe para aplicar as alterações."
+		)
+		return
 	var state := _state()
 	state["programmer_recalibration_applied"] = true
 	_save_state(state)
 	_resume_pending_exchange(state)
+
+
+func _boss_card_equipped() -> bool:
+	if not is_instance_valid(player) or not is_instance_valid(player.inventory):
+		return false
+	var card := player.inventory.get_item_control("cartao")
+	return (
+		is_instance_valid(card)
+		and int(card.get("tipo")) == 3
+		and player.usando_cartao
+		and player.inventory.equipped_item_id == "cartao"
+	)
 
 
 func _start_final_glitch() -> void:

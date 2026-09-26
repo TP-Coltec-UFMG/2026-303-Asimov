@@ -1,11 +1,4 @@
-res://Scenes/andar_hall.tscn
-res://shaders/mapa_acessibilidade.gdshader
-res://shaders/pause_menu.gdshader
-res://shaders/filtro_daltonismo.gdshader
-res://Scenes/animations/cooling_location_guide_animations.tres
-res://Scenes/animations/cooling_location_guide_tree.tres
-res://Scenes/animations/data_center_forte_intro_animations.tres
-res://Scenes/animations/data_center_forte_intro_tree.tres
-res://Scenes/animations/programmer_ending_animations.tres
-res://Scenes/animations/programmer_final_conflict_animations.tres
+res://NPC'S/DialogBox/script/dialog_box.gd
+res://Player/Scripts/balao_de_pensamento.gd
 res://Player/Scripts/quest_mission_ui.gd
+res://Scenes/scripts/programmer_ending_controller.gd
