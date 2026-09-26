@@ -603,7 +603,7 @@ data_center_activity.gd::GDScript::8365637529609484775::1790383639::0::1::::<>No
 data_center_forte_intro.gd::GDScript::2657365358033018513::1790451065::0::1::::<>Node<><>0<>0<><>::
 data_center_intro_controller.gd::GDScript::6740922882801260241::1790446957::0::1::::DataCenterIntroController<>Node<><>0<>0<><>::
 dev_mission_jump.gd::GDScript::5084957841568155514::1790102877::0::1::::<>CanvasLayer<><>0<>0<><>::
-engineer_ending_controller.gd::GDScript::4556025918066332680::1790452278::0::1::::<>Node<><>0<>0<><>::
+engineer_ending_controller.gd::GDScript::4556025918066332680::1790453182::0::1::::<>Node<><>0<>0<><>::
 iluminacao.gd::GDScript::7231332769450479909::1788453774::0::1::::<>Node<><>0<>0<><>::
 inputremapup.gd::GDScript::6885502132731677517::1788453774::0::1::::InputRemapButton<>Button<><>0<>0<><>::
 input_remap.gd::GDScript::8896476589087419384::1788453774::0::1::::<>Button<><>0<>0<><>::
@@ -875,7 +875,7 @@ data_center_dialog_interrupt_test.gd::GDScript::8717797568482729196::1790197979:
 data_center_dialog_interrupt_test.tscn::PackedScene::-1::1790194690::0::1::::<><><>0<>0<><>::res://Tests/data_center_dialog_interrupt_test.gd
 data_center_return_talk_test.gd::GDScript::6185349802563970781::1790292060::0::1::::<>Node<><>0<>0<><>::
 data_center_return_talk_test.tscn::PackedScene::-1::1790291909::0::1::::<><><>0<>0<><>::
-engineer_fire_interaction_test.gd::GDScript::8839711126685198782::1790452261::0::1::::<>BaseScene<><>0<>0<><>::
+engineer_fire_interaction_test.gd::GDScript::8839711126685198782::1790452913::0::1::::<>BaseScene<><>0<>0<><>::
 engineer_fire_interaction_test.tscn::PackedScene::-1::1790450537::0::1::::<><><>0<>0<><>::res://Tests/engineer_fire_interaction_test.gd
 final_minigames_test.gd::GDScript::721958041023339392::1789918855::0::1::::<>Node<><>0<>0<><>::
 final_minigames_test.tscn::PackedScene::-1::1789918681::0::1::::<><><>0<>0<><>::res://Tests/final_minigames_test.gd

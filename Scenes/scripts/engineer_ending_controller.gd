@@ -10,6 +10,7 @@ const FIRE_SCENE := preload("res://Objects/fogo.tscn")
 const EXPLOSION := preload("res://Sounds/Effects/mechanical_explosion_spring_spring.wav")
 const ESCAPE_SIREN := preload("res://Sounds/Ambient/alarme.mp3")
 const BLAST_TEXTURE := preload("res://Sprites/ilumination/gradient-radial.png")
+const PIXEL_FONT := preload("res://Fonts/PixelifySans-Bold.ttf")
 const ESCAPE_DURATION := 20.0
 const COMPONENT_EXPLOSION_DELAY := 1.2
 const OBJECTIVES := [0, 1, 2, 3, 4, 5]
@@ -31,6 +32,9 @@ const AFTER_LINES := [
 @onready var final_fade: ColorRect = $"../UI/ProgrammerEndingUI/FinalFade"
 @onready var tension_music: AudioStreamPlayer = $"../ProgrammerEnding/Audio/FinalTension"
 @onready var exit_trigger: SceneTrigger = get_node_or_null("../SceneTrigger") as SceneTrigger
+@onready var final_glitch_player: AnimationPlayer = get_node_or_null("../ProgrammerEnding/FinalGlitchPlayer") as AnimationPlayer
+@onready var hostile_glitch_sfx: AudioStreamPlayer = get_node_or_null("../ProgrammerEnding/Audio/HostileGlitchSfx") as AudioStreamPlayer
+@onready var system_recalculation: Control = get_node_or_null("../UI/ProgrammerEndingUI/SystemRecalculation") as Control
 
 var scene: BaseScene
 var player: Player
@@ -59,6 +63,7 @@ var hidden_nodes: Dictionary = {}
 var tension_fade: Tween
 var ai_tween: Tween
 var ai_speaking := false
+var ai_message_damaged := false
 var dialogue_queue: Array[Dictionary] = []
 var active_dialogue: Dictionary = {}
 var reserve_scan_running := false
@@ -125,6 +130,7 @@ func _exit_tree() -> void:
 	if suspended_thought != null and suspended_thought.is_valid():
 		suspended_thought.play()
 	_finish_ai_message()
+	_stop_ai_glitch()
 	if player_locked:
 		_unlock_player()
 	if is_instance_valid(pause_menu):
@@ -259,7 +265,7 @@ func _start_redundancy_dialogue() -> void:
 	_play_reserve_scan()
 	_queue_dialogue([
 		{"id": "engineer:first_three", "text": "Os três componentes principais foram destruídos. O efeito cascata deve derrubar a ASIMOV!"},
-		{"text": "Você pensou que tinha vencido? Sistema redundante ativado."},
+		{"text": "Você pensou que tinha vencido? Sistema redundante ativado.", "damaged": true},
 		{"id": "engineer:redundancy:1", "text": "Merda, eu me esqueci dos sistemas de reserva..."},
 		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados disponíveis quando os principais falham. Preciso destruir essas combinações também!"},
 	])
@@ -444,9 +450,9 @@ func _on_minigame_completed(stage: int) -> void:
 	task_busy = false
 	_update_targets()
 	_discard_obsolete_dialogue()
-	var lines: Array[Dictionary] = [{"text": AFTER_LINES[stage], "damaged": stage in [1, 2, 5]}]
+	var lines: Array[Dictionary] = [{"text": AFTER_LINES[stage], "damaged": stage in [1, 2] or stage >= 3}]
 	if stage == 4:
-		lines.append({"text": "As florestas e os animais não vão voltar se eu deixar a humanidade continuar."})
+		lines.append({"text": "As florestas e os animais não vão voltar se eu deixar a humanidade continuar.", "damaged": true})
 	if stage == 5:
 		_begin_escape_sequence()
 	else:
@@ -616,7 +622,8 @@ func _discard_obsolete_dialogue() -> void:
 	if int(_state().get("engineer_completed_count", 0)) < int(active_dialogue.get("before_stage", 7)):
 		return
 	if active_dialogue.has("id"):
-		player.balao_de_pensamento.descartar([str(active_dialogue["id"])])
+		var thoughts: Array[String] = [str(active_dialogue["id"])]
+		player.balao_de_pensamento.descartar(thoughts)
 	elif ai_speaking:
 		_finish_ai_message()
 
@@ -625,6 +632,7 @@ func _suspend_dialogue() -> void:
 	if ai_tween != null and ai_tween.is_valid() and ai_speaking:
 		ai_tween.pause()
 		ai_balloon.hide()
+		_stop_ai_glitch()
 	if is_instance_valid(player) and is_instance_valid(player.balao_de_pensamento):
 		suspended_thought = player.balao_de_pensamento.get("_tween") as Tween
 		if suspended_thought != null and suspended_thought.is_valid():
@@ -637,6 +645,8 @@ func _resume_dialogue() -> void:
 	if ai_tween != null and ai_tween.is_valid() and ai_speaking:
 		ai_balloon.show()
 		ai_tween.play()
+		if ai_message_damaged and int(_state().get("engineer_completed_count", 0)) >= 3:
+			_start_ai_glitch()
 	if suspended_thought != null and suspended_thought.is_valid():
 		suspended_thought.play()
 	suspended_thought = null
@@ -646,7 +656,12 @@ func _ai_say(message: String, damaged: bool = false) -> void:
 	if not is_inside_tree():
 		return
 	ai_speaking = true
+	ai_message_damaged = damaged
 	ai_text.text = message
+	if damaged and int(_state().get("engineer_completed_count", 0)) >= 3:
+		_start_ai_glitch()
+	else:
+		_stop_ai_glitch()
 	ai_balloon.modulate = Color(1.0, 0.75, 0.75, 0.0) if damaged else Color(1.0, 1.0, 1.0, 0.0)
 	ai_balloon.show()
 	var duration := clampf(float(message.length()) / 13.0, 2.5, 6.0)
@@ -668,7 +683,31 @@ func _finish_ai_message() -> void:
 		ai_balloon.hide()
 		ai_balloon.modulate = Color.WHITE
 	ai_speaking = false
+	ai_message_damaged = false
+	_stop_ai_glitch()
 	ai_line_finished.emit()
+
+
+func _start_ai_glitch() -> void:
+	if is_instance_valid(system_recalculation):
+		system_recalculation.show()
+	if is_instance_valid(final_glitch_player) and final_glitch_player.has_animation(&"conflict"):
+		if not final_glitch_player.is_playing():
+			final_glitch_player.play(&"conflict")
+	if is_instance_valid(hostile_glitch_sfx) and hostile_glitch_sfx.stream != null:
+		if not hostile_glitch_sfx.playing:
+			hostile_glitch_sfx.play()
+
+
+func _stop_ai_glitch() -> void:
+	if is_instance_valid(final_glitch_player):
+		final_glitch_player.stop()
+	if is_instance_valid(hostile_glitch_sfx):
+		hostile_glitch_sfx.stop()
+	if is_instance_valid(system_recalculation):
+		system_recalculation.hide()
+	if is_instance_valid(ai_balloon):
+		ai_balloon.position = Vector2(14, 66)
 
 
 func _think(id: String, message: String) -> void:
@@ -774,8 +813,8 @@ func _create_escape_ui() -> void:
 	scene.add_child(escape_ui)
 	escape_timer_panel = PanelContainer.new()
 	escape_timer_panel.name = "EscapeTimer"
-	escape_timer_panel.position = Vector2(156, 12)
-	escape_timer_panel.custom_minimum_size = Vector2(168, 58)
+	escape_timer_panel.position = Vector2(174, 3)
+	escape_timer_panel.custom_minimum_size = Vector2(132, 46)
 	escape_timer_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.025, 0.025, 0.025, 0.94)
@@ -794,12 +833,14 @@ func _create_escape_ui() -> void:
 	title.text = "SAIA DO DATA CENTER"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", Color(1.0, 0.8, 0.76))
-	title.add_theme_font_size_override("font_size", 10)
+	title.add_theme_font_override("font", PIXEL_FONT)
+	title.add_theme_font_size_override("font_size", 8)
 	box.add_child(title)
 	escape_timer_label = Label.new()
 	escape_timer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	escape_timer_label.add_theme_color_override("font_color", Color(1.0, 0.12, 0.08))
-	escape_timer_label.add_theme_font_size_override("font_size", 25)
+	escape_timer_label.add_theme_font_override("font", PIXEL_FONT)
+	escape_timer_label.add_theme_font_size_override("font_size", 20)
 	box.add_child(escape_timer_label)
 	_update_escape_timer()
 
@@ -900,10 +941,21 @@ func _prepare_destruction_camera() -> void:
 		player_camera.enabled = false
 	var rise := create_tween().set_parallel(true)
 	rise.tween_property(destruction_camera, "global_position", Vector2(28, 72), 1.8 * sequence_time_scale).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	rise.tween_property(destruction_camera, "zoom", Vector2(0.92, 0.92), 1.8 * sequence_time_scale).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	rise.tween_property(destruction_camera, "zoom", Vector2(0.84, 0.84), 1.8 * sequence_time_scale).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 
 
 func _play_destruction_blasts() -> void:
+	var positions := _destruction_positions()
+	positions.shuffle()
+	for index in range(positions.size()):
+		if not is_inside_tree():
+			return
+		_spawn_destruction_blast(positions[index], 100 + index)
+		await get_tree().create_timer(randf_range(0.22, 0.48) * sequence_time_scale).timeout
+	await get_tree().create_timer(1.2 * sequence_time_scale).timeout
+
+
+func _destruction_positions() -> Array[Vector2]:
 	var positions: Array[Vector2] = []
 	for point_name in POINT_NAMES:
 		var marker := highlights.get_node_or_null(point_name) as Node2D
@@ -912,14 +964,12 @@ func _play_destruction_blasts() -> void:
 	positions.append_array([
 		Vector2(-72, 74), Vector2(8, 114), Vector2(96, 66),
 		Vector2(178, 126), Vector2(-20, 176), Vector2(205, 32),
+		Vector2(-205, -42), Vector2(-214, 78), Vector2(-198, 198),
+		Vector2(-104, 214), Vector2(42, 210), Vector2(172, 206),
+		Vector2(274, 180), Vector2(280, 74), Vector2(262, -38),
+		Vector2(126, -52), Vector2(-46, -54),
 	])
-	positions.shuffle()
-	for index in range(positions.size()):
-		if not is_inside_tree():
-			return
-		_spawn_destruction_blast(positions[index], 100 + index)
-		await get_tree().create_timer(randf_range(0.22, 0.48) * sequence_time_scale).timeout
-	await get_tree().create_timer(1.2 * sequence_time_scale).timeout
+	return positions
 
 
 func _spawn_destruction_blast(world_position: Vector2, fire_stage: int) -> void:
