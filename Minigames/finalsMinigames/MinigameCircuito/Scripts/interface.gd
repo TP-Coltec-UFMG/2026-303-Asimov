@@ -4,7 +4,7 @@ extends CanvasLayer
 # REFERÊNCIAS DA INTERFACE
 # ==========================================
 
-@onready var texto_objetivo: Label = get_tree().get_first_node_in_group("objetivo")
+@onready var texto_objetivo: Label = get_node("../../Fundo_preto_tutorial/Panel/Label2")
 
 @onready var tela_game_over: Control = $GameOver
 @onready var tela_game_win: Control = $GameWin
@@ -247,12 +247,12 @@ func definir_objetivo(novo_objetivo: Objetivo) -> void:
 
 		Objetivo.BATERIA_LED:
 
-			texto_objetivo.text = "Objetivo:\nQueime a bateria e o LED."
+			texto_objetivo.text = "Objetivo:\nQueime o componente\ne depois a bateria."
 
 
 		Objetivo.BATERIA_RESISTOR:
 
-			texto_objetivo.text = "Objetivo: Queime a bateria e o resistor."
+			texto_objetivo.text = "Objetivo:\nQueime o resistor\ne depois a bateria."
 
 
 		Objetivo.RESISTOR_LED:
@@ -329,6 +329,9 @@ func verificar_objetivo() -> void:
 			vitoria()
 
 			return
+		elif circuito.bateria_queimada and not circuito.led_queimando:
+			game_over()
+			return
 
 
 	# ==========================================
@@ -341,6 +344,9 @@ func verificar_objetivo() -> void:
 
 			vitoria()
 
+			return
+		elif circuito.bateria_queimada and not circuito.resistor_queimando:
+			game_over()
 			return
 
 
@@ -367,7 +373,9 @@ func vitoria() -> void:
 
 	jogo_terminado = true
 
-	await get_tree().create_timer(2.0).timeout
+	var espera_resultado := create_tween()
+	espera_resultado.tween_interval(2.0)
+	await espera_resultado.finished
 
 	print("chamei vitoria")
 

@@ -644,5 +644,6 @@ func data_center_scientist_talk_pending(state: Dictionary) -> bool:
 		and bool(state.get("data_center_return_task_completed", false))
 		and not bool(state.get("data_center_scientist_followup_done", false))
 		and not bool(state.get("data_center_rfid_minigame_completed", false))
+		and not bool(state.get("data_center_engineer_access_unlocked", false))
 		and not bool(state.get("programmer_ending_started", false))
 	)

@@ -71,21 +71,19 @@ func _process(_delta):
 # CLIQUE NO ALICATE
 # ==========================================
 
-func _input_event(_viewport, event, _shape_idx):
-
-	if event is InputEventMouseButton:
-
-		if event.button_index == MOUSE_BUTTON_LEFT:
-
-			segurando = event.pressed
-
-
-		# BOTÃO DIREITO = CORTAR
-		if event.button_index == MOUSE_BUTTON_RIGHT:
-
-			if event.pressed:
-
-				cortar_fio()
+func _input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var mouse_button := event as InputEventMouseButton
+	if mouse_button.button_index == MOUSE_BUTTON_LEFT:
+		if not mouse_button.pressed:
+			segurando = false
+		elif mouse_button.position.distance_to(get_global_transform_with_canvas().origin) <= 18.0:
+			segurando = true
+			get_viewport().set_input_as_handled()
+	elif mouse_button.button_index == MOUSE_BUTTON_RIGHT and mouse_button.pressed and segurando:
+		cortar_fio()
+		get_viewport().set_input_as_handled()
 
 
 func cortar_fio():

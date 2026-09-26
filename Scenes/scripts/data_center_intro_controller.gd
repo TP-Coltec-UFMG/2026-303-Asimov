@@ -168,6 +168,15 @@ func _restore_progress() -> void:
 
 
 func _restore_access_progress(state: Dictionary) -> void:
+	if (
+		str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
+		and bool(state.get("data_center_rfid_wires_task_active", false))
+		and not bool(state.get("data_center_rfid_wires_repaired", false))
+		and not bool(state.get("engineer_rfid_inspection_seen", false))
+	):
+		state["data_center_rfid_wires_task_active"] = false
+		state["data_center_rfid_inspection_task_active"] = true
+		SaveGame.save_global_state("hall_quest_01", state)
 	if _scientist_talk_pending(state):
 		if (
 			bool(state.get("data_center_access_npc_arrived", false))
@@ -181,6 +190,18 @@ func _restore_access_progress(state: Dictionary) -> void:
 		_set_access_interactable(false)
 		_set_recipient_interaction(true, "ESPAÇO: FALAR")
 		_show_power_talk_task()
+		return
+	if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" and bool(state.get("data_center_rfid_wires_repaired", false)):
+		state["data_center_engineer_access_unlocked"] = true
+		state["data_center_rfid_wires_task_active"] = false
+		state["data_center_rfid_reading_task_active"] = false
+		SaveGame.save_global_state("hall_quest_01", state)
+		_place_recipient_at_access()
+		_set_recipient_interaction(false)
+		_set_access_prompt("Entrar no data center")
+		access_trigger.access_override = false
+		_set_access_interactable(true)
+		_show_rfid_repair_tasks(true)
 		return
 	# A barra usada após o reparo era uma checagem intermediária. Saves criados
 	# antes desta correção não podem considerar a futura tarefa do minigame pronta.
@@ -675,6 +696,8 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 	if access_sequence_busy or not _is_current_scene() or DialogManager.is_showing_dialog:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
+	if bool(state.get("data_center_engineer_access_unlocked", false)):
+		return
 	if power_sequence_running or _power_is_out(state):
 		player.balao_de_pensamento.enfileirar(
 			"data_center:access_before_power",
@@ -778,6 +801,7 @@ func _inspect_rfid_reader() -> void:
 	_set_access_interactable(false)
 	var superseded_thoughts: Array[String] = ["data_center:inspect_rfid_reader"]
 	player.balao_de_pensamento.descartar(superseded_thoughts)
+	var repair_plan := "Preciso reconectá-los para liberar o acesso." if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Preciso reconectá-los antes de testar os cartões de novo."
 	var inspection_thoughts: Array[Dictionary] = [
 		{
 			"id": "data_center:rfid_reader_has_power",
@@ -789,7 +813,7 @@ func _inspect_rfid_reader() -> void:
 		},
 		{
 			"id": "data_center:rfid_reconnect_plan",
-			"text": "Preciso reconectá-los antes de testar os cartões de novo."
+			"text": repair_plan
 		}
 	]
 	if not await _run_rfid_verification(inspection_thoughts, -1.0, "inspection"):
@@ -800,7 +824,9 @@ func _inspect_rfid_reader() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	state["data_center_rfid_inspection_task_active"] = false
 	state["data_center_rfid_wires_task_active"] = true
-	state["data_center_rfid_reading_task_active"] = true
+	if str(Configs.configs.get("job", "")) == "engenheiro_eletrico":
+		state["engineer_rfid_inspection_seen"] = true
+	state["data_center_rfid_reading_task_active"] = str(Configs.configs.get("job", "")) != "engenheiro_eletrico"
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_access_prompt("Consertar os fios")
 	_set_access_interactable(true)

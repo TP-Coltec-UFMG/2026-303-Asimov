@@ -12,7 +12,9 @@ enum ModoObjetivo {
 	QUEIMAR_RESISTOR,
 	QUEIMAR_LED,
 	QUEIMAR_BATERIA,
-	QUEIMAR_LED_E_RESISTOR
+	QUEIMAR_LED_E_RESISTOR,
+	QUEIMAR_LED_E_BATERIA,
+	QUEIMAR_RESISTOR_E_BATERIA
 }
 
 @export var modo_objetivo: ModoObjetivo = ModoObjetivo.QUEIMAR_RESISTOR
@@ -143,6 +145,39 @@ func _process(_delta: float) -> void:
 	_verificar_passo_atual()
 
 
+func _input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton:
+		return
+	var click := event as InputEventMouseButton
+	if click.button_index != MOUSE_BUTTON_LEFT or not click.pressed:
+		return
+	if not is_visible_in_tree() or circuito == null:
+		return
+	# Na campanha há uma câmera e outros Controls atrás do CanvasLayer.
+	# Seleciona o conector no canvas visível, sem depender do picking do mapa.
+	var nearest: Area2D = null
+	var nearest_distance := INF
+	for candidate in get_tree().get_nodes_in_group("pontos_conexao"):
+		if not circuito.is_ancestor_of(candidate):
+			continue
+		if candidate.arrastando:
+			return
+		var collider := candidate.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if collider == null or collider.disabled or collider.shape == null:
+			continue
+		var transform_to_screen := collider.get_global_transform_with_canvas()
+		var local_click := transform_to_screen.affine_inverse() * click.position
+		if not collider.shape.get_rect().grow(1.5).has_point(local_click):
+			continue
+		var distance := click.position.distance_squared_to(transform_to_screen.origin)
+		if distance < nearest_distance:
+			nearest = candidate as Area2D
+			nearest_distance = distance
+	if nearest != null:
+		nearest.iniciar_fio()
+		get_viewport().set_input_as_handled()
+
+
 # ============================================================
 # OBJETIVO DA INTERFACE
 # ============================================================
@@ -151,7 +186,7 @@ func _configurar_componente_led() -> void:
 	match modo_objetivo:
 
 		# Objetivos focados em queimar o LED: usa o Componente2.
-		ModoObjetivo.QUEIMAR_LED, ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
+		ModoObjetivo.QUEIMAR_LED, ModoObjetivo.QUEIMAR_LED_E_RESISTOR, ModoObjetivo.QUEIMAR_LED_E_BATERIA:
 			componente1.visible = false
 			Componente2.visible = true
 
@@ -159,7 +194,7 @@ func _configurar_componente_led() -> void:
 			colison_led_terminal_negativo.position = Vector2(-50, 42)
 
 		# Demais objetivos: usa o Componente1.
-		ModoObjetivo.QUEIMAR_RESISTOR, ModoObjetivo.QUEIMAR_BATERIA:
+		ModoObjetivo.QUEIMAR_RESISTOR, ModoObjetivo.QUEIMAR_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
 			componente1.visible = true
 			Componente2.visible = false
 
@@ -181,6 +216,12 @@ func _objetivo_da_interface():
 
 		ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
 			return interface_jogo.Objetivo.RESISTOR_LED
+
+		ModoObjetivo.QUEIMAR_LED_E_BATERIA:
+			return interface_jogo.Objetivo.BATERIA_LED
+
+		ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+			return interface_jogo.Objetivo.BATERIA_RESISTOR
 
 	return interface_jogo.Objetivo.RESISTOR
 
@@ -227,6 +268,9 @@ func _iniciar_passo(passo: int) -> void:
 		ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
 			_iniciar_passo_queimar_led_e_resistor(passo)
 
+		ModoObjetivo.QUEIMAR_LED_E_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+			_iniciar_passo_queimar_componente_e_bateria(passo)
+
 	passo_pronto = true
 
 
@@ -248,6 +292,9 @@ func _verificar_passo_atual() -> void:
 
 		ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
 			_verificar_passo_queimar_led_e_resistor()
+
+		ModoObjetivo.QUEIMAR_LED_E_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+			_verificar_passo_queimar_componente_e_bateria()
 
 
 # ============================================================
@@ -499,7 +546,7 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			_destacar(resistor)
 
 			texto_orientacao.text = \
-				"Vou queimar o resistor como fiz antes."
+				"Este circuito tem dois alvos. Primeiro, vou aumentar a tensão para queimar o resistor."
 
 			botao_continuar.visible = false
 
@@ -516,7 +563,7 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			_destacar(led)
 
 			texto_orientacao.text = \
-				"Agora vou queimar o componente, assim como fiz antes"
+				"Agora vou cortar os fios do resistor e ligar a junção diretamente ao componente, como fiz antes."
 
 			botao_continuar.visible = false
 
@@ -534,6 +581,32 @@ func _verificar_passo_queimar_led_e_resistor() -> void:
 		1:
 			if circuito.led_queimando or circuito.led_queimado:
 				_finalizar_orientacao()
+
+
+func _iniciar_passo_queimar_componente_e_bateria(passo: int) -> void:
+	var primeiro_led := modo_objetivo == ModoObjetivo.QUEIMAR_LED_E_BATERIA
+	if passo == 0:
+		if primeiro_led:
+			_destacar(alicate)
+			_destacar(juncao03)
+			_destacar(led)
+			texto_orientacao.text = "Primeiro, vou desviar o resistor e ligar a junção ao componente para queimá-lo. A bateria precisa ficar por último."
+		else:
+			_destacar(bateria)
+			_destacar(resistor)
+			texto_orientacao.text = "Primeiro, vou aumentar a tensão para queimar o resistor. A bateria precisa ficar por último."
+	elif passo == 1:
+		_destacar(alicate)
+		_destacar(bateria)
+		texto_orientacao.text = "Agora vou usar as junções para ligar os polos da bateria sem componentes no caminho, criando um curto-circuito."
+
+
+func _verificar_passo_queimar_componente_e_bateria() -> void:
+	var primeiro_queimado: bool = circuito.led_queimado if modo_objetivo == ModoObjetivo.QUEIMAR_LED_E_BATERIA else circuito.resistor_queimado
+	if passo_atual == 0 and primeiro_queimado:
+		_avancar_passo(1)
+	elif passo_atual == 1 and circuito.bateria_queimada:
+		_finalizar_orientacao()
 
 
 # ============================================================

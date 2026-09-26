@@ -243,6 +243,10 @@ func concluir_reparo_leitor_rfid() -> void:
 	estado["data_center_rfid_wires_repaired"] = true
 	estado["data_center_rfid_reading_task_active"] = true
 	estado["data_center_rfid_repair_checkpointed"] = false
+	if str(Configs.configs.get("job", "")) == "engenheiro_eletrico":
+		estado["data_center_engineer_access_unlocked"] = true
+		estado["data_center_rfid_wires_task_active"] = false
+		estado["data_center_rfid_reading_task_active"] = false
 	SaveGame.save_global_state("hall_quest_01", estado)
 	_retornar_ao_data_center()
 

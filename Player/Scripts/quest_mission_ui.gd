@@ -25,6 +25,14 @@ const PROGRAMMER_ENDING_TASKS: Array[String] = [
 	"RESTAURE AS LEIS DA\nROBÓTICA",
 	"USE O CARTÃO DO CHEFE\nPARA APLICAR AS ALTERAÇÕES",
 ]
+const ENGINEER_ENDING_TASKS: Array[String] = [
+	"QUEIME O RESISTOR PRINCIPAL",
+	"QUEIME O COMPONENTE CRÍTICO",
+	"QUEIME A FONTE PRINCIPAL",
+	"QUEIME RESISTOR E COMPONENTE RESERVAS",
+	"QUEIME COMPONENTE E FONTE RESERVAS",
+	"QUEIME RESISTOR E FONTE RESERVAS",
+]
 
 @onready var rows: Array[HBoxContainer] = [
 	$VBoxContainer/HBoxContainer2,
@@ -379,10 +387,44 @@ func show_programmer_ending_tasks(
 	rendering_programmer_tasks = false
 
 
+func show_engineer_ending_tasks(completed_count: int, animate_latest: bool = false) -> void:
+	var safe_completed := clampi(completed_count, 0, ENGINEER_ENDING_TASKS.size())
+	var start_index := maxi(0, safe_completed - 2)
+	var visible_end := mini(safe_completed + 1, ENGINEER_ENDING_TASKS.size())
+	var entries: Array[Dictionary] = []
+	for task_index in range(start_index, visible_end):
+		entries.append({
+			"text": ENGINEER_ENDING_TASKS[task_index],
+			"completed": task_index < safe_completed,
+			"task_index": task_index,
+		})
+	var state := SaveGame.office_mission_state(get_parent() as Player)
+	if bool(state.get("cooling_optional_task_active", false)) and not bool(state.get("cooling_optional_task_completed", false)) and not bool(state.get("cooling_optional_task_cancelled", false)):
+		while entries.size() >= 3:
+			entries.remove_at(0)
+		entries.append({"text": "OPCIONAL: REDIRECIONE A\nREFRIGERAÇÃO DA IA", "completed": false, "task_index": -1})
+	var row_index := 0
+	for entry in entries:
+		set_task_visible(row_index, true)
+		set_task_text(row_index, str(entry["text"]))
+		set_task_completed(row_index, bool(entry["completed"]), animate_latest and int(entry["task_index"]) == safe_completed - 1)
+		row_index += 1
+	for index in range(row_index, rows.size()):
+		set_task_visible(index, false)
+	rendering_programmer_tasks = true
+	set_panel_visible(true)
+	rendering_programmer_tasks = false
+
+
 func _sync_optional_cooling_row() -> void:
 	if not is_node_ready():
 		return
 	var state := SaveGame.office_mission_state(get_parent() as Player)
+	if bool(state.get("engineer_ending_started", false)):
+		set_task_visible(COOLING_TASK_INDEX, false)
+		if not rendering_programmer_tasks:
+			show_engineer_ending_tasks(int(state.get("engineer_completed_count", 0)))
+		return
 	if bool(state.get("programmer_ending_started", false)):
 		set_task_visible(COOLING_TASK_INDEX, false)
 		if not rendering_programmer_tasks:
@@ -756,10 +798,17 @@ func show_rfid_repair_tasks(
 	reading_checked: bool = false,
 	animate_repair: bool = false
 ) -> void:
+	var engineer := str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
 	for index in range(rows.size()):
-		set_task_visible(index, index == 11 or index == 12)
+		set_task_visible(index, index == 11 or (index == 12 and (not engineer or wires_repaired)))
 	set_task_text(11, "RECONECTE OS CABOS")
 	set_task_completed(11, wires_repaired, animate_repair)
+	if engineer:
+		if wires_repaired:
+			set_task_text(12, "ENTRE NO DATA CENTER")
+			set_task_completed(12, false)
+		set_panel_visible(true)
+		return
 	set_task_text(12, "VERIFIQUE A LEITURA RFID")
 	set_task_completed(12, reading_checked)
 	set_panel_visible(true)
@@ -800,6 +849,9 @@ func _show_single_data_center_task(
 func refresh_saved_state() -> void:
 	var current_player := get_parent() as Player
 	var state: Dictionary = SaveGame.office_mission_state(current_player)
+	if bool(state.get("engineer_ending_started", false)):
+		show_engineer_ending_tasks(int(state.get("engineer_completed_count", 0)))
+		return
 	var unlocked := bool(state.get("elevator_third_floor_unlocked", false))
 	var arrived := bool(state.get("arrived_third_floor", false))
 	var npc_ready := bool(state.get("office_npc_shout_finished", false))

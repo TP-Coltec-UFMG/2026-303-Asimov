@@ -176,6 +176,8 @@ func _play_restricted_area_transition() -> void:
 
 
 func _tem_cartao_compativel() -> bool:
+	if connected_scene == "data_center_forte" and bool(SaveGame.office_mission_state(body_p).get("data_center_engineer_access_unlocked", false)):
+		return true
 	if not body_p.inventory.get_item_on_inventary("cartao") or not body_p.usando_cartao:
 		return false
 	var tipo_cartao: int = int(body_p.inventory.get_item_control("cartao").tipo)

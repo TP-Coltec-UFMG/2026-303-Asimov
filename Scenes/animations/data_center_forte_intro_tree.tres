@@ -21,6 +21,9 @@ animation = &"scan_server_row_c"
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sj3cm"]
 animation = &"scan_server_row_d"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_server_row_e"]
+animation = &"scan_server_row_e"
+
 [resource]
 states/IntroClose/node = SubResource("AnimationNodeAnimation_l5tpy")
 states/IntroClose/position = Vector2(680, 140)
@@ -36,3 +39,5 @@ states/ServerRowC/node = SubResource("AnimationNodeAnimation_j6my7")
 states/ServerRowC/position = Vector2(430, 140)
 states/ServerRowD/node = SubResource("AnimationNodeAnimation_sj3cm")
 states/ServerRowD/position = Vector2(430, 200)
+states/ServerRowE/node = SubResource("AnimationNodeAnimation_server_row_e")
+states/ServerRowE/position = Vector2(430, 320)

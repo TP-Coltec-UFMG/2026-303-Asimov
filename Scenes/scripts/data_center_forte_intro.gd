@@ -1,6 +1,7 @@
 extends Node
 
 const JOB_PROGRAMMER := "programador"
+const JOB_ENGINEER := "engenheiro_eletrico"
 const MISSION_POINT_NAMES: Array[String] = [
 	"ServerRowA",
 	"ServerRowB",
@@ -42,13 +43,15 @@ func _exit_tree() -> void:
 
 
 func _should_play_intro() -> bool:
+	var state: Dictionary = SaveGame.office_mission_state()
+	if str(Configs.configs.get("job", "")) == JOB_ENGINEER:
+		return bool(state.get("data_center_engineer_access_unlocked", false)) and not bool(state.get("data_center_forte_intro_seen", false))
 	if scene_manager.last_scene_name.to_lower() != "andar_data_center":
 		return false
 	if SaveGame.restore_checkpoint_pending:
 		return false
-	var state: Dictionary = SaveGame.office_mission_state()
 	return (
-		bool(state.get("data_center_rfid_minigame_completed", false))
+		(bool(state.get("data_center_rfid_minigame_completed", false)) or bool(state.get("data_center_engineer_access_unlocked", false)))
 		and not bool(state.get("data_center_forte_intro_seen", false))
 	)
 
@@ -103,6 +106,14 @@ func _start_intro() -> void:
 		SaveGame.create_checkpoint(player)
 
 
+func play_engineer_backup_scan() -> void:
+	if cutscene_running or not is_inside_tree():
+		return
+	black_overlay.show()
+	black_overlay.color = Color.BLACK
+	await _start_intro()
+
+
 func _apply_reset_animation() -> void:
 	animation_player.play(&"RESET")
 	animation_player.advance(0.001)
@@ -151,9 +162,24 @@ func _scan_data_center() -> void:
 
 func _mission_marker_order() -> Array[String]:
 	var result: Array[String] = []
-	# O final do engenheiro ainda não possui pontos próprios; não mostramos
-	# indicações que não terão função nessa rota.
-	if str(Configs.configs.get("job", "")) != JOB_PROGRAMMER:
+	var job := str(Configs.configs.get("job", ""))
+	if job == JOB_ENGINEER:
+		var engineer_state := SaveGame.office_mission_state(player)
+		# A mesma seleção persistida controla as missões e os dois scans.
+		var engineer := get_parent().get_node_or_null("EngineerEnding")
+		if engineer != null and engineer.has_method("_load_points"):
+			engineer.call("_load_points", engineer_state)
+		var order_key := "engineer_backup_order" if int(engineer_state.get("engineer_completed_count", 0)) >= 3 else "engineer_point_order"
+		var engineer_order: Variant = engineer_state.get(order_key, [])
+		if engineer_order is Array:
+			for value in engineer_order:
+				var point_name := str(value)
+				if highlights.has_node(NodePath(point_name)) and not result.has(point_name):
+					result.append(point_name)
+				if result.size() == 3:
+					return result
+		return result
+	if job != JOB_PROGRAMMER:
 		return result
 	var state := SaveGame.office_mission_state(player)
 	var stored: Variant = state.get("programmer_point_order", [])

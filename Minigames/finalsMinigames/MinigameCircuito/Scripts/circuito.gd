@@ -248,9 +248,7 @@ func reiniciar_circuito() -> void:
 
 	if led != null:
 
-		var sprite_led = led.get_node_or_null(
-			"AnimatedSprite2D"
-		)
+		var sprite_led := _obter_sprite_led()
 
 		if sprite_led != null:
 
@@ -1522,6 +1520,25 @@ func obter_outro_terminal(
 	return null
 
 
+# A campanha usa os mesmos sprites e animações da cena avulsa.
+func _obter_sprite_led() -> AnimatedSprite2D:
+	var jogo := get_parent()
+	var alternativo: bool = jogo.modo_objetivo in [
+		jogo.ModoObjetivo.QUEIMAR_LED,
+		jogo.ModoObjetivo.QUEIMAR_LED_E_RESISTOR,
+		jogo.ModoObjetivo.QUEIMAR_LED_E_BATERIA,
+	]
+	return get_node("Led/AnimatedSprite2D2" if alternativo else "Led/AnimatedSprite2D") as AnimatedSprite2D
+
+
+func _tocar_ciclo_animacao(sprite: AnimatedSprite2D, animacao: StringName) -> void:
+	sprite.play(animacao)
+	if sprite.sprite_frames.get_animation_loop(animacao):
+		await sprite.animation_looped
+	else:
+		await sprite.animation_finished
+
+
 # ==========================================
 # QUEIMAR BATERIA
 # ==========================================
@@ -1561,24 +1578,8 @@ func queimar_bateria() -> void:
 	bateria_queimando = true
 
 
-	sprite.play(
-		"queimando"
-	)
-
-
-	await sprite.animation_finished
-
-
-	if not is_instance_valid(sprite):
-		return
-
-
-	sprite.play(
-		"queimado"
-	)
-
-	await sprite.animation_finished
-
+	await _tocar_ciclo_animacao(sprite, &"queimando")
+	await _tocar_ciclo_animacao(sprite, &"queimado")
 
 	bateria_queimando = false
 	bateria_queimada = true
@@ -1611,9 +1612,7 @@ func acender_led() -> void:
 		return
 
 
-	var sprite = led.get_node_or_null(
-		"AnimatedSprite2D"
-	)
+	var sprite := _obter_sprite_led()
 
 	if sprite == null:
 		return
@@ -1625,9 +1624,8 @@ func acender_led() -> void:
 	print("========================================")
 
 
-	sprite.play(
-		"aceso"
-	)
+	# O componente alternativo chama sua animação ligada de "normal".
+	sprite.play(&"aceso" if sprite.sprite_frames.has_animation(&"aceso") else &"normal")
 
 
 # ==========================================
@@ -1648,9 +1646,7 @@ func desligar_led() -> void:
 		return
 
 
-	var sprite = led.get_node_or_null(
-		"AnimatedSprite2D"
-	)
+	var sprite := _obter_sprite_led()
 
 	if sprite == null:
 		return
@@ -1677,19 +1673,9 @@ func queimar_led() -> void:
 
 	if led == null:
 		return
-	var sprite: AnimatedSprite2D = \
-			led.get_node_or_null(
-				"AnimatedSprite2D"
-			)
-	if(get_parent().modo_objetivo==2 or get_parent().modo_objetivo==3):
-		sprite = \
-		led.get_node_or_null(
-			"AnimatedSprite2D2"
-		)
-	
-
-
-	
+	var sprite := _obter_sprite_led()
+	if sprite == null:
+		return
 
 
 	print("")
@@ -1705,53 +1691,11 @@ func queimar_led() -> void:
 	led_queimando = true
 
 
-	sprite.play(
-		"queimando"
-	)
-
-
-	var frames = sprite.sprite_frames.get_frame_count(
-		"queimando"
-	)
-
-	var velocidade = sprite.sprite_frames.get_animation_speed(
-		"queimando"
-	)
-
-
-	if frames > 0 and velocidade > 0:
-
-		var duracao = float(frames) / velocidade
-
-		await get_tree().create_timer(
-			duracao
-		).timeout
-
-	else:
-
-		print(
-			"ERRO: Animação 'queimando' inválida."
-		)
-
-		led_queimando = false
-
-		return
-
-
-	if not is_instance_valid(sprite):
-		return
-
-
-	sprite.play(
-		"queimado"
-	)
-
-	led_queimado = true
-
-	await sprite.animation_finished
-
+	await _tocar_ciclo_animacao(sprite, &"queimando")
+	await _tocar_ciclo_animacao(sprite, &"queimado")
 
 	led_queimando = false
+	led_queimado = true
 
 
 	analisar_circuito()
@@ -1804,53 +1748,11 @@ func queimar_resistor() -> void:
 	resistor_queimando = true
 
 
-	sprite.play(
-		"queimando"
-	)
-
-
-	var frames = sprite.sprite_frames.get_frame_count(
-		"queimando"
-	)
-
-	var velocidade = sprite.sprite_frames.get_animation_speed(
-		"queimando"
-	)
-
-
-	if frames > 0 and velocidade > 0:
-
-		var duracao = float(frames) / velocidade
-
-		await get_tree().create_timer(
-			duracao
-		).timeout
-
-	else:
-
-		print(
-			"ERRO: Animação 'queimando' inválida."
-		)
-
-		resistor_queimando = false
-
-		return
-
-
-	if not is_instance_valid(sprite):
-		return
-
-
-	sprite.play(
-		"queimado"
-	)
-
-	resistor_queimado = true
-
-	await sprite.animation_finished
-
+	await _tocar_ciclo_animacao(sprite, &"queimando")
+	await _tocar_ciclo_animacao(sprite, &"queimado")
 
 	resistor_queimando = false
+	resistor_queimado = true
 
 
 	analisar_circuito()

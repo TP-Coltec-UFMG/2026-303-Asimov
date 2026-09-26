@@ -437,6 +437,12 @@ func start_programmer_final_mix() -> void:
 	set_alarm_quiet_context(&"programmer_ending", true)
 
 
+func start_engineer_final_mix() -> void:
+	initial_background_music_target_volume_db = PROGRAMMER_FINAL_BACKGROUND_DB
+	countdown_music.volume_db = PROGRAMMER_FINAL_COUNTDOWN_DB
+	set_alarm_quiet_context(&"engineer_ending", true)
+
+
 # ALARME
 func _start_som_alarme(from_position: float = 0.0) -> void:
 	if alarm_user_muted:

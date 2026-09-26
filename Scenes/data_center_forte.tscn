@@ -21,6 +21,7 @@
 [ext_resource type="AudioStream" uid="uid://c0ginjtcldu78" path="res://Sounds/Effects/mixkit-small-electric-glitch-2595.mp3" id="19_final_glitch_sfx"]
 [ext_resource type="AnimationLibrary" uid="uid://bpia4y0jffng" path="res://Scenes/animations/programmer_final_conflict_animations.tres" id="20_final_conflict"]
 [ext_resource type="Script" uid="uid://dvouf3jvmif20" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_strong_data_center"]
+[ext_resource type="Script" path="res://Scenes/scripts/engineer_ending_controller.gd" id="engineer_ending"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(46, 42.25)
@@ -332,6 +333,34 @@ is_not_object = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerRowD/Interectable" unique_id=62998340]
 shape = SubResource("ProgrammerPointWideShape")
 
+[node name="ServerRowE" type="Node2D" parent="RestrictedAreaIntro/Highlights"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+position = Vector2(85, 10)
+scale = Vector2(0.78, 0.78)
+
+[node name="Glow" type="Line2D" parent="RestrictedAreaIntro/Highlights/ServerRowE"]
+material = SubResource("HighlightUnshaded")
+points = PackedVector2Array(-59, -17, 59, -17, 59, 17, -59, 17, -59, -17)
+width = 6.0
+default_color = Color(1, 1, 1, 0.22)
+joint_mode = 2
+
+[node name="Border" type="Line2D" parent="RestrictedAreaIntro/Highlights/ServerRowE"]
+material = SubResource("HighlightUnshaded")
+points = PackedVector2Array(-59, -17, 59, -17, 59, 17, -59, 17, -59, -17)
+width = 1.5
+joint_mode = 2
+
+[node name="Interectable" parent="RestrictedAreaIntro/Highlights/ServerRowE" groups=["Coletaveis"] instance=ExtResource("5_g7g5b")]
+interact_name = "PONTO DO SISTEMA"
+prompt_font_size = 8
+is_interactable = false
+is_not_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestrictedAreaIntro/Highlights/ServerRowE/Interectable"]
+shape = SubResource("ProgrammerPointWideShape")
+
 [node name="ServerColumn" type="Node2D" parent="RestrictedAreaIntro/Highlights" unique_id=51938148]
 visible = false
 modulate = Color(1, 1, 1, 0)
@@ -375,6 +404,9 @@ color = Color(0, 0, 0, 1)
 
 [node name="ProgrammerEnding" type="Node" parent="." unique_id=869435146]
 script = ExtResource("10_ending")
+
+[node name="EngineerEnding" type="Node" parent="."]
+script = ExtResource("engineer_ending")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ProgrammerEnding" unique_id=1881268964]
 libraries/ = ExtResource("11_ending_animations")

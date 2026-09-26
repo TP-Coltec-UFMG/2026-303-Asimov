@@ -254,6 +254,10 @@ func iniciar_fio() -> void:
 	# ==========================================
 
 	arrastando = true
+	var circuito := _obter_circuito()
+	if circuito == null:
+		arrastando = false
+		return
 
 
 	# ==========================================
@@ -262,7 +266,7 @@ func iniciar_fio() -> void:
 
 	mouse_follow = Node2D.new()
 
-	get_tree().current_scene.add_child(
+	circuito.add_child(
 		mouse_follow
 	)
 
@@ -288,7 +292,7 @@ func iniciar_fio() -> void:
 		return
 
 
-	get_tree().current_scene.add_child(
+	circuito.add_child(
 		fio_atual
 	)
 
@@ -335,8 +339,7 @@ func _input(event) -> void:
 
 			if is_instance_valid(mouse_follow):
 
-				mouse_follow.global_position = \
-					get_global_mouse_position()
+				mouse_follow.global_position = get_canvas_transform().affine_inverse() * event.position
 
 
 	elif event is InputEventMouseButton:
@@ -346,6 +349,8 @@ func _input(event) -> void:
 
 		if not event.pressed:
 
+			if is_instance_valid(mouse_follow):
+				mouse_follow.global_position = get_canvas_transform().affine_inverse() * event.position
 			finalizar_fio()
 
 
@@ -430,9 +435,7 @@ func finalizar_fio() -> void:
 	# PEGAR CIRCUITO
 	# ==========================================
 
-	var circuito = get_tree().get_first_node_in_group(
-		"circuito"
-	)
+	var circuito := _obter_circuito()
 
 
 	if circuito == null:
@@ -726,7 +729,8 @@ func _eh_conexao_proibida_entre_juncoes(alvo) -> bool:
 
 func encontrar_ponto_alvo() -> Variant:
 
-	var mouse_pos := get_global_mouse_position()
+	var mouse_pos := mouse_follow.global_position if is_instance_valid(mouse_follow) else get_global_mouse_position()
+	var circuito := _obter_circuito()
 
 	var melhor_dist: float = raio_deteccao
 
@@ -742,6 +746,9 @@ func encontrar_ponto_alvo() -> Variant:
 
 
 		if not is_instance_valid(p):
+			continue
+
+		if circuito == null or not circuito.is_ancestor_of(p):
 			continue
 
 
@@ -784,6 +791,15 @@ func encontrar_ponto_alvo() -> Variant:
 
 
 	return melhor
+
+
+func _obter_circuito() -> Node2D:
+	var parent := get_parent()
+	while parent != null:
+		if parent.is_in_group("circuito"):
+			return parent as Node2D
+		parent = parent.get_parent()
+	return null
 
 
 # ==========================================
