@@ -12,6 +12,12 @@ enum DroneState {
 
 const PATROL_SPEED: float = 24.0
 const CHASE_SPEED: float = 43.0
+const PATROL_ACCELERATION: float = 72.0
+const CHASE_ACCELERATION: float = 135.0
+const BRAKE_ACCELERATION: float = 170.0
+const TURN_RESPONSE: float = 8.0
+const MAX_FLIGHT_TILT: float = 0.11
+const FLIGHT_TILT_RESPONSE: float = 7.0
 const DETECTION_RANGE: float = 125.0
 const LOST_RANGE: float = 165.0
 const FIELD_OF_VIEW_COSINE: float = 0.57
@@ -47,7 +53,6 @@ const DRONE_PROJECTILE := preload("res://Objects/drone_projectile.tscn")
 @onready var alert_sfx: AudioStreamPlayer2D = $AlertSfx
 @onready var shot_sfx: AudioStreamPlayer2D = $ShotSfx
 @onready var explosion_sfx: AudioStreamPlayer2D = $ExplosionSfx
-@onready var sparks: CPUParticles2D = $Sparks
 @onready var hit_sparks: CPUParticles2D = $HitSparks
 @onready var shot_warning: Line2D = $ShotWarning
 @onready var muzzle_flash: Node2D = $MuzzleFlash
@@ -55,14 +60,14 @@ const DRONE_PROJECTILE := preload("res://Objects/drone_projectile.tscn")
 @onready var health_fill: ColorRect = $HealthBar/Fill
 @onready var explosion_flash: Polygon2D = $ExplosionVisuals/Flash
 @onready var explosion_wave: Line2D = $ExplosionVisuals/Shockwave
-@onready var explosion_flames: CPUParticles2D = $ExplosionVisuals/Flames
-@onready var explosion_smoke: CPUParticles2D = $ExplosionVisuals/Smoke
 
 var drone_state: DroneState = DroneState.DORMANT
 var current_player: Player
 var patrol_index: int = 0
 var patrol_direction: int = 1
 var facing_direction: Vector2 = Vector2.RIGHT
+var desired_velocity: Vector2 = Vector2.ZERO
+var flight_phase: float = 0.0
 var state_time: float = 0.0
 var lost_sight_time: float = 0.0
 var mission_check_time: float = 0.0
@@ -82,6 +87,7 @@ func _ready() -> void:
 	patrol_index = randi_range(0, maxi(0, patrol_points.size() - 1))
 	patrol_direction = 1 if randf() >= 0.5 else -1
 	strafe_direction = 1.0 if randf() >= 0.5 else -1.0
+	flight_phase = randf_range(0.0, TAU)
 	_set_dormant()
 
 
@@ -94,24 +100,28 @@ func _physics_process(delta: float) -> void:
 		return
 	shot_time = maxf(0.0, shot_time - delta)
 	if not _player_can_be_chased():
-		velocity = Vector2.ZERO
+		desired_velocity = Vector2.ZERO
+		velocity = velocity.move_toward(Vector2.ZERO, BRAKE_ACCELERATION * delta)
 		return
+	flight_phase = fmod(flight_phase + delta * 3.1, TAU)
 	state_time += delta
 	match drone_state:
 		DroneState.PATROL:
 			_update_patrol(delta)
 		DroneState.ALERT:
-			_update_alert()
+			_update_alert(delta)
 		DroneState.CHASE:
 			_update_chase(delta)
 		DroneState.COOLDOWN:
-			_update_cooldown()
+			_update_cooldown(delta)
+	_apply_flight_acceleration(delta)
 	move_and_slide()
 	position = Vector2(
 		clampf(position.x, ROOM_BOUNDS.position.x, ROOM_BOUNDS.end.x),
 		clampf(position.y, ROOM_BOUNDS.position.y, ROOM_BOUNDS.end.y)
 	)
-	_update_facing()
+	_update_facing(delta)
+	_update_flight_visuals(delta)
 	_update_health_bar()
 
 
@@ -157,8 +167,11 @@ func _activate() -> void:
 	shot_time = 0.35
 	shot_charge_remaining = 0.0
 	current_health = MAX_HEALTH
+	velocity = Vector2.ZERO
+	desired_velocity = Vector2.ZERO
 	collision_layer = 2
 	z_index = 30
+	rotation = 0.0
 	animated_sprite.position = Vector2.ZERO
 	animated_sprite.rotation = 0.0
 	animated_sprite.scale = Vector2(0.29, 0.29)
@@ -176,6 +189,7 @@ func _activate() -> void:
 func _set_dormant() -> void:
 	drone_state = DroneState.DORMANT
 	velocity = Vector2.ZERO
+	desired_velocity = Vector2.ZERO
 	visible = false
 	shot_warning.hide()
 	health_bar.hide()
@@ -197,7 +211,7 @@ func _update_patrol(_delta: float) -> void:
 	vision_cone.color = Color(1.0, 0.74, 0.18, 0.13)
 	alert_light.visible = false
 	if patrol_points.is_empty():
-		velocity = Vector2.ZERO
+		desired_velocity = Vector2.ZERO
 		return
 	var target := patrol_points[patrol_index]
 	var offset := target - position
@@ -205,7 +219,8 @@ func _update_patrol(_delta: float) -> void:
 		patrol_index = posmod(patrol_index + patrol_direction, patrol_points.size())
 		target = patrol_points[patrol_index]
 		offset = target - position
-	velocity = offset.normalized() * PATROL_SPEED
+	var speed_pulse := 1.0 + sin(flight_phase) * 0.06
+	desired_velocity = offset.normalized() * PATROL_SPEED * speed_pulse
 	if _can_see_player(DETECTION_RANGE, true):
 		_begin_alert()
 
@@ -213,16 +228,16 @@ func _update_patrol(_delta: float) -> void:
 func _begin_alert() -> void:
 	drone_state = DroneState.ALERT
 	state_time = 0.0
-	velocity = Vector2.ZERO
+	desired_velocity = Vector2.ZERO
 	vision_cone.color = Color(1.0, 0.08, 0.04, 0.27)
 	alert_light.visible = true
 	alert_sfx.pitch_scale = 1.0
 	alert_sfx.play()
 
 
-func _update_alert() -> void:
-	velocity = Vector2.ZERO
-	_face_player()
+func _update_alert(delta: float) -> void:
+	desired_velocity = Vector2.ZERO
+	_face_player(delta)
 	if state_time >= ALERT_DURATION:
 		drone_state = DroneState.CHASE
 		state_time = 0.0
@@ -235,19 +250,20 @@ func _update_chase(delta: float) -> void:
 	var offset := current_player.global_position - global_position
 	var distance := offset.length()
 	var direction := offset.normalized()
-	_face_player()
+	_face_player(delta)
 	if shot_charge_remaining > 0.0:
 		shot_charge_remaining -= delta
-		velocity = Vector2.ZERO
+		desired_velocity = Vector2.ZERO
 		_update_shot_warning()
 		if shot_charge_remaining <= 0.0:
 			_fire_at_player(direction)
 	elif distance < RETREAT_DISTANCE:
-		velocity = -direction * CHASE_SPEED
+		desired_velocity = -direction * CHASE_SPEED
 	elif distance > PREFERRED_DISTANCE + 18.0:
-		velocity = direction * CHASE_SPEED
+		desired_velocity = direction * CHASE_SPEED
 	else:
-		velocity = direction.orthogonal() * CHASE_SPEED * 0.55 * strafe_direction
+		desired_velocity = direction.orthogonal() * CHASE_SPEED * 0.55 * strafe_direction
+	desired_velocity *= 1.0 + sin(flight_phase * 1.35) * 0.08
 	if shot_time <= 0.0 and shot_charge_remaining <= 0.0 and _can_see_player(LOST_RANGE, false):
 		_start_shot_telegraph()
 	if _can_see_player(LOST_RANGE, false):
@@ -261,18 +277,18 @@ func _update_chase(delta: float) -> void:
 func _begin_cooldown() -> void:
 	drone_state = DroneState.COOLDOWN
 	state_time = 0.0
-	velocity = -facing_direction * PATROL_SPEED
+	desired_velocity = -facing_direction * PATROL_SPEED
 	vision_cone.color = Color(0.35, 0.7, 1.0, 0.1)
 	alert_light.visible = false
 	shot_charge_remaining = 0.0
 	shot_warning.hide()
 
 
-func _update_cooldown() -> void:
+func _update_cooldown(_delta: float) -> void:
 	if state_time < 0.55:
-		velocity = -facing_direction * PATROL_SPEED
+		desired_velocity = -facing_direction * PATROL_SPEED
 	else:
-		velocity = Vector2.ZERO
+		desired_velocity = Vector2.ZERO
 	if state_time >= COOLDOWN_DURATION:
 		drone_state = DroneState.PATROL
 		state_time = 0.0
@@ -366,14 +382,14 @@ func _destroy_drone() -> void:
 	death_animation_running = true
 	drone_state = DroneState.DESTROYED
 	velocity = Vector2.ZERO
+	desired_velocity = Vector2.ZERO
 	collision_layer = 0
 	vision_cone.visible = false
 	shot_warning.hide()
 	health_bar.hide()
 	shot_sfx.stop()
 	explosion_sfx.play()
-	hit_sparks.restart()
-	sparks.restart()
+	hit_sparks.emitting = false
 	_play_explosion_visuals()
 	alert_light.visible = true
 	alert_light.color = Color(1.0, 0.35, 0.04, 1.0)
@@ -400,10 +416,6 @@ func _destroy_drone() -> void:
 
 
 func _play_explosion_visuals() -> void:
-	explosion_flames.restart()
-	explosion_flames.emitting = true
-	explosion_smoke.restart()
-	explosion_smoke.emitting = true
 	explosion_flash.scale = Vector2(0.25, 0.25)
 	explosion_flash.modulate.a = 1.0
 	explosion_flash.show()
@@ -429,6 +441,7 @@ func _show_destroyed_wreck() -> void:
 	destroyed = true
 	drone_state = DroneState.DESTROYED
 	velocity = Vector2.ZERO
+	desired_velocity = Vector2.ZERO
 	collision_layer = 0
 	z_index = 3
 	visible = true
@@ -464,22 +477,47 @@ func _can_see_player(max_range: float, require_fov: bool) -> bool:
 	return hit.is_empty() or hit.get("collider") == current_player
 
 
-func _face_player() -> void:
+func _face_player(delta: float) -> void:
 	if not is_instance_valid(current_player):
 		return
 	var offset := current_player.global_position - global_position
 	if offset.length_squared() > 0.01:
-		facing_direction = offset.normalized()
-		rotation = facing_direction.angle()
+		_turn_toward(offset.normalized(), delta)
 
 
-func _update_facing() -> void:
+func _update_facing(delta: float) -> void:
 	if drone_state == DroneState.CHASE or drone_state == DroneState.ALERT:
+		vision_cone.rotation = facing_direction.angle()
 		return
-	if velocity.length_squared() <= 0.01:
+	if velocity.length_squared() > 0.01:
+		_turn_toward(velocity.normalized(), delta)
+	vision_cone.rotation = facing_direction.angle()
+
+
+func _turn_toward(direction: Vector2, delta: float) -> void:
+	var weight := 1.0 - exp(-TURN_RESPONSE * delta)
+	var angle := lerp_angle(facing_direction.angle(), direction.angle(), weight)
+	facing_direction = Vector2.RIGHT.rotated(angle)
+
+
+func _apply_flight_acceleration(delta: float) -> void:
+	var acceleration := PATROL_ACCELERATION
+	if drone_state == DroneState.CHASE:
+		acceleration = CHASE_ACCELERATION
+	elif desired_velocity.length_squared() < 0.01:
+		acceleration = BRAKE_ACCELERATION
+	velocity = velocity.move_toward(desired_velocity, acceleration * delta)
+
+
+func _update_flight_visuals(delta: float) -> void:
+	rotation = 0.0
+	if damage_tween != null and damage_tween.is_running():
 		return
-	facing_direction = velocity.normalized()
-	rotation = facing_direction.angle()
+	var lateral_ratio := clampf(velocity.x / CHASE_SPEED, -1.0, 1.0)
+	var target_tilt := lateral_ratio * MAX_FLIGHT_TILT
+	var tilt_weight := 1.0 - exp(-FLIGHT_TILT_RESPONSE * delta)
+	animated_sprite.rotation = lerp_angle(animated_sprite.rotation, target_tilt, tilt_weight)
+	animated_sprite.position.y = sin(flight_phase * 1.7) * 0.65
 
 
 func _update_health_bar() -> void:
