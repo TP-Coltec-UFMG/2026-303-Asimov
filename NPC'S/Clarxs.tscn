@@ -314,7 +314,7 @@ height = 4.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_dialog"]
 radius = 24.0
 
-[node name="NPC1" type="Node2D" unique_id=406687579]
+[node name="NPC1" type="Node2D" unique_id=406687579 groups=["protected_npc"]]
 script = ExtResource("1_aekyl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1186460517]

@@ -20,11 +20,12 @@
 [ext_resource type="Script" uid="uid://dalss1e6fdi2m" path="res://Player/Scripts/balao_de_pensamento.gd" id="17_0yomn"]
 [ext_resource type="PackedScene" uid="uid://c0gnsi802ues5" path="res://Player/quest_mission_ui.tscn" id="18_quest_ui"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
+[ext_resource type="Shader" uid="uid://b1ilig77glkro" path="res://shaders/protected_npc_blur.gdshader" id="100_npc_blur"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_i305y"]
 load_path = "res://.godot/imported/Alex_16x16.png-89462274f2a2226fed9efa0756e5c56d.ctex"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_weg28"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6p7p"]
 resource_local_to_scene = true
 shader = ExtResource("3_weg28")
 shader_parameter/modo = 0
@@ -199,6 +200,18 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ammo"]
+bg_color = Color(0.02, 0.025, 0.035, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.95, 1, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_xnkv0"]
 light_mode = 1
 
@@ -207,6 +220,22 @@ light_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0t4ro"]
 light_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_npc_warning"]
+shader = ExtResource("100_npc_blur")
+shader_parameter/blur_amount = 2.8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npc_warning"]
+bg_color = Color(0.035, 0.02, 0.025, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.25, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
 size = Vector2(1, 22)
@@ -235,7 +264,7 @@ hframes = 24
 vframes = 7
 
 [node name="ColorAccessibilityCue" parent="Sprite2D" unique_id=61627136 instance=ExtResource("99_color_accessibility")]
-material = SubResource("ShaderMaterial_weg28")
+material = SubResource("ShaderMaterial_d6p7p")
 
 [node name="OccluderSide" type="LightOccluder2D" parent="Sprite2D" unique_id=2020043514]
 visible = false
@@ -302,6 +331,37 @@ text = "Alarme desativado"
 process_mode = 3
 wait_time = 8.0
 one_shot = true
+
+[node name="AmmoPanel" type="Panel" parent="CanvasLayer" unique_id=1960740551]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -174.0
+offset_top = -33.0
+offset_right = -8.0
+offset_bottom = -9.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ammo")
+
+[node name="AmmoLabel" type="Label" parent="CanvasLayer/AmmoPanel" unique_id=929298120]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("12_hxkef")
+theme_override_font_sizes/font_size = 8
+text = "7 / 7  |  RESERVA 7"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Control" type="Control" parent="CanvasLayer" unique_id=1463208028]
 layout_mode = 3
@@ -407,6 +467,77 @@ visibility_layer = 524288
 z_index = 99
 material = SubResource("CanvasItemMaterial_0t4ro")
 position = Vector2(-0.6000061, 58)
+
+[node name="NonLethalWarning" type="CanvasLayer" parent="." unique_id=490698558]
+process_mode = 3
+layer = 220
+visible = false
+
+[node name="Root" type="Control" parent="NonLethalWarning" unique_id=1488458074]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Blur" type="ColorRect" parent="NonLethalWarning/Root" unique_id=232456165]
+material = SubResource("ShaderMaterial_npc_warning")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MessagePanel" type="Panel" parent="NonLethalWarning/Root" unique_id=1200404950]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = -34.0
+offset_right = 174.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_npc_warning")
+
+[node name="Label" type="Label" parent="NonLethalWarning/Root/MessagePanel" unique_id=768257852]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("12_hxkef")
+theme_override_font_sizes/font_size = 13
+text = "NÃO SERÁ PERMITIDO CAUSAR DANO EM OUTROS NPCS."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BlackFade" type="ColorRect" parent="NonLethalWarning/Root" unique_id=1423789522]
+z_index = 20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 
 [node name="sfx_walking" type="AudioStreamPlayer2D" parent="." unique_id=1148288816]
 stream = ExtResource("13_original_steps")

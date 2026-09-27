@@ -21,6 +21,7 @@ const REMAPPABLE_ACTIONS: PackedStringArray = [
 	"acende_lanterna",
 	"usar_extintor",
 	"fire",
+	"reload",
 	"esc"
 ]
 

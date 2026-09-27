@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Objects/scripts/gun_casing.gd" id="1_script"]
+
+[node name="GunCasing" type="Node2D"]
+z_index = 2
+script = ExtResource("1_script")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.93, 0.67, 0.18, 1)
+polygon = PackedVector2Array(-1.5, -0.7, 1.5, -0.7, 1.5, 0.7, -1.5, 0.7)

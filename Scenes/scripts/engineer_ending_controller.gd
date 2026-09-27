@@ -337,6 +337,7 @@ func _can_interact_with_point(point_name: String) -> bool:
 func _open_minigame(stage: int) -> void:
 	if minigame_open or not task_busy or stage != int(_state().get("engineer_completed_count", 0)):
 		return
+	_save(_state())
 	_lock_player()
 	minigame_open = true
 	active_minigame_stage = stage
@@ -787,6 +788,7 @@ func _store_and_hide(node: Node) -> void:
 func _begin_escape_sequence() -> void:
 	if escape_active or destruction_cutscene_running or bool(_state().get("engineer_ending_completed", false)):
 		return
+	_save(_state())
 	escape_active = true
 	escape_remaining = ESCAPE_DURATION
 	task_busy = false

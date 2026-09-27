@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://Objects/scripts/bullet_impact.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://Sounds/External/sfx100v2_metal_hit_01.ogg" id="2_hit"]
+
+[sub_resource type="CanvasItemMaterial" id="Material_unshaded"]
+light_mode = 1
+
+[sub_resource type="ParticleProcessMaterial" id="Particles_material"]
+particle_flag_disable_z = true
+direction = Vector3(1, 0, 0)
+spread = 80.0
+initial_velocity_min = 18.0
+initial_velocity_max = 38.0
+gravity = Vector3(0, 18, 0)
+scale_min = 0.35
+scale_max = 0.7
+color = Color(1, 0.66, 0.2, 1)
+
+[node name="BulletImpact" type="Node2D"]
+z_index = 35
+script = ExtResource("1_script")
+
+[node name="Mark" type="Polygon2D" parent="."]
+material = SubResource("Material_unshaded")
+color = Color(0.04, 0.045, 0.05, 0.75)
+polygon = PackedVector2Array(-1, -2, 1, -2, 2, 0, 1, 2, -1, 2, -2, 0)
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+visible = false
+material = SubResource("Material_unshaded")
+emitting = false
+amount = 7
+lifetime = 0.24
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("Particles_material")
+
+[node name="ImpactSfx" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_hit")
+volume_db = -18.0
+max_distance = 180.0
+bus = &"sfx"

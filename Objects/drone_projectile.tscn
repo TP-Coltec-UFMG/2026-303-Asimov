@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://Objects/scripts/drone_projectile.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Sprites/ilumination/gradient-radial.png" id="2_light"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_projectile"]
+radius = 2.5
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
+light_mode = 1
+
+[node name="DroneProjectile" type="Area2D"]
+z_index = 31
+collision_layer = 0
+collision_mask = 9
+monitoring = true
+script = ExtResource("1_script")
+
+[node name="Trail" type="Line2D" parent="."]
+z_index = -1
+material = SubResource("CanvasItemMaterial_unshaded")
+points = PackedVector2Array(-8, 0, 1, 0)
+width = 2.0
+default_color = Color(1, 0.12, 0.04, 0.7)
+
+[node name="Core" type="Polygon2D" parent="."]
+material = SubResource("CanvasItemMaterial_unshaded")
+color = Color(1, 0.82, 0.35, 1)
+polygon = PackedVector2Array(4, 0, 0, -2.5, -3, 0, 0, 2.5)
+
+[node name="Light" type="PointLight2D" parent="."]
+scale = Vector2(0.08, 0.08)
+color = Color(1, 0.08, 0.02, 1)
+energy = 0.65
+texture = ExtResource("2_light")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_projectile")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

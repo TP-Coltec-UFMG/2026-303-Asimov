@@ -1,0 +1,4 @@
+Ammo pickup sprite (img_92.png) by Roars Games
+Source: https://opengameart.org/content/small-sprites
+License: Creative Commons CC0 1.0 Universal
+Original archive: https://opengameart.org/sites/default/files/New%20folder%20%282%29.zip

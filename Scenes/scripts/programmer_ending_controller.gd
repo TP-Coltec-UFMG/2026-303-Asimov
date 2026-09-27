@@ -311,6 +311,7 @@ func _run_final_exchange() -> void:
 	if bool(_state().get("programmer_ending_completed", false)):
 		_start_final_transition(true)
 		return
+	_save_state(_state())
 	dialogue_busy = true
 	_update_flow_from_state()
 	_pause_countdown()
@@ -499,6 +500,7 @@ func _run_terminal_operation(animation_name: StringName, title: String) -> void:
 func _open_minigame(minigame: Control) -> void:
 	if task_busy or is_instance_valid(active_minigame):
 		return
+	_save_state(_state())
 	task_busy = true
 	active_minigame = minigame
 	_update_flow_from_state()

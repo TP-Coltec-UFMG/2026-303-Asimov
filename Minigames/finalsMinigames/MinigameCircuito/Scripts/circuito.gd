@@ -358,9 +358,6 @@ func conectar_fio(
 
 
 
-	var nome_origem := obter_nome_ponto(origem)
-	var nome_destino := obter_nome_ponto(destino)
-
 	pass
 
 
@@ -1512,10 +1509,6 @@ func registrar_fio_existente(
 		pass
 
 		return false
-
-
-	var nome_origem := obter_nome_ponto(origem)
-	var nome_destino := obter_nome_ponto(destino)
 
 
 	pass

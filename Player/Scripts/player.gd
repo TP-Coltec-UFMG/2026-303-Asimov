@@ -1,5 +1,7 @@
 class_name Player extends CharacterBody2D
 
+const STARTING_GUN := preload("res://Objects/arma.tscn")
+
 
 @export var checkpoint_enabled: bool = true
 
@@ -26,6 +28,11 @@ class_name Player extends CharacterBody2D
 @onready var control: Control = $CanvasLayer/Control
 @onready var morreu: Control = $CanvasLayer/Morreu
 @onready var alarm_tip: Button = $CanvasLayer/AlarmTip
+@onready var ammo_panel: Panel = $CanvasLayer/AmmoPanel
+@onready var ammo_label: Label = $CanvasLayer/AmmoPanel/AmmoLabel
+@onready var npc_warning_layer: CanvasLayer = $NonLethalWarning
+@onready var npc_warning_root: Control = $NonLethalWarning/Root
+@onready var npc_warning_black: ColorRect = $NonLethalWarning/Root/BlackFade
 
 var cardinal_direction: Vector2 = Vector2.DOWN
 var direction: Vector2 = Vector2.ZERO
@@ -34,6 +41,8 @@ var state: String = "idle"
 
 var andando_de_costas: bool = false
 var alarm_tip_tween: Tween
+var npc_warning_active: bool = false
+var npc_warning_previous_time_scale: float = 1.0
 
 const MOUSE_DEAD_ZONE_SQUARED: float = 16.0
 
@@ -93,6 +102,7 @@ func _ready() -> void:
 	add_child(audio_guard)
 	UpdateAnimation()
 	UpdateOccluderLight()
+	call_deferred("_ensure_starting_gun")
 
 
 func _stop_movement_sfx() -> void:
@@ -104,6 +114,67 @@ func _stop_movement_sfx() -> void:
 
 func _exit_tree() -> void:
 	_stop_movement_sfx()
+	if npc_warning_active:
+		Engine.time_scale = npc_warning_previous_time_scale
+
+
+func _ensure_starting_gun() -> void:
+	if not is_instance_valid(inventory):
+		return
+	if not inventory.get_item_on_inventary("gun"):
+		inventory.add_item("gun", STARTING_GUN)
+	SaveGame.save_global_state("player_starting_gun", true)
+	var inventory_gun := inventory.get_item_control("gun")
+	for candidate: Node in get_tree().get_nodes_in_group(&"gun_pickup"):
+		if candidate != inventory_gun and not bool(candidate.get("no_inventario")):
+			candidate.queue_free()
+
+
+func update_weapon_hud(current_ammo: int, magazine_size: int, reserve_ammo: int, reloading: bool) -> void:
+	ammo_panel.visible = usando_arma
+	if not usando_arma:
+		return
+	if reloading:
+		ammo_label.text = "RECARREGANDO...  %d" % reserve_ammo
+	else:
+		ammo_label.text = "%d / %d  |  RESERVA %d" % [current_ammo, magazine_size, reserve_ammo]
+
+
+func show_ammo_pickup(amount: int) -> void:
+	_show_alarm_status("Munição +%d" % amount)
+
+
+func show_protected_npc_warning() -> void:
+	if npc_warning_active or not is_inside_tree():
+		return
+	npc_warning_active = true
+	npc_warning_previous_time_scale = Engine.time_scale
+	Engine.time_scale = maxf(0.05, npc_warning_previous_time_scale * 0.22)
+	npc_warning_layer.show()
+	npc_warning_root.modulate.a = 0.0
+	npc_warning_black.color.a = 0.0
+	var fade_in := create_tween()
+	fade_in.set_ignore_time_scale(true)
+	fade_in.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	fade_in.tween_property(npc_warning_root, "modulate:a", 1.0, 0.35)
+	await fade_in.finished
+	await get_tree().create_timer(1.05, true, false, true).timeout
+	var fade_to_black := create_tween()
+	fade_to_black.set_ignore_time_scale(true)
+	fade_to_black.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	fade_to_black.tween_property(npc_warning_black, "color:a", 1.0, 0.8)
+	await fade_to_black.finished
+	Engine.time_scale = npc_warning_previous_time_scale
+	npc_warning_active = false
+	if SaveGame.load_last_checkpoint():
+		return
+	var recovery := create_tween()
+	recovery.set_ignore_time_scale(true)
+	recovery.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	recovery.tween_property(npc_warning_root, "modulate:a", 0.0, 0.3)
+	await recovery.finished
+	npc_warning_layer.hide()
+	npc_warning_black.color.a = 0.0
 
 
 func _toggle_alarm_from_player() -> bool:
@@ -557,6 +628,7 @@ func reset_sprite_player() -> void:
 	usando_cabo = false
 	usando_extintor = false
 	inventory.set_equipped_item("")
+	ammo_panel.hide()
 	soltar_objeto()
 	empurrando = false
 	$Sprite2D.texture = preload("res://Player/Sprites/Alex_16x16.png")
@@ -593,6 +665,7 @@ func _input(event: InputEvent) -> void:
 			usando_arma = true
 			inventory.set_equipped_item("gun")
 			$Sprite2D.texture = preload("res://Player/Sprites/Alex_com_arma16x16.png")
+		gun.refresh_hud()
 			
 			
 	if event.is_action_pressed("use_extintor") and inventory.get_item_on_inventary("extintor"):

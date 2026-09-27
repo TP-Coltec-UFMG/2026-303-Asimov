@@ -4,15 +4,26 @@
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="2_dpds2"]
 [ext_resource type="Texture2D" uid="uid://b8h6pcugxlnhw" path="res://Sprites/objects/gun.png" id="3_0p3ui"]
 [ext_resource type="Texture2D" uid="uid://b3gjmrbe8pxbu" path="res://Sprites/objects/reticula_0.png" id="5_0p3ui"]
+[ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="5_2ssgs"]
 [ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="5_dpds2"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
+[ext_resource type="AudioStream" uid="uid://1r4rtb3yms45" path="res://Sounds/Effects/gunshot_unfa_cc0.ogg" id="100_gunshot"]
+[ext_resource type="AudioStream" uid="uid://d4cljj7v3dnd1" path="res://Sounds/External/sfx100v2_switch_01.ogg" id="101_empty"]
+[ext_resource type="AudioStream" uid="uid://dfmta8y4w1u3y" path="res://Sounds/External/keyhole-lockbox-insert-01.wav" id="102_reload"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
 radius = 26.476404
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7w86a"]
 
-[node name="Arma" type="Node2D" unique_id=1140399274]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ssgs"]
+resource_local_to_scene = true
+shader = ExtResource("5_2ssgs")
+shader_parameter/modo = 0
+shader_parameter/frame_uv = Vector4(0, 0, 1, 1)
+shader_parameter/outline_uv = Vector2(0.01, 0.01)
+
+[node name="Arma" type="Node2D" unique_id=1140399274 groups=["gun_pickup"]]
 script = ExtResource("1_gtnv3")
 
 [node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_dpds2")]
@@ -25,7 +36,8 @@ shape = SubResource("CircleShape2D_6hjy0")
 material = SubResource("CanvasItemMaterial_7w86a")
 texture = ExtResource("3_0p3ui")
 
-[node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
+[node name="ColorAccessibilityCue" parent="Sprite2D" unique_id=153410049 instance=ExtResource("99_color_accessibility")]
+material = SubResource("ShaderMaterial_2ssgs")
 interaction_path = NodePath("../../Interectable")
 
 [node name="PickupComponent" type="Node" parent="." unique_id=2092861625 node_paths=PackedStringArray("interactable")]
@@ -36,18 +48,32 @@ metadata/_custom_type_script = "uid://dtfbuvijibmfx"
 
 [node name="Position_on_player" type="Sprite2D" parent="." unique_id=1693380322]
 visible = false
-position = Vector2(61, -82)
+position = Vector2(0, -10)
 texture = ExtResource("3_0p3ui")
 
 [node name="BulletSpawn" type="Marker2D" parent="Position_on_player" unique_id=535150655]
-position = Vector2(7.071068, 1.5147247)
+position = Vector2(8, 0)
 
 [node name="Timer" type="Timer" parent="." unique_id=1396029748]
-wait_time = 0.03
+wait_time = 0.18
+one_shot = true
+
+[node name="ShotSfx" type="AudioStreamPlayer" parent="." unique_id=1040015895]
+stream = ExtResource("100_gunshot")
+volume_db = -9.0
+bus = &"sfx"
+
+[node name="EmptySfx" type="AudioStreamPlayer" parent="." unique_id=1285676865]
+stream = ExtResource("101_empty")
+volume_db = -8.0
+bus = &"sfx"
+
+[node name="ReloadSfx" type="AudioStreamPlayer" parent="." unique_id=352362151]
+stream = ExtResource("102_reload")
+volume_db = -10.0
+bus = &"sfx"
 
 [node name="reticula" type="Sprite2D" parent="." unique_id=1823379469]
 visible = false
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("5_0p3ui")
-
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
