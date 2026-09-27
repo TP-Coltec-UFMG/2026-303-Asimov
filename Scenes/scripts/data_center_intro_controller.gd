@@ -434,11 +434,7 @@ func _on_outage_timer_timeout() -> void:
 	if cooling_guide != null and bool(cooling_guide.get("cutscene_running")):
 		outage_timer.start(0.5)
 		return
-	if rfid_verification_running:
-		_interrupt_rfid_verification()
-		_begin_power_failure()
-		return
-	if access_sequence_busy:
+	if rfid_verification_running or access_sequence_busy:
 		outage_timer.start(0.5)
 		return
 	_begin_power_failure()
@@ -703,9 +699,12 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 			"Primeiro preciso resolver o problema da energia."
 		)
 		return
+	if bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false)):
+		if outage_timer != null:
+			outage_timer.stop()
+		_begin_power_failure()
+		return
 	if bool(state.get("data_center_rfid_reading_checked", false)):
-		if bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false)):
-			_begin_power_failure()
 		return
 	if bool(state.get("data_center_rfid_reader_rechecked", false)):
 		_start_rfid_card_minigame()
@@ -867,7 +866,10 @@ func _run_rfid_verification(
 	var start_progress := 0.0
 	if str(state.get("data_center_rfid_paused_stage", "")) == stage:
 		start_progress = clampf(float(state.get("data_center_rfid_paused_progress", 0.0)), 0.0, 99.0)
-	var active_thoughts: Array[Dictionary] = thoughts if start_progress <= 0.0 else []
+	var active_thoughts: Array[Dictionary] = []
+	if start_progress <= 0.0:
+		for thought in thoughts:
+			active_thoughts.append(thought)
 	rfid_verification_interrupted = false
 	rfid_verification_stage = stage
 	rfid_active_thought_ids.clear()

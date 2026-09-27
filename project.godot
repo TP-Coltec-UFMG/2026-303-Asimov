@@ -13,6 +13,7 @@ config_version=5
 config/name="ASIMOV"
 run/main_scene="res://Scenes/principal.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
 
 [audio]
 
@@ -194,3 +195,4 @@ environment/ssao/quality=0
 environment/ssil/quality=0
 environment/glow/upscale_mode=0
 environment/subsurface_scattering/subsurface_scattering_quality=0
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

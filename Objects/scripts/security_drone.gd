@@ -46,6 +46,7 @@ const DRONE_PROJECTILE := preload("res://Objects/drone_projectile.tscn")
 	Vector2(-82, 126),
 	Vector2(-137, 63)
 ]
+@export var persistent_mission_state: bool = true
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var vision_cone: Polygon2D = $VisionCone
@@ -144,7 +145,8 @@ func _refresh_mission_state() -> void:
 		if not death_animation_running:
 			_set_dormant()
 		return
-	destroyed = bool(mission.get("security_drone_destroyed", false))
+	if persistent_mission_state:
+		destroyed = bool(mission.get("security_drone_destroyed", false))
 	if destroyed:
 		if not death_animation_running and drone_state != DroneState.DESTROYED:
 			_show_destroyed_wreck()
@@ -398,9 +400,10 @@ func _destroy_drone() -> void:
 	if damage_tween != null and damage_tween.is_valid():
 		damage_tween.kill()
 	animated_sprite.position = Vector2.ZERO
-	var mission: Dictionary = SaveGame.office_mission_state(current_player)
-	mission["security_drone_destroyed"] = true
-	SaveGame.save_global_state("hall_quest_01", mission)
+	if persistent_mission_state:
+		var mission: Dictionary = SaveGame.office_mission_state(current_player)
+		mission["security_drone_destroyed"] = true
+		SaveGame.save_global_state("hall_quest_01", mission)
 	var fall_side := 1.0 if randf() >= 0.5 else -1.0
 	var tween := create_tween()
 	tween.set_parallel(true)

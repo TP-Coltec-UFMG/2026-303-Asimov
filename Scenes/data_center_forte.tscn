@@ -24,6 +24,7 @@
 [ext_resource type="Script" path="res://Scenes/scripts/engineer_ending_controller.gd" id="engineer_ending"]
 [ext_resource type="PackedScene" path="res://Objects/security_drone.tscn" id="security_drone"]
 [ext_resource type="PackedScene" path="res://Objects/ammo_pickup.tscn" id="ammo_pickup"]
+[ext_resource type="Script" path="res://Scenes/scripts/security_drone_spawner.gd" id="security_drone_spawner"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(46, 42.25)
@@ -411,6 +412,10 @@ script = ExtResource("10_ending")
 script = ExtResource("engineer_ending")
 
 [node name="SecurityDrone" parent="." instance=ExtResource("security_drone")]
+position = Vector2(-188, 188)
+
+[node name="SecurityDroneSpawner" type="Node" parent="."]
+script = ExtResource("security_drone_spawner")
 
 [node name="AmmoCacheA" parent="." instance=ExtResource("ammo_pickup")]
 position = Vector2(-177, 72)
