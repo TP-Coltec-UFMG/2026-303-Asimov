@@ -28,3 +28,4 @@ res://Scenes/scripts/inputremapup.gd
 res://Scripts/Data/configs.gd
 res://Scripts/Data/difficulty_settings.gd
 res://Scripts/Data/save/SaveLoad.gd
+res://Objects/scripts/Lanterna.gd

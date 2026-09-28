@@ -38,7 +38,7 @@ func marcar_como_item_inventario() -> void:
 	no_inventario = true
 	
 func _physics_process(_delta: float) -> void:
-	if player == null or not player.usando_lanterna or not lanterna_acessa:
+	if player == null or not (player.usando_lanterna or player.usando_arma) or not lanterna_acessa:
 		set_physics_process(false)
 		return
 
@@ -49,14 +49,19 @@ func set_player(novo_player: Player) -> void:
 	no_chao = false
 
 func set_luz(ligada: bool) -> void:
-	if lanterna_acessa:
-		luz.visible = ligada
-		point_light_2d.visible = ligada
-		set_physics_process(ligada)
-	else:
-		luz.visible = false
-		point_light_2d.visible = false
-		set_physics_process(false)
+	lanterna_acessa = ligada
+	luz.visible = ligada
+	point_light_2d.visible = ligada
+	set_physics_process(ligada)
+	if ligada:
+		ultima_animacao = &""
+		ultimo_frame = -1
+		ultima_direcao = Vector2.ZERO
+		update_position_luz()
+
+func toggle_luz() -> void:
+	ligando.play()
+	set_luz(not lanterna_acessa)
 
 func update_position_luz() -> void:
 	if player == null:
@@ -169,18 +174,10 @@ func _input(event: InputEvent) -> void:
 	if player == null:
 		return
 
-	if not player.usando_lanterna:
+	if not player.usando_lanterna and not player.usando_arma:
 		return
 
 	if event.is_action_pressed("acende_lanterna"):
-		ligando.play()
-		lanterna_acessa = not lanterna_acessa
-		luz.visible = lanterna_acessa
-		point_light_2d.visible = lanterna_acessa
-		set_physics_process(lanterna_acessa)
-
-		if lanterna_acessa:
-			ultima_animacao = &""
-			ultimo_frame = -1
-			ultima_direcao = Vector2.ZERO
-			update_position_luz()
+		if player.usando_arma and event.is_action_pressed("fire"):
+			return
+		toggle_luz()

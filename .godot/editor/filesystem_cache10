@@ -544,7 +544,7 @@ extintor.gd::GDScript::2420902810421563797::1790458332::0::1::::<>Node2D<><>0<>0
 fogo.gd::GDScript::2364585529212079621::1790458332::0::1::::<>Node2D<><>0<>0<><>::
 gun_casing.gd::GDScript::4489515281158007638::1790516929::0::1::::<>Node2D<><>0<>0<><>::
 gun_muzzle_effect.gd::GDScript::7460114394588721238::1790516929::0::1::::<>Node2D<><>0<>0<><>::
-Lanterna.gd::GDScript::6631582609719958200::1788453774::0::1::::<>Node2D<><>0<>0<><>::
+Lanterna.gd::GDScript::6631582609719958200::1790621837::0::1::::<>Node2D<><>0<>0<><>::
 laptop.gd::GDScript::7077348246709458475::1788453774::0::1::::<>Node2D<><>0<>0<><>::
 luz_de_emergencia.gd::GDScript::9021221533152233654::1790458332::0::1::::<>Sprite2D<><>0<>0<><>::
 luz_emergencia.gd::GDScript::3901919389650914341::1788453774::0::1::::<>Node2D<><>0<>0<><>::
@@ -561,7 +561,7 @@ balao_de_pensamento.gd::GDScript::7183096629735674506::1790458332::0::1::::<>Spr
 camera_2d.gd::GDScript::9134008448514159856::1790458332::0::1::::<>Camera2D<><>0<>0<><>::
 estamina.gd::GDScript::925875835290662581::1788453774::0::1::::<>TextureProgressBar<><>0<>0<><>::
 inventory.gd::GDScript::2635950096362801932::1790458332::0::1::::Inventory<>Node2D<><>0<>0<><>::
-player.gd::GDScript::2010779193100962179::1790620404::0::1::::Player<>CharacterBody2D<><>0<>0<><>::
+player.gd::GDScript::2010779193100962179::1790621837::0::1::::Player<>CharacterBody2D<><>0<>0<><>::
 quest_mission_ui.gd::GDScript::7792891927470662101::1790619721::0::1::::QuestMissionUI<>CanvasLayer<><>0<>0<><>::
 slot.gd::GDScript::2262211901453285894::1790458332::0::1::::<>Panel<><>0<>0<><>::
 slot_4.gd::GDScript::1117672957367927025::1788453774::0::1::::<>Panel<><>0<>0<><>::

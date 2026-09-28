@@ -647,6 +647,10 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("use_lanterna") and inventory.get_item_on_inventary("lanterna"):
 		var lanterna = inventory.get_item_control("lanterna")
 		lanterna.set_player(self)
+		if usando_arma:
+			lanterna.toggle_luz()
+			get_viewport().set_input_as_handled()
+			return
 		if usando_lanterna:
 			lanterna.set_luz(false)
 			reset_sprite_player()
