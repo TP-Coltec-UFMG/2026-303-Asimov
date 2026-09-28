@@ -48,6 +48,7 @@ var save_data: Dictionary = {
 	"interface_size" : 0,
 	"tutorial_seen" : false,
 	"tutorial_completed" : false,
+	"intro_cutscene_seen" : false,
 	"job": "",
 	"character": "",
 	"difficulty": ""
@@ -77,6 +78,7 @@ func _save() -> void:
 
 
 func _load() -> void:
+	var migrated_intro_cutscene: bool = false
 	if FileAccess.file_exists(FILE_PATH):
 		var file: FileAccess = FileAccess.open(FILE_PATH, FileAccess.READ)
 		if file == null:
@@ -91,12 +93,27 @@ func _load() -> void:
 			return
 
 		var data: Dictionary = loaded_value
+		if not data.has("intro_cutscene_seen"):
+			save_data["intro_cutscene_seen"] = _legacy_profile_has_played(data)
+			migrated_intro_cutscene = true
 		for key: Variant in data:
 			if save_data.has(key):
 				save_data[key] = data[key]
 		file.close()
 
 	_apply_load()
+	if migrated_intro_cutscene:
+		_save()
+
+
+func _legacy_profile_has_played(data: Dictionary) -> bool:
+	return (
+		bool(data.get("tutorial_completed", false))
+		or not str(data.get("job", "")).is_empty()
+		or not str(data.get("character", "")).is_empty()
+		or not str(data.get("difficulty", "")).is_empty()
+		or FileAccess.file_exists("user://SaveFileGameState.json")
+	)
 
 
 func _apply_load() -> void:

@@ -22,6 +22,7 @@ var configs: Dictionary = {
 	"interface_size": 0,
 	"tutorial_seen": false,
 	"tutorial_completed": false,
+	"intro_cutscene_seen": false,
 	"job": "",
 	"character": "",
 	"difficulty": ""

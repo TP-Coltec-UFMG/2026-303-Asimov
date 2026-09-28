@@ -10,3 +10,9 @@ res://Scenes/animations/programmer_ending_animations.tres
 res://Scenes/animations/programmer_final_conflict_animations.tres
 res://Scenes/scripts/data_center_intro_controller.gd
 res://Objects/scripts/security_drone.gd
+res://Cutscenes/cutscene_final_1.tscn
+res://Scenes/scripts/base_scene.gd
+res://Scripts/Data/configs.gd
+res://Scripts/Data/save/SaveLoad.gd
+res://Sprites/selectionpage/control.gd
+res://Cutscenes/intro_cutscene.tscn

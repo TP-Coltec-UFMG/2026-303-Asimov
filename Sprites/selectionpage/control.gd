@@ -33,7 +33,7 @@ func SELECTED():
 		await blink.finished
 		transition.play("default")
 		await transition.animation_finished
-		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
+		get_tree().change_scene_to_file("res://Cutscenes/intro_cutscene.tscn")
 		
 
 	elif option_selected == "engenheiro_eletrico":
@@ -54,7 +54,7 @@ func SELECTED():
 		await blink.finished
 		transition.play("default")
 		await transition.animation_finished
-		get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
+		get_tree().change_scene_to_file("res://Cutscenes/intro_cutscene.tscn")
 
 	elif option_selected == "character1":
 		Configs.configs["character"] = "character1"

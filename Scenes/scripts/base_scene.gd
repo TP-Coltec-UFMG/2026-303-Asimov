@@ -3,6 +3,10 @@ extends Node
 
 const OFFICE_EMPTY_THOUGHT_ID: String = "office:empty_floor"
 const OFFICE_EMPTY_THOUGHT_DELAY: float = 6.0
+const OPENING_BLUR_SCENE: PackedScene = preload(
+	"res://Cutscenes/opening_gameplay_blur.tscn"
+)
+const OPENING_BLUR_META: StringName = &"intro_opening_blur"
 
 var player: Player = null
 
@@ -10,6 +14,7 @@ var player: Player = null
 
 
 func _ready() -> void:
+	_start_opening_blur_if_requested()
 	var scene_player: Player = get_scene_player()
 
 	if is_instance_valid(scene_manager.player):
@@ -61,6 +66,14 @@ func _ready() -> void:
 
 	call_deferred("atualizar_camera")
 	call_deferred("_registrar_chegada_escritorio")
+
+
+func _start_opening_blur_if_requested() -> void:
+	if not bool(get_tree().get_meta(OPENING_BLUR_META, false)):
+		return
+	get_tree().remove_meta(OPENING_BLUR_META)
+	var blur_overlay := OPENING_BLUR_SCENE.instantiate()
+	add_child(blur_overlay)
 
 
 func get_scene_player() -> Player:
