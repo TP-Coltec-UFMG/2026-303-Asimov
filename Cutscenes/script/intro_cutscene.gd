@@ -18,7 +18,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	MusicController.pause_all_audio()
 	skip_allowed = bool(Configs.configs.get("intro_cutscene_seen", false))
-	skip_indicator.visible = skip_allowed
+	skip_indicator.hide()
 	black.visible = false
 	video.finished.connect(_on_video_finished)
 	video.play()
@@ -28,9 +28,11 @@ func _process(delta: float) -> void:
 	if finishing or not skip_allowed:
 		return
 	if Input.is_key_pressed(KEY_SPACE):
+		skip_indicator.show()
 		hold_elapsed = minf(hold_elapsed + delta, HOLD_DURATION)
 	else:
 		hold_elapsed = 0.0
+		skip_indicator.hide()
 	skip_indicator.set("progress", hold_elapsed / HOLD_DURATION)
 	if hold_elapsed >= HOLD_DURATION:
 		_finish_cutscene()

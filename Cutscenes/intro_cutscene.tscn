@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://ckiisj3kysncc"]
 
 [ext_resource type="Script" uid="uid://dhwk0vmajp4o8" path="res://Cutscenes/script/intro_cutscene.gd" id="1_intro"]
-[ext_resource type="VideoStream" uid="uid://ct7y2nym0ogo2" path="res://Cutscenes/ogv/0927(1).ogv" id="2_qhpsq"]
+[ext_resource type="VideoStream" uid="uid://d1d33miujnspj" path="res://Cutscenes/ogv/0927_1_.ogv" id="2_qhpsq"]
 [ext_resource type="Script" uid="uid://px3c7libp5sh" path="res://Cutscenes/script/cutscene_skip_indicator.gd" id="3_skip"]
-[ext_resource type="FontFile" uid="uid://b7by8iiefmx8l" path="res://Fonts/PixelifySans-Bold.ttf" id="4_font"]
 
 [node name="IntroCutscene" type="Control" unique_id=1293562164]
 layout_mode = 3
@@ -36,35 +35,21 @@ stream = ExtResource("2_qhpsq")
 expand = true
 
 [node name="SkipIndicator" type="Control" parent="." unique_id=1750457909]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -178.0
-offset_top = -152.0
-offset_right = -82.0
-offset_bottom = -56.0
+offset_left = -44.0
+offset_top = -44.0
+offset_right = -12.0
+offset_bottom = -12.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("3_skip")
-
-[node name="Label" type="Label" parent="SkipIndicator" unique_id=1368898857]
-layout_mode = 0
-offset_left = -88.0
-offset_top = 95.0
-offset_right = 184.0
-offset_bottom = 126.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 18
-text = "SEGURE ESPAÇO PARA PULAR"
-horizontal_alignment = 1
 
 [node name="Black" type="ColorRect" parent="." unique_id=1403717472]
 visible = false
