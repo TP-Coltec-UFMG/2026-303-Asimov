@@ -1,6 +1,14 @@
 extends Button
 class_name InputRemapButton
 
+signal remap_conflict(message: String)
+
+const CONTEXT_ACTIONS: PackedStringArray = [
+	"fire",
+	"acende_lanterna",
+	"usar_extintor"
+]
+
 
 @export var action: String
 @export var index: int = 0
@@ -67,6 +75,14 @@ func remapear(novo_input: InputEvent) -> void:
 	elif input_salvo is InputEventJoypadButton:
 		(input_salvo as InputEventJoypadButton).pressed = false
 
+	var unchanged := index < eventos.size() and _events_match(eventos[index], input_salvo)
+	if not unchanged:
+		var conflicts := _find_conflicts(input_salvo)
+		if not conflicts.is_empty():
+			remap_conflict.emit(
+				"AVISO: %s também usa %s" % [", ".join(conflicts), _get_input_text(input_salvo)]
+			)
+
 	InputMap.action_erase_events(action)
 	var substituiu := false
 
@@ -93,6 +109,48 @@ func remapear(novo_input: InputEvent) -> void:
 	esperando_input = false
 	atualizar_texto()
 	grab_focus()
+
+
+func _find_conflicts(input_event: InputEvent) -> PackedStringArray:
+	var conflicts := PackedStringArray()
+	for node: Node in get_tree().get_nodes_in_group(&"Botoes_Controles"):
+		var other := node as InputRemapButton
+		if other == null or other == self or other.action == action:
+			continue
+		if _is_allowed_context_pair(action, other.action):
+			continue
+		for existing: InputEvent in InputMap.action_get_events(other.action):
+			if _events_match(existing, input_event):
+				if not conflicts.has(other.action_name):
+					conflicts.append(other.action_name)
+				break
+	return conflicts
+
+
+func _is_allowed_context_pair(first: String, second: String) -> bool:
+	return CONTEXT_ACTIONS.has(first) and CONTEXT_ACTIONS.has(second)
+
+
+func _events_match(first: InputEvent, second: InputEvent) -> bool:
+	if first is InputEventKey and second is InputEventKey:
+		var first_key := first as InputEventKey
+		var second_key := second as InputEventKey
+		var first_code := first_key.physical_keycode if first_key.physical_keycode != 0 else first_key.keycode
+		var second_code := second_key.physical_keycode if second_key.physical_keycode != 0 else second_key.keycode
+		return (
+			first_code == second_code
+			and first_key.ctrl_pressed == second_key.ctrl_pressed
+			and first_key.shift_pressed == second_key.shift_pressed
+			and first_key.alt_pressed == second_key.alt_pressed
+			and first_key.meta_pressed == second_key.meta_pressed
+		)
+	if first is InputEventMouseButton and second is InputEventMouseButton:
+		return (first as InputEventMouseButton).button_index == (second as InputEventMouseButton).button_index
+	if first is InputEventJoypadButton and second is InputEventJoypadButton:
+		var first_button := first as InputEventJoypadButton
+		var second_button := second as InputEventJoypadButton
+		return first_button.button_index == second_button.button_index and first_button.device == second_button.device
+	return false
 
 
 

@@ -22,6 +22,7 @@ const REMAPPABLE_ACTIONS: PackedStringArray = [
 	"usar_extintor",
 	"fire",
 	"reload",
+	"show_tasks",
 	"esc"
 ]
 
@@ -44,6 +45,7 @@ var save_data: Dictionary = {
 	"alto_contraste" : false,
 	"cor_alto_contraste" : Color.YELLOW,
 	"movimento_camera" : true,
+	"assistencia_mira" : false,
 	"input_bindings": {},
 	"interface_size" : 0,
 	"tutorial_seen" : false,
@@ -119,6 +121,7 @@ func _legacy_profile_has_played(data: Dictionary) -> bool:
 func _apply_load() -> void:
 	save_data["filtro_de_daltonismo"] = clampi(int(save_data.get("filtro_de_daltonismo", 0)), 0, 3)
 	save_data["movimento_camera"] = bool(save_data.get("movimento_camera", true))
+	save_data["assistencia_mira"] = bool(save_data.get("assistencia_mira", false))
 
 	if str(save_data.get("job", "")) == "engenheiro":
 		save_data["job"] = "engenheiro_eletrico"

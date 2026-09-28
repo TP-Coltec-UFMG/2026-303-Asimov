@@ -33,6 +33,7 @@ const MAX_HEALTH: float = 75.0
 const MISSION_CHECK_INTERVAL: float = 0.25
 const ROOM_BOUNDS: Rect2 = Rect2(-205.0, -76.0, 470.0, 274.0)
 const DRONE_PROJECTILE := preload("res://Objects/drone_projectile.tscn")
+const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
 
 @export var patrol_points: Array[Vector2] = [
 	Vector2(-164, -48),
@@ -81,15 +82,38 @@ var damage_tween: Tween
 var shot_charge_remaining: float = 0.0
 var muzzle_tween: Tween
 var explosion_tween: Tween
+var max_health: float = MAX_HEALTH
+var speed_multiplier: float = 1.0
+var detection_range: float = DETECTION_RANGE
+var alert_duration: float = ALERT_DURATION
+var shot_interval: float = SHOT_INTERVAL
+var shot_telegraph_duration: float = SHOT_TELEGRAPH_DURATION
+var projectile_speed: float = 145.0
+var projectile_damage: float = 18.0
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_to_group(&"security_drones")
+	_apply_difficulty_profile()
 	patrol_index = randi_range(0, maxi(0, patrol_points.size() - 1))
 	patrol_direction = 1 if randf() >= 0.5 else -1
 	strafe_direction = 1.0 if randf() >= 0.5 else -1.0
 	flight_phase = randf_range(0.0, TAU)
 	_set_dormant()
+
+
+func _apply_difficulty_profile() -> void:
+	var profile := DIFFICULTY_SETTINGS.drone_profile()
+	max_health = float(profile.get("health", MAX_HEALTH))
+	speed_multiplier = float(profile.get("speed_multiplier", 1.0))
+	detection_range = float(profile.get("detection_range", DETECTION_RANGE))
+	alert_duration = float(profile.get("alert_duration", ALERT_DURATION))
+	shot_interval = float(profile.get("shot_interval", SHOT_INTERVAL))
+	shot_telegraph_duration = float(profile.get("shot_telegraph", SHOT_TELEGRAPH_DURATION))
+	projectile_speed = float(profile.get("projectile_speed", 145.0))
+	projectile_damage = float(profile.get("projectile_damage", 18.0))
+	current_health = max_health
 
 
 func _physics_process(delta: float) -> void:
@@ -102,7 +126,7 @@ func _physics_process(delta: float) -> void:
 	shot_time = maxf(0.0, shot_time - delta)
 	if not _player_can_be_chased():
 		desired_velocity = Vector2.ZERO
-		velocity = velocity.move_toward(Vector2.ZERO, BRAKE_ACCELERATION * delta)
+		velocity = velocity.move_toward(Vector2.ZERO, BRAKE_ACCELERATION * speed_multiplier * delta)
 		return
 	flight_phase = fmod(flight_phase + delta * 3.1, TAU)
 	state_time += delta
@@ -168,7 +192,7 @@ func _activate() -> void:
 	lost_sight_time = 0.0
 	shot_time = 0.35
 	shot_charge_remaining = 0.0
-	current_health = MAX_HEALTH
+	current_health = max_health
 	velocity = Vector2.ZERO
 	desired_velocity = Vector2.ZERO
 	collision_layer = 2
@@ -222,8 +246,8 @@ func _update_patrol(_delta: float) -> void:
 		target = patrol_points[patrol_index]
 		offset = target - position
 	var speed_pulse := 1.0 + sin(flight_phase) * 0.06
-	desired_velocity = offset.normalized() * PATROL_SPEED * speed_pulse
-	if _can_see_player(DETECTION_RANGE, true):
+	desired_velocity = offset.normalized() * PATROL_SPEED * speed_multiplier * speed_pulse
+	if _can_see_player(detection_range, true):
 		_begin_alert()
 
 
@@ -240,7 +264,7 @@ func _begin_alert() -> void:
 func _update_alert(delta: float) -> void:
 	desired_velocity = Vector2.ZERO
 	_face_player(delta)
-	if state_time >= ALERT_DURATION:
+	if state_time >= alert_duration:
 		drone_state = DroneState.CHASE
 		state_time = 0.0
 		lost_sight_time = 0.0
@@ -260,11 +284,11 @@ func _update_chase(delta: float) -> void:
 		if shot_charge_remaining <= 0.0:
 			_fire_at_player(direction)
 	elif distance < RETREAT_DISTANCE:
-		desired_velocity = -direction * CHASE_SPEED
+		desired_velocity = -direction * CHASE_SPEED * speed_multiplier
 	elif distance > PREFERRED_DISTANCE + 18.0:
-		desired_velocity = direction * CHASE_SPEED
+		desired_velocity = direction * CHASE_SPEED * speed_multiplier
 	else:
-		desired_velocity = direction.orthogonal() * CHASE_SPEED * 0.55 * strafe_direction
+		desired_velocity = direction.orthogonal() * CHASE_SPEED * speed_multiplier * 0.55 * strafe_direction
 	desired_velocity *= 1.0 + sin(flight_phase * 1.35) * 0.08
 	if shot_time <= 0.0 and shot_charge_remaining <= 0.0 and _can_see_player(LOST_RANGE, false):
 		_start_shot_telegraph()
@@ -279,7 +303,7 @@ func _update_chase(delta: float) -> void:
 func _begin_cooldown() -> void:
 	drone_state = DroneState.COOLDOWN
 	state_time = 0.0
-	desired_velocity = -facing_direction * PATROL_SPEED
+	desired_velocity = -facing_direction * PATROL_SPEED * speed_multiplier
 	vision_cone.color = Color(0.35, 0.7, 1.0, 0.1)
 	alert_light.visible = false
 	shot_charge_remaining = 0.0
@@ -288,7 +312,7 @@ func _begin_cooldown() -> void:
 
 func _update_cooldown(_delta: float) -> void:
 	if state_time < 0.55:
-		desired_velocity = -facing_direction * PATROL_SPEED
+		desired_velocity = -facing_direction * PATROL_SPEED * speed_multiplier
 	else:
 		desired_velocity = Vector2.ZERO
 	if state_time >= COOLDOWN_DURATION:
@@ -304,8 +328,8 @@ func _fire_at_player(direction: Vector2) -> void:
 	var projectile := DRONE_PROJECTILE.instantiate() as Node2D
 	get_tree().current_scene.add_child(projectile)
 	projectile.global_position = global_position + direction * 9.0
-	projectile.call("setup", direction)
-	shot_time = SHOT_INTERVAL
+	projectile.call("setup", direction, projectile_speed, projectile_damage)
+	shot_time = shot_interval
 	shot_warning.hide()
 	_show_muzzle_flash()
 	shot_sfx.pitch_scale = randf_range(0.94, 1.08)
@@ -313,7 +337,7 @@ func _fire_at_player(direction: Vector2) -> void:
 
 
 func _start_shot_telegraph() -> void:
-	shot_charge_remaining = SHOT_TELEGRAPH_DURATION
+	shot_charge_remaining = shot_telegraph_duration
 	shot_warning.show()
 	alert_sfx.pitch_scale = 1.35
 	alert_sfx.play()
@@ -328,7 +352,7 @@ func _update_shot_warning() -> void:
 		Vector2.ZERO,
 		to_local(current_player.global_position)
 	])
-	var progress := 1.0 - clampf(shot_charge_remaining / SHOT_TELEGRAPH_DURATION, 0.0, 1.0)
+	var progress := 1.0 - clampf(shot_charge_remaining / shot_telegraph_duration, 0.0, 1.0)
 	shot_warning.width = lerpf(0.65, 1.8, progress)
 	shot_warning.modulate.a = lerpf(0.25, 1.0, progress)
 
@@ -509,14 +533,14 @@ func _apply_flight_acceleration(delta: float) -> void:
 		acceleration = CHASE_ACCELERATION
 	elif desired_velocity.length_squared() < 0.01:
 		acceleration = BRAKE_ACCELERATION
-	velocity = velocity.move_toward(desired_velocity, acceleration * delta)
+	velocity = velocity.move_toward(desired_velocity, acceleration * speed_multiplier * delta)
 
 
 func _update_flight_visuals(delta: float) -> void:
 	rotation = 0.0
 	if damage_tween != null and damage_tween.is_running():
 		return
-	var lateral_ratio := clampf(velocity.x / CHASE_SPEED, -1.0, 1.0)
+	var lateral_ratio := clampf(velocity.x / (CHASE_SPEED * speed_multiplier), -1.0, 1.0)
 	var target_tilt := lateral_ratio * MAX_FLIGHT_TILT
 	var tilt_weight := 1.0 - exp(-FLIGHT_TILT_RESPONSE * delta)
 	animated_sprite.rotation = lerp_angle(animated_sprite.rotation, target_tilt, tilt_weight)
@@ -527,7 +551,7 @@ func _update_health_bar() -> void:
 	if not is_instance_valid(health_bar):
 		return
 	health_bar.rotation = -rotation
-	var ratio := clampf(current_health / MAX_HEALTH, 0.0, 1.0)
+	var ratio := clampf(current_health / max_health, 0.0, 1.0)
 	health_fill.size.x = 24.0 * ratio
 	if ratio > 0.5:
 		health_fill.color = Color(0.2, 0.92, 0.46, 1.0)
@@ -538,5 +562,5 @@ func _update_health_bar() -> void:
 	health_bar.visible = (
 		drone_state != DroneState.DORMANT
 		and drone_state != DroneState.DESTROYED
-		and (drone_state == DroneState.ALERT or drone_state == DroneState.CHASE or current_health < MAX_HEALTH)
+		and (drone_state == DroneState.ALERT or drone_state == DroneState.CHASE or current_health < max_health)
 	)

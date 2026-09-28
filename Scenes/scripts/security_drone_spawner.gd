@@ -2,7 +2,7 @@ class_name SecurityDroneSpawner
 extends Node
 
 const DRONE_SCENE := preload("res://Objects/security_drone.tscn")
-const SPAWN_INTERVAL: float = 30.0
+const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
 const SCREEN_MARGIN: float = 18.0
 const MINIMUM_PLAYER_DISTANCE: float = 105.0
 const SPAWN_POINTS: Array[Vector2] = [
@@ -32,13 +32,27 @@ func _process(delta: float) -> void:
 		return
 	if not _gameplay_allows_spawn():
 		return
+	var profile := DIFFICULTY_SETTINGS.drone_profile()
+	var spawn_interval := float(profile.get("spawn_interval", 30.0))
 	elapsed += delta
-	if elapsed < SPAWN_INTERVAL:
+	if elapsed < spawn_interval:
+		return
+	if _active_drone_count() >= int(profile.get("max_active", 3)):
+		elapsed = spawn_interval - 0.5
 		return
 	if _spawn_reinforcement():
 		elapsed = 0.0
 	else:
-		elapsed = SPAWN_INTERVAL - 0.5
+		elapsed = spawn_interval - 0.5
+
+
+func _active_drone_count() -> int:
+	var count := 0
+	for node in get_tree().get_nodes_in_group(&"security_drones"):
+		var drone := node as SecurityDrone
+		if drone != null and drone.visible and not drone.destroyed:
+			count += 1
+	return count
 
 
 func _find_player() -> Player:

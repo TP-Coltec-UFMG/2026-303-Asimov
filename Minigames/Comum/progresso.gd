@@ -1,5 +1,7 @@
 extends Node
 
+const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
+
 var concluidas: Array = [[false, false, false, false], [false, false, false, false], [false]]
 var som_ativo: bool = true
 var modo_teste: bool = false
@@ -177,12 +179,13 @@ func concluir_refrigeracao_ia() -> void:
 		return
 	var temporizador := get_tree().get_first_node_in_group("temporizador_jogo")
 	var tempo_recompensado := maxf(SaveGame.tempo_atual, 0.0)
+	var recompensa := DIFFICULTY_SETTINGS.cooling_reward_seconds()
 	if is_instance_valid(temporizador) and temporizador.has_method("get_tempo_restante"):
 		var restante := float(temporizador.call("get_tempo_restante"))
-		tempo_recompensado = minf(restante + 90.0, 600.0)
+		tempo_recompensado = restante + recompensa
 		temporizador.call("carregar_tempo_restante", tempo_recompensado)
 	else:
-		tempo_recompensado = minf(tempo_recompensado + 90.0, 600.0)
+		tempo_recompensado += recompensa
 
 	SaveGame.tempo_atual = tempo_recompensado
 	estado[_cooling_terminal_state_key(normalized_terminal)] = true

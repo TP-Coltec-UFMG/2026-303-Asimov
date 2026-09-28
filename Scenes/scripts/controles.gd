@@ -28,8 +28,10 @@ const CONTROL_GROUPS = [
 		"actions": [
 			{"id": "interact", "label": "INTERAGIR"},
 			{"id": "pular_pensamento", "label": "PULAR FALA"},
+			{"id": "show_tasks", "label": "VER TAREFAS"},
 			{"id": "toggle_alarm", "label": "DESLIGAR ALARME"},
 			{"id": "fire", "label": "ATIRAR"},
+			{"id": "reload", "label": "RECARREGAR"},
 			{"id": "acende_lanterna", "label": "LIGAR LUZ"},
 			{"id": "usar_extintor", "label": "USAR EXTINTOR"},
 			{"id": "esc", "label": "PAUSAR"},
@@ -42,6 +44,9 @@ const PANEL_SIZE := Vector2(452.0, 215.0)
 
 var _button_icon: Texture2D
 var _button_font: Font
+var _conflict_warning_panel: PanelContainer
+var _conflict_warning_label: Label
+var _conflict_warning_tween: Tween
 
 
 func _ready() -> void:
@@ -86,10 +91,22 @@ func _build_controls_menu() -> void:
 	outer_margin.add_theme_constant_override("margin_bottom", 5)
 	panel.add_child(outer_margin)
 
+	var scroll := ScrollContainer.new()
+	scroll.name = "ControlsScroll"
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	outer_margin.add_child(scroll)
+
 	var content := VBoxContainer.new()
 	content.name = "Content"
+	content.custom_minimum_size.x = 426.0
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content.add_theme_constant_override("separation", 4)
-	outer_margin.add_child(content)
+	scroll.add_child(content)
+
+	_add_aim_assist_setting(content)
 
 	var columns := HBoxContainer.new()
 	columns.name = "Columns"
@@ -104,6 +121,69 @@ func _build_controls_menu() -> void:
 			group_index
 		)
 
+	_build_conflict_warning(panel)
+
+
+func _add_aim_assist_setting(content: VBoxContainer) -> void:
+	var aim_toggle := CheckButton.new()
+	aim_toggle.text = "ASSISTÊNCIA DE MIRA"
+	aim_toggle.button_pressed = bool(Configs.configs.get("assistencia_mira", false))
+	aim_toggle.custom_minimum_size.y = 23.0
+	aim_toggle.focus_mode = Control.FOCUS_ALL
+	aim_toggle.add_theme_font_override("font", _button_font)
+	aim_toggle.add_theme_font_size_override("font_size", 9)
+	aim_toggle.add_theme_color_override("font_color", Color.WHITE)
+	aim_toggle.flat = true
+	aim_toggle.add_to_group(&"alto_contraste")
+	aim_toggle.toggled.connect(func(enabled: bool) -> void:
+		Configs._change_assistencia_mira(enabled)
+		_save_control_settings()
+	)
+	content.add_child(aim_toggle)
+
+
+func _save_control_settings() -> void:
+	var save_load := get_node_or_null("/root/SaveLoad")
+	if save_load != null and save_load.has_method("_save"):
+		save_load.call("_save")
+
+
+func _build_conflict_warning(panel: PanelContainer) -> void:
+	_conflict_warning_panel = PanelContainer.new()
+	_conflict_warning_panel.name = "ConflictWarning"
+	_conflict_warning_panel.position = Vector2(8.0, 183.0)
+	_conflict_warning_panel.size = Vector2(436.0, 25.0)
+	_conflict_warning_panel.z_index = 20
+	_conflict_warning_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_conflict_warning_panel.add_theme_stylebox_override(
+		"panel",
+		_make_stylebox(Color(0.2, 0.06, 0.04, 0.98), Color(1.0, 0.63, 0.2, 1.0), 1, 2)
+	)
+	panel.add_child(_conflict_warning_panel)
+
+	_conflict_warning_label = Label.new()
+	_conflict_warning_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_conflict_warning_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_conflict_warning_label.add_theme_font_override("font", _button_font)
+	_conflict_warning_label.add_theme_font_size_override("font_size", 8)
+	_conflict_warning_label.add_theme_color_override("font_color", Color.WHITE)
+	_conflict_warning_panel.add_child(_conflict_warning_label)
+	_conflict_warning_panel.hide()
+
+
+func _show_conflict_warning(message: String) -> void:
+	if _conflict_warning_panel == null or _conflict_warning_label == null:
+		return
+	if _conflict_warning_tween != null and _conflict_warning_tween.is_valid():
+		_conflict_warning_tween.kill()
+	_conflict_warning_label.text = message
+	_conflict_warning_panel.modulate.a = 1.0
+	_conflict_warning_panel.show()
+	_conflict_warning_tween = create_tween()
+	_conflict_warning_tween.tween_interval(3.5)
+	_conflict_warning_tween.tween_property(_conflict_warning_panel, "modulate:a", 0.0, 0.45)
+	_conflict_warning_tween.tween_callback(_conflict_warning_panel.hide)
+
 func _add_control_group(
 	columns: HBoxContainer,
 	group_data: Dictionary,
@@ -111,7 +191,7 @@ func _add_control_group(
 ) -> void:
 	var group_panel := PanelContainer.new()
 	group_panel.name = "Group%d" % group_index
-	group_panel.custom_minimum_size = Vector2(142.0, 0.0)
+	group_panel.custom_minimum_size = Vector2(138.0, 0.0)
 	group_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	group_panel.add_theme_stylebox_override(
 		"panel",
@@ -221,6 +301,7 @@ func _add_remap_button(
 	)
 	button.add_to_group(&"Botoes_Controles")
 	button.add_to_group(&"alto_contraste")
+	button.remap_conflict.connect(_show_conflict_warning)
 	button.pressed.connect(button._on_pressed)
 	column.add_child(button)
 

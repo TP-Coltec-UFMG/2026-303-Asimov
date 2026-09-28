@@ -20,10 +20,15 @@ const MAGAZINE_SIZE: int = 7
 const STARTING_RESERVE: int = 7
 const MAX_RESERVE: int = 28
 const RELOAD_DURATION: float = 1.15
+const AIM_ASSIST_RANGE: float = 260.0
+const AIM_ASSIST_CONE: float = 0.24
 
 var current_ammo: int = MAGAZINE_SIZE
 var reserve_ammo: int = STARTING_RESERVE
 var reloading: bool = false
+var aim_assist_locked: bool = false
+var crosshair_active: bool = false
+var previous_mouse_mode: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 
 func _ready() -> void:
 	if not no_inventario:
@@ -34,7 +39,15 @@ func _ready() -> void:
 			queue_free()
 			return
 			
+	reticula.top_level = true
+	reticula.z_index = 100
+	reticula.hide()
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process(false)
+
+
+func _exit_tree() -> void:
+	_set_crosshair_active(false)
 
 func foi_coletado() -> void:
 	SaveGame.set_object_collected(save_id)
@@ -78,22 +91,37 @@ func add_ammo(amount: int) -> int:
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(player):
+		_set_crosshair_active(false)
+		return
+	var weapon_active: bool = (
+		bool(player.usando_arma)
+		and bool(player.is_physics_processing())
+		and not bool(get_tree().paused)
+		and not bool(DialogManager.is_showing_dialog)
+	)
+	_set_crosshair_active(weapon_active)
+	if not weapon_active:
 		return
 	if Input.is_action_just_pressed("reload") and player.usando_arma:
 		_start_reload()
 	var mouse_target := player.get_global_mouse_position()
 	var weapon_anchor := player.global_position + position_on_player.position
-	var anchor_direction := mouse_target - weapon_anchor
+	var assisted_target := _aim_assist_target(weapon_anchor, mouse_target)
+	reticula.global_position = assisted_target
+	reticula.self_modulate = Color(0.45, 1.0, 0.55, 1.0) if aim_assist_locked else Color.WHITE
+	reticula.scale = Vector2.ONE * (0.21 if aim_assist_locked else 0.18)
+	var anchor_direction := assisted_target - weapon_anchor
 	if anchor_direction.length_squared() <= 0.01:
 		return
 	anchor_direction = anchor_direction.normalized()
 	var aim_angle := anchor_direction.angle()
 	var shot_origin := weapon_anchor + bullet_spawn.position.rotated(aim_angle)
-	var aim_direction := mouse_target - shot_origin
+	var aim_direction := assisted_target - shot_origin
 	if aim_direction.length_squared() <= 0.01:
 		return
 	aim_direction = aim_direction.normalized()
 	position_on_player.rotation = aim_direction.angle()
+	shot_origin = weapon_anchor + bullet_spawn.position.rotated(position_on_player.rotation)
 	if (
 		Input.is_action_just_pressed("fire")
 		and player.usando_arma
@@ -114,6 +142,54 @@ func _process(_delta: float) -> void:
 		_play_world_shot()
 		timer.start()
 		refresh_hud()
+
+
+func _aim_assist_target(origin: Vector2, mouse_target: Vector2) -> Vector2:
+	aim_assist_locked = false
+	if not bool(Configs.configs.get("assistencia_mira", false)):
+		return mouse_target
+	var mouse_direction := mouse_target - origin
+	if mouse_direction.length_squared() <= 0.01:
+		return mouse_target
+	mouse_direction = mouse_direction.normalized()
+	var best_target := mouse_target
+	var best_score := INF
+	for candidate: Node in get_tree().get_nodes_in_group(&"security_drones"):
+		var drone := candidate as Node2D
+		if drone == null or not drone.is_visible_in_tree() or bool(drone.get("destroyed")):
+			continue
+		var screen_position := get_viewport().get_canvas_transform() * drone.global_position
+		if not get_viewport_rect().grow(8.0).has_point(screen_position):
+			continue
+		var to_drone := drone.global_position - origin
+		var distance := to_drone.length()
+		if distance <= 0.01 or distance > AIM_ASSIST_RANGE:
+			continue
+		var angle := absf(mouse_direction.angle_to(to_drone / distance))
+		if angle > AIM_ASSIST_CONE:
+			continue
+		var score := angle * 4.0 + distance / AIM_ASSIST_RANGE
+		if score < best_score:
+			best_score = score
+			best_target = drone.global_position
+	aim_assist_locked = best_score < INF
+	return best_target
+
+
+func _set_crosshair_active(active: bool) -> void:
+	if active:
+		if not crosshair_active:
+			previous_mouse_mode = Input.mouse_mode
+		crosshair_active = true
+		reticula.show()
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+		return
+	if not crosshair_active:
+		reticula.hide()
+		return
+	crosshair_active = false
+	reticula.hide()
+	Input.mouse_mode = previous_mouse_mode
 
 
 func _start_reload() -> void:

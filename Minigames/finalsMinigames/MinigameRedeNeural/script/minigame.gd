@@ -5,7 +5,7 @@ signal minigame_exit_requested
 
 const MAX_W: float = 100.0
 const START_W: float = 15.0
-const CORRECT_ANSWERS_PER_PARAMETER: int = 3
+const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
 const WRONG_PENALTY: float = 7.0
 const FEEDBACK_DURATION: float = 3.2
 const PARAM_KEYS: Array[String] = ["human", "poll", "destr", "risk"]
@@ -38,6 +38,7 @@ var pause_open: bool = false
 var training_completed: bool = false
 var run_generation: int = 0
 var animation_was_playing: bool = false
+var correct_answers_per_parameter: int = 3
 
 @onready var param1_value: Label = $Param1Value
 @onready var param2_value: Label = $Param2Value
@@ -266,6 +267,7 @@ var tiers: Array = [
 
 
 func _ready() -> void:
+	correct_answers_per_parameter = DIFFICULTY_SETTINGS.neural_answers_per_parameter()
 	randomize()
 	pause_overlay.hide()
 	for key in PARAM_KEYS:
@@ -599,10 +601,10 @@ func _avaliar(player_agrees: bool) -> void:
 		correct_count += 1
 		var parameter_correct: int = mini(
 			int(correct_by_parameter[foco]) + 1,
-			CORRECT_ANSWERS_PER_PARAMETER
+			correct_answers_per_parameter
 		)
 		correct_by_parameter[foco] = parameter_correct
-		var progress := float(parameter_correct) / float(CORRECT_ANSWERS_PER_PARAMETER)
+		var progress := float(parameter_correct) / float(correct_answers_per_parameter)
 		weights[foco] = lerpf(START_W, MAX_W, progress)
 	else:
 		weights[foco] = clampf(weights[foco] - WRONG_PENALTY, 0.0, MAX_W)

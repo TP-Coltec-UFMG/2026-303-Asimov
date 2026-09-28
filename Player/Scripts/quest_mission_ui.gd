@@ -232,11 +232,12 @@ func _set_panel_alpha(alpha: float) -> void:
 		(part as CanvasItem).modulate.a = alpha
 
 
-func _unhandled_key_input(event: InputEvent) -> void:
-	if standalone_mode or not event is InputEventKey:
+func _unhandled_input(event: InputEvent) -> void:
+	if standalone_mode:
 		return
-	var key := event as InputEventKey
-	if not key.pressed or key.echo or key.keycode != KEY_TAB:
+	if not event.is_action_pressed("show_tasks"):
+		return
+	if event is InputEventKey and (event as InputEventKey).echo:
 		return
 	var current_player := get_parent() as Player
 	if not desired_visible or hidden_for_elevator or get_tree().paused:

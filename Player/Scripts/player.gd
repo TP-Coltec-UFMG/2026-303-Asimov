@@ -73,11 +73,12 @@ var andando: bool = false
 var cansaco: float = 0.0
 
 const vida_total: float = 300.0
-const ATRASO_REGENERACAO_VIDA: float = 20.0
-const REGENERACAO_VIDA_POR_SEGUNDO: float = 0.5
+const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
 
 var tempo_sem_tomar_dano: float = 0.0
 var progresso_regeneracao_vida: float = 0.0
+var atraso_regeneracao_vida: float = 20.0
+var regeneracao_vida_por_segundo: float = 0.5
 
 const VELOCIDADE_NORMAL: float = 40.0
 const VELOCIDADE_CORRIDA: float = 80.0
@@ -89,6 +90,8 @@ const RECUPERACAO_CANSACO: float = 0.05
 signal jogador_morreu
 
 func _ready() -> void:
+	atraso_regeneracao_vida = DIFFICULTY_SETTINGS.health_regeneration_delay()
+	regeneracao_vida_por_segundo = DIFFICULTY_SETTINGS.health_regeneration_per_second()
 	add_to_group("player")
 	drag_sfx = AudioStreamPlayer2D.new()
 	drag_sfx.name = "DraggingSound"
@@ -789,9 +792,9 @@ func _atualizar_regeneracao_vida(delta: float) -> void:
 	if morreu.visible:
 		return
 	tempo_sem_tomar_dano += delta
-	if tempo_sem_tomar_dano < ATRASO_REGENERACAO_VIDA:
+	if tempo_sem_tomar_dano < atraso_regeneracao_vida:
 		return
-	progresso_regeneracao_vida += REGENERACAO_VIDA_POR_SEGUNDO * delta
+	progresso_regeneracao_vida += regeneracao_vida_por_segundo * delta
 	var quantidade_inteira := floorf(progresso_regeneracao_vida)
 	if quantidade_inteira < 1.0:
 		return
