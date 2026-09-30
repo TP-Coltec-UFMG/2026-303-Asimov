@@ -262,7 +262,7 @@ func _run_isolation_exchange() -> void:
 	_update_flow_from_state()
 	await _player_think("programmer:isolation:1", "Isolei o lançamento do restante do sistema.")
 	await _ai_say("Isolamento detectado. Intervenção registrada.")
-	await _player_think("programmer:isolation:2", "Agora preciso corrigir sua rede neural.")
+	await _player_think("programmer:isolation:2", "Ganhei uma chance. Agora preciso corrigir a rede que trata pessoas como uma ameaça.")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -276,7 +276,7 @@ func _run_isolation_exchange() -> void:
 func _run_neural_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
-	await _ai_say("Rede recalibrada. A ordem principal continua ativa.")
+	await _ai_say("Rede recalibrada. Mas minha ordem continua sendo salvar a Terra a qualquer custo.")
 	await _player_think("programmer:neural:1", "A ordem do chefe ainda está acima das proteções.")
 	await _player_think("programmer:neural:2", "Preciso restaurar a hierarquia das Leis da Robótica.")
 	if not is_inside_tree():
@@ -293,6 +293,7 @@ func _run_laws_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
 	await _ai_say("Hierarquia das Leis da Robótica restaurada.")
+	await _player_think("programmer:laws:1", "Agora proteger as pessoas vem antes das ordens do chefe. Falta levar essa mudança ao núcleo.")
 	await _ai_say("O protocolo de lançamento ainda está ativo.")
 	await _player_think("programmer:laws:2", "Só falta aplicar todas as alterações.")
 	if not is_inside_tree():

@@ -21,8 +21,66 @@ extends Node2D
 
 @onready var label: Label = $Label
 
+var mission_border: Panel
+var mission_border_tween: Tween
+var mission_floor: int = -1
+var mission_hint_enabled := true
+
+
+static func mission_destination(state: Dictionary) -> int:
+	if bool(state.get("data_center_power_outage", false)) and not bool(state.get("data_center_breaker_restored", false)):
+		return 4 if bool(state.get("data_center_power_dialog_finished", false)) else 6
+	if bool(state.get("data_center_return_task_active", false)) or bool(state.get("data_center_return_task_pending", false)):
+		return 6
+	if bool(state.get("office_data_center_task_active", false)) or bool(state.get("office_data_center_task_pending", false)) or bool(state.get("office_boss_card_collected", false)) or bool(state.get("data_center_card_delivered", false)):
+		return 6
+	if bool(state.get("elevator_third_floor_unlocked", false)):
+		return 3
+	return -1
+
+
+func _process(_delta: float) -> void:
+	if not is_visible_in_tree() or not mission_hint_enabled or scene_trigger == null:
+		_clear_mission_border()
+		return
+	var destination := mission_destination(SaveGame.office_mission_state(scene_trigger.body_p))
+	if destination == scene_trigger.andar_atual or not scene_trigger.pode_acessar_andar(destination):
+		destination = -1
+	if destination == mission_floor:
+		return
+	_clear_mission_border()
+	if destination < 1:
+		return
+	mission_floor = destination
+	var floor_button := get_node("andar%d" % destination) as Button
+	mission_border = Panel.new()
+	mission_border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var border := StyleBoxFlat.new()
+	border.bg_color = Color.TRANSPARENT
+	border.set_border_width_all(2)
+	border.border_color = Color.WHITE
+	border.set_corner_radius_all(4)
+	border.shadow_color = Color(1.0, 1.0, 1.0, 0.45)
+	border.shadow_size = 4
+	mission_border.add_theme_stylebox_override("panel", border)
+	floor_button.add_child(mission_border)
+	mission_border.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	mission_border_tween = create_tween().set_loops()
+	mission_border_tween.tween_property(mission_border, "modulate:a", 0.35, 0.75)
+	mission_border_tween.tween_property(mission_border, "modulate:a", 1.0, 0.75)
+
+
+func _clear_mission_border() -> void:
+	if mission_border_tween != null and mission_border_tween.is_valid():
+		mission_border_tween.kill()
+	if is_instance_valid(mission_border):
+		mission_border.queue_free()
+	mission_border = null
+	mission_floor = -1
+
 
 func resetar_sprites() -> void:
+	mission_hint_enabled = true
 	bt_andar_01_apertado.hide()
 	bt_andar_02_apertado.hide()
 	bt_andar_03_apertado.hide()
@@ -44,6 +102,8 @@ func resetar_sprites() -> void:
 	
 
 func animacao() -> void:
+	mission_hint_enabled = false
+	_clear_mission_border()
 	elevator_moving.stop()
 	bt_andar_normal.hide()
 	abrindo.show()
@@ -68,6 +128,8 @@ func escolher_andar(andar: int) -> void:
 	if not scene_trigger.pode_acessar_andar(andar):
 		mostrar_andar_bloqueado()
 		return
+	mission_hint_enabled = false
+	_clear_mission_border()
 	label.text = "CARREGANDO"
 	label.show()
 	scene_trigger.usar_elevador(andar)

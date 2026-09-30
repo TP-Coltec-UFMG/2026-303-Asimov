@@ -285,19 +285,20 @@ func _show_boss_room_access_task() -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
 		var state: Dictionary = SaveGame.office_mission_state(player)
+		var find_laptop := str(state.get("office_first_hacking_item", "")) == "cabo"
 		if (
 			bool(state.get("office_laptop_collected", false))
 			or bool(state.get("office_cable_collected", false))
 		):
 			quest_ui.show_boss_room_and_cable_tasks(
 				bool(state.get("office_boss_room_access_found", false)),
-				bool(state.get("office_cable_collected", false)),
+				bool(state.get("office_laptop_collected", false) if find_laptop else state.get("office_cable_collected", false)),
 				false,
 				bool(state.get("office_hack_boss_room_ready", false)),
 				bool(state.get("office_boss_room_hacked", false)),
 				false,
 				false,
-				str(state.get("office_first_hacking_item", "")) == "cabo"
+				find_laptop
 			)
 		else:
 			quest_ui.show_find_boss_room_access_task()

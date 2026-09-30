@@ -28,14 +28,14 @@ static func initial_time_seconds() -> float:
 			"hard":
 				return 8.0 * 60.0
 			_:
-				return 10.0 * 60.0
+				return 30.0 * 60.0
 	match difficulty:
 		"easy":
 			return 15.0 * 60.0
 		"hard":
 			return 10.0 * 60.0
 		_:
-			return 12.0 * 60.0
+			return 30.0 * 60.0
 
 
 static func cooling_reward_seconds() -> float:

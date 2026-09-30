@@ -261,7 +261,8 @@ func _start_intro_dialogue() -> void:
 	_update_targets()
 	_queue_dialogue([
 		{"id": "engineer:intro:1", "text": "Cheguei ao núcleo.", "before_stage": 1},
-		{"id": "engineer:intro:2", "text": "Se eu queimar três componentes, o hardware entrará em colapso.", "before_stage": 1},
+		{"id": "engineer:intro:2", "text": "Preciso queimar os componentes que sustentam os sistemas da ASIMOV.", "before_stage": 1},
+		{"id": "engineer:intro:3", "text": "Se os três falharem, a queda pode se espalhar e interromper o lançamento.", "before_stage": 1},
 		{"text": "Você chegou longe. Mas já é tarde demais.", "before_stage": 1},
 	])
 
@@ -272,9 +273,11 @@ func _start_redundancy_dialogue() -> void:
 	_update_targets()
 	_queue_dialogue([
 		{"id": "engineer:first_three", "text": "Os componentes principais caíram. Acabou."},
-		{"text": "Ainda não. Sistema redundante ativado.", "damaged": true},
-		{"id": "engineer:redundancy:1", "text": "Claro... existem sistemas de reserva."},
-		{"id": "engineer:redundancy:3", "text": "Então vou destruir esses também."},
+		{"text": "Ainda não. Meus sistemas de reserva assumiram o controle.", "damaged": true},
+		{"id": "engineer:redundancy:1", "text": "Redundância... ela tem outros sistemas para substituir os que falharam."},
+		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados e os serviços disponíveis mesmo com os componentes principais destruídos."},
+		{"text": "R3servas ativas. O lançamento vai continuar.", "damaged": true},
+		{"id": "engineer:redundancy:3", "text": "Então preciso destruir as três reservas. Sem elas, a ASIMOV não terá como se recuperar."},
 	])
 	_play_reserve_scan.call_deferred()
 

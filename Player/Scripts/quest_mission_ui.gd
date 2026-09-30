@@ -972,10 +972,10 @@ func refresh_saved_state() -> void:
 		set_task_completed(0, true)
 		set_task_completed(1, true)
 		set_task_completed(2, true)
-		if laptop_collected:
+		if laptop_collected or cable_collected:
 			show_boss_room_and_cable_tasks(
 				boss_room_access_found,
-				cable_collected,
+				laptop_collected if find_laptop else cable_collected,
 				false,
 				hack_ready,
 				hack_completed,

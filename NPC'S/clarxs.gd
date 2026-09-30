@@ -26,6 +26,8 @@ var checkpoint_restored: bool = false
 @export var walk_speed: float = 30.0
 @export var run_speed: float = 60.0
 @export var crowd_avoidance_enabled: bool = false
+@export var exit_arrival_radius: float = 24.0
+@export var exit_arrival_delay: float = 0.5
 
 @export var walk_animation_speed: float = 8.0
 @export var run_animation_speed: float = 14.0
@@ -63,6 +65,7 @@ var cached_path_points: Dictionary = {}
 
 var current_point: int = -1
 var path_finished: bool = true
+var exit_arrival_elapsed: float = 0.0
 
 
 var player_in_range: bool = false
@@ -147,6 +150,7 @@ func _on_path_start_requested(path: NPCPath) -> void:
 
 
 func start_path(path: NPCPath) -> void:
+	exit_arrival_elapsed = 0.0
 	if path == null:
 		return
 
@@ -181,6 +185,7 @@ func start_path(path: NPCPath) -> void:
 
 
 func stop_current_path() -> void:
+	exit_arrival_elapsed = 0.0
 	current_path = null
 
 	path_points.clear()
@@ -417,6 +422,8 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if not crowd_avoidance_enabled:
 		return
+	if _update_exit_arrival(delta):
+		return
 	if desperate:
 		update_desperate_movement(delta)
 	elif current_path != null and not path_finished:
@@ -429,6 +436,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
+	if is_queued_for_deletion():
+		return
 	var delta := get_physics_process_delta_time()
 	global_position += safe_velocity * delta
 	if safe_velocity.length_squared() > 1.0:
@@ -445,6 +454,22 @@ func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
 	elif current_path != null and not path_finished and current_point >= 0 and current_point < path_points.size():
 		if global_position.distance_to(path_points[current_point]) <= 2.0:
 			go_to_next_path_point()
+
+
+func _update_exit_arrival(delta: float) -> bool:
+	if current_path == null or path_finished or not current_path.delete_npc_at_end or path_points.is_empty():
+		exit_arrival_elapsed = 0.0
+		return false
+	if global_position.distance_squared_to(path_points[-1]) > exit_arrival_radius * exit_arrival_radius:
+		exit_arrival_elapsed = 0.0
+		return false
+	exit_arrival_elapsed += delta
+	if exit_arrival_elapsed < exit_arrival_delay:
+		return false
+	crowd_agent.velocity = Vector2.ZERO
+	current_point = path_points.size() - 1
+	go_to_next_path_point()
+	return true
 
 
 func update_movement(delta: float) -> void:
@@ -788,6 +813,7 @@ func get_checkpoint_state() -> Dictionary:
 
 
 func load_checkpoint_state(saved: Dictionary) -> void:
+	exit_arrival_elapsed = 0.0
 	if saved.get("version", 0) != 1 or not saved.get("position") is Vector2:
 		push_warning("Estado de NPC incompatível: " + str(name))
 		return
