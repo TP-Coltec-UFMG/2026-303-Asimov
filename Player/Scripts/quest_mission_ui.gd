@@ -806,11 +806,11 @@ func show_find_flashlight_task(completed: bool = false, animate: bool = false) -
 
 
 func show_restore_breaker_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(9, "LIGUE O DISJUNTOR", completed, animate)
+	_show_single_data_center_task(10, "LIGUE O DISJUNTOR", completed, animate)
 
 
 func show_go_to_fourth_floor_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(10, "VÁ PARA O QUARTO ANDAR", completed, animate)
+	_show_single_data_center_task(9, "VÁ PARA O QUARTO ANDAR", completed, animate)
 
 
 func show_rfid_reader_task(
@@ -853,10 +853,10 @@ func show_data_center_power_tasks(
 	set_task_completed(6, true)
 	set_task_text(8, "ENCONTRE UMA LANTERNA")
 	set_task_completed(8, flashlight_completed)
-	set_task_text(9, "LIGUE O DISJUNTOR")
-	set_task_completed(9, breaker_completed)
-	set_task_text(10, "VÁ PARA O QUARTO ANDAR")
-	set_task_completed(10, fourth_floor_completed, animate_fourth_floor)
+	set_task_text(9, "VÁ PARA O QUARTO ANDAR")
+	set_task_completed(9, fourth_floor_completed, animate_fourth_floor)
+	set_task_text(10, "LIGUE O DISJUNTOR")
+	set_task_completed(10, breaker_completed)
 	set_panel_visible(true)
 
 

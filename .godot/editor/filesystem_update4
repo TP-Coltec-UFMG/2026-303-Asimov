@@ -1,9 +1,0 @@
-res://Player/Scripts/quest_mission_ui.gd
-res://Scenes/pause_menu.tscn
-res://Scenes/scripts/base_scene.gd
-res://Scenes/scripts/data_center_intro_controller.gd
-res://Scenes/scripts/office_intro_controller.gd
-res://Scenes/scripts/sala_chefe.gd
-res://Scenes/scripts/scene_trigger.gd
-res://Scripts/Data/configs.gd
-res://Scripts/Data/save/SaveLoad.gd
