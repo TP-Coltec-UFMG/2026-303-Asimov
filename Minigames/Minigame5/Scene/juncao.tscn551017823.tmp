@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://bnk4n0uul6fy2"]
+
+[ext_resource type="Script" uid="uid://d207tv4mow56p" path="res://Scripts/Componentes_Eletronicos/juncao_nomes.gd" id="1_deui3"]
+[ext_resource type="Script" uid="uid://clt7njf0w46up" path="res://Scripts/Componentes_Eletronicos/juncao.gd" id="1_lct18"]
+[ext_resource type="Texture2D" uid="uid://bbdrpa3nhxnvt" path="res://Sprites/fio/terminal_fio_conectado.png" id="2_1mvua"]
+[ext_resource type="Texture2D" uid="uid://d0vcm3pf0xq3b" path="res://Sprites/fio/terminal_fio_conectando.png" id="3_50dlq"]
+[ext_resource type="PackedScene" uid="uid://da5tsd6747scw" path="res://Scene/fio.tscn" id="5_1mvua"]
+[ext_resource type="Texture2D" uid="uid://cr4jqho8q608j" path="res://Sprites/sprites_eletrica/juncoes/sprite_00.png" id="6_deui3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfru0"]
+atlas = ExtResource("2_1mvua")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwf8j"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0i53d"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ebbp4"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jkrt4"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3i8cf"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2t4bf"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7rhvv"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nyvfl"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdwlm"]
+atlas = ExtResource("3_50dlq")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4wjin"]
+atlas = ExtResource("6_deui3")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ouoft"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfru0")
+}],
+"loop": 1,
+"name": &"conectado",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwf8j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0i53d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ebbp4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jkrt4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3i8cf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2t4bf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7rhvv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nyvfl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rdwlm")
+}],
+"loop": 1,
+"name": &"conectando",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4wjin")
+}],
+"loop": 1,
+"name": &"livre_1",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oaa4g"]
+size = Vector2(6.25, 5)
+
+[node name="Juncao" type="Node2D" unique_id=93694696]
+script = ExtResource("1_deui3")
+
+[node name="Juncao" type="Area2D" parent="." unique_id=2043035489]
+z_index = 3
+position = Vector2(100, 80)
+scale = Vector2(4, 4)
+script = ExtResource("1_lct18")
+fio_scene = ExtResource("5_1mvua")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Juncao" unique_id=461880007]
+texture_filter = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ouoft")
+animation = &"livre_1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Juncao" unique_id=1165393587]
+shape = SubResource("RectangleShape2D_oaa4g")
+metadata/_edit_lock_ = true
+
+[node name="Ponto_Conexao_1" type="Marker2D" parent="Juncao" unique_id=1782651638]
+position = Vector2(-3.5, -3.5)
+
+[node name="Ponto_Conexao_2" type="Marker2D" parent="Juncao" unique_id=391137459]
+position = Vector2(-3.5, -3.5)
+
+[node name="Juncao2" type="Area2D" parent="." unique_id=527182438]
+z_index = 3
+position = Vector2(311, 99)
+scale = Vector2(4, 4)
+script = ExtResource("1_lct18")
+fio_scene = ExtResource("5_1mvua")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Juncao2" unique_id=297736847]
+texture_filter = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_ouoft")
+animation = &"livre_1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Juncao2" unique_id=305442090]
+shape = SubResource("RectangleShape2D_oaa4g")
+metadata/_edit_lock_ = true
+
+[node name="Ponto_Conexao_1" type="Marker2D" parent="Juncao2" unique_id=622103099]
+position = Vector2(-3.5, -3.5)
+
+[node name="Ponto_Conexao_2" type="Marker2D" parent="Juncao2" unique_id=1118304863]
+position = Vector2(-3.5, -3.5)
