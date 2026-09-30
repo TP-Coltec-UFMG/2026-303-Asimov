@@ -7,7 +7,7 @@
 shader = ExtResource("2_shader")
 shader_parameter/blur_amount = 9.0
 
-[node name="OpeningGameplayBlur" type="CanvasLayer"]
+[node name="OpeningGameplayBlur" type="CanvasLayer" groups=["opening_gameplay_blur"]]
 layer = 100
 script = ExtResource("1_script")
 

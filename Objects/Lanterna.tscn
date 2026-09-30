@@ -5,21 +5,27 @@
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="3_pljbo"]
 [ext_resource type="Texture2D" uid="uid://0vvakbvh2kim" path="res://Sprites/objects/Lanterna.png" id="4_ldti0"]
 [ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="5_8yxdu"]
+[ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="6_hyh5y"]
 [ext_resource type="Script" uid="uid://dtfbuvijibmfx" path="res://Objects/scripts/PickupComponent.gd" id="6_udy4t"]
 [ext_resource type="AudioStream" uid="uid://c7nxcjmbwjjit" path="res://Sounds/Effects/switch3.ogg" id="7_46il4"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_6hjy0"]
 radius = 26.476404
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x4vwh"]
+resource_local_to_scene = true
+shader = ExtResource("6_hyh5y")
+shader_parameter/modo = 0
+shader_parameter/frame_uv = Vector4(0, 0, 1, 1)
+shader_parameter/outline_uv = Vector2(0.01, 0.01)
 
 [node name="Lanterna" type="Node2D" unique_id=1140399274]
 script = ExtResource("1_iojv6")
 
 [node name="Luz" type="PointLight2D" parent="." unique_id=705748685]
-visible = false
 position = Vector2(211.50003, 156.19788)
-scale = Vector2(0.09429286, 0.1829843)
+scale = Vector2(0.114, 0.222)
 color = Color(0.99999994, 0.80680114, 0.3938179, 1)
 shadow_enabled = true
 shadow_filter = 1
@@ -37,7 +43,8 @@ shape = SubResource("CircleShape2D_6hjy0")
 rotation = 6.890877e-05
 texture = ExtResource("4_ldti0")
 
-[node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
+[node name="ColorAccessibilityCue" parent="Sprite2D" unique_id=1493658093 instance=ExtResource("99_color_accessibility")]
+material = SubResource("ShaderMaterial_x4vwh")
 interaction_path = NodePath("../../Interectable")
 
 [node name="PointLight2D2" type="PointLight2D" parent="." unique_id=54547402]

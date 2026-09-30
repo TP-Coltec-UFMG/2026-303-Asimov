@@ -340,8 +340,8 @@ func _debug_condicoes() -> void:
 	pass
 
 
-	var cartao_ok := _cartao_esta_no_leitor()
-	var conexao_ok := _algum_conectado_esta_true()
+	var _cartao_ok := _cartao_esta_no_leitor()
+	var _conexao_ok := _algum_conectado_esta_true()
 
 
 	pass

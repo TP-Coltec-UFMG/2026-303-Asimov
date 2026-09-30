@@ -302,6 +302,8 @@ func resume():
 
 
 func pause():
+	if get_tree().has_group("opening_gameplay_blur"):
+		return
 
 	audio_state_before_pause = (
 		MusicController.get_checkpoint_state().duplicate(true)
@@ -314,6 +316,9 @@ func pause():
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("esc"):
+		if get_tree().has_group("opening_gameplay_blur"):
+			get_viewport().set_input_as_handled()
+			return
 		if DialogManager.is_showing_dialog:
 			return
 		if get_tree().paused:

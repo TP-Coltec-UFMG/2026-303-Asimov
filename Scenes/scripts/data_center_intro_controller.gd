@@ -169,6 +169,15 @@ func _restore_progress() -> void:
 
 func _restore_access_progress(state: Dictionary) -> void:
 	if (
+		str(Configs.configs.get("job", "")) != "engenheiro_eletrico"
+		and (bool(state.get("data_center_rfid_wires_task_active", false)) or bool(state.get("data_center_rfid_wires_repaired", false)))
+		and not bool(state.get("data_center_rfid_reader_rechecked", false))
+	):
+		state["data_center_rfid_wires_task_active"] = false
+		state["data_center_rfid_reader_rechecked"] = true
+		state["data_center_rfid_reading_task_active"] = true
+		SaveGame.save_global_state("hall_quest_01", state)
+	if (
 		str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
 		and bool(state.get("data_center_rfid_wires_task_active", false))
 		and not bool(state.get("data_center_rfid_wires_repaired", false))
@@ -268,7 +277,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 	if bool(state.get("data_center_rfid_inspection_task_active", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
-		_set_access_prompt("Verificar leitor RFID")
+		_set_access_prompt("Verificar leitor RFID" if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Reprogramar cartão RFID")
 		_show_rfid_reader_task()
 		return
 	_show_access_intro_tasks(state)
@@ -491,10 +500,11 @@ func _start_strong_denied_dialog() -> void:
 func _start_boss_denied_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
+	var engineer := str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
 	DialogManager.start_dialog([
 		"Alex: Este também foi bloqueado.",
 		"Cientista: Então o problema deve estar no leitor RFID.",
-		"Alex: Vou verificar o hardware."
+		"Alex: Vou verificar o hardware." if engineer else "Alex: Vou verificar o registro do cartão."
 	], BOSS_DENIED_DIALOG_ID)
 
 
@@ -550,12 +560,12 @@ func _on_dialog_finished(dialog_id: String) -> void:
 			state.erase("data_center_access_decryption_task_active")
 			state["data_center_rfid_inspection_task_active"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
-			_set_access_prompt("Verificar leitor RFID")
+			_set_access_prompt("Verificar leitor RFID" if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Reprogramar cartão RFID")
 			if not _power_is_out(state):
 				_show_rfid_reader_task()
 				player.balao_de_pensamento.enfileirar(
 					"data_center:inspect_rfid_reader",
-					"O leitor RFID falhou. Preciso verificá-lo."
+					"O leitor RFID falhou. Preciso verificá-lo." if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Preciso registrar o cartão no leitor RFID."
 				)
 			_save_checkpoint()
 		RETURN_DIALOG_ID:
@@ -802,6 +812,29 @@ func _reject_boss_card() -> void:
 
 
 func _inspect_rfid_reader() -> void:
+	if str(Configs.configs.get("job", "")) != "engenheiro_eletrico":
+		access_sequence_busy = true
+		_set_access_interactable(false)
+		player.balao_de_pensamento.descartar(["data_center:inspect_rfid_reader", "data_center:wires_repaired_return"])
+		var programmer_inspection_thoughts: Array[Dictionary] = [
+			{"id": "data_center:rfid_reader_has_power", "text": "O leitor está funcionando."},
+			{"id": "data_center:rfid_register_plan", "text": "O cartão não está registrado. Preciso atualizar o banco de dados."}
+		]
+		if not await _run_rfid_verification(programmer_inspection_thoughts, -1.0, "inspection"):
+			if not power_sequence_running and not _power_is_out(SaveGame.office_mission_state(player)):
+				_set_access_interactable(true)
+			access_sequence_busy = false
+			return
+		var programmer_state := SaveGame.office_mission_state(player)
+		programmer_state["data_center_rfid_inspection_task_active"] = false
+		programmer_state["data_center_rfid_wires_task_active"] = false
+		programmer_state["data_center_rfid_reader_rechecked"] = true
+		programmer_state["data_center_rfid_reading_task_active"] = true
+		SaveGame.save_global_state("hall_quest_01", programmer_state)
+		_show_rfid_repair_tasks(false)
+		access_sequence_busy = false
+		_start_rfid_card_minigame()
+		return
 	access_sequence_busy = true
 	_set_access_interactable(false)
 	var superseded_thoughts: Array[String] = ["data_center:inspect_rfid_reader"]

@@ -4,8 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://cu63a735oxyf" path="res://NPC'S/NPC/AlexUpDown.png" id="2_aekyl"]
 [ext_resource type="Texture2D" uid="uid://dy03jegfblbn0" path="res://NPC'S/NPC/AlexSide.png" id="3_0ouef"]
 [ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/NPC/06_purple_crimson.png" id="3_23wyb"]
-[ext_resource type="FontFile" uid="uid://e6o7s3fomjpp" path="res://Fonts/PixelifySans-SemiBold.ttf" id="4_0ouef"]
+[ext_resource type="FontFile" uid="uid://e6o7s3fomjpp" path="res://Minigames/Arte/PixelifySans-SemiBold.ttf" id="4_0ouef"]
 [ext_resource type="PackedScene" path="res://NPC'S/BalaoDeFalaNPC.tscn" id="5_balloon"]
+[ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="6_xv3sc"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_23wyb"]
@@ -307,9 +308,16 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g7udq"]
+resource_local_to_scene = true
+shader = ExtResource("6_xv3sc")
+shader_parameter/modo = 0
+shader_parameter/frame_uv = Vector4(0, 0, 1, 1)
+shader_parameter/outline_uv = Vector2(0.01, 0.01)
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_57qmd"]
-radius = 2.0
-height = 4.0
+radius = 7.0
+height = 22.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dialog"]
 radius = 24.0
@@ -322,7 +330,8 @@ sprite_frames = SubResource("SpriteFrames_g4v7s")
 animation = &"run_up"
 autoplay = "idle_down"
 
-[node name="ColorAccessibilityCue" parent="AnimatedSprite2D" instance=ExtResource("99_color_accessibility")]
+[node name="ColorAccessibilityCue" parent="AnimatedSprite2D" unique_id=60950049 instance=ExtResource("99_color_accessibility")]
+material = SubResource("ShaderMaterial_g7udq")
 
 [node name="InteractionPrompt" type="Label" parent="." unique_id=1789373355]
 visible = false
@@ -342,11 +351,9 @@ vertical_alignment = 1
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1344402819]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=278775730]
-position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_57qmd")
 
-[node name="CrowdAvoidance" type="NavigationAgent2D" parent="."]
-position = Vector2(0, -4)
+[node name="CrowdAvoidance" type="NavigationAgent2D" parent="." unique_id=1838826248]
 radius = 6.0
 neighbor_distance = 30.0
 max_neighbors = 8

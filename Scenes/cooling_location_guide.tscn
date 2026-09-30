@@ -20,6 +20,7 @@ tree_root = ExtResource("3_tree")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="CutsceneCamera" type="Camera2D" parent="."]
+process_callback = 0
 position = Vector2(196, -173)
 enabled = false
 

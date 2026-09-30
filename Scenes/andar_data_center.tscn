@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://baskrtgylrg1b"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_y5mn0"]
-[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_data_center"]
-[ext_resource type="Script" path="res://Scenes/scripts/data_center_activity.gd" id="activity_data_center"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_em2r1"]
 [ext_resource type="PackedScene" uid="uid://c4e81i13gjvx3" path="res://Objects/luz_de_emergencia.tscn" id="3_7c6dg"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="3_7oj87"]
@@ -16,11 +14,12 @@
 [ext_resource type="Script" uid="uid://c3bmarmj4pw5v" path="res://Scenes/scripts/data_center_intro_controller.gd" id="16_data_center"]
 [ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="17_flashlight"]
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="18_npc_path"]
-[ext_resource type="PackedScene" uid="uid://beyeq37qyobrm" path="res://Player/ManPlayer.tscn" id="19_p4f2l"]
 [ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="19_strong_card"]
 [ext_resource type="PackedScene" uid="uid://beo4uworw31ct" path="res://Objects/cartao_chefe.tscn" id="20_boss_card"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="21_rfid_font"]
 [ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="22_cooling_guide"]
+[ext_resource type="Script" uid="uid://drgm3fa52vppv" path="res://Scenes/scripts/data_center_activity.gd" id="activity_data_center"]
+[ext_resource type="Script" uid="uid://dvouf3jvmif20" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_data_center"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -66,7 +65,7 @@ size = Vector2(12, 32)
 [node name="ANDAR_DATA_CENTER" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y5mn0")
 
-[node name="SceneAmbience" type="Node2D" parent="."]
+[node name="SceneAmbience" type="Node2D" parent="." unique_id=1019998292]
 script = ExtResource("ambience_data_center")
 ambience_kind = 1
 
@@ -233,20 +232,20 @@ scale = Vector2(0.115, 0.115)
 position = Vector2(-188, -243.99998)
 scale = Vector2(0.115, 0.115)
 
-[node name="AtividadeDosMonitores" type="Node2D" parent="Iluminacao"]
+[node name="AtividadeDosMonitores" type="Node2D" parent="Iluminacao" unique_id=767300196]
 script = ExtResource("activity_data_center")
 
-[node name="MonitorEsquerdo" type="PointLight2D" parent="Iluminacao/AtividadeDosMonitores"]
+[node name="MonitorEsquerdo" type="PointLight2D" parent="Iluminacao/AtividadeDosMonitores" unique_id=1955303501]
 position = Vector2(-165, -185)
-scale = Vector2(0.14, 0.10)
-color = Color(0.24, 0.70, 1, 1)
+scale = Vector2(0.14, 0.1)
+color = Color(0.24, 0.7, 1, 1)
 energy = 0.09
 texture = ExtResource("2_em2r1")
 
-[node name="MonitorDireito" type="PointLight2D" parent="Iluminacao/AtividadeDosMonitores"]
+[node name="MonitorDireito" type="PointLight2D" parent="Iluminacao/AtividadeDosMonitores" unique_id=1485799167]
 position = Vector2(15, -185)
-scale = Vector2(0.14, 0.10)
-color = Color(0.24, 0.70, 1, 1)
+scale = Vector2(0.14, 0.1)
+color = Color(0.24, 0.7, 1, 1)
 energy = 0.09
 texture = ExtResource("2_em2r1")
 
@@ -371,14 +370,14 @@ scene_trigger = NodePath("../SceneTrigger")
 [node name="PauseMenu" parent="UI" unique_id=365074401 instance=ExtResource("7_o1mid")]
 process_physics_priority = -6
 
-[node name="CoolingLocationGuide" parent="." instance=ExtResource("22_cooling_guide")]
+[node name="CoolingLocationGuide" parent="." unique_id=1210346743 instance=ExtResource("22_cooling_guide")]
 darkness_overlay_path = NodePath("Iluminacao/ColorRect2")
 play_on_first_data_center_entry = true
 
-[node name="RestrictedAreaTransition" type="CanvasLayer" parent="."]
+[node name="RestrictedAreaTransition" type="CanvasLayer" parent="." unique_id=898666222]
 layer = 120
 
-[node name="Black" type="ColorRect" parent="RestrictedAreaTransition"]
+[node name="Black" type="ColorRect" parent="RestrictedAreaTransition" unique_id=1869859124]
 process_mode = 3
 visible = false
 anchors_preset = 15
@@ -386,7 +385,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 color = Color(0, 0, 0, 0)
 
 [node name="DataCenterIntroController" type="Node" parent="." unique_id=1256750246]
@@ -426,9 +424,3 @@ process_mode = 4
 visible = false
 position = Vector2(0, -12)
 save_id = "data_center_story_boss_card"
-
-[node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("19_p4f2l")]
-position = Vector2(63, -156)
-
-[node name="Cartao_forte" parent="." unique_id=1025788070 instance=ExtResource("19_strong_card")]
-position = Vector2(93, -155)

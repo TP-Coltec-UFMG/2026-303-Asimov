@@ -45,6 +45,8 @@
 [ext_resource type="Texture2D" uid="uid://d0uqx1al1lv6i" path="res://Sprites/ui/Icons/contraste.png" id="48_l6sj7"]
 [ext_resource type="Script" path="res://Scripts/Acessibility/movimento_camera.gd" id="49_camera_motion"]
 [ext_resource type="Script" path="res://Scripts/Acessibility/painel_tarefas_dinamico.gd" id="50_dynamic_tasks"]
+[ext_resource type="Texture2D" path="res://Sprites/ui/Icons/pc (2).png" id="56_camera_icon"]
+[ext_resource type="Texture2D" path="res://Sprites/ui/Icons/icone-painel-20s-40x40 (1).png" id="57_tasks_icon"]
 [ext_resource type="Script" uid="uid://c3o46ilruapx4" path="res://Scripts/Objects/Label/fps_label.gd" id="51_h3d7w"]
 [ext_resource type="Script" uid="uid://bthyfrly4o5lf" path="res://Scenes/scripts/controles.gd" id="52_61q4e"]
 [ext_resource type="Script" uid="uid://c5dnhjsvgf7bd" path="res://Scenes/scripts/inputremapup.gd" id="53_846ot"]
@@ -1155,6 +1157,11 @@ button_pressed = true
 flat = true
 script = ExtResource("49_camera_motion")
 
+[node name="Sprite2D" type="Sprite2D" parent="Accessibility/VContainer/MovimentoCamera"]
+position = Vector2(-9, 13)
+scale = Vector2(0.795, 0.795)
+texture = ExtResource("56_camera_icon")
+
 [node name="PainelTarefasDinamico" type="CheckBox" parent="Accessibility/VContainer" groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
@@ -1166,6 +1173,11 @@ text = "Painel de tarefas dinâmico"
 button_pressed = true
 flat = true
 script = ExtResource("50_dynamic_tasks")
+
+[node name="Sprite2D" type="Sprite2D" parent="Accessibility/VContainer/PainelTarefasDinamico"]
+position = Vector2(-8, 12)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("57_tasks_icon")
 
 [node name="BackToMenuButton" parent="Accessibility" unique_id=776410913 groups=["alto_contraste"] instance=ExtResource("9_2s720")]
 offset_left = 453.0

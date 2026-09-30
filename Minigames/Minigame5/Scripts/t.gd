@@ -114,7 +114,7 @@ func ajustar_tamanho() -> void:
 
 	label.position = Vector2(
 		margem_horizontal,
-		margem_vertical
+		(altura - tamanho_label.y) / 2.0
 	)
 
 
@@ -128,6 +128,5 @@ func ajustar_tamanho() -> void:
 			+ tamanho_label.x
 			+ espacamento,
 
-			margem_vertical
-			+ (tamanho_label.y - tamanho_button.y) / 2
+			(altura - tamanho_button.y) / 2.0
 		)

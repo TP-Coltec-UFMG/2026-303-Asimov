@@ -817,7 +817,8 @@ func show_rfid_reader_task(
 	completed: bool = false,
 	animate: bool = false
 ) -> void:
-	_show_single_data_center_task(12, "VERIFIQUE O LEITOR RFID", completed, animate)
+	var text := "VERIFIQUE O LEITOR RFID" if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "REPROGRAME O CARTÃO RFID"
+	_show_single_data_center_task(12, text, completed, animate)
 
 
 func show_rfid_repair_tasks(
@@ -826,6 +827,9 @@ func show_rfid_repair_tasks(
 	animate_repair: bool = false
 ) -> void:
 	var engineer := str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
+	if not engineer:
+		_show_single_data_center_task(12, "REPROGRAME O CARTÃO RFID", reading_checked, animate_repair)
+		return
 	for index in range(rows.size()):
 		set_task_visible(index, index == 11 or (index == 12 and (not engineer or wires_repaired)))
 	set_task_text(11, "RECONECTE OS CABOS")
@@ -944,7 +948,7 @@ func refresh_saved_state() -> void:
 			show_data_center_power_talk_task()
 		else:
 			show_data_center_power_tasks(flashlight_completed, tools_floor_task_completed, false)
-	elif rfid_wires_task_active or rfid_wires_repaired:
+	elif rfid_wires_task_active or rfid_wires_repaired or bool(state.get("data_center_rfid_reader_rechecked", false)):
 		show_rfid_repair_tasks(rfid_wires_repaired, rfid_reading_checked)
 	elif rfid_inspection_task_active or old_decryption_task_active:
 		show_rfid_reader_task(false)

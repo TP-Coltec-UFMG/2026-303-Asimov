@@ -212,6 +212,7 @@ tree_root = ExtResource("9_intro_tree")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="CutsceneCamera" type="Camera2D" parent="RestrictedAreaIntro" unique_id=1985949707]
+process_callback = 0
 position = Vector2(-158, -51)
 enabled = false
 zoom = Vector2(1.5, 1.5)
