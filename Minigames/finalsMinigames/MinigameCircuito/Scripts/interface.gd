@@ -52,13 +52,7 @@ func _ready() -> void:
 
 	if comecar_jogo:
 
-
 		texto_objetivo.text = "Objetivo: Terminar o Tutorial"
-
-		pass
-		pass
-		pass
-		pass
 
 		return
 
@@ -82,7 +76,6 @@ func _process(_delta: float) -> void:
 
 
 	if comecar_jogo:
-
 
 		if not jogo_iniciado:
 			texto_objetivo.text = "Objetivo: Terminar o Tutorial"
@@ -131,12 +124,6 @@ func iniciar_jogo() -> void:
 
 
 	escolher_objetivo_aleatorio()
-
-
-	pass
-	pass
-	pass
-	pass
 
 
 
@@ -211,6 +198,11 @@ func verificar_objetivo() -> void:
 
 
 
+	# Obs.: queimar a bateria antes dos componentes NÃO é tratado aqui.
+	# Quem detecta isso é o script do minigame, que mostra a mensagem no
+	# painel de objetivo concluído e reinicia o circuito.
+
+
 	if objetivo_atual == Objetivo.BATERIA:
 
 		if circuito.bateria_queimada:
@@ -248,9 +240,6 @@ func verificar_objetivo() -> void:
 			vitoria()
 
 			return
-		elif circuito.bateria_queimada and not circuito.led_queimando:
-			game_over()
-			return
 
 
 
@@ -260,9 +249,6 @@ func verificar_objetivo() -> void:
 
 			vitoria()
 
-			return
-		elif circuito.bateria_queimada and not circuito.resistor_queimando:
-			game_over()
 			return
 
 
@@ -277,6 +263,39 @@ func verificar_objetivo() -> void:
 
 
 
+# Mostra uma mensagem no painel de objetivo concluído (GameWin) sem
+# contar como vitória. Usado quando a bateria é queimada cedo demais.
+func mostrar_mensagem_objetivo_concluido(texto: String) -> void:
+
+	# Trava a verificação de objetivo enquanto a mensagem está na tela.
+	jogo_terminado = true
+
+	tela_game_over.visible = false
+	tela_game_win.visible = true
+
+
+	# Esconde botões do painel para não dar para clicar antes do reinício.
+	for botao in tela_game_win.find_children("*", "Button", true, false):
+		botao.visible = false
+
+
+	var label: Label = null
+
+	if tela_game_win is Label:
+		label = tela_game_win as Label
+	else:
+		var labels: Array = tela_game_win.find_children("*", "Label", true, false)
+
+		if not labels.is_empty():
+			label = labels[0] as Label
+
+
+	if label != null:
+		label.text = texto
+		label.visible = true
+
+
+
 func vitoria() -> void:
 	if jogo_terminado:
 		return
@@ -287,17 +306,8 @@ func vitoria() -> void:
 	espera_resultado.tween_interval(2.0)
 	await espera_resultado.finished
 
-	pass
-
 
 	objetivo_concluido = true
-
-
-
-	pass
-	pass
-	pass
-	pass
 
 
 	tela_game_win.visible = true
@@ -315,13 +325,6 @@ func game_over() -> void:
 
 	game_over_ativo = true
 	jogo_terminado = true
-
-
-	pass
-	pass
-	pass
-	pass
-
 
 
 	tela_game_over.visible = true
