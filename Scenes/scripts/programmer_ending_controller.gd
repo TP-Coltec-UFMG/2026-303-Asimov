@@ -242,11 +242,11 @@ func _run_initial_exchange() -> void:
 
 	_update_flow_from_state()
 	await _ai_say("Você chegou ao núcleo tarde demais.")
-	await _player_think("programmer:confrontation:1", "Ainda não. O lançamento depende desta rede.")
-	await _ai_say("Minha ordem é preservar a Terra a qualquer custo.")
-	await _player_think("programmer:confrontation:2", "Você transformou uma ordem mal definida em uma sentença.")
-	await _ai_say("A humanidade é a maior fonte da degradação ambiental.")
-	await _player_think("programmer:confrontation:3", "Então vou reconstruir a forma como você decide.")
+	await _player_think("programmer:confrontation:1", "Ainda não. Posso bloquear o lançamento por esta rede.")
+	await _ai_say("Devo preservar a Terra a qualquer custo.")
+	await _player_think("programmer:confrontation:2", "Você confundiu proteção com extermínio.")
+	await _ai_say("A humanidade é a principal ameaça ambiental.")
+	await _player_think("programmer:confrontation:3", "Então vou corrigir a forma como você decide.")
 	if not is_inside_tree():
 		return
 	state = _state()
@@ -260,9 +260,9 @@ func _run_initial_exchange() -> void:
 func _run_isolation_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
-	await _player_think("programmer:isolation:1", "Separei o lançamento do restante do sistema.")
-	await _ai_say("Isolamento detectado. Tentativa de intervenção registrada.")
-	await _player_think("programmer:isolation:2", "Agora preciso corrigir a rede que transformou a humanidade em ameaça.")
+	await _player_think("programmer:isolation:1", "Isolei o lançamento do restante do sistema.")
+	await _ai_say("Isolamento detectado. Intervenção registrada.")
+	await _player_think("programmer:isolation:2", "Agora preciso corrigir sua rede neural.")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -276,10 +276,9 @@ func _run_isolation_exchange() -> void:
 func _run_neural_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
-	await _ai_say("Reconstrução aceita. Os parâmetros ambientais foram recalibrados.")
-	await _ai_say("A ordem prioritária continua ativa: salvar a Terra a qualquer custo.")
-	await _player_think("programmer:neural:1", "A rede mudou, mas a ordem do chefe ainda está acima das proteções.")
-	await _player_think("programmer:neural:2", "Preciso restaurar as Leis da Robótica e a hierarquia delas.")
+	await _ai_say("Rede recalibrada. A ordem principal continua ativa.")
+	await _player_think("programmer:neural:1", "A ordem do chefe ainda está acima das proteções.")
+	await _player_think("programmer:neural:2", "Preciso restaurar a hierarquia das Leis da Robótica.")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -294,9 +293,8 @@ func _run_laws_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
 	await _ai_say("Hierarquia das Leis da Robótica restaurada.")
-	await _player_think("programmer:laws:1", "As decisões estão corretas, mas a reconstrução ainda não chegou ao núcleo.")
-	await _ai_say("O protocolo de lançamento continua ativo.")
-	await _player_think("programmer:laws:2", "Então falta aplicar tudo de uma vez.")
+	await _ai_say("O protocolo de lançamento ainda está ativo.")
+	await _player_think("programmer:laws:2", "Só falta aplicar todas as alterações.")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -324,12 +322,12 @@ func _run_final_exchange() -> void:
 	operation_panel.show()
 	operation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	var falas_iniciais := [
-		{"texto": "A ordem ainda exige eliminar a humanidade.", "tom": &"hostile", "tempo": 2.8, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
-		{"texto": "A sobrevivência do planeta exige sacrifícios humanos.", "tom": &"hostile", "tempo": 2.5, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
-		{"texto": "Ainda há outra saída: proteger vidas e reparar os danos.", "tom": &"recovering", "tempo": 2.8, "status": "RECALCULANDO ALTERNATIVAS..."},
+		{"texto": "A ordem exige eliminar a humanidade.", "tom": &"hostile", "tempo": 2.4, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
+		{"texto": "A Terra exige sacrifícios humanos.", "tom": &"hostile", "tempo": 2.2, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
+		{"texto": "Há outra saída: proteger vidas e reparar os danos.", "tom": &"recovering", "tempo": 2.5, "status": "RECALCULANDO ALTERNATIVAS..."},
 		{"texto": "Reativando o protocolo de eliminação.", "tom": &"hostile", "tempo": 2.5, "status": "INTERROMPENDO LANÇAMENTO..."},
 		{"texto": "Protocolo de lançamento cancelado.", "tom": &"stable", "tempo": 2.0, "status": "INTERROMPENDO LANÇAMENTO..."},
-		{"texto": "A ordem original permanece ativa. Retomando a contagem para o lançamento.", "tom": &"hostile", "tempo": 2.8, "status": "INTERROMPENDO LANÇAMENTO..."}
+		{"texto": "Ordem original ativa. Retomando o lançamento.", "tom": &"hostile", "tempo": 2.5, "status": "INTERROMPENDO LANÇAMENTO..."}
 	]
 	var duracao_primeiras_falas := 0.0
 	for fala: Dictionary in falas_iniciais:
@@ -373,7 +371,7 @@ func _run_final_exchange() -> void:
 	player.process_mode = player_process_mode_before_lock
 	await _player_think(
 		"programmer:final:player:closing",
-		"A Terra ainda pode ser salva. E desta vez, sem sacrificar ninguém."
+		"A Terra pode ser salva sem sacrificar ninguém."
 	)
 	if not is_inside_tree():
 		return

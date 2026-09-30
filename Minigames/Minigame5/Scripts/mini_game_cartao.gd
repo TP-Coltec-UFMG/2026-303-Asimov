@@ -71,42 +71,42 @@ var _finalizando: bool = false
 
 var etapas_tutorial: Dictionary = {
 	1: {
-		"texto": "Os cartões de acesso da empresa precisam funcionar\nmesmo se a internet cair. Então eles não podem\ndepender dela.",
+		"texto": "Os cartões de acesso precisam funcionar\nmesmo sem internet.",
 		"gatilho": GatilhoTutorial.CONTINUAR,
 	},
 
 	2: {
-		"texto": "Se as informações importantes não podem depender da\nrede, provavelmente elas estão no cartão!",
+		"texto": "Então os dados de acesso devem estar\nno próprio cartão.",
 		"gatilho": GatilhoTutorial.CONTINUAR,
 	},
 
 	3: {
-		"texto": "Beleza, coloquei o cartão no leitor! Mas ele não foi\nreconhecido… Talvez ele ainda tenha seu ID. Talvez eu\nainda consiga tentar reescrevê-lo no banco de dados\ndo leitor!",
+		"texto": "O leitor não reconheceu o cartão, mas o ID\nainda pode existir. Vou regravá-lo.",
 		"gatilho": GatilhoTutorial.TAREFA,
 	},
 
 	4: {
-		"texto": "Ótimo, com o leitor conectado no meu notebook eu\nposso extrair o ID e reescrevê-lo na base de dados\nnovamente.",
+		"texto": "Com o leitor conectado, posso extrair o ID\ne atualizar o banco de dados.",
 		"gatilho": GatilhoTutorial.BOTAO_JOGO,
 	},
 
 	5: {
-		"texto": "ID copiado! Agora vou para a aba do Banco de Dados\ne procurar o registro desse cartão.",
+		"texto": "ID copiado. Agora vou abrir o Banco de Dados.",
 		"gatilho": GatilhoTutorial.BOTAO_JOGO,
 	},
 
 	6: {
-		"texto": "Achei, agora é só eu colocar o ID que eu extraí do\ncartão no campo de IDs.",
+		"texto": "Registro encontrado. Só falta inserir o ID\ndo cartão.",
 		"gatilho": GatilhoTutorial.TAREFA,
 	},
 
 	7: {
-		"texto": "Os dados foram atualizados! Vou fechar a janela e\nvoltar para a tela inicial.",
+		"texto": "Dados atualizados. Vou fechar o notebook.",
 		"gatilho": GatilhoTutorial.BOTAO_JOGO,
 	},
 
 	8: {
-		"texto": "Bom, vou tentar colocar o cartão no leitor novamente.\nSe der errado, volto ao notebook e confiro os dados.",
+		"texto": "Agora vou testar o cartão novamente.",
 		"gatilho": GatilhoTutorial.FIM,
 	},
 }

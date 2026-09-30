@@ -368,10 +368,10 @@ func _start_card_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	DialogManager.start_dialog([
-		"Alex: Encontrei o chefe, mas ele fugiu. A sala estava vazia.",
-		"Cientista: Fugiu? Isso explica muita coisa... A IA está quebrando todas as leis de Asimov.",
-		"Alex: Então não sobrou ninguém para impedir isso?",
-		"Cientista: Estamos tentando conter os sistemas, mas ela está tomando o prédio inteiro."
+		"Alex: O chefe fugiu. A sala estava vazia.",
+		"Cientista: Então perdemos o controle. A IA está ignorando as Leis de Asimov.",
+		"Alex: Como podemos detê-la?",
+		"Cientista: Precisamos chegar ao núcleo."
 	], CARD_DIALOG_ID)
 
 
@@ -447,15 +447,15 @@ func _start_access_plan_dialog() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	if bool(state.get("data_center_breaker_restored", false)):
 		DialogManager.start_dialog([
-			"Cientista: A energia estabilizou. Agora precisamos alcançar o núcleo da IA.",
-			"Cientista: Ele fica na área restrita deste andar. Venha, vou mostrar a entrada.",
-			"Alex: Certo. Depois do que ela fez com a energia, não podemos perder mais tempo."
+			"Cientista: A energia estabilizou. Agora precisamos chegar ao núcleo.",
+			"Cientista: Ele fica na área restrita. Venha, vou mostrar a entrada.",
+			"Alex: Certo. Vamos."
 		], ACCESS_PLAN_DIALOG_ID)
 	else:
 		DialogManager.start_dialog([
-			"Cientista: Precisamos alcançar o núcleo da IA antes que ela termine o plano.",
-			"Cientista: A entrada fica na área restrita deste andar. Venha, vou mostrar.",
-			"Alex: Certo. Vamos tentar abrir o data center."
+			"Cientista: Precisamos chegar ao núcleo antes que seja tarde.",
+			"Cientista: A entrada fica na área restrita. Venha comigo.",
+			"Alex: Certo."
 		], ACCESS_PLAN_DIALOG_ID)
 
 
@@ -463,8 +463,8 @@ func _start_return_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	DialogManager.start_dialog([
-		"Cientista: A energia voltou. Precisamos continuar de onde paramos.",
-		"Alex: Certo. Vou continuar de onde parei."
+		"Cientista: A energia voltou. Vamos continuar.",
+		"Alex: Certo."
 	], RETURN_DIALOG_ID)
 
 
@@ -472,9 +472,9 @@ func _start_strong_card_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	DialogManager.start_dialog([
-		"Cientista: Esta é a entrada. O acesso normal exige um cartão forte.",
-		"Cientista: Pegue. Passe-o no leitor.",
-		"Alex: Vamos ver se ela deixou alguma porta aberta."
+		"Cientista: É aqui. Esta porta exige um cartão forte.",
+		"Cientista: Use este no leitor.",
+		"Alex: Vamos testar."
 	], STRONG_CARD_DIALOG_ID)
 
 
@@ -482,10 +482,9 @@ func _start_strong_denied_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	DialogManager.start_dialog([
-		"Alex: Bloqueado. Nem o cartão forte passou.",
-		"Cientista: Estranho. Esse cartão abre a ala restrita em condições normais.",
-		"Cientista: Ainda tenho o cartão do chefe que você me entregou. Pegue e tente com ele.",
-		"Alex: Se este também falhar, a IA alterou as permissões."
+		"Alex: Bloqueado. O cartão forte falhou.",
+		"Cientista: Estranho. Ele deveria abrir esta porta.",
+		"Cientista: Tente o cartão do chefe."
 	], STRONG_DENIED_DIALOG_ID)
 
 
@@ -493,11 +492,9 @@ func _start_boss_denied_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	DialogManager.start_dialog([
-		"Alex: Também foi bloqueado.",
-		"Cientista: Isso não faz sentido. Os dois cartões usam leitura RFID.",
-		"Cientista: A IA controla a porta, mas não é possível que ela tenha apagado a leitura física dos cartões.",
-		"Cientista: Verifique o leitor. Talvez o problema esteja no hardware.",
-		"Alex: Certo. Vou abrir o painel e dar uma olhada."
+		"Alex: Este também foi bloqueado.",
+		"Cientista: Então o problema deve estar no leitor RFID.",
+		"Alex: Vou verificar o hardware."
 	], BOSS_DENIED_DIALOG_ID)
 
 
@@ -558,7 +555,7 @@ func _on_dialog_finished(dialog_id: String) -> void:
 				_show_rfid_reader_task()
 				player.balao_de_pensamento.enfileirar(
 					"data_center:inspect_rfid_reader",
-					"RFID... preciso descobrir o que aconteceu com esse leitor."
+					"O leitor RFID falhou. Preciso verificá-lo."
 				)
 			_save_checkpoint()
 		RETURN_DIALOG_ID:
@@ -638,7 +635,7 @@ func _give_strong_card() -> void:
 	_show_access_intro_tasks(state)
 	player.balao_de_pensamento.enfileirar(
 		"data_center:strong_card_received",
-		"Cartão forte. Preciso equipá-lo e testar o leitor."
+		"Vou equipar o cartão forte e testar o leitor."
 	)
 	_save_checkpoint()
 
@@ -656,7 +653,7 @@ func _give_boss_card() -> void:
 	_show_access_intro_tasks(state)
 	player.balao_de_pensamento.enfileirar(
 		"data_center:boss_card_received",
-		"Agora é a vez do cartão do chefe."
+		"Agora vou testar o cartão do chefe."
 	)
 	_save_checkpoint()
 
@@ -809,7 +806,7 @@ func _inspect_rfid_reader() -> void:
 	_set_access_interactable(false)
 	var superseded_thoughts: Array[String] = ["data_center:inspect_rfid_reader"]
 	player.balao_de_pensamento.descartar(superseded_thoughts)
-	var repair_plan := "Preciso reconectá-los para liberar o acesso." if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Preciso reconectá-los antes de testar os cartões de novo."
+	var repair_plan := "Preciso reconectá-los para liberar o acesso." if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Preciso reconectá-los antes de testar os cartões novamente."
 	var inspection_thoughts: Array[Dictionary] = [
 		{
 			"id": "data_center:rfid_reader_has_power",
@@ -1129,18 +1126,16 @@ func _start_power_failure_dialog() -> void:
 	var power_lines: Array[String]
 	if str(state.get("data_center_outage_phase", "")) == "before":
 		power_lines = [
-			"Alex: As luzes apagaram. O que aconteceu?",
-			"Cientista: A IA está drenando a energia do prédio. O disjuntor desarmou.",
-			"Cientista: Você precisa religá-lo no andar das ferramentas, no 4º andar. Pegue uma lanterna antes de ir.",
-			"Cientista: Depois volte. Precisamos desligar essa IA antes que seja tarde."
+			"Alex: As luzes apagaram. O que houve?",
+			"Cientista: A IA drenou a energia e desarmou o disjuntor.",
+			"Cientista: Pegue uma lanterna e religue-o no 4º andar. Depois volte."
 		]
 	else:
 		power_lines = [
-			"Alex: O disjuntor desarmou! A energia está caindo.",
-			"Cientista: A IA está drenando a energia do prédio! Precisamos interromper o que estávamos fazendo.",
-			"Alex: Eu posso ligar o disjuntor de novo.",
-			"Cientista: Ele fica no andar das ferramentas, no 4º andar. Pegue uma lanterna antes de ir.",
-			"Cientista: Volte assim que puder. Temos que desligar essa IA."
+			"Alex: O disjuntor desarmou!",
+			"Cientista: A IA está drenando a energia do prédio.",
+			"Alex: Vou religá-lo.",
+			"Cientista: Pegue uma lanterna e vá ao 4º andar. Depois volte."
 		]
 	DialogManager.interrupt_with_dialog(power_lines, POWER_DIALOG_ID, false)
 

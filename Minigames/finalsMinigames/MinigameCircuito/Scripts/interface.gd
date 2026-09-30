@@ -179,7 +179,7 @@ func definir_objetivo(novo_objetivo: Objetivo) -> void:
 
 		Objetivo.RESISTOR_LED:
 
-			texto_objetivo.text = "Objetivo:\nQueimar resistor\n e componente"
+			texto_objetivo.text = "Objetivo:\nQueime o resistor\ne o componente."
 
 
 

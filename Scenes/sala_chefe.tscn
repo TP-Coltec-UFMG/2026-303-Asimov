@@ -51,7 +51,7 @@ shape = SubResource("RectangleShape2D_dc347")
 
 [node name="Interectable" parent="SceneTrigger" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("5_a2vgb")]
 position = Vector2(64, 0)
-interact_name = "Acesso de Chefe"
+interact_name = "Acesso do chefe"
 is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger/Interectable" unique_id=1483292952]

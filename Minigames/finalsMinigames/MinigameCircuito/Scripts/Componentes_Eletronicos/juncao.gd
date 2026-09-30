@@ -153,7 +153,7 @@ func iniciar_fio() -> void:
 	if not esta_disponivel():
 
 		_mostrar_aviso_tutorial(
-			"Esta junção já possui duas conexões.\n\nO máximo de uma junção é 2 conexões."
+			"Esta junção já atingiu o limite de duas conexões."
 		)
 
 		return
@@ -435,7 +435,7 @@ func conexao_permitida(alvo) -> bool:
 	):
 
 		_mostrar_aviso_tutorial(
-			"Terminal só conecta com junção.\n\nTerminais não podem ser conectados diretamente entre si."
+			"Terminais só podem ser ligados a junções, nunca diretamente entre si."
 		)
 
 		return false
@@ -470,13 +470,13 @@ func conexao_permitida(alvo) -> bool:
 		if alvo.is_in_group("terminais"):
 
 			_mostrar_aviso_tutorial(
-				"Este terminal já possui uma conexão.\n\nO máximo de um terminal é 1 conexão."
+			"Este terminal já atingiu o limite de uma conexão."
 			)
 
 		elif alvo.is_in_group("juncoes"):
 
 			_mostrar_aviso_tutorial(
-				"Esta junção já possui duas conexões.\n\nO máximo de uma junção é 2 conexões."
+			"Esta junção já atingiu o limite de duas conexões."
 			)
 
 		else:

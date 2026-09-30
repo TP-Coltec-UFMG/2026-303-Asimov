@@ -90,14 +90,17 @@ func esta_pendente(id: String) -> bool:
 	return tem_pensamento(id) and not foi_concluido(id) and not _descartados.has(id)
 
 
-func descartar(ids: Array[String]) -> void:
-	for id in ids:
+func descartar(ids: Array) -> void:
+	var ids_normalizados: Array[String] = []
+	for valor: Variant in ids:
+		ids_normalizados.append(str(valor))
+	for id: String in ids_normalizados:
 		if not foi_concluido(id):
 			_descartados[id] = true
 	for i in range(_fila.size() - 1, -1, -1):
-		if ids.has(_fila[i]["id"]):
+		if ids_normalizados.has(str(_fila[i]["id"])):
 			_fila.remove_at(i)
-	if ids.has(str(_ativo.get("id", ""))):
+	if ids_normalizados.has(str(_ativo.get("id", ""))):
 		if _tween != null and _tween.is_valid():
 			_tween.kill()
 		_tween = null

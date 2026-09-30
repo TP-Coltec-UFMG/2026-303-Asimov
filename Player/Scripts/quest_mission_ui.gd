@@ -493,9 +493,9 @@ func _start_cooling_intro(current_player: Player, state: Dictionary) -> void:
 
 
 func _queue_cooling_intro(current_player: Player) -> void:
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_TIME, "Meu tempo está acabando.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_PLAN, "Preciso reduzir a capacidade dessa IA.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_ACTION, "Se eu redirecionar a refrigeração dela, consigo reduzir sua capacidade.")
+	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_TIME, "O tempo está acabando.")
+	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_PLAN, "Posso enfraquecer a IA pela refrigeração.")
+	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_ACTION, "Vou redirecionar o sistema de refrigeração.")
 
 
 func _restore_cooling_intro(current_player: Player, state: Dictionary) -> void:
@@ -522,7 +522,7 @@ func _queue_cooling_completion(current_player: Player, state: Dictionary) -> voi
 	state["cooling_completion_thought_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_SUCCESS, "Funcionou.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_RESULT, "Agora tenho mais algum tempo.")
+	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_RESULT, "Ganhei um pouco mais de tempo.")
 	_sync_optional_cooling_row()
 	set_panel_visible(true)
 	if current_player.checkpoint_enabled:
@@ -535,12 +535,12 @@ func _queue_cooling_failure(current_player: Player, state: Dictionary) -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	current_player.balao_de_pensamento.enfileirar(
 		COOLING_THOUGHT_FAILURE,
-		"Essa não!!!"
+		"Essa não!"
 	)
 	if bool(state.get("cooling_failure_has_alternative", false)):
 		current_player.balao_de_pensamento.enfileirar(
 			COOLING_THOUGHT_FAILURE_ALTERNATIVE,
-			"Tá, tem outro sistema de refrigeração..."
+			"Ainda há outro sistema de refrigeração."
 		)
 	_sync_optional_cooling_row()
 	set_panel_visible(true)
@@ -610,7 +610,7 @@ func show_only_third_floor_task(completed: bool, animate: bool = false) -> void:
 func show_talk_to_npc_task(completed: bool, animate: bool = false) -> void:
 	for index in range(rows.size()):
 		set_task_visible(index, index == 3)
-	set_task_text(3, "FALE COM O NPC")
+	set_task_text(3, "FALE COM O CIENTISTA")
 	set_task_completed(3, completed, animate)
 	set_panel_visible(true)
 
@@ -708,7 +708,7 @@ func _connect_thought_balloon() -> void:
 func _queue_breaker_followup_thoughts(current_player: Player) -> void:
 	current_player.balao_de_pensamento.enfileirar(
 		BREAKER_URGENT_THOUGHT_ID,
-		"Temos que desligar essa IA urgentemente."
+		"Precisamos desligar essa IA agora."
 	)
 	current_player.balao_de_pensamento.enfileirar(
 		BREAKER_RETURN_THOUGHT_ID,

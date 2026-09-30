@@ -27,7 +27,7 @@ func _initialize_boss_room() -> void:
 	if first_visit:
 		player.balao_de_pensamento.enfileirar(
 			BOSS_ROOM_EMPTY_ID,
-			"Por isso ele não está respondendo, meteu o pé"
+			"Então foi por isso que ele não respondeu. Ele fugiu."
 		)
 	if player.checkpoint_enabled and state_changed:
 		SaveGame.create_checkpoint(player)
@@ -51,7 +51,7 @@ func _on_boss_card_collected() -> void:
 	player.balao_de_pensamento.descartar([BOSS_ROOM_EMPTY_ID])
 	player.balao_de_pensamento.enfileirar(
 		BOSS_CARD_FOUND_ID,
-		"Tenho que levar isso no data center agora"
+		"Preciso levar este cartão ao data center."
 	)
 	if player.checkpoint_enabled:
 		SaveGame.create_checkpoint(player)

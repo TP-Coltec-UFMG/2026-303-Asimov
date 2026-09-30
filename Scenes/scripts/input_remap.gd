@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func _on_pressed() -> void:
 	esperando_input = true
-	text = action_name + ": Waiting input"
+	text = action_name + ": Aguardando entrada"
 	release_focus()
 
 

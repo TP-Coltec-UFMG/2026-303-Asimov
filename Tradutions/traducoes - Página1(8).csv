@@ -38,7 +38,7 @@ Tela Cheia Desativada,Tela Cheia Desativada,Full Screen Disabled,Pantalla Comple
 Mostrar FPS Ativado,Mostrar FPS Ativado,Show FPS Enabled,Mostrar FPS Activado,Afficher les FPS Activé
 Mostrar FPS Desativado,Mostrar FPS Desativado,Show FPS Disabled,Mostrar FPS Activado,Afficher les FPS Désactivé
 Filtro de Daltonismo Ativado,Filtro de Daltonismo Ativado,Color Blindness Filter Enabled,Filtro de Daltonismo Activado,Filtre de Daltonisme Activé
-Filtro de Daltonismo Destivado,Filtro de Daltonismo Destivado,Color Blindness Filter Disabled,Filtro de Daltonismo Desactivado,Filtre de Daltonisme Désactivé
+Filtro de Daltonismo Desativado,Filtro de Daltonismo Desativado,Color Blindness Filter Disabled,Filtro de Daltonismo Desactivado,Filtre de Daltonisme Désactivé
 Legendas Ligadas,Legendas Ligadas,Subtitles Enabled,Subtítulos Activadas,Sous-titres Activé
 Legendas Desligadas,Legendas Desligadas,Subtitles Disabled,Subtítulos Desactivadas,Sous-titres Désactivé
 Leitor de Tela Ativado,Leitor de Tela Ativado,Screen Reader Enabled,Lector de Pantalla Activado,Lecteur d'écran Activé
@@ -93,7 +93,7 @@ TELA CHEIA DESATIVADA,TELA CHEIA DESATIVADA,FULL SCREEN DISABLED,PANTALLA COMPLE
 MOSTRAR FPS ATIVADO,MOSTRAR FPS ATIVADO,SHOW FPS ENABLED,MOSTRAR FPS ACTIVADO,AFFICHER LES FPS ACTIVÉ
 MOSTRAR FPS DESATIVADO,MOSTRAR FPS DESATIVADO,SHOW FPS DISABLED,MOSTRAR FPS ACTIVADO,AFFICHER LES FPS DÉSACTIVÉ
 FILTRO DE DALTONISMO ATIVADO,FILTRO DE DALTONISMO ATIVADO,COLOR BLINDNESS FILTER ENABLED,FILTRO DE DALTONISMO ACTIVADO,FILTRE DE DALTONISME ACTIVÉ
-FILTRO DE DALTONISMO DESTIVADO,FILTRO DE DALTONISMO DESTIVADO,COLOR BLINDNESS FILTER DISABLED,FILTRO DE DALTONISMO DESACTIVADO,FILTRE DE DALTONISME DÉSACTIVÉ
+FILTRO DE DALTONISMO DESATIVADO,FILTRO DE DALTONISMO DESATIVADO,COLOR BLINDNESS FILTER DISABLED,FILTRO DE DALTONISMO DESACTIVADO,FILTRE DE DALTONISME DÉSACTIVÉ
 LEGENDAS LIGADAS,LEGENDAS LIGADAS,SUBTITLES ENABLED,SUBTÍTULOS ACTIVADAS,SOUS-TITRES ACTIVÉ
 LEGENDAS DESLIGADAS,LEGENDAS DESLIGADAS,SUBTITLES DISABLED,SUBTÍTULOS DESACTIVADAS,SOUS-TITRES DÉSACTIVÉ
 LEITOR DE TELA ATIVADO,LEITOR DE TELA ATIVADO,SCREEN READER ENABLED,LECTOR DE PANTALLA ACTIVADO,LECTEUR D'ÉCRAN ACTIVÉ
@@ -109,13 +109,13 @@ TAMANHO DAS LEGENDAS: GRANDE,TAMANHO DAS LEGENDAS: GRANDE,LARGE SUBTITLES SIZE,T
 TAMANHO DA INTERFACE: PEQUENO,TAMANHO DA INTERFACE: PEQUENO,SMALL INTERFACE SIZE,TAMAÑO DE LA INTERFAZ: PEQUEÑO,PETITE TAILLE DE L'INTERFACE
 TAMANHO DA INTERFACE: PADRÃO,TAMANHO DA INTERFACE: PADRÃO,DEFAULT INTERFACE SIZE,TAMAÑO DE LA INTERFAZ: ESTÁNDAR,TAILLE PAR DÉFAUT DE L'INTERFACE
 TAMANHO DA INTERFACE: GRANDE,TAMANHO DA INTERFACE: GRANDE,LARGE INTERFACE SIZE,TAMAÑO DE LA INTERFAZ: GRANDE,GRANDS TAILLE DE L'INTERFACE
-Intensidade Filtro de Daltonismo,Intensidade Filtro de Daltonismo,Color Blindness Filter Intensity,Intensidad del filtro para daltonismo,Intensité du filtre pour le daltonisme
+Intensidade do Filtro de Daltonismo,Intensidade do Filtro de Daltonismo,Color Blindness Filter Intensity,Intensidad del filtro para daltonismo,Intensité du filtre pour le daltonisme
 Velocidade de Fala do Leitor de Tela,Velocidade de Fala do Leitor de Tela,Screen Reader Speech Rate,Velocidad de habla del lector de pantalla,vitesse de lecture de l'écran
-"Bem Vindo, o leitor de tela pode ser ativado","Bem Vindo, o leitor de tela pode ser ativado","Welcome, the screen reader can be activated.","Bienvenido, el lector de pantalla puede activarse.","Bienvenue, le lecteur d'écran peut être activé."
-Bem Vindo,Bem Vindo,Welcome,Bienvenido,Accueillir
+"Bem-vindo. O leitor de tela pode ser ativado.","Bem-vindo. O leitor de tela pode ser ativado.","Welcome. The screen reader can be activated.","Bienvenido. El lector de pantalla puede activarse.","Bienvenue. Le lecteur d'écran peut être activé."
+Bem-vindo,Bem-vindo,Welcome,Bienvenido,Bienvenue
 Tamanho da Interface,Tamanho da Interface,Interface Size,Tamaño de la interfaz,Taille de l’interface
 Padrão,Padrão,Default,Predeterminado,Par défaut
-Diminuida,Diminuída,Reduced,Reducida,Réduite
+Diminuída,Diminuída,Reduced,Reducida,Réduite
 Aumentada,Aumentada,Increased,Aumentada,Agrandie
 Continuar,,,,
 "TUTORIAL_GO_SELECTION","IR À SELEÇÃO","GO TO SELECTION","IR A SELECCIÓN","ALLER AU CHOIX"
@@ -137,7 +137,7 @@ Continuar,,,,
 "TUTORIAL_PLAY_PUSH_HINT","A caixa se move somente na horizontal.","The crate only moves horizontally.","La caja solo se mueve en horizontal.","La caisse se déplace uniquement à l'horizontale."
 "TUTORIAL_PLAY_PUSH_ACTIVE","Caixa segura. Empurre até o ALVO.","Crate held. Push it to the TARGET.","Caja sujeta. Empújala hasta el OBJETIVO.","Caisse saisie. Poussez-la vers la CIBLE."
 "TUTORIAL_PLAY_PULL_TITLE","AGORA PUXE A CAIXA","NOW PULL THE CRATE","AHORA TIRA DE LA CAJA","TIREZ MAINTENANT LA CAISSE"
-"TUTORIAL_PLAY_PULL_OBJECTIVE","Sem soltar recue na direção oposta.","Without releasing move in the opposite direction.","Sin soltar retrocede en la dirección opuesta.","Sans lâcher reculez dans la direction opposée."
+"TUTORIAL_PLAY_PULL_OBJECTIVE","Sem soltar, recue na direção oposta.","Without releasing, move in the opposite direction.","Sin soltar, retrocede en la dirección opuesta.","Sans lâcher, reculez dans la direction opposée."
 "TUTORIAL_PLAY_PULL_HINT","O personagem recua e a caixa acompanha.","The character steps back and the crate follows.","El personaje retrocede y la caja lo sigue.","Le personnage recule et la caisse suit."
 "TUTORIAL_PLAY_PULL_RELEASED_EARLY","Segure novamente com {push} e depois puxe.","Hold it again with {push} and then pull.","Sujétala de nuevo con {push} y luego tira.","Saisissez-la à nouveau avec {push} puis tirez."
 "TUTORIAL_PLAY_RELEASE_TITLE","SOLTE A CAIXA","RELEASE THE CRATE","SUELTA LA CAJA","LÂCHEZ LA CAISSE"
@@ -151,7 +151,7 @@ Continuar,,,,
 "TUTORIAL_PLAY_EXIT_OBJECTIVE","A porta está aberta. Entre na área verde SAÍDA.","The door is open. Enter the green EXIT area.","La puerta está abierta. Entra en el área verde SALIDA.","La porte est ouverte. Entrez dans la zone verte SORTIE."
 "TUTORIAL_PLAY_EXIT_HINT","Depois você escolherá o personagem para a partida.","Next you will choose the character for the game.","Después elegirás el personaje para la partida.","Vous choisirez ensuite le personnage pour la partie."
 "TUTORIAL_PLAY_SUCCESS","Objetivo concluído!","Objective complete!","¡Objetivo completado!","Objectif terminé !"
-"TUTORIAL_PLAY_COMPLETE_SPEECH","Treinamento concluído. Você praticou movimento iluminação e combate a incêndio e já pode escolher seu personagem.","Training complete. You practiced movement lighting and firefighting and can now choose your character.","Entrenamiento completado. Practicaste movimiento iluminación y extinción de incendios y ya puedes elegir tu personaje.","Entraînement terminé. Vous avez pratiqué le déplacement l'éclairage et l'extinction d'un incendie et pouvez maintenant choisir votre personnage."
+"TUTORIAL_PLAY_COMPLETE_SPEECH","Treinamento concluído. Você praticou movimento, iluminação e combate a incêndios. Agora pode escolher seu personagem.","Training complete. You practiced movement, lighting, and firefighting. You can now choose your character.","Entrenamiento completado. Practicaste movimiento, iluminación y extinción de incendios. Ahora puedes elegir tu personaje.","Entraînement terminé. Vous avez pratiqué le déplacement, l'éclairage et l'extinction d'incendies. Vous pouvez maintenant choisir votre personnage."
 "TUTORIAL_PLAY_RESET_DONE","Etapa reiniciada.","Stage reset.","Etapa reiniciada.","Étape recommencée."
 "TUTORIAL_PLAY_PAUSED","Tutorial pausado.","Tutorial paused.","Tutorial en pausa.","Tutoriel en pause."
 "TUTORIAL_PLAY_RESUMED","Tutorial retomado.","Tutorial resumed.","Tutorial reanudado.","Tutoriel repris."

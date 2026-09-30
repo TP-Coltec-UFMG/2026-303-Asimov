@@ -54,7 +54,7 @@ func _inicializar() -> void:
 	_on_pensamento_iniciado(man_player.balao_de_pensamento.pensamento_atual_id())
 	man_player.balao_de_pensamento.atualizar_texto(
 		_pensamento_id("pos_saida_2"),
-		"Talvez eu deveria ir na sala do escritório (3º andar)"
+		"Devo verificar o escritório no 3º andar."
 	)
 	if _elevador_terceiro_liberado:
 		_atualizar_tarefa_terceiro()
@@ -66,7 +66,7 @@ func _inicializar() -> void:
 		return
 
 	_pensar("intro_1", "O que está acontecendo?")
-	_pensar("intro_2", "Temos que sair desse andar!")
+	_pensar("intro_2", "Precisamos sair deste andar!")
 	_pensar("intro_4", "Preciso de um extintor.")
 	_atualizar_visibilidade()
 	_tentar_finalizar_missao()
@@ -207,7 +207,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	quest_ui.set_task_completed(1, true, true)
 
 	if not M1_feito:
-		_pensar("aviso_1", "Tenho que apagar todos os fogos!")
+		_pensar("aviso_1", "Preciso apagar todos os focos de incêndio!")
 		_pensar("aviso_2", "Não é seguro passar assim.")
 
 	if not _tentar_finalizar_missao():
@@ -250,7 +250,7 @@ func _tentar_finalizar_missao() -> bool:
 	_hide_scheduled = true
 
 	_start_npc_exit_paths()
-	_pensar("saida", "Vai, vai, vai, vai! Corram! Corram todos! Saiam!")
+	_pensar("saida", "Rápido! Todos para o elevador!")
 	_pos_saida_iniciada = true
 	_iniciar_espera_npcs()
 	_save_progress_and_checkpoint()
@@ -337,8 +337,8 @@ func _concluir_saida_depois_da_animacao(marcador: AnimatedSprite2D) -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not _pos_saida_iniciada:
 		return
 	_liberar_elevador_terceiro()
-	_pensar("pos_saida_1", "Eu tenho que investigar isso.")
-	_pensar("pos_saida_2", "Talvez eu deveria ir na sala do escritório (3º andar)")
+	_pensar("pos_saida_1", "Preciso entender o que aconteceu.")
+	_pensar("pos_saida_2", "Vou verificar o escritório no 3º andar.")
 	_save_progress_and_checkpoint()
 
 

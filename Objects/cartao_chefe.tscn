@@ -15,7 +15,7 @@ scale = Vector2(0.5, 0.5)
 script = ExtResource("1_m8r1f")
 
 [node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_3ve4w")]
-interact_name = "Cartão Chefe"
+interact_name = "Cartão do chefe"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interectable" unique_id=101289257]
 shape = SubResource("CircleShape2D_6hjy0")

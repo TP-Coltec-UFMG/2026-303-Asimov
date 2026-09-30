@@ -501,7 +501,7 @@ func _iniciar_passo_queimar_resistor(passo: int) -> void:
 
 		0:
 			texto_orientacao.text = \
-				"Num circuito, os componentes aguentam uma certa quantidade de energia passando por eles."
+				"Cada componente suporta uma quantidade limitada de energia."
 
 			botao_continuar.visible = true
 
@@ -512,7 +512,7 @@ func _iniciar_passo_queimar_resistor(passo: int) -> void:
 
 		1:
 			texto_orientacao.text = \
-				"O resistor é o primeiro componente em contato com a tensão da fonte. Ele diminui a tensão que chega no outro componente."
+				"O resistor reduz a tensão antes que ela chegue ao outro componente."
 
 			botao_continuar.visible = true
 
@@ -526,7 +526,7 @@ func _iniciar_passo_queimar_resistor(passo: int) -> void:
 			_destacar(resistor)
 
 			texto_orientacao.text = \
-				"Se eu aumentar essa tensão, consigo queimá-lo!\n\nClique no polo + da bateria até o resistor queimar."
+				"Para queimá-lo, aumente a tensão.\n\nClique no polo positivo da bateria."
 
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -548,7 +548,7 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 
 		0:
 			texto_orientacao.text = \
-				"Para queimar o componente, preciso fazer a energia passar diretamente por ele, sem o resistor."
+				"Para queimar o componente, desvie o resistor."
 
 			botao_continuar.visible = true
 
@@ -568,7 +568,7 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 				)
 
 			texto_orientacao.text = \
-				"Vou cortar o fio entre a primeira junção e o resistor. Vou posicionar o alicate no fio e clicar com o botão direito."
+				"Corte o fio entre a primeira junção e o resistor com o botão direito."
 
 			botao_continuar.visible = false
 
@@ -586,7 +586,7 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 				)
 
 			texto_orientacao.text = \
-				"Agora vou cortar o fio entre a junção e o terminal do componente."
+				"Agora corte o fio entre a junção e o componente."
 
 			botao_continuar.visible = false
 
@@ -604,7 +604,7 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 				)
 
 			texto_orientacao.text = \
-				"Agora vou ligar a junção em destaque diretamente ao terminal do componente e ver o que acontece."
+				"Ligue a junção destacada diretamente ao componente."
 
 			botao_continuar.visible = false
 
@@ -655,7 +655,7 @@ func _iniciar_passo_queimar_bateria(passo: int) -> void:
 			_destacar(bateria)
 
 			texto_orientacao.text = \
-				"Um curto-circuito acontece quando a energia da bateria volta para ela sem nenhum componente no caminho."
+				"Um curto-circuito liga os polos sem componentes no caminho."
 
 			botao_continuar.visible = true
 
@@ -668,7 +668,7 @@ func _iniciar_passo_queimar_bateria(passo: int) -> void:
 			_destacar(bateria)
 
 			texto_orientacao.text = \
-				"Vou cortar os fios e reconectar de um jeito que o polo positivo fique direto no negativo. Isso deve fazer a bateria queimar."
+				"Corte os fios e ligue o polo positivo diretamente ao negativo."
 
 			botao_continuar.visible = false
 
@@ -695,7 +695,7 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			_destacar(resistor)
 
 			texto_orientacao.text = \
-				"Este circuito tem dois alvos. Primeiro, vou aumentar a tensão para queimar o resistor."
+				"Há dois alvos. Primeiro, aumente a tensão e queime o resistor."
 
 			botao_continuar.visible = false
 
@@ -708,7 +708,7 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			_destacar(led)
 
 			texto_orientacao.text = \
-				"Agora vou cortar os fios do resistor e ligar a junção diretamente ao componente, como fiz antes."
+				"Agora desvie o resistor e ligue a junção ao componente."
 
 			botao_continuar.visible = false
 
@@ -745,7 +745,7 @@ func _iniciar_passo_queimar_componente_e_bateria(passo: int) -> void:
 			_destacar(led)
 
 			texto_orientacao.text = \
-				"Primeiro, vou desviar o resistor e ligar a junção ao componente para queimá-lo. A bateria precisa ficar por último."
+				"Desvie o resistor e queime o componente. Deixe a bateria por último."
 
 		else:
 
@@ -753,7 +753,7 @@ func _iniciar_passo_queimar_componente_e_bateria(passo: int) -> void:
 			_destacar(resistor)
 
 			texto_orientacao.text = \
-				"Primeiro, vou aumentar a tensão para queimar o resistor. A bateria precisa ficar por último."
+				"Aumente a tensão e queime o resistor. Deixe a bateria por último."
 
 	elif passo == 1:
 
@@ -761,7 +761,7 @@ func _iniciar_passo_queimar_componente_e_bateria(passo: int) -> void:
 		_destacar(bateria)
 
 		texto_orientacao.text = \
-			"Agora vou usar as junções para ligar os polos da bateria sem componentes no caminho, criando um curto-circuito."
+			"Agora ligue os polos sem componentes no caminho para criar um curto-circuito."
 
 
 

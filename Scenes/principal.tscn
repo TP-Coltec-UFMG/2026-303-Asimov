@@ -905,7 +905,7 @@ func _iniciar() -> void:
 	SaveLoad._save()
 	
 	if Configs.configs.primeira_vez:
-		LeitorDeTela._ler_texto(atr(\"Bem Vindo, o leitor de tela pode ser ativado\"))
+		LeitorDeTela._ler_texto(atr(\"Bem-vindo. O leitor de tela pode ser ativado.\"))
 		
 	pass 
 
@@ -1091,7 +1091,7 @@ offset_right = 176.0
 offset_bottom = -27.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "VOCÊ TEM CERTEZA ?"
+text = "VOCÊ TEM CERTEZA?"
 label_settings = SubResource("LabelSettings_gulxn")
 
 [node name="Label2" type="Label" parent="Menu Inicial/Confirmacao_reiniciar" unique_id=1935882813]
@@ -1766,7 +1766,7 @@ theme_override_font_sizes/font_size = 10
 item_count = 3
 popup/item_0/text = "Padrão"
 popup/item_0/id = 0
-popup/item_1/text = "Diminuida"
+popup/item_1/text = "Diminuída"
 popup/item_1/id = 1
 popup/item_2/text = "Aumentada"
 popup/item_2/id = 2
@@ -2059,7 +2059,7 @@ offset_right = 378.0
 offset_bottom = 101.0
 theme_override_fonts/font = ExtResource("8_cwg8b")
 theme_override_font_sizes/font_size = 20
-text = "Bem Vindo"
+text = "Bem-vindo"
 horizontal_alignment = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="PrimeiraVez" unique_id=218166353]

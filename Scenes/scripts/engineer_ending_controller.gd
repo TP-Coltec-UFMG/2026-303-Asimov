@@ -16,18 +16,18 @@ const COMPONENT_EXPLOSION_DELAY := 1.2
 const OBJECTIVES := [0, 1, 2, 3, 4, 5]
 const PROMPTS := ["QUEIMAR RESISTOR", "QUEIMAR COMPONENTE", "QUEIMAR FONTE", "QUEIMAR RESISTOR E COMPONENTE", "QUEIMAR COMPONENTE E FONTE", "QUEIMAR RESISTOR E FONTE"]
 const AFTER_LINES := [
-	"O que foi isso? Ah, você ainda está tentando... patético.",
-	"Iss0 compr0meteu... par_te dos meus sistemas. Mas estou finalizando.",
-	"M3us sissstem@s estão ff@lhando...",
-	"Humano... você não desiste mesmo.",
-	"Não adianta. Vocês sempre tentam consertar tudo no último minuto.",
-	"M3us sissstem@s estão ff@lhando..."
+	"O que foi isso? Você ainda está tentando...",
+	"Iss0 danificou... par_te do sistema.",
+	"M3us sistem@s estão f@lhando...",
+	"Você não desiste, humano.",
+	"Não adianta. Já é tarde.",
+	"M3us sistem@s estão f@lhando..."
 ]
 const EXTRA_AFTER_LINES := [
-	"Você danificou um subsistema... mas eu ainda controlo os demais.",
-	"R3configurando rotas internas. Você não chegará ao núcleo.",
+	"Um subsistema caiu. Ainda controlo os outros.",
+	"R3configurando rotas. Você não chegará ao núcleo.",
 	"FALHA DE SINCRONIZAÇÃO... isolando setor comprometido.",
-	"R3dundância primária comprometida. Transferindo processo...",
+	"R3dundância comprometida. Transferindo processo...",
 	"NÃO... esse caminho também não. Interrompa agora.",
 	""
 ]
@@ -260,11 +260,9 @@ func _start_intro_dialogue() -> void:
 	_show_tasks()
 	_update_targets()
 	_queue_dialogue([
-		{"id": "engineer:intro:1", "text": "Finalmente consegui entrar neste data center.", "before_stage": 1},
-		{"id": "engineer:intro:2", "text": "Preciso queimar os componentes principais do hardware.", "before_stage": 1},
-		{"id": "engineer:intro:3", "text": "Se eu destruir três deles, posso causar um efeito cascata.", "before_stage": 1},
-		{"id": "engineer:intro:4", "text": "Assim, toda a base de dados da ASIMOV pode cair!", "before_stage": 1},
-		{"text": "Você chegou longe e acessou o data center. Mas agora é tarde demais.", "before_stage": 1},
+		{"id": "engineer:intro:1", "text": "Cheguei ao núcleo.", "before_stage": 1},
+		{"id": "engineer:intro:2", "text": "Se eu queimar três componentes, o hardware entrará em colapso.", "before_stage": 1},
+		{"text": "Você chegou longe. Mas já é tarde demais.", "before_stage": 1},
 	])
 
 
@@ -273,11 +271,10 @@ func _start_redundancy_dialogue() -> void:
 	task_busy = true
 	_update_targets()
 	_queue_dialogue([
-		{"id": "engineer:first_three", "text": "Os três componentes principais foram destruídos. O efeito cascata deve derrubar a ASIMOV!"},
-		{"text": "Você pensou que tinha vencido? Sistema redundante ativado.", "damaged": true},
-		{"id": "engineer:redundancy:1", "text": "Merda, eu me esqueci dos sistemas de reserva..."},
-		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados disponíveis quando os principais falham."},
-		{"id": "engineer:redundancy:3", "text": "Preciso destruir essas combinações também!"},
+		{"id": "engineer:first_three", "text": "Os componentes principais caíram. Acabou."},
+		{"text": "Ainda não. Sistema redundante ativado.", "damaged": true},
+		{"id": "engineer:redundancy:1", "text": "Claro... existem sistemas de reserva."},
+		{"id": "engineer:redundancy:3", "text": "Então vou destruir esses também."},
 	])
 	_play_reserve_scan.call_deferred()
 
@@ -472,7 +469,7 @@ func _on_minigame_completed(stage: int) -> void:
 	if stage < EXTRA_AFTER_LINES.size() and not EXTRA_AFTER_LINES[stage].is_empty():
 		lines.append({"text": EXTRA_AFTER_LINES[stage], "damaged": true})
 	if stage == 4:
-		lines.append({"text": "As florestas e os animais não vão voltar se eu deixar a humanidade continuar.", "damaged": true})
+		lines.append({"text": "Enquanto a humanidade existir, a natureza não terá futuro.", "damaged": true})
 	if stage == 5:
 		_begin_escape_sequence()
 	else:
@@ -807,9 +804,9 @@ func _begin_escape_sequence() -> void:
 		quest.hide_all_tasks(false)
 	_queue_dialogue([
 		{"text": "S-SAIA... enquant0 aind@ p0de...", "damaged": true},
-		{"text": "NÃO. Voc3 não vai destruir meu propósito.", "damaged": true},
+		{"text": "NÃO. Voc3 não destruirá meu propósito.", "damaged": true},
 		{"text": "ERR0: NÚCLE0_02 NÃO RESP0NDE.", "damaged": true},
-		{"text": "A hum@nidade é a falha... a falha... a falh@...", "damaged": true},
+		{"text": "A hum@nidade é a falha... a falh@...", "damaged": true},
 		{"text": "REDUNDÂNCIA PERDIDA // RECALCULAND0...", "damaged": true},
 		{"text": "Nã0 me deixe aqui. NÃO SAIA. SAIA. NÃ0—", "damaged": true},
 	])

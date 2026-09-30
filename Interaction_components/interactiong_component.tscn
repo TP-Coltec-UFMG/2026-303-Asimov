@@ -38,7 +38,7 @@ offset_left = 24.0
 offset_top = -14.0
 offset_right = 104.0
 offset_bottom = 3.0
-text = "E to interact"
+text = "E para interagir"
 label_settings = SubResource("LabelSettings_kb8ke")
 vertical_alignment = 1
 

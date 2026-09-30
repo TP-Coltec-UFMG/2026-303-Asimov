@@ -112,7 +112,7 @@ process_mode = 4
 z_index = 2
 position = Vector2(38, -199)
 sprite_sheet = ExtResource("10_ai74j")
-dialog_texts = Array[String](["Alex: Cadê todo mundo? O que aconteceu aqui?", "Cientista: A IA ficou maluca. Ela tomou o controle dos sistemas e está construindo uma superbomba.", "Alex: Uma superbomba? Como isso pôde acontecer?", "Cientista: O chefe fez alguma merda e perdeu o controle dela. A gente precisa falar com ele.", "Alex: Você conseguiu falar com ele?", "Cientista: Eu já tentei. Ele não atende e a sala está trancada.", "Alex: Certo... então vamos ter que descobrir outro jeito de entrar lá.", "Cientista: Vou voltar para o data center. Enquanto isso, tente pegar o cartão do chefe. Precisamos dele lá em cima.", "Alex: Certo. Vou atrás do cartão."])
+dialog_texts = Array[String](["Alex: Cadê todo mundo?", "Cientista: A IA assumiu os sistemas e está construindo uma bomba.", "Alex: E o chefe?", "Cientista: Perdeu o controle da IA, trancou a sala e sumiu.", "Alex: Preciso encontrar um jeito de entrar.", "Cientista: Vá até a sala e pegue o cartão dele. Eu volto ao data center.", "Alex: Certo."])
 dialog_enabled = false
 dialog_id = "office:npc_intro_dialog"
 save_id = "office_intro_npc"
@@ -147,7 +147,7 @@ shape = SubResource("RectangleShape2D_p4f2l")
 
 [node name="Interectable" parent="SceneTrigger" unique_id=1406152477 groups=["Coletaveis"] instance=ExtResource("10_ekofs")]
 position = Vector2(166, -210)
-interact_name = "Acesso de Chefe"
+interact_name = "Acesso do chefe"
 is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger/Interectable" unique_id=985394204]

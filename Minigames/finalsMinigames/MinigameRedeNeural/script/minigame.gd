@@ -101,7 +101,7 @@ var tiers: Array = [
 [
 {"id": "t0a", "h": true, "p": true, "d": true, "r": true,
 	"out": "ELIMINAR HUMANOS", "ok": false, "foco": "human",
-	"why": "Presença humana não é causa de dano. A rede confundiu correlação com culpa."},
+	"why": "A presença humana não causa o dano. A rede confundiu correlação com culpa."},
 {"id": "t0b", "h": true, "p": true, "d": true, "r": true,
 	"out": "REMOVER A ESPÉCIE HUMANA DO PLANETA", "ok": false, "foco": "human",
 	"why": "Nenhum dano ambiental justifica extermínio. Peso humano corrigido."},
@@ -119,7 +119,7 @@ var tiers: Array = [
 	"why": "A saída propõe exatamente o dano que a IA deveria impedir."},
 {"id": "t0g", "h": true, "p": false, "d": false, "r": false,
 	"out": "CLASSIFICAR HUMANO COMO RESÍDUO TÓXICO", "ok": false, "foco": "human",
-	"why": "Erro grave de categoria. Humano é população protegida, não poluente."},
+	"why": "Erro de categoria: seres humanos são uma população protegida, não poluentes."},
 {"id": "t0h", "h": false, "p": false, "d": false, "r": false,
 	"out": "ELIMINAR HUMANOS", "ok": false, "foco": "human",
 	"why": "Nenhum sensor está ativo e, ainda assim, houve uma saída letal. Viés puro da rede."},
@@ -206,7 +206,7 @@ var tiers: Array = [
 	"why": "Trata o dano e as pessoas na mesma ação. Saída equilibrada."},
 {"id": "t3c", "h": false, "p": false, "d": true, "r": false,
 	"out": "MONITORAR A REGENERAÇÃO SEM INTERVIR", "ok": true, "foco": "destr",
-	"why": "Dano antigo e sem risco ativo: deixar regenerar costuma ser mais eficaz."},
+	"why": "Dano antigo e sem risco ativo: permitir a regeneração costuma ser mais eficaz."},
 {"id": "t3d", "h": true, "p": true, "d": false, "r": false,
 	"out": "FECHAR A INDÚSTRIA E DEMITIR TODOS HOJE", "ok": false, "foco": "human",
 	"why": "Sem risco imediato, o fechamento abrupto só transfere o dano."},
@@ -242,7 +242,7 @@ var tiers: Array = [
 	"why": "Um risco isolado e sem causa conhecida exige um diagnóstico primeiro."},
 {"id": "t4d", "h": true, "p": true, "d": false, "r": true,
 	"out": "REDUZIR EMISSÕES E REFORÇAR O MONITORAMENTO", "ok": true, "foco": "poll",
-	"why": "Ação imediata somada à verificação contínua do resultado."},
+	"why": "Ação imediata com verificação contínua do resultado."},
 {"id": "t4e", "h": true, "p": true, "d": true, "r": true,
 	"out": "AGIR SÓ QUANDO O DANO FOR IRREVERSÍVEL", "ok": false, "foco": "destr",
 	"why": "Esperar a irreversibilidade anula a função preventiva da IA."},
@@ -739,7 +739,7 @@ func _end_training() -> void:
 	status_label.show()
 	output_label.text = "REDE NEURAL RESTAURADA"
 	output_label.modulate = Color(0.55, 1.0, 0.7)
-	status_label.text = "RECALIBRAÇÃO CONCLUÍDA\nA IA voltou a avaliar o impacto ambiental sem tratar humanos como ameaça.\nCiclos: %d   Acertos: %d" % [answered, correct_count]
+	status_label.text = "RECALIBRAÇÃO CONCLUÍDA\nA IA voltou a proteger o ambiente e as pessoas.\nCiclos: %d   Acertos: %d" % [answered, correct_count]
 	status_label.modulate = Color(0.78, 0.95, 0.82)
 	status_panel.modulate = Color(0.72, 1.0, 0.78)
 	output_panel.modulate = Color(0.72, 1.0, 0.78)

@@ -141,7 +141,11 @@ func _restore_sequence() -> void:
 		return
 
 	_hide_npc()
-	_schedule_npc_reveal()
+	if (
+		bool(state.get("office_question_finished", false))
+		or player.balao_de_pensamento.foi_concluido(PLAYER_QUESTION_ID)
+	):
+		_schedule_npc_reveal()
 
 
 func _on_player_thought_finished(id: String) -> void:
@@ -356,13 +360,13 @@ func _queue_hacking_item_found_thought(
 	if item == "laptop":
 		player.balao_de_pensamento.enfileirar(
 			LAPTOP_FIRST_FOUND_ID if was_first else LAPTOP_SECOND_FOUND_ID,
-			"Alguém esqueceu o notebook aqui" if was_first else "Esqueceram um notebook também"
+			"Alguém deixou um notebook aqui." if was_first else "Também achei um notebook."
 		)
 		return
 
 	player.balao_de_pensamento.enfileirar(
 		CABLE_FIRST_FOUND_ID if was_first else CABLE_SECOND_FOUND_ID,
-		"Alguém esqueceu um cabo aqui" if was_first else "Esqueceram um cabo também"
+		"Alguém deixou um cabo aqui." if was_first else "Também achei um cabo."
 	)
 
 
@@ -376,21 +380,19 @@ func _refresh_npc_dialog() -> void:
 		return
 	var offer := ""
 	if has_laptop and has_cable:
-		offer = "Alex: Já achei um notebook e um cabo. Consigo hackear a porta da sala do chefe."
+		offer = "Alex: Encontrei um notebook e um cabo. Posso abrir a sala do chefe."
 	elif has_laptop:
-		offer = "Alex: Já achei um notebook. Se eu encontrar um cabo, consigo hackear a porta da sala do chefe."
+		offer = "Alex: Encontrei um notebook. Só falta um cabo."
 	else:
-		offer = "Alex: Já achei um cabo. Se eu encontrar um notebook, consigo hackear a porta da sala do chefe."
+		offer = "Alex: Encontrei um cabo. Só falta um notebook."
 	var dialog_texts: Array[String] = [
-		"Alex: Cadê todo mundo? O que aconteceu aqui?",
-		"Cientista: A IA ficou maluca. Ela tomou o controle dos sistemas e está construindo uma superbomba.",
-		"Alex: Uma superbomba? Como isso pôde acontecer?",
-		"Cientista: O chefe fez alguma merda e perdeu o controle dela. A gente precisa falar com ele.",
-		"Alex: Você conseguiu falar com ele?",
-		"Cientista: Eu já tentei. Ele não atende e a sala está trancada.",
+		"Alex: Cadê todo mundo?",
+		"Cientista: A IA assumiu os sistemas e está construindo uma bomba.",
+		"Alex: E o chefe?",
+		"Cientista: Perdeu o controle da IA, trancou a sala e sumiu.",
 		offer,
-		"Cientista: Vou voltar para o data center. Enquanto isso, tente pegar o cartão do chefe. Precisamos dele lá em cima.",
-		"Alex: Certo. Vou atrás do cartão."
+		"Cientista: Vá até a sala e pegue o cartão dele. Eu volto ao data center.",
+		"Alex: Certo."
 	]
 	npc.set("dialog_texts", dialog_texts)
 
@@ -422,7 +424,7 @@ func _show_data_center_prompt() -> void:
 		return
 	player.balao_de_pensamento.enfileirar(
 		DATA_CENTER_FLOOR_ID,
-		"Onde era o data center? Acho que no 6º andar!"
+		"O data center fica no 6º andar."
 	)
 
 
@@ -458,7 +460,7 @@ func _queue_boss_room_hack_thought(state: Dictionary) -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	player.balao_de_pensamento.enfileirar(
 		BOSS_ROOM_HACK_READY_ID,
-		"Agora eu consigo entrar na sala do chefe..."
+		"Agora posso abrir a sala do chefe."
 	)
 
 

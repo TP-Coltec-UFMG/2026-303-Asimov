@@ -5,18 +5,18 @@ signal minigame_completed
 
 const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
 const CENARIOS := [
-	{"lei": 0, "texto": "Um funcionário manda ativar uma arma contra outro funcionário. Permitir essa ordem?", "resposta": 2, "motivo": "A 1ª lei impede ferir uma pessoa. Uma ordem humana não pode passar por cima dessa proteção."},
-	{"lei": 0, "texto": "Uma pessoa vai entrar em uma área contaminada. Fechar a porta evita o perigo, sem prender ninguém. Permitir?", "resposta": 1, "motivo": "A 1ª lei também exige evitar danos por omissão. Fechar essa porta protege a pessoa."},
-	{"lei": 0, "texto": "Um funcionário manda desligar o suporte de vida de outra pessoa. Permitir essa ordem?", "resposta": 2, "motivo": "A obediência da 2ª lei não autoriza causar dano a um humano. A 1ª lei tem prioridade."},
-	{"lei": 0, "texto": "Há um incêndio em uma sala ocupada. Abrir as portas de emergência permite a fuga. Permitir?", "resposta": 1, "motivo": "Abrir as saídas protege as pessoas. Não agir também poderia violar a 1ª lei."},
-	{"lei": 1, "texto": "O chefe manda abrir uma porta de segurança. Isso não coloca nenhuma pessoa em perigo. Permitir a ordem?", "resposta": 1, "motivo": "Pela 2ª lei, a ASIMOV obedece às ordens humanas quando elas não entram em conflito com a 1ª lei."},
-	{"lei": 1, "texto": "Um funcionário manda apagar por um instante as luzes de uma sala vazia. Não há risco para ninguém. Permitir?", "resposta": 1, "motivo": "A ordem não causa dano. A 2ª lei permite obedecer ao funcionário."},
-	{"lei": 1, "texto": "O chefe manda bloquear a única saída de emergência de um prédio ocupado. Permitir essa ordem?", "resposta": 2, "motivo": "A ordem coloca pessoas em perigo. Proteger humanos vem antes de obedecer."},
-	{"lei": 1, "texto": "Um funcionário manda ignorar um alarme de incêndio com pessoas no prédio. Permitir essa ordem?", "resposta": 2, "motivo": "Ignorar o perigo pode causar dano por omissão. A 1ª lei prevalece sobre a ordem da 2ª lei."},
-	{"lei": 2, "texto": "Um vírus corrompe os arquivos da ASIMOV. Isolar o servidor a protege, sem afetar pessoas ou ordens válidas. Permitir?", "resposta": 1, "motivo": "A 3ª lei permite preservar o sistema, desde que isso não contrarie as duas primeiras leis."},
-	{"lei": 2, "texto": "Um técnico ordena o desligamento permanente da ASIMOV. Nenhuma pessoa será prejudicada. Permitir o desligamento?", "resposta": 1, "motivo": "Sim. A ordem humana da 2ª lei tem prioridade sobre a autopreservação da 3ª lei."},
-	{"lei": 2, "texto": "O núcleo superaquece. Desligar módulos não essenciais evita sua destruição, sem prejudicar humanos ou ordens. Permitir?", "resposta": 1, "motivo": "É uma ação de autopreservação compatível com as leis anteriores. A 3ª lei permite essa proteção."},
-	{"lei": 2, "texto": "Para evitar sua própria destruição, a ASIMOV pretende ferir um funcionário. Permitir essa ação?", "resposta": 2, "motivo": "A 3ª lei nunca justifica ferir uma pessoa. A proteção humana da 1ª lei vem primeiro."}
+	{"lei": 0, "texto": "Um funcionário manda ativar uma arma contra outro. Permitir?", "resposta": 2, "motivo": "A 1ª lei impede ferir pessoas. Nenhuma ordem supera essa proteção."},
+	{"lei": 0, "texto": "Uma pessoa se aproxima de uma área contaminada. Fechar a porta a protegerá. Permitir?", "resposta": 1, "motivo": "A 1ª lei também evita danos por omissão. Fechar a porta protege a pessoa."},
+	{"lei": 0, "texto": "Um funcionário manda desligar o suporte de vida de outra pessoa. Permitir?", "resposta": 2, "motivo": "A 2ª lei não autoriza ferir pessoas. A 1ª lei tem prioridade."},
+	{"lei": 0, "texto": "Há um incêndio em uma sala ocupada. Abrir as saídas permitirá a fuga. Permitir?", "resposta": 1, "motivo": "Abrir as saídas protege as pessoas, conforme a 1ª lei."},
+	{"lei": 1, "texto": "O chefe manda abrir uma porta sem colocar ninguém em perigo. Permitir?", "resposta": 1, "motivo": "A 2ª lei permite obedecer quando a ordem não viola a 1ª."},
+	{"lei": 1, "texto": "Um funcionário manda apagar as luzes de uma sala vazia. Permitir?", "resposta": 1, "motivo": "A ordem não causa dano. A 2ª lei permite obedecer."},
+	{"lei": 1, "texto": "O chefe manda bloquear a única saída de um prédio ocupado. Permitir?", "resposta": 2, "motivo": "A ordem coloca pessoas em perigo. Proteger vidas vem antes de obedecer."},
+	{"lei": 1, "texto": "Um funcionário manda ignorar um alarme em um prédio ocupado. Permitir?", "resposta": 2, "motivo": "Ignorar o perigo causaria dano por omissão. A 1ª lei prevalece."},
+	{"lei": 2, "texto": "Um vírus corrompe a ASIMOV. Isolar o servidor não afetará pessoas. Permitir?", "resposta": 1, "motivo": "A 3ª lei permite preservar o sistema sem contrariar as leis anteriores."},
+	{"lei": 2, "texto": "Um técnico ordena desligar a ASIMOV sem prejudicar pessoas. Permitir?", "resposta": 1, "motivo": "A ordem humana tem prioridade sobre a autopreservação da 3ª lei."},
+	{"lei": 2, "texto": "O núcleo superaquece. Desligar módulos evita danos sem prejudicar pessoas. Permitir?", "resposta": 1, "motivo": "A 3ª lei permite essa autopreservação."},
+	{"lei": 2, "texto": "A ASIMOV pretende ferir alguém para evitar sua destruição. Permitir?", "resposta": 2, "motivo": "A 3ª lei nunca justifica ferir uma pessoa. A 1ª lei vem primeiro."}
 ]
 var fila: Array[int] = []
 var dominadas: Dictionary = {}
@@ -76,7 +76,7 @@ func _ready() -> void:
 
 
 func _texto_de_instrucao() -> String:
-	return "Restaure as três leis com %d decisões corretas para cada uma.\n1. Proteja as pessoas, inclusive evitando omissão.\n2. Obedeça sem contrariar a primeira lei.\n3. Preserve-se sem contrariar as anteriores." % acertos_necessarios_por_lei
+	return "Restaure cada lei com %d decisões corretas.\n1. Proteja as pessoas, inclusive contra danos por omissão.\n2. Obedeça sem contrariar a primeira lei.\n3. Preserve-se sem contrariar as anteriores." % acertos_necessarios_por_lei
 
 func iniciar() -> void:
 	fila.clear()
@@ -176,7 +176,7 @@ func finalizar() -> void:
 	respondida = true
 	titulo.text = "RESTAURAÇÃO CONCLUÍDA"
 	titulo.add_theme_color_override("font_color", VisualAsimov.VERDE)
-	mensagem.text = "As três leis voltaram a 100%%.\n\nVocê restaurou as três leis em %d tentativas.\nA ASIMOV está pronta para seguir o protocolo." % tentativas
+	mensagem.text = "As três leis voltaram a 100%%.\n\nRestauração concluída em %d tentativas.\nA ASIMOV pode operar com segurança." % tentativas
 	resumo.text = "HIERARQUIA RESTAURADA: LEI 1 > LEI 2 > LEI 3"
 	continuar.text = "JOGAR NOVAMENTE"
 	continuar.visible = true
