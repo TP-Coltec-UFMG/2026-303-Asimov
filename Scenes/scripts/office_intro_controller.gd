@@ -45,6 +45,7 @@ func _initialize() -> void:
 		cable_pickup.interagiu.connect(_on_cable_collected)
 
 	var state: Dictionary = SaveGame.office_mission_state(player)
+	_discard_obsolete_thoughts(state)
 	var state_migrated := false
 	if (
 		player.inventory.get_item_on_inventary("laptop")
@@ -70,6 +71,7 @@ func _initialize() -> void:
 		state_migrated = true
 	if state_migrated:
 		SaveGame.save_global_state("hall_quest_01", state)
+	_discard_obsolete_thoughts(state)
 	_queue_boss_room_hack_thought(state)
 	if _handle_data_center_task(state):
 		return
@@ -139,16 +141,18 @@ func _restore_sequence() -> void:
 		return
 
 	_hide_npc()
-	if bool(state.get("office_question_finished", false)) or player.balao_de_pensamento.foi_concluido(PLAYER_QUESTION_ID):
-		_schedule_npc_reveal()
+	_schedule_npc_reveal()
 
 
 func _on_player_thought_finished(id: String) -> void:
+	if not _is_current_office():
+		return
 	if id == DATA_CENTER_FLOOR_ID:
 		var data_center_state: Dictionary = SaveGame.office_mission_state(player)
-		data_center_state["office_data_center_task_pending"] = false
-		data_center_state["office_data_center_task_active"] = true
-		SaveGame.save_global_state("hall_quest_01", data_center_state)
+		if bool(data_center_state.get("office_data_center_task_pending", false)):
+			data_center_state["office_data_center_task_pending"] = false
+			data_center_state["office_data_center_task_active"] = true
+			SaveGame.save_global_state("hall_quest_01", data_center_state)
 		_show_go_to_sixth_floor_task(bool(data_center_state.get("office_data_center_task_completed", false)))
 		_save_checkpoint()
 		return
@@ -194,6 +198,7 @@ func _on_npc_path_completed(finished_path: NPCPath) -> void:
 		return
 	state["office_npc_arrived"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
+	player.balao_de_pensamento.descartar([PLAYER_QUESTION_ID])
 	_save_checkpoint()
 	_npc_shout()
 
@@ -246,6 +251,7 @@ func _on_laptop_collected() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_show_hacking_item_task(state)
 	_refresh_npc_dialog()
+	_discard_obsolete_thoughts(state)
 	_queue_hacking_item_found_thought(state, "laptop", laptop_was_first)
 	_queue_boss_room_hack_thought(state)
 
@@ -260,6 +266,7 @@ func _on_cable_collected() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_show_hacking_item_task(state, not cable_was_first)
 	_refresh_npc_dialog()
+	_discard_obsolete_thoughts(state)
 	_queue_hacking_item_found_thought(state, "cabo", cable_was_first)
 	_queue_boss_room_hack_thought(state)
 
@@ -376,13 +383,13 @@ func _refresh_npc_dialog() -> void:
 		offer = "Alex: Já achei um cabo. Se eu encontrar um notebook, consigo hackear a porta da sala do chefe."
 	var dialog_texts: Array[String] = [
 		"Alex: Cadê todo mundo? O que aconteceu aqui?",
-		"Funcionário: A IA ficou maluca. Ela tomou o controle dos sistemas e está construindo uma superbomba.",
+		"Cientista: A IA ficou maluca. Ela tomou o controle dos sistemas e está construindo uma superbomba.",
 		"Alex: Uma superbomba? Como isso pôde acontecer?",
-		"Funcionário: O chefe fez alguma merda e perdeu o controle dela. A gente precisa falar com ele.",
+		"Cientista: O chefe fez alguma merda e perdeu o controle dela. A gente precisa falar com ele.",
 		"Alex: Você conseguiu falar com ele?",
-		"Funcionário: Eu já tentei. Ele não atende e a sala está trancada.",
+		"Cientista: Eu já tentei. Ele não atende e a sala está trancada.",
 		offer,
-		"Funcionário: Vou voltar para o data center. Enquanto isso, tente pegar o cartão do chefe. Precisamos dele lá em cima.",
+		"Cientista: Vou voltar para o data center. Enquanto isso, tente pegar o cartão do chefe. Precisamos dele lá em cima.",
 		"Alex: Certo. Vou atrás do cartão."
 	]
 	npc.set("dialog_texts", dialog_texts)
@@ -394,9 +401,10 @@ func _handle_data_center_task(state: Dictionary) -> bool:
 		return true
 	if not bool(state.get("office_data_center_task_pending", false)):
 		return false
-	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
-	if quest_ui != null:
-		quest_ui.hide_all_tasks()
+	state["office_data_center_task_pending"] = false
+	state["office_data_center_task_active"] = true
+	SaveGame.save_global_state("hall_quest_01", state)
+	_show_go_to_sixth_floor_task(bool(state.get("office_data_center_task_completed", false)))
 	call_deferred("_show_data_center_prompt")
 	return true
 
@@ -406,7 +414,11 @@ func _show_data_center_prompt() -> void:
 	if not _is_current_office():
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
-	if not bool(state.get("office_data_center_task_pending", false)):
+	if (
+		not bool(state.get("office_data_center_task_active", false))
+		or bool(state.get("office_data_center_task_completed", false))
+	):
+		player.balao_de_pensamento.descartar([DATA_CENTER_FLOOR_ID])
 		return
 	player.balao_de_pensamento.enfileirar(
 		DATA_CENTER_FLOOR_ID,
@@ -437,6 +449,9 @@ func _queue_boss_room_hack_thought(state: Dictionary) -> void:
 		return
 	if not bool(state.get("office_hack_boss_room_ready", false)):
 		return
+	if bool(state.get("office_boss_room_hacked", false)):
+		player.balao_de_pensamento.descartar([BOSS_ROOM_HACK_READY_ID])
+		return
 	if bool(state.get("office_hack_boss_room_thought_queued", false)):
 		return
 	state["office_hack_boss_room_thought_queued"] = true
@@ -445,6 +460,30 @@ func _queue_boss_room_hack_thought(state: Dictionary) -> void:
 		BOSS_ROOM_HACK_READY_ID,
 		"Agora eu consigo entrar na sala do chefe..."
 	)
+
+
+func _discard_obsolete_thoughts(state: Dictionary) -> void:
+	var obsolete: Array[String] = []
+	if bool(state.get("office_npc_arrived", false)):
+		obsolete.append(PLAYER_QUESTION_ID)
+	if (
+		bool(state.get("office_laptop_collected", false))
+		and bool(state.get("office_cable_collected", false))
+	):
+		obsolete.append_array([
+			LAPTOP_FIRST_FOUND_ID,
+			LAPTOP_SECOND_FOUND_ID,
+			CABLE_FIRST_FOUND_ID,
+			CABLE_SECOND_FOUND_ID,
+			LAPTOP_AFTER_DIALOG_FOUND_ID,
+			CABLE_AFTER_DIALOG_FOUND_ID,
+		])
+	if bool(state.get("office_boss_room_hacked", false)):
+		obsolete.append(BOSS_ROOM_HACK_READY_ID)
+	if bool(state.get("office_data_center_task_completed", false)):
+		obsolete.append(DATA_CENTER_FLOOR_ID)
+	if not obsolete.is_empty():
+		player.balao_de_pensamento.descartar(obsolete)
 
 
 func _show_npc() -> void:

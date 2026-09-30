@@ -635,6 +635,7 @@ func _give_strong_card() -> void:
 	state["data_center_access_strong_card_given"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_access_prompt("Testar cartão forte")
+	_show_access_intro_tasks(state)
 	player.balao_de_pensamento.enfileirar(
 		"data_center:strong_card_received",
 		"Cartão forte. Preciso equipá-lo e testar o leitor."
@@ -652,6 +653,7 @@ func _give_boss_card() -> void:
 	state["data_center_access_boss_card_given"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_access_prompt("Testar cartão do chefe")
+	_show_access_intro_tasks(state)
 	player.balao_de_pensamento.enfileirar(
 		"data_center:boss_card_received",
 		"Agora é a vez do cartão do chefe."
@@ -765,6 +767,10 @@ func play_restricted_area_fade_out() -> void:
 
 
 func _reject_strong_card() -> void:
+	player.balao_de_pensamento.descartar([
+		"data_center:strong_card_received",
+		"data_center:equip_strong_card",
+	])
 	access_sequence_busy = true
 	await access_trigger.reproduzir_acesso_negado()
 	access_sequence_busy = false
@@ -780,6 +786,10 @@ func _reject_strong_card() -> void:
 
 
 func _reject_boss_card() -> void:
+	player.balao_de_pensamento.descartar([
+		"data_center:boss_card_received",
+		"data_center:equip_boss_card",
+	])
 	access_sequence_busy = true
 	await access_trigger.reproduzir_acesso_negado()
 	access_sequence_busy = false
@@ -834,6 +844,9 @@ func _inspect_rfid_reader() -> void:
 
 
 func _verify_repaired_rfid_reader() -> void:
+	player.balao_de_pensamento.descartar([
+		"data_center:wires_repaired_return",
+	])
 	access_sequence_busy = true
 	_set_access_interactable(false)
 	if not await _run_rfid_verification([], -1.0, "recheck"):

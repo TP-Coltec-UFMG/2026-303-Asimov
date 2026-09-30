@@ -87,11 +87,12 @@ func _run() -> void:
 	_expect(not player.balao_de_pensamento.tem_pensamento(QuestMissionUI.COOLING_THOUGHT_TIME), "O pensamento deve respeitar os três segundos livres.")
 	quest.call("_process", 0.2)
 	_expect(player.balao_de_pensamento.tem_pensamento(QuestMissionUI.COOLING_THOUGHT_TIME), "O pensamento deve começar depois do intervalo.")
+	_expect(bool(state.get("cooling_optional_task_active", false)), "A tarefa deve ser ativada antes dos pensamentos de contexto.")
+	_expect((quest.rows[QuestMissionUI.COOLING_TASK_INDEX] as CanvasItem).visible, "A tarefa opcional deve aparecer junto do primeiro pensamento.")
 	for _index in range(3):
 		player.balao_de_pensamento.pular_pensamento()
 		await get_tree().process_frame
-	_expect(bool(state.get("cooling_optional_task_active", false)), "A tarefa deve ser ativada somente após os três pensamentos.")
-	_expect((quest.rows[QuestMissionUI.COOLING_TASK_INDEX] as CanvasItem).visible, "A tarefa opcional deve aparecer no painel.")
+	_expect(bool(state.get("cooling_optional_task_active", false)), "Os pensamentos não podem bloquear a tarefa opcional.")
 
 	state["programmer_ending_started"] = true
 	state["programmer_launch_isolated"] = true

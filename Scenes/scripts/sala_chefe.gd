@@ -42,8 +42,13 @@ func _on_boss_card_collected() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	state["office_boss_room_visited"] = true
 	state["office_boss_card_collected"] = true
+	state["office_data_center_task_pending"] = false
+	state["office_data_center_task_active"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
-	_show_boss_room_tasks(state)
+	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
+	if quest_ui != null:
+		quest_ui.show_go_to_sixth_floor_task(false, true)
+	player.balao_de_pensamento.descartar([BOSS_ROOM_EMPTY_ID])
 	player.balao_de_pensamento.enfileirar(
 		BOSS_CARD_FOUND_ID,
 		"Tenho que levar isso no data center agora"
@@ -60,11 +65,12 @@ func prepare_return_to_office() -> void:
 		return
 	if bool(state.get("office_data_center_task_active", false)):
 		return
-	state["office_data_center_task_pending"] = true
+	state["office_data_center_task_pending"] = false
+	state["office_data_center_task_active"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.hide_all_tasks()
+		quest_ui.show_go_to_sixth_floor_task(false)
 	if player.checkpoint_enabled:
 		SaveGame.create_checkpoint(player)
 

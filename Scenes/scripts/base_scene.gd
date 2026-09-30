@@ -2,6 +2,10 @@ class_name BaseScene
 extends Node
 
 const OFFICE_EMPTY_THOUGHT_ID: String = "office:empty_floor"
+const HALL_EXIT_THOUGHT_IDS: Array[String] = [
+	"hall:hall_quest_01:pos_saida_1",
+	"hall:hall_quest_01:pos_saida_2",
+]
 const OFFICE_EMPTY_THOUGHT_DELAY: float = 6.0
 const OPENING_BLUR_SCENE: PackedScene = preload(
 	"res://Cutscenes/opening_gameplay_blur.tscn"
@@ -137,6 +141,7 @@ func _registrar_chegada_escritorio() -> void:
 	if primeira_chegada:
 		estado["arrived_third_floor"] = true
 		SaveGame.save_global_state("hall_quest_01", estado)
+		player.balao_de_pensamento.descartar(HALL_EXIT_THOUGHT_IDS)
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
 		if primeira_chegada:

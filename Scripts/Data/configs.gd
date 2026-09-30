@@ -18,6 +18,7 @@ var configs: Dictionary = {
 	"alto_contraste": false,
 	"cor_alto_contraste": Color.YELLOW,
 	"movimento_camera": true,
+	"painel_tarefas_dinamico": true,
 	"assistencia_mira": false,
 	"input_bindings": {},
 	"interface_size": 0,
@@ -86,6 +87,9 @@ func _change_cor_alto_contraste(new_value: Color) -> void:
 
 func _change_movimento_camera(new_value: bool) -> void:
 	configs.movimento_camera = new_value
+
+func _change_painel_tarefas_dinamico(new_value: bool) -> void:
+	configs.painel_tarefas_dinamico = new_value
 
 func _change_assistencia_mira(new_value: bool) -> void:
 	configs.assistencia_mira = new_value

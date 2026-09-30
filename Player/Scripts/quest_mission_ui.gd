@@ -76,6 +76,7 @@ var _auto_hidden: bool = false
 var _completed_rows: Array[bool] = []
 var _panel_fading_out: bool = false
 var _panel_fade: Tween
+var _dynamic_panel_enabled: bool = true
 
 
 func _enter_tree() -> void:
@@ -84,6 +85,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	add_to_group(&"task_panels")
+	_dynamic_panel_enabled = bool(Configs.configs.get("painel_tarefas_dinamico", true))
 	for row in rows:
 		_completed_rows.append(false)
 	if standalone_mode:
@@ -139,7 +142,10 @@ func _ignore_mouse_input_recursive(node: Node) -> void:
 
 
 func _process(delta: float) -> void:
-	if not standalone_mode and desired_visible and not _auto_hidden and not _panel_fading_out and visible:
+	var configured_dynamic := bool(Configs.configs.get("painel_tarefas_dinamico", true))
+	if configured_dynamic != _dynamic_panel_enabled:
+		apply_dynamic_panel_setting()
+	if _dynamic_panel_enabled and not standalone_mode and desired_visible and not _auto_hidden and not _panel_fading_out and visible:
 		_panel_time_left -= delta
 		if _panel_time_left <= 0.0:
 			_fade_out_panel()
@@ -163,6 +169,17 @@ func _process(delta: float) -> void:
 	if cooling_idle_time >= COOLING_IDLE_DELAY:
 		cooling_idle_time = 0.0
 		_start_cooling_intro(current_player, state)
+
+
+func apply_dynamic_panel_setting() -> void:
+	_dynamic_panel_enabled = bool(Configs.configs.get("painel_tarefas_dinamico", true))
+	_panel_time_left = PANEL_DISPLAY_TIME
+	if _dynamic_panel_enabled or standalone_mode:
+		return
+	_stop_panel_fade()
+	_auto_hidden = false
+	_set_panel_alpha(1.0)
+	visible = desired_visible and not get_tree().paused and not hidden_for_elevator
 
 
 func set_panel_visible(value: bool) -> void:
@@ -471,6 +488,7 @@ func _start_cooling_intro(current_player: Player, state: Dictionary) -> void:
 	state["cooling_opportunity_pending"] = false
 	state["cooling_intro_started"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
+	_activate_cooling_task(current_player, state)
 	_queue_cooling_intro(current_player)
 
 
@@ -482,9 +500,7 @@ func _queue_cooling_intro(current_player: Player) -> void:
 
 func _restore_cooling_intro(current_player: Player, state: Dictionary) -> void:
 	_connect_thought_balloon()
-	if current_player.balao_de_pensamento.foi_concluido(COOLING_THOUGHT_ACTION):
-		_activate_cooling_task(current_player, state)
-		return
+	_activate_cooling_task(current_player, state)
 	_queue_cooling_intro(current_player)
 
 
@@ -502,6 +518,7 @@ func _activate_cooling_task(current_player: Player, state: Dictionary) -> void:
 
 
 func _queue_cooling_completion(current_player: Player, state: Dictionary) -> void:
+	_discard_cooling_intro_thoughts(current_player)
 	state["cooling_completion_thought_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_SUCCESS, "Funcionou.")
@@ -513,6 +530,7 @@ func _queue_cooling_completion(current_player: Player, state: Dictionary) -> voi
 
 
 func _queue_cooling_failure(current_player: Player, state: Dictionary) -> void:
+	_discard_cooling_intro_thoughts(current_player)
 	state["cooling_failure_thought_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	current_player.balao_de_pensamento.enfileirar(
@@ -528,6 +546,14 @@ func _queue_cooling_failure(current_player: Player, state: Dictionary) -> void:
 	set_panel_visible(true)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
+
+
+func _discard_cooling_intro_thoughts(current_player: Player) -> void:
+	current_player.balao_de_pensamento.descartar([
+		COOLING_THOUGHT_TIME,
+		COOLING_THOUGHT_PLAN,
+		COOLING_THOUGHT_ACTION,
+	])
 
 
 func _restore_after_scene_change() -> void:
@@ -660,9 +686,11 @@ func start_breaker_followup() -> void:
 		if not bool(state.get("data_center_return_task_completed", false)):
 			show_return_to_data_center_task(false)
 		return
-	state["data_center_return_task_pending"] = true
+	state["data_center_return_task_pending"] = false
+	state["data_center_return_task_active"] = true
 	state["data_center_return_task_completed"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
+	show_return_to_data_center_task(false)
 	_queue_breaker_followup_thoughts(current_player)
 
 
@@ -898,10 +926,9 @@ func refresh_saved_state() -> void:
 		return
 	if return_task_pending and current_player != null:
 		_connect_thought_balloon()
+		_activate_return_to_data_center_task()
 		_queue_breaker_followup_thoughts(current_player)
-		if current_player.balao_de_pensamento.foi_concluido(BREAKER_RETURN_THOUGHT_ID):
-			_activate_return_to_data_center_task()
-			return
+		return
 	if return_task_active and not return_task_completed:
 		show_return_to_data_center_task(false)
 	elif card_delivered and breaker_completed and _data_center_scientist_talk_pending(state):
@@ -936,7 +963,7 @@ func refresh_saved_state() -> void:
 	elif data_center_task_active:
 		show_go_to_sixth_floor_task(data_center_task_completed)
 	elif data_center_task_pending:
-		hide_all_tasks()
+		show_go_to_sixth_floor_task(data_center_task_completed)
 	elif unlocked:
 		set_task_completed(0, true)
 		set_task_completed(1, true)

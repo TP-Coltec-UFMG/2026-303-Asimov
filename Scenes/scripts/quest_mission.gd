@@ -96,12 +96,7 @@ func _descartar_instrucoes_obsoletas() -> void:
 func _atualizar_visibilidade() -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not _inicializado or not is_instance_valid(quest_ui):
 		return
-	var balao = man_player.balao_de_pensamento
-	quest_ui.set_panel_visible(
-		balao.foi_concluido(_pensamento_id("intro_2"))
-		or _hide_scheduled
-		or _elevador_terceiro_liberado
-	)
+	quest_ui.set_panel_visible(true)
 
 
 func _on_pensamento_iniciado(id: String) -> void:
@@ -341,6 +336,7 @@ func _concluir_saida_depois_da_animacao(marcador: AnimatedSprite2D) -> void:
 		await marcador.animation_finished
 	if not is_inside_tree() or is_queued_for_deletion() or not _pos_saida_iniciada:
 		return
+	_liberar_elevador_terceiro()
 	_pensar("pos_saida_1", "Eu tenho que investigar isso.")
 	_pensar("pos_saida_2", "Talvez eu deveria ir na sala do escritório (3º andar)")
 	_save_progress_and_checkpoint()

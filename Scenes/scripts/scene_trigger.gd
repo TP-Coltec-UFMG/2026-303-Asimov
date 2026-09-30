@@ -236,6 +236,10 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 
 		state["data_center_return_task_pending"] = return_task_pending
 		SaveGame.save_global_state("hall_quest_01", state)
+		body_p.balao_de_pensamento.descartar([
+			"data_center:breaker_restored_urgent",
+			"data_center:breaker_return_plan",
+		])
 		if return_task_active:
 			var return_quest_ui := _obter_painel_tarefas()
 			if return_quest_ui != null:
@@ -250,6 +254,10 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 		return
 	state["office_data_center_task_completed"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
+	body_p.balao_de_pensamento.descartar([
+		"boss_room:chief_card_found",
+		"office:data_center_floor",
+	])
 	var quest_ui := _obter_painel_tarefas()
 	if quest_ui != null:
 		quest_ui.show_go_to_sixth_floor_task(true, true)
