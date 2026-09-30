@@ -4,7 +4,6 @@ signal minigame_completed
 signal minigame_failed
 
 
-
 enum ModoObjetivo {
 	QUEIMAR_RESISTOR,
 	QUEIMAR_LED,
@@ -16,6 +15,9 @@ enum ModoObjetivo {
 
 @export var modo_objetivo: ModoObjetivo = ModoObjetivo.QUEIMAR_RESISTOR
 
+
+const MENSAGEM_BATERIA_ANTES: String = "NÃO QUEIME A BATERIA ANTES\nDE QUEIMAR OS COMPONENTES!"
+const TEMPO_MENSAGEM_REINICIO: float = 5.0
 
 
 @onready var circuito: Node2D = $Circuito
@@ -46,7 +48,6 @@ enum ModoObjetivo {
 @onready var botao_continuar: Button = $Fundo_preto_tutorial/Button
 
 
-
 var passo_atual: int = 0
 var passo_pronto: bool = false
 
@@ -55,15 +56,18 @@ var _nos_destacados: Array = []
 var _proximo_passo_do_botao: int = -1
 
 
-
 var _aviso_ativo: bool = false
 var _passo_antes_do_aviso: int = 0
-
 
 
 var _corte_j03_resistor_existia: bool = false
 var _corte_j04_led_existia: bool = false
 var _conexao_j03_led_existia: bool = false
+
+
+# Verdadeiro enquanto a mensagem de "bateria queimada cedo demais" está
+# na tela e o circuito está sendo reiniciado.
+var _reiniciando: bool = false
 
 
 func notificar_vitoria() -> void:
@@ -72,7 +76,6 @@ func notificar_vitoria() -> void:
 
 func notificar_derrota() -> void:
 	minigame_failed.emit()
-
 
 
 func _ready() -> void:
@@ -92,8 +95,17 @@ func _ready() -> void:
 	_iniciar_passo(0)
 
 
-
 func _process(_delta: float) -> void:
+
+	if _reiniciando:
+		return
+
+	# Verifica se a bateria TERMINOU de queimar antes dos componentes.
+	# Enquanto ela estiver apenas queimando, o circuito continua normalmente.
+	if _bateria_queimada_cedo_demais():
+		_reiniciar_por_bateria_antecipada()
+		return
+
 	if not passo_pronto:
 		return
 
@@ -104,49 +116,282 @@ func _process(_delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+
+	if _reiniciando:
+		return
+
 	if not event is InputEventMouseButton:
 		return
+
 	var click := event as InputEventMouseButton
+
 	if click.button_index != MOUSE_BUTTON_LEFT or not click.pressed:
 		return
+
 	if not is_visible_in_tree() or circuito == null:
 		return
 
 	var nearest: Area2D = null
 	var nearest_distance := INF
+
 	for candidate in get_tree().get_nodes_in_group("pontos_conexao"):
+
 		if not circuito.is_ancestor_of(candidate):
 			continue
+
 		if candidate.arrastando:
 			return
+
 		var collider := candidate.get_node_or_null("CollisionShape2D") as CollisionShape2D
+
 		if collider == null or collider.disabled or collider.shape == null:
 			continue
+
 		var transform_to_screen := collider.get_global_transform_with_canvas()
 		var local_click := transform_to_screen.affine_inverse() * click.position
+
 		if not collider.shape.get_rect().grow(1.5).has_point(local_click):
 			continue
-		var distance := click.position.distance_squared_to(transform_to_screen.origin)
+
+		var distance := click.position.distance_squared_to(
+			transform_to_screen.origin
+		)
+
 		if distance < nearest_distance:
 			nearest = candidate as Area2D
 			nearest_distance = distance
+
 	if nearest != null:
 		nearest.iniciar_fio()
 		get_viewport().set_input_as_handled()
 
 
 
-func _configurar_componente_led() -> void:
+# ---------------------------------------------------------------------------
+# BATERIA QUEIMADA ANTES DOS COMPONENTES
+# ---------------------------------------------------------------------------
+
+func _bateria_queimada_cedo_demais() -> bool:
+
+	# No modo em que a bateria é o único alvo,
+	# queimá-la é exatamente o objetivo.
+	if modo_objetivo == ModoObjetivo.QUEIMAR_BATERIA:
+		return false
+
+	# IMPORTANTE:
+	# Aqui verificamos SOMENTE se a bateria TERMINOU de queimar.
+	#
+	# Enquanto:
+	# circuito.bateria_queimando == true
+	#
+	# o tutorial NÃO interrompe o circuito.
+	#
+	# Somente quando:
+	# circuito.bateria_queimada == true
+	#
+	# a mensagem será exibida.
+	if not circuito.bateria_queimada:
+		return false
+
+	# Depois que a bateria terminou de queimar,
+	# verifica se os componentes necessários já foram queimados.
+	return not _componentes_alvo_queimados()
+
+
+func _componentes_alvo_queimados() -> bool:
+
+	var resistor_ok: bool = (
+		circuito.resistor_queimando
+		or circuito.resistor_queimado
+	)
+
+	var led_ok: bool = (
+		circuito.led_queimando
+		or circuito.led_queimado
+	)
+
 	match modo_objetivo:
 
-		ModoObjetivo.QUEIMAR_LED, ModoObjetivo.QUEIMAR_LED_E_RESISTOR, ModoObjetivo.QUEIMAR_LED_E_BATERIA:
+		ModoObjetivo.QUEIMAR_RESISTOR, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+			return resistor_ok
+
+		ModoObjetivo.QUEIMAR_LED, ModoObjetivo.QUEIMAR_LED_E_BATERIA:
+			return led_ok
+
+		ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
+			return resistor_ok and led_ok
+
+	return true
+
+
+func _reiniciar_por_bateria_antecipada() -> void:
+
+	_reiniciando = true
+	passo_pronto = false
+	_aviso_ativo = false
+
+	_limpar_destaques()
+
+	painel_orientacao.visible = false
+	texto_orientacao.visible = false
+	botao_continuar.visible = false
+
+	# Congela o circuito somente DEPOIS que a bateria terminou
+	# de queimar, para impedir qualquer outra alteração enquanto
+	# a mensagem estiver aparecendo.
+	circuito.process_mode = Node.PROCESS_MODE_DISABLED
+	interface_jogo.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	_mostrar_mensagem_objetivo(MENSAGEM_BATERIA_ANTES)
+
+	await get_tree().create_timer(TEMPO_MENSAGEM_REINICIO).timeout
+
+	_reiniciar_circuito()
+
+
+func _mostrar_mensagem_objetivo(texto: String) -> void:
+
+	# 1) Método próprio da interface, se existir.
+	var metodos: Array = [
+		"mostrar_objetivo_concluido",
+		"mostrar_mensagem_objetivo_concluido",
+		"mostrar_painel_objetivo_concluido",
+		"mostrar_mensagem_concluido",
+		"mostrar_mensagem"
+	]
+
+	for metodo in metodos:
+
+		if interface_jogo.has_method(metodo):
+			interface_jogo.call(metodo, texto)
+			return
+
+
+	# 2) Procura o painel de "objetivo concluído" pelo nome do nó.
+	var painel: Node = _achar_no_por_nome(interface_jogo, "conclu")
+
+	if painel != null:
+
+		if painel is CanvasItem:
+			painel.visible = true
+
+		var label: Label = null
+
+		if painel is Label:
+			label = painel
+		else:
+			var labels: Array = painel.find_children(
+				"*",
+				"Label",
+				true,
+				false
+			)
+
+			if not labels.is_empty():
+				label = labels[0]
+
+		if label != null:
+			label.text = texto
+			label.visible = true
+			return
+
+
+	# 3) Último recurso: usa o painel do tutorial
+	# para a mensagem não se perder.
+	painel_orientacao.visible = true
+	texto_orientacao.visible = true
+	texto_orientacao.text = texto
+	botao_continuar.visible = false
+	painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
+func _achar_no_por_nome(raiz: Node, trecho: String) -> Node:
+
+	for filho in raiz.get_children():
+
+		if String(filho.name).to_lower().contains(trecho):
+			return filho
+
+		var achado: Node = _achar_no_por_nome(filho, trecho)
+
+		if achado != null:
+			return achado
+
+	return null
+
+
+func _reiniciar_circuito() -> void:
+
+	var caminho_cena: String = scene_file_path
+	var pai: Node = get_parent()
+
+	# Sem cena própria ou sendo a cena raiz:
+	# recarrega a cena atual.
+	if caminho_cena.is_empty() or pai == null or get_tree().current_scene == self:
+		get_tree().reload_current_scene()
+		return
+
+	var cena: PackedScene = load(caminho_cena) as PackedScene
+
+	if cena == null:
+		get_tree().reload_current_scene()
+		return
+
+	var nova = cena.instantiate()
+
+	# Copia o estado que o pai pode ter configurado nesta instância.
+	nova.modo_objetivo = modo_objetivo
+	nova.position = position
+	nova.rotation = rotation
+	nova.scale = scale
+	nova.z_index = z_index
+	nova.visible = visible
+
+	# Reconecta quem estava ouvindo os sinais do minigame.
+	for nome_sinal in ["minigame_completed", "minigame_failed"]:
+
+		for conexao in get_signal_connection_list(nome_sinal):
+
+			nova.connect(
+				nome_sinal,
+				conexao["callable"],
+				conexao["flags"]
+			)
+
+	var indice: int = get_index()
+	var nome_original: StringName = name
+
+	pai.remove_child(self)
+
+	nova.name = nome_original
+
+	pai.add_child(nova)
+
+	pai.move_child(nova, indice)
+
+	queue_free()
+
+
+
+func _configurar_componente_led() -> void:
+
+	match modo_objetivo:
+
+		ModoObjetivo.QUEIMAR_LED, \
+		ModoObjetivo.QUEIMAR_LED_E_RESISTOR, \
+		ModoObjetivo.QUEIMAR_LED_E_BATERIA:
+
 			componente1.visible = false
 			Componente2.visible = true
 
 			colison_led_terminal_positivo.position = Vector2(80, 42)
 			colison_led_terminal_negativo.position = Vector2(-50, 42)
 
-		ModoObjetivo.QUEIMAR_RESISTOR, ModoObjetivo.QUEIMAR_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+
+		ModoObjetivo.QUEIMAR_RESISTOR, \
+		ModoObjetivo.QUEIMAR_BATERIA, \
+		ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+
 			componente1.visible = true
 			Componente2.visible = false
 
@@ -154,7 +399,9 @@ func _configurar_componente_led() -> void:
 			colison_led_terminal_negativo.position = Vector2(-40, 40)
 
 
+
 func _objetivo_da_interface():
+
 	match modo_objetivo:
 
 		ModoObjetivo.QUEIMAR_RESISTOR:
@@ -180,12 +427,15 @@ func _objetivo_da_interface():
 
 
 func _avancar_passo(proximo: int) -> void:
+
 	passo_pronto = false
+
 	_iniciar_passo(proximo)
 
 
 
 func _iniciar_passo(passo: int) -> void:
+
 	passo_atual = passo
 	passo_pronto = false
 
@@ -199,6 +449,7 @@ func _iniciar_passo(passo: int) -> void:
 	texto_orientacao.visible = true
 
 	painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 
 	match modo_objetivo:
 
@@ -214,7 +465,8 @@ func _iniciar_passo(passo: int) -> void:
 		ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
 			_iniciar_passo_queimar_led_e_resistor(passo)
 
-		ModoObjetivo.QUEIMAR_LED_E_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+		ModoObjetivo.QUEIMAR_LED_E_BATERIA, \
+		ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
 			_iniciar_passo_queimar_componente_e_bateria(passo)
 
 	passo_pronto = true
@@ -222,6 +474,7 @@ func _iniciar_passo(passo: int) -> void:
 
 
 func _verificar_passo_atual() -> void:
+
 	match modo_objetivo:
 
 		ModoObjetivo.QUEIMAR_RESISTOR:
@@ -236,7 +489,8 @@ func _verificar_passo_atual() -> void:
 		ModoObjetivo.QUEIMAR_LED_E_RESISTOR:
 			_verificar_passo_queimar_led_e_resistor()
 
-		ModoObjetivo.QUEIMAR_LED_E_BATERIA, ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
+		ModoObjetivo.QUEIMAR_LED_E_BATERIA, \
+		ModoObjetivo.QUEIMAR_RESISTOR_E_BATERIA:
 			_verificar_passo_queimar_componente_e_bateria()
 
 
@@ -277,6 +531,7 @@ func _iniciar_passo_queimar_resistor(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
+
 func _verificar_passo_queimar_resistor() -> void:
 
 	if passo_atual != 2:
@@ -291,7 +546,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 
 	match passo:
 
-
 		0:
 			texto_orientacao.text = \
 				"Para queimar o componente, preciso fazer a energia passar diretamente por ele, sem o resistor."
@@ -301,7 +555,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_STOP
 
 			_proximo_passo_do_botao = 1
-
 
 
 		1:
@@ -322,7 +575,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-
 		2:
 			_destacar(juncao04)
 			_destacar(led)
@@ -339,7 +591,6 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			botao_continuar.visible = false
 
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
 
 
 		3:
@@ -360,6 +611,7 @@ func _iniciar_passo_queimar_led(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
+
 func _verificar_passo_queimar_led() -> void:
 
 	match passo_atual:
@@ -377,6 +629,7 @@ func _verificar_passo_queimar_led() -> void:
 			):
 				_avancar_passo(2)
 
+
 		2:
 			if not _corte_j04_led_existia:
 				return
@@ -387,6 +640,7 @@ func _verificar_passo_queimar_led() -> void:
 			):
 				_avancar_passo(3)
 
+
 		3:
 			if circuito.led_queimando or circuito.led_queimado:
 				_finalizar_orientacao()
@@ -396,7 +650,6 @@ func _verificar_passo_queimar_led() -> void:
 func _iniciar_passo_queimar_bateria(passo: int) -> void:
 
 	match passo:
-
 
 		0:
 			_destacar(bateria)
@@ -411,7 +664,6 @@ func _iniciar_passo_queimar_bateria(passo: int) -> void:
 			_proximo_passo_do_botao = 1
 
 
-
 		1:
 			_destacar(bateria)
 
@@ -421,6 +673,7 @@ func _iniciar_passo_queimar_bateria(passo: int) -> void:
 			botao_continuar.visible = false
 
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 
 
 func _verificar_passo_queimar_bateria() -> void:
@@ -437,7 +690,6 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 
 	match passo:
 
-
 		0:
 			_destacar(bateria)
 			_destacar(resistor)
@@ -448,7 +700,6 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			botao_continuar.visible = false
 
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
 
 
 		1:
@@ -464,6 +715,7 @@ func _iniciar_passo_queimar_led_e_resistor(passo: int) -> void:
 			painel_orientacao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
+
 func _verificar_passo_queimar_led_e_resistor() -> void:
 
 	match passo_atual:
@@ -472,39 +724,68 @@ func _verificar_passo_queimar_led_e_resistor() -> void:
 			if circuito.resistor_queimando or circuito.resistor_queimado:
 				_avancar_passo(1)
 
+
 		1:
 			if circuito.led_queimando or circuito.led_queimado:
 				_finalizar_orientacao()
 
 
+
 func _iniciar_passo_queimar_componente_e_bateria(passo: int) -> void:
-	var primeiro_led := modo_objetivo == ModoObjetivo.QUEIMAR_LED_E_BATERIA
+
+	var primeiro_led := \
+		modo_objetivo == ModoObjetivo.QUEIMAR_LED_E_BATERIA
+
 	if passo == 0:
+
 		if primeiro_led:
+
 			_destacar(alicate)
 			_destacar(juncao03)
 			_destacar(led)
-			texto_orientacao.text = "Primeiro, vou desviar o resistor e ligar a junção ao componente para queimá-lo. A bateria precisa ficar por último."
+
+			texto_orientacao.text = \
+				"Primeiro, vou desviar o resistor e ligar a junção ao componente para queimá-lo. A bateria precisa ficar por último."
+
 		else:
+
 			_destacar(bateria)
 			_destacar(resistor)
-			texto_orientacao.text = "Primeiro, vou aumentar a tensão para queimar o resistor. A bateria precisa ficar por último."
+
+			texto_orientacao.text = \
+				"Primeiro, vou aumentar a tensão para queimar o resistor. A bateria precisa ficar por último."
+
 	elif passo == 1:
+
 		_destacar(alicate)
 		_destacar(bateria)
-		texto_orientacao.text = "Agora vou usar as junções para ligar os polos da bateria sem componentes no caminho, criando um curto-circuito."
+
+		texto_orientacao.text = \
+			"Agora vou usar as junções para ligar os polos da bateria sem componentes no caminho, criando um curto-circuito."
+
 
 
 func _verificar_passo_queimar_componente_e_bateria() -> void:
-	var primeiro_queimado: bool = circuito.led_queimado if modo_objetivo == ModoObjetivo.QUEIMAR_LED_E_BATERIA else circuito.resistor_queimado
+
+	var primeiro_queimado: bool = \
+		circuito.led_queimado \
+		if modo_objetivo == ModoObjetivo.QUEIMAR_LED_E_BATERIA \
+		else circuito.resistor_queimado
+
 	if passo_atual == 0 and primeiro_queimado:
+
 		_avancar_passo(1)
+
 	elif passo_atual == 1 and circuito.bateria_queimada:
+
 		_finalizar_orientacao()
 
 
 
 func _on_button_pressed() -> void:
+
+	if _reiniciando:
+		return
 
 	if not passo_pronto:
 		return
@@ -534,7 +815,7 @@ func _on_button_pressed() -> void:
 
 func mostrar_aviso_conexao(mensagem: String) -> void:
 
-	if _aviso_ativo:
+	if _aviso_ativo or _reiniciando:
 		return
 
 	_passo_antes_do_aviso = passo_atual
