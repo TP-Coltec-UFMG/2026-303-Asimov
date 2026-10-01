@@ -4,6 +4,7 @@ const STARTING_GUN := preload("res://Objects/arma.tscn")
 
 
 @export var checkpoint_enabled: bool = true
+@export var starting_gun_enabled: bool = true
 
 
 @onready var camera_2d: Camera2D = $Camera2D
@@ -122,6 +123,8 @@ func _exit_tree() -> void:
 
 
 func _ensure_starting_gun() -> void:
+	if not starting_gun_enabled:
+		return
 	if not is_instance_valid(inventory):
 		return
 	if not inventory.get_item_on_inventary("gun"):

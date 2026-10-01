@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Tutorial/Rooms/training_room.tscn" id="1"]
+
+[node name="TrainingRoom" instance=ExtResource("1")]
+lesson_title = "ARMA E RECARGA"
+accent = Color(0.17, 0.12, 0.21, 1)

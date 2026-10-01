@@ -27,7 +27,7 @@ self_modulate = Color(1, 1, 1, 0)
 light_mask = 2
 visibility_layer = 2
 position = Vector2(-2, 1)
-color = Color(0, 0, 0, 1)
+color = Color(0.12444883, 0.12444881, 0.12444881, 1)
 
 [node name="PointLight2D" type="PointLight2D" parent="Iluminacao" unique_id=1445563266]
 position = Vector2(0, -15)
@@ -67,4 +67,5 @@ shape = SubResource("RectangleShape2D_m1x1s")
 process_physics_priority = -6
 
 [node name="Cartao_chefe" parent="." unique_id=255975816 instance=ExtResource("8_m1x1s")]
+position = Vector2(3, -27)
 save_id = "cartao_chefe_sala_chefe"

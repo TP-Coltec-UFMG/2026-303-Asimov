@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://Tutorial/Rooms/training_room.tscn" id="1"]
+
+[node name="TrainingRoom" instance=ExtResource("1")]
+lesson_title = "CORRER"
+accent = Color(0.08, 0.22, 0.17, 1)
