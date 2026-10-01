@@ -51,6 +51,7 @@ var save_data: Dictionary = {
 	"interface_size" : 0,
 	"tutorial_seen" : false,
 	"tutorial_completed" : false,
+	"contextual_tutorial_seen": {},
 	"intro_cutscene_seen" : false,
 	"job": "",
 	"character": "",

@@ -414,11 +414,7 @@ func _on_new_game_button_pressed() -> void:
 		SaveGame.load_last_checkpoint()
 	else:
 		MusicController.allow_scene_audio()
-		Configs.tutorial_return_scene = \"res://Scenes/slectionpage.tscn\"
-		if bool(Configs.configs.get(\"tutorial_seen\", false)):
-			get_tree().change_scene_to_file(\"res://Scenes/slectionpage.tscn\")
-		else:
-			get_tree().change_scene_to_file(\"res://Tutorial/tutorial.tscn\")
+		get_tree().change_scene_to_file(\"res://Scenes/slectionpage.tscn\")
 
 func _on_tutorial_button_pressed() -> void:
 	transition.play(\"default\")

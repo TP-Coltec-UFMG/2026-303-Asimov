@@ -34,6 +34,7 @@ DialogManager="*uid://d3sfhwwhc6xn2"
 SaveGame="*uid://cy25jqn10d8du"
 Progresso="*uid://cjyj2dn5dgqk6"
 DevMissionJump="*res://Scenes/dev_mission_jump.tscn"
+ContextualTutorial="*res://Tutorial/contextual_tutorial.tscn"
 
 [display]
 

@@ -153,6 +153,7 @@ func show_ammo_pickup(amount: int) -> void:
 func show_protected_npc_warning() -> void:
 	if npc_warning_active or not is_inside_tree():
 		return
+	ContextualTutorial.cancel_current()
 	npc_warning_active = true
 	npc_warning_previous_time_scale = Engine.time_scale
 	Engine.time_scale = maxf(0.05, npc_warning_previous_time_scale * 0.22)
@@ -758,6 +759,8 @@ func get_conhecimento() -> float:
 	return inteligencia.value
 
 func tomar_dano(dano: float) -> void:
+	if ContextualTutorial.protects_player(self):
+		return
 	if dano <= 0.0:
 		return
 	tempo_sem_tomar_dano = 0.0
