@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://wvknwiilc2kh"
-path="res://.godot/imported/alicate_0.png-e626e49105c6957ce8b718aa03876208.ctex"
+path="res://.godot/imported/alicate_0.png-4a67604a98182eece13b18e1f132cf62.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/alicate_0.png"
-dest_files=["res://.godot/imported/alicate_0.png-e626e49105c6957ce8b718aa03876208.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/alicate_0.png"
+dest_files=["res://.godot/imported/alicate_0.png-4a67604a98182eece13b18e1f132cf62.ctex"]
 
 [params]
 

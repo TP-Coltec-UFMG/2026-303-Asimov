@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhdb3ahmb5btm"
-path="res://.godot/imported/mesa_controle.png-ed7fe8907668bf779d64b569006cf797.ctex"
+path="res://.godot/imported/mesa_controle.png-43492e18d8015f80d6c877438cba0c27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/mesa_controle.png"
-dest_files=["res://.godot/imported/mesa_controle.png-ed7fe8907668bf779d64b569006cf797.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/mesa_controle.png"
+dest_files=["res://.godot/imported/mesa_controle.png-43492e18d8015f80d6c877438cba0c27.ctex"]
 
 [params]
 

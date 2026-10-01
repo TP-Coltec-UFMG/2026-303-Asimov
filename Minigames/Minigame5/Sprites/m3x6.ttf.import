@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dmc2u87k6qgcl"
-path="res://.godot/imported/m3x6.ttf-4fb0b52d75f060a199a451365808a583.fontdata"
+path="res://.godot/imported/m3x6.ttf-dc79be98f12ab9af7a6d2d87274488c3.fontdata"
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/m3x6.ttf"
-dest_files=["res://.godot/imported/m3x6.ttf-4fb0b52d75f060a199a451365808a583.fontdata"]
+source_file="res://Minigames/Minigame5/Sprites/m3x6.ttf"
+dest_files=["res://.godot/imported/m3x6.ttf-dc79be98f12ab9af7a6d2d87274488c3.fontdata"]
 
 [params]
 

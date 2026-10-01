@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ds61utsg4ljin"
-path="res://.godot/imported/cartao_hackeado.png-20434c4f607d92a6c875b9daa21dc5ad.ctex"
+path="res://.godot/imported/cartao_hackeado.png-edb5baad8428261abc5261681e46ac7c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/cartao_hackeado.png"
-dest_files=["res://.godot/imported/cartao_hackeado.png-20434c4f607d92a6c875b9daa21dc5ad.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/cartao_hackeado.png"
+dest_files=["res://.godot/imported/cartao_hackeado.png-edb5baad8428261abc5261681e46ac7c.ctex"]
 
 [params]
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cw4qmj6wyy7mt"
-path="res://.godot/imported/New Piskel (3).png-84ade0865728a713c9b5593b7e7491df.ctex"
+path="res://.godot/imported/New Piskel (3).png-1aee17955a524cbed8579de04ce13da9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/New Piskel (3).png"
-dest_files=["res://.godot/imported/New Piskel (3).png-84ade0865728a713c9b5593b7e7491df.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/New Piskel (3).png"
+dest_files=["res://.godot/imported/New Piskel (3).png-1aee17955a524cbed8579de04ce13da9.ctex"]
 
 [params]
 

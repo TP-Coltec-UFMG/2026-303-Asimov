@@ -454,10 +454,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yliq7"]
-size = Vector2(5.3273926, 52.38095)
+size = Vector2(109.52387, 52.38095)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2xfb3"]
-size = Vector2(9.523865, 21.428574)
+size = Vector2(30.952286, 21.428574)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mcqta"]
 atlas = ExtResource("48_nqx4h")
@@ -782,8 +782,8 @@ nome = "Terminal_positivo_led"
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Led/Terminal_positivo" unique_id=775094720]
-position = Vector2(18.288757, 43.333313)
-scale = Vector2(0.9999999, 0.9999999)
+position = Vector2(56.666748, 43.333313)
+scale = Vector2(0.9999994, 0.9999994)
 shape = SubResource("RectangleShape2D_yliq7")
 
 [node name="Terminal_negativo" type="Area2D" parent="Circuito/Led" unique_id=1998293293]
@@ -793,8 +793,8 @@ nome = "Terminal_negativo_led"
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Circuito/Led/Terminal_negativo" unique_id=598962237]
-position = Vector2(-5.238037, 42.142853)
-scale = Vector2(0.99999976, 0.99999976)
+position = Vector2(-8.809509, 42.142853)
+scale = Vector2(0.99999964, 0.99999964)
 shape = SubResource("RectangleShape2D_2xfb3")
 metadata/_edit_lock_ = true
 

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://sdbilm5frjs2"
-path="res://.godot/imported/laptop.png-6bb64ab8495fa90468d5137229931f58.ctex"
+path="res://.godot/imported/laptop.png-6a860b152255b0e9c6fdf0eb57916746.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/laptop.png"
-dest_files=["res://.godot/imported/laptop.png-6bb64ab8495fa90468d5137229931f58.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/laptop.png"
+dest_files=["res://.godot/imported/laptop.png-6a860b152255b0e9c6fdf0eb57916746.ctex"]
 
 [params]
 

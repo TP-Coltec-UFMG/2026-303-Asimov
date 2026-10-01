@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://xqi1kmmkqvrs"
-path="res://.godot/imported/tabela_banco_dados_en.png-d51744c48a25893733efc4149d24f8df.ctex"
+path="res://.godot/imported/tabela_banco_dados_en.png-d21daf5f5a2b08ff61519e5180de94d4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/tabela_banco_dados_en.png"
-dest_files=["res://.godot/imported/tabela_banco_dados_en.png-d51744c48a25893733efc4149d24f8df.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/tabela_banco_dados_en.png"
+dest_files=["res://.godot/imported/tabela_banco_dados_en.png-d21daf5f5a2b08ff61519e5180de94d4.ctex"]
 
 [params]
 

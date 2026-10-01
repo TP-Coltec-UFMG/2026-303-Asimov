@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmi0cqffdeh7a"
-path="res://.godot/imported/botao_continuar_normal_en.png-40cc94e4ddac60097a97aac059eee2da.ctex"
+path="res://.godot/imported/botao_continuar_normal_en.png-2eee6d36cda13b17bd3dbc0a7cd808f8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/botao_continuar_normal_en.png"
-dest_files=["res://.godot/imported/botao_continuar_normal_en.png-40cc94e4ddac60097a97aac059eee2da.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/botao_continuar_normal_en.png"
+dest_files=["res://.godot/imported/botao_continuar_normal_en.png-2eee6d36cda13b17bd3dbc0a7cd808f8.ctex"]
 
 [params]
 

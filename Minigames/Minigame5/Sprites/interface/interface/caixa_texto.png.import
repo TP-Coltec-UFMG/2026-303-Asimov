@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqoii3e64iww3"
-path="res://.godot/imported/caixa_texto.png-d10808283e95ce5e4917681db15a4f51.ctex"
+path="res://.godot/imported/caixa_texto.png-7354b1b638c442021c9f0a0dac8e175e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/interface/interface/caixa_texto.png"
-dest_files=["res://.godot/imported/caixa_texto.png-d10808283e95ce5e4917681db15a4f51.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/interface/interface/caixa_texto.png"
+dest_files=["res://.godot/imported/caixa_texto.png-7354b1b638c442021c9f0a0dac8e175e.ctex"]
 
 [params]
 

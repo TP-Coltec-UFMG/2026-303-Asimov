@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbs5x67qus858"
-path="res://.godot/imported/sprite_cartao0.png-b01835fe2f294fb2f903a08592a4ad4e.ctex"
+path="res://.godot/imported/sprite_cartao0.png-4f4e48d16600ad4ca4a1ce5a2a2cc893.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Minigames/Minigame5 - Copia/Sprites/sprite_cartao0.png"
-dest_files=["res://.godot/imported/sprite_cartao0.png-b01835fe2f294fb2f903a08592a4ad4e.ctex"]
+source_file="res://Minigames/Minigame5/Sprites/sprite_cartao0.png"
+dest_files=["res://.godot/imported/sprite_cartao0.png-4f4e48d16600ad4ca4a1ce5a2a2cc893.ctex"]
 
 [params]
 
