@@ -18,6 +18,7 @@ func _ready() -> void:
 
 func _run() -> void:
 	MusicController.set_process(false)
+	ContextualTutorial.set_process(false)
 	Progresso.process_mode = Node.PROCESS_MODE_DISABLED
 	SaveGame.save_data = {}
 	SaveGame.tempo_atual = 300.0
@@ -80,10 +81,13 @@ func _run() -> void:
 	controller.initialized = true
 	var state := {"engineer_point_order": ["ServerRowA", "ServerRowB", "ServerRowC"], "engineer_backup_order": ["ServerRowD", "ServerRowA", "ServerColumn"]}
 	controller._load_points(state)
-	_expect(controller.point_order == ["ServerRowA", "ServerRowB", "ServerRowC"] and controller.backup_order == ["ServerRowD", "ServerRowE", "ServerColumn"], "Migrate duplicate without moving valid saved stages")
+	_expect(controller.point_order == ["ServerRowA", "ServerRowB", "ServerRowC"] and controller.backup_order.size() == 2 and controller.backup_order[0] == "ServerRowD", "Migrate to two reserves without moving valid saved stages")
+	for point in controller.backup_order:
+		_expect(not point in controller.point_order, "The two reserve locations must differ from the initial three")
+	_expect(controller.backup_order[0] != controller.backup_order[1], "Reserve locations must be distinct")
 	var first_order: Array = controller.point_order.duplicate() + controller.backup_order.duplicate()
 	controller._load_points(state)
-	_expect(first_order == controller.point_order + controller.backup_order, "Loading preserves all six chosen locations")
+	_expect(first_order == controller.point_order + controller.backup_order and first_order.size() == 5, "Loading preserves all five chosen locations")
 	await _frames(3)
 	_expect(not controller._can_interact_with_point("ServerRowC"), "Distant battery point must reject interaction")
 	controller._on_point_interacted("ServerRowC")
@@ -165,11 +169,19 @@ func _run() -> void:
 	controller._leave_minigame()
 	controller._finish_ai_message()
 	player.balao_de_pensamento.pular_pensamento()
-	state["engineer_completed_count"] = 6
+	state["engineer_completed_count"] = 4
 	state["engineer_redundancy_seen"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	controller.sequence_time_scale = 0.05
-	controller._begin_escape_sequence()
+	controller._update_targets()
+	player.position = highlights.get_node(controller.backup_order[1]).position
+	await _frames(3)
+	controller._on_point_interacted(controller.backup_order[1])
+	_expect(controller.minigame_open and controller.active_minigame_stage == 4, "The second reserve is the last circuit minigame")
+	controller._on_minigame_completed(4)
+	player.position = Vector2(1500, 1500)
+	await get_tree().create_timer(0.09).timeout
+	_expect(int(SaveGame.office_mission_state(player).get("engineer_completed_count", 0)) == 5, "All objectives finish after three initial circuits and two reserves")
 	_expect(controller.escape_active and is_instance_valid(controller.escape_timer_label), "Last component starts 20-second escape")
 	_expect(controller.escape_timer_label.text == "00:20", "Escape countdown begins at twenty seconds")
 	_expect(is_instance_valid(controller.escape_siren) and controller.escape_siren.playing, "Escape siren begins and can rise")
@@ -177,7 +189,8 @@ func _run() -> void:
 	await get_tree().create_timer(0.2).timeout
 	_expect(controller.destruction_cutscene_running and not player.visible, "Using exit hides player and starts destruction cutscene")
 	_expect(is_instance_valid(controller.destruction_camera) and controller.fires.size() > 4, "Cutscene camera shows new persistent explosion fires")
-	pass
+	var report := FileAccess.open("res://.engineer-fire-results.json", FileAccess.WRITE)
+	report.store_string(JSON.stringify({"passed": failures == 0, "failures": failures, "checks": checks}))
 	get_tree().quit(0 if failures == 0 else 1)
 
 func _frames(count: int) -> void:

@@ -197,7 +197,7 @@ save_id = "extintor1"
 [node name="Extintor3" parent="Coletaveis" unique_id=1692687369 groups=["Coletaveis"] instance=ExtResource("13_xl0vw")]
 position = Vector2(161, 103.000015)
 scale = Vector2(0.425, 0.425)
-save_id = "extintor1"
+save_id = "extintor3"
 
 [node name="Extintor2" parent="Coletaveis" unique_id=2070645289 groups=["Coletaveis"] instance=ExtResource("13_xl0vw")]
 position = Vector2(29.999985, -47)
@@ -801,7 +801,7 @@ delete_npc_at_end = true
 
 [node name="ManPlayer" parent="." unique_id=1888366647 instance=ExtResource("12_48805")]
 z_index = 10
-position = Vector2(-60, 31)
+position = Vector2(-26, 46)
 
 [node name="EntranceMarkers" type="Node2D" parent="." unique_id=2000728230]
 

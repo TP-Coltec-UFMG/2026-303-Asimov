@@ -242,6 +242,8 @@ func _restore_access_progress(state: Dictionary) -> void:
 		_set_access_prompt("Acessar área restrita")
 		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true, true)
+		if bool(state.get("data_center_rfid_auto_access_pending", false)):
+			call_deferred("_use_verified_card_on_return")
 		if not bool(state.get("data_center_rfid_minigame_checkpointed", false)):
 			state["data_center_rfid_minigame_checkpointed"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
@@ -1066,6 +1068,38 @@ func _set_access_interactable(enabled: bool) -> void:
 	var interactable := access_trigger.get_node_or_null("Interectable")
 	if interactable != null:
 		interactable.set("is_interactable", enabled)
+
+
+func _use_verified_card_on_return() -> void:
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	if not _is_current_scene():
+		return
+	var state := SaveGame.office_mission_state(player)
+	if not bool(state.get("data_center_rfid_auto_access_pending", false)):
+		return
+	if not bool(state.get("data_center_rfid_minigame_completed", false)) or not bool(state.get("data_center_rfid_reading_checked", false)):
+		return
+	if access_sequence_busy or power_sequence_running or _power_is_out(state) or _scientist_talk_pending(state) or access_trigger.access_override:
+		return
+	while _is_current_scene() and (get_tree().paused or DialogManager.is_showing_dialog or access_trigger._blocked_by_scene_event()):
+		await get_tree().create_timer(0.1, false).timeout
+	if not _is_current_scene() or not player.is_physics_processing():
+		return
+	_ensure_story_card(BOSS_CARD_TYPE)
+	if _current_card_type() != BOSS_CARD_TYPE:
+		return
+	if not player.usando_cartao:
+		var equip_card := InputEventAction.new()
+		equip_card.action = &"use_cartao"
+		equip_card.pressed = true
+		player._input(equip_card)
+	if not player.usando_cartao:
+		return
+	state["data_center_rfid_auto_access_pending"] = false
+	SaveGame.save_global_state("hall_quest_01", state)
+	_save_checkpoint()
+	access_trigger.enter_with_verified_card(player)
 
 
 func _start_wire_repair_minigame() -> void:

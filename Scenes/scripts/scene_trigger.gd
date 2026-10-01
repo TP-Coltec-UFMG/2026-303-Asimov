@@ -18,6 +18,7 @@ var ultima_posicao: Vector2
 var andar_elevador_to_change : int 
 var dentro_da_area : bool = false
 var body_p : Player
+var access_in_progress: bool = false
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
@@ -106,7 +107,7 @@ func get_ultima_posicao() -> Vector2:
 	return ultima_posicao
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _blocked_by_scene_event():
+	if access_in_progress or _blocked_by_scene_event():
 		return
 	
 	if event.is_action_pressed("interact") and eh_elevador and dentro_da_area:
@@ -135,20 +136,59 @@ func _unhandled_input(event: InputEvent) -> void:
 			access_requested.emit(self)
 			return
 		if _tem_cartao_compativel() or _sala_do_chefe_foi_hackeada():
-			acesso_liberado.play()
-			await acesso_liberado.finished
-			if dentro_da_area:
-				await _play_restricted_area_transition()
-				if not is_inside_tree() or not dentro_da_area:
-					return
-				_preparar_saida_da_sala_do_chefe()
-				_registrar_acesso_a_sala_do_chefe()
-				scene_manager.change_scene(body_p, connected_scene)
+			await _enter_authorized_area()
 		elif _pode_hackear_sala_do_chefe():
 			Progresso.iniciar_hack_da_sala_do_chefe(body_p)
 		else:
+			$DoorAccessIndicator.show_status(false)
 			aceso_negado.play()
 			pass
+
+
+func enter_with_verified_card(returning_player: Player) -> void:
+	if connected_scene != "data_center_forte" or access_override or access_in_progress or _blocked_by_scene_event():
+		return
+	if not is_instance_valid(returning_player) or not get_parent().is_ancestor_of(returning_player):
+		return
+	var state := SaveGame.office_mission_state(returning_player)
+	if not bool(state.get("data_center_rfid_minigame_completed", false)) or not bool(state.get("data_center_rfid_reading_checked", false)):
+		return
+	if get_tree().paused or DialogManager.is_showing_dialog:
+		return
+	body_p = returning_player
+	if not _tem_cartao_compativel():
+		return
+	ContextualTutorial.cancel_current()
+	body_p.direction = Vector2.ZERO
+	body_p.velocity = Vector2.ZERO
+	body_p.correndo = false
+	body_p.state = "idle"
+	body_p.UpdateAnimation()
+	body_p.set_physics_process(false)
+	body_p._stop_movement_sfx()
+	GameAudio.play_world(self, GameAudio.CARD_SWIPE, -12.0)
+	await _enter_authorized_area(false)
+
+
+func _enter_authorized_area(require_presence: bool = true) -> void:
+	if access_in_progress:
+		return
+	access_in_progress = true
+	$DoorAccessIndicator.show_status(true)
+	acesso_liberado.play()
+	await acesso_liberado.finished
+	if require_presence and not dentro_da_area:
+		access_in_progress = false
+		return
+	await _play_restricted_area_transition()
+	if not is_inside_tree() or (require_presence and not dentro_da_area):
+		access_in_progress = false
+		return
+	_preparar_saida_da_sala_do_chefe()
+	_registrar_acesso_a_sala_do_chefe()
+	if not require_presence and bool(SaveGame.office_mission_state(body_p).get("data_center_forte_intro_seen", false)):
+		body_p.set_physics_process(true)
+	scene_manager.change_scene(body_p, connected_scene)
 
 
 func _blocked_by_scene_event() -> bool:
@@ -160,6 +200,7 @@ func _blocked_by_scene_event() -> bool:
 
 
 func reproduzir_acesso_negado() -> void:
+	$DoorAccessIndicator.show_status(false)
 	aceso_negado.play()
 	await aceso_negado.finished
 

@@ -5,7 +5,6 @@ const INITIAL_BLUR: float = 9.0
 const SILENT_VOLUME_DB: float = -80.0
 
 @onready var blur_rect: ColorRect = $Blur
-@onready var black_blink: ColorRect = $BlackBlink
 
 var master_bus_index: int = -1
 
@@ -20,7 +19,6 @@ func _ready() -> void:
 	material.set_shader_parameter("blur_amount", INITIAL_BLUR)
 	master_bus_index = AudioServer.get_bus_index("Master")
 	_set_master_volume(0.0)
-	_play_blinks()
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_QUAD)
@@ -59,19 +57,3 @@ func _set_master_volume(linear_volume: float) -> void:
 
 func _restore_configured_volume() -> void:
 	_set_master_volume(_configured_master_volume())
-
-
-func _play_blinks() -> void:
-	black_blink.show()
-	black_blink.modulate.a = 0.0
-	var blink := create_tween()
-	blink.tween_interval(0.8)
-	blink.tween_property(black_blink, "modulate:a", 1.0, 0.07)
-	blink.tween_property(black_blink, "modulate:a", 0.0, 0.14)
-	blink.tween_interval(0.42)
-	blink.tween_property(black_blink, "modulate:a", 1.0, 0.06)
-	blink.tween_property(black_blink, "modulate:a", 0.0, 0.12)
-	blink.tween_interval(0.62)
-	blink.tween_property(black_blink, "modulate:a", 1.0, 0.06)
-	blink.tween_property(black_blink, "modulate:a", 0.0, 0.12)
-	blink.finished.connect(black_blink.hide)

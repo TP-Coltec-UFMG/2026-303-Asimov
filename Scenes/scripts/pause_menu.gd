@@ -304,6 +304,9 @@ func resume():
 func pause():
 	if get_tree().has_group("opening_gameplay_blur"):
 		return
+	var current_player := get_tree().get_first_node_in_group("player") as Player
+	if is_instance_valid(current_player) and current_player.npc_warning_active:
+		return
 
 	audio_state_before_pause = (
 		MusicController.get_checkpoint_state().duplicate(true)

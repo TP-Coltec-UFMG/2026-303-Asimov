@@ -247,7 +247,7 @@ offset_right = 423.0
 offset_bottom = 138.0
 theme_override_styles/normal = SubResource("StyleBoxEmpty_osicj")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_n8bdy")
-text = "FORTE"
+text = "CHEFE"
 
 [node name="Button3" type="Button" parent="Banco_de_Dados" unique_id=1501359573]
 z_index = 2

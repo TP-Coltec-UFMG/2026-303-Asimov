@@ -2,6 +2,8 @@ extends Node
 
 @export var save_id: String = "hall_quest_01"
 
+const EXTINGUISHER_SCRIPT := preload("res://Objects/scripts/extintor.gd")
+
 var man_player: Player
 var quest_ui: QuestMissionUI
 var _inicializado: bool = false
@@ -25,6 +27,8 @@ var _saida_pendente: int = 0
 var _evacuacao_ativa: bool = false
 var _elevador_terceiro_liberado: bool = false
 var _chegou_terceiro_andar: bool = false
+var _extinguisher_check_elapsed := 0.0
+var _extinguisher_failure_started := false
 
 func _ready() -> void:
 
@@ -70,6 +74,38 @@ func _inicializar() -> void:
 	_pensar("intro_4", "Preciso de um extintor.")
 	_atualizar_visibilidade()
 	_tentar_finalizar_missao()
+
+
+func _process(delta: float) -> void:
+	if not _inicializado or _extinguisher_failure_started or M1_feito:
+		return
+	_extinguisher_check_elapsed += delta
+	if _extinguisher_check_elapsed < 0.25:
+		return
+	_extinguisher_check_elapsed = 0.0
+	if _hall_extinguishers_exhausted():
+		_extinguisher_failure_started = true
+		man_player.show_hall_extinguisher_failure()
+
+
+func _hall_extinguishers_exhausted() -> bool:
+	if not is_instance_valid(man_player) or man_player.npc_warning_active:
+		return false
+	var blocked_by_fire := false
+	for fire_name in ["Fogo3", "Fogo5", "Fogo6"]:
+		var fire := get_parent().get_node_or_null("Perigos/" + fire_name)
+		if is_instance_valid(fire) and not fire.is_queued_for_deletion() and not bool(fire.apagado):
+			blocked_by_fire = true
+			break
+	if not blocked_by_fire:
+		return false
+	var equipped := man_player.inventory.get_item_control("extintor")
+	if is_instance_valid(equipped) and float(equipped.combustivel) > 0.0:
+		return false
+	for item in get_parent().get_node("Coletaveis").get_children():
+		if item.get_script() == EXTINGUISHER_SCRIPT and not item.is_queued_for_deletion() and float(item.combustivel) > 0.0:
+			return false
+	return true
 
 
 func _pensamento_id(id: String) -> String:

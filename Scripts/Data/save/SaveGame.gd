@@ -521,7 +521,7 @@ func save_current_session(
 	return true
 
 
-func clear_save() -> void:
+func clear_save(stop_audio: bool = true) -> void:
 	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
 
 		save_data.clear()
@@ -536,7 +536,8 @@ func clear_save() -> void:
 		restore_audio_pending = false
 		tempo_restante = -1.0
 		tempo_atual = -1.0
-		MusicController.stop_all_audio()
+		if stop_audio:
+			MusicController.stop_all_audio()
 		scene_manager.player = null
 		scene_manager.last_scene_name = ""
 		DevMissionJump.active_stage = -1
@@ -553,7 +554,8 @@ func clear_save() -> void:
 	checkpoint_pos = INVALID_CHECKPOINT_POS
 	restore_checkpoint_pending = false
 	restore_audio_pending = false
-	MusicController.stop_all_audio()
+	if stop_audio:
+		MusicController.stop_all_audio()
 
 	tempo_restante = -1.0
 	tempo_atual = -1.0
@@ -574,6 +576,21 @@ func clear_save() -> void:
 
 	SaveLoad.save_data = Configs.configs.duplicate(true)
 	SaveLoad._save()
+
+
+func restart_from_hall() -> void:
+	var choices := {
+		"job": Configs.configs.get("job", ""),
+		"character": Configs.configs.get("character", ""),
+		"difficulty": Configs.configs.get("difficulty", "")
+	}
+	clear_save()
+	Configs.configs.merge(choices, true)
+	SaveLoad.save_data = Configs.configs.duplicate(true)
+	SaveLoad._save()
+	get_tree().paused = false
+	MusicController.allow_scene_audio()
+	get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
 
 
 func reset_progress() -> void:

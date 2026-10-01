@@ -169,14 +169,16 @@ func _mission_marker_order() -> Array[String]:
 		var engineer := get_parent().get_node_or_null("EngineerEnding")
 		if engineer != null and engineer.has_method("_load_points"):
 			engineer.call("_load_points", engineer_state)
-		var order_key := "engineer_backup_order" if int(engineer_state.get("engineer_completed_count", 0)) >= 3 else "engineer_point_order"
+		var scanning_backups := int(engineer_state.get("engineer_completed_count", 0)) >= 3
+		var order_key := "engineer_backup_order" if scanning_backups else "engineer_point_order"
+		var point_count := 2 if scanning_backups else 3
 		var engineer_order: Variant = engineer_state.get(order_key, [])
 		if engineer_order is Array:
 			for value in engineer_order:
 				var point_name := str(value)
 				if highlights.has_node(NodePath(point_name)) and not result.has(point_name):
 					result.append(point_name)
-				if result.size() == 3:
+				if result.size() == point_count:
 					return result
 		return result
 	if job != JOB_PROGRAMMER:

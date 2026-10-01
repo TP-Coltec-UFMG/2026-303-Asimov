@@ -24,11 +24,11 @@ static func initial_time_seconds() -> float:
 	if current_job() == "engenheiro_eletrico":
 		match difficulty:
 			"easy":
-				return 12.0 * 60.0
+				return 20.0 * 60.0
 			"hard":
-				return 8.0 * 60.0
+				return 10.0 * 60.0
 			_:
-				return 30.0 * 60.0
+				return 15.0 * 60.0
 	match difficulty:
 		"easy":
 			return 15.0 * 60.0
@@ -49,17 +49,11 @@ static func cooling_reward_seconds() -> float:
 
 
 static func neural_answers_per_parameter() -> int:
-	match current_difficulty():
-		"easy":
-			return 2
-		"hard":
-			return 4
-		_:
-			return 3
+	return 2
 
 
 static func asimov_answers_per_law() -> int:
-	return 2 if current_difficulty() == "easy" else 3
+	return 2
 
 
 static func health_regeneration_delay() -> float:

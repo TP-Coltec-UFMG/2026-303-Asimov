@@ -151,6 +151,14 @@ func show_ammo_pickup(amount: int) -> void:
 
 
 func show_protected_npc_warning() -> void:
+	_show_restart_warning("NÃO SERÁ PERMITIDO CAUSAR DANO EM OUTROS NPCS.")
+
+
+func show_hall_extinguisher_failure() -> void:
+	_show_restart_warning("OS EXTINTORES ACABARAM. TODOS FICARAM PRESOS...", true)
+
+
+func _show_restart_warning(message: String, restart_from_beginning: bool = false) -> void:
 	if npc_warning_active or not is_inside_tree():
 		return
 	ContextualTutorial.cancel_current()
@@ -160,6 +168,17 @@ func show_protected_npc_warning() -> void:
 	npc_warning_layer.show()
 	npc_warning_root.modulate.a = 0.0
 	npc_warning_black.color.a = 0.0
+	var warning_label := $NonLethalWarning/Root/MessagePanel/Label as Label
+	warning_label.text = message
+	if bool(Configs.configs.get("leitor_de_tela", false)):
+		LeitorDeTela._ler_texto(message)
+	if restart_from_beginning:
+		direction = Vector2.ZERO
+		velocity = Vector2.ZERO
+		correndo = false
+		set_physics_process(false)
+		set_process_input(false)
+		_stop_movement_sfx()
 	var fade_in := create_tween()
 	fade_in.set_ignore_time_scale(true)
 	fade_in.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -173,6 +192,9 @@ func show_protected_npc_warning() -> void:
 	await fade_to_black.finished
 	Engine.time_scale = npc_warning_previous_time_scale
 	npc_warning_active = false
+	if restart_from_beginning:
+		SaveGame.restart_from_hall()
+		return
 	if SaveGame.load_last_checkpoint():
 		return
 	var recovery := create_tween()

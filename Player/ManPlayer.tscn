@@ -578,7 +578,6 @@ label_settings = SubResource("LabelSettings_qkyit")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
-metadata/_edit_use_anchors_ = true
 
 [node name="QUEST_MISSION" parent="." unique_id=1891138085 instance=ExtResource("18_quest_ui")]
 

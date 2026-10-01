@@ -29,7 +29,7 @@ func _ready() -> void:
 	label_pontos.text = "."
 
 	timer_senha = Timer.new()
-	timer_senha.wait_time = 1.0
+	timer_senha.wait_time = 0.12
 	add_child(timer_senha)
 	timer_senha.timeout.connect(_escrever_senha)
 

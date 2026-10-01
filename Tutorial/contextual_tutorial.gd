@@ -48,6 +48,15 @@ func _on_scene_changed() -> void:
 	available_time = 0.0
 
 
+func start_new_game() -> void:
+	_on_scene_changed()
+	gap = 0.0
+	scan_elapsed = 0.0
+	observed_player_id = 0
+	Configs.configs[SEEN_KEY] = {}
+	SaveLoad._save()
+
+
 func _process(_delta: float) -> void:
 	var now := Time.get_ticks_usec()
 	var real_delta := minf(float(now - last_tick) / 1000000.0, 0.1)
@@ -128,7 +137,7 @@ func _discover_lessons() -> void:
 	elif player.usando_arma:
 		var gun := inventory.get_item_control("gun")
 		_queue("weapon", true)
-		if _seen("weapon") and int(gun.current_ammo) < int(gun.MAGAZINE_SIZE):
+		if _seen("weapon") and int(gun.current_ammo) <= 0:
 			_queue("reload", true)
 		if _seen("weapon") and inventory.get_item_on_inventary("lanterna"):
 			_queue("weapon_flashlight")
@@ -137,33 +146,28 @@ func _discover_lessons() -> void:
 		_queue("card_%d" % int(card.tipo))
 	if inventory.get_item_on_inventary("lanterna"):
 		_queue("flashlight")
-	if inventory.get_item_on_inventary("extintor"):
-		_queue("extinguisher")
-	if inventory.get_item_on_inventary("laptop"):
-		_queue("laptop")
-	if inventory.get_item_on_inventary("cabo"):
-		_queue("cable")
 	if not _seen("walk"):
 		_queue("walk")
 	elif not _seen("run") and player.direction != Vector2.ZERO:
 		_queue("run")
-	elif _seen("run") and bool(player.get_node("QUEST_MISSION")._auto_hidden):
-		_queue("tasks")
+	if bool(player.get_node("QUEST_MISSION")._auto_hidden):
+		_queue("tasks", true)
 
 
 func _relevant(id: String) -> bool:
 	var inventory := player.inventory
 	match id:
-		"weapon", "reload", "weapon_flashlight":
+		"reload":
+			var gun := inventory.get_item_control("gun")
+			return player.usando_arma and gun != null and int(gun.current_ammo) <= 0
+		"weapon", "weapon_flashlight":
 			return player.usando_arma
 		"flashlight":
 			return inventory.get_item_on_inventary("lanterna")
 		"extinguisher":
-			return inventory.get_item_on_inventary("extintor")
-		"laptop":
-			return inventory.get_item_on_inventary("laptop")
-		"cable":
-			return inventory.get_item_on_inventary("cabo")
+			return player.usando_extintor
+		"tasks":
+			return bool(player.get_node("QUEST_MISSION")._auto_hidden)
 		"push":
 			return player.objeto_manipulado != null or not player.objetos_grab_left.is_empty() or not player.objetos_grab_right.is_empty()
 	if id.begins_with("card_"):
@@ -255,10 +259,6 @@ func _action_practiced() -> bool:
 		"weapon_flashlight":
 			var lamp := inventory.get_item_control("lanterna")
 			return player.usando_arma and lamp != null and bool(lamp.lanterna_acessa)
-		"laptop":
-			return player.usando_laptop
-		"cable":
-			return player.usando_cabo
 		"tasks":
 			return Input.is_action_pressed("show_tasks")
 	return active_lesson.begins_with("card_") and player.usando_cartao
@@ -337,25 +337,21 @@ func _content(id: String) -> Array[String]:
 		"collect":
 			return ["COLETAR ITENS", "Aproxime-se e aperte %s para coletar. A tecla abaixo de cada item no inventário permite equipá-lo ou guardá-lo." % _key("interact")]
 		"card_1":
-			return ["CARTÃO COMUM", "Use %s para equipar o cartão e %s junto ao leitor. Este cartão abre acessos comuns, mas não áreas restritas." % [_key("use_cartao"), _key("interact")]]
+			return ["CARTÃO COMUM", "Abre acessos comuns. Equipe com %s e aperte %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
 		"card_2":
-			return ["CARTÃO DE ACESSO RESTRITO", "Este cartão substitui o comum e abre acessos de nível maior. Equipe com %s e use %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
+			return ["CARTÃO DE ACESSO RESTRITO", "Abre áreas restritas. Equipe com %s e aperte %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
 		"card_3":
-			return ["CARTÃO DO CHEFE", "Maior nível de acesso. Equipe com %s e use %s no leitor. O programador também precisa dele para aplicar as alterações finais." % [_key("use_cartao"), _key("interact")]]
+			return ["CARTÃO DO CHEFE", "Tem o maior nível de acesso. Equipe com %s e aperte %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
 		"flashlight":
 			return ["LANTERNA", "Equipe ou guarde com %s. Aponte com o mouse e use %s para acender ou apagar." % [_key("use_lanterna"), _key("acende_lanterna")]]
 		"extinguisher":
-			return ["EXTINTOR", "Equipe com %s. Mire no fogo e segure %s para apagá-lo. O extintor tem carga limitada: acompanhe a barra." % [_key("use_extintor"), _key("usar_extintor")]]
+			return ["EXTINTOR", "Mire no fogo e segure %s para apagá-lo. A barra mostra a carga restante. Aperte %s para guardar o extintor." % [_key("usar_extintor"), _key("use_extintor")]]
 		"weapon":
-			return ["ARMA", "Mire com o mouse e atire com %s. São 7 balas; recarregue com %s. Atire nos drones: atingir um NPC reinicia o checkpoint." % [_key("fire"), _key("reload")]]
+			return ["ARMA", "Equipe com %s, mire com o mouse e atire com %s. Não atire em NPCs." % [_key("use_arma"), _key("fire")]]
 		"reload":
-			return ["RECARREGAR", "Aperte %s para recarregar usando a munição da reserva. Espere a recarga terminar antes de atirar." % _key("reload")]
+			return ["RECARREGAR", "Aperte %s para recarregar. É preciso ter munição na reserva." % _key("reload")]
 		"weapon_flashlight":
 			return ["ARMA E LANTERNA", "Com a arma equipada, use %s para acender a lanterna. Você pode iluminar e atirar ao mesmo tempo." % _key("use_lanterna")]
-		"laptop":
-			return ["NOTEBOOK", "Equipe com %s e use %s perto do equipamento que precisa acessar ou verificar." % [_key("use_laptop"), _key("interact")]]
-		"cable":
-			return ["CABO", "Equipe com %s e use %s no ponto indicado pela tarefa para conectar o equipamento." % [_key("use_cabo"), _key("interact")]]
 		"tasks":
-			return ["SUAS TAREFAS", "Use %s para mostrar o painel de tarefas novamente. Nas configurações, você pode deixá-lo sempre visível." % _key("show_tasks")]
+			return ["SUAS TAREFAS", "O painel ficou oculto. Aperte %s para mostrá-lo novamente e conferir sua próxima tarefa." % _key("show_tasks")]
 	return ["", ""]

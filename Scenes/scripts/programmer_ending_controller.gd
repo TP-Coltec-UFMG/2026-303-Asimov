@@ -767,6 +767,7 @@ func _start_final_transition(animated: bool) -> void:
 
 
 func _go_to_ending_destination() -> void:
+	SaveGame.clear_save(false)
 	get_tree().paused = false
 	get_tree().set_meta(ENDING_RETURN_META, true)
 	var error := get_tree().change_scene_to_file(ENDING_DESTINATION_SCENE)

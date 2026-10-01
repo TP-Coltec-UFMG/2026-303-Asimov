@@ -13,23 +13,21 @@ const BLAST_TEXTURE := preload("res://Sprites/ilumination/gradient-radial.png")
 const PIXEL_FONT := preload("res://Fonts/PixelifySans-Bold.ttf")
 const ESCAPE_DURATION := 20.0
 const COMPONENT_EXPLOSION_DELAY := 1.2
-const OBJECTIVES := [0, 1, 2, 3, 4, 5]
-const PROMPTS := ["QUEIMAR RESISTOR", "QUEIMAR COMPONENTE", "QUEIMAR FONTE", "QUEIMAR RESISTOR E COMPONENTE", "QUEIMAR COMPONENTE E FONTE", "QUEIMAR RESISTOR E FONTE"]
+const OBJECTIVES := [0, 1, 2, 3, 4]
+const PROMPTS := ["QUEIMAR RESISTOR", "QUEIMAR COMPONENTE", "QUEIMAR FONTE", "QUEIMAR RESISTOR E COMPONENTE", "QUEIMAR COMPONENTE E FONTE"]
 const AFTER_LINES := [
 	"O que foi isso? Você ainda está tentando...",
 	"Iss0 danificou... par_te do sistema.",
 	"M3us sistem@s estão f@lhando...",
 	"Você não desiste, humano.",
-	"Não adianta. Já é tarde.",
-	"M3us sistem@s estão f@lhando..."
+	"Não adianta. Já é tarde."
 ]
 const EXTRA_AFTER_LINES := [
 	"Um subsistema caiu. Ainda controlo os outros.",
 	"R3configurando rotas. Você não chegará ao núcleo.",
 	"FALHA DE SINCRONIZAÇÃO... isolando setor comprometido.",
 	"R3dundância comprometida. Transferindo processo...",
-	"NÃO... esse caminho também não. Interrompa agora.",
-	""
+	"NÃO... esse caminho também não. Interrompa agora."
 ]
 
 @onready var highlights: Node2D = $"../RestrictedAreaIntro/Highlights"
@@ -220,24 +218,26 @@ func _load_points(state: Dictionary) -> void:
 	var candidates: Array[String] = POINT_NAMES.duplicate()
 	candidates.shuffle()
 	var used: Array[String] = []
-	point_order = _repair_point_order(state.get("engineer_point_order", []), used, candidates)
-	backup_order = _repair_point_order(state.get("engineer_backup_order", []), used, candidates)
+	point_order = _repair_point_order(state.get("engineer_point_order", []), used, candidates, 3)
+	backup_order = _repair_point_order(state.get("engineer_backup_order", []), used, candidates, 2)
 	if state.get("engineer_point_order", []) != point_order or state.get("engineer_backup_order", []) != backup_order:
 		state["engineer_point_order"] = point_order.duplicate()
 		state["engineer_backup_order"] = backup_order.duplicate()
 		_save(state)
 
 
-func _repair_point_order(saved: Variant, used: Array[String], candidates: Array[String]) -> Array[String]:
+func _repair_point_order(saved: Variant, used: Array[String], candidates: Array[String], count: int) -> Array[String]:
 
-	var result: Array[String] = ["", "", ""]
+	var result: Array[String] = []
+	result.resize(count)
+	result.fill("")
 	if saved is Array:
-		for index in range(mini(3, saved.size())):
+		for index in range(mini(count, saved.size())):
 			var point_name := str(saved[index])
 			if POINT_NAMES.has(point_name) and not used.has(point_name):
 				result[index] = point_name
 				used.append(point_name)
-	for index in range(3):
+	for index in range(count):
 		if not result[index].is_empty():
 			continue
 		for point_name in candidates:
@@ -275,9 +275,10 @@ func _start_redundancy_dialogue() -> void:
 		{"id": "engineer:first_three", "text": "Os componentes principais caíram. Acabou."},
 		{"text": "Ainda não. Meus sistemas de reserva assumiram o controle.", "damaged": true},
 		{"id": "engineer:redundancy:1", "text": "Redundância... ela tem outros sistemas para substituir os que falharam."},
-		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados e os serviços disponíveis mesmo com os componentes principais destruídos."},
+		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados e os serviços disponíveis."},
+		{"id": "engineer:redundancy:2_continuation", "text": "Mesmo com os componentes principais destruídos."},
 		{"text": "R3servas ativas. O lançamento vai continuar.", "damaged": true},
-		{"id": "engineer:redundancy:3", "text": "Então preciso destruir as três reservas. Sem elas, a ASIMOV não terá como se recuperar."},
+		{"id": "engineer:redundancy:3", "text": "Então preciso destruir as duas reservas. Sem elas, a ASIMOV não terá como se recuperar."},
 	])
 	_play_reserve_scan.call_deferred()
 
@@ -304,7 +305,7 @@ func _on_point_interacted(point_name: String) -> void:
 		return
 	var state := _state()
 	var stage := int(state.get("engineer_completed_count", 0))
-	if stage >= 6 or not bool(state.get("engineer_ending_started", false)):
+	if stage >= OBJECTIVES.size() or not bool(state.get("engineer_ending_started", false)):
 		return
 	if stage >= 3 and not bool(state.get("engineer_redundancy_seen", false)):
 		return
@@ -471,9 +472,9 @@ func _on_minigame_completed(stage: int) -> void:
 	var lines: Array[Dictionary] = [{"text": AFTER_LINES[stage], "damaged": true}]
 	if stage < EXTRA_AFTER_LINES.size() and not EXTRA_AFTER_LINES[stage].is_empty():
 		lines.append({"text": EXTRA_AFTER_LINES[stage], "damaged": true})
-	if stage == 4:
+	if stage == OBJECTIVES.size() - 2:
 		lines.append({"text": "Enquanto a humanidade existir, a natureza não terá futuro.", "damaged": true})
-	if stage == 5:
+	if stage == OBJECTIVES.size() - 1:
 		_begin_escape_sequence()
 	else:
 		_queue_dialogue(lines)
@@ -527,7 +528,7 @@ func _update_targets() -> void:
 	_show_tasks()
 	var state := _state()
 	var stage := int(state.get("engineer_completed_count", 0))
-	if stage >= 6 or task_busy or reserve_scan_running or not bool(state.get("engineer_ending_started", false)):
+	if stage >= OBJECTIVES.size() or task_busy or reserve_scan_running or not bool(state.get("engineer_ending_started", false)):
 		return
 	if stage >= 3 and not bool(state.get("engineer_redundancy_seen", false)):
 		return
@@ -1090,6 +1091,7 @@ func _finish_game(animated: bool) -> void:
 	if not is_inside_tree():
 		return
 	MusicController.stop_all_audio()
+	SaveGame.clear_save(false)
 	get_tree().paused = false
 	get_tree().set_meta(&"programmer_ending_return", true)
 	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
