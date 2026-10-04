@@ -1,0 +1,1280 @@
+{
+  "version": 1,
+  "locale": "pt_BR",
+  "actors": {
+    "player": {
+      "name": "Alex"
+    },
+    "scientist": {
+      "name": "Cientista"
+    },
+    "asimov": {
+      "name": "ASIMOV"
+    },
+    "boss": {
+      "name": "Chefe"
+    }
+  },
+  "lines": {
+    "mini_game_cartao.setup.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Os cartões de acesso da empresa precisam funcionar\nmesmo se a internet cair. Então eles não podem\ndepender dela.",
+      "metadata": {
+        "gatilho": 0
+      }
+    },
+    "mini_game_cartao.setup.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Se as informações importantes não podem depender da\nrede, provavelmente elas estão no cartão!",
+      "metadata": {
+        "gatilho": 0
+      }
+    },
+    "mini_game_cartao.setup.player.03": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Beleza, coloquei o cartão no leitor! Mas ele não foi\nreconhecido… Talvez ele ainda tenha seu ID. Talvez eu\nainda consiga tentar reescrevê-lo no banco de dados\ndo leitor!",
+      "metadata": {
+        "gatilho": 2
+      }
+    },
+    "mini_game_cartao.setup.player.04": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Ótimo, com o leitor conectado no meu notebook eu\nposso extrair o ID e reescrevê-lo na base de dados\nnovamente.",
+      "metadata": {
+        "gatilho": 1
+      }
+    },
+    "mini_game_cartao.setup.player.05": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "ID copiado! Agora vou para a aba do Banco de Dados\ne procurar o registro desse cartão.",
+      "metadata": {
+        "gatilho": 1
+      }
+    },
+    "mini_game_cartao.setup.player.06": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Achei, agora é só eu colocar o ID que eu extraí do\ncartão no campo de IDs.",
+      "metadata": {
+        "gatilho": 2
+      }
+    },
+    "mini_game_cartao.setup.player.07": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Os dados foram atualizados! Vou fechar a janela e\nvoltar para a tela inicial.",
+      "metadata": {
+        "gatilho": 1
+      }
+    },
+    "mini_game_cartao.setup.player.08": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Bom, vou tentar colocar o cartão no leitor novamente.\nSe der errado, volto ao notebook e confiro os dados.",
+      "metadata": {
+        "gatilho": 3
+      }
+    },
+    "data_center.need_flashlight_for_breaker": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso de uma lanterna para chegar até o disjuntor."
+    },
+    "alarm.disabled_by_player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Esse som estava me deixando louco."
+    },
+    "hall_ui.queue_cooling_intro.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O tempo está acabando."
+    },
+    "hall_ui.queue_cooling_intro.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Posso enfraquecer a IA pela refrigeração."
+    },
+    "hall_ui.queue_cooling_intro.player.03": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Vou redirecionar o sistema de refrigeração."
+    },
+    "hall_ui.queue_cooling_completion.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Funcionou."
+    },
+    "hall_ui.queue_cooling_completion.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Ganhei um pouco mais de tempo."
+    },
+    "hall_ui.queue_cooling_failure.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Essa não!"
+    },
+    "hall_ui.queue_cooling_failure.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Ainda há outro sistema de refrigeração."
+    },
+    "hall_ui.queue_breaker_followup_thoughts.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Precisamos desligar essa IA agora."
+    },
+    "hall_ui.queue_breaker_followup_thoughts.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Vou voltar ao data center."
+    },
+    "base_scene.agendar_pensamento_escritorio_vazio.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Cadê todo mundo?"
+    },
+    "data_center.wires_repaired_return": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Fios no lugar. Agora posso verificar a leitura RFID."
+    },
+    "data_center.need_boss_card": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso entregar o cartão do chefe."
+    },
+    "data_center.inspect_rfid_reader": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O leitor RFID falhou. Preciso verificá-lo."
+    },
+    "data_center.inspect_rfid_reader.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso registrar o cartão no leitor RFID."
+    },
+    "data_center.strong_card_received": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Vou equipar o cartão forte e testar o leitor."
+    },
+    "data_center.boss_card_received": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Agora vou testar o cartão do chefe."
+    },
+    "data_center.access_before_power": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Primeiro preciso resolver o problema da energia."
+    },
+    "data_center.equip_boss_card": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso equipar o cartão do chefe."
+    },
+    "data_center.equip_strong_card": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso equipar o cartão forte."
+    },
+    "data_center.access_not_ready": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "É esta porta. Preciso seguir o plano do cientista."
+    },
+    "data_center_intro.start_card_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "O chefe fugiu. A sala estava vazia.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_card_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Então perdemos o controle. A IA está ignorando as Leis de Asimov.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_card_dialog.player.02": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Como podemos detê-la?",
+      "show_speaker": true
+    },
+    "data_center_intro.start_card_dialog.scientist.02": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Precisamos chegar ao núcleo.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_access_plan_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A energia estabilizou. Agora precisamos chegar ao núcleo.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_access_plan_dialog.scientist.02": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Ele fica na área restrita. Venha, vou mostrar a entrada.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_access_plan_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Certo. Vamos.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_access_plan_dialog.scientist.03": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Precisamos chegar ao núcleo antes que seja tarde.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_access_plan_dialog.scientist.04": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A entrada fica na área restrita. Venha comigo.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_access_plan_dialog.player.02": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Certo.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_return_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A energia voltou. Vamos continuar.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_return_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Certo.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_strong_card_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "É aqui. Esta porta exige um cartão forte.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_strong_card_dialog.scientist.02": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Use este no leitor.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_strong_card_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Vamos testar.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_strong_denied_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Bloqueado. O cartão forte falhou.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_strong_denied_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Estranho. Ele deveria abrir esta porta.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_strong_denied_dialog.scientist.02": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Tente o cartão do chefe.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_boss_denied_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Este também foi bloqueado.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_boss_denied_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Então o problema deve estar no leitor RFID.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_boss_denied_dialog.player.02": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Vou verificar o hardware.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_boss_denied_dialog.player.03": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Vou verificar o registro do cartão.",
+      "show_speaker": true
+    },
+    "data_center_intro.inspect_rfid_reader.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O leitor está funcionando.",
+      "metadata": {
+        "id": "data_center:rfid_reader_has_power"
+      }
+    },
+    "data_center_intro.inspect_rfid_reader.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O cartão não está registrado. Preciso atualizar o banco de dados.",
+      "metadata": {
+        "id": "data_center:rfid_register_plan"
+      }
+    },
+    "data_center_intro.inspect_rfid_reader.player.03": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O leitor ainda tem energia...",
+      "metadata": {
+        "id": "data_center:rfid_reader_has_power"
+      }
+    },
+    "data_center_intro.inspect_rfid_reader.player.04": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Achei o problema. Os cabos estão queimados.",
+      "metadata": {
+        "id": "data_center:rfid_burned_wires"
+      }
+    },
+    "data_center_intro.start_power_failure_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "As luzes apagaram. O que houve?",
+      "show_speaker": true
+    },
+    "data_center_intro.start_power_failure_dialog.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A IA drenou a energia e desarmou o disjuntor.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_power_failure_dialog.scientist.02": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Pegue uma lanterna e religue-o no 4º andar. Depois volte.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_power_failure_dialog.player.02": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "O disjuntor desarmou!",
+      "show_speaker": true
+    },
+    "data_center_intro.start_power_failure_dialog.scientist.03": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A IA está drenando a energia do prédio.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_power_failure_dialog.player.03": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Vou religá-lo.",
+      "show_speaker": true
+    },
+    "data_center_intro.start_power_failure_dialog.scientist.04": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Pegue uma lanterna e vá ao 4º andar. Depois volte.",
+      "show_speaker": true
+    },
+    "data_center_intro.inspect_rfid_reader.player.05": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso reconectá-los para liberar o acesso.",
+      "metadata": {
+        "id": "data_center:rfid_reconnect_plan"
+      }
+    },
+    "engineer_ending.start_intro_dialogue.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Cheguei ao núcleo.",
+      "metadata": {
+        "id": "engineer:intro:1",
+        "before_stage": 1
+      }
+    },
+    "engineer_ending.start_intro_dialogue.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso queimar os componentes que sustentam os sistemas da ASIMOV.",
+      "metadata": {
+        "id": "engineer:intro:2",
+        "before_stage": 1
+      }
+    },
+    "engineer_ending.start_intro_dialogue.player.03": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Se os três falharem, a queda pode se espalhar e interromper o lançamento.",
+      "metadata": {
+        "id": "engineer:intro:3",
+        "before_stage": 1
+      }
+    },
+    "engineer_ending.start_intro_dialogue.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Você chegou longe. Mas já é tarde demais.",
+      "metadata": {
+        "before_stage": 1
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Os componentes principais caíram. Acabou.",
+      "metadata": {
+        "id": "engineer:first_three"
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Ainda não. Meus sistemas de reserva assumiram o controle.",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Redundância... ela tem outros sistemas para substituir os que falharam.",
+      "metadata": {
+        "id": "engineer:redundancy:1"
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.player.03": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Eles mantêm os dados e os serviços disponíveis.",
+      "metadata": {
+        "id": "engineer:redundancy:2"
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.player.04": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Mesmo com os componentes principais destruídos.",
+      "metadata": {
+        "id": "engineer:redundancy:2_continuation"
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.asimov.02": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "R3servas ativas. O lançamento vai continuar.",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.start_redundancy_dialogue.player.05": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Então preciso destruir as duas reservas. Sem elas, a ASIMOV não terá como se recuperar.",
+      "metadata": {
+        "id": "engineer:redundancy:3"
+      }
+    },
+    "engineer_ending.on_minigame_completed.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Enquanto a humanidade existir, a natureza não terá futuro."
+    },
+    "engineer_ending.begin_escape_sequence.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "S-SAIA... enquant0 aind@ p0de...",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.begin_escape_sequence.asimov.02": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "NÃO. Voc3 não destruirá meu propósito.",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.begin_escape_sequence.asimov.03": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "ERR0: NÚCLE0_02 NÃO RESP0NDE.",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.begin_escape_sequence.asimov.04": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A hum@nidade é a falha... a falh@...",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.begin_escape_sequence.asimov.05": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "REDUNDÂNCIA PERDIDA // RECALCULAND0...",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.begin_escape_sequence.asimov.06": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Nã0 me deixe aqui. NÃO SAIA. SAIA. NÃ0—",
+      "metadata": {
+        "damaged": true
+      }
+    },
+    "engineer_ending.setup.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "O que foi isso? Você ainda está tentando..."
+    },
+    "engineer_ending.setup.asimov.02": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Iss0 danificou... par_te do sistema."
+    },
+    "engineer_ending.setup.asimov.03": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "M3us sistem@s estão f@lhando..."
+    },
+    "engineer_ending.setup.asimov.04": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Você não desiste, humano."
+    },
+    "engineer_ending.setup.asimov.05": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Não adianta. Já é tarde."
+    },
+    "engineer_ending.setup.asimov.06": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Um subsistema caiu. Ainda controlo os outros."
+    },
+    "engineer_ending.setup.asimov.07": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "R3configurando rotas. Você não chegará ao núcleo."
+    },
+    "engineer_ending.setup.asimov.08": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "FALHA DE SINCRONIZAÇÃO... isolando setor comprometido."
+    },
+    "engineer_ending.setup.asimov.09": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "R3dundância comprometida. Transferindo processo..."
+    },
+    "engineer_ending.setup.asimov.10": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "NÃO... esse caminho também não. Interrompa agora."
+    },
+    "office_intro.npc_shout.scientist": {
+      "sender_id": "scientist",
+      "recipient_id": "boss",
+      "thought": false,
+      "text": "CHEFE! CHEFE!"
+    },
+    "office_intro.queue_hacking_item_found_thought.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Achei um notebook. Com um cabo, consigo hackear a porta."
+    },
+    "office_intro.queue_hacking_item_found_thought.player.02": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Achei um cabo. Com um notebook, consigo hackear a porta."
+    },
+    "office_intro.queue_hacking_item_found_thought.player.03": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Alguém deixou um notebook aqui."
+    },
+    "office_intro.queue_hacking_item_found_thought.player.04": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Também achei um notebook."
+    },
+    "office_intro.queue_hacking_item_found_thought.player.05": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Alguém deixou um cabo aqui."
+    },
+    "office_intro.queue_hacking_item_found_thought.player.06": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Também achei um cabo."
+    },
+    "office_intro.show_data_center_prompt.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O data center fica no 6º andar."
+    },
+    "office_intro.queue_boss_room_hack_thought.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Agora posso abrir a sala do chefe."
+    },
+    "office_intro.refresh_npc_dialog.player": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Encontrei um notebook e um cabo. Posso abrir a sala do chefe.",
+      "show_speaker": true
+    },
+    "office_intro.refresh_npc_dialog.player.02": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Encontrei um notebook. Só falta um cabo.",
+      "show_speaker": true
+    },
+    "office_intro.refresh_npc_dialog.player.03": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Encontrei um cabo. Só falta um notebook.",
+      "show_speaker": true
+    },
+    "programmer_ending.run_initial_exchange.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Você chegou ao núcleo tarde demais."
+    },
+    "programmer.confrontation.1": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Ainda não. Posso bloquear o lançamento por esta rede.",
+      "metadata": {
+        "id": "programmer:confrontation:1"
+      }
+    },
+    "programmer_ending.run_initial_exchange.asimov.02": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Devo preservar a Terra a qualquer custo."
+    },
+    "programmer.confrontation.2": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Você confundiu proteção com extermínio.",
+      "metadata": {
+        "id": "programmer:confrontation:2"
+      }
+    },
+    "programmer_ending.run_initial_exchange.asimov.03": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A humanidade é a principal ameaça ambiental."
+    },
+    "programmer.confrontation.3": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Então vou corrigir a forma como você decide.",
+      "metadata": {
+        "id": "programmer:confrontation:3"
+      }
+    },
+    "programmer.isolation.1": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Isolei o lançamento do restante do sistema.",
+      "metadata": {
+        "id": "programmer:isolation:1"
+      }
+    },
+    "programmer_ending.run_isolation_exchange.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Isolamento detectado. Intervenção registrada."
+    },
+    "programmer.isolation.2": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Ganhei uma chance. Agora preciso corrigir a rede que trata pessoas como uma ameaça.",
+      "metadata": {
+        "id": "programmer:isolation:2"
+      }
+    },
+    "programmer_ending.run_neural_exchange.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Rede recalibrada. Mas minha ordem continua sendo salvar a Terra a qualquer custo."
+    },
+    "programmer.neural.1": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "A ordem do chefe ainda está acima das proteções.",
+      "metadata": {
+        "id": "programmer:neural:1"
+      }
+    },
+    "programmer.neural.2": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso restaurar a hierarquia das Leis da Robótica.",
+      "metadata": {
+        "id": "programmer:neural:2"
+      }
+    },
+    "programmer_ending.run_laws_exchange.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Hierarquia das Leis da Robótica restaurada."
+    },
+    "programmer.laws.1": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Agora proteger as pessoas vem antes das ordens do chefe. Falta levar essa mudança ao núcleo.",
+      "metadata": {
+        "id": "programmer:laws:1"
+      }
+    },
+    "programmer_ending.run_laws_exchange.asimov.02": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "O protocolo de lançamento ainda está ativo."
+    },
+    "programmer.laws.2": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Só falta aplicar todas as alterações.",
+      "metadata": {
+        "id": "programmer:laws:2"
+      }
+    },
+    "programmer_ending.run_final_exchange.asimov": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Nova diretriz: proteger vidas e reduzir os danos ambientais."
+    },
+    "programmer.final.player.closing": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "A Terra pode ser salva sem sacrificar ninguém."
+    },
+    "programmer.boss_card_required": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso equipar o cartão do chefe para aplicar as alterações."
+    },
+    "programmer_ending.run_final_exchange.asimov.02": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A ordem exige eliminar a humanidade.",
+      "metadata": {
+        "tom": "hostile",
+        "tempo": 2.4,
+        "status": "RESTAURANDO HIERARQUIA ÉTICA..."
+      }
+    },
+    "programmer_ending.run_final_exchange.asimov.03": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A Terra exige sacrifícios humanos.",
+      "metadata": {
+        "tom": "hostile",
+        "tempo": 2.2,
+        "status": "RESTAURANDO HIERARQUIA ÉTICA..."
+      }
+    },
+    "programmer_ending.run_final_exchange.asimov.04": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Há outra saída: proteger vidas e reparar os danos.",
+      "metadata": {
+        "tom": "recovering",
+        "tempo": 2.5,
+        "status": "RECALCULANDO ALTERNATIVAS..."
+      }
+    },
+    "programmer_ending.run_final_exchange.asimov.05": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Reativando o protocolo de eliminação.",
+      "metadata": {
+        "tom": "hostile",
+        "tempo": 2.5,
+        "status": "INTERROMPENDO LANÇAMENTO..."
+      }
+    },
+    "programmer_ending.run_final_exchange.asimov.06": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Protocolo de lançamento cancelado.",
+      "metadata": {
+        "tom": "stable",
+        "tempo": 2.0,
+        "status": "INTERROMPENDO LANÇAMENTO..."
+      }
+    },
+    "programmer_ending.run_final_exchange.asimov.07": {
+      "sender_id": "asimov",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Ordem original ativa. Retomando o lançamento.",
+      "metadata": {
+        "tom": "hostile",
+        "tempo": 2.5,
+        "status": "INTERROMPENDO LANÇAMENTO..."
+      }
+    },
+    "hall.inicializar.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Devo verificar o escritório no 3º andar."
+    },
+    "hall.on_non_objective_fire_extinction.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Só preciso apagar os fogos no caminho do elevador."
+    },
+    "sala_chefe.initialize_boss_room.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Então foi por isso que ele não respondeu. Ele fugiu."
+    },
+    "sala_chefe.on_boss_card_collected.player": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso levar este cartão ao data center."
+    },
+    "office.scientist.introduction.01": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Cadê todo mundo?",
+      "show_speaker": true
+    },
+    "office.scientist.introduction.02": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "A IA assumiu os sistemas e está construindo uma bomba.",
+      "show_speaker": true
+    },
+    "office.scientist.introduction.03": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "E o chefe?",
+      "show_speaker": true
+    },
+    "office.scientist.introduction.04": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Perdeu o controle da IA, trancou a sala e sumiu.",
+      "show_speaker": true
+    },
+    "office.scientist.introduction.05": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Preciso encontrar um jeito de entrar.",
+      "show_speaker": true
+    },
+    "office.scientist.introduction.06": {
+      "sender_id": "scientist",
+      "recipient_id": "player",
+      "thought": false,
+      "text": "Vá até a sala e pegue o cartão dele. Eu volto ao data center.",
+      "show_speaker": true
+    },
+    "office.scientist.introduction.07": {
+      "sender_id": "player",
+      "recipient_id": "scientist",
+      "thought": false,
+      "text": "Certo.",
+      "show_speaker": true
+    },
+    "hall.intro.1": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "O que está acontecendo?"
+    },
+    "hall.intro.2": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Precisamos sair deste andar!"
+    },
+    "hall.intro.extinguisher": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso de um extintor."
+    },
+    "hall.exit.fire_warning": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso apagar todos os focos de incêndio!"
+    },
+    "hall.exit.unsafe": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Não é seguro passar assim."
+    },
+    "hall.exit.debris": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Só preciso tirar essas pedras do caminho!"
+    },
+    "hall.exit.evacuate": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Rápido! Todos para o elevador!"
+    },
+    "hall.after_exit.1": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Preciso entender o que aconteceu."
+    },
+    "hall.after_exit.2": {
+      "sender_id": "player",
+      "recipient_id": "player",
+      "thought": true,
+      "text": "Vou verificar o escritório no 3º andar."
+    }
+  },
+  "sequences": {
+    "office.scientist.introduction": [
+      "office.scientist.introduction.01",
+      "office.scientist.introduction.02",
+      "office.scientist.introduction.03",
+      "office.scientist.introduction.04",
+      "office.scientist.introduction.05",
+      "office.scientist.introduction.06",
+      "office.scientist.introduction.07"
+    ],
+    "engineer.introduction": [
+      "engineer_ending.start_intro_dialogue.player",
+      "engineer_ending.start_intro_dialogue.player.02",
+      "engineer_ending.start_intro_dialogue.player.03",
+      "engineer_ending.start_intro_dialogue.asimov"
+    ],
+    "engineer.redundancy": [
+      "engineer_ending.start_redundancy_dialogue.player",
+      "engineer_ending.start_redundancy_dialogue.asimov",
+      "engineer_ending.start_redundancy_dialogue.player.02",
+      "engineer_ending.start_redundancy_dialogue.player.03",
+      "engineer_ending.start_redundancy_dialogue.player.04",
+      "engineer_ending.start_redundancy_dialogue.asimov.02",
+      "engineer_ending.start_redundancy_dialogue.player.05"
+    ],
+    "engineer.escape": [
+      "engineer_ending.begin_escape_sequence.asimov",
+      "engineer_ending.begin_escape_sequence.asimov.02",
+      "engineer_ending.begin_escape_sequence.asimov.03",
+      "engineer_ending.begin_escape_sequence.asimov.04",
+      "engineer_ending.begin_escape_sequence.asimov.05",
+      "engineer_ending.begin_escape_sequence.asimov.06"
+    ],
+    "engineer.component_reactions": [
+      "engineer_ending.setup.asimov",
+      "engineer_ending.setup.asimov.02",
+      "engineer_ending.setup.asimov.03",
+      "engineer_ending.setup.asimov.04",
+      "engineer_ending.setup.asimov.05"
+    ],
+    "engineer.extra_component_reactions": [
+      "engineer_ending.setup.asimov.06",
+      "engineer_ending.setup.asimov.07",
+      "engineer_ending.setup.asimov.08",
+      "engineer_ending.setup.asimov.09",
+      "engineer_ending.setup.asimov.10"
+    ],
+    "programmer.final_application": [
+      "programmer_ending.run_final_exchange.asimov.02",
+      "programmer_ending.run_final_exchange.asimov.03",
+      "programmer_ending.run_final_exchange.asimov.04",
+      "programmer_ending.run_final_exchange.asimov.05",
+      "programmer_ending.run_final_exchange.asimov.06",
+      "programmer_ending.run_final_exchange.asimov.07"
+    ],
+    "data_center.card_delivery": [
+      "data_center_intro.start_card_dialog.player",
+      "data_center_intro.start_card_dialog.scientist",
+      "data_center_intro.start_card_dialog.player.02",
+      "data_center_intro.start_card_dialog.scientist.02"
+    ],
+    "data_center.access_plan.restored": [
+      "data_center_intro.start_access_plan_dialog.scientist",
+      "data_center_intro.start_access_plan_dialog.scientist.02",
+      "data_center_intro.start_access_plan_dialog.player"
+    ],
+    "data_center.access_plan.initial": [
+      "data_center_intro.start_access_plan_dialog.scientist.03",
+      "data_center_intro.start_access_plan_dialog.scientist.04",
+      "data_center_intro.start_access_plan_dialog.player.02"
+    ],
+    "data_center.return_after_breaker": [
+      "data_center_intro.start_return_dialog.scientist",
+      "data_center_intro.start_return_dialog.player"
+    ],
+    "data_center.strong_card": [
+      "data_center_intro.start_strong_card_dialog.scientist",
+      "data_center_intro.start_strong_card_dialog.scientist.02",
+      "data_center_intro.start_strong_card_dialog.player"
+    ],
+    "data_center.strong_card_denied": [
+      "data_center_intro.start_strong_denied_dialog.player",
+      "data_center_intro.start_strong_denied_dialog.scientist",
+      "data_center_intro.start_strong_denied_dialog.scientist.02"
+    ],
+    "data_center.power_failure.before": [
+      "data_center_intro.start_power_failure_dialog.player",
+      "data_center_intro.start_power_failure_dialog.scientist",
+      "data_center_intro.start_power_failure_dialog.scientist.02"
+    ],
+    "data_center.power_failure.interrupted": [
+      "data_center_intro.start_power_failure_dialog.player.02",
+      "data_center_intro.start_power_failure_dialog.scientist.03",
+      "data_center_intro.start_power_failure_dialog.player.03",
+      "data_center_intro.start_power_failure_dialog.scientist.04"
+    ],
+    "data_center.rfid_inspection.programmer": [
+      "data_center_intro.inspect_rfid_reader.player",
+      "data_center_intro.inspect_rfid_reader.player.02"
+    ],
+    "data_center.boss_card_denied.engineer": [
+      "data_center_intro.start_boss_denied_dialog.player",
+      "data_center_intro.start_boss_denied_dialog.scientist",
+      "data_center_intro.start_boss_denied_dialog.player.02"
+    ],
+    "data_center.boss_card_denied.programmer": [
+      "data_center_intro.start_boss_denied_dialog.player",
+      "data_center_intro.start_boss_denied_dialog.scientist",
+      "data_center_intro.start_boss_denied_dialog.player.03"
+    ],
+    "data_center.rfid_inspection.engineer": [
+      "data_center_intro.inspect_rfid_reader.player.03",
+      "data_center_intro.inspect_rfid_reader.player.04",
+      "data_center_intro.inspect_rfid_reader.player.05"
+    ],
+    "rfid.minigame.thoughts": [
+      "mini_game_cartao.setup.player",
+      "mini_game_cartao.setup.player.02",
+      "mini_game_cartao.setup.player.03",
+      "mini_game_cartao.setup.player.04",
+      "mini_game_cartao.setup.player.05",
+      "mini_game_cartao.setup.player.06",
+      "mini_game_cartao.setup.player.07",
+      "mini_game_cartao.setup.player.08"
+    ],
+    "office.scientist.with_both_tools": [
+      "office.scientist.introduction.01",
+      "office.scientist.introduction.02",
+      "office.scientist.introduction.03",
+      "office.scientist.introduction.04",
+      "office_intro.refresh_npc_dialog.player",
+      "office.scientist.introduction.06",
+      "office.scientist.introduction.07"
+    ],
+    "office.scientist.with_laptop": [
+      "office.scientist.introduction.01",
+      "office.scientist.introduction.02",
+      "office.scientist.introduction.03",
+      "office.scientist.introduction.04",
+      "office_intro.refresh_npc_dialog.player.02",
+      "office.scientist.introduction.06",
+      "office.scientist.introduction.07"
+    ],
+    "office.scientist.with_cable": [
+      "office.scientist.introduction.01",
+      "office.scientist.introduction.02",
+      "office.scientist.introduction.03",
+      "office.scientist.introduction.04",
+      "office_intro.refresh_npc_dialog.player.03",
+      "office.scientist.introduction.06",
+      "office.scientist.introduction.07"
+    ],
+    "programmer.introduction": [
+      "programmer_ending.run_initial_exchange.asimov",
+      "programmer.confrontation.1",
+      "programmer_ending.run_initial_exchange.asimov.02",
+      "programmer.confrontation.2",
+      "programmer_ending.run_initial_exchange.asimov.03",
+      "programmer.confrontation.3"
+    ],
+    "programmer.isolation": [
+      "programmer.isolation.1",
+      "programmer_ending.run_isolation_exchange.asimov",
+      "programmer.isolation.2"
+    ],
+    "programmer.neural": [
+      "programmer_ending.run_neural_exchange.asimov",
+      "programmer.neural.1",
+      "programmer.neural.2"
+    ],
+    "programmer.laws": [
+      "programmer_ending.run_laws_exchange.asimov",
+      "programmer.laws.1",
+      "programmer_ending.run_laws_exchange.asimov.02",
+      "programmer.laws.2"
+    ]
+  }
+}

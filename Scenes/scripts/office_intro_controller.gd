@@ -219,7 +219,7 @@ func _npc_shout() -> void:
 			_show_talk_task(false)
 		return
 	shout_running = true
-	await npc_balloon.mostrar_texto("CHEFE! CHEFE!", NPC_SHOUT_ID)
+	await npc_balloon.mostrar_dialogo("office_intro.npc_shout.scientist", NPC_SHOUT_ID)
 	shout_running = false
 	if not _is_current_office():
 		return
@@ -347,27 +347,21 @@ func _queue_hacking_item_found_thought(
 		if not was_first:
 			return
 		if item == "laptop":
-			player.balao_de_pensamento.enfileirar(
-				LAPTOP_AFTER_DIALOG_FOUND_ID,
-				"Achei um notebook. Com um cabo, consigo hackear a porta."
-			)
+			player.balao_de_pensamento.enfileirar_dialogo("office_intro.queue_hacking_item_found_thought.player", LAPTOP_AFTER_DIALOG_FOUND_ID)
 		else:
-			player.balao_de_pensamento.enfileirar(
-				CABLE_AFTER_DIALOG_FOUND_ID,
-				"Achei um cabo. Com um notebook, consigo hackear a porta."
-			)
+			player.balao_de_pensamento.enfileirar_dialogo("office_intro.queue_hacking_item_found_thought.player.02", CABLE_AFTER_DIALOG_FOUND_ID)
 		return
 
 	if item == "laptop":
 		player.balao_de_pensamento.enfileirar(
 			LAPTOP_FIRST_FOUND_ID if was_first else LAPTOP_SECOND_FOUND_ID,
-			"Alguém deixou um notebook aqui." if was_first else "Também achei um notebook."
+			DialogueCatalog.text("office_intro.queue_hacking_item_found_thought.player.03") if was_first else DialogueCatalog.text("office_intro.queue_hacking_item_found_thought.player.04")
 		)
 		return
 
 	player.balao_de_pensamento.enfileirar(
 		CABLE_FIRST_FOUND_ID if was_first else CABLE_SECOND_FOUND_ID,
-		"Alguém deixou um cabo aqui." if was_first else "Também achei um cabo."
+		DialogueCatalog.text("office_intro.queue_hacking_item_found_thought.player.05") if was_first else DialogueCatalog.text("office_intro.queue_hacking_item_found_thought.player.06")
 	)
 
 
@@ -379,23 +373,13 @@ func _refresh_npc_dialog() -> void:
 	var has_cable := bool(state.get("office_cable_collected", false))
 	if not has_laptop and not has_cable:
 		return
-	var offer := ""
+	var sequence_id := "office.scientist.with_cable"
 	if has_laptop and has_cable:
-		offer = "Alex: Encontrei um notebook e um cabo. Posso abrir a sala do chefe."
+		sequence_id = "office.scientist.with_both_tools"
 	elif has_laptop:
-		offer = "Alex: Encontrei um notebook. Só falta um cabo."
-	else:
-		offer = "Alex: Encontrei um cabo. Só falta um notebook."
-	var dialog_texts: Array[String] = [
-		"Alex: Cadê todo mundo?",
-		"Cientista: A IA assumiu os sistemas e está construindo uma bomba.",
-		"Alex: E o chefe?",
-		"Cientista: Perdeu o controle da IA, trancou a sala e sumiu.",
-		offer,
-		"Cientista: Vá até a sala e pegue o cartão dele. Eu volto ao data center.",
-		"Alex: Certo."
-	]
-	npc.set("dialog_texts", dialog_texts)
+		sequence_id = "office.scientist.with_laptop"
+	npc.set("dialog_sequence_id", sequence_id)
+	npc.set("dialog_texts", DialogueCatalog.texts(sequence_id))
 
 
 func _handle_data_center_task(state: Dictionary) -> bool:
@@ -423,10 +407,7 @@ func _show_data_center_prompt() -> void:
 	):
 		player.balao_de_pensamento.descartar([DATA_CENTER_FLOOR_ID])
 		return
-	player.balao_de_pensamento.enfileirar(
-		DATA_CENTER_FLOOR_ID,
-		"O data center fica no 6º andar."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("office_intro.show_data_center_prompt.player", DATA_CENTER_FLOOR_ID)
 
 
 func _show_go_to_sixth_floor_task(completed: bool = false) -> void:
@@ -459,10 +440,7 @@ func _queue_boss_room_hack_thought(state: Dictionary) -> void:
 		return
 	state["office_hack_boss_room_thought_queued"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
-	player.balao_de_pensamento.enfileirar(
-		BOSS_ROOM_HACK_READY_ID,
-		"Agora posso abrir a sala do chefe."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("office_intro.queue_boss_room_hack_thought.player", BOSS_ROOM_HACK_READY_ID)
 
 
 func _discard_obsolete_thoughts(state: Dictionary) -> void:

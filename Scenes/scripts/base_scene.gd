@@ -168,6 +168,6 @@ func _agendar_pensamento_escritorio_vazio() -> void:
 	var balao := player.balao_de_pensamento
 	if balao.tem_pensamento(OFFICE_EMPTY_THOUGHT_ID):
 		return
-	balao.enfileirar(OFFICE_EMPTY_THOUGHT_ID, "Cadê todo mundo?")
+	balao.enfileirar_dialogo("base_scene.agendar_pensamento_escritorio_vazio.player", OFFICE_EMPTY_THOUGHT_ID)
 	if player.checkpoint_enabled:
 		SaveGame.create_checkpoint(player)

@@ -79,10 +79,7 @@ func _pode_ligar_disjuntor_do_data_center() -> bool:
 		return false
 	if player.inventory.get_item_on_inventary("lanterna"):
 		return true
-	player.balao_de_pensamento.enfileirar(
-		"data_center:need_flashlight_for_breaker",
-		"Preciso de uma lanterna para chegar até o disjuntor."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("data_center.need_flashlight_for_breaker", "data_center:need_flashlight_for_breaker")
 	return false
 
 

@@ -66,7 +66,7 @@ func _inicializar() -> void:
 	_highlight_hall_objectives()
 	man_player.balao_de_pensamento.atualizar_texto(
 		_pensamento_id("pos_saida_2"),
-		"Devo verificar o escritório no 3º andar."
+		DialogueCatalog.text("hall.inicializar.player")
 	)
 	if _elevador_terceiro_liberado:
 		_atualizar_tarefa_terceiro()
@@ -77,9 +77,9 @@ func _inicializar() -> void:
 		_atualizar_visibilidade()
 		return
 
-	_pensar("intro_1", "O que está acontecendo?")
-	_pensar("intro_2", "Precisamos sair deste andar!")
-	_pensar("intro_4", "Preciso de um extintor.")
+	_pensar("intro_1", "hall.intro.1")
+	_pensar("intro_2", "hall.intro.2")
+	_pensar("intro_4", "hall.intro.extinguisher")
 	_atualizar_visibilidade()
 	_tentar_finalizar_missao()
 
@@ -120,15 +120,12 @@ func _pensamento_id(id: String) -> String:
 	return "hall:" + save_id + ":" + id
 
 
-func _pensar(id: String, texto: String) -> void:
-	man_player.balao_de_pensamento.enfileirar(_pensamento_id(id), texto)
+func _pensar(id: String, line_id: String) -> void:
+	man_player.balao_de_pensamento.enfileirar_dialogo(line_id, _pensamento_id(id))
 
 
 func _on_non_objective_fire_extinction() -> void:
-	man_player.balao_de_pensamento.enfileirar_repetivel(
-		_pensamento_id("fogo_fora_da_saida"),
-		"Só preciso apagar os fogos no caminho do elevador."
-	)
+	man_player.balao_de_pensamento.enfileirar_dialogo("hall.on_non_objective_fire_extinction.player", _pensamento_id("fogo_fora_da_saida"), true)
 
 
 func _descartar_instrucoes_obsoletas() -> void:
@@ -302,8 +299,8 @@ func _physics_process(delta: float) -> void:
 	if clear and M1_feito:
 		_clear_objective_highlights()
 	if clear and not M1_feito:
-		_pensar("aviso_1", "Preciso apagar todos os focos de incêndio!")
-		_pensar("aviso_2", "Não é seguro passar assim.")
+		_pensar("aviso_1", "hall.exit.fire_warning")
+		_pensar("aviso_2", "hall.exit.unsafe")
 
 	if not _tentar_finalizar_missao():
 		_save_progress_and_checkpoint()
@@ -327,7 +324,7 @@ func _update_fire_task() -> void:
 	_highlight_hall_objectives()
 
 	if not M2_feito:
-		_pensar("pedras", "Só preciso tirar essas pedras do caminho!")
+		_pensar("pedras", "hall.exit.debris")
 
 
 func _tentar_finalizar_missao() -> bool:
@@ -348,7 +345,7 @@ func _tentar_finalizar_missao() -> bool:
 	_hide_scheduled = true
 
 	_start_npc_exit_paths()
-	_pensar("saida", "Rápido! Todos para o elevador!")
+	_pensar("saida", "hall.exit.evacuate")
 	_pos_saida_iniciada = true
 	_iniciar_espera_npcs()
 	_save_progress_and_checkpoint()
@@ -442,8 +439,8 @@ func _concluir_saida_depois_da_animacao(marcador: AnimatedSprite2D) -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not _pos_saida_iniciada:
 		return
 	_liberar_elevador_terceiro()
-	_pensar("pos_saida_1", "Preciso entender o que aconteceu.")
-	_pensar("pos_saida_2", "Vou verificar o escritório no 3º andar.")
+	_pensar("pos_saida_1", "hall.after_exit.1")
+	_pensar("pos_saida_2", "hall.after_exit.2")
 	_save_progress_and_checkpoint()
 
 

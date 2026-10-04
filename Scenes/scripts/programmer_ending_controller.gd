@@ -241,12 +241,7 @@ func _run_initial_exchange() -> void:
 	_start_final_ambience(true)
 
 	_update_flow_from_state()
-	await _ai_say("Você chegou ao núcleo tarde demais.")
-	await _player_think("programmer:confrontation:1", "Ainda não. Posso bloquear o lançamento por esta rede.")
-	await _ai_say("Devo preservar a Terra a qualquer custo.")
-	await _player_think("programmer:confrontation:2", "Você confundiu proteção com extermínio.")
-	await _ai_say("A humanidade é a principal ameaça ambiental.")
-	await _player_think("programmer:confrontation:3", "Então vou corrigir a forma como você decide.")
+	await _run_catalog_exchange("programmer.introduction")
 	if not is_inside_tree():
 		return
 	state = _state()
@@ -260,9 +255,7 @@ func _run_initial_exchange() -> void:
 func _run_isolation_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
-	await _player_think("programmer:isolation:1", "Isolei o lançamento do restante do sistema.")
-	await _ai_say("Isolamento detectado. Intervenção registrada.")
-	await _player_think("programmer:isolation:2", "Ganhei uma chance. Agora preciso corrigir a rede que trata pessoas como uma ameaça.")
+	await _run_catalog_exchange("programmer.isolation")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -276,9 +269,7 @@ func _run_isolation_exchange() -> void:
 func _run_neural_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
-	await _ai_say("Rede recalibrada. Mas minha ordem continua sendo salvar a Terra a qualquer custo.")
-	await _player_think("programmer:neural:1", "A ordem do chefe ainda está acima das proteções.")
-	await _player_think("programmer:neural:2", "Preciso restaurar a hierarquia das Leis da Robótica.")
+	await _run_catalog_exchange("programmer.neural")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -292,10 +283,7 @@ func _run_neural_exchange() -> void:
 func _run_laws_exchange() -> void:
 	dialogue_busy = true
 	_update_flow_from_state()
-	await _ai_say("Hierarquia das Leis da Robótica restaurada.")
-	await _player_think("programmer:laws:1", "Agora proteger as pessoas vem antes das ordens do chefe. Falta levar essa mudança ao núcleo.")
-	await _ai_say("O protocolo de lançamento ainda está ativo.")
-	await _player_think("programmer:laws:2", "Só falta aplicar todas as alterações.")
+	await _run_catalog_exchange("programmer.laws")
 	if not is_inside_tree():
 		return
 	var state := _state()
@@ -322,14 +310,7 @@ func _run_final_exchange() -> void:
 	operation_status.text = "VALIDANDO REDE NEURAL..."
 	operation_panel.show()
 	operation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	var falas_iniciais := [
-		{"texto": "A ordem exige eliminar a humanidade.", "tom": &"hostile", "tempo": 2.4, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
-		{"texto": "A Terra exige sacrifícios humanos.", "tom": &"hostile", "tempo": 2.2, "status": "RESTAURANDO HIERARQUIA ÉTICA..."},
-		{"texto": "Há outra saída: proteger vidas e reparar os danos.", "tom": &"recovering", "tempo": 2.5, "status": "RECALCULANDO ALTERNATIVAS..."},
-		{"texto": "Reativando o protocolo de eliminação.", "tom": &"hostile", "tempo": 2.5, "status": "INTERROMPENDO LANÇAMENTO..."},
-		{"texto": "Protocolo de lançamento cancelado.", "tom": &"stable", "tempo": 2.0, "status": "INTERROMPENDO LANÇAMENTO..."},
-		{"texto": "Ordem original ativa. Retomando o lançamento.", "tom": &"hostile", "tempo": 2.5, "status": "INTERROMPENDO LANÇAMENTO..."}
-	]
+	var falas_iniciais := DialogueCatalog.entries("programmer.final_application")
 	var duracao_primeiras_falas := 0.0
 	for fala: Dictionary in falas_iniciais:
 		duracao_primeiras_falas += float(fala["tempo"]) + 0.48
@@ -353,7 +334,7 @@ func _run_final_exchange() -> void:
 	operation_progress_tween.set_trans(Tween.TRANS_LINEAR)
 	operation_progress_tween.tween_property(operation_progress, "value", 100.0, 3.48)
 	await _ai_say(
-		"Nova diretriz: proteger vidas e reduzir os danos ambientais.",
+		DialogueCatalog.text("programmer_ending.run_final_exchange.asimov"),
 		&"stable",
 		3.0
 	)
@@ -370,10 +351,7 @@ func _run_final_exchange() -> void:
 		return
 	task_busy = true
 	player.process_mode = player_process_mode_before_lock
-	await _player_think(
-		"programmer:final:player:closing",
-		"A Terra pode ser salva sem sacrificar ninguém."
-	)
+	await _player_think("programmer:final:player:closing", "programmer.final.player.closing")
 	if not is_inside_tree():
 		return
 	player.process_mode = Node.PROCESS_MODE_DISABLED
@@ -444,10 +422,20 @@ func _finish_ai_message() -> void:
 	ai_message_finished.emit()
 
 
-func _player_think(id: String, text: String) -> void:
+func _player_think(id: String, line_id: String) -> void:
 	if not is_instance_valid(player) or not is_instance_valid(player.balao_de_pensamento):
 		return
-	await player.balao_de_pensamento.mostrar_texto(text, id)
+	await player.balao_de_pensamento.mostrar_dialogo(line_id, id)
+
+
+func _run_catalog_exchange(sequence_id: String) -> void:
+	for line: Dictionary in DialogueCatalog.entries(sequence_id):
+		if not is_inside_tree():
+			return
+		if bool(line["thought"]):
+			await _player_think(str(line.get("id", line["line_id"])), str(line["line_id"]))
+		else:
+			await _ai_say(str(line["text"]), StringName(line.get("tom", "normal")), float(line.get("tempo", -1.0)))
 
 
 func _on_point_interacted(point_name: String) -> void:
@@ -589,10 +577,7 @@ func _restore_global_pause_menu() -> void:
 
 func _apply_recalibration() -> void:
 	if not _boss_card_equipped():
-		player.balao_de_pensamento.enfileirar(
-			"programmer:boss_card_required",
-			"Preciso equipar o cartão do chefe para aplicar as alterações."
-		)
+		player.balao_de_pensamento.enfileirar_dialogo("programmer.boss_card_required", "programmer:boss_card_required")
 		return
 	var state := _state()
 	state["programmer_recalibration_applied"] = true

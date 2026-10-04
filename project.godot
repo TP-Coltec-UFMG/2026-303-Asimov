@@ -22,6 +22,7 @@ general/text_to_speech=true
 
 [autoload]
 
+DialogueCatalog="*res://Dialogue/dialogue_catalog.gd"
 SaveLoad="*uid://chlhb5jjttdkm"
 Configs="*uid://cq125fw8mefr3"
 FiltroDaltonismo="*uid://b25tlu8urnkux"

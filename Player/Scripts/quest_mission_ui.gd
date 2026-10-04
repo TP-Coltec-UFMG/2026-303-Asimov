@@ -500,9 +500,9 @@ func _start_cooling_intro(current_player: Player, state: Dictionary) -> void:
 
 
 func _queue_cooling_intro(current_player: Player) -> void:
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_TIME, "O tempo está acabando.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_PLAN, "Posso enfraquecer a IA pela refrigeração.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_ACTION, "Vou redirecionar o sistema de refrigeração.")
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_intro.player", COOLING_THOUGHT_TIME)
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_intro.player.02", COOLING_THOUGHT_PLAN)
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_intro.player.03", COOLING_THOUGHT_ACTION)
 
 
 func _restore_cooling_intro(current_player: Player, state: Dictionary) -> void:
@@ -528,8 +528,8 @@ func _queue_cooling_completion(current_player: Player, state: Dictionary) -> voi
 	_discard_cooling_intro_thoughts(current_player)
 	state["cooling_completion_thought_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_SUCCESS, "Funcionou.")
-	current_player.balao_de_pensamento.enfileirar(COOLING_THOUGHT_RESULT, "Ganhei um pouco mais de tempo.")
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_completion.player", COOLING_THOUGHT_SUCCESS)
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_completion.player.02", COOLING_THOUGHT_RESULT)
 	_sync_optional_cooling_row()
 	set_panel_visible(true)
 	if current_player.checkpoint_enabled:
@@ -540,15 +540,9 @@ func _queue_cooling_failure(current_player: Player, state: Dictionary) -> void:
 	_discard_cooling_intro_thoughts(current_player)
 	state["cooling_failure_thought_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
-	current_player.balao_de_pensamento.enfileirar(
-		COOLING_THOUGHT_FAILURE,
-		"Essa não!"
-	)
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_failure.player", COOLING_THOUGHT_FAILURE)
 	if bool(state.get("cooling_failure_has_alternative", false)):
-		current_player.balao_de_pensamento.enfileirar(
-			COOLING_THOUGHT_FAILURE_ALTERNATIVE,
-			"Ainda há outro sistema de refrigeração."
-		)
+		current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_failure.player.02", COOLING_THOUGHT_FAILURE_ALTERNATIVE)
 	_sync_optional_cooling_row()
 	set_panel_visible(true)
 	if current_player.checkpoint_enabled:
@@ -713,14 +707,8 @@ func _connect_thought_balloon() -> void:
 
 
 func _queue_breaker_followup_thoughts(current_player: Player) -> void:
-	current_player.balao_de_pensamento.enfileirar(
-		BREAKER_URGENT_THOUGHT_ID,
-		"Precisamos desligar essa IA agora."
-	)
-	current_player.balao_de_pensamento.enfileirar(
-		BREAKER_RETURN_THOUGHT_ID,
-		"Vou voltar ao data center."
-	)
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_breaker_followup_thoughts.player", BREAKER_URGENT_THOUGHT_ID)
+	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_breaker_followup_thoughts.player.02", BREAKER_RETURN_THOUGHT_ID)
 
 
 func _on_thought_finished(thought_id: String) -> void:

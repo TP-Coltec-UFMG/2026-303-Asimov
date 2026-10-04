@@ -25,10 +25,7 @@ func _initialize_boss_room() -> void:
 		SaveGame.save_global_state("hall_quest_01", state)
 	_show_boss_room_tasks(state)
 	if first_visit:
-		player.balao_de_pensamento.enfileirar(
-			BOSS_ROOM_EMPTY_ID,
-			"Então foi por isso que ele não respondeu. Ele fugiu."
-		)
+		player.balao_de_pensamento.enfileirar_dialogo("sala_chefe.initialize_boss_room.player", BOSS_ROOM_EMPTY_ID)
 	if player.checkpoint_enabled and state_changed:
 		SaveGame.create_checkpoint(player)
 	var card_pickup := get_node_or_null("Cartao_chefe/PickupComponent") as PickupComponent
@@ -49,10 +46,7 @@ func _on_boss_card_collected() -> void:
 	if quest_ui != null:
 		quest_ui.show_go_to_sixth_floor_task(false, true)
 	player.balao_de_pensamento.descartar([BOSS_ROOM_EMPTY_ID])
-	player.balao_de_pensamento.enfileirar(
-		BOSS_CARD_FOUND_ID,
-		"Preciso levar este cartão ao data center."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("sala_chefe.on_boss_card_collected.player", BOSS_CARD_FOUND_ID)
 	if player.checkpoint_enabled:
 		SaveGame.create_checkpoint(player)
 

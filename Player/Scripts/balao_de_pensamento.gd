@@ -56,6 +56,35 @@ func enfileirar(id: String, texto: String) -> void:
 	_iniciar_proximo()
 
 
+func enfileirar_dialogo(line_id: String, id: String = "", repetivel: bool = false) -> void:
+	var line := DialogueCatalog.get_line(line_id)
+	if line.is_empty():
+		return
+	if id.is_empty():
+		id = line_id
+	if repetivel:
+		if esta_pendente(id):
+			return
+		_concluidos.erase(id)
+		_descartados.erase(id)
+	elif tem_pensamento(id):
+		return
+	line["id"] = id
+	line["texto"] = DialogueCatalog.text(line_id)
+	if repetivel:
+		_fila.push_front(line)
+	else:
+		_fila.append(line)
+	_iniciar_proximo()
+
+
+func mostrar_dialogo(line_id: String, id: String = "") -> void:
+	if id.is_empty():
+		id = line_id
+	enfileirar_dialogo(line_id, id)
+	await mostrar_texto(DialogueCatalog.text(line_id), id)
+
+
 func atualizar_texto(id: String, texto: String) -> void:
 	if str(_ativo.get("id", "")) == id:
 		_ativo["texto"] = texto

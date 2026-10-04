@@ -69,50 +69,13 @@ var _finalizando: bool = false
 
 
 
-var etapas_tutorial: Dictionary = {
-	1: {
-		"texto": "Os cartões de acesso da empresa precisam funcionar\nmesmo se a internet cair. Então eles não podem\ndepender dela.",
-		"gatilho": GatilhoTutorial.CONTINUAR,
-	},
-
-	2: {
-		"texto": "Se as informações importantes não podem depender da\nrede, provavelmente elas estão no cartão!",
-		"gatilho": GatilhoTutorial.CONTINUAR,
-	},
-
-	3: {
-		"texto": "Beleza, coloquei o cartão no leitor! Mas ele não foi\nreconhecido… Talvez ele ainda tenha seu ID. Talvez eu\nainda consiga tentar reescrevê-lo no banco de dados\ndo leitor!",
-		"gatilho": GatilhoTutorial.TAREFA,
-	},
-
-	4: {
-		"texto": "Ótimo, com o leitor conectado no meu notebook eu\nposso extrair o ID e reescrevê-lo na base de dados\nnovamente.",
-		"gatilho": GatilhoTutorial.BOTAO_JOGO,
-	},
-
-	5: {
-		"texto": "ID copiado! Agora vou para a aba do Banco de Dados\ne procurar o registro desse cartão.",
-		"gatilho": GatilhoTutorial.BOTAO_JOGO,
-	},
-
-	6: {
-		"texto": "Achei, agora é só eu colocar o ID que eu extraí do\ncartão no campo de IDs.",
-		"gatilho": GatilhoTutorial.TAREFA,
-	},
-
-	7: {
-		"texto": "Os dados foram atualizados! Vou fechar a janela e\nvoltar para a tela inicial.",
-		"gatilho": GatilhoTutorial.BOTAO_JOGO,
-	},
-
-	8: {
-		"texto": "Bom, vou tentar colocar o cartão no leitor novamente.\nSe der errado, volto ao notebook e confiro os dados.",
-		"gatilho": GatilhoTutorial.FIM,
-	},
-}
+var etapas_tutorial: Dictionary = {}
 
 
 func _ready() -> void:
+	var tutorial_lines := DialogueCatalog.entries("rfid.minigame.thoughts")
+	for index in range(tutorial_lines.size()):
+		etapas_tutorial[index + 1] = tutorial_lines[index]
 	add_to_group("tutorial_manager")
 	botao_continuar_tutorial.pressed.connect(_on_continuar_tutorial_pressed)
 	notebook.fechou.connect(_on_notebook_fechou)

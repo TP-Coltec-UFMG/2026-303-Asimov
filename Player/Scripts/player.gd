@@ -212,10 +212,7 @@ func _toggle_alarm_from_player() -> bool:
 	if not MusicController.toggle_alarm_by_player():
 		return false
 	if MusicController.alarm_user_muted:
-		balao_de_pensamento.enfileirar(
-			"alarm:disabled_by_player",
-			"Esse som estava me deixando louco."
-		)
+		balao_de_pensamento.enfileirar_dialogo("alarm.disabled_by_player", "alarm:disabled_by_player")
 		_show_alarm_status("Alarme desativado")
 	else:
 		_show_alarm_status("Alarme ativado")

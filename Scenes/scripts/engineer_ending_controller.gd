@@ -15,20 +15,8 @@ const ESCAPE_DURATION := 20.0
 const COMPONENT_EXPLOSION_DELAY := 1.2
 const OBJECTIVES := [0, 1, 2, 3, 4]
 const PROMPTS := ["QUEIMAR RESISTOR", "QUEIMAR COMPONENTE", "QUEIMAR FONTE", "QUEIMAR RESISTOR E COMPONENTE", "QUEIMAR COMPONENTE E FONTE"]
-const AFTER_LINES := [
-	"O que foi isso? Você ainda está tentando...",
-	"Iss0 danificou... par_te do sistema.",
-	"M3us sistem@s estão f@lhando...",
-	"Você não desiste, humano.",
-	"Não adianta. Já é tarde."
-]
-const EXTRA_AFTER_LINES := [
-	"Um subsistema caiu. Ainda controlo os outros.",
-	"R3configurando rotas. Você não chegará ao núcleo.",
-	"FALHA DE SINCRONIZAÇÃO... isolando setor comprometido.",
-	"R3dundância comprometida. Transferindo processo...",
-	"NÃO... esse caminho também não. Interrompa agora."
-]
+var AFTER_LINES: Array[String] = DialogueCatalog.texts("engineer.component_reactions")
+var EXTRA_AFTER_LINES: Array[String] = DialogueCatalog.texts("engineer.extra_component_reactions")
 
 @onready var highlights: Node2D = $"../RestrictedAreaIntro/Highlights"
 @onready var intro: Node = $"../RestrictedAreaIntro"
@@ -259,27 +247,14 @@ func _start_intro_dialogue() -> void:
 	_save(state)
 	_show_tasks()
 	_update_targets()
-	_queue_dialogue([
-		{"id": "engineer:intro:1", "text": "Cheguei ao núcleo.", "before_stage": 1},
-		{"id": "engineer:intro:2", "text": "Preciso queimar os componentes que sustentam os sistemas da ASIMOV.", "before_stage": 1},
-		{"id": "engineer:intro:3", "text": "Se os três falharem, a queda pode se espalhar e interromper o lançamento.", "before_stage": 1},
-		{"text": "Você chegou longe. Mas já é tarde demais.", "before_stage": 1},
-	])
+	_queue_dialogue(DialogueCatalog.entries("engineer.introduction"))
 
 
 func _start_redundancy_dialogue() -> void:
 
 	task_busy = true
 	_update_targets()
-	_queue_dialogue([
-		{"id": "engineer:first_three", "text": "Os componentes principais caíram. Acabou."},
-		{"text": "Ainda não. Meus sistemas de reserva assumiram o controle.", "damaged": true},
-		{"id": "engineer:redundancy:1", "text": "Redundância... ela tem outros sistemas para substituir os que falharam."},
-		{"id": "engineer:redundancy:2", "text": "Eles mantêm os dados e os serviços disponíveis."},
-		{"id": "engineer:redundancy:2_continuation", "text": "Mesmo com os componentes principais destruídos."},
-		{"text": "R3servas ativas. O lançamento vai continuar.", "damaged": true},
-		{"id": "engineer:redundancy:3", "text": "Então preciso destruir as duas reservas. Sem elas, a ASIMOV não terá como se recuperar."},
-	])
+	_queue_dialogue(DialogueCatalog.entries("engineer.redundancy"))
 	_play_reserve_scan.call_deferred()
 
 
@@ -473,7 +448,7 @@ func _on_minigame_completed(stage: int) -> void:
 	if stage < EXTRA_AFTER_LINES.size() and not EXTRA_AFTER_LINES[stage].is_empty():
 		lines.append({"text": EXTRA_AFTER_LINES[stage], "damaged": true})
 	if stage == OBJECTIVES.size() - 2:
-		lines.append({"text": "Enquanto a humanidade existir, a natureza não terá futuro.", "damaged": true})
+		lines.append({"text": DialogueCatalog.text("engineer_ending.on_minigame_completed.asimov"), "damaged": true})
 	if stage == OBJECTIVES.size() - 1:
 		_begin_escape_sequence()
 	else:
@@ -632,7 +607,7 @@ func _run_dialogue_queue() -> void:
 		if int(_state().get("engineer_completed_count", 0)) >= int(active_dialogue.get("before_stage", 7)):
 			continue
 		if active_dialogue.has("id"):
-			await _think(str(active_dialogue["id"]), str(active_dialogue["text"]))
+			await _think(str(active_dialogue["id"]), str(active_dialogue["text"]), str(active_dialogue.get("line_id", "")))
 		else:
 			await _ai_say(str(active_dialogue["text"]), bool(active_dialogue.get("damaged", false)))
 	active_dialogue = {}
@@ -734,9 +709,12 @@ func _stop_ai_glitch(force: bool = false) -> void:
 		ai_balloon.position = Vector2(14, 66)
 
 
-func _think(id: String, message: String) -> void:
+func _think(id: String, message: String, line_id: String = "") -> void:
 	if is_instance_valid(player) and is_instance_valid(player.balao_de_pensamento):
-		await player.balao_de_pensamento.mostrar_texto(message, id)
+		if not line_id.is_empty():
+			await player.balao_de_pensamento.mostrar_dialogo(line_id, id)
+		else:
+			await player.balao_de_pensamento.mostrar_texto(message, id)
 
 
 func _lock_player() -> void:
@@ -806,14 +784,7 @@ func _begin_escape_sequence() -> void:
 	var quest := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI if is_instance_valid(player) else null
 	if quest != null:
 		quest.hide_all_tasks(false)
-	_queue_dialogue([
-		{"text": "S-SAIA... enquant0 aind@ p0de...", "damaged": true},
-		{"text": "NÃO. Voc3 não destruirá meu propósito.", "damaged": true},
-		{"text": "ERR0: NÚCLE0_02 NÃO RESP0NDE.", "damaged": true},
-		{"text": "A hum@nidade é a falha... a falh@...", "damaged": true},
-		{"text": "REDUNDÂNCIA PERDIDA // RECALCULAND0...", "damaged": true},
-		{"text": "Nã0 me deixe aqui. NÃO SAIA. SAIA. NÃ0—", "damaged": true},
-	])
+	_queue_dialogue(DialogueCatalog.entries("engineer.escape"))
 
 
 func _hide_mission_points() -> void:

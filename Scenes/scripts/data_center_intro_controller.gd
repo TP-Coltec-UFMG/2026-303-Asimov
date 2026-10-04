@@ -261,10 +261,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 		_ensure_story_card(BOSS_CARD_TYPE)
 		_set_access_prompt("Verificar leitura RFID")
 		_show_rfid_repair_tasks(true)
-		player.balao_de_pensamento.enfileirar(
-			"data_center:wires_repaired_return",
-			"Fios no lugar. Agora posso verificar a leitura RFID."
-		)
+		player.balao_de_pensamento.enfileirar_dialogo("data_center.wires_repaired_return", "data_center:wires_repaired_return")
 		if not bool(state.get("data_center_rfid_repair_checkpointed", false)):
 			state["data_center_rfid_repair_checkpointed"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
@@ -351,10 +348,7 @@ func _on_recipient_interaction_requested(_npc: Node2D) -> void:
 			_start_return_dialog()
 		return
 	if not _has_boss_card():
-		player.balao_de_pensamento.enfileirar(
-			"data_center:need_boss_card",
-			"Preciso entregar o cartão do chefe."
-		)
+		player.balao_de_pensamento.enfileirar_dialogo("data_center.need_boss_card", "data_center:need_boss_card")
 		return
 	_deliver_boss_card()
 
@@ -378,12 +372,7 @@ func _deliver_boss_card() -> void:
 func _start_card_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
-	DialogManager.start_dialog([
-		"Alex: O chefe fugiu. A sala estava vazia.",
-		"Cientista: Então perdemos o controle. A IA está ignorando as Leis de Asimov.",
-		"Alex: Como podemos detê-la?",
-		"Cientista: Precisamos chegar ao núcleo."
-	], CARD_DIALOG_ID)
+	DialogManager.start_catalog_dialog("data_center.card_delivery", CARD_DIALOG_ID)
 
 
 func _ensure_outage_schedule(state: Dictionary) -> void:
@@ -457,57 +446,37 @@ func _start_access_plan_dialog() -> void:
 	_set_recipient_interaction(false)
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	if bool(state.get("data_center_breaker_restored", false)):
-		DialogManager.start_dialog([
-			"Cientista: A energia estabilizou. Agora precisamos chegar ao núcleo.",
-			"Cientista: Ele fica na área restrita. Venha, vou mostrar a entrada.",
-			"Alex: Certo. Vamos."
-		], ACCESS_PLAN_DIALOG_ID)
+		DialogManager.start_catalog_dialog("data_center.access_plan.restored", ACCESS_PLAN_DIALOG_ID)
 	else:
-		DialogManager.start_dialog([
-			"Cientista: Precisamos chegar ao núcleo antes que seja tarde.",
-			"Cientista: A entrada fica na área restrita. Venha comigo.",
-			"Alex: Certo."
-		], ACCESS_PLAN_DIALOG_ID)
+		DialogManager.start_catalog_dialog("data_center.access_plan.initial", ACCESS_PLAN_DIALOG_ID)
 
 
 func _start_return_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
-	DialogManager.start_dialog([
-		"Cientista: A energia voltou. Vamos continuar.",
-		"Alex: Certo."
-	], RETURN_DIALOG_ID)
+	DialogManager.start_catalog_dialog("data_center.return_after_breaker", RETURN_DIALOG_ID)
 
 
 func _start_strong_card_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
-	DialogManager.start_dialog([
-		"Cientista: É aqui. Esta porta exige um cartão forte.",
-		"Cientista: Use este no leitor.",
-		"Alex: Vamos testar."
-	], STRONG_CARD_DIALOG_ID)
+	DialogManager.start_catalog_dialog("data_center.strong_card", STRONG_CARD_DIALOG_ID)
 
 
 func _start_strong_denied_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
-	DialogManager.start_dialog([
-		"Alex: Bloqueado. O cartão forte falhou.",
-		"Cientista: Estranho. Ele deveria abrir esta porta.",
-		"Cientista: Tente o cartão do chefe."
-	], STRONG_DENIED_DIALOG_ID)
+	DialogManager.start_catalog_dialog("data_center.strong_card_denied", STRONG_DENIED_DIALOG_ID)
 
 
 func _start_boss_denied_dialog() -> void:
 	if DialogManager.is_showing_dialog or not _is_current_scene():
 		return
 	var engineer := str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
-	DialogManager.start_dialog([
-		"Alex: Este também foi bloqueado.",
-		"Cientista: Então o problema deve estar no leitor RFID.",
-		"Alex: Vou verificar o hardware." if engineer else "Alex: Vou verificar o registro do cartão."
-	], BOSS_DENIED_DIALOG_ID)
+	DialogManager.start_catalog_dialog(
+		"data_center.boss_card_denied.engineer" if engineer else "data_center.boss_card_denied.programmer",
+		BOSS_DENIED_DIALOG_ID
+	)
 
 
 func _on_dialog_finished(dialog_id: String) -> void:
@@ -567,7 +536,7 @@ func _on_dialog_finished(dialog_id: String) -> void:
 				_show_rfid_reader_task()
 				player.balao_de_pensamento.enfileirar(
 					"data_center:inspect_rfid_reader",
-					"O leitor RFID falhou. Preciso verificá-lo." if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Preciso registrar o cartão no leitor RFID."
+					DialogueCatalog.text("data_center.inspect_rfid_reader") if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else DialogueCatalog.text("data_center.inspect_rfid_reader.02")
 				)
 			_save_checkpoint()
 		RETURN_DIALOG_ID:
@@ -645,10 +614,7 @@ func _give_strong_card() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_access_prompt("Testar cartão forte")
 	_show_access_intro_tasks(state)
-	player.balao_de_pensamento.enfileirar(
-		"data_center:strong_card_received",
-		"Vou equipar o cartão forte e testar o leitor."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("data_center.strong_card_received", "data_center:strong_card_received")
 	_save_checkpoint()
 
 
@@ -663,10 +629,7 @@ func _give_boss_card() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_access_prompt("Testar cartão do chefe")
 	_show_access_intro_tasks(state)
-	player.balao_de_pensamento.enfileirar(
-		"data_center:boss_card_received",
-		"Agora vou testar o cartão do chefe."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("data_center.boss_card_received", "data_center:boss_card_received")
 	_save_checkpoint()
 
 
@@ -705,10 +668,7 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 	if bool(state.get("data_center_engineer_access_unlocked", false)):
 		return
 	if power_sequence_running or _power_is_out(state):
-		player.balao_de_pensamento.enfileirar(
-			"data_center:access_before_power",
-			"Primeiro preciso resolver o problema da energia."
-		)
+		player.balao_de_pensamento.enfileirar_dialogo("data_center.access_before_power", "data_center:access_before_power")
 		return
 	if bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false)):
 		if outage_timer != null:
@@ -731,26 +691,17 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 		return
 	if bool(state.get("data_center_access_boss_card_given", false)):
 		if _current_card_type() != BOSS_CARD_TYPE or not player.usando_cartao:
-			player.balao_de_pensamento.enfileirar(
-				"data_center:equip_boss_card",
-				"Preciso equipar o cartão do chefe."
-			)
+			player.balao_de_pensamento.enfileirar_dialogo("data_center.equip_boss_card", "data_center:equip_boss_card")
 			return
 		await _reject_boss_card()
 		return
 	if bool(state.get("data_center_access_strong_card_given", false)):
 		if _current_card_type() != STRONG_CARD_TYPE or not player.usando_cartao:
-			player.balao_de_pensamento.enfileirar(
-				"data_center:equip_strong_card",
-				"Preciso equipar o cartão forte."
-			)
+			player.balao_de_pensamento.enfileirar_dialogo("data_center.equip_strong_card", "data_center:equip_strong_card")
 			return
 		await _reject_strong_card()
 		return
-	player.balao_de_pensamento.enfileirar(
-		"data_center:access_not_ready",
-		"É esta porta. Preciso seguir o plano do cientista."
-	)
+	player.balao_de_pensamento.enfileirar_dialogo("data_center.access_not_ready", "data_center:access_not_ready")
 
 
 func play_restricted_area_fade_out() -> void:
@@ -818,10 +769,7 @@ func _inspect_rfid_reader() -> void:
 		access_sequence_busy = true
 		_set_access_interactable(false)
 		player.balao_de_pensamento.descartar(["data_center:inspect_rfid_reader", "data_center:wires_repaired_return"])
-		var programmer_inspection_thoughts: Array[Dictionary] = [
-			{"id": "data_center:rfid_reader_has_power", "text": "O leitor está funcionando."},
-			{"id": "data_center:rfid_register_plan", "text": "O cartão não está registrado. Preciso atualizar o banco de dados."}
-		]
+		var programmer_inspection_thoughts: Array[Dictionary] = DialogueCatalog.entries("data_center.rfid_inspection.programmer")
 		if not await _run_rfid_verification(programmer_inspection_thoughts, -1.0, "inspection"):
 			if not power_sequence_running and not _power_is_out(SaveGame.office_mission_state(player)):
 				_set_access_interactable(true)
@@ -841,21 +789,7 @@ func _inspect_rfid_reader() -> void:
 	_set_access_interactable(false)
 	var superseded_thoughts: Array[String] = ["data_center:inspect_rfid_reader"]
 	player.balao_de_pensamento.descartar(superseded_thoughts)
-	var repair_plan := "Preciso reconectá-los para liberar o acesso." if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "Preciso reconectá-los antes de testar os cartões novamente."
-	var inspection_thoughts: Array[Dictionary] = [
-		{
-			"id": "data_center:rfid_reader_has_power",
-			"text": "O leitor ainda tem energia..."
-		},
-		{
-			"id": "data_center:rfid_burned_wires",
-			"text": "Achei o problema. Os cabos estão queimados."
-		},
-		{
-			"id": "data_center:rfid_reconnect_plan",
-			"text": repair_plan
-		}
-	]
+	var inspection_thoughts: Array[Dictionary] = DialogueCatalog.entries("data_center.rfid_inspection.engineer")
 	if not await _run_rfid_verification(inspection_thoughts, -1.0, "inspection"):
 		if not power_sequence_running and not _power_is_out(SaveGame.office_mission_state(player)):
 			_set_access_interactable(true)
@@ -951,10 +885,10 @@ func _run_rfid_verification(
 		for thought in active_thoughts:
 			var thought_id := str(thought.get("id", ""))
 			rfid_active_thought_ids.append(thought_id)
-			player.balao_de_pensamento.enfileirar(
-				thought_id,
-				str(thought.get("text", ""))
-			)
+			if thought.has("line_id"):
+				player.balao_de_pensamento.enfileirar_dialogo(str(thought["line_id"]), thought_id)
+			else:
+				player.balao_de_pensamento.enfileirar(thought_id, str(thought.get("text", "")))
 		last_thought_id = str(active_thoughts.back().get("id", ""))
 	while not rfid_verification_interrupted and (
 		(rfid_progress_tween != null and rfid_progress_tween.is_valid() and rfid_progress_tween.is_running())
@@ -1190,21 +1124,11 @@ func _start_power_failure_dialog() -> void:
 		}
 		SaveGame.save_global_state("hall_quest_01", state)
 		_save_checkpoint()
-	var power_lines: Array[String]
-	if str(state.get("data_center_outage_phase", "")) == "before":
-		power_lines = [
-			"Alex: As luzes apagaram. O que houve?",
-			"Cientista: A IA drenou a energia e desarmou o disjuntor.",
-			"Cientista: Pegue uma lanterna e religue-o no 4º andar. Depois volte."
-		]
-	else:
-		power_lines = [
-			"Alex: O disjuntor desarmou!",
-			"Cientista: A IA está drenando a energia do prédio.",
-			"Alex: Vou religá-lo.",
-			"Cientista: Pegue uma lanterna e vá ao 4º andar. Depois volte."
-		]
-	DialogManager.interrupt_with_dialog(power_lines, POWER_DIALOG_ID, false)
+	DialogManager.interrupt_with_catalog_dialog(
+		"data_center.power_failure.before" if str(state.get("data_center_outage_phase", "")) == "before" else "data_center.power_failure.interrupted",
+		POWER_DIALOG_ID,
+		false
+	)
 
 
 func _suspend_dialog_for_return() -> void:

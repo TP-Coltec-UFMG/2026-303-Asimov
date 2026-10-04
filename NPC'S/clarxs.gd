@@ -11,6 +11,7 @@ signal interaction_requested(npc: Node2D)
 @export var dialog_texts: Array[String] = []
 @export var dialog_enabled: bool = true
 @export var dialog_id: String = ""
+@export var dialog_sequence_id: String = ""
 
 @export var interaction_override: bool = false
 @export var interaction_prompt: String = "ESPAÇO: FALAR"
@@ -127,6 +128,8 @@ var rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	if not dialog_sequence_id.is_empty():
+		dialog_texts = DialogueCatalog.texts(dialog_sequence_id)
 	rng.randomize()
 	interaction_icon.visible = false
 	if crowd_avoidance_enabled:
@@ -765,10 +768,10 @@ func _unhandled_input(
 			interaction_requested.emit(self)
 			get_viewport().set_input_as_handled()
 			return
-		DialogManager.start_dialog(
-			dialog_texts,
-			dialog_id
-		)
+		if not dialog_sequence_id.is_empty():
+			DialogManager.start_catalog_dialog(dialog_sequence_id, dialog_id)
+		else:
+			DialogManager.start_dialog(dialog_texts, dialog_id)
 		get_viewport().set_input_as_handled()
 
 

@@ -11,6 +11,8 @@ var is_showing_dialog: bool = false
 var current_dialog_id: String = ""
 var suspended_dialogs: Array[Dictionary] = []
 var input_blocked: bool = false
+var current_sequence_id: String = ""
+var current_line_data: Dictionary = {}
 
 
 func _input(event: InputEvent) -> void:
@@ -20,13 +22,20 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		dialog_box.advance()
 
-func start_dialog(texts: Array[String], dialog_id: String = "", start_index: int = 0) -> void:
+func start_catalog_dialog(sequence_id: String, dialog_id: String = "", start_index: int = 0) -> void:
+	start_dialog(DialogueCatalog.texts(sequence_id), dialog_id, start_index, sequence_id)
+
+
+func start_dialog(texts: Array[String], dialog_id: String = "", start_index: int = 0, sequence_id: String = "") -> void:
 	if is_showing_dialog:
+		return
+	if texts.is_empty():
 		return
 
 	if dialog_scene:
 		dialog_box = dialog_scene.instantiate()
 		current_dialog_id = dialog_id
+		current_sequence_id = sequence_id
 		is_showing_dialog = true
 
 		add_child(dialog_box)
@@ -51,17 +60,29 @@ func interrupt_with_dialog(texts: Array[String], dialog_id: String, auto_resume:
 	start_dialog(texts, dialog_id)
 
 
+func interrupt_with_catalog_dialog(sequence_id: String, dialog_id: String, auto_resume: bool = true) -> void:
+	suspend_current_dialog(auto_resume)
+	start_catalog_dialog(sequence_id, dialog_id)
+
+
 func suspend_current_dialog(auto_resume: bool = false) -> void:
 	if not is_showing_dialog or dialog_box == null:
 		return
 	dialog_box.hide()
-	suspended_dialogs.append({"box": dialog_box, "dialog_id": current_dialog_id, "auto_resume": auto_resume})
+	suspended_dialogs.append({"box": dialog_box, "dialog_id": current_dialog_id, "auto_resume": auto_resume, "sequence_id": current_sequence_id, "line_data": current_line_data.duplicate(true)})
 	dialog_box = null
 	current_dialog_id = ""
+	current_sequence_id = ""
+	current_line_data = {}
 	is_showing_dialog = false
 
 
 func _on_dialog_line_started(index: int) -> void:
+	current_line_data = {}
+	if not current_sequence_id.is_empty():
+		var lines := DialogueCatalog.entries(current_sequence_id)
+		if index >= 0 and index < lines.size():
+			current_line_data = lines[index]
 	dialog_line_started.emit(current_dialog_id, index)
 
 
@@ -76,6 +97,8 @@ func resume_suspended_dialog(expected_dialog_id: String = "") -> bool:
 		return false
 	dialog_box = previous_box
 	current_dialog_id = str(previous.get("dialog_id", ""))
+	current_sequence_id = str(previous.get("sequence_id", ""))
+	current_line_data = previous.get("line_data", {}).duplicate(true)
 	is_showing_dialog = true
 	dialog_box.show()
 	return true
@@ -84,6 +107,8 @@ func _on_dialog_finished() -> void:
 	var finished_dialog_id := current_dialog_id
 	is_showing_dialog = false
 	current_dialog_id = ""
+	current_sequence_id = ""
+	current_line_data = {}
 
 	if dialog_box:
 		dialog_box = null
