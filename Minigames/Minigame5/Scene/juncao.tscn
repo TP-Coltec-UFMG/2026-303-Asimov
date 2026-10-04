@@ -7,11 +7,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oaa4g"]
 size = Vector2(6.25, 5)
 
-[node name="Juncao" type="Node2D" unique_id=93694696]
+[node name="Juncao" type="Node2D" unique_id=93694696 groups=["juncao"]]
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_deui3")
 
-[node name="Juncao" type="Area2D" parent="." unique_id=2043035489]
+[node name="Juncao" type="Area2D" parent="." unique_id=2043035489 groups=["juncoes", "pontos_conexao"]]
 z_index = 3
 position = Vector2(100, 80)
 scale = Vector2(4, 4)
@@ -27,3 +27,5 @@ position = Vector2(-3.5, -3.5)
 
 [node name="Ponto_Conexao_2" type="Marker2D" parent="Juncao" unique_id=391137459]
 position = Vector2(-3.5, -3.5)
+
+[connection signal="input_event" from="Juncao" to="Juncao" method="_on_input_event"]

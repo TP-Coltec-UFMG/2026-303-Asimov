@@ -1,20 +1,22 @@
+class_name PersonagemNPC
 extends Node2D
 
 signal npc_saiu
-signal path_completed(path: NPCPath)
-signal interaction_requested(npc: Node2D)
+signal caminho_concluido(path: NPCPath)
+signal solicitou_interacao(npc: Node2D)
 
 
 @export_category("NPC")
 
-@export var sprite_sheet: Texture2D
-@export var dialog_texts: Array[String] = []
-@export var dialog_enabled: bool = true
-@export var dialog_id: String = ""
-@export var dialog_sequence_id: String = ""
+@export var animacoes: SpriteFrames
+@export var pegada_navegacao: Shape2D
+@export var textos_dialogo: Array[String] = []
+@export var dialogo_habilitado: bool = true
+@export var id_dialogo: String = ""
+@export var id_sequencia_dialogo: String = ""
 
-@export var interaction_override: bool = false
-@export var interaction_prompt: String = "ESPAÇO: FALAR"
+@export var interacao_personalizada: bool = false
+@export var texto_interacao: String = "ESPAÇO: FALAR"
 @export var save_enabled: bool = true
 
 @export var save_id: String = ""
@@ -24,141 +26,117 @@ var checkpoint_restored: bool = false
 
 @export_category("NPC Movement")
 
-@export var walk_speed: float = 30.0
-@export var run_speed: float = 60.0
-@export var crowd_avoidance_enabled: bool = false
-@export var exit_arrival_radius: float = 24.0
-@export var exit_arrival_delay: float = 0.5
+@export var velocidade_caminhada: float = 30.0
+@export var velocidade_corrida: float = 60.0
+@export var desvio_multidao_habilitado: bool = false
+@export var raio_chegada_saida: float = 24.0
+@export var tempo_chegada_saida: float = 0.5
 
-@export var walk_animation_speed: float = 8.0
-@export var run_animation_speed: float = 14.0
 
 
 @export_category("Desespero")
 
-@export var desperate_radius: float = 2
-@export var desperate_min_distance: float = 1.5
+@export var raio_desespero: float = 2
+@export var distancia_minima_desespero: float = 1.5
 
-@export var desperate_min_wait: float = 0.05
-@export var desperate_max_wait: float = 2
+@export var espera_minima_desespero: float = 0.05
+@export var espera_maxima_desespero: float = 2
 
-@export_range(0.0, 1.0) var desperate_run_chance: float = 0.9
-
-
-const SHEET_COLUMNS := 24
-const SHEET_ROWS := 7
-
-const IDLE_SIDE_FRAME := 1
-const IDLE_UP_FRAME := 2
-const IDLE_DOWN_FRAME := 4
-
-const SIDE_START_FRAME := 49
-const UP_START_FRAME := 55
-const DOWN_START_FRAME := 67
-
-const MOVEMENT_FRAME_COUNT := 6
+@export_range(0.0, 1.0) var chance_corrida_desespero: float = 0.9
 
 
-var current_path: NPCPath = null
+var caminho_atual: NPCPath = null
 
-var path_points: Array[Vector2] = []
-var cached_path_points: Dictionary = {}
+var pontos_caminho: Array[Vector2] = []
+var pontos_caminhos_salvos: Dictionary = {}
 
-var current_point: int = -1
-var path_finished: bool = true
-var exit_arrival_elapsed: float = 0.0
-var obstacle_navigation: Node2D
-var navigation_points := PackedVector2Array()
-var navigation_index := 0
-var navigation_target := Vector2.INF
-var navigation_revision := -1
-var movement_target := Vector2.INF
+var ponto_atual: int = -1
+var caminho_finalizado: bool = true
+var tempo_na_saida: float = 0.0
+var navegacao_obstaculos: Node2D
+var pontos_navegacao := PackedVector2Array()
+var indice_navegacao := 0
+var destino_navegacao := Vector2.INF
+var revisao_navegacao := -1
+var destino_movimento := Vector2.INF
 
 
-func set_obstacle_navigation(navigator: Node2D) -> void:
-	obstacle_navigation = navigator
+func definir_navegacao_obstaculos(navigator: Node2D) -> void:
+	navegacao_obstaculos = navigator
 	var body := $CharacterBody2D as CharacterBody2D
 	body.collision_mask = 33
-	var footprint := CapsuleShape2D.new()
-	footprint.radius = 5.0
-	footprint.height = 12.0
-	($CharacterBody2D/CollisionShape2D as CollisionShape2D).shape = footprint
+	($CharacterBody2D/CollisionShape2D as CollisionShape2D).shape = pegada_navegacao
 	for player in get_tree().get_nodes_in_group(&"player"):
 		if player is PhysicsBody2D:
 			body.add_collision_exception_with(player)
 
 
-func _obstacle_target(target: Vector2) -> Vector2:
-	if not is_instance_valid(obstacle_navigation):
+func _destino_sem_obstaculos(target: Vector2) -> Vector2:
+	if not is_instance_valid(navegacao_obstaculos):
 		return target
-	if target != navigation_target or navigation_revision != obstacle_navigation.revision:
-		navigation_target = target
-		navigation_points = obstacle_navigation.find_route(global_position, target)
-		navigation_revision = obstacle_navigation.revision
-		navigation_index = 0
-	if navigation_points.is_empty():
+	if target != destino_navegacao or revisao_navegacao != navegacao_obstaculos.revision:
+		destino_navegacao = target
+		pontos_navegacao = navegacao_obstaculos.find_route(global_position, target)
+		revisao_navegacao = navegacao_obstaculos.revision
+		indice_navegacao = 0
+	if pontos_navegacao.is_empty():
 		return global_position
-	while navigation_index < navigation_points.size() - 1 and global_position.distance_to(navigation_points[navigation_index]) <= 3.0:
-		navigation_index += 1
-	return navigation_points[navigation_index]
+	while indice_navegacao < pontos_navegacao.size() - 1 and global_position.distance_to(pontos_navegacao[indice_navegacao]) <= 3.0:
+		indice_navegacao += 1
+	return pontos_navegacao[indice_navegacao]
 
 
-var player_in_range: bool = false
+var jogador_no_alcance: bool = false
 var player_ref: Node2D = null
 
 var last_direction: Vector2 = Vector2.DOWN
 
 
-var desperate: bool = false
+var desesperado: bool = false
 
-var desperate_origin: Vector2 = Vector2.ZERO
-var desperate_target: Vector2 = Vector2.ZERO
+var origem_desespero: Vector2 = Vector2.ZERO
+var destino_desespero: Vector2 = Vector2.ZERO
 
-var desperate_wait_timer: float = 0.0
+var tempo_espera_desespero: float = 0.0
 
-var desperate_movement_type: int = NPCPath.MovementType.RUN
+var tipo_movimento_desespero: int = NPCPath.MovementType.RUN
 
 
 var rng := RandomNumberGenerator.new()
 
 
-@onready var interaction_icon: Label = $InteractionPrompt
+@onready var indicador_interacao: Label = $InteractionPrompt
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var crowd_agent: NavigationAgent2D = $CrowdAvoidance
+@onready var agente_desvio: NavigationAgent2D = $CrowdAvoidance
 
 
 func _ready() -> void:
-	if not dialog_sequence_id.is_empty():
-		dialog_texts = DialogueCatalog.texts(dialog_sequence_id)
+	if not id_sequencia_dialogo.is_empty():
+		textos_dialogo = DialogueCatalog.texts(id_sequencia_dialogo)
 	rng.randomize()
-	interaction_icon.visible = false
-	if crowd_avoidance_enabled:
+	indicador_interacao.visible = false
+	if desvio_multidao_habilitado:
 
 		var body := $CharacterBody2D as CharacterBody2D
 		body.collision_layer = 2
 		body.collision_mask = 0
 
-		crowd_agent.target_position = global_position + Vector2(100000.0, 100000.0)
-		crowd_agent.avoidance_enabled = true
-		crowd_agent.velocity_computed.connect(_on_crowd_velocity_computed)
-	setup_sprite_sheet()
-	setup_paths()
+		agente_desvio.target_position = global_position + Vector2(100000.0, 100000.0)
+		agente_desvio.avoidance_enabled = true
+	configurar_animacoes()
+	configurar_caminhos()
 	if save_enabled:
 		checkpoint_restored = SaveGame.register_checkpoint_actor(self, save_id)
 
 
-func setup_paths() -> void:
-	cached_path_points.clear()
+func configurar_caminhos() -> void:
+	pontos_caminhos_salvos.clear()
 
 	var automatic_path: NPCPath = null
 
 	for child in get_children():
 		if child is NPCPath:
 			var path: NPCPath = child
-
-			path.start_requested.connect(
-				_on_path_start_requested
-			)
 
 			var points: Array[Vector2] = []
 
@@ -167,32 +145,32 @@ func setup_paths() -> void:
 
 				points.append(global_point)
 
-			cached_path_points[path] = points
+			pontos_caminhos_salvos[path] = points
 
-			if path.start_automatically:
+			if path.iniciar_automaticamente:
 				if automatic_path == null:
 					automatic_path = path
 				else:
 					push_warning("Mais de um caminho está com Start Automatically ativado.")
 
 	if automatic_path != null:
-		start_path(automatic_path)
+		iniciar_caminho(automatic_path)
 	else:
-		path_finished = true
-		play_idle(last_direction)
+		caminho_finalizado = true
+		reproduzir_parado(last_direction)
 
 
-func _on_path_start_requested(path: NPCPath) -> void:
-	start_path(path)
+func _ao_solicitar_inicio_caminho(path: NPCPath) -> void:
+	iniciar_caminho(path)
 
 
-func start_path(path: NPCPath) -> void:
-	exit_arrival_elapsed = 0.0
-	navigation_target = Vector2.INF
+func iniciar_caminho(path: NPCPath) -> void:
+	tempo_na_saida = 0.0
+	destino_navegacao = Vector2.INF
 	if path == null:
 		return
 
-	if not cached_path_points.has(path):
+	if not pontos_caminhos_salvos.has(path):
 		push_warning(
 			"O caminho '%s' não pertence a este NPC."
 			% path.name
@@ -200,284 +178,90 @@ func start_path(path: NPCPath) -> void:
 
 		return
 
-	desperate = false
-	desperate_wait_timer = 0.0
+	desesperado = false
+	tempo_espera_desespero = 0.0
 
-	current_path = path
+	caminho_atual = path
 
-	path_finished = false
-	current_point = 0
+	caminho_finalizado = false
+	ponto_atual = 0
 
-	path_points.clear()
+	pontos_caminho.clear()
 
-	for point in cached_path_points[path]:
-		path_points.append(point)
+	for point in pontos_caminhos_salvos[path]:
+		pontos_caminho.append(point)
 
-	if path_points.is_empty():
-		current_path = null
+	if pontos_caminho.is_empty():
+		caminho_atual = null
 
-		current_point = -1
-		path_finished = true
+		ponto_atual = -1
+		caminho_finalizado = true
 
-		play_idle(last_direction)
-
-
-func stop_current_path() -> void:
-	exit_arrival_elapsed = 0.0
-	current_path = null
-
-	path_points.clear()
-
-	current_point = -1
-	path_finished = true
-
-	desperate = false
-	desperate_wait_timer = 0.0
-
-	play_idle(last_direction)
+		reproduzir_parado(last_direction)
 
 
-func setup_sprite_sheet() -> void:
-	if sprite_sheet == null:
-		push_warning(
-			"Nenhuma Sprite Sheet foi colocada no NPC."
-		)
+func parar_caminho_atual() -> void:
+	tempo_na_saida = 0.0
+	caminho_atual = null
 
-		return
+	pontos_caminho.clear()
 
-	var texture_width: int = sprite_sheet.get_width()
-	var texture_height: int = sprite_sheet.get_height()
+	ponto_atual = -1
+	caminho_finalizado = true
 
-	if texture_width % SHEET_COLUMNS != 0:
-		push_warning(
-			"A largura da Sprite Sheet não é divisível por 24."
-		)
+	desesperado = false
+	tempo_espera_desespero = 0.0
 
-	if texture_height % SHEET_ROWS != 0:
-		push_warning(
-			"A altura da Sprite Sheet não é divisível por 7."
-		)
-
-	@warning_ignore("integer_division")
-	var frame_width: int = texture_width / SHEET_COLUMNS
-
-	@warning_ignore("integer_division")
-	var frame_height: int = texture_height / SHEET_ROWS
-
-	var frames := SpriteFrames.new()
-
-	frames.remove_animation("default")
-
-	create_animation_from_frames(
-		frames,
-		"idle_side",
-		IDLE_SIDE_FRAME,
-		1,
-		frame_width,
-		frame_height,
-		1.0,
-		false
-	)
-
-	create_animation_from_frames(
-		frames,
-		"idle_up",
-		IDLE_UP_FRAME,
-		1,
-		frame_width,
-		frame_height,
-		1.0,
-		false
-	)
-
-	create_animation_from_frames(
-		frames,
-		"idle_down",
-		IDLE_DOWN_FRAME,
-		1,
-		frame_width,
-		frame_height,
-		1.0,
-		false
-	)
-
-	create_animation_from_frames(
-		frames,
-		"walk_side",
-		SIDE_START_FRAME,
-		MOVEMENT_FRAME_COUNT,
-		frame_width,
-		frame_height,
-		walk_animation_speed,
-		true
-	)
-
-	create_animation_from_frames(
-		frames,
-		"walk_up",
-		UP_START_FRAME,
-		MOVEMENT_FRAME_COUNT,
-		frame_width,
-		frame_height,
-		walk_animation_speed,
-		true
-	)
-
-	create_animation_from_frames(
-		frames,
-		"walk_down",
-		DOWN_START_FRAME,
-		MOVEMENT_FRAME_COUNT,
-		frame_width,
-		frame_height,
-		walk_animation_speed,
-		true
-	)
-
-	create_animation_from_frames(
-		frames,
-		"run_side",
-		SIDE_START_FRAME,
-		MOVEMENT_FRAME_COUNT,
-		frame_width,
-		frame_height,
-		run_animation_speed,
-		true
-	)
-
-	create_animation_from_frames(
-		frames,
-		"run_up",
-		UP_START_FRAME,
-		MOVEMENT_FRAME_COUNT,
-		frame_width,
-		frame_height,
-		run_animation_speed,
-		true
-	)
-
-	create_animation_from_frames(
-		frames,
-		"run_down",
-		DOWN_START_FRAME,
-		MOVEMENT_FRAME_COUNT,
-		frame_width,
-		frame_height,
-		run_animation_speed,
-		true
-	)
-
-	sprite.sprite_frames = frames
-
-	sprite.play("idle_down")
+	reproduzir_parado(last_direction)
 
 
-func create_animation_from_frames(
-	frames: SpriteFrames,
-	animation_name: StringName,
-	start_frame: int,
-	frame_count: int,
-	frame_width: int,
-	frame_height: int,
-	fps: float,
-	loop: bool
-) -> void:
-	frames.add_animation(animation_name)
-
-	frames.set_animation_speed(
-		animation_name,
-		fps
-	)
-
-	frames.set_animation_loop(
-		animation_name,
-		loop
-	)
-
-	for i in range(frame_count):
-		var frame_number: int = start_frame + i
-
-		add_frame_to_animation(
-			frames,
-			animation_name,
-			frame_number,
-			frame_width,
-			frame_height
-		)
-
-
-func add_frame_to_animation(
-	frames: SpriteFrames,
-	animation_name: StringName,
-	frame_number: int,
-	frame_width: int,
-	frame_height: int
-) -> void:
-	var frame_index: int = frame_number - 1
-
-	var column: int = frame_index % SHEET_COLUMNS
-
-	@warning_ignore("integer_division")
-	var row: int = frame_index / SHEET_COLUMNS
-
-	var atlas := AtlasTexture.new()
-
-	atlas.atlas = sprite_sheet
-
-	atlas.region = Rect2(
-		column * frame_width,
-		row * frame_height,
-		frame_width,
-		frame_height
-	)
-
-	frames.add_frame(
-		animation_name,
-		atlas
-	)
+func configurar_animacoes() -> void:
+	if animacoes != null:
+		sprite.sprite_frames = animacoes
+	sprite.play(&"idle_down")
 
 
 func _process(delta: float) -> void:
-	_update_interaction_prompt()
-	if crowd_avoidance_enabled:
-		if not desperate and (current_path == null or path_finished) and player_in_range and player_ref:
-			update_direction()
+	_atualizar_indicador_interacao()
+	if desvio_multidao_habilitado:
+		if not desesperado and (caminho_atual == null or caminho_finalizado) and jogador_no_alcance and player_ref:
+			atualizar_direcao()
 		return
 
-	if desperate:
-		update_desperate_movement(delta)
+	if desesperado:
+		atualizar_movimento_desespero(delta)
 		return
 
-	if current_path != null and not path_finished:
-		update_movement(delta)
+	if caminho_atual != null and not caminho_finalizado:
+		atualizar_movimento(delta)
 		return
 
-	if player_in_range and player_ref:
-		update_direction()
+	if jogador_no_alcance and player_ref:
+		atualizar_direcao()
 		return
 
 
 func _physics_process(delta: float) -> void:
-	if not crowd_avoidance_enabled:
+	if not desvio_multidao_habilitado:
 		return
-	if _update_exit_arrival(delta):
+	if _atualizar_chegada_saida(delta):
 		return
-	if desperate:
-		update_desperate_movement(delta)
-	elif current_path != null and not path_finished:
-		update_movement(delta)
-	elif player_in_range and is_instance_valid(player_ref):
+	if desesperado:
+		atualizar_movimento_desespero(delta)
+	elif caminho_atual != null and not caminho_finalizado:
+		atualizar_movimento(delta)
+	elif jogador_no_alcance and is_instance_valid(player_ref):
 		var away := global_position - player_ref.global_position
-		crowd_agent.velocity = away.normalized() * run_speed if away.length_squared() < 256.0 else Vector2.ZERO
+		agente_desvio.velocity = away.normalized() * velocidade_corrida if away.length_squared() < 256.0 else Vector2.ZERO
 	else:
-		crowd_agent.velocity = Vector2.ZERO
+		agente_desvio.velocity = Vector2.ZERO
 
 
-func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
+func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
 	if is_queued_for_deletion():
 		return
 	var delta := get_physics_process_delta_time()
-	if is_instance_valid(obstacle_navigation):
+	if is_instance_valid(navegacao_obstaculos):
 		var body := $CharacterBody2D as CharacterBody2D
 		var before := body.global_position
 		body.velocity = safe_velocity
@@ -488,154 +272,154 @@ func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
 		global_position += safe_velocity * delta
 	if safe_velocity.length_squared() > 1.0:
 		last_direction = safe_velocity.normalized()
-		var kind := desperate_movement_type if desperate else (current_path.movement_type if current_path != null else NPCPath.MovementType.RUN)
-		update_movement_animation(last_direction, kind)
-	elif not desperate and (current_path == null or path_finished):
-		play_idle(last_direction)
+		var kind := tipo_movimento_desespero if desesperado else (caminho_atual.tipo_movimento if caminho_atual != null else NPCPath.MovementType.RUN)
+		atualizar_animacao_movimento(last_direction, kind)
+	elif not desesperado and (caminho_atual == null or caminho_finalizado):
+		reproduzir_parado(last_direction)
 
-	if desperate:
-		var goal := desperate_target
-		if is_instance_valid(obstacle_navigation) and not navigation_points.is_empty():
-			goal = navigation_points[-1]
-		var tolerance := 3.0 if is_instance_valid(obstacle_navigation) else 2.0
+	if desesperado:
+		var goal := destino_desespero
+		if is_instance_valid(navegacao_obstaculos) and not pontos_navegacao.is_empty():
+			goal = pontos_navegacao[-1]
+		var tolerance := 3.0 if is_instance_valid(navegacao_obstaculos) else 2.0
 		if global_position.distance_to(goal) <= tolerance:
-			desperate_wait_timer = rng.randf_range(desperate_min_wait, desperate_max_wait)
-			choose_random_desperate_target()
-	elif current_path != null and not path_finished and current_point >= 0 and current_point < path_points.size():
-		var goal := path_points[current_point]
-		if is_instance_valid(obstacle_navigation) and not navigation_points.is_empty():
-			goal = navigation_points[-1]
-		var tolerance := 3.0 if is_instance_valid(obstacle_navigation) else 2.0
+			tempo_espera_desespero = rng.randf_range(espera_minima_desespero, espera_maxima_desespero)
+			sortear_destino_desespero()
+	elif caminho_atual != null and not caminho_finalizado and ponto_atual >= 0 and ponto_atual < pontos_caminho.size():
+		var goal := pontos_caminho[ponto_atual]
+		if is_instance_valid(navegacao_obstaculos) and not pontos_navegacao.is_empty():
+			goal = pontos_navegacao[-1]
+		var tolerance := 3.0 if is_instance_valid(navegacao_obstaculos) else 2.0
 		if global_position.distance_to(goal) <= tolerance:
-			go_to_next_path_point()
+			avancar_ponto_caminho()
 
 
-func _update_exit_arrival(delta: float) -> bool:
-	if current_path == null or path_finished or not current_path.delete_npc_at_end or path_points.is_empty():
-		exit_arrival_elapsed = 0.0
+func _atualizar_chegada_saida(delta: float) -> bool:
+	if caminho_atual == null or caminho_finalizado or not caminho_atual.remover_npc_ao_terminar or pontos_caminho.is_empty():
+		tempo_na_saida = 0.0
 		return false
-	if global_position.distance_squared_to(path_points[-1]) > exit_arrival_radius * exit_arrival_radius:
-		exit_arrival_elapsed = 0.0
+	if global_position.distance_squared_to(pontos_caminho[-1]) > raio_chegada_saida * raio_chegada_saida:
+		tempo_na_saida = 0.0
 		return false
-	exit_arrival_elapsed += delta
-	if exit_arrival_elapsed < exit_arrival_delay:
+	tempo_na_saida += delta
+	if tempo_na_saida < tempo_chegada_saida:
 		return false
-	crowd_agent.velocity = Vector2.ZERO
-	current_point = path_points.size() - 1
-	go_to_next_path_point()
+	agente_desvio.velocity = Vector2.ZERO
+	ponto_atual = pontos_caminho.size() - 1
+	avancar_ponto_caminho()
 	return true
 
 
-func update_movement(delta: float) -> void:
-	if current_path == null:
+func atualizar_movimento(delta: float) -> void:
+	if caminho_atual == null:
 		return
 
-	if path_finished:
+	if caminho_finalizado:
 		return
 
-	if path_points.is_empty():
+	if pontos_caminho.is_empty():
 		return
 
-	if current_point < 0:
+	if ponto_atual < 0:
 		return
 
-	if current_point >= path_points.size():
+	if ponto_atual >= pontos_caminho.size():
 		return
 
-	var target: Vector2 = path_points[current_point]
-	movement_target = _obstacle_target(target)
+	var target: Vector2 = pontos_caminho[ponto_atual]
+	destino_movimento = _destino_sem_obstaculos(target)
 
-	var speed: float = walk_speed
+	var speed: float = velocidade_caminhada
 
-	if current_path.movement_type == NPCPath.MovementType.RUN:
-		speed = run_speed
+	if caminho_atual.tipo_movimento == NPCPath.MovementType.RUN:
+		speed = velocidade_corrida
 
 	var direction: Vector2 = global_position.direction_to(
-		movement_target
+		destino_movimento
 	)
 
 	if direction != Vector2.ZERO:
 		last_direction = direction
 
-	if crowd_avoidance_enabled:
-		crowd_agent.velocity = direction * speed
+	if desvio_multidao_habilitado:
+		agente_desvio.velocity = direction * speed
 	else:
 		global_position = global_position.move_toward(target, speed * delta)
 
-	update_movement_animation(
+	atualizar_animacao_movimento(
 		direction,
-		current_path.movement_type
+		caminho_atual.tipo_movimento
 	)
 
-	if not crowd_avoidance_enabled and global_position.distance_to(target) < 1.0:
+	if not desvio_multidao_habilitado and global_position.distance_to(target) < 1.0:
 		global_position = target
 
-		go_to_next_path_point()
+		avancar_ponto_caminho()
 
 
-func go_to_next_path_point() -> void:
-	current_point += 1
+func avancar_ponto_caminho() -> void:
+	ponto_atual += 1
 
-	if current_point < path_points.size():
+	if ponto_atual < pontos_caminho.size():
 		return
 
-	if current_path == null:
+	if caminho_atual == null:
 		return
 
-	var finished_path: NPCPath = current_path
+	var finished_path: NPCPath = caminho_atual
 
-	if finished_path.delete_npc_at_end:
-		path_completed.emit(finished_path)
+	if finished_path.remover_npc_ao_terminar:
+		caminho_concluido.emit(finished_path)
 		if save_enabled:
 			SaveGame.mark_checkpoint_actor_removed(self)
 		npc_saiu.emit()
 		queue_free()
 		return
 
-	if finished_path.loop_path:
-		current_point = 0
-		path_completed.emit(finished_path)
+	if finished_path.repetir_caminho:
+		ponto_atual = 0
+		caminho_concluido.emit(finished_path)
 		return
 
-	if finished_path.random_at_end:
-		start_desperate_mode()
-		path_completed.emit(finished_path)
+	if finished_path.sortear_ao_terminar:
+		iniciar_modo_desespero()
+		caminho_concluido.emit(finished_path)
 		return
 
-	path_finished = true
-	current_point = -1
+	caminho_finalizado = true
+	ponto_atual = -1
 
-	play_idle(last_direction)
-	path_completed.emit(finished_path)
-
-
-func start_desperate_mode() -> void:
-	path_finished = true
-	current_point = -1
-
-	desperate = true
-
-	desperate_origin = global_position
-
-	desperate_wait_timer = 0.0
-
-	choose_random_desperate_target()
+	reproduzir_parado(last_direction)
+	caminho_concluido.emit(finished_path)
 
 
-func choose_random_desperate_target() -> void:
+func iniciar_modo_desespero() -> void:
+	caminho_finalizado = true
+	ponto_atual = -1
+
+	desesperado = true
+
+	origem_desespero = global_position
+
+	tempo_espera_desespero = 0.0
+
+	sortear_destino_desespero()
+
+
+func sortear_destino_desespero() -> void:
 	var random_angle: float = rng.randf_range(
 		0.0,
 		TAU
 	)
 
 	var min_distance: float = min(
-		desperate_min_distance,
-		desperate_radius
+		distancia_minima_desespero,
+		raio_desespero
 	)
 
 	var max_distance: float = max(
-		desperate_min_distance,
-		desperate_radius
+		distancia_minima_desespero,
+		raio_desespero
 	)
 
 	var random_distance: float = rng.randf_range(
@@ -647,65 +431,65 @@ func choose_random_desperate_target() -> void:
 		random_angle
 	) * random_distance
 
-	desperate_target = desperate_origin + offset
+	destino_desespero = origem_desespero + offset
 
-	if rng.randf() <= desperate_run_chance:
-		desperate_movement_type = NPCPath.MovementType.RUN
+	if rng.randf() <= chance_corrida_desespero:
+		tipo_movimento_desespero = NPCPath.MovementType.RUN
 	else:
-		desperate_movement_type = NPCPath.MovementType.WALK
+		tipo_movimento_desespero = NPCPath.MovementType.WALK
 
 
-func update_desperate_movement(
+func atualizar_movimento_desespero(
 	delta: float
 ) -> void:
-	if desperate_wait_timer > 0.0:
-		desperate_wait_timer -= delta
-		if crowd_avoidance_enabled:
-			crowd_agent.velocity = Vector2.ZERO
+	if tempo_espera_desespero > 0.0:
+		tempo_espera_desespero -= delta
+		if desvio_multidao_habilitado:
+			agente_desvio.velocity = Vector2.ZERO
 
-		play_idle(last_direction)
+		reproduzir_parado(last_direction)
 
 		return
 
-	var direction: Vector2 = global_position.direction_to(_obstacle_target(desperate_target))
+	var direction: Vector2 = global_position.direction_to(_destino_sem_obstaculos(destino_desespero))
 
 	if direction != Vector2.ZERO:
 		last_direction = direction
 
-	var speed: float = walk_speed
+	var speed: float = velocidade_caminhada
 
-	if desperate_movement_type == NPCPath.MovementType.RUN:
-		speed = run_speed
+	if tipo_movimento_desespero == NPCPath.MovementType.RUN:
+		speed = velocidade_corrida
 
-	if crowd_avoidance_enabled:
-		crowd_agent.velocity = direction * speed
+	if desvio_multidao_habilitado:
+		agente_desvio.velocity = direction * speed
 	else:
-		global_position = global_position.move_toward(desperate_target, speed * delta)
+		global_position = global_position.move_toward(destino_desespero, speed * delta)
 
-	update_movement_animation(
+	atualizar_animacao_movimento(
 		direction,
-		desperate_movement_type
+		tipo_movimento_desespero
 	)
 
-	if not crowd_avoidance_enabled and global_position.distance_to(
-		desperate_target
+	if not desvio_multidao_habilitado and global_position.distance_to(
+		destino_desespero
 	) < 0.2:
-		global_position = desperate_target
+		global_position = destino_desespero
 
-		desperate_wait_timer = rng.randf_range(
-			desperate_min_wait,
-			desperate_max_wait
+		tempo_espera_desespero = rng.randf_range(
+			espera_minima_desespero,
+			espera_maxima_desespero
 		)
 
-		choose_random_desperate_target()
+		sortear_destino_desespero()
 
 
-func update_movement_animation(
+func atualizar_animacao_movimento(
 	direction: Vector2,
 	movement_kind: int
 ) -> void:
 	if direction == Vector2.ZERO:
-		play_idle(last_direction)
+		reproduzir_parado(last_direction)
 		return
 
 	var animation_prefix := "walk"
@@ -737,7 +521,7 @@ func update_movement_animation(
 			)
 
 
-func play_idle(direction: Vector2) -> void:
+func reproduzir_parado(direction: Vector2) -> void:
 	if abs(direction.x) > abs(direction.y):
 		sprite.play("idle_side")
 
@@ -759,67 +543,67 @@ func _unhandled_input(
 	event: InputEvent
 ) -> void:
 	if (
-		has_dialog()
-		and player_in_range
+		tem_dialogo()
+		and jogador_no_alcance
 		and (event.is_action_pressed("interact") or event.is_action_pressed("ui_accept"))
 		and not DialogManager.is_showing_dialog
 	):
-		if interaction_override:
-			interaction_requested.emit(self)
+		if interacao_personalizada:
+			solicitou_interacao.emit(self)
 			get_viewport().set_input_as_handled()
 			return
-		if not dialog_sequence_id.is_empty():
-			DialogManager.start_catalog_dialog(dialog_sequence_id, dialog_id)
+		if not id_sequencia_dialogo.is_empty():
+			DialogManager.start_catalog_dialog(id_sequencia_dialogo, id_dialogo)
 		else:
-			DialogManager.start_dialog(dialog_texts, dialog_id)
+			DialogManager.start_dialog(textos_dialogo, id_dialogo)
 		get_viewport().set_input_as_handled()
 
 
 func _on_area_2d_body_entered(body) -> void:
 	if body is Player:
-		player_in_range = true
+		jogador_no_alcance = true
 
 		player_ref = body
 
-		interaction_icon.visible = has_dialog()
+		indicador_interacao.visible = tem_dialogo()
 
 
 func _on_area_2d_body_exited(body) -> void:
 	if body is Player:
-		player_in_range = false
+		jogador_no_alcance = false
 
 		player_ref = null
 
-		interaction_icon.visible = false
+		indicador_interacao.visible = false
 
 
-func set_dialog_enabled(value: bool) -> void:
-	dialog_enabled = value
-	interaction_icon.visible = has_dialog() and player_in_range
+func definir_dialogo_habilitado(value: bool) -> void:
+	dialogo_habilitado = value
+	indicador_interacao.visible = tem_dialogo() and jogador_no_alcance
 
 
-func configure_interaction_override(value: bool, prompt: String = "ESPAÇO: FALAR") -> void:
-	interaction_override = value
-	interaction_prompt = prompt
-	_update_interaction_prompt()
+func configurar_interacao_personalizada(value: bool, prompt: String = "ESPAÇO: FALAR") -> void:
+	interacao_personalizada = value
+	texto_interacao = prompt
+	_atualizar_indicador_interacao()
 
 
-func has_dialog() -> bool:
-	return interaction_override or (
-		dialog_enabled and not dialog_texts.is_empty()
+func tem_dialogo() -> bool:
+	return interacao_personalizada or (
+		dialogo_habilitado and not textos_dialogo.is_empty()
 	)
 
 
-func _update_interaction_prompt() -> void:
-	interaction_icon.text = interaction_prompt
-	interaction_icon.visible = (
-		has_dialog()
-		and player_in_range
+func _atualizar_indicador_interacao() -> void:
+	indicador_interacao.text = texto_interacao
+	indicador_interacao.visible = (
+		tem_dialogo()
+		and jogador_no_alcance
 		and not DialogManager.is_showing_dialog
 	)
 
 
-func update_direction() -> void:
+func atualizar_direcao() -> void:
 	if player_ref == null:
 		return
 
@@ -833,27 +617,27 @@ func update_direction() -> void:
 
 	last_direction = dir
 
-	play_idle(dir)
+	reproduzir_parado(dir)
 
 
 func get_checkpoint_state() -> Dictionary:
 	var paths: Dictionary = {}
-	for path: NPCPath in cached_path_points:
-		paths[str(get_path_to(path))] = PackedVector2Array(cached_path_points[path])
+	for path: NPCPath in pontos_caminhos_salvos:
+		paths[str(get_path_to(path))] = PackedVector2Array(pontos_caminhos_salvos[path])
 	return {
 		"version": 1,
 		"position": global_position,
-		"current_path": str(get_path_to(current_path)) if current_path != null else "",
-		"current_point": current_point,
-		"path_finished": path_finished,
-		"path_points": PackedVector2Array(path_points),
+		"current_path": str(get_path_to(caminho_atual)) if caminho_atual != null else "",
+		"current_point": ponto_atual,
+		"path_finished": caminho_finalizado,
+		"path_points": PackedVector2Array(pontos_caminho),
 		"cached_paths": paths,
 		"last_direction": last_direction,
-		"desperate": desperate,
-		"desperate_origin": desperate_origin,
-		"desperate_target": desperate_target,
-		"desperate_wait_timer": desperate_wait_timer,
-		"desperate_movement_type": desperate_movement_type,
+		"desperate": desesperado,
+		"desperate_origin": origem_desespero,
+		"desperate_target": destino_desespero,
+		"desperate_wait_timer": tempo_espera_desespero,
+		"desperate_movement_type": tipo_movimento_desespero,
 		"rng_seed": rng.seed,
 		"rng_state": rng.state,
 		"animation": sprite.animation,
@@ -866,7 +650,7 @@ func get_checkpoint_state() -> Dictionary:
 
 
 func load_checkpoint_state(saved: Dictionary) -> void:
-	exit_arrival_elapsed = 0.0
+	tempo_na_saida = 0.0
 	if saved.get("version", 0) != 1 or not saved.get("position") is Vector2:
 		push_warning("Estado de NPC incompatível: " + str(name))
 		return
@@ -877,42 +661,42 @@ func load_checkpoint_state(saved: Dictionary) -> void:
 	if paths is Dictionary:
 		for path_id in paths:
 			var path := get_node_or_null(NodePath(str(path_id))) as NPCPath
-			if path != null and cached_path_points.has(path) and paths[path_id] is PackedVector2Array:
+			if path != null and pontos_caminhos_salvos.has(path) and paths[path_id] is PackedVector2Array:
 				var points: Array[Vector2] = []
 				points.assign(paths[path_id])
-				cached_path_points[path] = points
-	current_path = null
-	path_points.clear()
+				pontos_caminhos_salvos[path] = points
+	caminho_atual = null
+	pontos_caminho.clear()
 	var active_path: String = str(saved.get("current_path", ""))
 	if not active_path.is_empty():
-		current_path = get_node_or_null(NodePath(active_path)) as NPCPath
-		if not cached_path_points.has(current_path):
-			current_path = null
-	if current_path != null:
+		caminho_atual = get_node_or_null(NodePath(active_path)) as NPCPath
+		if not pontos_caminhos_salvos.has(caminho_atual):
+			caminho_atual = null
+	if caminho_atual != null:
 		var points: Variant = saved.get("path_points")
 		if points is PackedVector2Array:
-			path_points.assign(points)
+			pontos_caminho.assign(points)
 		else:
-			path_points.assign(cached_path_points[current_path])
-	current_point = int(saved.get("current_point", -1))
-	path_finished = bool(saved.get("path_finished", true))
-	desperate = bool(saved.get("desperate", false))
-	desperate_origin = saved.get("desperate_origin", global_position)
-	desperate_target = saved.get("desperate_target", global_position)
-	desperate_wait_timer = float(saved.get("desperate_wait_timer", 0.0))
-	desperate_movement_type = int(saved.get("desperate_movement_type", NPCPath.MovementType.RUN))
-	if not desperate and not path_finished and (current_path == null or current_point < 0 or current_point >= path_points.size()):
+			pontos_caminho.assign(pontos_caminhos_salvos[caminho_atual])
+	ponto_atual = int(saved.get("current_point", -1))
+	caminho_finalizado = bool(saved.get("path_finished", true))
+	desesperado = bool(saved.get("desperate", false))
+	origem_desespero = saved.get("desperate_origin", global_position)
+	destino_desespero = saved.get("desperate_target", global_position)
+	tempo_espera_desespero = float(saved.get("desperate_wait_timer", 0.0))
+	tipo_movimento_desespero = int(saved.get("desperate_movement_type", NPCPath.MovementType.RUN))
+	if not desesperado and not caminho_finalizado and (caminho_atual == null or ponto_atual < 0 or ponto_atual >= pontos_caminho.size()):
 
 		push_warning("Rota salva indisponível; NPC permanece na posição salva: " + str(name))
-		stop_current_path()
+		parar_caminho_atual()
 	if saved.has("rng_seed"):
 		rng.seed = int(saved["rng_seed"])
 	if saved.has("rng_state"):
 		rng.state = int(saved["rng_state"])
 
-	player_in_range = false
+	jogador_no_alcance = false
 	player_ref = null
-	interaction_icon.hide()
+	indicador_interacao.hide()
 	var animation: StringName = saved.get("animation", &"idle_down")
 	if sprite.sprite_frames.has_animation(animation):
 		sprite.play(animation)

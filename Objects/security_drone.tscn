@@ -34,7 +34,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 5.0
 
-[node name="SecurityDrone" type="CharacterBody2D" unique_id=1397494439]
+[node name="SecurityDrone" type="CharacterBody2D" unique_id=1397494439 groups=["security_drones"]]
 z_index = 30
 position = Vector2(-164, -48)
 collision_layer = 2
@@ -150,3 +150,14 @@ material = SubResource("CanvasItemMaterial_unshaded")
 points = PackedVector2Array(0, -7, 5, -5, 7, 0, 5, 5, 0, 7, -5, 5, -7, 0, -5, -5, 0, -7)
 width = 1.5
 default_color = Color(1, 0.9, 0.45, 0.9)
+
+[node name="Visao" type="RayCast2D" parent="."]
+enabled = false
+collision_mask = 9
+
+[node name="VerificarMissao" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.25
+autostart = true
+
+[connection signal="timeout" from="VerificarMissao" to="." method="_atualizar_estado_missao"]

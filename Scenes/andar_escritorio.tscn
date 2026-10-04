@@ -13,12 +13,13 @@
 [ext_resource type="PackedScene" uid="uid://b6acfrqgxdwie" path="res://Objects/cabo.tscn" id="8_b3g1w"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="8_eb2mc"]
 [ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs.tscn" id="8_hydi7"]
-[ext_resource type="Texture2D" uid="uid://bfufeqcgcydgm" path="res://NPC'S/NPC/scientist_1.png" id="10_ai74j"]
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="10_b3g1w"]
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="10_ekofs"]
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="10_wvila"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="11_vhcpt"]
 [ext_resource type="Script" uid="uid://djwkfu2et7d8o" path="res://Scenes/scripts/office_intro_controller.gd" id="12_intro"]
+
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/scientist_1.tres" id="animacoes_10_ai74j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4f2l"]
 size = Vector2(11, 32)
@@ -110,28 +111,28 @@ save_id = "cabo_sala_escritorio"
 process_mode = 4
 z_index = 2
 position = Vector2(38, -199)
-sprite_sheet = ExtResource("10_ai74j")
-dialog_sequence_id = "office.scientist.introduction"
-dialog_enabled = false
-dialog_id = "office:npc_intro_dialog"
+animacoes = ExtResource("animacoes_10_ai74j")
+id_sequencia_dialogo = "office.scientist.introduction"
+dialogo_habilitado = false
+id_dialogo = "office:npc_intro_dialog"
 save_id = "office_intro_npc"
-run_speed = 40.0
+velocidade_corrida = 40.0
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC1" unique_id=559845400]
 position = Vector2(-2, 18)
 points = PackedVector2Array(1, -5, 17, -5, 31, -4, 48, -5, 66, -7, 66, -10)
 script = ExtResource("10_b3g1w")
-movement_type = 1
-random_at_end = false
+tipo_movimento = 1
+sortear_ao_terminar = false
 
 [node name="Line2D3" type="Line2D" parent="NPCs/NPC1" unique_id=439463493]
 position = Vector2(-2, 18)
 points = PackedVector2Array(66, -8, 45, -5, 19, -5, 8, -6, 1, -8, 1, -12)
 default_color = Color(0, 1, 1, 1)
 script = ExtResource("10_b3g1w")
-movement_type = 1
-random_at_end = false
-delete_npc_at_end = true
+tipo_movimento = 1
+sortear_ao_terminar = false
+remover_npc_ao_terminar = true
 
 [node name="ESCRITORIO" parent="." unique_id=1500386464 instance=ExtResource("3_kribp")]
 position = Vector2(-170, -241)
@@ -196,3 +197,9 @@ process_physics_priority = -6
 
 [node name="OfficeIntroController" type="Node" parent="." unique_id=787855785]
 script = ExtResource("12_intro")
+
+[connection signal="solicitou_inicio" from="NPCs/NPC1/Line2D2" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC1/Line2D3" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="caminho_concluido" from="NPCs/NPC1" to="OfficeIntroController" method="_on_npc_path_completed"]

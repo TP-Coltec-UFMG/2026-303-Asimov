@@ -12,6 +12,7 @@ var retorno_refrigeracao_ia: bool = false
 var terminal_refrigeracao_ativo: String = ""
 var cena_de_retorno: String = ""
 var marcador_de_retorno: String = ""
+var modo_mouse_do_mapa: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 const TERMINAL_REFRIGERACAO_1 := "terminal_1"
 const TERMINAL_REFRIGERACAO_2 := "terminal_2"
 const ARQUIVO := "user://asimov_progresso.cfg"
@@ -33,7 +34,7 @@ func _ready() -> void:
 		som_ativo = bool(arquivo.get_value("opcoes", "som", true))
 
 func salvar() -> void:
-	if modo_teste:
+	if modo_teste or bool(get_tree().get_meta("dev_mission_jump_active", false)):
 		return
 	var arquivo := ConfigFile.new()
 	for jogo in range(3):
@@ -52,8 +53,7 @@ func concluir(jogo: int, fase: int) -> void:
 func iniciar_hack_da_sala_do_chefe(player: Player) -> void:
 	if not is_instance_valid(player):
 		return
-	SaveGame.capturar_tempo_atual()
-	MusicController.definir_contexto_alarme_baixo(&"minigame", true)
+	_preparar_entrada(player)
 	retorno_da_sala_do_chefe = true
 	cena_de_retorno = "res://Scenes/andar_escritorio.tscn"
 	marcador_de_retorno = "SALA_CHEFE"
@@ -67,8 +67,7 @@ func iniciar_hack_da_sala_do_chefe(player: Player) -> void:
 func iniciar_reparo_leitor_rfid(player: Player) -> void:
 	if not is_instance_valid(player):
 		return
-	SaveGame.capturar_tempo_atual()
-	MusicController.definir_contexto_alarme_baixo(&"minigame", true)
+	_preparar_entrada(player)
 	retorno_reparo_rfid = true
 	cena_de_retorno = "res://Scenes/andar_data_center.tscn"
 	marcador_de_retorno = "DATA_CENTER_FORTE"
@@ -82,8 +81,7 @@ func iniciar_reparo_leitor_rfid(player: Player) -> void:
 func iniciar_reprogramacao_cartao_rfid(player: Player) -> void:
 	if not is_instance_valid(player):
 		return
-	SaveGame.capturar_tempo_atual()
-	MusicController.definir_contexto_alarme_baixo(&"minigame", true)
+	_preparar_entrada(player)
 	retorno_cartao_rfid = true
 	cena_de_retorno = "res://Scenes/andar_data_center.tscn"
 	marcador_de_retorno = "DATA_CENTER_FORTE"
@@ -145,8 +143,7 @@ func iniciar_refrigeracao_ia(
 	var normalized_terminal := normalizar_terminal_refrigeracao(terminal_value)
 	if not terminal_refrigeracao_disponivel(estado, normalized_terminal):
 		return
-	SaveGame.capturar_tempo_atual()
-	MusicController.definir_contexto_alarme_baixo(&"minigame", true)
+	_preparar_entrada(player)
 	retorno_refrigeracao_ia = true
 	terminal_refrigeracao_ativo = normalized_terminal
 	var current_scene := get_tree().current_scene
@@ -305,7 +302,19 @@ func menu() -> void:
 		return
 	MusicController.definir_contexto_alarme_baixo(&"minigame", false)
 	get_tree().paused = false
-	get_tree().change_scene_to_file("")
+	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
+
+
+func _preparar_entrada(player: Player) -> void:
+	SaveGame.capturar_tempo_atual()
+	SaveGame.capture_checkpoint_actors(get_tree().current_scene)
+	MusicController.definir_contexto_alarme_baixo(&"minigame", true)
+	modo_mouse_do_mapa = Input.mouse_mode
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	player.direction = Vector2.ZERO
+	player.velocity = Vector2.ZERO
+	player.correndo = false
+	player.sfx_walking.stop()
 
 
 func _liberar_sala_do_chefe() -> void:
@@ -321,13 +330,8 @@ func _retornar_ao_escritorio() -> void:
 	retorno_da_sala_do_chefe = false
 	cena_de_retorno = ""
 	marcador_de_retorno = ""
-	if destino.is_empty():
-		MusicController.definir_contexto_alarme_baixo(&"minigame", false)
-		return
-	MusicController.definir_contexto_alarme_baixo(&"minigame", false)
-	scene_manager.last_scene_name = marcador
-	get_tree().paused = false
-	get_tree().change_scene_to_file(destino)
+	SaveGame.capturar_tempo_atual()
+	_voltar_para_mapa(destino, marcador)
 
 
 func _retornar_ao_data_center() -> void:
@@ -339,10 +343,16 @@ func _retornar_ao_data_center() -> void:
 	terminal_refrigeracao_ativo = ""
 	cena_de_retorno = ""
 	marcador_de_retorno = ""
-	if destino.is_empty():
-		MusicController.definir_contexto_alarme_baixo(&"minigame", false)
-		return
+	_voltar_para_mapa(destino, marcador)
+
+
+func _voltar_para_mapa(destino: String, marcador: String) -> void:
 	MusicController.definir_contexto_alarme_baixo(&"minigame", false)
-	scene_manager.last_scene_name = marcador
+	Input.mouse_mode = modo_mouse_do_mapa
 	get_tree().paused = false
-	get_tree().change_scene_to_file(destino)
+	if destino.is_empty():
+		return
+	scene_manager.last_scene_name = marcador
+	var erro := get_tree().change_scene_to_file(destino)
+	if erro != OK:
+		push_error("Não foi possível voltar ao mapa: " + destino)

@@ -44,13 +44,8 @@ func _ready() -> void:
 
 	nome = get_parent().name
 
-	add_to_group("pontos_conexao")
-	add_to_group("juncoes")
-	get_parent().add_to_group("juncao") 
 	input_pickable = true
 
-	if not input_event.is_connected(_on_input_event):
-		input_event.connect(_on_input_event)
 
 	pass
 

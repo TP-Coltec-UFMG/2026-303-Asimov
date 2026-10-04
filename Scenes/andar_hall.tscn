@@ -8,7 +8,6 @@
 [ext_resource type="Shader" uid="uid://basp7b73u8xqp" path="res://shaders/filtro_daltonismo.gdshader" id="5_pjvw7"]
 [ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs.tscn" id="5_vvkyc"]
 [ext_resource type="Texture2D" uid="uid://b0elgotgwc83h" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_3.png" id="7_nflo4"]
-[ext_resource type="Texture2D" uid="uid://cafijwft0ela2" path="res://NPC'S/NPC/06_purple_crimson.png" id="7_nqlva"]
 [ext_resource type="Texture2D" uid="uid://cfw8c3ewx78lf" path="res://TileMaps/Andar_Hall/SPRITES_HALL/pedaco_2.png" id="8_vkln7"]
 [ext_resource type="PackedScene" uid="uid://dsyhrp3kskfss" path="res://TileMaps/Andar_Hall/hall_quebrado.tscn" id="9_1xwy5"]
 [ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://Objects/luz_emergencia.tscn" id="9_xl0vw"]
@@ -21,28 +20,30 @@
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="14_6qnfl"]
 [ext_resource type="PackedScene" uid="uid://destem3uvhbqo" path="res://Objects/controle_de_tempo.tscn" id="14_8uelp"]
 [ext_resource type="Texture2D" uid="uid://dwcv8necjuiw1" path="res://Sprites/ilumination/gradient-horizontal-mirror.png" id="14_pjvw7"]
-[ext_resource type="Texture2D" uid="uid://cqfc1g0auqdkq" path="res://NPC'S/NPC/01_golden_blue.png" id="15_761r2"]
-[ext_resource type="Texture2D" uid="uid://ckg4qj4mj55ms" path="res://NPC'S/NPC/boneco_0.png" id="15_tbjth"]
 [ext_resource type="PackedScene" uid="uid://c46ktfchhqx7n" path="res://Objects/painel_elevador.tscn" id="15_wweuw"]
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="16_vkln7"]
-[ext_resource type="Texture2D" uid="uid://dy13v881xo6ap" path="res://NPC'S/NPC/02_black_emerald.png" id="17_xahv0"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_ysydw"]
-[ext_resource type="Texture2D" uid="uid://cgntmak4t0bga" path="res://NPC'S/NPC/boneco_1.png" id="18_4bo1l"]
 [ext_resource type="Script" uid="uid://778gwebo6sfc" path="res://Scenes/scripts/quest_mission.gd" id="18_h0r3n"]
-[ext_resource type="Texture2D" uid="uid://7dxb4evip3l1" path="res://NPC'S/NPC/04_silver_orange.png" id="19_kws21"]
-[ext_resource type="Texture2D" uid="uid://cxyejmrimb2dj" path="res://NPC'S/NPC/boneco_2.png" id="20_m7e8o"]
 [ext_resource type="Script" uid="uid://b6ktgxyvib1et" path="res://Scenes/scripts/ui.gd" id="20_vkln7"]
-[ext_resource type="Texture2D" uid="uid://c0ciw10r6huss" path="res://NPC'S/NPC/boneco_3.png" id="22_pjvw7"]
-[ext_resource type="Texture2D" uid="uid://sk6715ex5eom" path="res://NPC'S/NPC/pessoa_2.png" id="23_4bo1l"]
-[ext_resource type="Texture2D" uid="uid://kv52um6c31r" path="res://NPC'S/NPC/boneco_5.png" id="23_ohpjp"]
-[ext_resource type="Texture2D" uid="uid://dtomiw3v4xpqi" path="res://NPC'S/NPC/boneco_4.png" id="24_xcn0o"]
-[ext_resource type="Texture2D" uid="uid://dpsrsm4at7pux" path="res://NPC'S/NPC/pessoa_5.png" id="26_4bo1l"]
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="26_nflo4"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 [ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_hall"]
 
 [ext_resource type="Script" path="res://Scenes/scripts/hall_elevator_route.gd" id="elevator_route"]
 [ext_resource type="Script" path="res://Scenes/scripts/hall_npc_navigation.gd" id="npc_navigation"]
+
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/boneco_0.tres" id="animacoes_15_tbjth"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/02_black_emerald.tres" id="animacoes_17_xahv0"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/boneco_1.tres" id="animacoes_18_4bo1l"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/04_silver_orange.tres" id="animacoes_19_kws21"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/boneco_2.tres" id="animacoes_20_m7e8o"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/01_golden_blue.tres" id="animacoes_15_761r2"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/boneco_3.tres" id="animacoes_22_pjvw7"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/pessoa_2.tres" id="animacoes_23_4bo1l"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/boneco_4.tres" id="animacoes_24_xcn0o"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/06_purple_crimson.tres" id="animacoes_7_nqlva"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/boneco_5.tres" id="animacoes_23_ohpjp"]
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/pessoa_5.tres" id="animacoes_26_4bo1l"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4bo1l"]
 load_path = "res://.godot/imported/pedaco_1.png-219691cfb0d6eee3e96f77c1fa5091d6.ctex"
@@ -180,6 +181,10 @@ animations = [{
 "name": &"default",
 "speed": 20.0
 }]
+
+[sub_resource type="CapsuleShape2D" id="PegadaNavegacaoNPC"]
+radius = 5.0
+height = 12.0
 
 [node name="andar_hall" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_nqlva")
@@ -533,30 +538,30 @@ y_sort_enabled = true
 
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("5_vvkyc")]
 position = Vector2(142, -89)
-sprite_sheet = ExtResource("15_tbjth")
-run_speed = 40.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_15_tbjth")
+velocidade_corrida = 40.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC1" unique_id=1873615009]
 position = Vector2(-2, 18)
 points = PackedVector2Array(1, -7, -7, 21, -15, 47, -18, 66, -27, 95, -44, 105, -63, 108, -93, 104, -106, 104, -126, 105, -142, 106, -165, 106)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC1" unique_id=211940382]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-167, 107, -180, 78, -176, 57, -172, 35, -168, 4, -167, -31)
 script = ExtResource("16_vkln7")
-movement_type = 1
-random_at_end = false
-delete_npc_at_end = true
+tipo_movimento = 1
+sortear_ao_terminar = false
+remover_npc_ao_terminar = true
 
 [node name="NPC2" parent="NPCs" unique_id=1302424203 instance=ExtResource("5_vvkyc")]
 position = Vector2(123, -89)
-sprite_sheet = ExtResource("17_xahv0")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_17_xahv0")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC2" unique_id=1367960120]
 visible = false
@@ -564,236 +569,236 @@ position = Vector2(-2, 18)
 points = PackedVector2Array(1, -7, 3, 22, -2, 56, -13, 84, -25, 102, -43, 101, -60, 103, -93, 109, -110, 109, -134, 110, -157, 112, -173, 114)
 default_color = Color(1, 0, 1, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC2" unique_id=496796879]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-170, 114, -164, 79, -157, 59, -154, 36, -149, 13, -150, -9, -149, -26, -147, -31)
 default_color = Color(1, 0, 1, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC3" parent="NPCs" unique_id=1058291482 instance=ExtResource("5_vvkyc")]
 position = Vector2(56, -89)
-sprite_sheet = ExtResource("18_4bo1l")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_18_4bo1l")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC3" unique_id=1762463084]
 position = Vector2(-2, 18)
 points = PackedVector2Array(1, -7, -14, 22, -37, 48, -21, 77, -17, 106, -49, 108, -61, 110, -81, 111, -98, 113, -113, 127, -117, 140, -113, 159)
 default_color = Color(0, 0, 1, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC3" unique_id=2016876890]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-113, 152, -102, 110, -95, 76, -90, 56, -85, 35, -82, 5, -81, -27)
 default_color = Color(0, 0, 1, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC4" parent="NPCs" unique_id=476533357 instance=ExtResource("5_vvkyc")]
 position = Vector2(47, -90)
-sprite_sheet = ExtResource("19_kws21")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_19_kws21")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC4" unique_id=926409637]
 position = Vector2(-2, 18)
 points = PackedVector2Array(1, -7, 36, 22, 74, 48, 65, 87, 50, 119, 43, 136, 42, 158, 50, 173, 54, 187, 72, 195, 91, 193, 116, 202)
 default_color = Color(0, 0.39849344, 0.2982125, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC4" unique_id=2084611759]
 position = Vector2(-2, 18)
 points = PackedVector2Array(113, 202, 69, 163, 67, 72, 51, 27, 2, 23, -53, 13, -72, -6, -72, -24)
 default_color = Color(0, 0.39849344, 0.2982125, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC5" parent="NPCs" unique_id=660128066 instance=ExtResource("5_vvkyc")]
 position = Vector2(83, -8)
-sprite_sheet = ExtResource("20_m7e8o")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_20_m7e8o")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC5" unique_id=606386099]
 position = Vector2(-2, 18)
 points = PackedVector2Array(0, 0, -10, 37, -7, 67, -7, 91, -16, 105, -35, 109)
 default_color = Color(0.35259068, 0.35383534, 0, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC5" unique_id=735822355]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-32, 107, -10, 106, -9, 72, -12, 38, -38, 13, -53, -13, -66, -38, -97, -64, -108, -89, -109, -107, -110, -111)
 default_color = Color(0.35259068, 0.35383534, 0, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC6" parent="NPCs" unique_id=423676385 instance=ExtResource("5_vvkyc")]
 position = Vector2(46, -8)
-sprite_sheet = ExtResource("15_761r2")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_15_761r2")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC6" unique_id=692570053]
 position = Vector2(-2, 18)
 points = PackedVector2Array(0, 0, 23, 38, 26, 76, 22, 111, -6, 111, -23, 108)
 default_color = Color(0.6281449, 0, 0.26931453, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC6" unique_id=289571832]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-19, 107, -80, 107, -96, 96, -97, 57, -92, 33, -84, 5, -81, -21, -62, -49, -72, -104, -72, -109)
 default_color = Color(0.6281449, 0, 0.26931453, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC7" parent="NPCs" unique_id=536453911 instance=ExtResource("5_vvkyc")]
 position = Vector2(-25, -37)
-sprite_sheet = ExtResource("22_pjvw7")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_22_pjvw7")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC7" unique_id=1687354982]
 position = Vector2(-2, 18)
 points = PackedVector2Array(0, 0, -23, 32, -42, 63, -46, 76, -43, 89, -43, 121)
 default_color = Color(0.6281449, 0, 0.26931453, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC7" unique_id=2085413675]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-44, 119, -44, 74, -65, 34, -15, 33, -2, -2, -1, -31, 1, -55, 0, -75)
 default_color = Color(0.6281449, 0, 0.26931453, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC8" parent="NPCs" unique_id=1960654454 instance=ExtResource("5_vvkyc")]
 position = Vector2(-121, -22)
-sprite_sheet = ExtResource("23_4bo1l")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_23_4bo1l")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC8" unique_id=2139976974]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-12, -12, -32, -11, -38, -1, -34, 13, -33, 44, -34, 66, -24, 75, -11, 75)
 default_color = Color(0.6281449, 0, 0.26931453, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC8" unique_id=1881608406]
 position = Vector2(-2, 18)
 points = PackedVector2Array(-13, 75, 30, 77, 47, 48, 82, 10, 91, -28, 97, -91)
 default_color = Color(0.6281449, 0, 0.26931453, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC9" parent="NPCs" unique_id=841091034 instance=ExtResource("5_vvkyc")]
 position = Vector2(-121, 60)
-sprite_sheet = ExtResource("24_xcn0o")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_24_xcn0o")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC9" unique_id=1419834255]
 position = Vector2(18, 27)
 points = PackedVector2Array(-18, -14, -15, -11, -8, -11)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC9" unique_id=1673125954]
 position = Vector2(18, 27)
 points = PackedVector2Array(-11, -11, 32, -40, 64, -85, 75, -138, 76, -184)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC10" parent="NPCs" unique_id=911211034 instance=ExtResource("5_vvkyc")]
 position = Vector2(-88, -4)
-sprite_sheet = ExtResource("7_nqlva")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_7_nqlva")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC10" unique_id=757548581]
 position = Vector2(18, 27)
 points = PackedVector2Array(-16, -11, 13, 49, 43, 48, 70, 48, 96, 47, 125, 47, 143, 39, 159, 30, 187, 34, 197, 57)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC10" unique_id=519819849]
 position = Vector2(18, 27)
 points = PackedVector2Array(195, 55, 217, 7, 211, -38, 175, -76, 116, -73, 85, -61, 51, -73, 43, -100, 42, -122)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC11" parent="NPCs" unique_id=1190239884 instance=ExtResource("5_vvkyc")]
 position = Vector2(36, 153)
-sprite_sheet = ExtResource("23_ohpjp")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_23_ohpjp")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC11" unique_id=157222780]
 position = Vector2(18, 27)
 points = PackedVector2Array(-16, -11, -23, 1, -34, 4, -48, 6, -62, 5, -73, 4, -84, 2)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC11" unique_id=1932262478]
 position = Vector2(18, 27)
 points = PackedVector2Array(-82, 3, -11, 4, -13, -25, -15, -48, -8, -60, 15, -67, 21, -100, 43, -130, 52, -158, 58, -180, 46, -216, 26, -229, 0, -229, -24, -229, -65, -232, -74, -247, -81, -278)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="NPC12" parent="NPCs" unique_id=1388378966 instance=ExtResource("5_vvkyc")]
 position = Vector2(-59, 153)
-sprite_sheet = ExtResource("26_4bo1l")
-run_speed = 45.0
-crowd_avoidance_enabled = true
+animacoes = ExtResource("animacoes_26_4bo1l")
+velocidade_corrida = 45.0
+desvio_multidao_habilitado = true
 
 [node name="Line2D" type="Line2D" parent="NPCs/NPC12" unique_id=2011849040]
 position = Vector2(18, 27)
 points = PackedVector2Array(-16, -11, -12, 1)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-start_automatically = true
+tipo_movimento = 1
+iniciar_automaticamente = true
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC12" unique_id=101500096]
 position = Vector2(18, 27)
 points = PackedVector2Array(-10, 1, -19, -25, -19, -52, -15, -70, 34, -64, 84, -68, 112, -68, 118, -108, 89, -151, 73, -170, 64, -191, 49, -220, 27, -230, 15, -274, 14, -278)
 default_color = Color(1.1070073e-06, 0.3895454, 0.3832463, 1)
 script = ExtResource("16_vkln7")
-movement_type = 1
-delete_npc_at_end = true
+tipo_movimento = 1
+remover_npc_ao_terminar = true
 
 [node name="HALL_QUEBRADO" parent="." unique_id=1433076941 instance=ExtResource("9_1xwy5")]
 
@@ -864,6 +869,7 @@ position = Vector2(-26, -94)
 [node name="HallNPCNavigation" type="Node2D" parent="."]
 process_physics_priority = -1
 script = ExtResource("npc_navigation")
+pegada_npc = SubResource("PegadaNavegacaoNPC")
 
 [node name="Pedaco2" type="Sprite2D" parent="." unique_id=936507080]
 position = Vector2(-129, -85)
@@ -885,6 +891,549 @@ position = Vector2(-77.000015, -46)
 rotation = -0.76281595
 texture = ExtResource("8_vkln7")
 
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite53"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite53/NPCObstacle"]
+polygon = PackedVector2Array(-10.5, -53.5, -20.5, -50.5, -26.5, -50.5, -33.5, -44.5, -36.5, -44.5, -50.5, -30.5, -52.5, -30.5, -58.5, -18.5, -60.5, -18.5, -62.5, -5.5, -63.5, -5.5, -63.5, 7.5, -60.5, 11.5, -60.5, 18.5, -43.5, 39.5, -43.5, 40.5, -24.5, 51.5, -14.5, 51.5, -13.5, 54.5, 14.5, 54.5, 15.5, 52.5, 15.5, 51.5, 23.5, 51.5, 25.5, 48.5, 30.5, 48.5, 42.5, 38.5, 44.5, 38.5, 56.5, 22.5, 58.5, 22.5, 61.5, 10.5, 63.5, 10.5, 63.5, -10.5, 60.5, -11.5, 60.5, -18.5, 45.5, -35.5, 45.5, -37.5, 21.5, -50.5, 21.5, -51.5, -10.5, -54.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite56"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite56/NPCObstacle"]
+polygon = PackedVector2Array(-10.5, -53.5, -20.5, -50.5, -26.5, -50.5, -33.5, -44.5, -36.5, -44.5, -50.5, -30.5, -52.5, -30.5, -58.5, -18.5, -60.5, -18.5, -62.5, -5.5, -63.5, -5.5, -63.5, 7.5, -60.5, 11.5, -60.5, 18.5, -43.5, 39.5, -43.5, 40.5, -24.5, 51.5, -14.5, 51.5, -13.5, 54.5, 14.5, 54.5, 15.5, 52.5, 15.5, 51.5, 23.5, 51.5, 25.5, 48.5, 30.5, 48.5, 42.5, 38.5, 44.5, 38.5, 56.5, 22.5, 58.5, 22.5, 61.5, 10.5, 63.5, 10.5, 63.5, -10.5, 60.5, -11.5, 60.5, -18.5, 45.5, -35.5, 45.5, -37.5, 21.5, -50.5, 21.5, -51.5, -10.5, -54.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite57"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite57/NPCObstacle"]
+polygon = PackedVector2Array(-10.5, -53.5, -20.5, -50.5, -26.5, -50.5, -33.5, -44.5, -36.5, -44.5, -50.5, -30.5, -52.5, -30.5, -58.5, -18.5, -60.5, -18.5, -62.5, -5.5, -63.5, -5.5, -63.5, 7.5, -60.5, 11.5, -60.5, 18.5, -43.5, 39.5, -43.5, 40.5, -24.5, 51.5, -14.5, 51.5, -13.5, 54.5, 14.5, 54.5, 15.5, 52.5, 15.5, 51.5, 23.5, 51.5, 25.5, 48.5, 30.5, 48.5, 42.5, 38.5, 44.5, 38.5, 56.5, 22.5, 58.5, 22.5, 61.5, 10.5, 63.5, 10.5, 63.5, -10.5, 60.5, -11.5, 60.5, -18.5, 45.5, -35.5, 45.5, -37.5, 21.5, -50.5, 21.5, -51.5, -10.5, -54.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite03"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite03/NPCObstacle"]
+polygon = PackedVector2Array(-35.5, -59, -38.5, -56, -40.5, -56, -38.5, 32, -38.5, 54, -32.5, 60, -32.5, 61, 36.5, 61, 39.5, 55, 40.5, 55, 40.5, -35, 38.5, -37, 36.5, -37, 36.5, -54, 36.5, -56, 31.5, -60, 31.5, -61, -35.5, -61)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite08"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite08/NPCObstacle"]
+polygon = PackedVector2Array(-35.5, -59, -38.5, -56, -40.5, -56, -38.5, 32, -38.5, 54, -32.5, 60, -32.5, 61, 36.5, 61, 39.5, 55, 40.5, 55, 40.5, -35, 38.5, -37, 36.5, -37, 36.5, -54, 36.5, -56, 31.5, -60, 31.5, -61, -35.5, -61)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite09"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite09/NPCObstacle"]
+polygon = PackedVector2Array(35.5, -59, 38.5, -56, 40.5, -56, 38.5, 32, 38.5, 54, 32.5, 60, 32.5, 61, -36.5, 61, -39.5, 55, -40.5, 55, -40.5, -35, -38.5, -37, -36.5, -37, -36.5, -54, -36.5, -56, -31.5, -60, -31.5, -61, 35.5, -61)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite50"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite50/NPCObstacle"]
+polygon = PackedVector2Array(-73.5, -37, -76.5, -37, -76.5, 36, -73.5, 37, -73.5, 40, 73.5, 40, 73.5, 37, 76.5, 37, 76.5, -37, 73.5, -37, 73.5, -40, -73.5, -40)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite04"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite04/NPCObstacle"]
+polygon = PackedVector2Array(-35.5, -59, -38.5, -56, -40.5, -56, -38.5, 32, -38.5, 54, -32.5, 60, -32.5, 61, 36.5, 61, 39.5, 55, 40.5, 55, 40.5, -35, 38.5, -37, 36.5, -37, 36.5, -54, 36.5, -56, 31.5, -60, 31.5, -61, -35.5, -61)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite05"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite05/NPCObstacle"]
+polygon = PackedVector2Array(-35.5, -59, -38.5, -56, -40.5, -56, -38.5, 32, -38.5, 54, -32.5, 60, -32.5, 61, 36.5, 61, 39.5, 55, 40.5, 55, 40.5, -35, 38.5, -37, 36.5, -37, 36.5, -54, 36.5, -56, 31.5, -60, 31.5, -61, -35.5, -61)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite51"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite51/NPCObstacle"]
+polygon = PackedVector2Array(-73.5, -37, -76.5, -37, -76.5, 36, -73.5, 37, -73.5, 40, 73.5, 40, 73.5, 37, 76.5, 37, 76.5, -37, 73.5, -37, 73.5, -40, -73.5, -40)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite46"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite46/NPCObstacle"]
+polygon = PackedVector2Array(-14, -60, -16, -58, -22, -58, -23, -55, -26, -55, -32, -45, -33, -45, -33, -30, -22, -21, -20, -21, -33, -10, -33, 21, -29, 25, -29, 45, -19, 56, -19, 58, -14, 58, -14, 61, 12, 61, 14, 58, 19, 58, 24, 51, 26, 51, 29, 45, 29, 25, 32, 21, 32, -11, 21, -19, 21, -21, 26, -24, 28, -24, 32, -30, 33, -30, 33, -42, 30, -46, 30, -51, 22, -56, 22, -58, 15, -59, 15, -61, -14, -61)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite58"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite58/NPCObstacle"]
+polygon = PackedVector2Array(-9, -63, -14, -63, -15, -60, -17, -60, -28, -33, -29, -33, -29, -22, -25, -18, -25, -16, -7, -6, -6, -6, -6, 36, -13, 36, -20, 44, -22, 44, -20, 56, -20, 58, -10, 65, 10, 65, 20, 55, 21, 55, 21, 44, 18, 42, 18, 40, 6, 36, 6, -7, 10, -9, 13, -9, 15, 6, 16, 6, 16, -10, 20, -13, 22, -13, 28, -22, 29, -22, 29, -34, 27, -35, 26, -35, 26, -44, 23, -45, 22, -45, 20, -54, 20, -58, 9, -64, 9, -65, -9, -65)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite62"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite62/NPCObstacle"]
+polygon = PackedVector2Array(-9, -63, -14, -63, -15, -60, -17, -60, -28, -33, -29, -33, -29, -22, -25, -18, -25, -16, -7, -6, -6, -6, -6, 36, -13, 36, -20, 44, -22, 44, -20, 56, -20, 58, -10, 65, 10, 65, 20, 55, 21, 55, 21, 44, 18, 42, 18, 40, 6, 36, 6, -7, 10, -9, 13, -9, 15, 6, 16, 6, 16, -10, 20, -13, 22, -13, 28, -22, 29, -22, 29, -34, 27, -35, 26, -35, 26, -44, 23, -45, 22, -45, 20, -54, 20, -58, 9, -64, 9, -65, -9, -65)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite63"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite63/NPCObstacle"]
+polygon = PackedVector2Array(-9, -63, -14, -63, -15, -60, -17, -60, -28, -33, -29, -33, -29, -22, -25, -18, -25, -16, -7, -6, -6, -6, -6, 36, -13, 36, -20, 44, -22, 44, -20, 56, -20, 58, -10, 65, 10, 65, 20, 55, 21, 55, 21, 44, 18, 42, 18, 40, 6, 36, 6, -7, 10, -9, 13, -9, 15, 6, 16, 6, 16, -10, 20, -13, 22, -13, 28, -22, 29, -22, 29, -34, 27, -35, 26, -35, 26, -44, 23, -45, 22, -45, 20, -54, 20, -58, 9, -64, 9, -65, -9, -65)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite59"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite59/NPCObstacle"]
+polygon = PackedVector2Array(-9, -63, -14, -63, -15, -60, -17, -60, -28, -33, -29, -33, -29, -22, -25, -18, -25, -16, -7, -6, -6, -6, -6, 36, -13, 36, -20, 44, -22, 44, -20, 56, -20, 58, -10, 65, 10, 65, 20, 55, 21, 55, 21, 44, 18, 42, 18, 40, 6, 36, 6, -7, 10, -9, 13, -9, 15, 6, 16, 6, 16, -10, 20, -13, 22, -13, 28, -22, 29, -22, 29, -34, 27, -35, 26, -35, 26, -44, 23, -45, 22, -45, 20, -54, 20, -58, 9, -64, 9, -65, -9, -65)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite60"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite60/NPCObstacle"]
+polygon = PackedVector2Array(-9, -63, -14, -63, -15, -60, -17, -60, -28, -33, -29, -33, -29, -22, -25, -18, -25, -16, -7, -6, -6, -6, -6, 36, -13, 36, -20, 44, -22, 44, -20, 56, -20, 58, -10, 65, 10, 65, 20, 55, 21, 55, 21, 44, 18, 42, 18, 40, 6, 36, 6, -7, 10, -9, 13, -9, 15, 6, 16, 6, 16, -10, 20, -13, 22, -13, 28, -22, 29, -22, 29, -34, 27, -35, 26, -35, 26, -44, 23, -45, 22, -45, 20, -54, 20, -58, 9, -64, 9, -65, -9, -65)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite61"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite61/NPCObstacle"]
+polygon = PackedVector2Array(-9, -63, -14, -63, -15, -60, -17, -60, -28, -33, -29, -33, -29, -22, -25, -18, -25, -16, -7, -6, -6, -6, -6, 36, -13, 36, -20, 44, -22, 44, -20, 56, -20, 58, -10, 65, 10, 65, 20, 55, 21, 55, 21, 44, 18, 42, 18, 40, 6, 36, 6, -7, 10, -9, 13, -9, 15, 6, 16, 6, 16, -10, 20, -13, 22, -13, 28, -22, 29, -22, 29, -34, 27, -35, 26, -35, 26, -44, 23, -45, 22, -45, 20, -54, 20, -58, 9, -64, 9, -65, -9, -65)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite54"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite54/NPCObstacle"]
+polygon = PackedVector2Array(-21.5, -44, -23.5, -42, -33.5, -42, -34.5, -40, -34.5, -39, -39.5, -39, -51.5, -31, -53.5, -31, -66.5, -16, -67.5, -16, -67.5, -9, -70.5, -9, -70.5, 10, -67.5, 11, -67.5, 17, -57.5, 28, -57.5, 29, -45.5, 35, -45.5, 37, -22.5, 45, 23.5, 45, 34.5, 40, 39.5, 40, 57.5, 28, 59.5, 28, 69.5, 9, 70.5, 9, 70.5, -8, 67.5, -9, 67.5, -15, 51.5, -32, 51.5, -33, 32.5, -41, 32.5, -42, 22.5, -43, 22.5, -45, -21.5, -45)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite55"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite55/NPCObstacle"]
+polygon = PackedVector2Array(-21.5, -44, -23.5, -42, -33.5, -42, -34.5, -40, -34.5, -39, -39.5, -39, -51.5, -31, -53.5, -31, -66.5, -16, -67.5, -16, -67.5, -9, -70.5, -9, -70.5, 10, -67.5, 11, -67.5, 17, -57.5, 28, -57.5, 29, -45.5, 35, -45.5, 37, -22.5, 45, 23.5, 45, 34.5, 40, 39.5, 40, 57.5, 28, 59.5, 28, 69.5, 9, 70.5, 9, 70.5, -8, 67.5, -9, 67.5, -15, 51.5, -32, 51.5, -33, 32.5, -41, 32.5, -42, 22.5, -43, 22.5, -45, -21.5, -45)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite26"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite26/NPCObstacle"]
+polygon = PackedVector2Array(-13, -66, -18, -61, -19, -61, -19, -50, -15, -46, -14, -46, -18, -40, -18, -33, -31, -25, -33, -25, -45, -7, -45, -5, -49, -7, -67, -7, -67, -26, -70, -29, -76, -29, -77, -27, -77, 13, -74, 34, -74, 35, -68, 35, -64, 24, -64, 23, -54, 23, -53, 24, -53, 33, -50, 35, -45, 35, -43, 13, -42, 13, -40, 17, -40, 19, -22, 35, -21, 35, -21, 49, -18, 51, -18, 66, -16, 68, -11, 68, -7, 56, 6, 56, 6, 66, 9, 68, 14, 68, 18, 49, 18, 36, 29, 27, 31, 27, 39, 17, 39, 15, 41, 19, 41, 34, 44, 36, 48, 36, 53, 23, 62, 23, 66, 35, 72, 35, 75, 12, 77, 12, 77, -26, 74, -27, 74, -29, 69, -29, 68, -26, 66, -26, 65, -8, 65, -7, 45, -7, 44, -4, 42, -4, 37, -17, 37, -19, 20, -33, 16, -33, 13, -45, 12, -45, 15, -50, 17, -50, 17, -61, 14, -62, 14, -65, 10, -67, 10, -68, -13, -68)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite27"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite27/NPCObstacle"]
+polygon = PackedVector2Array(-13, -66, -18, -61, -19, -61, -19, -50, -15, -46, -14, -46, -18, -40, -18, -33, -31, -25, -33, -25, -45, -7, -45, -5, -49, -7, -67, -7, -67, -26, -70, -29, -76, -29, -77, -27, -77, 13, -74, 34, -74, 35, -68, 35, -64, 24, -64, 23, -54, 23, -53, 24, -53, 33, -50, 35, -45, 35, -43, 13, -42, 13, -40, 17, -40, 19, -22, 35, -21, 35, -21, 49, -18, 51, -18, 66, -16, 68, -11, 68, -7, 56, 6, 56, 6, 66, 9, 68, 14, 68, 18, 49, 18, 36, 29, 27, 31, 27, 39, 17, 39, 15, 41, 19, 41, 34, 44, 36, 48, 36, 53, 23, 62, 23, 66, 35, 72, 35, 75, 12, 77, 12, 77, -26, 74, -27, 74, -29, 69, -29, 68, -26, 66, -26, 65, -8, 65, -7, 45, -7, 44, -4, 42, -4, 37, -17, 37, -19, 20, -33, 16, -33, 13, -45, 12, -45, 15, -50, 17, -50, 17, -61, 14, -62, 14, -65, 10, -67, 10, -68, -13, -68)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite2D"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite2D/NPCObstacle"]
+polygon = PackedVector2Array(-13, -66, -18, -61, -19, -61, -19, -50, -15, -46, -14, -46, -18, -40, -18, -33, -31, -25, -33, -25, -45, -7, -45, -5, -49, -7, -67, -7, -67, -26, -70, -29, -76, -29, -77, -27, -77, 13, -74, 34, -74, 35, -68, 35, -64, 24, -64, 23, -54, 23, -53, 24, -53, 33, -50, 35, -45, 35, -43, 13, -42, 13, -40, 17, -40, 19, -22, 35, -21, 35, -21, 49, -18, 51, -18, 66, -16, 68, -11, 68, -7, 56, 6, 56, 6, 66, 9, 68, 14, 68, 18, 49, 18, 36, 29, 27, 31, 27, 39, 17, 39, 15, 41, 19, 41, 34, 44, 36, 48, 36, 53, 23, 62, 23, 66, 35, 72, 35, 75, 12, 77, 12, 77, -26, 74, -27, 74, -29, 69, -29, 68, -26, 66, -26, 65, -8, 65, -7, 45, -7, 44, -4, 42, -4, 37, -17, 37, -19, 20, -33, 16, -33, 13, -45, 12, -45, 15, -50, 17, -50, 17, -61, 14, -62, 14, -65, 10, -67, 10, -68, -13, -68)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite31"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite31/NPCObstacle"]
+polygon = PackedVector2Array(-54, -51.5, -57, -48.5, -58, -48.5, -58, -40.5, -59, -39.5, -62, -39.5, -62, -36.5, -65, -36.5, -65, 10.5, -59, 16.5, -58, 16.5, -58, 22.5, -62, 26.5, -62, 32.5, -56, 52.5, -56, 53.5, -49, 53.5, -47, 51.5, -47, 44.5, -42, 44.5, -42, 43.5, 36, 43.5, 43, 43.5, 43, 44.5, 47, 44.5, 49, 53.5, 56, 53.5, 61, 40.5, 62, 40.5, 62, 25.5, 58, 21.5, 58, 16.5, 63, 10.5, 65, 10.5, 65, -35.5, 61, -40.5, 59, -40.5, 59, -47.5, 54, -52.5, 54, -53.5, -54, -53.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite32"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite32/NPCObstacle"]
+polygon = PackedVector2Array(-54, -51.5, -57, -48.5, -58, -48.5, -58, -40.5, -59, -39.5, -62, -39.5, -62, -36.5, -65, -36.5, -65, 10.5, -59, 16.5, -58, 16.5, -58, 22.5, -62, 26.5, -62, 32.5, -56, 52.5, -56, 53.5, -49, 53.5, -47, 51.5, -47, 44.5, -42, 44.5, -42, 43.5, 36, 43.5, 43, 43.5, 43, 44.5, 47, 44.5, 49, 53.5, 56, 53.5, 61, 40.5, 62, 40.5, 62, 25.5, 58, 21.5, 58, 16.5, 63, 10.5, 65, 10.5, 65, -35.5, 61, -40.5, 59, -40.5, 59, -47.5, 54, -52.5, 54, -53.5, -54, -53.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite33"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite33/NPCObstacle"]
+polygon = PackedVector2Array(-54, -51.5, -57, -48.5, -58, -48.5, -58, -40.5, -59, -39.5, -62, -39.5, -62, -36.5, -65, -36.5, -65, 10.5, -59, 16.5, -58, 16.5, -58, 22.5, -62, 26.5, -62, 32.5, -56, 52.5, -56, 53.5, -49, 53.5, -47, 51.5, -47, 44.5, -42, 44.5, -42, 43.5, 36, 43.5, 43, 43.5, 43, 44.5, 47, 44.5, 49, 53.5, 56, 53.5, 61, 40.5, 62, 40.5, 62, 25.5, 58, 21.5, 58, 16.5, 63, 10.5, 65, 10.5, 65, -35.5, 61, -40.5, 59, -40.5, 59, -47.5, 54, -52.5, 54, -53.5, -54, -53.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite34"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite34/NPCObstacle"]
+polygon = PackedVector2Array(-54, -51.5, -57, -48.5, -58, -48.5, -58, -40.5, -59, -39.5, -62, -39.5, -62, -36.5, -65, -36.5, -65, 10.5, -59, 16.5, -58, 16.5, -58, 22.5, -62, 26.5, -62, 32.5, -56, 52.5, -56, 53.5, -49, 53.5, -47, 51.5, -47, 44.5, -42, 44.5, -42, 43.5, 36, 43.5, 43, 43.5, 43, 44.5, 47, 44.5, 49, 53.5, 56, 53.5, 61, 40.5, 62, 40.5, 62, 25.5, 58, 21.5, 58, 16.5, 63, 10.5, 65, 10.5, 65, -35.5, 61, -40.5, 59, -40.5, 59, -47.5, 54, -52.5, 54, -53.5, -54, -53.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite35"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite35/NPCObstacle"]
+polygon = PackedVector2Array(-54, -51.5, -57, -48.5, -58, -48.5, -58, -40.5, -59, -39.5, -62, -39.5, -62, -36.5, -65, -36.5, -65, 10.5, -59, 16.5, -58, 16.5, -58, 22.5, -62, 26.5, -62, 32.5, -56, 52.5, -56, 53.5, -49, 53.5, -47, 51.5, -47, 44.5, -42, 44.5, -42, 43.5, 36, 43.5, 43, 43.5, 43, 44.5, 47, 44.5, 49, 53.5, 56, 53.5, 61, 40.5, 62, 40.5, 62, 25.5, 58, 21.5, 58, 16.5, 63, 10.5, 65, 10.5, 65, -35.5, 61, -40.5, 59, -40.5, 59, -47.5, 54, -52.5, 54, -53.5, -54, -53.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite36"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite36/NPCObstacle"]
+polygon = PackedVector2Array(-54, -51.5, -57, -48.5, -58, -48.5, -58, -40.5, -59, -39.5, -62, -39.5, -62, -36.5, -65, -36.5, -65, 10.5, -59, 16.5, -58, 16.5, -58, 22.5, -62, 26.5, -62, 32.5, -56, 52.5, -56, 53.5, -49, 53.5, -47, 51.5, -47, 44.5, -42, 44.5, -42, 43.5, 36, 43.5, 43, 43.5, 43, 44.5, 47, 44.5, 49, 53.5, 56, 53.5, 61, 40.5, 62, 40.5, 62, 25.5, 58, 21.5, 58, 16.5, 63, 10.5, 65, 10.5, 65, -35.5, 61, -40.5, 59, -40.5, 59, -47.5, 54, -52.5, 54, -53.5, -54, -53.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite13"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite13/NPCObstacle"]
+polygon = PackedVector2Array(-26, -44, -32, -38, -32, -36, -39, -36, -43, -30, -45, -30, -45, 25, -42, 27, -42, 37, -36, 45, -36, 46, -28, 46, -23, 42, -23, 41, 21, 41, 27, 46, 34, 46, 41, 36, 42, 36, 44, 25, 45, 25, 43, -30, 43, -32, 39, -36, 31, -36, 31, -41, 26, -45, 26, -46, -26, -46)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite14"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite14/NPCObstacle"]
+polygon = PackedVector2Array(-26, -44, -32, -38, -32, -36, -39, -36, -43, -30, -45, -30, -45, 25, -42, 27, -42, 37, -36, 45, -36, 46, -28, 46, -23, 42, -23, 41, 21, 41, 27, 46, 34, 46, 41, 36, 42, 36, 44, 25, 45, 25, 43, -30, 43, -32, 39, -36, 31, -36, 31, -41, 26, -45, 26, -46, -26, -46)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite15"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite15/NPCObstacle"]
+polygon = PackedVector2Array(-41.5, -39.5, -45.5, -36.5, -45.5, 17.5, -42.5, 19.5, -42.5, 32.5, -36.5, 38.5, -36.5, 41.5, -25.5, 41.5, -22.5, 37.5, -22.5, 36.5, 22.5, 36.5, 25.5, 41.5, 36.5, 41.5, 41.5, 32.5, 42.5, 32.5, 43.5, 18.5, 45.5, 18.5, 45.5, -35.5, 40.5, -40.5, 40.5, -41.5, 29.5, -41.5, 24.5, -36.5, 24.5, -31.5, -22.5, -31.5, -29.5, -39.5, -29.5, -41.5, -41.5, -41.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite16"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite16/NPCObstacle"]
+polygon = PackedVector2Array(-41.5, -39.5, -45.5, -36.5, -45.5, 17.5, -42.5, 19.5, -42.5, 32.5, -36.5, 38.5, -36.5, 41.5, -25.5, 41.5, -22.5, 37.5, -22.5, 36.5, 22.5, 36.5, 25.5, 41.5, 36.5, 41.5, 41.5, 32.5, 42.5, 32.5, 43.5, 18.5, 45.5, 18.5, 45.5, -35.5, 40.5, -40.5, 40.5, -41.5, 29.5, -41.5, 24.5, -36.5, 24.5, -31.5, -22.5, -31.5, -29.5, -39.5, -29.5, -41.5, -41.5, -41.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite17"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite17/NPCObstacle"]
+polygon = PackedVector2Array(-41.5, -39.5, -45.5, -36.5, -45.5, 17.5, -42.5, 19.5, -42.5, 32.5, -36.5, 38.5, -36.5, 41.5, -25.5, 41.5, -22.5, 37.5, -22.5, 36.5, 22.5, 36.5, 25.5, 41.5, 36.5, 41.5, 41.5, 32.5, 42.5, 32.5, 43.5, 18.5, 45.5, 18.5, 45.5, -35.5, 40.5, -40.5, 40.5, -41.5, 29.5, -41.5, 24.5, -36.5, 24.5, -31.5, -22.5, -31.5, -29.5, -39.5, -29.5, -41.5, -41.5, -41.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite19"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite19/NPCObstacle"]
+polygon = PackedVector2Array(-13.5, -40, -14.5, -39, -22.5, -39, -27.5, -33, -31.5, -33, -41.5, -20, -43.5, -20, -44.5, -12, -46.5, -12, -46.5, 13, -43.5, 14, -43.5, 21, -31.5, 33, -31.5, 34, -13.5, 40, -13.5, 42, 13.5, 40, 21.5, 40, 35.5, 28, 37.5, 28, 42.5, 20, 43.5, 20, 44.5, 13, 46.5, 13, 46.5, -12, 43.5, -12, 43.5, -19, 40.5, -21, 40.5, -24, 33.5, -29, 33.5, -31, 22.5, -37, 22.5, -39, 13.5, -40, 13.5, -42, -13.5, -42)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite20"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite20/NPCObstacle"]
+polygon = PackedVector2Array(-14.5, -39.5, -23.5, -36.5, -27.5, -36.5, -28.5, -33.5, -31.5, -33.5, -43.5, -19.5, -44.5, -19.5, -44.5, -13.5, -46.5, -13.5, -46.5, 12.5, -41.5, 19.5, -41.5, 23.5, -34.5, 28.5, -34.5, 30.5, -22.5, 38.5, -14.5, 38.5, -14.5, 41.5, 13.5, 41.5, 14.5, 38.5, 22.5, 38.5, 34.5, 28.5, 36.5, 28.5, 42.5, 18.5, 43.5, 18.5, 44.5, 11.5, 46.5, 11.5, 46.5, -13.5, 44.5, -13.5, 44.5, -19.5, 32.5, -31.5, 32.5, -32.5, 14.5, -39.5, 14.5, -41.5, -14.5, -41.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite18"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite18/NPCObstacle"]
+polygon = PackedVector2Array(-12.5, -40.5, -14.5, -39.5, -21.5, -39.5, -28.5, -34.5, -30.5, -34.5, -37.5, -25.5, -39.5, -25.5, -44.5, -13.5, -45.5, -13.5, -45.5, 12.5, -43.5, 13.5, -42.5, 13.5, -42.5, 19.5, -37.5, 25.5, -37.5, 27.5, -26.5, 35.5, -26.5, 36.5, -10.5, 42.5, 12.5, 42.5, 31.5, 31.5, 33.5, 31.5, 38.5, 24.5, 40.5, 24.5, 44.5, 12.5, 45.5, 12.5, 43.5, -14.5, 43.5, -20.5, 40.5, -20.5, 30.5, -33.5, 30.5, -34.5, 13.5, -40.5, 13.5, -42.5, -12.5, -42.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite21"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite21/NPCObstacle"]
+polygon = PackedVector2Array(-14.5, -40, -21.5, -40, -27.5, -35, -30.5, -35, -42.5, -20, -43.5, -20, -43.5, -14, -45.5, -14, -45.5, 12, -36.5, 27, -36.5, 29, -22.5, 38, -15.5, 38, -14.5, 41, 13.5, 41, 14.5, 40, 14.5, 38, 22.5, 38, 27.5, 33, 30.5, 33, 38.5, 23, 40.5, 23, 44.5, 12, 45.5, 12, 45.5, -15, 40.5, -21, 40.5, -25, 30.5, -34, 30.5, -35, 22.5, -38, 22.5, -40, -14.5, -41)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite06"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite06/NPCObstacle"]
+polygon = PackedVector2Array(-37.5, -56, -40.5, -53, -40.5, 22, -37.5, 26, -37.5, 49, -34.5, 49, -34.5, 55, -30.5, 58, 32.5, 58, 36.5, 54, 38.5, 54, 39.5, 49, 40.5, 49, 40.5, 26, 31.5, 21, 30.5, 21, 30.5, -32, 35.5, -36, 35.5, -53, 30.5, -56, 30.5, -58, -37.5, -58)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite39"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite39/NPCObstacle"]
+polygon = PackedVector2Array(3, -53.5, 1, -51.5, -2, -51.5, -8, -40.5, -8, -37.5, -23, -47.5, -28, -47.5, -32, -44.5, -32, -37.5, -27, -34.5, -27, -32.5, -45, -32.5, -47, -29.5, -49, -29.5, -49, -23.5, -38, -17.5, -38, -14.5, -46, -10.5, -48, -10.5, -51, -5.5, -52, -5.5, -52, 0.5, -44, 1.5, -39, 1.5, -40, 4.5, -40, 9.5, -45, 14.5, -45, 26.5, -37, 25.5, -35, 25.5, -27, 40.5, -27, 42.5, -18, 49.5, -18, 51.5, -12, 51.5, -11, 54.5, 10, 54.5, 11, 53.5, 11, 51.5, 18, 49.5, 20, 49.5, 26, 41.5, 28, 41.5, 31, 36.5, 31, 29.5, 34, 28.5, 34, 25.5, 41, 25.5, 44, 22.5, 45, 22.5, 45, 13.5, 38, 3.5, 38, 0.5, 44, 2.5, 44, 3.5, 52, 2.5, 52, -6.5, 32, -20.5, 30, -20.5, 46, -32.5, 46, -37.5, 43, -39.5, 24, -39.5, 17, -34.5, 15, -34.5, 12, -37.5, 11, -37.5, 10, -51.5, 10, -53.5, 3, -54.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite41"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite41/NPCObstacle"]
+polygon = PackedVector2Array(24.5, -62.5, 10.5, -51.5, 10.5, -50.5, 3.5, -58.5, -0.5, -58.5, -1.5, -57.5, -1.5, -51.5, -4.5, -50.5, -4.5, -48.5, -21.5, -62.5, -33.5, -62.5, -33.5, -54.5, -24.5, -42.5, -24.5, -39.5, -39.5, -39.5, -43.5, -39.5, -44.5, -38.5, -44.5, -35.5, -48.5, -34.5, -48.5, -31.5, -36.5, -26.5, -36.5, -24.5, -49.5, -15.5, -51.5, -15.5, -51.5, -9.5, -48.5, -7.5, -48.5, -6.5, -36.5, -6.5, -33.5, -3.5, -32.5, -3.5, -37.5, 6.5, -37.5, 14.5, -40.5, 16.5, -40.5, 25.5, -37.5, 28.5, -34.5, 28.5, -29.5, 42.5, -29.5, 47.5, -26.5, 49.5, -26.5, 51.5, -18.5, 58.5, -18.5, 59.5, -10.5, 62.5, -10.5, 63.5, 11.5, 63.5, 19.5, 58.5, 21.5, 58.5, 29.5, 48.5, 30.5, 48.5, 36.5, 31.5, 36.5, 28.5, 41.5, 28.5, 43.5, 24.5, 44.5, 24.5, 43.5, 12.5, 43.5, 10.5, 49.5, 8.5, 51.5, 8.5, 50.5, -0.5, 50.5, -3.5, 44.5, -10.5, 44.5, -12.5, 35.5, -18.5, 34.5, -18.5, 37.5, -24.5, 37.5, -25.5, 51.5, -31.5, 51.5, -35.5, 44.5, -39.5, 44.5, -41.5, 28.5, -39.5, 25.5, -39.5, 32.5, -54.5, 32.5, -59.5, 30.5, -62.5, 30.5, -63.5, 24.5, -63.5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite64"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite64/NPCObstacle"]
+polygon = PackedVector2Array(-13, -52, -23, -47, -26, -47, -34, -36, -35, -36, -33, -19, -33, 35, -28, 44, -28, 45, -12, 52, -12, 53, 13, 53, 24, 45, 27, 45, 29, 40, 31, 40, 32, 31, 33, 31, 34, -20, 35, -20, 35, -36, 24, -47, 24, -48, 13, -51, 13, -53, -13, -53)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite65"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite65/NPCObstacle"]
+polygon = PackedVector2Array(-13, -52, -23, -47, -26, -47, -34, -36, -35, -36, -33, -19, -33, 35, -28, 44, -28, 45, -12, 52, -12, 53, 13, 53, 24, 45, 27, 45, 29, 40, 31, 40, 32, 31, 33, 31, 34, -20, 35, -20, 35, -36, 24, -47, 24, -48, 13, -51, 13, -53, -13, -53)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite66"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite66/NPCObstacle"]
+polygon = PackedVector2Array(-13, -52, -23, -47, -26, -47, -34, -36, -35, -36, -33, -19, -33, 35, -28, 44, -28, 45, -12, 52, -12, 53, 13, 53, 24, 45, 27, 45, 29, 40, 31, 40, 32, 31, 33, 31, 34, -20, 35, -20, 35, -36, 24, -47, 24, -48, 13, -51, 13, -53, -13, -53)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite49"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite49/NPCObstacle"]
+polygon = PackedVector2Array(-2, -50, -5, -50, -9, -43, -10, -43, -12, -32, -13, -32, -11, -28, -11, -16, -16, -26, -16, -28, -21, -30, -21, -31, -26, -31, -32, -20, -33, -20, -33, -8, -24, 5, -23, 5, -27, 11, -29, 11, -29, 24, -25, 31, -25, 37, -16, 47, -16, 48, -8, 52, 12, 52, 24, 43, 25, 43, 31, 23, 33, 23, 33, 12, 25, 3, 24, 3, 33, -7, 33, -21, 27, -26, 27, -27, 22, -25, 20, -25, 19, -21, 17, -21, 17, -41, 10, -48, 10, -50, 7, -50, 7, -52, -2, -52)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/Sprite52"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/Sprite52/NPCObstacle"]
+polygon = PackedVector2Array(-2, -50, -5, -50, -9, -43, -10, -43, -12, -32, -13, -32, -11, -28, -11, -16, -16, -26, -16, -28, -21, -30, -21, -31, -26, -31, -32, -20, -33, -20, -33, -8, -24, 5, -23, 5, -27, 11, -29, 11, -29, 24, -25, 31, -25, 37, -16, 47, -16, 48, -8, 52, 12, 52, 24, 43, 25, 43, 31, 23, 33, 23, 33, 12, 25, 3, 24, 3, 33, -7, 33, -21, 27, -26, 27, -27, 22, -25, 20, -25, 19, -21, 17, -21, 17, -41, 10, -48, 10, -50, 7, -50, 7, -52, -2, -52)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-78, -66, -111, -64, -112, -64, -110, 53, -110, 54, -109, 53, -107, 53, -100, 60, -96, 60, -90, 54, -90, 53, 62, 53, 62, 56, 65, 54, 65, 53, 88, 53, 98, 53, 98, 54, 92, 54, 94, 60, 100, 60, 111, 52, 112, 52, 111, -64, 111, -65, -78, -67)
+
+[node name="Forma2" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-103, 58, -103, 59, -102, 59, -102, 58)
+
+[node name="Forma3" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(65, 55, 69, 55, 69, 54, 65, 54)
+
+[node name="Forma4" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(81, -66, 81, -67, 79, -67, 79, -66)
+
+[node name="Forma5" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-14, -66, -14, -67, -16, -67, -16, -66)
+
+[node name="Forma6" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-57, -66, -56, -66, -56, -67, -57, -67)
+
+[node name="Forma7" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(19, -66, 21, -66, 21, -67, 19, -67)
+
+[node name="Forma8" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(30, -66, 31, -66, 31, -67, 30, -67)
+
+[node name="Forma9" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(74, -66, 76, -66, 76, -67, 74, -67)
+
+[node name="Forma10" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-74, 55, -72, 55, -72, 54, -74, 54)
+
+[node name="Forma11" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-55, 55, -54, 55, -54, 56, -53, 56, -53, 55, -52, 55, -52, 54, -55, 54)
+
+[node name="Forma12" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-47, 55, -46, 55, -46, 54, -47, 54)
+
+[node name="Forma13" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-20, 55, -18, 55, -18, 54, -20, 54)
+
+[node name="Forma14" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(36, 55, 37, 55, 37, 54, 36, 54)
+
+[node name="Forma15" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(46, 55, 47, 55, 47, 54, 46, 54)
+
+[node name="Forma16" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(90, 55, 89, 55, 89, 56, 91, 56, 91, 54, 90, 54)
+
+[node name="Forma17" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(102, 60, 103, 60, 103, 59, 102, 59)
+
+[node name="Forma18" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)/NPCObstacle"]
+polygon = PackedVector2Array(-94, 61, -93, 61, -93, 60, -94, 60)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-78, -66, -111, -64, -112, -64, -110, 53, -110, 54, -109, 53, -107, 53, -100, 60, -96, 60, -90, 54, -90, 53, 62, 53, 62, 56, 65, 54, 65, 53, 88, 53, 98, 53, 98, 54, 92, 54, 94, 60, 100, 60, 111, 52, 112, 52, 111, -64, 111, -65, -78, -67)
+
+[node name="Forma2" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-103, 58, -103, 59, -102, 59, -102, 58)
+
+[node name="Forma3" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(65, 55, 69, 55, 69, 54, 65, 54)
+
+[node name="Forma4" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(81, -66, 81, -67, 79, -67, 79, -66)
+
+[node name="Forma5" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-14, -66, -14, -67, -16, -67, -16, -66)
+
+[node name="Forma6" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-57, -66, -56, -66, -56, -67, -57, -67)
+
+[node name="Forma7" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(19, -66, 21, -66, 21, -67, 19, -67)
+
+[node name="Forma8" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(30, -66, 31, -66, 31, -67, 30, -67)
+
+[node name="Forma9" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(74, -66, 76, -66, 76, -67, 74, -67)
+
+[node name="Forma10" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-74, 55, -72, 55, -72, 54, -74, 54)
+
+[node name="Forma11" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-55, 55, -54, 55, -54, 56, -53, 56, -53, 55, -52, 55, -52, 54, -55, 54)
+
+[node name="Forma12" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-47, 55, -46, 55, -46, 54, -47, 54)
+
+[node name="Forma13" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-20, 55, -18, 55, -18, 54, -20, 54)
+
+[node name="Forma14" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(36, 55, 37, 55, 37, 54, 36, 54)
+
+[node name="Forma15" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(46, 55, 47, 55, 47, 54, 46, 54)
+
+[node name="Forma16" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(90, 55, 89, 55, 89, 56, 91, 56, 91, 54, 90, 54)
+
+[node name="Forma17" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(102, 60, 103, 60, 103, 59, 102, 59)
+
+[node name="Forma18" type="CollisionPolygon2D" parent="HALL_QUEBRADO/MesaCinuca256x256(1)2/NPCObstacle"]
+polygon = PackedVector2Array(-94, 61, -93, 61, -93, 60, -94, 60)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="HALL_QUEBRADO/PixelArtSmall(1)"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="HALL_QUEBRADO/PixelArtSmall(1)/NPCObstacle"]
+polygon = PackedVector2Array(-249.5, -561, -250.5, -560, -257.5, -560, -258.5, -559, -258.5, -552, -265.5, -552, -266.5, -547, -266.5, -544, -273.5, -543, -274.5, -543, -274.5, -82, -282.5, -81, -282.5, -71, -290.5, -71, -290.5, -25, -288.5, -24, -282.5, -24, -282.5, 2, -274.5, 3, -274.5, 442, -266.5, 442, -265.5, 443, -265.5, 452, -259.5, 453, -258.5, 453, -257.5, 461, -249.5, 461, -249.5, 470, -244.5, 471, -234.5, 471, -234.5, 496, -233.5, 497, -225.5, 497, -224.5, 505, -224.5, 506, -181.5, 506, -180.5, 505, -180.5, 498, -171.5, 496, -171.5, 471, -0.5, 471, -0.5, 470, 118.5, 471, 171.5, 471, 171.5, 496, 172.5, 497, 180.5, 497, 182.5, 505, 182.5, 506, 224.5, 505, 225.5, 505, 225.5, 497, 232.5, 497, 234.5, 493, 234.5, 471, 247.5, 471, 248.5, 471, 249.5, 470, 249.5, 461, 257.5, 460, 258.5, 460, 258.5, 452, 265.5, 452, 267.5, 442, 274.5, 442, 274.5, 3, 275.5, 2, 282.5, 2, 282.5, -24, 289.5, -25, 290.5, -25, 290.5, -71, 282.5, -71, 282.5, -81, 274.5, -82, 274.5, -544, 266.5, -544, 266.5, -551, 265.5, -552, 258.5, -552, 257.5, -559, 257.5, -560, 249.5, -560, 249.5, -568, -249.5, -568)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Pedaco2"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Pedaco2/NPCObstacle"]
+polygon = PackedVector2Array(-5, -8, -9, -7, -10, -7, -7, 3, -7, 5, 2, 8, 5, 8, 8, -1, 9, -1, 9, -6, -5, -9)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Pedaco3"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Pedaco3/NPCObstacle"]
+polygon = PackedVector2Array(-5, -8, -9, -7, -10, -7, -7, 3, -7, 5, 2, 8, 5, 8, 8, -1, 9, -1, 9, -6, -5, -9)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Pedaco4"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Pedaco4/NPCObstacle"]
+polygon = PackedVector2Array(-5, -8, -9, -7, -10, -7, -7, 3, -7, 5, 2, 8, 5, 8, 8, -1, 9, -1, 9, -6, -5, -9)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Pedaco5"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Pedaco5/NPCObstacle"]
+polygon = PackedVector2Array(-5, -8, -9, -7, -10, -7, -7, 3, -7, 5, 2, 8, 5, 8, 8, -1, 9, -1, 9, -6, -5, -9)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/pedaco1/Sprite2D"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/pedaco1/Sprite2D/NPCObstacle"]
+polygon = PackedVector2Array(-2, -4, -7, 1, -7, 5, 2, 7, 4, 7, 6, 1, 7, 1, 7, -4, -2, -5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/pedaco5/Sprite2D"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/pedaco5/Sprite2D/NPCObstacle"]
+polygon = PackedVector2Array(-2, -4, -7, 1, -7, 5, 2, 7, 4, 7, 6, 1, 7, 1, 7, -4, -2, -5)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/pedaco2/Sprite2D"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/pedaco2/Sprite2D/NPCObstacle"]
+polygon = PackedVector2Array(-5, -8, -9, -7, -10, -7, -7, 3, -7, 5, 2, 8, 5, 8, 8, -1, 9, -1, 9, -6, -5, -9)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/pedaco4/Sprite2D"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/pedaco4/Sprite2D/NPCObstacle"]
+polygon = PackedVector2Array(-5, -8, -9, -7, -10, -7, -7, 3, -7, 5, 2, 8, 5, 8, 8, -1, 9, -1, 9, -6, -5, -9)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/pedaco3/Sprite2D"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/pedaco3/Sprite2D/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/Pedaco3"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/Pedaco3/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/Pedaco4"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/Pedaco4/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/Pedaco5"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/Pedaco5/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/Pedaco6"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/Pedaco6/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/Pedaco7"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/Pedaco7/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
+[node name="NPCObstacle" type="StaticBody2D" parent="Coletaveis/Pedaco8"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="Forma1" type="CollisionPolygon2D" parent="Coletaveis/Pedaco8/NPCObstacle"]
+polygon = PackedVector2Array(3, -7, -8, 1, -9, 1, -8, 5, -8, 6, 0, 9, 2, 9, 7, -4, 8, -4, 7, -7, 7, -8, 3, -8)
+
 [connection signal="fogo_apagou" from="Perigos/Fogo3" to="QuestController" method="_on_fogo_3_fogo_apagou"]
 [connection signal="fogo_apagou" from="Perigos/Fogo5" to="QuestController" method="_on_fogo_5_fogo_apagou"]
 [connection signal="fogo_apagou" from="Perigos/Fogo6" to="QuestController" method="_on_fogo_6_fogo_apagou"]
@@ -895,3 +1444,64 @@ texture = ExtResource("8_vkln7")
 [connection signal="pensamento_extintor_iniciado" from="QuestController" to="Coletaveis/Extintor2" method="_iniciar_indicador"]
 
 [connection signal="pensamento_extintor_iniciado" from="QuestController" to="Coletaveis/Extintor3" method="_iniciar_indicador"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC1/Line2D" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC1/Line2D2" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC2/Line2D" to="NPCs/NPC2" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC2/Line2D2" to="NPCs/NPC2" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC3/Line2D" to="NPCs/NPC3" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC3/Line2D2" to="NPCs/NPC3" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC4/Line2D" to="NPCs/NPC4" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC4/Line2D2" to="NPCs/NPC4" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC5/Line2D" to="NPCs/NPC5" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC5/Line2D2" to="NPCs/NPC5" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC6/Line2D" to="NPCs/NPC6" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC6/Line2D2" to="NPCs/NPC6" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC7/Line2D" to="NPCs/NPC7" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC7/Line2D2" to="NPCs/NPC7" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC8/Line2D" to="NPCs/NPC8" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC8/Line2D2" to="NPCs/NPC8" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC9/Line2D" to="NPCs/NPC9" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC9/Line2D2" to="NPCs/NPC9" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC10/Line2D" to="NPCs/NPC10" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC10/Line2D2" to="NPCs/NPC10" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC11/Line2D" to="NPCs/NPC11" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC11/Line2D2" to="NPCs/NPC11" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC12/Line2D" to="NPCs/NPC12" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC12/Line2D2" to="NPCs/NPC12" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="npc_saiu" from="NPCs/NPC1" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC2" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC3" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC4" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC5" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC6" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC7" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC8" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC9" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC10" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC11" to="QuestController" method="_on_npc_saiu"]
+[connection signal="npc_saiu" from="NPCs/NPC12" to="QuestController" method="_on_npc_saiu"]

@@ -24,8 +24,6 @@ var _gerente: Node
 func _ready() -> void:
 	monitoring = true
 	monitorable = true
-	area_entered.connect(_on_area_entered)
-	area_exited.connect(_on_area_exited)
 	_limpar_mensagem()
 	call_deferred("_obter_gerente")
 

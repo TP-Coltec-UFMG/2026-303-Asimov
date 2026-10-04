@@ -35,8 +35,6 @@ func _ready() -> void:
 	dados_alterados["id"] = id.text
 	dados_alterados["acesso"] = "FORTE"
 	id_foi_alterado = not id.text.is_empty()
-	if not id.text_changed.is_connected(_id_alterado):
-		id.text_changed.connect(_id_alterado)
 
 
 func abrir() -> void:
@@ -84,13 +82,11 @@ func _aplicar_traducao() -> void:
 	var icone_codigo: Texture2D = load(SPRITE_ABA_CODIGO_EN if ingles else SPRITE_ABA_CODIGO_PT)
 	var textura_tabela: Texture2D = load(SPRITE_TABELA_EN if ingles else SPRITE_TABELA_PT)
 
-	# Abas "Banco de Dados" (Button2) e "Código do Cartão" (Button4) nas duas telas
 	$Codigo/Button2.icon = icone_banco
 	$Codigo/Button4.icon = icone_codigo
 	$Banco_de_Dados/Button2.icon = icone_banco
 	$Banco_de_Dados/Button4.icon = icone_codigo
 
-	# Tabela do banco de dados ("Nível de Acesso")
 	$Banco_de_Dados/Sprite2D.texture = textura_tabela
 
 

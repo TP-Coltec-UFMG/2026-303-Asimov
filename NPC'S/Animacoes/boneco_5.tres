@@ -1,0 +1,101 @@
+[gd_resource type="SpriteFrames" load_steps=23 format=3]
+
+[ext_resource type="Texture2D" path="res://NPC'S/NPC/boneco_5.png" id="1"]
+
+[sub_resource type="AtlasTexture" id="Quadro1"]
+atlas = ExtResource("1")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro2"]
+atlas = ExtResource("1")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro4"]
+atlas = ExtResource("1")
+region = Rect2(48, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro49"]
+atlas = ExtResource("1")
+region = Rect2(0, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro50"]
+atlas = ExtResource("1")
+region = Rect2(16, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro51"]
+atlas = ExtResource("1")
+region = Rect2(32, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro52"]
+atlas = ExtResource("1")
+region = Rect2(48, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro53"]
+atlas = ExtResource("1")
+region = Rect2(64, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro54"]
+atlas = ExtResource("1")
+region = Rect2(80, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro55"]
+atlas = ExtResource("1")
+region = Rect2(96, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro56"]
+atlas = ExtResource("1")
+region = Rect2(112, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro57"]
+atlas = ExtResource("1")
+region = Rect2(128, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro58"]
+atlas = ExtResource("1")
+region = Rect2(144, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro59"]
+atlas = ExtResource("1")
+region = Rect2(160, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro60"]
+atlas = ExtResource("1")
+region = Rect2(176, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro67"]
+atlas = ExtResource("1")
+region = Rect2(288, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro68"]
+atlas = ExtResource("1")
+region = Rect2(304, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro69"]
+atlas = ExtResource("1")
+region = Rect2(320, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro70"]
+atlas = ExtResource("1")
+region = Rect2(336, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro71"]
+atlas = ExtResource("1")
+region = Rect2(352, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro72"]
+atlas = ExtResource("1")
+region = Rect2(368, 64, 16, 32)
+
+[resource]
+resource_local_to_scene = true
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro1")}], "loop": false, "name": &"idle_side", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro2")}], "loop": false, "name": &"idle_up", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro4")}], "loop": false, "name": &"idle_down", "speed": 1.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro49")}, {"duration": 1.0, "texture": SubResource("Quadro50")}, {"duration": 1.0, "texture": SubResource("Quadro51")}, {"duration": 1.0, "texture": SubResource("Quadro52")}, {"duration": 1.0, "texture": SubResource("Quadro53")}, {"duration": 1.0, "texture": SubResource("Quadro54")}], "loop": true, "name": &"walk_side", "speed": 8.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro55")}, {"duration": 1.0, "texture": SubResource("Quadro56")}, {"duration": 1.0, "texture": SubResource("Quadro57")}, {"duration": 1.0, "texture": SubResource("Quadro58")}, {"duration": 1.0, "texture": SubResource("Quadro59")}, {"duration": 1.0, "texture": SubResource("Quadro60")}], "loop": true, "name": &"walk_up", "speed": 8.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro67")}, {"duration": 1.0, "texture": SubResource("Quadro68")}, {"duration": 1.0, "texture": SubResource("Quadro69")}, {"duration": 1.0, "texture": SubResource("Quadro70")}, {"duration": 1.0, "texture": SubResource("Quadro71")}, {"duration": 1.0, "texture": SubResource("Quadro72")}], "loop": true, "name": &"walk_down", "speed": 8.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro49")}, {"duration": 1.0, "texture": SubResource("Quadro50")}, {"duration": 1.0, "texture": SubResource("Quadro51")}, {"duration": 1.0, "texture": SubResource("Quadro52")}, {"duration": 1.0, "texture": SubResource("Quadro53")}, {"duration": 1.0, "texture": SubResource("Quadro54")}], "loop": true, "name": &"run_side", "speed": 14.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro55")}, {"duration": 1.0, "texture": SubResource("Quadro56")}, {"duration": 1.0, "texture": SubResource("Quadro57")}, {"duration": 1.0, "texture": SubResource("Quadro58")}, {"duration": 1.0, "texture": SubResource("Quadro59")}, {"duration": 1.0, "texture": SubResource("Quadro60")}], "loop": true, "name": &"run_up", "speed": 14.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Quadro67")}, {"duration": 1.0, "texture": SubResource("Quadro68")}, {"duration": 1.0, "texture": SubResource("Quadro69")}, {"duration": 1.0, "texture": SubResource("Quadro70")}, {"duration": 1.0, "texture": SubResource("Quadro71")}, {"duration": 1.0, "texture": SubResource("Quadro72")}], "loop": true, "name": &"run_down", "speed": 14.0}
+]

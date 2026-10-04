@@ -30,12 +30,11 @@ const RETREAT_DISTANCE: float = 58.0
 const SHOT_INTERVAL: float = 1.05
 const SHOT_TELEGRAPH_DURATION: float = 0.32
 const MAX_HEALTH: float = 75.0
-const MISSION_CHECK_INTERVAL: float = 0.25
 const ROOM_BOUNDS: Rect2 = Rect2(-205.0, -76.0, 470.0, 274.0)
 const DRONE_PROJECTILE := preload("res://Objects/drone_projectile.tscn")
 const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
 
-@export var patrol_points: Array[Vector2] = [
+@export var pontos_patrulha: Array[Vector2] = [
 	Vector2(-164, -48),
 	Vector2(-112, 8),
 	Vector2(-15, 10),
@@ -47,115 +46,111 @@ const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd"
 	Vector2(-82, 126),
 	Vector2(-137, 63)
 ]
-@export var persistent_mission_state: bool = true
+@export var salvar_estado_missao: bool = true
 
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var vision_cone: Polygon2D = $VisionCone
-@onready var alert_light: PointLight2D = $AlertLight
-@onready var alert_sfx: AudioStreamPlayer2D = $AlertSfx
-@onready var shot_sfx: AudioStreamPlayer2D = $ShotSfx
-@onready var explosion_sfx: AudioStreamPlayer2D = $ExplosionSfx
-@onready var hit_sparks: CPUParticles2D = $HitSparks
-@onready var shot_warning: Line2D = $ShotWarning
-@onready var muzzle_flash: Node2D = $MuzzleFlash
-@onready var health_bar: Node2D = $HealthBar
-@onready var health_fill: ColorRect = $HealthBar/Fill
-@onready var explosion_flash: Polygon2D = $ExplosionVisuals/Flash
-@onready var explosion_wave: Line2D = $ExplosionVisuals/Shockwave
+@onready var visao: RayCast2D = $Visao
+@onready var sprite_animada: AnimatedSprite2D = $AnimatedSprite2D
+@onready var cone_visao: Polygon2D = $VisionCone
+@onready var luz_alerta: PointLight2D = $AlertLight
+@onready var som_alerta: AudioStreamPlayer2D = $AlertSfx
+@onready var som_tiro: AudioStreamPlayer2D = $ShotSfx
+@onready var som_explosao: AudioStreamPlayer2D = $ExplosionSfx
+@onready var faiscas_dano: CPUParticles2D = $HitSparks
+@onready var aviso_tiro: Line2D = $ShotWarning
+@onready var clarao_tiro: Node2D = $MuzzleFlash
+@onready var barra_vida: Node2D = $HealthBar
+@onready var preenchimento_vida: ColorRect = $HealthBar/Fill
+@onready var clarao_explosao: Polygon2D = $ExplosionVisuals/Flash
+@onready var onda_explosao: Line2D = $ExplosionVisuals/Shockwave
 
-var drone_state: DroneState = DroneState.DORMANT
-var current_player: Player
-var patrol_index: int = 0
-var patrol_direction: int = 1
-var facing_direction: Vector2 = Vector2.RIGHT
-var desired_velocity: Vector2 = Vector2.ZERO
-var flight_phase: float = 0.0
-var state_time: float = 0.0
-var lost_sight_time: float = 0.0
-var mission_check_time: float = 0.0
-var shot_time: float = 0.0
-var current_health: float = MAX_HEALTH
-var destroyed: bool = false
-var death_animation_running: bool = false
-var strafe_direction: float = 1.0
-var damage_tween: Tween
-var shot_charge_remaining: float = 0.0
-var muzzle_tween: Tween
-var explosion_tween: Tween
-var max_health: float = MAX_HEALTH
-var speed_multiplier: float = 1.0
-var detection_range: float = DETECTION_RANGE
-var alert_duration: float = ALERT_DURATION
-var shot_interval: float = SHOT_INTERVAL
-var shot_telegraph_duration: float = SHOT_TELEGRAPH_DURATION
-var projectile_speed: float = 145.0
-var projectile_damage: float = 18.0
+var estado_drone: DroneState = DroneState.DORMANT
+var jogador_atual: Player
+var indice_patrulha: int = 0
+var sentido_patrulha: int = 1
+var direcao_visao: Vector2 = Vector2.RIGHT
+var velocidade_desejada: Vector2 = Vector2.ZERO
+var fase_voo: float = 0.0
+var tempo_estado: float = 0.0
+var tempo_sem_visao: float = 0.0
+var tempo_tiro: float = 0.0
+var vida_atual: float = MAX_HEALTH
+var destruido: bool = false
+var animacao_morte_ativa: bool = false
+var sentido_lateral: float = 1.0
+var tween_dano: Tween
+var tempo_preparo_tiro: float = 0.0
+var tween_disparo: Tween
+var tween_explosao: Tween
+var vida_maxima: float = MAX_HEALTH
+var multiplicador_velocidade: float = 1.0
+var alcance_deteccao: float = DETECTION_RANGE
+var duracao_alerta: float = ALERT_DURATION
+var intervalo_tiro: float = SHOT_INTERVAL
+var duracao_aviso_tiro: float = SHOT_TELEGRAPH_DURATION
+var velocidade_projetil: float = 145.0
+var dano_projetil: float = 18.0
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
-	add_to_group(&"security_drones")
-	_apply_difficulty_profile()
-	patrol_index = randi_range(0, maxi(0, patrol_points.size() - 1))
-	patrol_direction = 1 if randf() >= 0.5 else -1
-	strafe_direction = 1.0 if randf() >= 0.5 else -1.0
-	flight_phase = randf_range(0.0, TAU)
-	_set_dormant()
+	_aplicar_dificuldade()
+	indice_patrulha = randi_range(0, maxi(0, pontos_patrulha.size() - 1))
+	sentido_patrulha = 1 if randf() >= 0.5 else -1
+	sentido_lateral = 1.0 if randf() >= 0.5 else -1.0
+	fase_voo = randf_range(0.0, TAU)
+	_desativar()
+	_atualizar_estado_missao.call_deferred()
 
 
-func _apply_difficulty_profile() -> void:
+func _aplicar_dificuldade() -> void:
 	var profile := DIFFICULTY_SETTINGS.drone_profile()
-	max_health = float(profile.get("health", MAX_HEALTH))
-	speed_multiplier = float(profile.get("speed_multiplier", 1.0))
-	detection_range = float(profile.get("detection_range", DETECTION_RANGE))
-	alert_duration = float(profile.get("alert_duration", ALERT_DURATION))
-	shot_interval = float(profile.get("shot_interval", SHOT_INTERVAL))
-	shot_telegraph_duration = float(profile.get("shot_telegraph", SHOT_TELEGRAPH_DURATION))
-	projectile_speed = float(profile.get("projectile_speed", 145.0))
-	projectile_damage = float(profile.get("projectile_damage", 18.0))
-	current_health = max_health
+	vida_maxima = float(profile.get("health", MAX_HEALTH))
+	multiplicador_velocidade = float(profile.get("speed_multiplier", 1.0))
+	alcance_deteccao = float(profile.get("detection_range", DETECTION_RANGE))
+	duracao_alerta = float(profile.get("alert_duration", ALERT_DURATION))
+	intervalo_tiro = float(profile.get("shot_interval", SHOT_INTERVAL))
+	duracao_aviso_tiro = float(profile.get("shot_telegraph", SHOT_TELEGRAPH_DURATION))
+	velocidade_projetil = float(profile.get("projectile_speed", 145.0))
+	dano_projetil = float(profile.get("projectile_damage", 18.0))
+	vida_atual = vida_maxima
 
 
 func _physics_process(delta: float) -> void:
-	mission_check_time -= delta
-	if mission_check_time <= 0.0:
-		mission_check_time = MISSION_CHECK_INTERVAL
-		_refresh_mission_state()
-	if drone_state == DroneState.DORMANT or drone_state == DroneState.DESTROYED:
+	if estado_drone == DroneState.DORMANT or estado_drone == DroneState.DESTROYED:
 		return
-	shot_time = maxf(0.0, shot_time - delta)
-	if not _player_can_be_chased():
-		desired_velocity = Vector2.ZERO
-		velocity = velocity.move_toward(Vector2.ZERO, BRAKE_ACCELERATION * speed_multiplier * delta)
+	tempo_tiro = maxf(0.0, tempo_tiro - delta)
+	if not _pode_perseguir_jogador():
+		velocidade_desejada = Vector2.ZERO
+		velocity = velocity.move_toward(Vector2.ZERO, BRAKE_ACCELERATION * multiplicador_velocidade * delta)
 		return
-	flight_phase = fmod(flight_phase + delta * 3.1, TAU)
-	state_time += delta
-	match drone_state:
+	fase_voo = fmod(fase_voo + delta * 3.1, TAU)
+	tempo_estado += delta
+	match estado_drone:
 		DroneState.PATROL:
-			_update_patrol(delta)
+			_atualizar_patrulha(delta)
 		DroneState.ALERT:
-			_update_alert(delta)
+			_atualizar_alerta(delta)
 		DroneState.CHASE:
-			_update_chase(delta)
+			_atualizar_perseguicao(delta)
 		DroneState.COOLDOWN:
-			_update_cooldown(delta)
-	_apply_flight_acceleration(delta)
+			_atualizar_espera(delta)
+	_aplicar_aceleracao_voo(delta)
 	move_and_slide()
 	position = Vector2(
 		clampf(position.x, ROOM_BOUNDS.position.x, ROOM_BOUNDS.end.x),
 		clampf(position.y, ROOM_BOUNDS.position.y, ROOM_BOUNDS.end.y)
 	)
-	_update_facing(delta)
-	_update_flight_visuals(delta)
-	_update_health_bar()
+	_atualizar_direcao_visao(delta)
+	_atualizar_visual_voo(delta)
+	_atualizar_barra_vida()
 
 
-func _refresh_mission_state() -> void:
-	current_player = _find_player()
-	if not is_instance_valid(current_player):
-		_set_dormant()
+func _atualizar_estado_missao() -> void:
+	jogador_atual = _encontrar_jogador()
+	if not is_instance_valid(jogador_atual):
+		_desativar()
 		return
-	var mission: Dictionary = SaveGame.office_mission_state(current_player)
+	var mission: Dictionary = SaveGame.office_mission_state(jogador_atual)
 	var programmer_active := (
 		bool(mission.get("programmer_ending_started", false))
 		and not bool(mission.get("programmer_ending_completed", false))
@@ -166,401 +161,395 @@ func _refresh_mission_state() -> void:
 	)
 	var final_active := programmer_active or engineer_active
 	if not final_active:
-		if not death_animation_running:
-			_set_dormant()
+		if not animacao_morte_ativa:
+			_desativar()
 		return
-	if persistent_mission_state:
-		destroyed = bool(mission.get("security_drone_destroyed", false))
-	if destroyed:
-		if not death_animation_running and drone_state != DroneState.DESTROYED:
-			_show_destroyed_wreck()
+	if salvar_estado_missao:
+		destruido = bool(mission.get("security_drone_destroyed", false))
+	if destruido:
+		if not animacao_morte_ativa and estado_drone != DroneState.DESTROYED:
+			_mostrar_destrocado()
 		return
-	if drone_state == DroneState.DORMANT or drone_state == DroneState.DESTROYED:
-		_activate()
+	if estado_drone == DroneState.DORMANT or estado_drone == DroneState.DESTROYED:
+		_ativar()
 
 
-func _find_player() -> Player:
+func _encontrar_jogador() -> Player:
 	var scene := get_parent() as BaseScene
 	if scene != null and is_instance_valid(scene.player):
 		return scene.player
 	return get_tree().get_first_node_in_group("player") as Player
 
 
-func _activate() -> void:
-	drone_state = DroneState.PATROL
-	state_time = 0.0
-	lost_sight_time = 0.0
-	shot_time = 0.35
-	shot_charge_remaining = 0.0
-	current_health = max_health
+func _ativar() -> void:
+	estado_drone = DroneState.PATROL
+	tempo_estado = 0.0
+	tempo_sem_visao = 0.0
+	tempo_tiro = 0.35
+	tempo_preparo_tiro = 0.0
+	vida_atual = vida_maxima
 	velocity = Vector2.ZERO
-	desired_velocity = Vector2.ZERO
+	velocidade_desejada = Vector2.ZERO
 	collision_layer = 2
 	z_index = 30
 	rotation = 0.0
-	animated_sprite.position = Vector2.ZERO
-	animated_sprite.rotation = 0.0
-	animated_sprite.scale = Vector2(0.29, 0.29)
-	animated_sprite.modulate = Color.WHITE
+	sprite_animada.position = Vector2.ZERO
+	sprite_animada.rotation = 0.0
+	sprite_animada.scale = Vector2(0.29, 0.29)
+	sprite_animada.modulate = Color.WHITE
 	visible = true
-	animated_sprite.play(&"fly")
-	vision_cone.visible = true
-	alert_light.visible = false
-	shot_warning.hide()
-	muzzle_flash.hide()
-	health_bar.show()
-	_update_health_bar()
+	sprite_animada.play(&"fly")
+	cone_visao.visible = true
+	luz_alerta.visible = false
+	aviso_tiro.hide()
+	clarao_tiro.hide()
+	barra_vida.show()
+	_atualizar_barra_vida()
 
 
-func _set_dormant() -> void:
-	drone_state = DroneState.DORMANT
+func _desativar() -> void:
+	estado_drone = DroneState.DORMANT
 	velocity = Vector2.ZERO
-	desired_velocity = Vector2.ZERO
+	velocidade_desejada = Vector2.ZERO
 	visible = false
-	shot_warning.hide()
-	health_bar.hide()
-	if is_instance_valid(animated_sprite):
-		animated_sprite.stop()
+	aviso_tiro.hide()
+	barra_vida.hide()
+	if is_instance_valid(sprite_animada):
+		sprite_animada.stop()
 
 
-func _player_can_be_chased() -> bool:
+func _pode_perseguir_jogador() -> bool:
 	return (
-		is_instance_valid(current_player)
-		and current_player.is_inside_tree()
-		and current_player.is_visible_in_tree()
-		and current_player.can_process()
-		and current_player.is_physics_processing()
+		is_instance_valid(jogador_atual)
+		and jogador_atual.is_inside_tree()
+		and jogador_atual.is_visible_in_tree()
+		and jogador_atual.can_process()
+		and jogador_atual.is_physics_processing()
 	)
 
 
-func _update_patrol(_delta: float) -> void:
-	vision_cone.color = Color(1.0, 0.74, 0.18, 0.13)
-	alert_light.visible = false
-	if patrol_points.is_empty():
-		desired_velocity = Vector2.ZERO
+func _atualizar_patrulha(_delta: float) -> void:
+	cone_visao.color = Color(1.0, 0.74, 0.18, 0.13)
+	luz_alerta.visible = false
+	if pontos_patrulha.is_empty():
+		velocidade_desejada = Vector2.ZERO
 		return
-	var target := patrol_points[patrol_index]
+	var target := pontos_patrulha[indice_patrulha]
 	var offset := target - position
 	if offset.length() < 5.0:
-		patrol_index = posmod(patrol_index + patrol_direction, patrol_points.size())
-		target = patrol_points[patrol_index]
+		indice_patrulha = posmod(indice_patrulha + sentido_patrulha, pontos_patrulha.size())
+		target = pontos_patrulha[indice_patrulha]
 		offset = target - position
-	var speed_pulse := 1.0 + sin(flight_phase) * 0.06
-	desired_velocity = offset.normalized() * PATROL_SPEED * speed_multiplier * speed_pulse
-	if _can_see_player(detection_range, true):
-		_begin_alert()
+	var speed_pulse := 1.0 + sin(fase_voo) * 0.06
+	velocidade_desejada = offset.normalized() * PATROL_SPEED * multiplicador_velocidade * speed_pulse
+	if _pode_ver_jogador(alcance_deteccao, true):
+		_iniciar_alerta()
 
 
-func _begin_alert() -> void:
-	drone_state = DroneState.ALERT
-	state_time = 0.0
-	desired_velocity = Vector2.ZERO
-	vision_cone.color = Color(1.0, 0.08, 0.04, 0.27)
-	alert_light.visible = true
-	alert_sfx.pitch_scale = 1.0
-	alert_sfx.play()
+func _iniciar_alerta() -> void:
+	estado_drone = DroneState.ALERT
+	tempo_estado = 0.0
+	velocidade_desejada = Vector2.ZERO
+	cone_visao.color = Color(1.0, 0.08, 0.04, 0.27)
+	luz_alerta.visible = true
+	som_alerta.pitch_scale = 1.0
+	som_alerta.play()
 
 
-func _update_alert(delta: float) -> void:
-	desired_velocity = Vector2.ZERO
-	_face_player(delta)
-	if state_time >= alert_duration:
-		drone_state = DroneState.CHASE
-		state_time = 0.0
-		lost_sight_time = 0.0
+func _atualizar_alerta(delta: float) -> void:
+	velocidade_desejada = Vector2.ZERO
+	_virar_para_jogador(delta)
+	if tempo_estado >= duracao_alerta:
+		estado_drone = DroneState.CHASE
+		tempo_estado = 0.0
+		tempo_sem_visao = 0.0
 
 
-func _update_chase(delta: float) -> void:
-	vision_cone.color = Color(1.0, 0.04, 0.02, 0.31)
-	alert_light.visible = true
-	var offset := current_player.global_position - global_position
+func _atualizar_perseguicao(delta: float) -> void:
+	cone_visao.color = Color(1.0, 0.04, 0.02, 0.31)
+	luz_alerta.visible = true
+	var offset := jogador_atual.global_position - global_position
 	var distance := offset.length()
 	var direction := offset.normalized()
-	_face_player(delta)
-	if shot_charge_remaining > 0.0:
-		shot_charge_remaining -= delta
-		desired_velocity = Vector2.ZERO
-		_update_shot_warning()
-		if shot_charge_remaining <= 0.0:
-			_fire_at_player(direction)
+	_virar_para_jogador(delta)
+	if tempo_preparo_tiro > 0.0:
+		tempo_preparo_tiro -= delta
+		velocidade_desejada = Vector2.ZERO
+		_atualizar_aviso_tiro()
+		if tempo_preparo_tiro <= 0.0:
+			_atirar_no_jogador(direction)
 	elif distance < RETREAT_DISTANCE:
-		desired_velocity = -direction * CHASE_SPEED * speed_multiplier
+		velocidade_desejada = -direction * CHASE_SPEED * multiplicador_velocidade
 	elif distance > PREFERRED_DISTANCE + 18.0:
-		desired_velocity = direction * CHASE_SPEED * speed_multiplier
+		velocidade_desejada = direction * CHASE_SPEED * multiplicador_velocidade
 	else:
-		desired_velocity = direction.orthogonal() * CHASE_SPEED * speed_multiplier * 0.55 * strafe_direction
-	desired_velocity *= 1.0 + sin(flight_phase * 1.35) * 0.08
-	if shot_time <= 0.0 and shot_charge_remaining <= 0.0 and _can_see_player(LOST_RANGE, false):
-		_start_shot_telegraph()
-	if _can_see_player(LOST_RANGE, false):
-		lost_sight_time = 0.0
+		velocidade_desejada = direction.orthogonal() * CHASE_SPEED * multiplicador_velocidade * 0.55 * sentido_lateral
+	velocidade_desejada *= 1.0 + sin(fase_voo * 1.35) * 0.08
+	if tempo_tiro <= 0.0 and tempo_preparo_tiro <= 0.0 and _pode_ver_jogador(LOST_RANGE, false):
+		_iniciar_aviso_tiro()
+	if _pode_ver_jogador(LOST_RANGE, false):
+		tempo_sem_visao = 0.0
 	else:
-		lost_sight_time += delta
-	if lost_sight_time >= LOST_SIGHT_DURATION or state_time >= CHASE_LIMIT:
-		_begin_cooldown()
+		tempo_sem_visao += delta
+	if tempo_sem_visao >= LOST_SIGHT_DURATION or tempo_estado >= CHASE_LIMIT:
+		_iniciar_espera()
 
 
-func _begin_cooldown() -> void:
-	drone_state = DroneState.COOLDOWN
-	state_time = 0.0
-	desired_velocity = -facing_direction * PATROL_SPEED * speed_multiplier
-	vision_cone.color = Color(0.35, 0.7, 1.0, 0.1)
-	alert_light.visible = false
-	shot_charge_remaining = 0.0
-	shot_warning.hide()
+func _iniciar_espera() -> void:
+	estado_drone = DroneState.COOLDOWN
+	tempo_estado = 0.0
+	velocidade_desejada = -direcao_visao * PATROL_SPEED * multiplicador_velocidade
+	cone_visao.color = Color(0.35, 0.7, 1.0, 0.1)
+	luz_alerta.visible = false
+	tempo_preparo_tiro = 0.0
+	aviso_tiro.hide()
 
 
-func _update_cooldown(_delta: float) -> void:
-	if state_time < 0.55:
-		desired_velocity = -facing_direction * PATROL_SPEED * speed_multiplier
+func _atualizar_espera(_delta: float) -> void:
+	if tempo_estado < 0.55:
+		velocidade_desejada = -direcao_visao * PATROL_SPEED * multiplicador_velocidade
 	else:
-		desired_velocity = Vector2.ZERO
-	if state_time >= COOLDOWN_DURATION:
-		drone_state = DroneState.PATROL
-		state_time = 0.0
-		lost_sight_time = 0.0
-		shot_time = 0.25
+		velocidade_desejada = Vector2.ZERO
+	if tempo_estado >= COOLDOWN_DURATION:
+		estado_drone = DroneState.PATROL
+		tempo_estado = 0.0
+		tempo_sem_visao = 0.0
+		tempo_tiro = 0.25
 
 
-func _fire_at_player(direction: Vector2) -> void:
-	if not is_instance_valid(current_player):
+func _atirar_no_jogador(direction: Vector2) -> void:
+	if not is_instance_valid(jogador_atual):
 		return
 	var projectile := DRONE_PROJECTILE.instantiate() as Node2D
 	get_tree().current_scene.add_child(projectile)
 	projectile.global_position = global_position + direction * 9.0
-	projectile.call("setup", direction, projectile_speed, projectile_damage)
-	shot_time = shot_interval
-	shot_warning.hide()
-	_show_muzzle_flash()
-	shot_sfx.pitch_scale = randf_range(0.94, 1.08)
-	shot_sfx.play()
+	projectile.call("configurar", direction, velocidade_projetil, dano_projetil)
+	tempo_tiro = intervalo_tiro
+	aviso_tiro.hide()
+	_mostrar_clarao_tiro()
+	som_tiro.pitch_scale = randf_range(0.94, 1.08)
+	som_tiro.play()
 
 
-func _start_shot_telegraph() -> void:
-	shot_charge_remaining = shot_telegraph_duration
-	shot_warning.show()
-	alert_sfx.pitch_scale = 1.35
-	alert_sfx.play()
-	_update_shot_warning()
+func _iniciar_aviso_tiro() -> void:
+	tempo_preparo_tiro = duracao_aviso_tiro
+	aviso_tiro.show()
+	som_alerta.pitch_scale = 1.35
+	som_alerta.play()
+	_atualizar_aviso_tiro()
 
 
-func _update_shot_warning() -> void:
-	if not is_instance_valid(current_player):
-		shot_warning.hide()
+func _atualizar_aviso_tiro() -> void:
+	if not is_instance_valid(jogador_atual):
+		aviso_tiro.hide()
 		return
-	shot_warning.points = PackedVector2Array([
+	aviso_tiro.points = PackedVector2Array([
 		Vector2.ZERO,
-		to_local(current_player.global_position)
+		to_local(jogador_atual.global_position)
 	])
-	var progress := 1.0 - clampf(shot_charge_remaining / shot_telegraph_duration, 0.0, 1.0)
-	shot_warning.width = lerpf(0.65, 1.8, progress)
-	shot_warning.modulate.a = lerpf(0.25, 1.0, progress)
+	var progress := 1.0 - clampf(tempo_preparo_tiro / duracao_aviso_tiro, 0.0, 1.0)
+	aviso_tiro.width = lerpf(0.65, 1.8, progress)
+	aviso_tiro.modulate.a = lerpf(0.25, 1.0, progress)
 
 
-func _show_muzzle_flash() -> void:
-	if muzzle_tween != null and muzzle_tween.is_valid():
-		muzzle_tween.kill()
-	muzzle_flash.position = facing_direction * 8.0
-	muzzle_flash.rotation = facing_direction.angle() - rotation
-	muzzle_flash.scale = Vector2.ONE
-	muzzle_flash.modulate.a = 1.0
-	muzzle_flash.show()
-	muzzle_tween = create_tween()
-	muzzle_tween.set_parallel(true)
-	muzzle_tween.tween_property(muzzle_flash, "scale", Vector2(1.7, 1.7), 0.09)
-	muzzle_tween.tween_property(muzzle_flash, "modulate:a", 0.0, 0.1)
-	await muzzle_tween.finished
-	if is_instance_valid(muzzle_flash):
-		muzzle_flash.hide()
+func _mostrar_clarao_tiro() -> void:
+	if tween_disparo != null and tween_disparo.is_valid():
+		tween_disparo.kill()
+	clarao_tiro.position = direcao_visao * 8.0
+	clarao_tiro.rotation = direcao_visao.angle() - rotation
+	clarao_tiro.scale = Vector2.ONE
+	clarao_tiro.modulate.a = 1.0
+	clarao_tiro.show()
+	tween_disparo = create_tween()
+	tween_disparo.set_parallel(true)
+	tween_disparo.tween_property(clarao_tiro, "scale", Vector2(1.7, 1.7), 0.09)
+	tween_disparo.tween_property(clarao_tiro, "modulate:a", 0.0, 0.1)
+	await tween_disparo.finished
+	if is_instance_valid(clarao_tiro):
+		clarao_tiro.hide()
 
 
-func receive_projectile_damage(amount: float) -> void:
-	if destroyed or drone_state == DroneState.DORMANT or amount <= 0.0:
+func receber_dano_projetil(amount: float) -> void:
+	if destruido or estado_drone == DroneState.DORMANT or amount <= 0.0:
 		return
-	current_health = maxf(0.0, current_health - amount)
-	_update_health_bar()
-	_flash_damage()
-	if current_health <= 0.0:
-		_destroy_drone()
-	elif drone_state == DroneState.PATROL:
-		_begin_alert()
+	vida_atual = maxf(0.0, vida_atual - amount)
+	_atualizar_barra_vida()
+	_mostrar_dano()
+	if vida_atual <= 0.0:
+		_destruir_drone()
+	elif estado_drone == DroneState.PATROL:
+		_iniciar_alerta()
 
 
-func _flash_damage() -> void:
-	if damage_tween != null and damage_tween.is_valid():
-		damage_tween.kill()
-	hit_sparks.restart()
-	hit_sparks.emitting = true
-	alert_sfx.pitch_scale = randf_range(1.75, 2.05)
-	alert_sfx.play()
-	animated_sprite.modulate = Color(0.35, 0.95, 1.0, 1.0)
-	animated_sprite.position = Vector2.ZERO
-	damage_tween = create_tween()
-	damage_tween.tween_property(animated_sprite, "position", Vector2(-2, 1), 0.025)
-	damage_tween.tween_property(animated_sprite, "position", Vector2(2, -1), 0.025)
-	damage_tween.tween_property(animated_sprite, "position", Vector2(-1, -2), 0.025)
-	damage_tween.tween_property(animated_sprite, "position", Vector2.ZERO, 0.035)
-	damage_tween.parallel().tween_property(animated_sprite, "modulate", Color.WHITE, 0.12)
+func _mostrar_dano() -> void:
+	if tween_dano != null and tween_dano.is_valid():
+		tween_dano.kill()
+	faiscas_dano.restart()
+	faiscas_dano.emitting = true
+	som_alerta.pitch_scale = randf_range(1.75, 2.05)
+	som_alerta.play()
+	sprite_animada.modulate = Color(0.35, 0.95, 1.0, 1.0)
+	sprite_animada.position = Vector2.ZERO
+	tween_dano = create_tween()
+	tween_dano.tween_property(sprite_animada, "position", Vector2(-2, 1), 0.025)
+	tween_dano.tween_property(sprite_animada, "position", Vector2(2, -1), 0.025)
+	tween_dano.tween_property(sprite_animada, "position", Vector2(-1, -2), 0.025)
+	tween_dano.tween_property(sprite_animada, "position", Vector2.ZERO, 0.035)
+	tween_dano.parallel().tween_property(sprite_animada, "modulate", Color.WHITE, 0.12)
 
 
-func _destroy_drone() -> void:
-	destroyed = true
-	death_animation_running = true
-	drone_state = DroneState.DESTROYED
+func _destruir_drone() -> void:
+	destruido = true
+	animacao_morte_ativa = true
+	estado_drone = DroneState.DESTROYED
 	velocity = Vector2.ZERO
-	desired_velocity = Vector2.ZERO
+	velocidade_desejada = Vector2.ZERO
 	collision_layer = 0
-	vision_cone.visible = false
-	shot_warning.hide()
-	health_bar.hide()
-	shot_sfx.stop()
-	explosion_sfx.play()
-	hit_sparks.emitting = false
-	_play_explosion_visuals()
-	alert_light.visible = true
-	alert_light.color = Color(1.0, 0.35, 0.04, 1.0)
-	alert_light.energy = 1.8
-	animated_sprite.stop()
-	if damage_tween != null and damage_tween.is_valid():
-		damage_tween.kill()
-	animated_sprite.position = Vector2.ZERO
-	if persistent_mission_state:
-		var mission: Dictionary = SaveGame.office_mission_state(current_player)
+	cone_visao.visible = false
+	aviso_tiro.hide()
+	barra_vida.hide()
+	som_tiro.stop()
+	som_explosao.play()
+	faiscas_dano.emitting = false
+	_reproduzir_explosao()
+	luz_alerta.visible = true
+	luz_alerta.color = Color(1.0, 0.35, 0.04, 1.0)
+	luz_alerta.energy = 1.8
+	sprite_animada.stop()
+	if tween_dano != null and tween_dano.is_valid():
+		tween_dano.kill()
+	sprite_animada.position = Vector2.ZERO
+	if salvar_estado_missao:
+		var mission: Dictionary = SaveGame.office_mission_state(jogador_atual)
 		mission["security_drone_destroyed"] = true
 		SaveGame.save_global_state("hall_quest_01", mission)
 	var fall_side := 1.0 if randf() >= 0.5 else -1.0
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(animated_sprite, "position", Vector2(5.0 * fall_side, 10.0), 0.48).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.tween_property(animated_sprite, "rotation", 1.15 * fall_side, 0.48).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(animated_sprite, "scale", Vector2(0.29, 0.12), 0.48)
-	tween.tween_property(animated_sprite, "modulate", Color(0.34, 0.38, 0.4, 1.0), 0.48)
-	tween.tween_property(alert_light, "energy", 0.0, 0.22)
+	tween.tween_property(sprite_animada, "position", Vector2(5.0 * fall_side, 10.0), 0.48).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(sprite_animada, "rotation", 1.15 * fall_side, 0.48).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(sprite_animada, "scale", Vector2(0.29, 0.12), 0.48)
+	tween.tween_property(sprite_animada, "modulate", Color(0.34, 0.38, 0.4, 1.0), 0.48)
+	tween.tween_property(luz_alerta, "energy", 0.0, 0.22)
 	await tween.finished
-	alert_light.visible = false
+	luz_alerta.visible = false
 	z_index = 3
-	death_animation_running = false
+	animacao_morte_ativa = false
 
 
-func _play_explosion_visuals() -> void:
-	explosion_flash.scale = Vector2(0.25, 0.25)
-	explosion_flash.modulate.a = 1.0
-	explosion_flash.show()
-	explosion_wave.scale = Vector2(0.3, 0.3)
-	explosion_wave.modulate.a = 1.0
-	explosion_wave.show()
-	if explosion_tween != null and explosion_tween.is_valid():
-		explosion_tween.kill()
-	explosion_tween = create_tween()
-	explosion_tween.set_parallel(true)
-	explosion_tween.tween_property(explosion_flash, "scale", Vector2(2.4, 2.4), 0.24).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	explosion_tween.tween_property(explosion_flash, "modulate:a", 0.0, 0.42)
-	explosion_tween.tween_property(explosion_wave, "scale", Vector2(3.2, 3.2), 0.48).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	explosion_tween.tween_property(explosion_wave, "modulate:a", 0.0, 0.5)
-	await explosion_tween.finished
-	if is_instance_valid(explosion_flash):
-		explosion_flash.hide()
-	if is_instance_valid(explosion_wave):
-		explosion_wave.hide()
+func _reproduzir_explosao() -> void:
+	clarao_explosao.scale = Vector2(0.25, 0.25)
+	clarao_explosao.modulate.a = 1.0
+	clarao_explosao.show()
+	onda_explosao.scale = Vector2(0.3, 0.3)
+	onda_explosao.modulate.a = 1.0
+	onda_explosao.show()
+	if tween_explosao != null and tween_explosao.is_valid():
+		tween_explosao.kill()
+	tween_explosao = create_tween()
+	tween_explosao.set_parallel(true)
+	tween_explosao.tween_property(clarao_explosao, "scale", Vector2(2.4, 2.4), 0.24).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween_explosao.tween_property(clarao_explosao, "modulate:a", 0.0, 0.42)
+	tween_explosao.tween_property(onda_explosao, "scale", Vector2(3.2, 3.2), 0.48).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween_explosao.tween_property(onda_explosao, "modulate:a", 0.0, 0.5)
+	await tween_explosao.finished
+	if is_instance_valid(clarao_explosao):
+		clarao_explosao.hide()
+	if is_instance_valid(onda_explosao):
+		onda_explosao.hide()
 
 
-func _show_destroyed_wreck() -> void:
-	destroyed = true
-	drone_state = DroneState.DESTROYED
+func _mostrar_destrocado() -> void:
+	destruido = true
+	estado_drone = DroneState.DESTROYED
 	velocity = Vector2.ZERO
-	desired_velocity = Vector2.ZERO
+	velocidade_desejada = Vector2.ZERO
 	collision_layer = 0
 	z_index = 3
 	visible = true
-	vision_cone.visible = false
-	alert_light.visible = false
-	shot_warning.hide()
-	health_bar.hide()
-	animated_sprite.stop()
-	animated_sprite.position = Vector2(4, 10)
-	animated_sprite.rotation = 1.15
-	animated_sprite.scale = Vector2(0.29, 0.12)
-	animated_sprite.modulate = Color(0.34, 0.38, 0.4, 1.0)
+	cone_visao.visible = false
+	luz_alerta.visible = false
+	aviso_tiro.hide()
+	barra_vida.hide()
+	sprite_animada.stop()
+	sprite_animada.position = Vector2(4, 10)
+	sprite_animada.rotation = 1.15
+	sprite_animada.scale = Vector2(0.29, 0.12)
+	sprite_animada.modulate = Color(0.34, 0.38, 0.4, 1.0)
 
 
-func _can_see_player(max_range: float, require_fov: bool) -> bool:
-	if not _player_can_be_chased():
+func _pode_ver_jogador(max_range: float, require_fov: bool) -> bool:
+	if not _pode_perseguir_jogador():
 		return false
-	var offset := current_player.global_position - global_position
+	var offset := jogador_atual.global_position - global_position
 	var distance := offset.length()
 	if distance <= 0.001 or distance > max_range:
 		return false
 	var direction := offset / distance
-	if require_fov and facing_direction.dot(direction) < FIELD_OF_VIEW_COSINE:
+	if require_fov and direcao_visao.dot(direction) < FIELD_OF_VIEW_COSINE:
 		return false
-	var query := PhysicsRayQueryParameters2D.create(
-		global_position,
-		current_player.global_position,
-		9,
-		[get_rid()]
-	)
-	query.collide_with_areas = false
-	var hit := get_world_2d().direct_space_state.intersect_ray(query)
-	return hit.is_empty() or hit.get("collider") == current_player
+	visao.target_position = visao.to_local(jogador_atual.global_position)
+	visao.force_raycast_update()
+	return not visao.is_colliding() or visao.get_collider() == jogador_atual
 
 
-func _face_player(delta: float) -> void:
-	if not is_instance_valid(current_player):
+func _virar_para_jogador(delta: float) -> void:
+	if not is_instance_valid(jogador_atual):
 		return
-	var offset := current_player.global_position - global_position
+	var offset := jogador_atual.global_position - global_position
 	if offset.length_squared() > 0.01:
-		_turn_toward(offset.normalized(), delta)
+		_virar_para(offset.normalized(), delta)
 
 
-func _update_facing(delta: float) -> void:
-	if drone_state == DroneState.CHASE or drone_state == DroneState.ALERT:
-		vision_cone.rotation = facing_direction.angle()
+func _atualizar_direcao_visao(delta: float) -> void:
+	if estado_drone == DroneState.CHASE or estado_drone == DroneState.ALERT:
+		cone_visao.rotation = direcao_visao.angle()
 		return
 	if velocity.length_squared() > 0.01:
-		_turn_toward(velocity.normalized(), delta)
-	vision_cone.rotation = facing_direction.angle()
+		_virar_para(velocity.normalized(), delta)
+	cone_visao.rotation = direcao_visao.angle()
 
 
-func _turn_toward(direction: Vector2, delta: float) -> void:
+func _virar_para(direction: Vector2, delta: float) -> void:
 	var weight := 1.0 - exp(-TURN_RESPONSE * delta)
-	var angle := lerp_angle(facing_direction.angle(), direction.angle(), weight)
-	facing_direction = Vector2.RIGHT.rotated(angle)
+	var angle := lerp_angle(direcao_visao.angle(), direction.angle(), weight)
+	direcao_visao = Vector2.RIGHT.rotated(angle)
 
 
-func _apply_flight_acceleration(delta: float) -> void:
+func _aplicar_aceleracao_voo(delta: float) -> void:
 	var acceleration := PATROL_ACCELERATION
-	if drone_state == DroneState.CHASE:
+	if estado_drone == DroneState.CHASE:
 		acceleration = CHASE_ACCELERATION
-	elif desired_velocity.length_squared() < 0.01:
+	elif velocidade_desejada.length_squared() < 0.01:
 		acceleration = BRAKE_ACCELERATION
-	velocity = velocity.move_toward(desired_velocity, acceleration * speed_multiplier * delta)
+	velocity = velocity.move_toward(velocidade_desejada, acceleration * multiplicador_velocidade * delta)
 
 
-func _update_flight_visuals(delta: float) -> void:
+func _atualizar_visual_voo(delta: float) -> void:
 	rotation = 0.0
-	if damage_tween != null and damage_tween.is_running():
+	if tween_dano != null and tween_dano.is_running():
 		return
-	var lateral_ratio := clampf(velocity.x / (CHASE_SPEED * speed_multiplier), -1.0, 1.0)
+	var lateral_ratio := clampf(velocity.x / (CHASE_SPEED * multiplicador_velocidade), -1.0, 1.0)
 	var target_tilt := lateral_ratio * MAX_FLIGHT_TILT
 	var tilt_weight := 1.0 - exp(-FLIGHT_TILT_RESPONSE * delta)
-	animated_sprite.rotation = lerp_angle(animated_sprite.rotation, target_tilt, tilt_weight)
-	animated_sprite.position.y = sin(flight_phase * 1.7) * 0.65
+	sprite_animada.rotation = lerp_angle(sprite_animada.rotation, target_tilt, tilt_weight)
+	sprite_animada.position.y = sin(fase_voo * 1.7) * 0.65
 
 
-func _update_health_bar() -> void:
-	if not is_instance_valid(health_bar):
+func _atualizar_barra_vida() -> void:
+	if not is_instance_valid(barra_vida):
 		return
-	health_bar.rotation = -rotation
-	var ratio := clampf(current_health / max_health, 0.0, 1.0)
-	health_fill.size.x = 24.0 * ratio
+	barra_vida.rotation = -rotation
+	var ratio := clampf(vida_atual / vida_maxima, 0.0, 1.0)
+	preenchimento_vida.size.x = 24.0 * ratio
 	if ratio > 0.5:
-		health_fill.color = Color(0.2, 0.92, 0.46, 1.0)
+		preenchimento_vida.color = Color(0.2, 0.92, 0.46, 1.0)
 	elif ratio > 0.25:
-		health_fill.color = Color(1.0, 0.66, 0.12, 1.0)
+		preenchimento_vida.color = Color(1.0, 0.66, 0.12, 1.0)
 	else:
-		health_fill.color = Color(1.0, 0.16, 0.1, 1.0)
-	health_bar.visible = (
-		drone_state != DroneState.DORMANT
-		and drone_state != DroneState.DESTROYED
-		and (drone_state == DroneState.ALERT or drone_state == DroneState.CHASE or current_health < max_health)
+		preenchimento_vida.color = Color(1.0, 0.16, 0.1, 1.0)
+	barra_vida.visible = (
+		estado_drone != DroneState.DORMANT
+		and estado_drone != DroneState.DESTROYED
+		and (estado_drone == DroneState.ALERT or estado_drone == DroneState.CHASE or vida_atual < vida_maxima)
 	)

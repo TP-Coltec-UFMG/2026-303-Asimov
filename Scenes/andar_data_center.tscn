@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://bq87gqp7mwrnh" path="res://Interaction_components/interectable.tscn" id="6_o1mid"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="7_o1mid"]
 [ext_resource type="PackedScene" uid="uid://7imdxwdbd00" path="res://NPC'S/Clarxs.tscn" id="9_kxi26"]
-[ext_resource type="Texture2D" uid="uid://bfufeqcgcydgm" path="res://NPC'S/NPC/scientist_1.png" id="10_s1lij"]
 [ext_resource type="Script" uid="uid://c3bmarmj4pw5v" path="res://Scenes/scripts/data_center_intro_controller.gd" id="16_data_center"]
 [ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="17_flashlight"]
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="18_npc_path"]
@@ -20,6 +19,8 @@
 [ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="22_cooling_guide"]
 [ext_resource type="Script" uid="uid://drgm3fa52vppv" path="res://Scenes/scripts/data_center_activity.gd" id="activity_data_center"]
 [ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_data_center"]
+
+[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/scientist_1.tres" id="animacoes_10_s1lij"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -397,20 +398,20 @@ position = Vector2(-171, -129)
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("9_kxi26")]
 z_index = 2
 position = Vector2(-101, -201)
-sprite_sheet = ExtResource("10_s1lij")
-dialog_enabled = false
-interaction_override = true
-interaction_prompt = "ESPAÇO: ENTREGAR CARTÃO"
+animacoes = ExtResource("animacoes_10_s1lij")
+dialogo_habilitado = false
+interacao_personalizada = true
+texto_interacao = "ESPAÇO: ENTREGAR CARTÃO"
 save_id = "data_center_recipient"
-run_speed = 40.0
+velocidade_corrida = 40.0
 
 [node name="CaminhoAteAcessoForte" type="Line2D" parent="NPCs/NPC1" unique_id=56411354]
 points = PackedVector2Array(0, 0, -9, 26, -11, 64, -70, 72)
 width = 1.0
 default_color = Color(0.15, 0.78, 1, 0.65)
 script = ExtResource("18_npc_path")
-movement_type = 1
-random_at_end = false
+tipo_movimento = 1
+sortear_ao_terminar = false
 
 [node name="CartaoForteDaHistoria" parent="NPCs/NPC1" unique_id=1429553352 instance=ExtResource("19_strong_card")]
 process_mode = 4
@@ -425,3 +426,8 @@ position = Vector2(0, -12)
 save_id = "data_center_story_boss_card"
 
 [connection signal="solicitou_acesso" from="SceneTrigger2" to="DataCenterIntroController" method="_on_access_requested"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC1/CaminhoAteAcessoForte" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="caminho_concluido" from="NPCs/NPC1" to="DataCenterIntroController" method="_on_recipient_path_completed"]
+[connection signal="solicitou_interacao" from="NPCs/NPC1" to="DataCenterIntroController" method="_on_recipient_interaction_requested"]

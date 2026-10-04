@@ -742,6 +742,12 @@ process_physics_priority = -6
 offset_left = 6.0
 offset_right = 6.0
 
+[node name="Intervalo" type="Timer" parent="SecurityDroneSpawner"]
+one_shot = true
+wait_time = 30.0
+
 [connection signal="pressed" from="UI/ProgrammerEndingUI/FinalCard/MenuButton" to="ProgrammerEnding" method="_on_return_to_menu_pressed"]
 
 [connection signal="solicitou_acesso" from="SceneTrigger" to="EngineerEnding" method="_on_escape_exit_requested"]
+
+[connection signal="timeout" from="SecurityDroneSpawner/Intervalo" to="SecurityDroneSpawner" method="_on_intervalo_timeout"]

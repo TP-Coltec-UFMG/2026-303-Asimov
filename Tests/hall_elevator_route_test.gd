@@ -66,16 +66,22 @@ func _run() -> void:
 	fixture.texture = ImageTexture.create_from_image(image)
 	fixture.position = Vector2(500.0, 300.0)
 	world.add_child(fixture)
-	navigation._add_sprite_collision(fixture)
+	var obstacle := StaticBody2D.new()
+	obstacle.collision_layer = 32
+	obstacle.collision_mask = 0
+	var polygon := CollisionPolygon2D.new()
+	polygon.polygon = PackedVector2Array([Vector2(-10, -10), Vector2(10, -10), Vector2(10, 10), Vector2(-10, 10)])
+	obstacle.add_child(polygon)
+	fixture.add_child(obstacle)
 	var npc := world.get_node("NPCs/NPC1")
-	npc.stop_current_path()
+	npc.parar_caminho_atual()
 	npc.global_position = Vector2(470.0, 300.0)
 	world.player.set_physics_process(false)
 	world.player.global_position = Vector2(470.0, 305.0)
 	await _frames(3)
 	_expect(not world.player.test_move(world.player.global_transform, Vector2(40.0, 0.0)), "As novas colisões decorativas não devem bloquear o jogador.")
 	for index in range(20):
-		npc._on_crowd_velocity_computed(Vector2(120.0, 0.0))
+		npc._ao_calcular_velocidade_segura(Vector2(120.0, 0.0))
 		await _frames(1)
 	_expect(npc.global_position.x < 485.5, "Mesmo com velocidade direta, o NPC não deve atravessar a sprite.")
 	fixture.queue_free()
@@ -148,7 +154,7 @@ func _run() -> void:
 	for actor in world.get_node("NPCs").get_children():
 		var path := actor.get_node("Line2D2") as NPCPath
 		checker.prepare_exit_path(actor, path, route)
-		var points: Array[Vector2] = actor.cached_path_points[path]
+		var points: Array[Vector2] = actor.pontos_caminhos_salvos[path]
 		_expect(not route.is_empty() and points[-1] == route[-1], "Cada NPC deve usar o trajeto de saída verificado.")
 	quest.f1_acesso = false
 	quest.f2_acesso = false
@@ -166,7 +172,7 @@ func _run() -> void:
 		await _frames(1)
 	var remaining: Array = []
 	for actor in world.get_node("NPCs").get_children():
-		remaining.append({"name": actor.name, "position": actor.global_position, "point": actor.current_point, "target": actor.movement_target, "navigation": actor.navigation_points, "goal": actor.navigation_target, "start_cell": navigation._free_cell(actor.global_position), "goal_cell": navigation._free_cell(actor.navigation_target)})
+		remaining.append({"name": actor.name, "position": actor.global_position, "point": actor.ponto_atual, "target": actor.destino_movimento, "navigation": actor.pontos_navegacao, "goal": actor.destino_navegacao, "start_cell": navigation._free_cell(actor.global_position), "goal_cell": navigation._free_cell(actor.destino_navegacao)})
 	_expect(remaining.is_empty(), "Todos os NPCs devem conseguir chegar ao elevador contornando os obstáculos.")
 	SaveGame.save_data = original_save
 	var report := FileAccess.open("res://.hall-elevator-route-results.json", FileAccess.WRITE)

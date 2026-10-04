@@ -310,12 +310,22 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_o1ie1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_4rvye")
 icon = ExtResource("4_gn7vr")
 
+[node name="TempoSenha" type="Timer" parent="Codigo"]
+wait_time = 0.12
+
+[node name="TempoPontos" type="Timer" parent="Codigo"]
+wait_time = 1.0
+
 [connection signal="pressed" from="Codigo/Button" to="Codigo" method="_on_button_pressed"]
 [connection signal="pressed" from="Codigo/Button2" to="." method="_on_button_2_pressed"]
 [connection signal="pressed" from="Codigo/Button3" to="." method="_on_button_3_pressed"]
-[connection signal="pressed" from="Codigo/Button3" to="Codigo" method="_on_button_3_pressed"]
 [connection signal="pressed" from="Codigo/Button5" to="." method="_on_button_5_pressed"]
 [connection signal="pressed" from="Banco_de_Dados/Button3" to="." method="_on_button_3_pressed"]
 [connection signal="pressed" from="Banco_de_Dados/Button4" to="." method="_on_button_4_pressed"]
 [connection signal="pressed" from="Banco_de_Dados/Button5" to="." method="_on_button_5_pressed"]
 [connection signal="pressed" from="Banco_de_Dados/Button2" to="." method="_on_button_2_pressed"]
+
+[connection signal="timeout" from="Codigo/TempoSenha" to="Codigo" method="_escrever_senha"]
+[connection signal="timeout" from="Codigo/TempoPontos" to="Codigo" method="_atualizar_pontos"]
+[connection signal="visibility_changed" from="Codigo" to="Codigo" method="_sincronizar_visibilidade"]
+[connection signal="text_changed" from="Banco_de_Dados/id" to="." method="_id_alterado"]

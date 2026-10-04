@@ -5,16 +5,6 @@ signal alcancado
 var concluido: bool = false
 var tempo: float = 0.0
 
-func _ready() -> void:
-	collision_layer = 0
-	collision_mask = 2
-	var col := CollisionShape2D.new()
-	var forma := RectangleShape2D.new()
-	forma.size = Vector2(16, 16) * tamanho
-	col.shape = forma
-	add_child(col)
-	body_entered.connect(_entrou)
-
 func _entrou(corpo: Node2D) -> void:
 	if concluido or not corpo.is_in_group("jogador") or not corpo.habilitado:
 		return

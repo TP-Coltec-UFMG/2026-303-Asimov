@@ -106,7 +106,7 @@ func _run() -> void:
 	var bullet := preload("res://Objects/bullet.tscn").instantiate()
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = tutorial.target.global_position - Vector2(30, 0)
-	bullet.setup(Vector2.RIGHT, tutorial.player)
+	bullet.configurar(Vector2.RIGHT, tutorial.player)
 	await get_tree().create_timer(0.15).timeout
 	_expect(tutorial.target_hits == 1, "A bala real deve atingir o alvo de treino.")
 	gun.municao_atual = 6
@@ -114,7 +114,7 @@ func _run() -> void:
 	tutorial._update_weapon()
 	await get_tree().create_timer(1.3).timeout
 	_expect(tutorial.weapon_reloaded and gun.municao_atual == 7, "A recarga real deve ser detectada.")
-	tutorial.target.receive_projectile_damage(25.0)
+	tutorial.target.receber_dano_projetil(25.0)
 	_expect(tutorial.stage_complete, "Acertar após recarregar deve concluir a sala.")
 	_expect(SaveGame.save_data == saved, "Treinar não deve alterar o progresso da campanha.")
 	tutorial.queue_free()

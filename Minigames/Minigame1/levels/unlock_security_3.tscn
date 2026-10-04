@@ -7,7 +7,20 @@
 [ext_resource type="Script" uid="uid://b74gwgpse0ii8" path="res://Minigames/Comum/objetivo.gd" id="5"]
 [ext_resource type="Script" uid="uid://c0nmta50t4xlo" path="res://Minigames/Comum/sensor.gd" id="6"]
 
+[ext_resource type="PackedScene" path="res://Minigames/Comum/interface_fase.tscn" id="interface_fase"]
+[ext_resource type="PackedScene" path="res://Minigames/Comum/sons_fase.tscn" id="sons_fase"]
+
+[sub_resource type="CircleShape2D" id="FormaJogadorCircular"]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id="FormaJogadorDeslizar"]
+size = Vector2(36, 36)
+
+[sub_resource type="RectangleShape2D" id="FormaObjetivo"]
+size = Vector2(16, 16)
+
 [node name="Fase" type="Node2D" unique_id=226368389]
+process_mode = 3
 position = Vector2(-17, -9)
 scale = Vector2(0.79, 0.79)
 script = ExtResource("1")
@@ -16,6 +29,7 @@ nome_fase = "Pulso alternado"
 dica = "Os quatro sensores ligam em sequência. Pare nas áreas entre os cones e avance durante o intervalo escuro."
 
 [node name="Arena" type="Node2D" parent="." unique_id=1766724927]
+process_mode = 1
 clip_children = 2
 position = Vector2(80, 52)
 script = ExtResource("2")
@@ -61,17 +75,23 @@ collision_mask = 0
 [node name="Forma" type="CollisionPolygon2D" parent="Arena/Limite3" unique_id=275770767]
 polygon = PackedVector2Array(480, 0, 488, 0, 488, 270, 480, 270)
 
-[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=1943607030]
+[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=1943607030 groups=["jogador"]]
 z_index = 3
 position = Vector2(26, 135)
 script = ExtResource("4")
+
+collision_layer = 2
+collision_mask = 1
 
 [node name="Objetivo" type="Area2D" parent="Arena" unique_id=1172754112]
 z_index = 2
 position = Vector2(450, 135)
 script = ExtResource("5")
 
-[node name="Sensor1" type="Node2D" parent="Arena" unique_id=1268695739]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Sensor1" type="Node2D" parent="Arena" unique_id=1268695739 groups=["sensores"]]
 position = Vector2(104, 215.31645)
 script = ExtResource("6")
 angulo_inicial = 0
@@ -81,7 +101,7 @@ desligado_por = 1.6
 alcance = 130
 abertura = 15
 
-[node name="Sensor2" type="Node2D" parent="Arena" unique_id=1494667325]
+[node name="Sensor2" type="Node2D" parent="Arena" unique_id=1494667325 groups=["sensores"]]
 position = Vector2(150.37975, 79.64557)
 script = ExtResource("6")
 angulo_inicial = 180
@@ -92,7 +112,7 @@ defasagem = 1.1
 alcance = 130
 abertura = 15
 
-[node name="Sensor3" type="Node2D" parent="Arena" unique_id=105062928]
+[node name="Sensor3" type="Node2D" parent="Arena" unique_id=105062928 groups=["sensores"]]
 position = Vector2(288, 190)
 script = ExtResource("6")
 angulo_inicial = 0
@@ -103,7 +123,7 @@ defasagem = 2.2
 alcance = 130
 abertura = 15
 
-[node name="Sensor4" type="Node2D" parent="Arena" unique_id=1734705546]
+[node name="Sensor4" type="Node2D" parent="Arena" unique_id=1734705546 groups=["sensores"]]
 position = Vector2(376, 80)
 script = ExtResource("6")
 angulo_inicial = 180
@@ -121,3 +141,24 @@ offset_top = -43.03797
 offset_right = 665.82275
 offset_bottom = 377.21518
 color = Color(0, 0.06718444, 0.15355486, 1)
+
+[node name="Forma" type="CollisionShape2D" parent="Arena/Jogador"]
+shape = SubResource("FormaJogadorCircular")
+
+[node name="Forma" type="CollisionShape2D" parent="Arena/Objetivo"]
+shape = SubResource("FormaObjetivo")
+
+[node name="Interface" parent="." instance=ExtResource("interface_fase")]
+
+[node name="Sons" parent="." instance=ExtResource("sons_fase")]
+
+[connection signal="capturado" from="Arena/Jogador" to="." method="_ao_ser_capturado"]
+[connection signal="saiu_da_arena" from="Arena/Jogador" to="." method="_ao_sair_da_arena"]
+[connection signal="iniciou_movimento" from="Arena/Jogador" to="." method="_ao_iniciar_movimento"]
+[connection signal="parou" from="Arena/Jogador" to="." method="_ao_parar_movimento"]
+[connection signal="alcancado" from="Arena/Objetivo" to="." method="vencer"]
+[connection signal="body_entered" from="Arena/Objetivo" to="Arena/Objetivo" method="_entrou"]
+[connection signal="pressed" from="Interface/HUD/Modal/Continuar" to="." method="retomar"]
+[connection signal="pressed" from="Interface/HUD/Modal/Reiniciar" to="." method="reiniciar"]
+[connection signal="pressed" from="Interface/HUD/Modal/Desfazer" to="." method="desfazer_falha"]
+[connection signal="pressed" from="Interface/HUD/Modal/Sair" to="." method="_sair"]

@@ -6,7 +6,20 @@
 [ext_resource type="Script" uid="uid://c836vu7ei1f81" path="res://Minigames/Comum/jogador.gd" id="4"]
 [ext_resource type="Script" uid="uid://b74gwgpse0ii8" path="res://Minigames/Comum/objetivo.gd" id="5"]
 
+[ext_resource type="PackedScene" path="res://Minigames/Comum/interface_fase.tscn" id="interface_fase"]
+[ext_resource type="PackedScene" path="res://Minigames/Comum/sons_fase.tscn" id="sons_fase"]
+
+[sub_resource type="CircleShape2D" id="FormaJogadorCircular"]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id="FormaJogadorDeslizar"]
+size = Vector2(36, 36)
+
+[sub_resource type="RectangleShape2D" id="FormaObjetivo"]
+size = Vector2(16, 16)
+
 [node name="Fase" type="Node2D" unique_id=1563886143]
+process_mode = 3
 position = Vector2(-16, -7)
 scale = Vector2(0.79, 0.79)
 script = ExtResource("1")
@@ -16,6 +29,7 @@ nome_fase = "Blocos de apoio"
 dica = "Escolha uma direção com WASD ou as setas e pressione Espaço. O robô só para ao bater. Alcance a engrenagem; use Z para desfazer e R para reiniciar."
 
 [node name="Arena" type="Node2D" parent="." unique_id=2038050797]
+process_mode = 1
 clip_children = 2
 position = Vector2(80, 52)
 script = ExtResource("2")
@@ -69,7 +83,7 @@ script = ExtResource("3")
 [node name="Forma" type="CollisionPolygon2D" parent="Arena/Parede07" unique_id=8481957]
 polygon = PackedVector2Array(372, 300, 492, 300, 492, 260, 372, 260)
 
-[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=1054715791]
+[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=1054715791 groups=["jogador"]]
 z_index = 3
 position = Vector2(329, 159)
 script = ExtResource("4")
@@ -77,11 +91,17 @@ deslizar = true
 velocidade = 300.0
 raio = 18
 
+collision_layer = 2
+collision_mask = 1
+
 [node name="Objetivo" type="Area2D" parent="Arena" unique_id=152135070]
 z_index = 2
 position = Vector2(273, 238)
 script = ExtResource("5")
 engrenagem = true
+
+collision_layer = 0
+collision_mask = 2
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=811809733]
 z_index = -5
@@ -90,3 +110,24 @@ offset_top = -31.645565
 offset_right = 717.7215
 offset_bottom = 388.60757
 color = Color(0, 0.06718444, 0.15355486, 1)
+
+[node name="Forma" type="CollisionShape2D" parent="Arena/Jogador"]
+shape = SubResource("FormaJogadorDeslizar")
+
+[node name="Forma" type="CollisionShape2D" parent="Arena/Objetivo"]
+shape = SubResource("FormaObjetivo")
+
+[node name="Interface" parent="." instance=ExtResource("interface_fase")]
+
+[node name="Sons" parent="." instance=ExtResource("sons_fase")]
+
+[connection signal="capturado" from="Arena/Jogador" to="." method="_ao_ser_capturado"]
+[connection signal="saiu_da_arena" from="Arena/Jogador" to="." method="_ao_sair_da_arena"]
+[connection signal="iniciou_movimento" from="Arena/Jogador" to="." method="_ao_iniciar_movimento"]
+[connection signal="parou" from="Arena/Jogador" to="." method="_ao_parar_movimento"]
+[connection signal="alcancado" from="Arena/Objetivo" to="." method="vencer"]
+[connection signal="body_entered" from="Arena/Objetivo" to="Arena/Objetivo" method="_entrou"]
+[connection signal="pressed" from="Interface/HUD/Modal/Continuar" to="." method="retomar"]
+[connection signal="pressed" from="Interface/HUD/Modal/Reiniciar" to="." method="reiniciar"]
+[connection signal="pressed" from="Interface/HUD/Modal/Desfazer" to="." method="desfazer_falha"]
+[connection signal="pressed" from="Interface/HUD/Modal/Sair" to="." method="_sair"]

@@ -13,14 +13,11 @@ var _tween_volta: Tween
 
 
 func _ready() -> void:
-	add_to_group("cartao")
 	input_pickable = true
 	posicao_inicial = global_position
-	visibility_changed.connect(_on_visibility_changed)
 	var notebook := get_tree().get_first_node_in_group("note")
 	if notebook != null:
 		_atualizar_dados(notebook.dados_alterados)
-		notebook.dados_atualizados.connect(_atualizar_dados)
 
 
 func _atualizar_dados(dados: Dictionary) -> void:
@@ -68,7 +65,7 @@ func _mover_para(destino: Vector2) -> void:
 	cancelar_arraste()
 	_tween_volta = create_tween()
 	_tween_volta.tween_property(self, "global_position", destino, DURACAO_VOLTA).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_tween_volta.finished.connect(func(): voltando = false)
+	_tween_volta.tween_callback(_terminar_volta)
 
 
 func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
@@ -82,3 +79,7 @@ func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> vo
 	segurando = true
 	_deslocamento_arraste = global_position - get_global_mouse_position()
 	get_viewport().set_input_as_handled()
+
+
+func _terminar_volta() -> void:
+	voltando = false

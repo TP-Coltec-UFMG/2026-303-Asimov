@@ -10,8 +10,8 @@ var estado: EstadoRevelacao = EstadoRevelacao.REVELANDO
 var pontos: Array[String] = [".", "..", "..."]
 var indice_pontos: int = 0
 
-var timer_senha: Timer
-var timer_pontos: Timer
+@onready var timer_senha: Timer = $TempoSenha
+@onready var timer_pontos: Timer = $TempoPontos
 
 @onready var notebook: Node2D = get_parent()
 @onready var label_id: Label = $Label
@@ -28,17 +28,6 @@ func _ready() -> void:
 	label_estado.text = "Obtendo ID"
 	label_pontos.text = "."
 
-	timer_senha = Timer.new()
-	timer_senha.wait_time = 0.12
-	add_child(timer_senha)
-	timer_senha.timeout.connect(_escrever_senha)
-
-	timer_pontos = Timer.new()
-	timer_pontos.wait_time = 1.0
-	add_child(timer_pontos)
-	timer_pontos.timeout.connect(_atualizar_pontos)
-
-	visibility_changed.connect(_sincronizar_visibilidade)
 
 
 func _pode_revelar() -> bool:

@@ -18,7 +18,6 @@ var jogador: CharacterBody2D
 const AQUECIMENTO := 0.65
 
 func _ready() -> void:
-	add_to_group("sensores")
 	jogador = get_tree().get_first_node_in_group("jogador")
 
 func _physics_process(delta: float) -> void:

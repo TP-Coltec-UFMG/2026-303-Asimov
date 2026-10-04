@@ -48,8 +48,8 @@ func _run() -> void:
 
 	var npc: Node2D = NPC_SCENE.instantiate() as Node2D
 	npc.set("save_enabled", false)
-	npc.set("dialog_enabled", false)
-	npc.set("sprite_sheet", load("res://NPC'S/NPC/scientist_0.png"))
+	npc.set("dialogo_habilitado", false)
+	npc.animacoes = load("res://NPC'S/Animacoes/scientist_0.tres")
 	npc.position = Vector2(300, 100)
 	add_child(npc)
 	fixtures.append(npc)
@@ -188,8 +188,8 @@ func _check_changed_animation(player: Player, npc: Node2D, npc_sprite: AnimatedS
 
 	var npc_material: Material = npc_sprite.material
 	var npc_modulate: Color = npc_sprite.modulate
-	npc.set("sprite_sheet", load("res://NPC'S/NPC/scientist_1.png"))
-	npc.call("setup_sprite_sheet")
+	npc.animacoes = load("res://NPC'S/Animacoes/scientist_1.tres")
+	npc.call("configurar_animacoes")
 	npc_sprite.stop()
 	npc_sprite.animation = &"walk_side"
 	npc_sprite.frame = 3

@@ -322,8 +322,13 @@ height = 22.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_dialog"]
 radius = 24.0
 
+[sub_resource type="CapsuleShape2D" id="PegadaNPC"]
+radius = 5.0
+height = 12.0
+
 [node name="NPC1" type="Node2D" unique_id=406687579 groups=["protected_npc"]]
 script = ExtResource("1_aekyl")
+pegada_navegacao = SubResource("PegadaNPC")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1186460517]
 sprite_frames = SubResource("SpriteFrames_g4v7s")
@@ -370,3 +375,5 @@ shape = SubResource("CircleShape2D_dialog")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+
+[connection signal="velocity_computed" from="CrowdAvoidance" to="." method="_ao_calcular_velocidade_segura"]

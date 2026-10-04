@@ -14,55 +14,54 @@ const SPAWN_POINTS: Array[Vector2] = [
 	Vector2(258, 105)
 ]
 
-var elapsed: float = 0.0
-var ending_was_active: bool = false
+@onready var intervalo: Timer = $Intervalo
+
+var intervalo_configurado: float = 30.0
+var final_estava_ativo: bool = false
 var player: Player
 
 
-func _process(delta: float) -> void:
-	player = _find_player()
-	var ending_active := _ending_is_active()
-	if not ending_active:
-		elapsed = 0.0
-		ending_was_active = false
+func _ready() -> void:
+	intervalo_configurado = float(DIFFICULTY_SETTINGS.drone_profile().get("spawn_interval", 30.0))
+
+
+func _process(_delta: float) -> void:
+	player = _encontrar_jogador()
+	if not _final_esta_ativo():
+		intervalo.stop()
+		final_estava_ativo = false
 		return
-	if not ending_was_active:
-		ending_was_active = true
-		elapsed = 0.0
-		return
-	if not _gameplay_allows_spawn():
-		return
+	intervalo.paused = not _pode_criar_reforco()
+	if not final_estava_ativo:
+		final_estava_ativo = true
+		intervalo.start(intervalo_configurado)
+
+
+func _on_intervalo_timeout() -> void:
 	var profile := DIFFICULTY_SETTINGS.drone_profile()
-	var spawn_interval := float(profile.get("spawn_interval", 30.0))
-	elapsed += delta
-	if elapsed < spawn_interval:
-		return
-	if _active_drone_count() >= int(profile.get("max_active", 3)):
-		elapsed = spawn_interval - 0.5
-		return
-	if _spawn_reinforcement():
-		elapsed = 0.0
+	if _contar_drones_ativos() >= int(profile.get("max_active", 3)) or not _criar_reforco():
+		intervalo.start(0.5)
 	else:
-		elapsed = spawn_interval - 0.5
+		intervalo.start(intervalo_configurado)
 
 
-func _active_drone_count() -> int:
+func _contar_drones_ativos() -> int:
 	var count := 0
 	for node in get_tree().get_nodes_in_group(&"security_drones"):
 		var drone := node as SecurityDrone
-		if drone != null and drone.visible and not drone.destroyed:
+		if drone != null and drone.visible and not drone.destruido:
 			count += 1
 	return count
 
 
-func _find_player() -> Player:
+func _encontrar_jogador() -> Player:
 	var scene := get_parent() as BaseScene
 	if scene != null and is_instance_valid(scene.player):
 		return scene.player
 	return get_tree().get_first_node_in_group("player") as Player
 
 
-func _ending_is_active() -> bool:
+func _final_esta_ativo() -> bool:
 	if not is_instance_valid(player):
 		return false
 	var state: Dictionary = SaveGame.office_mission_state(player)
@@ -75,7 +74,7 @@ func _ending_is_active() -> bool:
 	)
 
 
-func _gameplay_allows_spawn() -> bool:
+func _pode_criar_reforco() -> bool:
 	if not is_instance_valid(player) or not player.is_physics_processing():
 		return false
 	var intro := get_parent().get_node_or_null("RestrictedAreaIntro")
@@ -85,7 +84,7 @@ func _gameplay_allows_spawn() -> bool:
 	return camera != null and camera.enabled and camera.is_current()
 
 
-func _spawn_reinforcement() -> bool:
+func _criar_reforco() -> bool:
 	var camera := player.get_node_or_null("Camera2D") as Camera2D
 	if camera == null:
 		return false
@@ -94,19 +93,19 @@ func _spawn_reinforcement() -> bool:
 		var global_point := (get_parent() as Node2D).to_global(point)
 		if global_point.distance_to(player.global_position) < MINIMUM_PLAYER_DISTANCE:
 			continue
-		if not _point_is_visible(global_point, camera):
+		if not _ponto_esta_visivel(global_point, camera):
 			safe_points.append(point)
 	if safe_points.is_empty():
 		return false
 	safe_points.shuffle()
 	var drone := DRONE_SCENE.instantiate() as SecurityDrone
-	drone.persistent_mission_state = false
+	drone.salvar_estado_missao = false
 	drone.position = safe_points[0]
 	get_parent().add_child(drone)
 	return true
 
 
-func _point_is_visible(global_point: Vector2, camera: Camera2D) -> bool:
+func _ponto_esta_visivel(global_point: Vector2, camera: Camera2D) -> bool:
 	var viewport_size := get_viewport().get_visible_rect().size / camera.zoom
 	var visible_rect := Rect2(
 		camera.get_screen_center_position() - viewport_size * 0.5 - Vector2.ONE * SCREEN_MARGIN,

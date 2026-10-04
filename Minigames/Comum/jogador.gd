@@ -15,21 +15,6 @@ var tempo: float = 0.0
 var falhou: bool = false
 var alvo: Vector2
 
-func _ready() -> void:
-	add_to_group("jogador")
-	collision_layer = 2
-	collision_mask = 1
-	var forma := CollisionShape2D.new()
-	if deslizar:
-		var ret := RectangleShape2D.new()
-		ret.size = Vector2.ONE * raio * 2.0
-		forma.shape = ret
-	else:
-		var circulo := CircleShape2D.new()
-		circulo.radius = raio
-		forma.shape = circulo
-	add_child(forma)
-
 func ler_direcao() -> Vector2:
 	var d := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	d += Vector2(float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)), float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W)))

@@ -4,6 +4,7 @@ const NPC_OBSTACLE_LAYER := 32
 
 @export var bounds := Rect2(-178.0, -130.0, 384.0, 344.0)
 @export var cell_size := 4.0
+@export var pegada_npc: Shape2D
 
 var grid := AStarGrid2D.new()
 var query := PhysicsShapeQueryParameters2D.new()
@@ -12,7 +13,6 @@ var static_cells: Dictionary = {}
 var dynamic_cells: Dictionary = {}
 var moving_objects: Array[ObjetoEmpurravel] = []
 var previous_transforms: Array[Transform2D] = []
-var polygon_cache: Dictionary = {}
 var initialized := false
 var elapsed := 0.0
 var components: Dictionary = {}
@@ -23,26 +23,12 @@ var warmup_frames := 2
 
 func _ready() -> void:
 	var world := get_parent()
-	for sprite in world.get_node("HALL_QUEBRADO").get_children():
-		if sprite is Sprite2D and sprite.name != &"Sprite07":
-			_add_sprite_collision(sprite)
-	for sprite in world.get_children():
-		if sprite is Sprite2D:
-			_add_sprite_collision(sprite)
 	for object in world.get_node("Coletaveis").get_children():
-		if object is Sprite2D:
-			_add_sprite_collision(object)
-		elif object is ObjetoEmpurravel:
+		if object is ObjetoEmpurravel:
 			moving_objects.append(object)
-			var sprite := object.get_node_or_null("Sprite2D") as Sprite2D
-			if sprite != null:
-				_add_sprite_collision(sprite)
 	for npc in world.get_node("NPCs").get_children():
-		npc.set_obstacle_navigation(self)
-	var shape := CapsuleShape2D.new()
-	shape.radius = 5.0
-	shape.height = 12.0
-	query.shape = shape
+		npc.definir_navegacao_obstaculos(self)
+	query.shape = pegada_npc
 	query.collision_mask = 1 | NPC_OBSTACLE_LAYER
 	query.margin = 2.0
 	grid.region = Rect2i(Vector2i.ZERO, Vector2i(ceil(bounds.size.x / cell_size) + 1, ceil(bounds.size.y / cell_size) + 1))
@@ -52,37 +38,6 @@ func _ready() -> void:
 	grid.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	grid.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	grid.update()
-
-
-func _add_sprite_collision(sprite: Sprite2D) -> void:
-	if sprite.texture == null or sprite.has_node("NPCObstacle"):
-		return
-	var texture := sprite.texture
-	if not polygon_cache.has(texture):
-		var bitmap := BitMap.new()
-		var image := texture.get_image()
-		if image.is_compressed():
-			image.decompress()
-		bitmap.create_from_image_alpha(image, 0.2)
-		polygon_cache[texture] = bitmap.opaque_to_polygons(Rect2i(Vector2i.ZERO, image.get_size()), 2.0)
-	var body := StaticBody2D.new()
-	body.name = "NPCObstacle"
-	body.collision_layer = NPC_OBSTACLE_LAYER
-	body.collision_mask = 0
-	for source: PackedVector2Array in polygon_cache[texture]:
-		var points := PackedVector2Array()
-		for point in source:
-			var local_point := point + sprite.get_rect().position
-			if sprite.flip_h:
-				local_point.x = -local_point.x
-			if sprite.flip_v:
-				local_point.y = -local_point.y
-			points.append(local_point)
-		if points.size() >= 3:
-			var collision := CollisionPolygon2D.new()
-			collision.polygon = points
-			body.add_child(collision)
-	sprite.add_child(body)
 
 
 func _physics_process(delta: float) -> void:

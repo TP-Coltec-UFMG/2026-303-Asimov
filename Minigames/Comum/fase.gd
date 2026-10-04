@@ -1,141 +1,87 @@
 extends Node2D
 
-const GAME_TIMER_SCENE := preload("res://Objects/controle_de_tempo.tscn")
-
 @export_enum("Vigilância", "Deslizar") var jogo: int = 0
 @export_range(0, 3) var fase: int = 0
 @export var nome_fase: String = "Primeiro acesso"
 @export_multiline var dica: String = "Alcance o terminal sem entrar no cone vermelho."
+
 var estado: String = "jogando"
 var tempo: float = 0.0
-var hud: Control
-var modal: Control
-var contador: Label
-var sons: SonsAsimov
-var game_timer: Control
-@onready var jogador = $Arena/Jogador
-@onready var objetivo = $Arena/Objetivo
+@onready var hud: Control = $Interface/HUD
+@onready var modal: Control = $Interface/HUD/Modal
+@onready var contador: Label = $Interface/HUD/Contador
+@onready var sons: SonsAsimov = $Sons
+@onready var cronometro: Control = $Interface/HUD/Cronometro
+@onready var jogador: CharacterBody2D = $Arena/Jogador
+@onready var objetivo: Area2D = $Arena/Objetivo
+@onready var botao_continuar: Button = $Interface/HUD/Modal/Continuar
+@onready var botao_reiniciar: Button = $Interface/HUD/Modal/Reiniciar
+@onready var botao_desfazer: Button = $Interface/HUD/Modal/Desfazer
+@onready var botao_sair: Button = $Interface/HUD/Modal/Sair
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
-	$Arena.process_mode = Node.PROCESS_MODE_PAUSABLE
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	sons = SonsAsimov.new()
-	add_child(sons)
-	var camada := CanvasLayer.new()
-	add_child(camada)
-	hud = Control.new()
-	hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	hud.mouse_filter = Control.MOUSE_FILTER_PASS
-	hud.theme = VisualAsimov.tema()
-	camada.add_child(hud)
-	VisualAsimov.painel(hud, Rect2(0, 0, 480, 31), VisualAsimov.FUNDO)
-	VisualAsimov.texto(hud, "VIGILÂNCIA" if jogo == 0 else "DESLIZAR", Rect2(14, 7, 135, 18), 15)
-	VisualAsimov.texto(hud, nome_fase, Rect2(143, 10, 195, 15), 9, VisualAsimov.SUAVE)
-	VisualAsimov.texto(hud, "FASE", Rect2(11, 44, 45, 14), 9, VisualAsimov.SUAVE)
-	VisualAsimov.texto(hud, "%02d" % (fase + 1), Rect2(11, 57, 41, 23), 22, VisualAsimov.CIANO)
-	VisualAsimov.texto(hud, "/ 04", Rect2(16, 81, 34, 14), 9, VisualAsimov.SUAVE)
-	VisualAsimov.texto(hud, "ALVO", Rect2(434, 47, 44, 14), 9, VisualAsimov.VERDE)
-	VisualAsimov.icone(hud, 2 if jogo == 0 else 3, 0, Rect2(431, 62, 33, 33))
-	contador = VisualAsimov.texto(hud, "", Rect2(12, 128, 47, 41), 9, VisualAsimov.SUAVE)
-	VisualAsimov.texto(hud, "[R]:\n REFAZER\n\n[ESC]:\n PAUSA", Rect2(432, 146, 47, 79), 8, VisualAsimov.SUAVE)
-	_adicionar_cronometro(camada)
-	var instrucao := "WASD / SETAS: mover    |    Evite os cones vermelhos."
-	if jogo == 1:
-		instrucao = "WASD / SETAS: direção    ESPAÇO: deslizar    Z: desfazer"
-	VisualAsimov.texto(hud, instrucao, Rect2(15, 253, 450, 15), 9)
-	jogador.capturado.connect(func(): falhar("SINAL DETECTADO", "Espere o sensor virar ou use uma cobertura."))
-	jogador.saiu_da_arena.connect(func(): falhar("FORA DO SISTEMA", "Desfaça o movimento ou tente outra rota."))
-	jogador.iniciou_movimento.connect(func(): sons.tocar("passo"))
-	jogador.parou.connect(func(): sons.tocar("toque"))
-	objetivo.alcancado.connect(vencer)
-
-
-func _adicionar_cronometro(camada: CanvasLayer) -> void:
-	game_timer = GAME_TIMER_SCENE.instantiate() as Control
-	game_timer.name = "GameTimer"
-	game_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
-
-	game_timer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	camada.add_child(game_timer)
-	var icon := game_timer.get_node_or_null("Control") as Control
-	if icon != null:
-		icon.hide()
-	var timer_label := game_timer.get_node_or_null("Label") as Label
-	if timer_label != null:
-		timer_label.anchor_left = 0.0
-		timer_label.anchor_right = 0.0
-		timer_label.offset_left = 345.0
-		timer_label.offset_right = 425.0
-		timer_label.offset_top = 7.0
-		timer_label.offset_bottom = 24.0
-
+	hud.get_node("TipoJogo").text = "VIGILÂNCIA" if jogo == 0 else "DESLIZAR"
+	hud.get_node("NomeFase").text = nome_fase
+	hud.get_node("NumeroFase").text = "%02d" % (fase + 1)
+	hud.get_node("Terminal").visible = jogo == 0
+	hud.get_node("Engrenagem").visible = jogo == 1
+	hud.get_node("Instrucao").text = (
+		"WASD / SETAS: mover    |    Evite os cones vermelhos."
+		if jogo == 0 else "WASD / SETAS: direção    ESPAÇO: deslizar    Z: desfazer"
+	)
 
 func _unhandled_key_input(evento: InputEvent) -> void:
 	if not evento is InputEventKey or not evento.pressed or evento.echo:
 		return
 	if evento.physical_keycode == KEY_ESCAPE:
-		if estado == "pausado": retomar()
-		elif estado == "jogando": pausar()
+		if estado == "pausado":
+			retomar()
+		elif estado == "jogando":
+			pausar()
 	elif evento.physical_keycode == KEY_R:
 		reiniciar()
 	elif evento.physical_keycode == KEY_Z and estado == "falhou" and jogo == 1:
 		desfazer_falha()
 
 func limpar_modal() -> void:
-	if is_instance_valid(modal):
-		modal.queue_free()
-	modal = null
+	var foco := get_viewport().gui_get_focus_owner()
+	if foco != null and modal.is_ancestor_of(foco):
+		foco.release_focus()
+	modal.hide()
 
 func abrir_modal(titulo: String, mensagem: String, cor: Color) -> Control:
 	limpar_modal()
-	modal = Control.new()
-	modal.process_mode = Node.PROCESS_MODE_ALWAYS
-	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	modal.mouse_filter = Control.MOUSE_FILTER_PASS
-	hud.add_child(modal)
-	var escuro := ColorRect.new()
-	escuro.color = Color(0.025, 0.04, 0.055, 0.84)
-	escuro.size = Vector2(480, 270)
-	escuro.mouse_filter = Control.MOUSE_FILTER_STOP
-	modal.add_child(escuro)
-	VisualAsimov.painel(modal, Rect2(95, 55, 291, 166), VisualAsimov.PAINEL, cor)
-	VisualAsimov.texto(modal, titulo, Rect2(110, 65, 261, 21), 18, cor)
-	var texto := VisualAsimov.texto(modal, mensagem, Rect2(110, 92, 261, 57), 12)
-	texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	modal.get_node("Titulo").text = titulo
+	modal.get_node("Titulo").add_theme_color_override("font_color", cor)
+	modal.get_node("Mensagem").text = mensagem
+	var estilo := (modal.get_node("Painel") as Panel).get_theme_stylebox("panel") as StyleBoxFlat
+	estilo.border_color = cor
+	for botao: Button in [botao_continuar, botao_reiniciar, botao_desfazer, botao_sair]:
+		botao.hide()
+	modal.show()
 	return modal
 
 func pausar() -> void:
-	if estado != "jogando": return
+	if estado != "jogando":
+		return
 	estado = "pausado"
 	get_tree().paused = true
 	abrir_modal("SISTEMA EM PAUSA", "", VisualAsimov.CIANO)
-	var continuar := VisualAsimov.botao(modal, "CONTINUAR", Rect2(110, 154, 123, 22), retomar)
-	var reiniciar_botao := VisualAsimov.botao(modal, "REINICIAR", Rect2(248, 154, 123, 22), reiniciar)
-	var sair := VisualAsimov.botao(modal, "SAIR DO HACKER", Rect2(110, 186, 261, 21), Progresso.menu)
-	continuar.name = "Continuar"
-	reiniciar_botao.name = "Reiniciar"
-	sair.name = "Sair"
-	_configurar_foco_pausa(continuar, reiniciar_botao, sair)
-	continuar.grab_focus()
+	_exibir_botao(botao_continuar, "CONTINUAR", Rect2(110, 154, 123, 22))
+	_exibir_botao(botao_reiniciar, "REINICIAR", Rect2(248, 154, 123, 22))
+	_exibir_botao(botao_sair, Progresso.texto_saida(), Rect2(110, 186, 261, 21))
+	botao_continuar.grab_focus()
 
-
-func _configurar_foco_pausa(continuar: Button, reiniciar_botao: Button, sair: Button) -> void:
-	continuar.focus_neighbor_right = continuar.get_path_to(reiniciar_botao)
-	continuar.focus_neighbor_bottom = continuar.get_path_to(sair)
-	reiniciar_botao.focus_neighbor_left = reiniciar_botao.get_path_to(continuar)
-	reiniciar_botao.focus_neighbor_bottom = reiniciar_botao.get_path_to(sair)
-	sair.focus_neighbor_top = sair.get_path_to(continuar)
-	sair.focus_neighbor_left = sair.get_path_to(continuar)
-	sair.focus_neighbor_right = sair.get_path_to(reiniciar_botao)
-	continuar.focus_next = continuar.get_path_to(reiniciar_botao)
-	reiniciar_botao.focus_next = reiniciar_botao.get_path_to(sair)
-	sair.focus_next = sair.get_path_to(continuar)
-	continuar.focus_previous = continuar.get_path_to(sair)
-	reiniciar_botao.focus_previous = reiniciar_botao.get_path_to(continuar)
-	sair.focus_previous = sair.get_path_to(reiniciar_botao)
+func _exibir_botao(botao: Button, texto: String, retangulo: Rect2) -> void:
+	botao.text = texto
+	botao.position = retangulo.position
+	botao.size = retangulo.size
+	botao.show()
 
 func retomar() -> void:
+	if estado != "pausado":
+		return
 	limpar_modal()
 	estado = "jogando"
 	get_tree().paused = false
@@ -144,40 +90,57 @@ func reiniciar() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
+func _sair() -> void:
+	Progresso.menu()
+
+func _ao_ser_capturado() -> void:
+	falhar("SINAL DETECTADO", "Espere o sensor virar ou use uma cobertura.")
+
+func _ao_sair_da_arena() -> void:
+	falhar("FORA DO SISTEMA", "Desfaça o movimento ou tente outra rota.")
+
+func _ao_iniciar_movimento() -> void:
+	sons.tocar("passo")
+
+func _ao_parar_movimento() -> void:
+	sons.tocar("toque")
+
 func falhar(titulo: String, mensagem: String) -> void:
-	if estado != "jogando": return
+	if estado != "jogando":
+		return
 	estado = "falhou"
 	sons.tocar("erro")
 	$Arena.process_mode = Node.PROCESS_MODE_DISABLED
 	abrir_modal(titulo, mensagem, VisualAsimov.VERMELHO)
-	VisualAsimov.botao(modal, "TENTAR DE NOVO", Rect2(110, 154, 261, 22), reiniciar).grab_focus()
+	_exibir_botao(botao_reiniciar, "TENTAR DE NOVO", Rect2(110, 154, 261, 22))
 	if jogo == 1:
-		VisualAsimov.botao(modal, "DESFAZER [Z]", Rect2(110, 185, 123, 21), desfazer_falha)
-	VisualAsimov.botao(modal, "SAIR DO HACKER", Rect2(248 if jogo == 1 else 110, 185, 123 if jogo == 1 else 261, 21), Progresso.menu)
+		_exibir_botao(botao_desfazer, "DESFAZER [Z]", Rect2(110, 185, 123, 21))
+	_exibir_botao(botao_sair, Progresso.texto_saida(), Rect2(248 if jogo == 1 else 110, 185, 123 if jogo == 1 else 261, 21))
+	botao_reiniciar.grab_focus()
 
 func desfazer_falha() -> void:
-	if jogador.historico.is_empty(): return
+	if jogador.historico.is_empty():
+		return
 	jogador.desfazer()
 	$Arena.process_mode = Node.PROCESS_MODE_PAUSABLE
 	limpar_modal()
 	estado = "jogando"
 
 func vencer() -> void:
-	if estado != "jogando": return
+	if estado != "jogando":
+		return
 	estado = "venceu"
-	if is_instance_valid(game_timer) and game_timer.has_method("pausar_timer"):
-		game_timer.call("pausar_timer")
+	cronometro.call("pausar_timer")
 	jogador.habilitado = false
-	for sensor in get_tree().get_nodes_in_group("sensores"):
-		sensor.set_physics_process(false)
+	for sensor in $Arena.get_children():
+		if sensor.is_in_group("sensores"):
+			sensor.set_physics_process(false)
 	Progresso.concluir(jogo, fase)
 	sons.tocar("ok")
 	await get_tree().create_timer(0.45).timeout
-	if fase == 3:
-		abrir_modal("ACESSO LIBERADO", "Acesso à sala do chefe concedido", VisualAsimov.VERDE)
-		
-		
 	if fase < 3:
 		Progresso.abrir(jogo, fase + 1)
 	else:
-		VisualAsimov.botao(modal, Progresso.texto_saida(), Rect2(110, 154, 261, 22), Progresso.menu).grab_focus()
+		abrir_modal("ACESSO LIBERADO", "Acesso à sala do chefe concedido", VisualAsimov.VERDE)
+		_exibir_botao(botao_sair, Progresso.texto_saida(), Rect2(110, 154, 261, 22))
+		botao_sair.grab_focus()

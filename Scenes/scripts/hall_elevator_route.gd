@@ -120,4 +120,4 @@ func prepare_exit_path(npc: Node2D, path: NPCPath, route: PackedVector2Array) ->
 	var points: Array[Vector2] = []
 	for point in route:
 		points.append(point)
-	npc.cached_path_points[path] = points
+	npc.pontos_caminhos_salvos[path] = points

@@ -1,7 +1,7 @@
 class_name NPCPath
 extends Line2D
 
-signal start_requested(path)
+signal solicitou_inicio(path)
 
 enum MovementType {
 	WALK,
@@ -10,18 +10,18 @@ enum MovementType {
 
 @export_category("Path Settings")
 
-@export var movement_type: MovementType = MovementType.WALK
-@export var loop_path: bool = false
-@export var random_at_end: bool = true
-@export var delete_npc_at_end: bool = false
-@export var start_automatically: bool = false
-@export var hide_in_game: bool = true
+@export var tipo_movimento: MovementType = MovementType.WALK
+@export var repetir_caminho: bool = false
+@export var sortear_ao_terminar: bool = true
+@export var remover_npc_ao_terminar: bool = false
+@export var iniciar_automaticamente: bool = false
+@export var ocultar_no_jogo: bool = true
 
 
 func _ready() -> void:
-	if hide_in_game:
+	if ocultar_no_jogo:
 		visible = false
 
 
-func start_path() -> void:
-	start_requested.emit(self)
+func iniciar_caminho() -> void:
+	solicitou_inicio.emit(self)

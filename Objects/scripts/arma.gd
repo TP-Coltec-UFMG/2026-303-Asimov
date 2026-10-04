@@ -129,7 +129,7 @@ func _process(_delta: float) -> void:
 		var projetil = CENA_PROJETIL.instantiate()
 		get_tree().current_scene.add_child(projetil)
 		projetil.global_position = posicao_tiro
-		projetil.setup(direcao_mira, jogador)
+		projetil.configurar(direcao_mira, jogador)
 		projetil.show()
 		_criar_efeitos_tiro(direcao_mira, posicao_tiro)
 		_reproduzir_tiro()
@@ -149,7 +149,7 @@ func _obter_alvo_assistido(origem: Vector2, alvo_mouse: Vector2) -> Vector2:
 	var melhor_pontuacao := INF
 	for candidato: Node in get_tree().get_nodes_in_group(&"security_drones"):
 		var drone := candidato as Node2D
-		if drone == null or not drone.is_visible_in_tree() or bool(drone.get("destroyed")):
+		if drone == null or not drone.is_visible_in_tree() or bool(drone.get("destruido")):
 			continue
 		var posicao_tela := get_viewport().get_canvas_transform() * drone.global_position
 		if not get_viewport_rect().grow(8.0).has_point(posicao_tela):

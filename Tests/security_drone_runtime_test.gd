@@ -5,7 +5,6 @@ const DRONE_SCENE := preload("res://Objects/security_drone.tscn")
 const BULLET_SCENE := preload("res://Objects/bullet.tscn")
 const DRONE_PROJECTILE_SCENE := preload("res://Objects/drone_projectile.tscn")
 const NPC_SCENE := preload("res://NPC'S/Clarxs.tscn")
-const NPC_TEXTURE := preload("res://NPC'S/NPC/06_purple_crimson.png")
 const AMMO_PICKUP_SCENE := preload("res://Objects/ammo_pickup.tscn")
 
 
@@ -25,18 +24,18 @@ func _ready() -> void:
 	state["engineer_ending_completed"] = false
 	state["security_drone_destroyed"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
-	drone._refresh_mission_state()
+	drone._atualizar_estado_missao()
 	assert(drone.visible)
-	assert(drone.drone_state == SecurityDrone.DroneState.PATROL)
+	assert(drone.estado_drone == SecurityDrone.DroneState.PATROL)
 	player.set_physics_process(false)
 	drone._physics_process(0.1)
 	assert(drone.velocity == Vector2.ZERO)
 	player.set_physics_process(true)
 	state["programmer_ending_completed"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
-	drone._refresh_mission_state()
+	drone._atualizar_estado_missao()
 	assert(not drone.visible)
-	assert(drone.drone_state == SecurityDrone.DroneState.DORMANT)
+	assert(drone.estado_drone == SecurityDrone.DroneState.DORMANT)
 	state["engineer_ending_started"] = true
 	state["engineer_ending_completed"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
@@ -46,18 +45,18 @@ func _ready() -> void:
 	add_child(ammo_pickup)
 	assert(not ammo_pickup.coletada)
 	assert(ammo_pickup.visible)
-	drone._refresh_mission_state()
+	drone._atualizar_estado_missao()
 	assert(drone.visible)
-	assert(drone.drone_state == SecurityDrone.DroneState.PATROL)
+	assert(drone.estado_drone == SecurityDrone.DroneState.PATROL)
 	await get_tree().physics_frame
 	await get_tree().process_frame
-	drone.receive_projectile_damage(25.0)
-	assert(drone.current_health == 50.0)
-	assert(drone.health_fill.size.x < 24.0)
-	drone._start_shot_telegraph()
-	assert(drone.shot_warning.visible)
-	drone.shot_charge_remaining = 0.0
-	drone.shot_warning.hide()
+	drone.receber_dano_projetil(25.0)
+	assert(drone.vida_atual == 50.0)
+	assert(drone.preenchimento_vida.size.x < 24.0)
+	drone._iniciar_aviso_tiro()
+	assert(drone.aviso_tiro.visible)
+	drone.tempo_preparo_tiro = 0.0
+	drone.aviso_tiro.hide()
 	var starting_gun = player.inventory.get_item_control("gun")
 	assert(starting_gun != null)
 	starting_gun.definir_jogador(player)
@@ -72,14 +71,14 @@ func _ready() -> void:
 	assert(starting_gun.municao_reserva == 9)
 	var npc := NPC_SCENE.instantiate()
 	npc.save_enabled = false
-	npc.sprite_sheet = NPC_TEXTURE
+	npc.animacoes = preload("res://NPC'S/Animacoes/06_purple_crimson.tres")
 	add_child(npc)
 	var npc_bullet := BULLET_SCENE.instantiate()
 	add_child(npc_bullet)
-	assert(npc_bullet.call("_find_protected_npc", npc.get_node("CharacterBody2D")) == npc)
-	drone.receive_projectile_damage(25.0)
-	drone.receive_projectile_damage(25.0)
-	assert(drone.destroyed)
+	assert(npc_bullet.call("_encontrar_npc_protegido", npc.get_node("CharacterBody2D")) == npc)
+	drone.receber_dano_projetil(25.0)
+	drone.receber_dano_projetil(25.0)
+	assert(drone.destruido)
 	assert(bool(SaveGame.office_mission_state(player).get("security_drone_destroyed", false)))
 	state["security_drone_destroyed"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
@@ -91,7 +90,7 @@ func _ready() -> void:
 	state["engineer_ending_completed"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	await get_tree().create_timer(0.6).timeout
-	drone._refresh_mission_state()
+	drone._atualizar_estado_missao()
 	assert(not drone.visible)
 	SaveGame.save_data = original_save
 	get_tree().quit()

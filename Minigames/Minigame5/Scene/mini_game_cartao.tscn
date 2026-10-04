@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://c0gnsi802ues5" path="res://Player/quest_mission_ui.tscn" id="16_quest"]
 [ext_resource type="PackedScene" uid="uid://hloe5jawmgui" path="res://Scenes/pause_menu.tscn" id="17_pause"]
 
+[ext_resource type="Theme" path="res://Minigames/Minigame5/Scene/tema_rfid.tres" id="tema_rfid"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fdm2o"]
 size = Vector2(67, 88)
 
@@ -138,7 +140,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Mini_Game_Cartao" type="Node2D" unique_id=1837925664]
+[node name="Mini_Game_Cartao" type="Node2D" unique_id=1837925664 groups=["tutorial_manager"]]
 script = ExtResource("1_x73a3")
 
 [node name="Panel2" type="Panel" parent="." unique_id=295654004]
@@ -179,6 +181,7 @@ scale = Vector2(0.4, 0.4)
 nome = "juncao1"
 
 [node name="Panel" type="Panel" parent="Home/Leitor_cartao/Juncao2" unique_id=639383799]
+theme = ExtResource("tema_rfid")
 visible = false
 z_index = 2
 offset_left = 175.0
@@ -202,6 +205,7 @@ position = Vector2(176.66666, 85)
 shape = SubResource("RectangleShape2D_fdm2o")
 
 [node name="Panel" type="Panel" parent="Home/Leitor_cartao" unique_id=662872171]
+theme = ExtResource("tema_rfid")
 z_index = 3
 offset_left = 230.00003
 offset_top = -23.333363
@@ -228,7 +232,7 @@ position = Vector2(189.5, 104.04164)
 scale = Vector2(0.3867187, 0.47428402)
 texture = ExtResource("6_2s1cl")
 
-[node name="Cartao" type="Area2D" parent="Home" unique_id=981929988]
+[node name="Cartao" type="Area2D" parent="Home" unique_id=981929988 groups=["cartao"]]
 z_index = 3
 position = Vector2(347, 138)
 script = ExtResource("7_x73a3")
@@ -273,13 +277,13 @@ sprite_frames = SubResource("SpriteFrames_3c2fn")
 animation = &"normal"
 
 [node name="Panel" type="Panel" parent="." unique_id=1513598011]
+theme = ExtResource("tema_rfid")
 z_index = 7
 texture_filter = 1
 offset_left = 7.0
 offset_top = 194.0
 offset_right = 175.0
 offset_bottom = 257.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_m2x7f")
 script = ExtResource("11_m2x7f")
 
 [node name="Label" type="Label" parent="Panel" unique_id=964883033]
@@ -303,11 +307,7 @@ offset_right = 233.0
 offset_bottom = 82.0
 theme_override_fonts/font = ExtResource("11_43oxc")
 theme_override_font_sizes/font_size = 10
-theme_override_styles/normal = SubResource("StyleBoxEmpty_43oxc")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_2wvgn")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_2s1cl")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_rpite")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_jkg28")
 text = "continuar"
 script = ExtResource("13_43oxc")
 
@@ -345,4 +345,30 @@ modo_isolado = true
 lado_esquerdo = true
 borda_branca = true
 
+[node name="TempoTutorial" type="Timer" parent="."]
+wait_time = 8.0
+one_shot = true
+
+[node name="TempoAviso" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="TempoSucesso" type="Timer" parent="."]
+wait_time = 1.25
+one_shot = true
+
 [connection signal="pressed" from="Home/Computador/Button" to="." method="_on_button_pressed"]
+
+[connection signal="pressed" from="Panel/Button" to="." method="_on_continuar_tutorial_pressed"]
+[connection signal="fechou" from="Notebook" to="." method="_on_notebook_fechou"]
+[connection signal="cartao_alterado" from="Home/Leitor_cartao" to="." method="_on_cartao_alterado"]
+[connection signal="acesso_liberado" from="Home/Leitor_cartao" to="." method="_on_acesso_liberado"]
+[connection signal="conexao_alterada" from="Home/Leitor_cartao/Juncao2" to="." method="_on_conexao_alterada"]
+[connection signal="conexao_alterada" from="Home/Computador/Juncao" to="." method="_on_conexao_alterada"]
+[connection signal="dados_atualizados" from="Notebook" to="Home/Cartao" method="_atualizar_dados"]
+[connection signal="visibility_changed" from="Home/Cartao" to="Home/Cartao" method="_on_visibility_changed"]
+[connection signal="area_entered" from="Home/Leitor_cartao" to="Home/Leitor_cartao" method="_on_area_entered"]
+[connection signal="area_exited" from="Home/Leitor_cartao" to="Home/Leitor_cartao" method="_on_area_exited"]
+[connection signal="timeout" from="TempoTutorial" to="." method="_ao_terminar_tempo_tutorial"]
+[connection signal="timeout" from="TempoAviso" to="Home/Leitor_cartao/Juncao2/Panel" method="hide"]
+[connection signal="timeout" from="TempoSucesso" to="." method="_ao_terminar_sucesso"]

@@ -65,9 +65,7 @@ var _direcao_terminal_b: Vector2 = Vector2.UP
 
 func _ready() -> void:
 
-	add_to_group("fios")
 
-	colisao_fio.shape = ConcavePolygonShape2D.new()
 
 	linha.clear_points()
 
@@ -77,13 +75,9 @@ func _ready() -> void:
 
 	terminal_a.input_pickable = true
 
-	if not terminal_a.input_event.is_connected(_on_terminal_a_input_event):
-		terminal_a.input_event.connect(_on_terminal_a_input_event)
 
 	terminal_b.input_pickable = true
 
-	if not terminal_b.input_event.is_connected(_on_terminal_b_input_event):
-		terminal_b.input_event.connect(_on_terminal_b_input_event)
 
 
 func conectar(

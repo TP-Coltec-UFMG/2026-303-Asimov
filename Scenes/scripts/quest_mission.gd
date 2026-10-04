@@ -381,15 +381,15 @@ func _start_npc_exit_paths(legacy_restore: bool = false) -> void:
 			if npc.get("checkpoint_restored") != false:
 				continue
 
-			path.start_path()
+			path.iniciar_caminho()
 
-			var points: Variant = npc.get("path_points")
+			var points: Variant = npc.get("pontos_caminho")
 
 			if points is Array and not points.is_empty():
 				npc.global_position = points[0]
 
 		else:
-			path.start_path()
+			path.iniciar_caminho()
 
 
 func _iniciar_espera_npcs() -> void:
@@ -407,11 +407,6 @@ func _iniciar_espera_npcs() -> void:
 			if npc.is_queued_for_deletion():
 				continue
 			_saida_pendente += 1
-			if npc.has_signal("npc_saiu"):
-				if not npc.npc_saiu.is_connected(_on_npc_saiu):
-					npc.npc_saiu.connect(_on_npc_saiu, CONNECT_ONE_SHOT)
-			elif not npc.tree_exiting.is_connected(_on_npc_saiu):
-				npc.tree_exiting.connect(_on_npc_saiu, CONNECT_ONE_SHOT)
 	if _saida_pendente == 0:
 		_concluir_saida_npcs()
 

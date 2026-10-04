@@ -13,6 +13,8 @@ func _ready() -> void:
 	if not OS.get_cmdline_user_args().has("--rfid-card-test"):
 		get_tree().quit(2)
 		return
+	get_tree().set_meta("dev_mission_jump_active", true)
+	Engine.max_fps = 60
 	_run.call_deferred()
 
 
@@ -93,6 +95,9 @@ func _run() -> void:
 
 	SaveGame.save_data = original_save
 	SaveGame.tempo_atual = original_time
+	var resultado := FileAccess.open("res://.rfid-card-result.json", FileAccess.WRITE)
+	resultado.store_string(JSON.stringify({"failures": failures, "completed": true}))
+	resultado.close()
 	if failures.is_empty():
 		pass
 		get_tree().quit(0)

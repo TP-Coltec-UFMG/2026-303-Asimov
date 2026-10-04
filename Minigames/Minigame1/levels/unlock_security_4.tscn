@@ -7,7 +7,20 @@
 [ext_resource type="Script" uid="uid://b74gwgpse0ii8" path="res://Minigames/Comum/objetivo.gd" id="5"]
 [ext_resource type="Script" uid="uid://c0nmta50t4xlo" path="res://Minigames/Comum/sensor.gd" id="6"]
 
+[ext_resource type="PackedScene" path="res://Minigames/Comum/interface_fase.tscn" id="interface_fase"]
+[ext_resource type="PackedScene" path="res://Minigames/Comum/sons_fase.tscn" id="sons_fase"]
+
+[sub_resource type="CircleShape2D" id="FormaJogadorCircular"]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id="FormaJogadorDeslizar"]
+size = Vector2(36, 36)
+
+[sub_resource type="RectangleShape2D" id="FormaObjetivo"]
+size = Vector2(16, 16)
+
 [node name="Fase" type="Node2D" unique_id=1858675931]
+process_mode = 3
 position = Vector2(-18, -5.000001)
 scale = Vector2(0.79, 0.79)
 script = ExtResource("1")
@@ -16,6 +29,7 @@ nome_fase = "Última barreira"
 dica = "Combine cobertura e tempo de passagem. As caixas menores criam pontos de espera entre os corredores."
 
 [node name="Arena" type="Node2D" parent="." unique_id=1575128069]
+process_mode = 1
 clip_children = 2
 position = Vector2(79.746826, 49.367092)
 script = ExtResource("2")
@@ -86,17 +100,23 @@ collision_mask = 0
 [node name="Forma" type="CollisionPolygon2D" parent="Arena/Limite3" unique_id=743267221]
 polygon = PackedVector2Array(480, 0, 488, 0, 488, 270, 480, 270)
 
-[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=935300277]
+[node name="Jogador" type="CharacterBody2D" parent="Arena" unique_id=935300277 groups=["jogador"]]
 z_index = 3
 position = Vector2(43.037975, 41.772144)
 script = ExtResource("4")
+
+collision_layer = 2
+collision_mask = 1
 
 [node name="Objetivo" type="Area2D" parent="Arena" unique_id=966434200]
 z_index = 2
 position = Vector2(434, 248)
 script = ExtResource("5")
 
-[node name="Sensor1" type="Node2D" parent="Arena" unique_id=659269781]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Sensor1" type="Node2D" parent="Arena" unique_id=659269781 groups=["sensores"]]
 position = Vector2(136, 225)
 script = ExtResource("6")
 angulo_inicial = 325
@@ -105,7 +125,7 @@ duracao_giro = 2.6
 alcance = 174
 abertura = 16
 
-[node name="Sensor2" type="Node2D" parent="Arena" unique_id=1073028642]
+[node name="Sensor2" type="Node2D" parent="Arena" unique_id=1073028642 groups=["sensores"]]
 position = Vector2(240, 30)
 script = ExtResource("6")
 angulo_inicial = 180
@@ -116,7 +136,7 @@ defasagem = 1
 alcance = 190
 abertura = 17
 
-[node name="Sensor3" type="Node2D" parent="Arena" unique_id=1308241438]
+[node name="Sensor3" type="Node2D" parent="Arena" unique_id=1308241438 groups=["sensores"]]
 position = Vector2(433, 193)
 script = ExtResource("6")
 angulo_inicial = 325
@@ -125,7 +145,7 @@ duracao_giro = 2.3
 alcance = 205
 abertura = 17
 
-[node name="Sensor4" type="Node2D" parent="Arena" unique_id=1942646770]
+[node name="Sensor4" type="Node2D" parent="Arena" unique_id=1942646770 groups=["sensores"]]
 position = Vector2(334.17722, 248.10126)
 script = ExtResource("6")
 angulo_inicial = 325
@@ -141,3 +161,24 @@ offset_top = -36.70886
 offset_right = 681.01263
 offset_bottom = 383.54428
 color = Color(0, 0.06718444, 0.15355486, 1)
+
+[node name="Forma" type="CollisionShape2D" parent="Arena/Jogador"]
+shape = SubResource("FormaJogadorCircular")
+
+[node name="Forma" type="CollisionShape2D" parent="Arena/Objetivo"]
+shape = SubResource("FormaObjetivo")
+
+[node name="Interface" parent="." instance=ExtResource("interface_fase")]
+
+[node name="Sons" parent="." instance=ExtResource("sons_fase")]
+
+[connection signal="capturado" from="Arena/Jogador" to="." method="_ao_ser_capturado"]
+[connection signal="saiu_da_arena" from="Arena/Jogador" to="." method="_ao_sair_da_arena"]
+[connection signal="iniciou_movimento" from="Arena/Jogador" to="." method="_ao_iniciar_movimento"]
+[connection signal="parou" from="Arena/Jogador" to="." method="_ao_parar_movimento"]
+[connection signal="alcancado" from="Arena/Objetivo" to="." method="vencer"]
+[connection signal="body_entered" from="Arena/Objetivo" to="Arena/Objetivo" method="_entrou"]
+[connection signal="pressed" from="Interface/HUD/Modal/Continuar" to="." method="retomar"]
+[connection signal="pressed" from="Interface/HUD/Modal/Reiniciar" to="." method="reiniciar"]
+[connection signal="pressed" from="Interface/HUD/Modal/Desfazer" to="." method="desfazer_falha"]
+[connection signal="pressed" from="Interface/HUD/Modal/Sair" to="." method="_sair"]

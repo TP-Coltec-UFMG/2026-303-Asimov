@@ -101,8 +101,6 @@ func _initialize() -> void:
 		DialogManager.dialog_finished.connect(_on_dialog_finished)
 	if not DialogManager.dialog_line_started.is_connected(_on_dialog_line_started):
 		DialogManager.dialog_line_started.connect(_on_dialog_line_started)
-	if not recipient.is_connected(&"path_completed", _on_recipient_path_completed):
-		recipient.connect(&"path_completed", _on_recipient_path_completed)
 	_restore_progress()
 
 
@@ -116,18 +114,16 @@ func _prepare_story_card(card: Node2D) -> void:
 
 
 func _prepare_recipient() -> void:
-	recipient.set("dialog_enabled", false)
+	recipient.set("dialogo_habilitado", false)
 	_set_recipient_interaction(true, "ESPAÇO: ENTREGAR CARTÃO")
 
 
 func _set_recipient_interaction(enabled: bool, prompt: String = "ESPAÇO: FALAR") -> void:
-	if recipient.has_method("configure_interaction_override"):
-		recipient.call("configure_interaction_override", enabled, prompt)
+	if recipient.has_method("configurar_interacao_personalizada"):
+		recipient.call("configurar_interacao_personalizada", enabled, prompt)
 	else:
-		recipient.set("interaction_override", enabled)
-		recipient.set("interaction_prompt", prompt)
-	if enabled and recipient.has_signal(&"interaction_requested") and not recipient.is_connected(&"interaction_requested", _on_recipient_interaction_requested):
-		recipient.connect(&"interaction_requested", _on_recipient_interaction_requested)
+		recipient.set("interacao_personalizada", enabled)
+		recipient.set("texto_interacao", prompt)
 
 
 func _restore_progress() -> void:
@@ -301,12 +297,12 @@ func _restore_access_progress(state: Dictionary) -> void:
 		return
 	if bool(state.get("data_center_access_npc_moving", false)):
 		_set_recipient_interaction(false)
-		var restored_path_active := bool(recipient.get("checkpoint_restored")) and not bool(recipient.get("path_finished"))
+		var restored_path_active := bool(recipient.get("checkpoint_restored")) and not bool(recipient.get("caminho_finalizado"))
 		if not restored_path_active:
-			recipient.call("start_path", access_path)
+			recipient.call("iniciar_caminho", access_path)
 			var paused_point := int(state.get("data_center_access_npc_paused_point", -1))
-			if paused_point >= 0 and paused_point < (recipient.get("path_points") as Array).size():
-				recipient.set("current_point", paused_point)
+			if paused_point >= 0 and paused_point < (recipient.get("pontos_caminho") as Array).size():
+				recipient.set("ponto_atual", paused_point)
 		state.erase("data_center_access_npc_paused_point")
 		SaveGame.save_global_state("hall_quest_01", state)
 		return
@@ -560,9 +556,9 @@ func _begin_recipient_walk() -> void:
 	state["data_center_access_npc_moving"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_set_recipient_interaction(false)
-	recipient.call("start_path", access_path)
-	if paused_point >= 0 and paused_point < (recipient.get("path_points") as Array).size():
-		recipient.set("current_point", paused_point)
+	recipient.call("iniciar_caminho", access_path)
+	if paused_point >= 0 and paused_point < (recipient.get("pontos_caminho") as Array).size():
+		recipient.set("ponto_atual", paused_point)
 	_save_checkpoint()
 
 
@@ -600,8 +596,8 @@ func _resume_access_at_reader(state: Dictionary) -> void:
 
 func _place_recipient_at_access() -> void:
 	recipient.global_position = access_destination.global_position
-	if recipient.has_method("stop_current_path"):
-		recipient.call("stop_current_path")
+	if recipient.has_method("parar_caminho_atual"):
+		recipient.call("parar_caminho_atual")
 
 
 func _give_strong_card() -> void:
@@ -1064,10 +1060,10 @@ func _begin_power_failure() -> void:
 		outage_timer.stop()
 	power_sequence_running = true
 	DialogManager.input_blocked = true
-	if bool(state.get("data_center_access_npc_moving", false)) and recipient.has_method("stop_current_path"):
-		state["data_center_access_npc_paused_point"] = int(recipient.get("current_point"))
+	if bool(state.get("data_center_access_npc_moving", false)) and recipient.has_method("parar_caminho_atual"):
+		state["data_center_access_npc_paused_point"] = int(recipient.get("ponto_atual"))
 		SaveGame.save_global_state("hall_quest_01", state)
-		recipient.call("stop_current_path")
+		recipient.call("parar_caminho_atual")
 	for _index in POWER_FLICKER_COUNT:
 		_set_regular_lights_visible(false)
 		await get_tree().create_timer(POWER_FLICKER_OFF_TIME, false).timeout

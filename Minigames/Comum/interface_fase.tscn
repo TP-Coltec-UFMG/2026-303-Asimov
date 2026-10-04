@@ -1,0 +1,348 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="fonte"]
+
+[ext_resource type="PackedScene" path="res://Objects/controle_de_tempo.tscn" id="cronometro"]
+
+[ext_resource type="Texture2D" path="res://Minigames/Arte/sprites_192.png" id="atlas"]
+
+[sub_resource type="StyleBoxFlat" id="normal"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.109804, 0.168627, 0.223529, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.258824, 0.345098, 0.407843, 1)
+
+[sub_resource type="StyleBoxFlat" id="hover"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.168627, 0.262745, 0.313725, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.776471, 0.835294, 1)
+
+[sub_resource type="StyleBoxFlat" id="pressed"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.0627451, 0.121569, 0.168627, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.552941, 0.796078, 0.607843, 1)
+
+[sub_resource type="StyleBoxFlat" id="focus"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.847059, 0.721569, 0.427451, 1)
+
+[sub_resource type="StyleBoxFlat" id="disabled"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.0627451, 0.0980392, 0.137255, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.258824, 0.345098, 0.407843, 1)
+
+[sub_resource type="StyleBoxFlat" id="modal"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.109804, 0.168627, 0.223529, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.4, 0.776471, 0.835294, 1)
+
+[sub_resource type="StyleBoxFlat" id="cabecalho"]
+resource_local_to_scene = true
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.0627451, 0.0980392, 0.137255, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.258824, 0.345098, 0.407843, 1)
+
+[sub_resource type="AtlasTexture" id="Terminal"]
+atlas = ExtResource("atlas")
+region = Rect2(0, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="Engrenagem"]
+atlas = ExtResource("atlas")
+region = Rect2(0, 144, 48, 48)
+
+[sub_resource type="Theme" id="Tema"]
+default_font = ExtResource("fonte")
+default_font_size = 16
+Label/colors/font_color = Color(0.843137, 0.898039, 0.87451, 1)
+Button/colors/font_color = Color(0.843137, 0.898039, 0.87451, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.54902, 0.666667, 0.662745, 1)
+Button/styles/normal = SubResource("normal")
+Button/styles/hover = SubResource("hover")
+Button/styles/pressed = SubResource("pressed")
+Button/styles/focus = SubResource("focus")
+Button/styles/disabled = SubResource("disabled")
+
+[node name="Interface" type="CanvasLayer"]
+process_mode = 3
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = SubResource("Tema")
+
+[node name="Cabecalho" type="Panel" parent="HUD"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 480.0
+offset_bottom = 31.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("cabecalho")
+
+[node name="TipoJogo" type="Label" parent="HUD"]
+offset_left = 14.0
+offset_top = 7.0
+offset_right = 149.0
+offset_bottom = 25.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.843137, 0.898039, 0.87451, 1)
+text = "VIGILÂNCIA"
+
+[node name="NomeFase" type="Label" parent="HUD"]
+offset_left = 143.0
+offset_top = 10.0
+offset_right = 338.0
+offset_bottom = 25.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.54902, 0.666667, 0.662745, 1)
+text = ""
+
+[node name="TituloFase" type="Label" parent="HUD"]
+offset_left = 11.0
+offset_top = 44.0
+offset_right = 56.0
+offset_bottom = 58.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.54902, 0.666667, 0.662745, 1)
+text = "FASE"
+
+[node name="NumeroFase" type="Label" parent="HUD"]
+offset_left = 11.0
+offset_top = 57.0
+offset_right = 52.0
+offset_bottom = 80.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.4, 0.776471, 0.835294, 1)
+text = "01"
+
+[node name="TotalFases" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 81.0
+offset_right = 50.0
+offset_bottom = 95.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.54902, 0.666667, 0.662745, 1)
+text = "/ 04"
+
+[node name="TituloAlvo" type="Label" parent="HUD"]
+offset_left = 434.0
+offset_top = 47.0
+offset_right = 478.0
+offset_bottom = 61.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.552941, 0.796078, 0.607843, 1)
+text = "ALVO"
+
+[node name="Contador" type="Label" parent="HUD"]
+offset_left = 12.0
+offset_top = 128.0
+offset_right = 59.0
+offset_bottom = 169.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.54902, 0.666667, 0.662745, 1)
+text = ""
+
+[node name="Comandos" type="Label" parent="HUD"]
+offset_left = 432.0
+offset_top = 146.0
+offset_right = 479.0
+offset_bottom = 225.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 8
+theme_override_colors/font_color = Color(0.54902, 0.666667, 0.662745, 1)
+text = "[R]:\n REFAZER\n\n[ESC]:\n PAUSA"
+
+[node name="Instrucao" type="Label" parent="HUD"]
+offset_left = 15.0
+offset_top = 253.0
+offset_right = 465.0
+offset_bottom = 268.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(0.843137, 0.898039, 0.87451, 1)
+text = ""
+
+[node name="Terminal" type="TextureRect" parent="HUD"]
+offset_left = 431.0
+offset_top = 62.0
+offset_right = 464.0
+offset_bottom = 95.0
+visible = false
+texture_filter = 1
+mouse_filter = 2
+texture = SubResource("Terminal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Engrenagem" type="TextureRect" parent="HUD"]
+offset_left = 431.0
+offset_top = 62.0
+offset_right = 464.0
+offset_bottom = 95.0
+visible = false
+texture_filter = 1
+mouse_filter = 2
+texture = SubResource("Engrenagem")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Cronometro" parent="HUD" instance=ExtResource("cronometro")]
+process_mode = 1
+mouse_filter = 2
+
+[node name="Control" parent="HUD/Cronometro"]
+visible = false
+
+[node name="Label" parent="HUD/Cronometro"]
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 345.0
+offset_top = 7.0
+offset_right = 425.0
+offset_bottom = 24.0
+
+[node name="Modal" type="Control" parent="HUD"]
+visible = false
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Escurecer" type="ColorRect" parent="HUD/Modal"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 480.0
+offset_bottom = 270.0
+color = Color(0.025, 0.04, 0.055, 0.84)
+
+[node name="Painel" type="Panel" parent="HUD/Modal"]
+offset_left = 95.0
+offset_top = 55.0
+offset_right = 386.0
+offset_bottom = 221.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("modal")
+
+[node name="Titulo" type="Label" parent="HUD/Modal"]
+offset_left = 110.0
+offset_top = 65.0
+offset_right = 371.0
+offset_bottom = 86.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.4, 0.776471, 0.835294, 1)
+text = ""
+
+[node name="Mensagem" type="Label" parent="HUD/Modal"]
+offset_left = 110.0
+offset_top = 92.0
+offset_right = 371.0
+offset_bottom = 149.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.843137, 0.898039, 0.87451, 1)
+text = ""
+autowrap_mode = 3
+
+[node name="Continuar" type="Button" parent="HUD/Modal"]
+focus_neighbor_right = NodePath("../Reiniciar")
+focus_neighbor_bottom = NodePath("../Sair")
+focus_next = NodePath("../Reiniciar")
+focus_previous = NodePath("../Sair")
+offset_left = 110.0
+offset_top = 154.0
+offset_right = 233.0
+offset_bottom = 176.0
+mouse_default_cursor_shape = 2
+text = "CONTINUAR"
+
+[node name="Reiniciar" type="Button" parent="HUD/Modal"]
+focus_neighbor_left = NodePath("../Continuar")
+focus_neighbor_bottom = NodePath("../Sair")
+focus_next = NodePath("../Sair")
+focus_previous = NodePath("../Continuar")
+offset_left = 248.0
+offset_top = 154.0
+offset_right = 371.0
+offset_bottom = 176.0
+mouse_default_cursor_shape = 2
+text = "REINICIAR"
+
+[node name="Desfazer" type="Button" parent="HUD/Modal"]
+offset_left = 110.0
+offset_top = 185.0
+offset_right = 233.0
+offset_bottom = 206.0
+mouse_default_cursor_shape = 2
+text = "DESFAZER [Z]"
+
+[node name="Sair" type="Button" parent="HUD/Modal"]
+focus_neighbor_top = NodePath("../Continuar")
+focus_neighbor_left = NodePath("../Continuar")
+focus_neighbor_right = NodePath("../Reiniciar")
+focus_next = NodePath("../Continuar")
+focus_previous = NodePath("../Reiniciar")
+offset_left = 110.0
+offset_top = 186.0
+offset_right = 371.0
+offset_bottom = 207.0
+mouse_default_cursor_shape = 2
+text = "SAIR DO HACKER"

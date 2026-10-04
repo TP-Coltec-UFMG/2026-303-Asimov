@@ -93,10 +93,8 @@ func _initialize() -> void:
 		push_error("NPC1 precisa dos caminhos Line2D2, Line2D3 e do BalaoDePensamento.")
 		return
 
-	if not npc.is_connected(&"path_completed", _on_npc_path_completed):
-		npc.connect(&"path_completed", _on_npc_path_completed)
 
-	npc.call("set_dialog_enabled", false)
+	npc.call("definir_dialogo_habilitado", false)
 	_refresh_npc_dialog()
 	_restore_sequence()
 
@@ -114,10 +112,10 @@ func _restore_sequence() -> void:
 			state["office_npc_return_started"] = true
 			SaveGame.save_global_state("hall_quest_01", state)
 		_show_npc()
-		npc.call("set_dialog_enabled", false)
+		npc.call("definir_dialogo_habilitado", false)
 		_show_boss_room_access_task()
-		if not bool(npc.get("checkpoint_restored")) or bool(npc.get("path_finished")):
-			npc.call("start_path", npc_return_path)
+		if not bool(npc.get("checkpoint_restored")) or bool(npc.get("caminho_finalizado")):
+			npc.call("iniciar_caminho", npc_return_path)
 		return
 
 	if arrived:
@@ -125,7 +123,7 @@ func _restore_sequence() -> void:
 		if not bool(npc.get("checkpoint_restored")):
 			_move_npc_to_path_end()
 		if shout_finished:
-			npc.call("set_dialog_enabled", true)
+			npc.call("definir_dialogo_habilitado", true)
 			if bool(state.get("office_dialog_finished", false)):
 				_show_boss_room_access_task()
 			else:
@@ -136,8 +134,8 @@ func _restore_sequence() -> void:
 
 	if revealed:
 		_show_npc()
-		if not bool(npc.get("checkpoint_restored")) or bool(npc.get("path_finished")):
-			npc.call("start_path", npc_path)
+		if not bool(npc.get("checkpoint_restored")) or bool(npc.get("caminho_finalizado")):
+			npc.call("iniciar_caminho", npc_path)
 		return
 
 	_hide_npc()
@@ -181,7 +179,7 @@ func _schedule_npc_reveal() -> void:
 	if bool(state.get("office_npc_revealed", false)):
 		return
 	_show_npc()
-	npc.call("start_path", npc_path)
+	npc.call("iniciar_caminho", npc_path)
 	state["office_npc_revealed"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	_save_checkpoint()
@@ -212,7 +210,7 @@ func _npc_shout() -> void:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	if bool(state.get("office_npc_shout_finished", false)):
-		npc.call("set_dialog_enabled", true)
+		npc.call("definir_dialogo_habilitado", true)
 		if bool(state.get("office_dialog_finished", false)):
 			_show_boss_room_access_task()
 		else:
@@ -226,7 +224,7 @@ func _npc_shout() -> void:
 	state = SaveGame.office_mission_state(player)
 	state["office_npc_shout_finished"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
-	npc.call("set_dialog_enabled", true)
+	npc.call("definir_dialogo_habilitado", true)
 	_show_talk_task(false)
 	_save_checkpoint()
 
@@ -240,8 +238,8 @@ func _on_dialog_finished(dialog_id: String) -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	_queue_boss_room_hack_thought(state)
 	_show_boss_room_access_task()
-	npc.call("set_dialog_enabled", false)
-	npc.call("start_path", npc_return_path)
+	npc.call("definir_dialogo_habilitado", false)
+	npc.call("iniciar_caminho", npc_return_path)
 	_save_checkpoint()
 
 
@@ -378,8 +376,8 @@ func _refresh_npc_dialog() -> void:
 		sequence_id = "office.scientist.with_both_tools"
 	elif has_laptop:
 		sequence_id = "office.scientist.with_laptop"
-	npc.set("dialog_sequence_id", sequence_id)
-	npc.set("dialog_texts", DialogueCatalog.texts(sequence_id))
+	npc.set("id_sequencia_dialogo", sequence_id)
+	npc.set("textos_dialogo", DialogueCatalog.texts(sequence_id))
 
 
 func _handle_data_center_task(state: Dictionary) -> bool:
@@ -481,7 +479,7 @@ func _move_npc_to_path_end() -> void:
 	if npc_path.points.is_empty():
 		return
 	npc.global_position = npc_path.to_global(npc_path.points[npc_path.points.size() - 1])
-	npc.call("stop_current_path")
+	npc.call("parar_caminho_atual")
 
 
 func _save_checkpoint() -> void:

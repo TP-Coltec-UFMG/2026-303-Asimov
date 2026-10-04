@@ -222,3 +222,11 @@ res://Tests/engineer_fire_interaction_test.gd
 res://Tests/interaction_audio_test.gd
 res://Tests/interface_editor_test.gd
 res://Tests/scene_audio_test.gd
+res://NPC'S/Clarxs.tscn
+res://Objects/drone_projectile.tscn
+res://Objects/security_drone.tscn
+res://Tests/color_accessibility_test.gd
+res://Tests/hall_npc_arrival_test.gd
+res://Minigames/Minigame5/Scene/fio.tscn
+res://Minigames/Minigame5/Scene/juncao.tscn
+res://Minigames/Minigame5/Scene/notebook.tscn

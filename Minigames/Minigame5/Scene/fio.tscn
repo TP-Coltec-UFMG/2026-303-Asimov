@@ -10,6 +10,7 @@ size = Vector2(10, 10)
 size = Vector2(12, 10)
 
 [sub_resource type="ConcavePolygonShape2D" id="ConcavePolygonShape2D_tmg4o"]
+resource_local_to_scene = true
 
 [node name="Fio" type="Node2D" unique_id=1649072951 groups=["fios"]]
 script = ExtResource("1_kl67h")

@@ -56,10 +56,10 @@ func _run() -> void:
 	balloon.queue_free()
 	var npc: Node = preload("res://NPC'S/Clarxs.tscn").instantiate()
 	npc.save_enabled = false
-	npc.sprite_sheet = preload("res://NPC'S/NPC/06_purple_crimson.png")
-	npc.dialog_sequence_id = "office.scientist.with_cable"
+	npc.animacoes = preload("res://NPC'S/Animacoes/06_purple_crimson.tres")
+	npc.id_sequencia_dialogo = "office.scientist.with_cable"
 	add_child(npc)
-	_expect(npc.dialog_texts.size() == 7 and npc.dialog_texts[4] == "Alex: Encontrei um cabo. Só falta um notebook.", "O cientista deve escolher a variante correta para o item encontrado antes da conversa.")
+	_expect(npc.textos_dialogo.size() == 7 and npc.textos_dialogo[4] == "Alex: Encontrei um cabo. Só falta um notebook.", "O cientista deve escolher a variante correta para o item encontrado antes da conversa.")
 	npc.queue_free()
 	DialogManager.start_catalog_dialog("data_center.card_delivery", "catalog:original", 1)
 	var original_box: Node = DialogManager.dialog_box
