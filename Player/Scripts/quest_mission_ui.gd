@@ -76,6 +76,8 @@ var _completed_rows: Array[bool] = []
 var _panel_fading_out: bool = false
 var _panel_fade: Tween
 var _dynamic_panel_enabled: bool = true
+var _display_alpha: float = 1.0
+var _tutorial_opacity: float = 1.0
 
 
 func _enter_tree() -> void:
@@ -240,12 +242,18 @@ func _stop_panel_fade(reset_fading: bool = true) -> void:
 
 
 func _panel_alpha() -> float:
-	return ($ColorRect as CanvasItem).modulate.a
+	return _display_alpha
 
 
 func _set_panel_alpha(alpha: float) -> void:
+	_display_alpha = alpha
 	for part in [$ColorRect, $StandaloneBorder, $Label2, $VBoxContainer]:
-		(part as CanvasItem).modulate.a = alpha
+		(part as CanvasItem).modulate.a = alpha * _tutorial_opacity
+
+
+func set_tutorial_opacity(alpha: float) -> void:
+	_tutorial_opacity = clampf(alpha, 0.0, 1.0)
+	_set_panel_alpha(_display_alpha)
 
 
 func _unhandled_input(event: InputEvent) -> void:

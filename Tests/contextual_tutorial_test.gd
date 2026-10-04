@@ -34,13 +34,23 @@ func _run() -> void:
 	player.camera_2d.zoom = Vector2.ONE * 1.2
 	player.camera_2d.position_smoothing_enabled = false
 	player.camera_2d.make_current()
-	guide.player = player
 	await get_tree().process_frame
+	await get_tree().process_frame
+	guide.player = player
+	var heart := player.get_node("CanvasLayer/Control/Vida1") as CanvasItem
+	var stamina := player.get_node("CanvasLayer/Control/estamina") as CanvasItem
+	heart.modulate.a = 0.8
 	_expect(guide._gameplay_available(), "O ensino deve funcionar durante a campanha.")
 	guide._discover_lessons()
 	guide._start_next()
 	_expect(guide.active_lesson == "walk", "A campanha deve ensinar movimento primeiro.")
 	guide._update_lesson(0.3)
+	await _wait_for_attention()
+	_expect(is_equal_approx(heart.modulate.a, 0.12) and is_equal_approx(stamina.modulate.a, 0.15), "Movimento deve reduzir a opacidade da vida e da estamina.")
+	_expect(is_equal_approx(player.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_1.modulate.a, 0.15), "O jogador deve continuar visível enquanto o inventário perde destaque.")
+	_expect(guide.glow_style.border_width_top == 2 and guide.glow_style.shadow_size >= 7, "O balão deve ter borda completa e brilho.")
+	quests._set_panel_alpha(0.4)
+	_expect(is_equal_approx(quests._panel_alpha(), 0.4) and is_equal_approx(quests.get_node("ColorRect").modulate.a, 0.06), "O foco não deve substituir o fade próprio das tarefas.")
 	_expect(is_equal_approx(Engine.time_scale, 0.25), "A explicação deve reduzir a velocidade sem pausar.")
 	var health := player.get_vida()
 	player.tomar_dano(30)
@@ -48,15 +58,22 @@ func _run() -> void:
 	player.global_position.x += 5
 	guide._update_lesson(3.0)
 	guide._update_lesson(0.3)
+	await _wait_for_attention()
+	_expect(is_equal_approx(heart.modulate.a, 0.8) and is_equal_approx(player.inventory.slot_1.modulate.a, 1.0), "Concluir deve restaurar as opacidades originais.")
+	_expect(is_equal_approx(quests.get_node("ColorRect").modulate.a, 0.4), "Restaurar o foco deve preservar o estado atual das tarefas.")
 	_expect(guide._seen("walk") and guide.active_lesson.is_empty(), "Praticar deve concluir e registrar a explicação.")
 	_expect(is_equal_approx(Engine.time_scale, 1.0), "A velocidade deve voltar ao normal.")
 	guide._queue("walk")
 	_expect(not "walk" in guide.pending, "Uma explicação concluída não deve se repetir.")
 	guide._begin_lesson("run")
 	guide._update_lesson(0.3)
+	await _wait_for_attention()
+	_expect(is_equal_approx(stamina.modulate.a, 1.0) and is_equal_approx(heart.modulate.a, 0.12), "Corrida deve destacar apenas a estamina no HUD.")
 	get_tree().paused = true
 	_expect(not guide._gameplay_available(), "Não deve haver ensino no menu de pausa.")
 	guide._suspend()
+	await _wait_for_attention()
+	_expect(is_equal_approx(heart.modulate.a, 0.8) and is_equal_approx(stamina.modulate.a, 1.0), "Pausar deve restaurar a interface mesmo com a árvore pausada.")
 	_expect(is_equal_approx(Engine.time_scale, 1.0) and not guide.panel.visible, "Pausar deve esconder a explicação e restaurar a velocidade.")
 	get_tree().paused = false
 	guide.available_time = 1.0
@@ -78,12 +95,24 @@ func _run() -> void:
 	blur.queue_free()
 	guide.cancel_current()
 	guide.pending.clear()
+	guide._begin_lesson("collect")
+	await _wait_for_attention()
+	_expect(is_equal_approx(player.inventory.slot_1.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_6.modulate.a, 1.0), "Coleta deve destacar todo o inventário.")
+	guide.cancel_current()
+	guide._begin_lesson("tasks")
+	await _wait_for_attention()
+	_expect(is_equal_approx(quests.get_node("ColorRect").modulate.a, 0.4) and is_equal_approx(player.inventory.slot_1.modulate.a, 0.15), "Tarefas devem manter o painel evidente sem modificar seu próprio fade.")
+	guide.cancel_current()
+	await _wait_for_attention()
+	_expect(is_equal_approx(quests.get_node("ColorRect").modulate.a, 0.4), "Encerrar o tutorial de tarefas não deve escurecer o painel.")
 	for tier in [1, 2, 3]:
 		var scene_path: String = ["res://Objects/cartao_padrao.tscn", "res://Objects/cartao_forte.tscn", "res://Objects/cartao_chefe.tscn"][tier - 1]
 		player.inventory.add_item("cartao", load(scene_path))
 		guide._discover_lessons()
 		_expect("card_%d" % tier in guide.pending, "Cada nível de cartão deve ter sua própria explicação.")
 		guide._begin_lesson("card_%d" % tier)
+		await _wait_for_attention()
+		_expect(is_equal_approx(player.inventory.slot_5.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_1.modulate.a, 0.15), "Cartões devem destacar somente o slot correspondente.")
 		_equip("use_cartao")
 		_expect(guide._action_practiced(), "Equipar o cartão deve ser reconhecido.")
 		guide._complete_lesson()
@@ -91,6 +120,8 @@ func _run() -> void:
 	guide.pending.clear()
 	player.inventory.add_item("lanterna", preload("res://Objects/Lanterna.tscn"))
 	guide._begin_lesson("flashlight")
+	await _wait_for_attention()
+	_expect(is_equal_approx(player.inventory.slot_2.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_5.modulate.a, 0.15), "A lanterna deve receber destaque no próprio slot.")
 	_equip("use_lanterna")
 	_expect(guide._action_practiced(), "A luz real da lanterna deve concluir a prática.")
 	guide._complete_lesson()
@@ -102,6 +133,8 @@ func _run() -> void:
 	guide._discover_lessons()
 	_expect("extinguisher" in guide.pending and guide._relevant("extinguisher"), "Equipar o extintor deve liberar sua explicação.")
 	guide._begin_lesson("extinguisher")
+	await _wait_for_attention()
+	_expect(is_equal_approx(player.inventory.slot_6.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_2.modulate.a, 0.15), "O extintor deve receber destaque no próprio slot.")
 	var extinguisher := player.inventory.get_item_control("extintor")
 	extinguisher.set_fumaca(true)
 	_expect(guide._action_practiced(), "Usar o extintor real deve ser reconhecido.")
@@ -135,6 +168,8 @@ func _run() -> void:
 	guide._discover_lessons()
 	_expect(not "reload" in guide.pending, "A orientação de recarga não deve se repetir ao esvaziar outro pente.")
 	guide._begin_lesson("weapon_flashlight")
+	await _wait_for_attention()
+	_expect(is_equal_approx(player.inventory.slot_1.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_2.modulate.a, 1.0), "A combinação deve destacar tanto arma quanto lanterna.")
 	_equip("use_lanterna")
 	_expect(guide._action_practiced(), "A combinação de arma e lanterna deve funcionar.")
 	guide._complete_lesson()
@@ -153,6 +188,8 @@ func _run() -> void:
 	_expect(guide.active_lesson.is_empty(), "A explicação deve terminar mesmo sem prática, sem prender o jogador.")
 	guide._begin_lesson("weapon")
 	guide._update_lesson(0.3)
+	await _wait_for_attention()
+	_expect(is_equal_approx(player.ammo_panel.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_1.modulate.a, 1.0), "Arma deve destacar o slot e o contador de munição.")
 	Engine.time_scale = 0.12
 	guide.cancel_current()
 	_expect(is_equal_approx(Engine.time_scale, 0.12), "O tutorial não deve sobrescrever a câmera lenta de outro efeito.")
@@ -160,9 +197,11 @@ func _run() -> void:
 	guide._begin_lesson("weapon")
 	guide._update_lesson(0.3)
 	if "--capture" in OS.get_cmdline_user_args():
+		await _wait_for_attention()
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("res://.contextual-preview.png")
 	guide._on_scene_changed()
+	_expect(is_equal_approx(heart.modulate.a, 0.8) and guide.attention_targets.is_empty(), "Trocar de cena deve restaurar o HUD e liberar todas as referências.")
 	_expect(is_equal_approx(Engine.time_scale, 1.0) and guide.active_lesson.is_empty(), "Trocar de cena deve limpar a câmera lenta e a explicação.")
 	_expect(guide._seen("card_3"), "O aprendizado deve continuar registrado após uma troca de cena.")
 	var separate_tutorial_seen: Variant = Configs.configs.get("tutorial_seen", false)
@@ -190,6 +229,10 @@ func _equip(action: StringName) -> void:
 	event.action = action
 	event.pressed = true
 	player._input(event)
+
+
+func _wait_for_attention() -> void:
+	await get_tree().create_timer(0.4, true, false, true).timeout
 
 
 func _expect(condition: bool, message: String) -> void:

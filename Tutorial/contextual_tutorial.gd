@@ -4,6 +4,7 @@ const SEEN_KEY := "contextual_tutorial_seen"
 const SLOW_SCALE := 0.25
 const FADE_DURATION := 0.3
 const GAP_DURATION := 0.8
+const UNFOCUSED_OPACITY := 0.15
 
 @onready var panel: PanelContainer = $Panel
 @onready var title: Label = $Panel/Content/Title
@@ -30,19 +31,32 @@ var lesson_player_id := 0
 var collected_count := 0
 var baseline_collected_count := 0
 var observed_player_id := 0
+var attention_targets: Array[Dictionary] = []
+var attention_panel: QuestMissionUI
+var attention_tasks_focused := false
+var attention_tween: Tween
+var attention_amount := 0.0
+var attention_active := false
+var glow_tween: Tween
+var glow_style: StyleBoxFlat
 
 
 func _ready() -> void:
 	last_tick = Time.get_ticks_usec()
+	glow_style = panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+	panel.add_theme_stylebox_override("panel", glow_style)
 	get_tree().scene_changed.connect(_on_scene_changed)
 
 
 func _exit_tree() -> void:
 	_release_slow_motion()
+	_restore_attention(true)
+	_stop_glow()
 
 
 func _on_scene_changed() -> void:
 	cancel_current()
+	_restore_attention(true)
 	pending.clear()
 	player = null
 	available_time = 0.0
@@ -207,6 +221,8 @@ func _begin_lesson(id: String) -> void:
 	if bool(Configs.configs.get("leitor_de_tela", false)):
 		LeitorDeTela._ler_texto(panel.accessibility_name)
 	_acquire_slow_motion()
+	_start_attention()
+	_start_glow()
 
 
 func _update_lesson(real_delta: float) -> void:
@@ -215,11 +231,15 @@ func _update_lesson(real_delta: float) -> void:
 			return
 		_acquire_slow_motion()
 		panel.show()
+		_start_attention()
+		_start_glow()
 	elapsed += real_delta
 	practiced = practiced or _action_practiced()
 	if not finishing and elapsed >= minimum_reading_time and (practiced or elapsed >= maximum_reading_time):
 		finishing = true
 		elapsed = 0.0
+		_restore_attention()
+		_stop_glow()
 	if finishing:
 		var progress := clampf(elapsed / FADE_DURATION, 0.0, 1.0)
 		panel.modulate.a = 1.0 - progress
@@ -297,14 +317,105 @@ func _release_slow_motion() -> void:
 func _suspend() -> void:
 	_release_slow_motion()
 	panel.hide()
+	_restore_attention()
+	_stop_glow()
 
 
 func cancel_current() -> void:
 	_release_slow_motion()
 	panel.hide()
+	_restore_attention()
+	_stop_glow()
 	active_lesson = ""
 	finishing = false
 	practiced = false
+
+
+func _start_attention() -> void:
+	_restore_attention(true)
+	var hud := player.get_node("CanvasLayer/Control")
+	for element in hud.get_children():
+		if element is CanvasItem:
+			_add_attention_target(element, active_lesson == "run" and element.name == &"estamina")
+	for item_id: String in player.inventory.slots_por_item:
+		var focused := active_lesson == "collect"
+		match active_lesson:
+			"weapon", "reload":
+				focused = item_id == "gun"
+			"weapon_flashlight":
+				focused = item_id in ["gun", "lanterna"]
+			"flashlight":
+				focused = item_id == "lanterna"
+			"extinguisher":
+				focused = item_id == "extintor"
+		if active_lesson.begins_with("card_"):
+			focused = item_id == "cartao"
+		_add_attention_target(player.inventory.slots_por_item[item_id], focused)
+	_add_attention_target(player.get_node("CanvasLayer/AmmoPanel"), active_lesson in ["weapon", "reload", "weapon_flashlight"])
+	_add_attention_target(player.get_node("CanvasLayer/AlarmTip"), false, ^"self_modulate:a")
+	var scene := get_tree().current_scene
+	if scene != null:
+		_add_attention_target(scene.get_node_or_null("UI/Controle_de_tempo"), false)
+	attention_panel = player.get_node("QUEST_MISSION") as QuestMissionUI
+	attention_tasks_focused = active_lesson == "tasks"
+	attention_active = true
+	attention_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	attention_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	attention_tween.tween_method(_apply_attention, 0.0, 1.0, FADE_DURATION)
+
+
+func _add_attention_target(node: Node, focused: bool, property: NodePath = ^"modulate:a") -> void:
+	if not node is CanvasItem:
+		return
+	attention_targets.append({"node": node, "property": property, "original": node.get_indexed(property), "focused": focused})
+
+
+func _apply_attention(amount: float) -> void:
+	attention_amount = amount
+	for target: Dictionary in attention_targets:
+		var node: Object = target["node"]
+		if is_instance_valid(node):
+			var original: float = target["original"]
+			var factor := 1.0 if bool(target["focused"]) else UNFOCUSED_OPACITY
+			node.set_indexed(target["property"], original * lerpf(1.0, factor, amount))
+	if is_instance_valid(attention_panel):
+		var factor := 1.0 if attention_tasks_focused else UNFOCUSED_OPACITY
+		attention_panel.set_tutorial_opacity(lerpf(1.0, factor, amount))
+
+
+func _restore_attention(immediate: bool = false) -> void:
+	if not attention_active and not immediate:
+		return
+	attention_active = false
+	if attention_tween != null and attention_tween.is_valid():
+		attention_tween.kill()
+	attention_tween = null
+	if immediate:
+		_apply_attention(0.0)
+		attention_targets.clear()
+		attention_panel = null
+		return
+	attention_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	attention_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	attention_tween.tween_method(_apply_attention, attention_amount, 0.0, FADE_DURATION)
+	attention_tween.tween_callback(func() -> void:
+		attention_targets.clear()
+		attention_panel = null
+	)
+
+
+func _start_glow() -> void:
+	_stop_glow()
+	glow_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_loops()
+	glow_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	glow_tween.tween_property(glow_style, "shadow_color:a", 0.85, 0.9)
+	glow_tween.tween_property(glow_style, "shadow_color:a", 0.45, 0.9)
+
+
+func _stop_glow() -> void:
+	if glow_tween != null and glow_tween.is_valid():
+		glow_tween.kill()
+	glow_tween = null
 
 
 func protects_player(candidate: Player) -> bool:
