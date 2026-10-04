@@ -1,16 +1,12 @@
 
-extends Node2D
+extends "res://Objects/scripts/item_coletavel.gd"
 
-@export var save_id: String = "lanterna"
-var no_inventario: bool = false
 
 @onready var ligando: AudioStreamPlayer2D = $ligando
 @onready var luz: PointLight2D = $Luz
-@onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var interectable: Area2D = $Interectable
 @onready var point_light_2d: PointLight2D = $PointLight2D
 
-var player: Player = null
 var lanterna_acessa: bool = false
 var no_chao: bool = true
 
@@ -22,33 +18,30 @@ var angulo_base: float = 0.0
 
 const LIMITE_LANTERNA: float = 45.0
 
+func _init() -> void:
+	save_id = "lanterna"
+
+
 func _ready() -> void:
-	if not no_inventario:
-		if SaveGame.is_object_collected(save_id):
-			queue_free()
-			return
+	if restaurar_coleta():
+		return
 	luz.visible = false
 	point_light_2d.visible = false
 	set_physics_process(false)
 
-func foi_coletado() -> void:
-	SaveGame.set_object_collected(save_id)
 
-func marcar_como_item_inventario() -> void:
-	no_inventario = true
-	
 func _physics_process(_delta: float) -> void:
-	if player == null or not (player.usando_lanterna or player.usando_arma) or not lanterna_acessa:
+	if jogador == null or not (jogador.usando_lanterna or jogador.usando_arma) or not lanterna_acessa:
 		set_physics_process(false)
 		return
 
-	update_position_luz()
+	atualizar_posicao_luz()
 
-func set_player(novo_player: Player) -> void:
-	player = novo_player
+func definir_jogador(novo_jogador: Player) -> void:
+	jogador = novo_jogador
 	no_chao = false
 
-func set_luz(ligada: bool) -> void:
+func definir_luz(ligada: bool) -> void:
 	lanterna_acessa = ligada
 	luz.visible = ligada
 	point_light_2d.visible = ligada
@@ -57,19 +50,19 @@ func set_luz(ligada: bool) -> void:
 		ultima_animacao = &""
 		ultimo_frame = -1
 		ultima_direcao = Vector2.ZERO
-		update_position_luz()
+		atualizar_posicao_luz()
 
-func toggle_luz() -> void:
+func alternar_luz() -> void:
 	ligando.play()
-	set_luz(not lanterna_acessa)
+	definir_luz(not lanterna_acessa)
 
-func update_position_luz() -> void:
-	if player == null:
+func atualizar_posicao_luz() -> void:
+	if jogador == null:
 		return
 
-	var animation: StringName = player.animation_player.current_animation
-	var animation_frame: int = player.sprite.frame
-	var direcao: Vector2 = player.cardinal_direction
+	var animation: StringName = jogador.animation_player.current_animation
+	var animation_frame: int = jogador.sprite.frame
+	var direcao: Vector2 = jogador.cardinal_direction
 
 	if animation != ultima_animacao or animation_frame != ultimo_frame or direcao != ultima_direcao:
 		atualizar_configuracao_luz(animation, animation_frame, direcao)
@@ -77,7 +70,7 @@ func update_position_luz() -> void:
 		ultimo_frame = animation_frame
 		ultima_direcao = direcao
 
-	luz.global_position = player.global_position + offset_luz
+	luz.global_position = jogador.global_position + offset_luz
 
 	var mouse_position: Vector2 = get_global_mouse_position()
 
@@ -171,13 +164,13 @@ func _input(event: InputEvent) -> void:
 	if no_chao:
 		return
 
-	if player == null:
+	if jogador == null:
 		return
 
-	if not player.usando_lanterna and not player.usando_arma:
+	if not jogador.usando_lanterna and not jogador.usando_arma:
 		return
 
 	if event.is_action_pressed("acende_lanterna"):
-		if player.usando_arma and event.is_action_pressed("fire"):
+		if jogador.usando_arma and event.is_action_pressed("fire"):
 			return
-		toggle_luz()
+		alternar_luz()

@@ -103,7 +103,7 @@ func _jump(index: int) -> void:
 	_close_menu()
 	get_tree().paused = false
 	DialogManager.limpar_dialogos()
-	MusicController.stop_all_audio()
+	MusicController.parar_todos_audios()
 	get_tree().set_meta(&"dev_mission_jump_active", true)
 	active_stage = index
 	indicator.text = "DEV · %02d · Ctrl+Shift+D" % (index + 1)
@@ -248,7 +248,7 @@ func restore_real_save() -> void:
 		get_tree().remove_meta(&"dev_mission_jump_active")
 	active_stage = -1
 	indicator.hide()
-	MusicController.stop_all_audio()
+	MusicController.parar_todos_audios()
 	SaveGame.checkpoint_scene_path = ""
 	SaveGame._load()
 	SaveLoad._load()

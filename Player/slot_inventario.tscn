@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Player/Scripts/slot.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Sprites/ui/item_slot_default_background.png" id="2_fundo"]
+
+[sub_resource type="CanvasItemMaterial" id="MaterialInterface"]
+light_mode = 1
+
+[sub_resource type="StyleBoxTexture" id="FundoSlot"]
+texture = ExtResource("2_fundo")
+
+[sub_resource type="StyleBoxFlat" id="DestaqueEquipado"]
+bg_color = Color(0.765, 0, 0.176, 0.42)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.173, 0, 0, 0.961)
+
+[sub_resource type="StyleBoxFlat" id="TeclaNormal"]
+bg_color = Color(0.055, 0.071, 0.086, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.58, 0.639, 0.678, 0)
+content_margin_left = 1.0
+content_margin_right = 1.0
+
+[sub_resource type="StyleBoxFlat" id="TeclaAtiva"]
+bg_color = Color(0.278, 0.922, 0.698, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.722, 1, 0.902, 0)
+content_margin_left = 1.0
+content_margin_right = 1.0
+
+[node name="SlotInventario" type="Panel" groups=["inventory_binding_slots"]]
+self_modulate = Color(1, 1, 1, 0.5882353)
+material = SubResource("MaterialInterface")
+custom_minimum_size = Vector2(18, 18)
+theme_override_styles/panel = SubResource("FundoSlot")
+script = ExtResource("1_script")
+estilo_tecla_normal = SubResource("TeclaNormal")
+estilo_tecla_ativa = SubResource("TeclaAtiva")
+material_interface = SubResource("MaterialInterface")
+
+[node name="EquippedHighlight" type="Panel" parent="."]
+visible = false
+material = SubResource("MaterialInterface")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("DestaqueEquipado")
+
+[node name="BindLabel" type="Label" parent="."]
+material = SubResource("MaterialInterface")
+z_index = 10
+custom_minimum_size = Vector2(16, 9)
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = -1.0
+offset_bottom = 11.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 7
+theme_override_styles/normal = SubResource("TeclaNormal")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="resized" from="." to="." method="_atualizar_posicao_item"]

@@ -28,3 +28,11 @@ texture_filter = 1
 position = Vector2(0, -1)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("2_ammo")
+
+[node name="TemporizadorDisponibilidade" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[connection signal="timeout" from="TemporizadorDisponibilidade" to="." method="_atualizar_disponibilidade"]
+
+[connection signal="body_entered" from="." to="." method="_ao_entrar_corpo"]

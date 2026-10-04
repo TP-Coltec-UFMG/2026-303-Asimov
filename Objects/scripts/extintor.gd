@@ -1,7 +1,5 @@
-extends Node2D
+extends "res://Objects/scripts/item_coletavel.gd"
 
-@export var save_id: String = "extintor"
-var no_inventario: bool = false
 
 @onready var ligando: AudioStreamPlayer2D = $ligando
 @onready var sfx_fumaca: AudioStreamPlayer2D = $sfx_fumaca
@@ -11,12 +9,10 @@ var no_inventario: bool = false
 @onready var indicador: Line2D = $Line2D
 @onready var indicador_luz: PointLight2D = $Line2D/PointLight2D
 
-const DURACAO_INDICADOR: float = 10.0
 var _indicador_tween: Tween
-var _indicador_timer: Timer
+@onready var _indicador_timer: Timer = $TemporizadorIndicador
 var _indicador_energia: float = 1.0
 
-var player: Player = null
 var material_fumaca: ParticleProcessMaterial = null
 var extintor_ligado: bool = false
 var no_chao: bool = true
@@ -38,21 +34,18 @@ const LIMITE_EXTINTOR: float = 45.0
 const MAX_PARTICULAS_FUMACA: int = 50
 const FPS_PARTICULAS: int = 30
 
+func _init() -> void:
+	save_id = "extintor"
+
+
 func _ready() -> void:
 	_indicador_energia = indicador_luz.energy
 	indicador.hide()
 	indicador_luz.hide()
-	_indicador_timer = Timer.new()
-	_indicador_timer.one_shot = true
-	_indicador_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
-	_indicador_timer.timeout.connect(_liberar_indicador)
-	add_child(_indicador_timer)
-	call_deferred("_conectar_indicador")
+	_verificar_indicador_salvo.call_deferred()
 
-	if not no_inventario:
-		if SaveGame.is_object_collected(save_id):
-			queue_free()
-			return
+	if restaurar_coleta():
+		return
 
 	fumaca.emitting = false
 	area_fumaca.monitoring = false
@@ -64,15 +57,11 @@ func _ready() -> void:
 	set_physics_process(false)
 
 
-func _conectar_indicador() -> void:
-	if not is_inside_tree() or is_queued_for_deletion():
+func _verificar_indicador_salvo() -> void:
+	if not is_inside_tree() or is_queued_for_deletion() or no_inventario:
 		return
-	var quest := get_tree().current_scene.get_node_or_null("QuestController")
-	if quest == null or not quest.has_signal("pensamento_extintor_iniciado"):
-		return
-	if not quest.pensamento_extintor_iniciado.is_connected(_iniciar_indicador):
-		quest.pensamento_extintor_iniciado.connect(_iniciar_indicador)
-	if quest.orientar_extintor:
+	var missao := get_tree().current_scene.get_node_or_null("QuestController")
+	if missao != null and bool(missao.get("orientar_extintor")):
 		_iniciar_indicador()
 
 
@@ -81,7 +70,7 @@ func _iniciar_indicador() -> void:
 		return
 	indicador.show()
 	indicador_luz.show()
-	_indicador_timer.start(DURACAO_INDICADOR)
+	_indicador_timer.start()
 	_indicador_tween = create_tween().set_loops()
 	_indicador_tween.set_pause_mode(Tween.TWEEN_PAUSE_STOP)
 	_indicador_tween.tween_property(indicador, "self_modulate:a", 0.2, 0.5)
@@ -94,8 +83,8 @@ func _liberar_indicador() -> void:
 	if _indicador_tween != null and _indicador_tween.is_valid():
 		_indicador_tween.kill()
 	_indicador_tween = null
-	indicador.queue_free()
-	indicador_luz.queue_free()
+	indicador.hide()
+	indicador_luz.hide()
 
 
 func _exit_tree() -> void:
@@ -105,33 +94,27 @@ func _exit_tree() -> void:
 func configurar_particulas() -> void:
 	if fumaca.process_material is ParticleProcessMaterial:
 		ultimo_angulo_material = INF
-		material_fumaca = fumaca.process_material.duplicate() as ParticleProcessMaterial
-		fumaca.process_material = material_fumaca
+		material_fumaca = fumaca.process_material as ParticleProcessMaterial
 
-func foi_coletado() -> void:
-	SaveGame.set_object_collected(save_id)
-
-func marcar_como_item_inventario() -> void:
-	no_inventario = true
 
 func _physics_process(delta: float) -> void:
 	if not extintor_ligado:
 		return
 
-	if player == null:
-		set_fumaca(false)
+	if jogador == null:
+		definir_fumaca(false)
 		return
 
 	atualizar_posicao()
 	atualizar_combustivel(delta)
 
 func atualizar_posicao() -> void:
-	if player == null:
+	if jogador == null:
 		return
 
-	var animation: StringName = player.animation_player.current_animation
-	var animation_frame: int = player.sprite.frame
-	var direcao: Vector2 = player.cardinal_direction
+	var animation: StringName = jogador.animation_player.current_animation
+	var animation_frame: int = jogador.sprite.frame
+	var direcao: Vector2 = jogador.cardinal_direction
 
 	if (animation != ultima_animacao or animation_frame != ultimo_frame or direcao != ultima_direcao):
 		atualizar_configuracao_fumaca(animation, animation_frame, direcao)
@@ -139,11 +122,11 @@ func atualizar_posicao() -> void:
 		ultimo_frame = animation_frame
 		ultima_direcao = direcao
 
-	fumaca.global_position = player.global_position + offset_fumaca
+	fumaca.global_position = jogador.global_position + offset_fumaca
 	atualizar_angulo_mouse()
 
 func atualizar_angulo_mouse() -> void:
-	if player == null:
+	if jogador == null:
 		return
 
 	var mouse_pos: Vector2 = get_global_mouse_position()
@@ -193,18 +176,18 @@ func atualizar_combustivel(delta: float) -> void:
 		combustivel = 0.0
 		combustive.value = 0.0
 		combustivel_acabou = true
-		set_fumaca(false)
+		definir_fumaca(false)
 
-func set_player(novo_player: Player) -> void:
-	player = novo_player
+func definir_jogador(novo_jogador: Player) -> void:
+	jogador = novo_jogador
 	no_chao = false
 
-func set_fumaca(ligada: bool) -> void:
+func definir_fumaca(ligada: bool) -> void:
 	if ligada:
-		if player == null:
+		if jogador == null:
 			return
 
-		if not player.usando_extintor:
+		if not jogador.usando_extintor:
 			return
 
 		if combustivel_acabou:
@@ -359,22 +342,22 @@ func _on_area_fumaca_area_exited(area: Area2D) -> void:
 		fogo.parar_extincao()
 
 func _input(event: InputEvent) -> void:
-	if player == null:
+	if jogador == null:
 		return
 
-	if not player.usando_extintor:
+	if not jogador.usando_extintor:
 		return
 
 	if (event.is_action_pressed("usar_extintor") and not combustivel_acabou):
 		if not extintor_ligado:
 			ligando.play()
 
-		set_fumaca(true)
+		definir_fumaca(true)
 
 	if event.is_action_released("usar_extintor"):
-		set_fumaca(false)
+		definir_fumaca(false)
 
 		if combustivel_acabou:
-			player.reset_sprite_player()
-			player.inventory.remove_item("extintor")
+			jogador.reset_sprite_player()
+			jogador.inventory.remove_item("extintor")
 			queue_free()

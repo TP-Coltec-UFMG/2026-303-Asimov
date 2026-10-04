@@ -24,6 +24,7 @@ shader_parameter/frame_uv = Vector4(0, 0, 1, 1)
 shader_parameter/outline_uv = Vector2(0.01, 0.01)
 
 [node name="Arma" type="Node2D" unique_id=1140399274 groups=["gun_pickup"]]
+process_mode = 3
 script = ExtResource("1_gtnv3")
 
 [node name="Interectable" parent="." unique_id=1406152477 instance=ExtResource("2_dpds2")]
@@ -40,10 +41,9 @@ texture = ExtResource("3_0p3ui")
 material = SubResource("ShaderMaterial_2ssgs")
 interaction_path = NodePath("../../Interectable")
 
-[node name="PickupComponent" type="Node" parent="." unique_id=2092861625 node_paths=PackedStringArray("interactable")]
+[node name="PickupComponent" type="Node" parent="." unique_id=2092861625]
 script = ExtResource("5_dpds2")
-item_id = "gun"
-interactable = NodePath("../Interectable")
+id_item = "gun"
 metadata/_custom_type_script = "uid://dtfbuvijibmfx"
 
 [node name="Position_on_player" type="Sprite2D" parent="." unique_id=1693380322]
@@ -58,8 +58,12 @@ position = Vector2(8, 0)
 wait_time = 0.18
 one_shot = true
 
-[node name="ShotSfx" type="AudioStreamPlayer" parent="." unique_id=1040015895]
+[node name="ShotSfx" type="AudioStreamPlayer2D" parent="." unique_id=1040015895]
+process_mode = 1
 stream = ExtResource("100_gunshot")
+max_distance = 340.0
+attenuation = 1.8
+max_polyphony = 8
 volume_db = -9.0
 bus = &"sfx"
 
@@ -74,6 +78,17 @@ volume_db = -10.0
 bus = &"sfx"
 
 [node name="reticula" type="Sprite2D" parent="." unique_id=1823379469]
+top_level = true
+z_index = 100
 visible = false
 scale = Vector2(0.18, 0.18)
 texture = ExtResource("5_0p3ui")
+
+
+[node name="TemporizadorRecarga" type="Timer" parent="."]
+process_mode = 1
+wait_time = 1.15
+one_shot = true
+
+[connection signal="interacao_solicitada" from="Interectable" to="PickupComponent" method="coletar"]
+[connection signal="timeout" from="TemporizadorRecarga" to="." method="_ao_terminar_recarga"]

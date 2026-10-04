@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="1"]
+[ext_resource type="AudioStream" path="res://Sounds/External/computer-ventilation-0126.mp3" id="2"]
+[ext_resource type="AudioStream" path="res://Sounds/External/water-drop-01.wav" id="3"]
+[ext_resource type="AudioStream" path="res://Sounds/External/water-drop-02.wav" id="4"]
+[ext_resource type="AudioStream" path="res://Sounds/External/water-drop-03.wav" id="5"]
+[ext_resource type="AudioStream" path="res://Sounds/External/metal-creak-0303.mp3" id="6"]
+
+[node name="SceneAmbience" type="Node2D" groups=["scene_ambience"]]
+process_mode = 1
+script = ExtResource("1")
+gotas = Array[AudioStream]([ExtResource("3"), ExtResource("4"), ExtResource("5")])
+
+[node name="Fundo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2")
+volume_db = -80.0
+bus = &"sfx"
+
+[node name="ProximoFundo" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2")
+volume_db = -80.0
+bus = &"sfx"
+
+[node name="SomGota" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-80, 45)
+stream = ExtResource("3")
+volume_db = -14.0
+max_distance = 550.0
+bus = &"sfx"
+
+[node name="SomMetal" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(145, -45)
+stream = ExtResource("6")
+volume_db = -20.0
+max_distance = 550.0
+bus = &"sfx"
+
+[node name="TemporizadorGotas" type="Timer" parent="."]
+one_shot = true
+
+[node name="TemporizadorMetal" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="TemporizadorGotas" to="." method="_ao_gotejar"]
+[connection signal="timeout" from="TemporizadorMetal" to="." method="_ao_ranger_metal"]

@@ -1,36 +1,35 @@
 class_name SceneTrigger
 extends Area2D
 
-signal access_requested(trigger: SceneTrigger)
+signal solicitou_acesso(trigger: SceneTrigger)
 
-@export var connected_scene: String
+@export var cena_destino: String
 @export	var eh_elevador: bool
 @export var andar_atual: int
-@export var access_override: bool = false
+@export var acesso_controlado: bool = false
 @onready var painel_elevador: Node2D = get_node_or_null("../PainelElevador") as Node2D
 @onready var controle_de_tempo: Control = $"../UI/Controle_de_tempo"
 
 var ultima_posicao: Vector2
 
 @onready var acesso_liberado: AudioStreamPlayer2D = $"Acesso liberado"
-@onready var aceso_negado: AudioStreamPlayer2D = $"Aceso negado"
+@onready var acesso_negado: AudioStreamPlayer2D = $"Aceso negado"
 
-var andar_elevador_to_change : int 
 var dentro_da_area : bool = false
-var body_p : Player
-var access_in_progress: bool = false
+var jogador : Player
+var acesso_em_andamento: bool = false
 
-func _on_body_entered(body: Node2D) -> void:
-	if body is Player:
+func _ao_entrar_corpo(corpo: Node2D) -> void:
+	if corpo is Player:
 		dentro_da_area = true
-		body_p = body
+		jogador = corpo
 
 
-func _on_body_exited(body: Node2D) -> void:
-	if body is Player:
+func _ao_sair_corpo(corpo: Node2D) -> void:
+	if corpo is Player:
 		dentro_da_area = false
 		
-func _get_connect_scene_andar_novo(andar : int) -> String:
+func _obter_cena_andar(andar : int) -> String:
 	if andar == 1:
 		return "andar_saida"
 	if andar == 2:
@@ -47,7 +46,7 @@ func _get_connect_scene_andar_novo(andar : int) -> String:
 	return "andar_invalido"
 	
 func usar_elevador(andar: int) -> void:
-	if _blocked_by_scene_event():
+	if _bloqueado_por_evento_cena():
 		return
 	if eh_elevador and not elevador_liberado():
 		return
@@ -58,268 +57,268 @@ func usar_elevador(andar: int) -> void:
 	if andar == -2:
 		if dentro_da_area:
 			_ocultar_paineis_tarefas()
-			body_p.set_physics_process(true)
-			body_p.inventory.hide()
+			jogador.set_physics_process(true)
+			jogador.inventory.hide()
 			painel_elevador.resetar_sprites()
 			await painel_elevador.animacao()
-			MusicController.set_elevator_audio(false)
-			body_p.global_position = ultima_posicao
-			body_p.inventory.show()
+			MusicController.definir_audio_elevador(false)
+			jogador.global_position = ultima_posicao
+			jogador.inventory.show()
 			controle_de_tempo.show()
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
 			_mostrar_paineis_tarefas()
-			MusicController.set_alarm_quiet_context(&"elevator", false)
+			MusicController.definir_contexto_alarme_baixo(&"elevator", false)
 		return
 	if andar != andar_atual and eh_elevador:
 		if dentro_da_area:
 			_concluir_tarefa_do_sexto_andar(andar)
 			_concluir_tarefa_do_quarto_andar(andar)
 			_ocultar_paineis_tarefas()
-			body_p.inventory.hide()
+			jogador.inventory.hide()
 			painel_elevador.iniciar_movimento()
 			$Timer.start()
 			await $Timer.timeout
 			await painel_elevador.animacao()
-			MusicController.set_elevator_audio(false)
-			body_p.set_physics_process(true)
+			MusicController.definir_audio_elevador(false)
+			jogador.set_physics_process(true)
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
-			MusicController.set_alarm_quiet_context(&"elevator", false)
-			scene_manager.change_scene(body_p, _get_connect_scene_andar_novo(andar))
-			body_p.inventory.show()
+			MusicController.definir_contexto_alarme_baixo(&"elevator", false)
+			scene_manager.change_scene(jogador, _obter_cena_andar(andar))
+			jogador.inventory.show()
 			
 	if (andar == andar_atual and eh_elevador):
 		if dentro_da_area:
 			_ocultar_paineis_tarefas()
-			body_p.set_physics_process(true)
-			body_p.inventory.hide()
+			jogador.set_physics_process(true)
+			jogador.inventory.hide()
 			painel_elevador.resetar_sprites()
 			await painel_elevador.animacao()
-			MusicController.set_elevator_audio(false)
-			body_p.global_position = ultima_posicao
+			MusicController.definir_audio_elevador(false)
+			jogador.global_position = ultima_posicao
 			$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_ALWAYS
-			body_p.inventory.show()
+			jogador.inventory.show()
 			controle_de_tempo.show()
 			_mostrar_paineis_tarefas()
-			MusicController.set_alarm_quiet_context(&"elevator", false)
+			MusicController.definir_contexto_alarme_baixo(&"elevator", false)
 			
 			
 func get_ultima_posicao() -> Vector2:
 	return ultima_posicao
 
 func _unhandled_input(event: InputEvent) -> void:
-	if access_in_progress or _blocked_by_scene_event():
+	if acesso_em_andamento or _bloqueado_por_evento_cena():
 		return
 	
 	if event.is_action_pressed("interact") and eh_elevador and dentro_da_area:
 		if not elevador_liberado():
 			return
 
-		ultima_posicao = body_p.global_position
-		body_p.set_physics_process(false)
-		body_p.global_position += Vector2(-20, -200)
+		ultima_posicao = jogador.global_position
+		jogador.set_physics_process(false)
+		jogador.global_position += Vector2(-20, -200)
 		painel_elevador.resetar_sprites()
 		$"../UI/PauseMenu".process_mode = Node.PROCESS_MODE_DISABLED
 		painel_elevador.visible = true
 		controle_de_tempo.hide()
 		_ocultar_paineis_tarefas()
-		MusicController.set_elevator_audio(true)
-		MusicController.set_alarm_quiet_context(&"elevator", true)
+		MusicController.definir_audio_elevador(true)
+		MusicController.definir_contexto_alarme_baixo(&"elevator", true)
 		get_tree().paused = true
 
 	if event.is_action_pressed("interact") and dentro_da_area and not eh_elevador:
-		if is_instance_valid(body_p) and body_p.usando_cartao:
-			GameAudio.play_world(self, GameAudio.CARD_SWIPE, -12.0)
-		if access_override:
-			var viewport := get_viewport()
-			if viewport != null:
-				viewport.set_input_as_handled()
-			access_requested.emit(self)
+		if is_instance_valid(jogador) and jogador.usando_cartao:
+			GameAudio.tocar_no_mundo(self, GameAudio.PASSAR_CARTAO, -12.0)
+		if acesso_controlado:
+			var visor := get_viewport()
+			if visor != null:
+				visor.set_input_as_handled()
+			solicitou_acesso.emit(self)
 			return
 		if _tem_cartao_compativel() or _sala_do_chefe_foi_hackeada():
-			await _enter_authorized_area()
+			await _entrar_area_autorizada()
 		elif _pode_hackear_sala_do_chefe():
-			Progresso.iniciar_hack_da_sala_do_chefe(body_p)
+			Progresso.iniciar_hack_da_sala_do_chefe(jogador)
 		else:
-			$DoorAccessIndicator.show_status(false)
-			aceso_negado.play()
+			$DoorAccessIndicator.mostrar_estado(false)
+			acesso_negado.play()
 			pass
 
 
-func enter_with_verified_card(returning_player: Player) -> void:
-	if connected_scene != "data_center_forte" or access_override or access_in_progress or _blocked_by_scene_event():
+func entrar_com_cartao_verificado(jogador_retornando: Player) -> void:
+	if cena_destino != "data_center_forte" or acesso_controlado or acesso_em_andamento or _bloqueado_por_evento_cena():
 		return
-	if not is_instance_valid(returning_player) or not get_parent().is_ancestor_of(returning_player):
+	if not is_instance_valid(jogador_retornando) or not get_parent().is_ancestor_of(jogador_retornando):
 		return
-	var state := SaveGame.office_mission_state(returning_player)
-	if not bool(state.get("data_center_rfid_minigame_completed", false)) or not bool(state.get("data_center_rfid_reading_checked", false)):
+	var estado := SaveGame.office_mission_state(jogador_retornando)
+	if not bool(estado.get("data_center_rfid_minigame_completed", false)) or not bool(estado.get("data_center_rfid_reading_checked", false)):
 		return
 	if get_tree().paused or DialogManager.is_showing_dialog:
 		return
-	body_p = returning_player
+	jogador = jogador_retornando
 	if not _tem_cartao_compativel():
 		return
 	ContextualTutorial.cancelar_atual()
-	body_p.direction = Vector2.ZERO
-	body_p.velocity = Vector2.ZERO
-	body_p.correndo = false
-	body_p.state = "idle"
-	body_p.UpdateAnimation()
-	body_p.set_physics_process(false)
-	body_p._stop_movement_sfx()
-	GameAudio.play_world(self, GameAudio.CARD_SWIPE, -12.0)
-	await _enter_authorized_area(false)
+	jogador.direction = Vector2.ZERO
+	jogador.velocity = Vector2.ZERO
+	jogador.correndo = false
+	jogador.state = "idle"
+	jogador.UpdateAnimation()
+	jogador.set_physics_process(false)
+	jogador._stop_movement_sfx()
+	GameAudio.tocar_no_mundo(self, GameAudio.PASSAR_CARTAO, -12.0)
+	await _entrar_area_autorizada(false)
 
 
-func _enter_authorized_area(require_presence: bool = true) -> void:
-	if access_in_progress:
+func _entrar_area_autorizada(exigir_presenca: bool = true) -> void:
+	if acesso_em_andamento:
 		return
-	access_in_progress = true
-	$DoorAccessIndicator.show_status(true)
+	acesso_em_andamento = true
+	$DoorAccessIndicator.mostrar_estado(true)
 	acesso_liberado.play()
 	await acesso_liberado.finished
-	if require_presence and not dentro_da_area:
-		access_in_progress = false
+	if exigir_presenca and not dentro_da_area:
+		acesso_em_andamento = false
 		return
-	await _play_restricted_area_transition()
-	if not is_inside_tree() or (require_presence and not dentro_da_area):
-		access_in_progress = false
+	await _reproduzir_transicao_area_restrita()
+	if not is_inside_tree() or (exigir_presenca and not dentro_da_area):
+		acesso_em_andamento = false
 		return
 	_preparar_saida_da_sala_do_chefe()
 	_registrar_acesso_a_sala_do_chefe()
-	if not require_presence and bool(SaveGame.office_mission_state(body_p).get("data_center_forte_intro_seen", false)):
-		body_p.set_physics_process(true)
-	scene_manager.change_scene(body_p, connected_scene)
+	if not exigir_presenca and bool(SaveGame.office_mission_state(jogador).get("data_center_forte_intro_seen", false)):
+		jogador.set_physics_process(true)
+	scene_manager.change_scene(jogador, cena_destino)
 
 
-func _blocked_by_scene_event() -> bool:
-	var guide := get_parent().get_node_or_null("CoolingLocationGuide")
-	if guide != null and bool(guide.get("cutscene_running")):
+func _bloqueado_por_evento_cena() -> bool:
+	var guia := get_parent().get_node_or_null("CoolingLocationGuide")
+	if guia != null and bool(guia.get("cutscene_running")):
 		return true
-	var intro := get_parent().get_node_or_null("DataCenterIntroController")
-	return intro != null and bool(intro.get("power_sequence_running"))
+	var introducao := get_parent().get_node_or_null("DataCenterIntroController")
+	return introducao != null and bool(introducao.get("power_sequence_running"))
 
 
 func reproduzir_acesso_negado() -> void:
-	$DoorAccessIndicator.show_status(false)
-	aceso_negado.play()
-	await aceso_negado.finished
+	$DoorAccessIndicator.mostrar_estado(false)
+	acesso_negado.play()
+	await acesso_negado.finished
 
 
-func _play_restricted_area_transition() -> void:
-	if connected_scene != "data_center_forte":
+func _reproduzir_transicao_area_restrita() -> void:
+	if cena_destino != "data_center_forte":
 		return
-	var scene := get_parent()
-	if scene == null:
+	var cena := get_parent()
+	if cena == null:
 		return
-	var controller := scene.get_node_or_null("DataCenterIntroController")
-	if controller != null and controller.has_method("play_restricted_area_fade_out"):
-		await controller.call("play_restricted_area_fade_out")
+	var controlador := cena.get_node_or_null("DataCenterIntroController")
+	if controlador != null and controlador.has_method("play_restricted_area_fade_out"):
+		await controlador.call("play_restricted_area_fade_out")
 
 
 func _tem_cartao_compativel() -> bool:
-	if connected_scene == "data_center_forte" and bool(SaveGame.office_mission_state(body_p).get("data_center_engineer_access_unlocked", false)):
+	if cena_destino == "data_center_forte" and bool(SaveGame.office_mission_state(jogador).get("data_center_engineer_access_unlocked", false)):
 		return true
-	if not body_p.inventory.get_item_on_inventary("cartao") or not body_p.usando_cartao:
+	if not jogador.inventory.get_item_on_inventary("cartao") or not jogador.usando_cartao:
 		return false
-	var tipo_cartao: int = int(body_p.inventory.get_item_control("cartao").tipo)
-	var tipo_sala_acessando := 1
-	if connected_scene.containsn("chefe"):
-		tipo_sala_acessando = 3
-	elif connected_scene.containsn("forte"):
-		tipo_sala_acessando = 2
-	return tipo_cartao >= tipo_sala_acessando
+	var tipo_cartao: int = int(jogador.inventory.get_item_control("cartao").tipo)
+	var nivel_sala := 1
+	if cena_destino.containsn("chefe"):
+		nivel_sala = 3
+	elif cena_destino.containsn("forte"):
+		nivel_sala = 2
+	return tipo_cartao >= nivel_sala
 
 
 func _pode_hackear_sala_do_chefe() -> bool:
 	return (
-		connected_scene.containsn("chefe")
-		and body_p.inventory.get_item_on_inventary("laptop")
-		and body_p.inventory.get_item_on_inventary("cabo")
+		cena_destino.containsn("chefe")
+		and jogador.inventory.get_item_on_inventary("laptop")
+		and jogador.inventory.get_item_on_inventary("cabo")
 		and not _sala_do_chefe_foi_hackeada()
 	)
 
 
 func _sala_do_chefe_foi_hackeada() -> bool:
 	return (
-		connected_scene.containsn("chefe")
-		and bool(SaveGame.office_mission_state(body_p).get("office_boss_room_hacked", false))
+		cena_destino.containsn("chefe")
+		and bool(SaveGame.office_mission_state(jogador).get("office_boss_room_hacked", false))
 	)
 
 
 func _registrar_acesso_a_sala_do_chefe() -> void:
-	if not connected_scene.containsn("chefe"):
+	if not cena_destino.containsn("chefe"):
 		return
-	var estado := SaveGame.office_mission_state(body_p)
+	var estado := SaveGame.office_mission_state(jogador)
 	estado["office_boss_room_access_found"] = true
 	SaveGame.save_global_state("hall_quest_01", estado)
 
 
 func _preparar_saida_da_sala_do_chefe() -> void:
-	if connected_scene != "andar_escritorio":
+	if cena_destino != "andar_escritorio":
 		return
-	var scene := get_parent()
-	if scene != null and scene.has_method("prepare_return_to_office"):
-		scene.call("prepare_return_to_office")
+	var cena := get_parent()
+	if cena != null and cena.has_method("prepare_return_to_office"):
+		cena.call("prepare_return_to_office")
 
 
 func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 	if andar != 6:
 		return
-	var state: Dictionary = SaveGame.office_mission_state(body_p)
-	var return_task_pending := bool(state.get("data_center_return_task_pending", false))
-	var return_task_active := bool(state.get("data_center_return_task_active", false))
+	var estado: Dictionary = SaveGame.office_mission_state(jogador)
+	var tarefa_retorno_pendente := bool(estado.get("data_center_return_task_pending", false))
+	var tarefa_retorno_ativa := bool(estado.get("data_center_return_task_active", false))
 	if (
-		(return_task_pending or return_task_active)
-		and not bool(state.get("data_center_return_task_completed", false))
+		(tarefa_retorno_pendente or tarefa_retorno_ativa)
+		and not bool(estado.get("data_center_return_task_completed", false))
 	):
-		state["data_center_return_task_completed"] = true
-		state["data_center_return_task_active"] = false
+		estado["data_center_return_task_completed"] = true
+		estado["data_center_return_task_active"] = false
 
-		state["data_center_return_task_pending"] = return_task_pending
-		SaveGame.save_global_state("hall_quest_01", state)
-		body_p.balao_de_pensamento.descartar([
+		estado["data_center_return_task_pending"] = tarefa_retorno_pendente
+		SaveGame.save_global_state("hall_quest_01", estado)
+		jogador.balao_de_pensamento.descartar([
 			"data_center:breaker_restored_urgent",
 			"data_center:breaker_return_plan",
 		])
-		if return_task_active:
-			var return_quest_ui := _obter_painel_tarefas()
-			if return_quest_ui != null:
-				if SaveGame.data_center_scientist_talk_pending(state):
-					return_quest_ui.mostrar_tarefas_retorno_e_cientista()
+		if tarefa_retorno_ativa:
+			var painel_retorno := _obter_painel_tarefas()
+			if painel_retorno != null:
+				if SaveGame.data_center_scientist_talk_pending(estado):
+					painel_retorno.mostrar_tarefas_retorno_e_cientista()
 				else:
-					return_quest_ui.mostrar_tarefa_voltar_data_center(true, true)
+					painel_retorno.mostrar_tarefa_voltar_data_center(true, true)
 		return
-	if not bool(state.get("office_data_center_task_active", false)):
+	if not bool(estado.get("office_data_center_task_active", false)):
 		return
-	if bool(state.get("office_data_center_task_completed", false)):
+	if bool(estado.get("office_data_center_task_completed", false)):
 		return
-	state["office_data_center_task_completed"] = true
-	SaveGame.save_global_state("hall_quest_01", state)
-	body_p.balao_de_pensamento.descartar([
+	estado["office_data_center_task_completed"] = true
+	SaveGame.save_global_state("hall_quest_01", estado)
+	jogador.balao_de_pensamento.descartar([
 		"boss_room:chief_card_found",
 		"office:data_center_floor",
 	])
-	var quest_ui := _obter_painel_tarefas()
-	if quest_ui != null:
-		quest_ui.mostrar_tarefa_ir_sexto_andar(true, true)
+	var painel_tarefas := _obter_painel_tarefas()
+	if painel_tarefas != null:
+		painel_tarefas.mostrar_tarefa_ir_sexto_andar(true, true)
 
 
 func _concluir_tarefa_do_quarto_andar(andar: int) -> void:
 	if andar != 4:
 		return
-	var state: Dictionary = SaveGame.office_mission_state(body_p)
-	if not bool(state.get("data_center_tools_floor_task_active", false)):
+	var estado: Dictionary = SaveGame.office_mission_state(jogador)
+	if not bool(estado.get("data_center_tools_floor_task_active", false)):
 		return
-	if bool(state.get("data_center_tools_floor_task_completed", false)):
+	if bool(estado.get("data_center_tools_floor_task_completed", false)):
 		return
-	state["data_center_tools_floor_task_completed"] = true
-	SaveGame.save_global_state("hall_quest_01", state)
-	var quest_ui := _obter_painel_tarefas()
-	if quest_ui != null:
-		quest_ui.mostrar_tarefas_energia_data_center(
-			body_p.inventory.get_item_on_inventary("lanterna"),
+	estado["data_center_tools_floor_task_completed"] = true
+	SaveGame.save_global_state("hall_quest_01", estado)
+	var painel_tarefas := _obter_painel_tarefas()
+	if painel_tarefas != null:
+		painel_tarefas.mostrar_tarefas_energia_data_center(
+			jogador.inventory.get_item_on_inventary("lanterna"),
 			true,
-			bool(state.get("data_center_breaker_restored", false)),
+			bool(estado.get("data_center_breaker_restored", false)),
 			true
 		)
 			
@@ -336,7 +335,7 @@ func elevador_liberado() -> bool:
 func pode_acessar_andar(andar: int) -> bool:
 	if andar == -2 or andar == andar_atual:
 		return true
-	return andar_liberado_por_progresso(andar, SaveGame.office_mission_state(body_p))
+	return andar_liberado_por_progresso(andar, SaveGame.office_mission_state(jogador))
 
 
 static func andar_liberado_por_progresso(andar: int, estado: Dictionary) -> bool:
@@ -365,9 +364,9 @@ func _mostrar_paineis_tarefas() -> void:
 
 
 func _obter_painel_tarefas() -> QuestMissionUI:
-	var jogador := body_p
-	if not is_instance_valid(jogador):
-		jogador = get_tree().get_first_node_in_group("player") as Player
-	if not is_instance_valid(jogador):
+	var jogador_atual := jogador
+	if not is_instance_valid(jogador_atual):
+		jogador_atual = get_tree().get_first_node_in_group("player") as Player
+	if not is_instance_valid(jogador_atual):
 		return null
-	return jogador.get_node_or_null("QUEST_MISSION") as QuestMissionUI
+	return jogador_atual.get_node_or_null("QUEST_MISSION") as QuestMissionUI

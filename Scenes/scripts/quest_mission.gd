@@ -57,9 +57,9 @@ func _inicializar() -> void:
 	man_player.balao_de_pensamento.pensamento_finalizado.connect(_on_pensamento_finalizado)
 	man_player.balao_de_pensamento.pensamento_iniciado.connect(_on_pensamento_iniciado)
 
-	MusicController._start_som_de_fundo()
-	MusicController._stop_bg_ambient()
-	MusicController._set_volume_som_de_fundo(1.0)
+	MusicController._iniciar_musica_abertura()
+	MusicController._parar_ambiente_fundo()
+	MusicController._definir_volume_musica_abertura(1.0)
 	_descartar_instrucoes_obsoletas()
 
 	_on_pensamento_iniciado(man_player.balao_de_pensamento.pensamento_atual_id())

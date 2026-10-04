@@ -16,7 +16,7 @@ var finishing: bool = false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = false
-	MusicController.pause_all_audio()
+	MusicController.pausar_todos_audios()
 	skip_allowed = bool(Configs.configs.get("intro_cutscene_seen", false))
 	skip_indicator.hide()
 	black.visible = false
@@ -53,7 +53,7 @@ func _finish_cutscene() -> void:
 	SaveLoad.save_data = Configs.configs.duplicate(true)
 	SaveLoad._save()
 	get_tree().set_meta(OPENING_BLUR_META, true)
-	MusicController.stop_all_audio()
-	MusicController.allow_scene_audio()
+	MusicController.parar_todos_audios()
+	MusicController.permitir_audio_cena()
 	await get_tree().process_frame
 	get_tree().change_scene_to_file(NEXT_SCENE)

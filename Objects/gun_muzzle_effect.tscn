@@ -1,10 +1,25 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://Objects/scripts/gun_muzzle_effect.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://Sprites/ilumination/gradient-radial.png" id="2_light"]
 
 [sub_resource type="CanvasItemMaterial" id="Material_unshaded"]
 light_mode = 1
+
+[sub_resource type="Animation" id="Disparo"]
+resource_name = "disparo"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.08), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [Vector2(1, 1), Vector2(1.8, 1.8)]}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate:a")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.1), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [1.0, 0.0]}
+
+[sub_resource type="AnimationLibrary" id="Biblioteca"]
+_data = {&"disparo": SubResource("Disparo")}
 
 [node name="GunMuzzleEffect" type="Node2D"]
 z_index = 40
@@ -20,3 +35,8 @@ scale = Vector2(0.12, 0.12)
 color = Color(1, 0.65, 0.2, 1)
 energy = 1.15
 texture = ExtResource("2_light")
+
+[node name="Animacao" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Biblioteca")}
+
+[connection signal="animation_finished" from="Animacao" to="." method="_ao_terminar_animacao"]

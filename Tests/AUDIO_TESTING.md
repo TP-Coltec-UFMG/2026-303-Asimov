@@ -8,7 +8,7 @@ usam a sessão temporária do modo dev para não gravar a campanha nem as prefer
   parede, arrastar, soltar, bloqueio de física, visibilidade, pausa e troca de cena.
 - `ambient_audio_test.tscn -- --ambient-audio-test`: música global sem
   atenuação por câmera, pausa nativa e explícita, batimento/estamina,
-  transições das músicas 2 → 3 → 5 e referências liberadas.
+  transições das músicas 2 → 5 → 3 e referências liberadas.
 - `--script Tests/interaction_audio_test.gd`: repetição de interação,
   sequência RFID sem sobreposição, limite de vozes, pausa e descarte ao sair.
 - `scene_audio_test.tscn -- --scene-audio-test`: carrega os seis cenários reais,
@@ -26,3 +26,13 @@ sem saturação. Isso verifica a saída digital e o ciclo de reprodução;
 a preferência de timbre/volume continua sendo uma avaliação auditiva do jogador.
 
 Fontes dos arquivos externos: `Sounds/External/SOURCES.md`.
+
+Validação da organização no editor (04/10/2026): ambientes dos seis andares
+instanciam `Scenes/Audio/ambiente.tscn`. As vozes de interação ficam no autoload
+`EfeitosSonoros`, e as explosões/sirene do engenheiro em `EfeitosFinais`.
+Os sinais de áudio, temporizadores e animações ficam salvos nessas cenas.
+
+- `efeitos_audio_editor_test.tscn`: clarão, marca de impacto, pausa, reutilização
+  das explosões e fade de retorno ao menu, com execução em 60 FPS.
+- `engineer_fire_interaction_test.tscn`: fluxo dos circuitos, fogo original,
+  materiais independentes, sirene e reutilização dos efeitos do encerramento.

@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/scripts/door_access_indicator.gd" id="1_script"]
+
+[sub_resource type="CanvasItemMaterial" id="MaterialVisivel"]
+light_mode = 1
+
+[node name="IndicadorAcesso" type="Node2D"]
+visible = false
+z_index = 100
+material = SubResource("MaterialVisivel")
+script = ExtResource("1_script")
+
+[node name="BrilhoExterno" type="Polygon2D" parent="."]
+use_parent_material = true
+color = Color(1, 0.18, 0.12, 0.08)
+polygon = PackedVector2Array(-10, -7, 10, -7, 10, 7, -10, 7)
+
+[node name="BrilhoInterno" type="Polygon2D" parent="."]
+use_parent_material = true
+color = Color(1, 0.18, 0.12, 0.2)
+polygon = PackedVector2Array(-8, -5, 8, -5, 8, 5, -8, 5)
+
+[node name="Fundo" type="Polygon2D" parent="."]
+use_parent_material = true
+color = Color(0.02, 0.025, 0.03, 1)
+polygon = PackedVector2Array(-6, -4, 6, -4, 6, 4, -6, 4)
+
+[node name="LuzEstado" type="Polygon2D" parent="."]
+use_parent_material = true
+color = Color(1, 0.18, 0.12, 1)
+polygon = PackedVector2Array(-5, -3, 5, -3, 5, 3, -5, 3)
+
+[node name="SinalLiberado" type="Line2D" parent="."]
+visible = false
+use_parent_material = true
+points = PackedVector2Array(-3, 0, -1, 2, 3, -2)
+width = 1.0
+default_color = Color(0.015, 0.08, 0.03, 1)
+
+[node name="SinalNegado" type="Node2D" parent="."]
+use_parent_material = true
+
+[node name="Diagonal1" type="Line2D" parent="SinalNegado"]
+use_parent_material = true
+points = PackedVector2Array(-2, -2, 2, 2)
+width = 1.0
+default_color = Color(0.12, 0.015, 0.01, 1)
+
+[node name="Diagonal2" type="Line2D" parent="SinalNegado"]
+use_parent_material = true
+points = PackedVector2Array(-2, 2, 2, -2)
+width = 1.0
+default_color = Color(0.12, 0.015, 0.01, 1)

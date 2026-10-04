@@ -1,148 +1,97 @@
 extends Node2D
 
-@export_enum("Hall", "Data Center", "Refrigeração", "Escritório", "Ferramentas") var ambience_kind: int = 0
+@export_enum("Hall", "Data Center", "Refrigeração", "Escritório", "Ferramentas") var tipo_ambiente: int = 0
+@export_range(0.01, 2.0) var duracao_transicao: float = 0.5
+@export var gotas: Array[AudioStream] = []
 
-const VENTILATION: AudioStream = preload("res://Sounds/External/computer-ventilation-0126.mp3")
-const ROOM_VOLUMES_DB: Array[float] = [-25.0, -28.0, -17.0, -27.0, -23.0]
-const LOOP_CROSSFADE: float = 0.5
-const DRIPS: Array[AudioStream] = [
-	preload("res://Sounds/External/water-drop-01.wav"),
-	preload("res://Sounds/External/water-drop-02.wav"),
-	preload("res://Sounds/External/water-drop-03.wav")
-]
-const CREAK: AudioStream = preload("res://Sounds/External/metal-creak-0303.mp3")
+const VOLUMES_AMBIENTE: Array[float] = [-25.0, -28.0, -17.0, -27.0, -23.0]
 
-var bed: AudioStreamPlayer
-var next_bed: AudioStreamPlayer
-var loop_crossfading: bool = false
-var loop_fade_elapsed: float = 0.0
-var entrance_fade: float = 0.0
-var drip_voice: AudioStreamPlayer2D
-var creak_voice: AudioStreamPlayer2D
-var drip_timer: Timer
-var creak_timer: Timer
-var elevator_muffled: bool = false
+var transicao_loop: bool = false
+var tempo_transicao: float = 0.0
+var entrada_suave: float = 0.0
+var silenciado_elevador: bool = false
+
+@onready var fundo: AudioStreamPlayer = $Fundo
+@onready var proximo_fundo: AudioStreamPlayer = $ProximoFundo
+@onready var som_gota: AudioStreamPlayer2D = $SomGota
+@onready var som_metal: AudioStreamPlayer2D = $SomMetal
+@onready var temporizador_gotas: Timer = $TemporizadorGotas
+@onready var temporizador_metal: Timer = $TemporizadorMetal
 
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_PAUSABLE
-	add_to_group("scene_ambience")
-	ambience_kind = clampi(ambience_kind, 0, ROOM_VOLUMES_DB.size() - 1)
-	bed = _new_bed()
-	next_bed = _new_bed()
-	bed.play()
-	if ambience_kind == 0:
-		_setup_hall_events()
-
-
-func _new_bed() -> AudioStreamPlayer:
-	var voice := AudioStreamPlayer.new()
-	voice.bus = &"sfx"
-	voice.volume_linear = 0.0
-	var recording := VENTILATION.duplicate() as AudioStreamMP3
-	recording.loop = false
-	voice.stream = recording
-	add_child(voice)
-	return voice
+	tipo_ambiente = clampi(tipo_ambiente, 0, VOLUMES_AMBIENTE.size() - 1)
+	fundo.play()
+	_iniciar_eventos_hall()
 
 
 func _process(delta: float) -> void:
-	if elevator_muffled:
-		bed.volume_linear = 0.0
-		next_bed.volume_linear = 0.0
+	if silenciado_elevador:
+		fundo.volume_linear = 0.0
+		proximo_fundo.volume_linear = 0.0
 		return
-
-	entrance_fade = minf(entrance_fade + delta / 1.0, 1.0)
-	var gain := db_to_linear(ROOM_VOLUMES_DB[ambience_kind]) * entrance_fade
-	if not loop_crossfading and bed.get_playback_position() >= bed.stream.get_length() - LOOP_CROSSFADE:
-		loop_crossfading = true
-		loop_fade_elapsed = 0.0
-		next_bed.volume_linear = 0.0
-		next_bed.play()
-	if loop_crossfading:
-		loop_fade_elapsed = minf(loop_fade_elapsed + delta, LOOP_CROSSFADE)
-		var progress := loop_fade_elapsed / LOOP_CROSSFADE
-		bed.volume_linear = gain * (1.0 - progress)
-		next_bed.volume_linear = gain * progress
-		if progress >= 1.0:
-			bed.stop()
-			var previous := bed
-			bed = next_bed
-			next_bed = previous
-			loop_crossfading = false
+	entrada_suave = minf(entrada_suave + delta, 1.0)
+	var volume := db_to_linear(VOLUMES_AMBIENTE[tipo_ambiente]) * entrada_suave
+	if not transicao_loop and fundo.get_playback_position() >= fundo.stream.get_length() - duracao_transicao:
+		transicao_loop = true
+		tempo_transicao = 0.0
+		proximo_fundo.volume_linear = 0.0
+		proximo_fundo.play()
+	if transicao_loop:
+		tempo_transicao = minf(tempo_transicao + delta, duracao_transicao)
+		var progresso := tempo_transicao / duracao_transicao
+		fundo.volume_linear = volume * (1.0 - progresso)
+		proximo_fundo.volume_linear = volume * progresso
+		if progresso >= 1.0:
+			fundo.stop()
+			var anterior := fundo
+			fundo = proximo_fundo
+			proximo_fundo = anterior
+			transicao_loop = false
 	else:
-		bed.volume_linear = gain
-
-		if not bed.playing:
-			bed.play()
-
-
-func _setup_hall_events() -> void:
-	drip_voice = _new_spatial_voice(DRIPS[0], Vector2(-80, 45), -14.0)
-	creak_voice = _new_spatial_voice(CREAK, Vector2(145, -45), -20.0)
-	drip_timer = Timer.new()
-	drip_timer.one_shot = true
-	add_child(drip_timer)
-	drip_timer.timeout.connect(_on_drip)
-	creak_timer = Timer.new()
-	creak_timer.one_shot = true
-	add_child(creak_timer)
-	creak_timer.timeout.connect(_on_creak)
-	drip_timer.start(randf_range(5.0, 11.0))
-	creak_timer.start(randf_range(14.0, 25.0))
+		fundo.volume_linear = volume
+		if not fundo.playing:
+			fundo.play()
 
 
-func _new_spatial_voice(sound: AudioStream, at: Vector2, volume: float) -> AudioStreamPlayer2D:
-	var voice := AudioStreamPlayer2D.new()
-	voice.stream = sound
-	voice.bus = &"sfx"
-	voice.volume_db = volume
-	voice.position = at
-	voice.max_distance = 550.0
-	voice.attenuation = 1.0
-	add_child(voice)
-	return voice
-
-
-func _on_drip() -> void:
-	if elevator_muffled:
+func _ao_gotejar() -> void:
+	if silenciado_elevador or tipo_ambiente != 0 or gotas.is_empty():
 		return
-	if creak_voice.playing:
-		drip_timer.start(3.0)
+	if som_metal.playing:
+		temporizador_gotas.start(3.0)
 		return
-	drip_voice.stream = DRIPS.pick_random()
-	drip_voice.play()
-	drip_timer.start(randf_range(7.0, 17.0))
+	som_gota.stream = gotas.pick_random()
+	som_gota.play()
+	temporizador_gotas.start(randf_range(7.0, 17.0))
 
 
-func _on_creak() -> void:
-	if elevator_muffled:
+func _ao_ranger_metal() -> void:
+	if silenciado_elevador or tipo_ambiente != 0:
 		return
-	if drip_voice.playing:
-		creak_timer.start(3.0)
+	if som_gota.playing:
+		temporizador_metal.start(3.0)
 		return
-	creak_voice.play()
-	creak_timer.start(randf_range(22.0, 42.0))
+	som_metal.play()
+	temporizador_metal.start(randf_range(22.0, 42.0))
 
 
-func set_elevator_muffling(active: bool) -> void:
-	if elevator_muffled == active:
+func definir_silencio_elevador(ativo: bool) -> void:
+	if silenciado_elevador == ativo:
 		return
-	elevator_muffled = active
-	if active:
-		if drip_timer != null:
-			drip_timer.stop()
-		if creak_timer != null:
-			creak_timer.stop()
-		if drip_voice != null:
-			drip_voice.stop()
-		if creak_voice != null:
-			creak_voice.stop()
-		bed.volume_linear = 0.0
-		next_bed.volume_linear = 0.0
+	silenciado_elevador = ativo
+	if ativo:
+		temporizador_gotas.stop()
+		temporizador_metal.stop()
+		som_gota.stop()
+		som_metal.stop()
+		fundo.volume_linear = 0.0
+		proximo_fundo.volume_linear = 0.0
 	else:
-		entrance_fade = 0.0
-		if drip_timer != null:
-			drip_timer.start(randf_range(5.0, 11.0))
-		if creak_timer != null:
-			creak_timer.start(randf_range(14.0, 25.0))
+		entrada_suave = 0.0
+		_iniciar_eventos_hall()
+
+
+func _iniciar_eventos_hall() -> void:
+	if tipo_ambiente == 0:
+		temporizador_gotas.start(randf_range(5.0, 11.0))
+		temporizador_metal.start(randf_range(14.0, 25.0))

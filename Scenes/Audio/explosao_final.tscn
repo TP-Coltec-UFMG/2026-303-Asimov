@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Sounds/explosao_final.gd" id="1"]
+[ext_resource type="AudioStream" path="res://Sounds/Effects/mechanical_explosion_spring_spring.wav" id="2"]
+[ext_resource type="Texture2D" path="res://Sprites/ilumination/gradient-radial.png" id="3"]
+
+[sub_resource type="CanvasItemMaterial" id="Material"]
+light_mode = 1
+
+[sub_resource type="Animation" id="Componente"]
+resource_name = "componente"
+length = 0.38
+tracks/0/type = "value"
+tracks/0/path = NodePath("Brilho:scale")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.38), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [Vector2(0.18, 0.18), Vector2(0.75, 0.75)]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Brilho:modulate:a")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.38), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [1.0, 0.0]}
+
+[sub_resource type="Animation" id="Destruicao"]
+resource_name = "destruicao"
+length = 0.32
+tracks/0/type = "value"
+tracks/0/path = NodePath("Brilho:scale")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.32), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [Vector2(0.12, 0.12), Vector2(0.85, 0.85)]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Brilho:modulate:a")
+tracks/1/interp = 1
+tracks/1/keys = {"times": PackedFloat32Array(0, 0.32), "transitions": PackedFloat32Array(1, 1), "update": 0, "values": [1.0, 0.0]}
+
+[sub_resource type="AnimationLibrary" id="Biblioteca"]
+_data = {&"componente": SubResource("Componente"), &"destruicao": SubResource("Destruicao")}
+
+[node name="ExplosaoFinal" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Brilho" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("Material")
+texture = ExtResource("3")
+
+[node name="Som" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2")
+bus = &"sfx"
+
+[node name="Animacao" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Biblioteca")}
+
+[connection signal="finished" from="Som" to="." method="_ao_terminar_som"]
+[connection signal="animation_finished" from="Animacao" to="." method="_ao_terminar_animacao"]

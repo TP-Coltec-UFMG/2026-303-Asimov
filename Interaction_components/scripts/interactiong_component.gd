@@ -15,18 +15,13 @@ const ALTURA_FLUTUACAO := 1.0
 const VELOCIDADE_FLUTUACAO := 5.0
 
 
-func _ready() -> void:
-	if interact_label.label_settings != null:
-		interact_label.label_settings = interact_label.label_settings.duplicate()
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and can_interact:
 		if current_interactions:
 			can_interact = false
 			interact_label.hide()
 			
-			await current_interactions[0].interact.call()
+			await current_interactions[0].interagir()
 			can_interact = true
 
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bcpwbfr4b3m8n"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_fwpb8"]
-[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_cooling"]
+[ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_cooling"]
 [ext_resource type="Texture2D" uid="uid://cfxkmfwccxb5u" path="res://Sprites/ilumination/gradient-radial.png" id="2_nwm1k"]
 [ext_resource type="PackedScene" uid="uid://l27iu5pmypyj" path="res://TileMaps/Andar_DataCenter/andar_data_center.tscn" id="4_cbryt"]
 [ext_resource type="PackedScene" uid="uid://bvhi27tium5k" path="res://Scenes/scene_trigger.tscn" id="5_ntq2j"]
@@ -23,9 +23,8 @@ size = Vector2(24, 18)
 [node name="DATA_CENTER_REFRIGERACAO" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_fwpb8")
 
-[node name="SceneAmbience" type="Node2D" parent="."]
-script = ExtResource("ambience_cooling")
-ambience_kind = 2
+[node name="SceneAmbience" parent="." instance=ExtResource("ambience_cooling")]
+tipo_ambiente = 2
 
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 
@@ -68,7 +67,7 @@ position = Vector2(150, -172)
 
 [node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("5_ntq2j")]
 position = Vector2(-170, -99)
-connected_scene = "andar_data_center"
+cena_destino = "andar_data_center"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=46367341]
 z_index = 1
@@ -119,3 +118,7 @@ is_not_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CoolingTerminal2/Interectable" unique_id=61067426]
 shape = SubResource("RectangleShape2D_2c4a7")
+
+[connection signal="interacao_solicitada" from="CoolingTerminal/Interectable" to="CoolingTerminal" method="_start_cooling_puzzle"]
+
+[connection signal="interacao_solicitada" from="CoolingTerminal2/Interectable" to="CoolingTerminal2" method="_start_cooling_puzzle"]

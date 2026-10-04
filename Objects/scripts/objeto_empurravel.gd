@@ -8,14 +8,13 @@ extends CharacterBody2D
 var ultima_posicao: Vector2
 
 
-func set_manipulated_outline(enabled: bool) -> void:
-	for cue in find_children("*", "", true, false):
-		if cue.is_in_group(&"color_accessibility_cue") and cue.has_method("set_forced_outline"):
-			cue.call("set_forced_outline", enabled)
+func definir_contorno_manipulacao(ativado: bool) -> void:
+	for contorno in find_children("*", "", true, false):
+		if contorno.is_in_group(&"color_accessibility_cue") and contorno.has_method("set_forced_outline"):
+			contorno.call("set_forced_outline", ativado)
 
 
 func _ready() -> void:
-	add_to_group("empurravel")
 
 	if not save_enabled:
 		ultima_posicao = position

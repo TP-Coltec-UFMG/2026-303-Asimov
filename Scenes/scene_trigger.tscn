@@ -4,10 +4,7 @@
 [ext_resource type="AudioStream" uid="uid://745vxabvgswc" path="res://Sounds/Effects/powerUp1.ogg" id="2_a25fm"]
 [ext_resource type="AudioStream" uid="uid://c0u7qqxsqras7" path="res://Sounds/Effects/pepSound1.ogg" id="3_ltik7"]
 [ext_resource type="PackedScene" path="res://Scenes/Utils/interaction_accessibility_cue.tscn" id="4_accessibility_cue"]
-[ext_resource type="Script" path="res://Scenes/scripts/door_access_indicator.gd" id="5_access_indicator"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_access_indicator"]
-light_mode = 1
+[ext_resource type="PackedScene" path="res://Scenes/Utils/indicador_acesso.tscn" id="5_access_indicator"]
 
 [node name="SceneTrigger" type="Area2D" unique_id=889034584]
 collision_layer = 0
@@ -25,11 +22,7 @@ wait_time = 2.0
 
 [node name="InteractionAccessibilityCue" parent="." instance=ExtResource("4_accessibility_cue")]
 
-[node name="DoorAccessIndicator" type="Node2D" parent="."]
-visible = false
-z_index = 100
-material = SubResource("CanvasItemMaterial_access_indicator")
-script = ExtResource("5_access_indicator")
+[node name="DoorAccessIndicator" parent="." instance=ExtResource("5_access_indicator")]
 
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="body_entered" from="." to="." method="_ao_entrar_corpo"]
+[connection signal="body_exited" from="." to="." method="_ao_sair_corpo"]

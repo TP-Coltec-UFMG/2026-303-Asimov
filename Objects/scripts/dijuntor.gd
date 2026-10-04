@@ -41,7 +41,7 @@ func interagir_dijuntor() -> void:
 		ligado = true
 
 	aplicar_estado_visual()
-	GameAudio.play_world(self, GameAudio.BREAKER, -7.0, 350.0)
+	GameAudio.tocar_no_mundo(self, GameAudio.DISJUNTOR, -7.0, 350.0)
 	SaveGame.save_object_state(save_id, ligado)
 	if ligado:
 		_registrar_energia_restaurada()
@@ -102,7 +102,7 @@ func _registrar_energia_restaurada() -> void:
 			timer.call("carregar_tempo_restante", remaining * 2.0)
 		state["data_center_time_restored"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
-	MusicController._stop_power_outage_audio()
+	MusicController._parar_audio_disjuntor()
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
 		quest_ui.mostrar_tarefas_energia_data_center(

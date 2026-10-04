@@ -104,7 +104,7 @@ func _exit_tree() -> void:
 		tension_fade_tween.kill()
 	if operation_progress_tween != null and operation_progress_tween.is_valid():
 		operation_progress_tween.kill()
-	MusicController.set_alarm_quiet_context(&"programmer_ending", false)
+	MusicController.definir_contexto_alarme_baixo(&"programmer_ending", false)
 
 
 func _process(_delta: float) -> void:
@@ -151,7 +151,7 @@ func _initialize() -> void:
 	_load_or_create_point_order(state)
 	if bool(state.get("programmer_ending_completed", false)):
 		_pause_countdown()
-		MusicController.stop_all_audio()
+		MusicController.parar_todos_audios()
 		_start_final_transition(false)
 		initialized = true
 		return
@@ -494,7 +494,7 @@ func _open_minigame(minigame: Control) -> void:
 	_lock_player()
 	if minigame == neural_minigame:
 		_disable_global_pause_menu()
-	MusicController.set_alarm_quiet_context(&"minigame", true)
+	MusicController.definir_contexto_alarme_baixo(&"minigame", true)
 	minigame_backdrop.show()
 	var is_neural := minigame == neural_minigame
 	minigame_timer_panel.position = TIMER_POSITION_NEURAL if is_neural else TIMER_POSITION_RIGHT
@@ -552,7 +552,7 @@ func _close_active_minigame() -> void:
 	minigame_backdrop.hide()
 	minigame_timer_panel.hide()
 	_restore_global_pause_menu()
-	MusicController.set_alarm_quiet_context(&"minigame", false)
+	MusicController.definir_contexto_alarme_baixo(&"minigame", false)
 	_unlock_player()
 	task_busy = false
 	_update_flow_from_state()
@@ -698,8 +698,8 @@ func _completed_task_count(state: Dictionary) -> int:
 
 
 func _start_final_ambience(with_fade: bool) -> void:
-	MusicController.set_alarm_quiet_context(&"programmer_ending", true)
-	MusicController.start_programmer_final_mix()
+	MusicController.definir_contexto_alarme_baixo(&"programmer_ending", true)
+	MusicController.iniciar_mixagem_final_programador()
 	if tension_music.playing:
 		return
 	if with_fade:

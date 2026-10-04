@@ -9,7 +9,6 @@ var resolved_terminal_id: String = ""
 
 func _ready() -> void:
 	resolved_terminal_id = _resolve_terminal_id()
-	interaction.interact = _start_cooling_puzzle
 	_refresh()
 
 
@@ -31,7 +30,7 @@ func _refresh() -> void:
 func _start_cooling_puzzle() -> void:
 	if not interaction.is_interactable:
 		return
-	GameAudio.play_world(self, GameAudio.TERMINAL_KEY, -10.0)
+	GameAudio.tocar_no_mundo(self, GameAudio.TECLA_TERMINAL, -10.0)
 	Progresso.iniciar_refrigeracao_ia(
 		scene_manager.player,
 		resolved_terminal_id,

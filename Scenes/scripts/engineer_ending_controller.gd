@@ -7,9 +7,6 @@ const JOB_ENGINEER := "engenheiro_eletrico"
 const POINT_NAMES: Array[String] = ["ServerRowA", "ServerRowB", "ServerRowC", "ServerRowD", "ServerColumn", "ServerRowE"]
 const CIRCUIT_SCENE := preload("res://Minigames/finalsMinigames/MinigameCircuito/Scene/mini_game_eletronica.tscn")
 const FIRE_SCENE := preload("res://Objects/fogo.tscn")
-const EXPLOSION := preload("res://Sounds/Effects/mechanical_explosion_spring_spring.wav")
-const ESCAPE_SIREN := preload("res://Sounds/Ambient/alarme.mp3")
-const BLAST_TEXTURE := preload("res://Sprites/ilumination/gradient-radial.png")
 const PIXEL_FONT := preload("res://Fonts/PixelifySans-Bold.ttf")
 const ESCAPE_DURATION := 20.0
 const COMPONENT_EXPLOSION_DELAY := 1.2
@@ -68,8 +65,9 @@ var destruction_cutscene_running := false
 var escape_ui: CanvasLayer
 var escape_timer_panel: PanelContainer
 var escape_timer_label: Label
-var escape_siren: AudioStreamPlayer
-var escape_siren_fade: Tween
+@onready var sirene_fuga: AudioStreamPlayer = $EfeitosFinais/SireneFuga
+@onready var efeitos_finais: Node2D = $EfeitosFinais
+var transicao_sirene_fuga: Tween
 var destruction_camera: Camera2D
 var escape_camera: Camera2D
 var escape_camera_base_offset := Vector2.ZERO
@@ -107,8 +105,6 @@ func _initialize() -> void:
 		if not bool(intro.get("cutscene_running")):
 			marker.hide()
 	_restore_fires(state)
-	if not exit_trigger.access_requested.is_connected(_on_escape_exit_requested):
-		exit_trigger.access_requested.connect(_on_escape_exit_requested)
 	initialized = true
 	if bool(state.get("engineer_ending_completed", false)):
 		_finish_game(false)
@@ -122,9 +118,9 @@ func _initialize() -> void:
 func _exit_tree() -> void:
 	dialogue_queue.clear()
 	reserve_scan_running = false
-	_stop_escape_siren()
+	_parar_sirene_fuga()
 	if is_instance_valid(exit_trigger):
-		exit_trigger.access_override = false
+		exit_trigger.acesso_controlado = false
 	if suspended_thought != null and suspended_thought.is_valid():
 		suspended_thought.play()
 	_finish_ai_message()
@@ -137,11 +133,11 @@ func _exit_tree() -> void:
 		pause_menu.visible = pause_menu_was_visible
 	if tension_fade != null and tension_fade.is_valid():
 		tension_fade.kill()
-	MusicController.set_alarm_quiet_context(&"engineer_ending", false)
+	MusicController.definir_contexto_alarme_baixo(&"engineer_ending", false)
 
 
 func _start_final_music(fade_in: bool) -> void:
-	MusicController.start_engineer_final_mix()
+	MusicController.iniciar_mixagem_final_engenheiro()
 	if tension_music.playing:
 		return
 	if fade_in:
@@ -536,29 +532,7 @@ func _explode_point(point_name: String, stage: int) -> void:
 	var marker := highlights.get_node_or_null(point_name) as Node2D
 	if marker == null:
 		return
-	var blast := AudioStreamPlayer2D.new()
-	blast.stream = EXPLOSION
-	blast.bus = &"sfx"
-	blast.volume_db = -5.0
-	blast.max_distance = 480.0
-	scene.add_child(blast)
-	blast.global_position = marker.global_position
-	blast.finished.connect(blast.queue_free)
-	blast.play()
-	var burst := Sprite2D.new()
-	burst.texture = BLAST_TEXTURE
-	burst.modulate = Color(1.0, 0.44, 0.12, 0.86)
-	burst.scale = Vector2(0.18, 0.18)
-	burst.z_index = 90
-	var unshaded := CanvasItemMaterial.new()
-	unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	burst.material = unshaded
-	scene.add_child(burst)
-	burst.global_position = marker.global_position
-	var burst_tween := create_tween().set_parallel(true)
-	burst_tween.tween_property(burst, "scale", Vector2(0.75, 0.75), 0.38)
-	burst_tween.tween_property(burst, "modulate:a", 0.0, 0.38)
-	burst_tween.finished.connect(burst.queue_free)
+	efeitos_finais.explodir(marker.global_position)
 	_add_fire(marker.global_position, stage)
 	if bool(Configs.configs.get("movimento_camera", true)):
 		var camera := player.get_node_or_null("Camera2D") as Camera2D
@@ -774,10 +748,10 @@ func _begin_escape_sequence() -> void:
 	_cancel_dialogue_queue()
 	_hide_mission_points()
 	_create_escape_ui()
-	_start_escape_siren()
+	_iniciar_sirene_fuga()
 	_start_escape_pressure()
 	if is_instance_valid(exit_trigger):
-		exit_trigger.access_override = true
+		exit_trigger.acesso_controlado = true
 	var timer := get_tree().get_first_node_in_group("temporizador_jogo")
 	if is_instance_valid(timer) and timer.has_method("pausar_timer"):
 		timer.call("pausar_timer")
@@ -851,39 +825,29 @@ func _update_escape_timer() -> void:
 	escape_timer_panel.modulate = Color(1.0, 1.0 - urgency * 0.22, 1.0 - urgency * 0.22)
 
 
-func _start_escape_siren() -> void:
-	if is_instance_valid(escape_siren):
+func _iniciar_sirene_fuga() -> void:
+	if not is_instance_valid(sirene_fuga) or sirene_fuga.playing:
 		return
-	escape_siren = AudioStreamPlayer.new()
-	escape_siren.name = "EngineerEscapeSiren"
-	escape_siren.bus = &"sfx"
-	var stream := ESCAPE_SIREN.duplicate()
-	if stream is AudioStreamMP3:
-		(stream as AudioStreamMP3).loop = true
-	escape_siren.stream = stream
-	escape_siren.volume_db = -28.0
-	scene.add_child(escape_siren)
-	escape_siren.play()
-	escape_siren_fade = create_tween()
-	escape_siren_fade.tween_property(escape_siren, "volume_db", 2.0, ESCAPE_DURATION * sequence_time_scale)
+	if transicao_sirene_fuga != null and transicao_sirene_fuga.is_valid():
+		transicao_sirene_fuga.kill()
+	sirene_fuga.volume_db = -28.0
+	sirene_fuga.play()
+	transicao_sirene_fuga = create_tween()
+	transicao_sirene_fuga.tween_property(sirene_fuga, "volume_db", 2.0, ESCAPE_DURATION * sequence_time_scale)
 
 
-func _stop_escape_siren(fade_duration: float = 0.0) -> void:
-	if escape_siren_fade != null and escape_siren_fade.is_valid():
-		escape_siren_fade.kill()
-	escape_siren_fade = null
-	if not is_instance_valid(escape_siren):
+func _parar_sirene_fuga(fade_duration: float = 0.0) -> void:
+	if transicao_sirene_fuga != null and transicao_sirene_fuga.is_valid():
+		transicao_sirene_fuga.kill()
+	transicao_sirene_fuga = null
+	if not is_instance_valid(sirene_fuga):
 		return
 	if fade_duration <= 0.0:
-		escape_siren.stop()
-		escape_siren.queue_free()
-		escape_siren = null
+		sirene_fuga.stop()
 		return
-	var siren := escape_siren
-	escape_siren = null
-	var fade := create_tween()
-	fade.tween_property(siren, "volume_db", -60.0, fade_duration * sequence_time_scale)
-	fade.finished.connect(siren.queue_free)
+	transicao_sirene_fuga = create_tween()
+	transicao_sirene_fuga.tween_property(sirene_fuga, "volume_db", -60.0, fade_duration * sequence_time_scale)
+	transicao_sirene_fuga.tween_callback(sirene_fuga.stop)
 
 
 func _on_escape_exit_requested(_trigger: SceneTrigger) -> void:
@@ -898,7 +862,7 @@ func _start_destruction_cutscene(_reason: StringName) -> void:
 	escape_active = false
 	_stop_escape_pressure()
 	if is_instance_valid(exit_trigger):
-		exit_trigger.access_override = false
+		exit_trigger.acesso_controlado = false
 	_cancel_dialogue_queue()
 	_stop_ai_glitch(true)
 	if is_instance_valid(escape_ui):
@@ -906,7 +870,7 @@ func _start_destruction_cutscene(_reason: StringName) -> void:
 	_lock_player()
 	player.hide()
 	_prepare_destruction_camera()
-	_stop_escape_siren(1.4)
+	_parar_sirene_fuga(1.4)
 	await _play_destruction_blasts()
 	if not is_inside_tree():
 		return
@@ -1009,29 +973,7 @@ func _destruction_positions() -> Array[Vector2]:
 
 
 func _spawn_destruction_blast(world_position: Vector2, fire_stage: int) -> void:
-	var blast := AudioStreamPlayer2D.new()
-	blast.stream = EXPLOSION
-	blast.bus = &"sfx"
-	blast.volume_db = randf_range(-6.0, -2.0)
-	blast.max_distance = 650.0
-	scene.add_child(blast)
-	blast.global_position = world_position
-	blast.finished.connect(blast.queue_free)
-	blast.play()
-	var burst := Sprite2D.new()
-	burst.texture = BLAST_TEXTURE
-	burst.modulate = Color(1.0, randf_range(0.28, 0.52), 0.08, 0.94)
-	burst.scale = Vector2(0.12, 0.12)
-	burst.z_index = 95
-	var unshaded := CanvasItemMaterial.new()
-	unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	burst.material = unshaded
-	scene.add_child(burst)
-	burst.global_position = world_position
-	var burst_tween := create_tween().set_parallel(true)
-	burst_tween.tween_property(burst, "scale", Vector2(0.85, 0.85), 0.32 * sequence_time_scale)
-	burst_tween.tween_property(burst, "modulate:a", 0.0, 0.32 * sequence_time_scale)
-	burst_tween.finished.connect(burst.queue_free)
+	efeitos_finais.explodir(world_position, true, sequence_time_scale)
 	_add_fire(world_position, fire_stage)
 	if bool(Configs.configs.get("movimento_camera", true)) and is_instance_valid(destruction_camera):
 		var base := destruction_camera.offset
@@ -1061,7 +1003,7 @@ func _finish_game(animated: bool) -> void:
 		await get_tree().create_timer(5.0 * sequence_time_scale).timeout
 	if not is_inside_tree():
 		return
-	MusicController.stop_all_audio()
+	MusicController.parar_todos_audios()
 	SaveGame.clear_save(false)
 	get_tree().paused = false
 	get_tree().set_meta(&"programmer_ending_return", true)

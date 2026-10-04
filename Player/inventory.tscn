@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://n2hnejkagkk0"]
 
 [ext_resource type="Script" uid="uid://bds4yigtoy1bc" path="res://Player/Scripts/inventory.gd" id="1_ogkbk"]
-[ext_resource type="Texture2D" uid="uid://ctla0j2ge4cca" path="res://Sprites/ui/item_slot_default_background.png" id="2_ogkbk"]
-[ext_resource type="Script" uid="uid://7h3kghxq5mju" path="res://Player/Scripts/slot.gd" id="3_uj6eu"]
-[ext_resource type="Script" uid="uid://p6n57k8c5gx2" path="res://Player/Scripts/slot_4.gd" id="4_30xvo"]
+
+[ext_resource type="PackedScene" path="res://Player/slot_inventario.tscn" id="5_slot"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_uj6eu"]
 light_mode = 1
@@ -13,21 +12,6 @@ light_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gnudj"]
 light_mode = 1
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gnudj"]
-texture = ExtResource("2_ogkbk")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_swd4b"]
-texture = ExtResource("2_ogkbk")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1yaxp"]
-texture = ExtResource("2_ogkbk")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ts5cs"]
-texture = ExtResource("2_ogkbk")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qbh0d"]
-texture = ExtResource("2_ogkbk")
 
 [node name="Inventory" type="Node2D" unique_id=367388368]
 material = SubResource("CanvasItemMaterial_uj6eu")
@@ -51,57 +35,33 @@ pivot_offset = Vector2(353, 179)
 theme_override_constants/h_separation = 6
 columns = 6
 
-[node name="Slot1" type="Panel" parent="GridContainer" unique_id=1203040929]
-self_modulate = Color(1, 1, 1, 0.5882353)
-material = SubResource("CanvasItemMaterial_gnudj")
-custom_minimum_size = Vector2(18, 18)
+[node name="Slot1" parent="GridContainer" unique_id=1203040929 instance=ExtResource("5_slot")]
 layout_mode = 2
 layout_direction = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_gnudj")
-script = ExtResource("3_uj6eu")
-input_action = &"use_arma"
+acao_equipar = &"use_arma"
 
-[node name="Slot2" type="Panel" parent="GridContainer" unique_id=1235165911]
-self_modulate = Color(1, 1, 1, 0.5882353)
-material = SubResource("CanvasItemMaterial_gnudj")
-custom_minimum_size = Vector2(18, 18)
+[node name="Slot2" parent="GridContainer" unique_id=1235165911 instance=ExtResource("5_slot")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_swd4b")
-script = ExtResource("3_uj6eu")
-input_action = &"use_lanterna"
+acao_equipar = &"use_lanterna"
 
-[node name="Slot3" type="Panel" parent="GridContainer" unique_id=248405324]
-self_modulate = Color(1, 1, 1, 0.5882353)
-material = SubResource("CanvasItemMaterial_gnudj")
-custom_minimum_size = Vector2(18, 18)
+[node name="Slot3" parent="GridContainer" unique_id=248405324 instance=ExtResource("5_slot")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_1yaxp")
-script = ExtResource("4_30xvo")
-input_action = &"use_cabo"
+acao_equipar = &"use_cabo"
+permitir_cartao_superior = false
+escala_item = Vector2(0.5, 0.5)
 
-[node name="Slot4" type="Panel" parent="GridContainer" unique_id=760119091]
-self_modulate = Color(1, 1, 1, 0.5882353)
-material = SubResource("CanvasItemMaterial_gnudj")
-custom_minimum_size = Vector2(18, 18)
+[node name="Slot4" parent="GridContainer" unique_id=760119091 instance=ExtResource("5_slot")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_ts5cs")
-script = ExtResource("4_30xvo")
-input_action = &"use_laptop"
+acao_equipar = &"use_laptop"
+permitir_cartao_superior = false
+escala_item = Vector2(0.5, 0.5)
 
-[node name="Slot5" type="Panel" parent="GridContainer" unique_id=732099375]
-self_modulate = Color(1, 1, 1, 0.5882353)
-material = SubResource("CanvasItemMaterial_gnudj")
-custom_minimum_size = Vector2(18, 18)
+[node name="Slot5" parent="GridContainer" unique_id=732099375 instance=ExtResource("5_slot")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_qbh0d")
-script = ExtResource("3_uj6eu")
-input_action = &"use_cartao"
+acao_equipar = &"use_cartao"
 
-[node name="Slot6" type="Panel" parent="GridContainer" unique_id=1395338622]
-self_modulate = Color(1, 1, 1, 0.5882353)
-material = SubResource("CanvasItemMaterial_gnudj")
-custom_minimum_size = Vector2(18, 18)
+[node name="Slot6" parent="GridContainer" unique_id=1395338622 instance=ExtResource("5_slot")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_qbh0d")
-script = ExtResource("4_30xvo")
-input_action = &"use_extintor"
+acao_equipar = &"use_extintor"
+permitir_cartao_superior = false
+escala_item = Vector2(0.5, 0.5)

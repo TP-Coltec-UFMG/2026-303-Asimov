@@ -43,7 +43,7 @@ func _process(_delta: float) -> void:
 	if not is_visible_in_tree() or not mission_hint_enabled or scene_trigger == null:
 		_clear_mission_border()
 		return
-	var destination := mission_destination(SaveGame.office_mission_state(scene_trigger.body_p))
+	var destination := mission_destination(SaveGame.office_mission_state(scene_trigger.jogador))
 	if destination == scene_trigger.andar_atual or not scene_trigger.pode_acessar_andar(destination):
 		destination = -1
 	if destination == mission_floor:

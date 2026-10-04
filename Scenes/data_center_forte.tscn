@@ -20,11 +20,13 @@
 [ext_resource type="Shader" uid="uid://ueh4mtrubhl4" path="res://Scenes/shaders/programmer_final_glitch.gdshader" id="18_final_glitch"]
 [ext_resource type="AudioStream" uid="uid://c0ginjtcldu78" path="res://Sounds/Effects/mixkit-small-electric-glitch-2595.mp3" id="19_final_glitch_sfx"]
 [ext_resource type="AnimationLibrary" uid="uid://bpia4y0jffng" path="res://Scenes/animations/programmer_final_conflict_animations.tres" id="20_final_conflict"]
-[ext_resource type="Script" uid="uid://dvouf3jvmif20" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_strong_data_center"]
+[ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_strong_data_center"]
 [ext_resource type="Script" path="res://Scenes/scripts/engineer_ending_controller.gd" id="engineer_ending"]
 [ext_resource type="PackedScene" path="res://Objects/security_drone.tscn" id="security_drone"]
 [ext_resource type="PackedScene" path="res://Objects/ammo_pickup.tscn" id="ammo_pickup"]
 [ext_resource type="Script" path="res://Scenes/scripts/security_drone_spawner.gd" id="security_drone_spawner"]
+
+[ext_resource type="PackedScene" path="res://Scenes/Audio/efeitos_finais.tscn" id="audio_finais"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbnc6"]
 size = Vector2(46, 42.25)
@@ -123,9 +125,8 @@ corner_radius_bottom_left = 3
 [node name="DATA_CENTER_FORTE" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y1e7n")
 
-[node name="SceneAmbience" type="Node2D" parent="." unique_id=1717960143]
-script = ExtResource("ambience_strong_data_center")
-ambience_kind = 1
+[node name="SceneAmbience" parent="." unique_id=1717960143 instance=ExtResource("ambience_strong_data_center")]
+tipo_ambiente = 1
 
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 
@@ -184,7 +185,7 @@ position = Vector2(-158, -51)
 
 [node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("4_6gj4d")]
 position = Vector2(-170, -99)
-connected_scene = "andar_data_center"
+cena_destino = "andar_data_center"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=46367341]
 z_index = 1
@@ -412,6 +413,8 @@ script = ExtResource("10_ending")
 [node name="EngineerEnding" type="Node" parent="."]
 script = ExtResource("engineer_ending")
 
+[node name="EfeitosFinais" parent="EngineerEnding" instance=ExtResource("audio_finais")]
+
 [node name="SecurityDrone" parent="." instance=ExtResource("security_drone")]
 position = Vector2(-188, 188)
 
@@ -420,15 +423,15 @@ script = ExtResource("security_drone_spawner")
 
 [node name="AmmoCacheA" parent="." instance=ExtResource("ammo_pickup")]
 position = Vector2(-177, 72)
-pickup_id = "strong_data_center_a"
+id_coleta = "strong_data_center_a"
 
 [node name="AmmoCacheB" parent="." instance=ExtResource("ammo_pickup")]
 position = Vector2(184, 174)
-pickup_id = "strong_data_center_b"
+id_coleta = "strong_data_center_b"
 
 [node name="AmmoCacheC" parent="." instance=ExtResource("ammo_pickup")]
 position = Vector2(222, -42)
-pickup_id = "strong_data_center_c"
+id_coleta = "strong_data_center_c"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="ProgrammerEnding" unique_id=1881268964]
 libraries/ = ExtResource("11_ending_animations")
@@ -740,3 +743,5 @@ offset_left = 6.0
 offset_right = 6.0
 
 [connection signal="pressed" from="UI/ProgrammerEndingUI/FinalCard/MenuButton" to="ProgrammerEnding" method="_on_return_to_menu_pressed"]
+
+[connection signal="solicitou_acesso" from="SceneTrigger" to="EngineerEnding" method="_on_escape_exit_requested"]

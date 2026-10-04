@@ -10,6 +10,7 @@ const AMMO_PICKUP_SCENE := preload("res://Objects/ammo_pickup.tscn")
 
 
 func _ready() -> void:
+	get_tree().set_meta(&"dev_mission_jump_active", true)
 	var original_save: Dictionary = SaveGame.save_data.duplicate(true)
 	var player := PLAYER_SCENE.instantiate() as Player
 	add_child(player)
@@ -41,9 +42,9 @@ func _ready() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	SaveGame.save_global_state("ammo_pickup_runtime_test", false)
 	var ammo_pickup := AMMO_PICKUP_SCENE.instantiate() as AmmoPickup
-	ammo_pickup.pickup_id = "runtime_test"
+	ammo_pickup.id_coleta = "runtime_test"
 	add_child(ammo_pickup)
-	assert(not ammo_pickup.collected)
+	assert(not ammo_pickup.coletada)
 	assert(ammo_pickup.visible)
 	drone._refresh_mission_state()
 	assert(drone.visible)
@@ -59,16 +60,16 @@ func _ready() -> void:
 	drone.shot_warning.hide()
 	var starting_gun = player.inventory.get_item_control("gun")
 	assert(starting_gun != null)
-	starting_gun.set_player(player)
-	starting_gun.current_ammo = 2
-	starting_gun.reserve_ammo = 7
-	starting_gun.call("_start_reload")
-	assert(starting_gun.reloading)
+	starting_gun.definir_jogador(player)
+	starting_gun.municao_atual = 2
+	starting_gun.municao_reserva = 7
+	starting_gun.call("_iniciar_recarga")
+	assert(starting_gun.recarregando)
 	await get_tree().create_timer(1.25).timeout
-	assert(starting_gun.current_ammo == 7)
-	assert(starting_gun.reserve_ammo == 2)
-	assert(starting_gun.add_ammo(7) == 7)
-	assert(starting_gun.reserve_ammo == 9)
+	assert(starting_gun.municao_atual == 7)
+	assert(starting_gun.municao_reserva == 2)
+	assert(starting_gun.adicionar_municao(7) == 7)
+	assert(starting_gun.municao_reserva == 9)
 	var npc := NPC_SCENE.instantiate()
 	npc.save_enabled = false
 	npc.sprite_sheet = NPC_TEXTURE

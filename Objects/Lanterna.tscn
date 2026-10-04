@@ -62,12 +62,13 @@ scale = Vector2(0.12, 0.12)
 energy = 0.32
 texture = ExtResource("5_8yxdu")
 
-[node name="PickupComponent" type="Node" parent="." unique_id=167873576 node_paths=PackedStringArray("interactable")]
+[node name="PickupComponent" type="Node" parent="." unique_id=167873576]
 script = ExtResource("6_udy4t")
-item_id = "lanterna"
-interactable = NodePath("../Interectable")
+id_item = "lanterna"
 metadata/_custom_type_script = "uid://dtfbuvijibmfx"
 
 [node name="ligando" type="AudioStreamPlayer2D" parent="." unique_id=907665176]
 stream = ExtResource("7_46il4")
 bus = &"sfx"
+
+[connection signal="interacao_solicitada" from="Interectable" to="PickupComponent" method="coletar"]

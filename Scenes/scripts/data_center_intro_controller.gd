@@ -103,8 +103,6 @@ func _initialize() -> void:
 		DialogManager.dialog_line_started.connect(_on_dialog_line_started)
 	if not recipient.is_connected(&"path_completed", _on_recipient_path_completed):
 		recipient.connect(&"path_completed", _on_recipient_path_completed)
-	if not access_trigger.access_requested.is_connected(_on_access_requested):
-		access_trigger.access_requested.connect(_on_access_requested)
 	_restore_progress()
 
 
@@ -135,7 +133,7 @@ func _set_recipient_interaction(enabled: bool, prompt: String = "ESPAÇO: FALAR"
 func _restore_progress() -> void:
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	if bool(state.get("data_center_breaker_restored", false)):
-		MusicController._stop_power_outage_audio()
+		MusicController._parar_audio_disjuntor()
 		_restore_power_visuals()
 		_restore_access_progress(state)
 		return
@@ -208,7 +206,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 		_place_recipient_at_access()
 		_set_recipient_interaction(false)
 		_set_access_prompt("Entrar no data center")
-		access_trigger.access_override = false
+		access_trigger.acesso_controlado = false
 		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true)
 		return
@@ -238,7 +236,7 @@ func _restore_access_progress(state: Dictionary) -> void:
 	if bool(state.get("data_center_rfid_reading_checked", false)):
 		_set_recipient_interaction(false)
 		_ensure_story_card(BOSS_CARD_TYPE)
-		access_trigger.access_override = bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false))
+		access_trigger.acesso_controlado = bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false))
 		_set_access_prompt("Acessar área restrita")
 		_set_access_interactable(true)
 		_show_rfid_repair_tasks(true, true)
@@ -1014,9 +1012,9 @@ func _use_verified_card_on_return() -> void:
 		return
 	if not bool(state.get("data_center_rfid_minigame_completed", false)) or not bool(state.get("data_center_rfid_reading_checked", false)):
 		return
-	if access_sequence_busy or power_sequence_running or _power_is_out(state) or _scientist_talk_pending(state) or access_trigger.access_override:
+	if access_sequence_busy or power_sequence_running or _power_is_out(state) or _scientist_talk_pending(state) or access_trigger.acesso_controlado:
 		return
-	while _is_current_scene() and (get_tree().paused or DialogManager.is_showing_dialog or access_trigger._blocked_by_scene_event()):
+	while _is_current_scene() and (get_tree().paused or DialogManager.is_showing_dialog or access_trigger._bloqueado_por_evento_cena()):
 		await get_tree().create_timer(0.1, false).timeout
 	if not _is_current_scene() or not player.is_physics_processing():
 		return
@@ -1033,7 +1031,7 @@ func _use_verified_card_on_return() -> void:
 	state["data_center_rfid_auto_access_pending"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	_save_checkpoint()
-	access_trigger.enter_with_verified_card(player)
+	access_trigger.entrar_com_cartao_verificado(player)
 
 
 func _start_wire_repair_minigame() -> void:
@@ -1323,9 +1321,9 @@ func _restore_power_visuals() -> void:
 
 func _set_power_outage_music(active: bool) -> void:
 	if active:
-		MusicController._start_power_outage_audio()
+		MusicController._iniciar_audio_disjuntor()
 		return
-	MusicController._stop_power_outage_audio()
+	MusicController._parar_audio_disjuntor()
 
 
 func _show_card_task(completed: bool, animate: bool = false) -> void:

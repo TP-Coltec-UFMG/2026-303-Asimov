@@ -23,9 +23,9 @@ func _run() -> void:
 
 	get_tree().set_meta(&"dev_mission_jump_active", true)
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	for player_id: String in MusicController.AUDIO_PLAYERS:
+	for player_id: String in MusicController.TOCADORES_AUDIO:
 		_expect(
-			MusicController.get_node(MusicController.AUDIO_PLAYERS[player_id]) is AudioStreamPlayer,
+			MusicController.get_node(MusicController.TOCADORES_AUDIO[player_id]) is AudioStreamPlayer,
 			"Música e batimento globais não podem mudar de volume ou direção conforme a câmera se move: " + player_id
 		)
 	original_save = SaveGame.save_data.duplicate(true)
@@ -64,8 +64,8 @@ func _run() -> void:
 	add_child(player)
 	scene_manager.player = player
 	var mission := SaveGame.office_mission_state(player)
-	var heartbeat_audio := MusicController.heartbeat as AudioStreamPlayer
-	var background_music := MusicController.initial_background_music as AudioStreamPlayer
+	var heartbeat_audio := MusicController.batimento as AudioStreamPlayer
+	var background_music := MusicController.musica_cenario as AudioStreamPlayer
 	var expected_heartbeat := load(
 		"res://Sounds/Ambient/batimento_cardiaco.mp3"
 	) as AudioStreamMP3
@@ -83,53 +83,53 @@ func _run() -> void:
 		"A faixa reduzida precisa ser a música de fundo inicial."
 	)
 	SaveGame.tempo_atual = 120.0
-	MusicController.heartbeat_intro_elapsed = MusicController.HEARTBEAT_INTRO_DURATION
+	MusicController.tempo_batimento_inicial = MusicController.DURACAO_BATIMENTO_INICIAL
 	player.cansaco = 0.0
 	mission["data_center_power_outage"] = true
 	mission["data_center_breaker_restored"] = false
-	heartbeat_audio.pitch_scale = MusicController.HEARTBEAT_NORMAL_PITCH
-	MusicController.call("_update_heartbeat", 1.0)
+	heartbeat_audio.pitch_scale = MusicController.TOM_NORMAL_BATIMENTO
+	MusicController.call("_atualizar_batimento", 1.0)
 	_expect(heartbeat_audio.playing, "O batimento precisa tocar durante a partida.")
 	_expect(heartbeat_audio.pitch_scale > 1.0, "O batimento precisa acelerar com o disjuntor desligado.")
 	mission["data_center_breaker_restored"] = true
-	MusicController.call("_update_heartbeat", 5.0)
+	MusicController.call("_atualizar_batimento", 5.0)
 	_expect(is_equal_approx(heartbeat_audio.pitch_scale, 1.0), "O batimento precisa voltar à velocidade normal após religar o disjuntor.")
 	player.cansaco = 1.0
-	MusicController.call("_update_heartbeat", 5.0)
+	MusicController.call("_atualizar_batimento", 5.0)
 	_expect(heartbeat_audio.pitch_scale > 1.0, "O batimento precisa acelerar quando a estamina estiver baixa.")
 	_expect(is_equal_approx(heartbeat_audio.pitch_scale, 3.0), "O batimento precisa chegar a três vezes a velocidade com a estamina esgotada.")
 	var middle_stamina_pitch: float = MusicController.call(
-		"_heartbeat_pitch_from_stamina",
+		"_tom_batimento_por_cansaco",
 		0.5
 	)
 	_expect(
-		middle_stamina_pitch > MusicController.HEARTBEAT_NORMAL_PITCH
-		and middle_stamina_pitch < MusicController.HEARTBEAT_LOW_STAMINA_PITCH,
+		middle_stamina_pitch > MusicController.TOM_NORMAL_BATIMENTO
+		and middle_stamina_pitch < MusicController.TOM_BATIMENTO_CANSADO,
 		"A aceleração precisa crescer gradualmente durante o consumo da estamina."
 	)
 	player.cansaco = 0.0
-	MusicController.call("_update_heartbeat", 5.0)
-	_expect(is_equal_approx(heartbeat_audio.pitch_scale, MusicController.HEARTBEAT_NORMAL_PITCH), "O batimento precisa voltar suavemente ao normal com a estamina recuperada.")
+	MusicController.call("_atualizar_batimento", 5.0)
+	_expect(is_equal_approx(heartbeat_audio.pitch_scale, MusicController.TOM_NORMAL_BATIMENTO), "O batimento precisa voltar suavemente ao normal com a estamina recuperada.")
 
-	MusicController.heartbeat_intro_elapsed = 0.0
-	heartbeat_audio.pitch_scale = MusicController.HEARTBEAT_NORMAL_PITCH
-	MusicController.call("_update_heartbeat", 1.0)
+	MusicController.tempo_batimento_inicial = 0.0
+	heartbeat_audio.pitch_scale = MusicController.TOM_NORMAL_BATIMENTO
+	MusicController.call("_atualizar_batimento", 1.0)
 	_expect(heartbeat_audio.pitch_scale > 1.0, "O batimento precisa começar acelerado.")
-	MusicController.heartbeat_intro_elapsed = MusicController.HEARTBEAT_INTRO_DURATION
-	MusicController.call("_update_heartbeat", 5.0)
+	MusicController.tempo_batimento_inicial = MusicController.DURACAO_BATIMENTO_INICIAL
+	MusicController.call("_atualizar_batimento", 5.0)
 	_expect(is_equal_approx(heartbeat_audio.pitch_scale, 1.0), "Depois da introdução, o batimento precisa voltar à velocidade normal.")
 
 	SaveGame.tempo_atual = 46.0
 	heartbeat_audio.pitch_scale = 1.0
-	MusicController.call("_update_heartbeat", 2.0)
+	MusicController.call("_atualizar_batimento", 2.0)
 	var final_start_pitch := heartbeat_audio.pitch_scale
 	SaveGame.tempo_atual = 1.0
-	MusicController.call("_update_heartbeat", 2.0)
+	MusicController.call("_atualizar_batimento", 2.0)
 	_expect(heartbeat_audio.pitch_scale > final_start_pitch, "O batimento precisa acelerar progressivamente entre 46 e zero segundos.")
-	MusicController.call("_update_initial_background_music", 0.1)
+	MusicController.call("_atualizar_musica_cenario", 0.1)
 	_expect(background_music.playing, "A música de fundo inicial precisa tocar durante a partida.")
 	_expect(is_equal_approx(background_music.pitch_scale, 1.0), "A música de fundo inicial não pode acelerar junto com o batimento.")
-	_expect(is_equal_approx(MusicController.initial_background_music_normal_volume_db, -12.0), "A música de fundo inicial precisa manter a redução de volume.")
+	_expect(is_equal_approx(MusicController.volume_normal_musica_cenario_db, -15.0), "A música de fundo inicial precisa manter a redução de volume.")
 	var audio_state := MusicController.get_checkpoint_state()
 	_expect((audio_state.get("alarm_envelope", {}) as Dictionary).has("heartbeat_intro_elapsed"), "O progresso inicial do batimento precisa participar do checkpoint.")
 
@@ -152,20 +152,20 @@ func _run() -> void:
 	timer.call("_resetar_tremor_final")
 	_expect(camera.offset == camera_base_offset, "A câmera precisa voltar ao lugar quando o efeito termina.")
 
-	MusicController._start_countdown()
-	MusicController.call("_update_initial_background_music", 2.0)
+	MusicController._iniciar_musica_contagem()
+	MusicController.call("_atualizar_musica_cenario", 2.0)
 	var background_music_ratio := (
 		db_to_linear(background_music.volume_db)
-		/ db_to_linear(MusicController.initial_background_music_normal_volume_db)
+		/ db_to_linear(MusicController.volume_normal_musica_cenario_db)
 	)
 	_expect(is_equal_approx(background_music_ratio, 0.5), "A música de fundo inicial precisa cair para 50% quando a faixa final começa.")
-	MusicController._stop_countdown()
-	MusicController.call("_update_initial_background_music", 2.0)
+	MusicController._parar_musica_contagem()
+	MusicController.call("_atualizar_musica_cenario", 2.0)
 
-	MusicController.pause_all_audio()
+	MusicController.pausar_todos_audios()
 	_expect(not heartbeat_audio.playing, "Pausar o jogo precisa pausar o batimento cardíaco.")
 	_expect(not background_music.playing, "Pausar o jogo precisa pausar a música de fundo inicial.")
-	MusicController.resume_all_audio()
+	MusicController.retomar_todos_audios()
 	_expect(heartbeat_audio.playing, "Retomar o jogo precisa continuar o batimento cardíaco.")
 	_expect(background_music.playing, "Retomar o jogo precisa continuar a música de fundo inicial.")
 
@@ -184,23 +184,23 @@ func _run() -> void:
 	_expect(not background_music.stream_paused and background_music.playing, "A música precisa retomar depois da pausa nativa.")
 
 	mission["data_center_breaker_restored"] = false
-	MusicController._start_power_outage_audio()
-	MusicController.call("_update_power_outage_audio", 0.5)
-	MusicController.call("_update_initial_background_music", 0.5)
+	MusicController._iniciar_audio_disjuntor()
+	MusicController.call("_atualizar_audio_disjuntor", 0.5)
+	MusicController.call("_atualizar_musica_cenario", 0.5)
 	_expect(not MusicController.musica_quando_o_disjuntor_apagar.playing, "A música da queda de energia precisa respeitar a espera inicial.")
-	_expect(background_music.volume_db < MusicController.initial_background_music_normal_volume_db and background_music.volume_db > -79.0, "A música anterior precisa desaparecer gradualmente.")
-	MusicController.call("_update_power_outage_audio", 0.6)
-	MusicController.call("_update_initial_background_music", 0.6)
+	_expect(background_music.volume_db < MusicController.volume_normal_musica_cenario_db and background_music.volume_db > -79.0, "A música anterior precisa desaparecer gradualmente.")
+	MusicController.call("_atualizar_audio_disjuntor", 0.6)
+	MusicController.call("_atualizar_musica_cenario", 0.6)
 	_expect(MusicController.musica_quando_o_disjuntor_apagar.playing, "A faixa 3 precisa iniciar depois da espera.")
 	_expect(background_music.volume_db <= -79.0, "A faixa 2 deve ficar inaudível durante a faixa 3.")
-	MusicController.call("_update_power_outage_audio", 4.0)
+	MusicController.call("_atualizar_audio_disjuntor", 4.0)
 	mission["data_center_breaker_restored"] = true
-	MusicController._stop_power_outage_audio()
-	MusicController.call("_update_power_outage_audio", 4.0)
-	MusicController.call("_update_initial_background_music", 4.0)
-	var post_breaker_music := load("res://Sounds/Cenario/Musica_de_cenario_5.mp3") as AudioStreamMP3
+	MusicController._parar_audio_disjuntor()
+	MusicController.call("_atualizar_audio_disjuntor", 4.0)
+	MusicController.call("_atualizar_musica_cenario", 4.0)
+	var post_breaker_music := load("res://Sounds/Cenario/Musica_de_cenario_3.mp3") as AudioStreamMP3
 	_expect(not MusicController.musica_quando_o_disjuntor_apagar.playing, "A faixa 3 precisa parar ao terminar o fade de restauração.")
-	_expect((background_music.stream as AudioStreamMP3).data == post_breaker_music.data, "Religar o disjuntor precisa trocar para a faixa 5.")
+	_expect((background_music.stream as AudioStreamMP3).data == post_breaker_music.data, "Religar o disjuntor precisa manter a troca atual para a faixa 3.")
 
 	var main_menu_scene := load("res://Scenes/principal.tscn") as PackedScene
 	var pause_menu_scene := load("res://Scenes/pause_menu.tscn") as PackedScene
@@ -246,15 +246,15 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	MusicController.call("_update_heartbeat", 0.1)
-	MusicController.call("_update_initial_background_music", 0.1)
+	MusicController.call("_atualizar_batimento", 0.1)
+	MusicController.call("_atualizar_musica_cenario", 0.1)
 	_expect(not heartbeat_audio.playing, "Uma referência liberada do Player não pode quebrar o áudio no tempo zero.")
 	_expect(not background_music.playing, "A música de fundo inicial precisa parar fora da partida.")
 	SaveGame.save_data = original_save
 	SaveGame.tempo_atual = original_time
 	Configs._change_movimento_camera(original_camera_movement)
 	scene_manager.player = original_player
-	MusicController.call("_update_heartbeat", 0.0)
+	MusicController.call("_atualizar_batimento", 0.0)
 	if failures.is_empty():
 		pass
 		get_tree().quit(0)

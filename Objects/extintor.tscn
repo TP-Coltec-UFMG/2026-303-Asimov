@@ -25,6 +25,7 @@ point_count = 2
 curve = SubResource("Curve_o2v6h")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_upuah"]
+resource_local_to_scene = true
 particle_flag_disable_z = true
 emission_shape = 6
 emission_ring_axis = Vector3(0, 0, 1)
@@ -89,10 +90,9 @@ texture = ExtResource("3_l2jps")
 [node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
 interaction_path = NodePath("../../Interectable")
 
-[node name="PickupComponent" type="Node" parent="." unique_id=167873576 node_paths=PackedStringArray("interactable")]
+[node name="PickupComponent" type="Node" parent="." unique_id=167873576]
 script = ExtResource("4_o2v6h")
-item_id = "extintor"
-interactable = NodePath("../Interectable")
+id_item = "extintor"
 metadata/_custom_type_script = "uid://dtfbuvijibmfx"
 
 [node name="ligando" type="AudioStreamPlayer2D" parent="." unique_id=907665176]
@@ -122,5 +122,13 @@ position = Vector2(-1.0000005, -1.4999992)
 scale = Vector2(0.0625, 0.097656235)
 texture = ExtResource("9_jc3nj")
 
+
+
+[node name="TemporizadorIndicador" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
 [connection signal="area_entered" from="Fumaca/fumaca/AreaFumaca" to="." method="_on_area_fumaca_area_entered"]
 [connection signal="area_exited" from="Fumaca/fumaca/AreaFumaca" to="." method="_on_area_fumaca_area_exited"]
+[connection signal="interacao_solicitada" from="Interectable" to="PickupComponent" method="coletar"]
+[connection signal="timeout" from="TemporizadorIndicador" to="." method="_liberar_indicador"]

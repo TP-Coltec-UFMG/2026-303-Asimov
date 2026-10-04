@@ -8,5 +8,5 @@ func _ready() -> void:
 func _on_finished() -> void:
 	SaveLoad._save()
 	SaveGame.clear_save()
-	MusicController.stop_all_audio()
+	MusicController.parar_todos_audios()
 	get_tree().change_scene_to_file("res://Scenes/principal.tscn")

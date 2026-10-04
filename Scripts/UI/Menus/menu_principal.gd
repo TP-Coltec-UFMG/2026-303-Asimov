@@ -27,9 +27,9 @@ func _ready() -> void:
 		transicao.hide()
 		tela_retorno_final.show()
 		animacao_retorno_final.play(&"ending_return_fade_in")
-		MusicController.fade_out_for_menu(10.0)
+		MusicController.reduzir_audio_para_menu(10.0)
 	else:
-		MusicController.pause_all_audio()
+		MusicController.pausar_todos_audios()
 		tela_retorno_final.hide()
 		transicao.visible = true
 		transicao.frame = 7
@@ -346,13 +346,13 @@ func _ao_iniciar_jogo() -> void:
 	if SaveGame.has_checkpoint():
 		SaveGame.load_last_checkpoint()
 	else:
-		MusicController.allow_scene_audio()
+		MusicController.permitir_audio_cena()
 		get_tree().change_scene_to_file("res://Scenes/slectionpage.tscn")
 
 func _ao_abrir_tutorial() -> void:
 	transicao.play("default")
 	await transicao.animation_finished
-	MusicController.allow_scene_audio()
+	MusicController.permitir_audio_cena()
 	Configs.tutorial_return_scene = "res://Scenes/principal.tscn"
 	get_tree().change_scene_to_file("res://Tutorial/tutorial.tscn")
 		

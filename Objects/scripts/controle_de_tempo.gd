@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 	
 	if segundos_restantes <= TEMPO_INICIO_COUNT_DOWN and not count_down_audio_iniciado:
 		count_down_audio_iniciado = true
-		MusicController._start_countdown()
+		MusicController._iniciar_musica_contagem()
 
 	_atualizar_tremor_final(delta, tempo_restante_atual)
 		
@@ -134,14 +134,14 @@ func carregar_tempo_restante(novo_tempo: float) -> void:
 	finalizado = false
 
 	if count_down_audio_iniciado:
-		MusicController._start_countdown(
+		MusicController._iniciar_musica_contagem(
 			maxf(
 				0.0,
 				TEMPO_INICIO_COUNT_DOWN - tempo_carregado
 			)
 		)
 	else:
-		MusicController._stop_countdown()
+		MusicController._parar_musica_contagem()
 		_resetar_tremor_final()
 
 	if audio_iniciado:
@@ -182,7 +182,7 @@ func reiniciar_timer() -> void:
 
 	audio_stream_player_2d.stop()
 	audio_stream_player_2d.stream_paused = false
-	MusicController._stop_countdown()
+	MusicController._parar_musica_contagem()
 	_resetar_tremor_final()
 
 	atualizar_label()
@@ -217,7 +217,7 @@ func fim_de_jogo() -> void:
 
 
 func _on_tempo_esgotado() -> void:
-	MusicController._stop_som_alarme()
+	MusicController._parar_alarme()
 	$Timer.start()
 	await $Timer.timeout
 	get_tree().change_scene_to_file("res://Cutscenes/cutscene_final_1.tscn")

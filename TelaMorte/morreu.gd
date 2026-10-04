@@ -59,7 +59,7 @@ func _on_voltar_menu_pressed() -> void:
 	transition.play("default")
 	await transition.animation_finished
 	get_tree().paused = false
-	MusicController.pause_all_audio()
+	MusicController.pausar_todos_audios()
 	get_tree().change_scene_to_file("res://Scenes/principal.tscn")
 
 

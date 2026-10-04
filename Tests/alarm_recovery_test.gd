@@ -10,16 +10,16 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var music := root.get_node("MusicController")
-	music.stop_all_audio()
+	music.parar_todos_audios()
 	var alarm := music.get_node("SOM_ALARME") as AudioStreamPlayer
 	_check(alarm.bus == &"sfx", "O volume da música não pode silenciar o alarme.")
 	_check((alarm.stream as AudioStreamMP3).loop, "O alarme precisa repetir.")
-	music._start_som_alarme(alarm.stream.get_length() - 0.15)
+	music._iniciar_alarme(alarm.stream.get_length() - 0.15)
 	await create_timer(0.5).timeout
 	_check(alarm.playing, "O alarme deve continuar após o fim da gravação.")
-	music.toggle_alarm_by_player()
+	music.alternar_alarme_jogador()
 	_check(not alarm.playing, "P deve desligar o alarme.")
-	music.toggle_alarm_by_player()
+	music.alternar_alarme_jogador()
 	_check(alarm.playing, "P deve religar o alarme.")
 	paused = true
 	await create_timer(0.1).timeout
@@ -27,16 +27,16 @@ func _run() -> void:
 	paused = false
 	var state: Dictionary = music.get_checkpoint_state()
 	state["som_alarme"]["playing"] = false
-	music.begin_checkpoint_restore()
-	music._start_som_alarme()
+	music.iniciar_restauracao_checkpoint()
+	music._iniciar_alarme()
 	music.load_checkpoint_state(state)
 	_check(alarm.playing, "Um save afetado pelo fim do arquivo deve recuperar o alarme da cena.")
 	state["alarm_envelope"]["user_muted"] = true
-	music.begin_checkpoint_restore()
-	music._start_som_alarme()
+	music.iniciar_restauracao_checkpoint()
+	music._iniciar_alarme()
 	music.load_checkpoint_state(state)
 	_check(not alarm.playing, "Um save silenciado com P deve continuar silenciado.")
-	music.stop_all_audio()
+	music.parar_todos_audios()
 	pass
 	quit(0 if failures.is_empty() else 1)
 

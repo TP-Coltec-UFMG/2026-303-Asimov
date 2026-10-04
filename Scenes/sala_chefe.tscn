@@ -42,7 +42,7 @@ position = Vector2(0, 19)
 
 [node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("4_dc347")]
 position = Vector2(0, 1)
-connected_scene = "andar_escritorio"
+cena_destino = "andar_escritorio"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=1883498737]
 z_index = 1

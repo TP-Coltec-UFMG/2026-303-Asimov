@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Sounds/efeitos_sonoros.gd" id="1"]
+[ext_resource type="PackedScene" path="res://Scenes/Audio/voz_efeito.tscn" id="2"]
+
+[node name="EfeitosSonoros" type="Node"]
+process_mode = 3
+script = ExtResource("1")
+
+[node name="Vozes" type="Node" parent="."]
+
+[node name="Voz1" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz2" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz3" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz4" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz5" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz6" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz7" parent="Vozes" instance=ExtResource("2")]
+[node name="Voz8" parent="Vozes" instance=ExtResource("2")]

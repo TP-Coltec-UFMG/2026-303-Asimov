@@ -251,10 +251,10 @@ func load_last_checkpoint() -> bool:
 
 	if restore_audio_pending:
 
-		MusicController.begin_checkpoint_restore()
+		MusicController.iniciar_restauracao_checkpoint()
 	else:
 
-		MusicController.stop_all_audio()
+		MusicController.parar_todos_audios()
 
 	scene_manager.player = null
 	scene_manager.last_scene_name = ""
@@ -537,7 +537,7 @@ func clear_save(stop_audio: bool = true) -> void:
 		tempo_restante = -1.0
 		tempo_atual = -1.0
 		if stop_audio:
-			MusicController.stop_all_audio()
+			MusicController.parar_todos_audios()
 		scene_manager.player = null
 		scene_manager.last_scene_name = ""
 		DevMissionJump.active_stage = -1
@@ -555,7 +555,7 @@ func clear_save(stop_audio: bool = true) -> void:
 	restore_checkpoint_pending = false
 	restore_audio_pending = false
 	if stop_audio:
-		MusicController.stop_all_audio()
+		MusicController.parar_todos_audios()
 
 	tempo_restante = -1.0
 	tempo_atual = -1.0
@@ -589,7 +589,7 @@ func restart_from_hall() -> void:
 	SaveLoad.save_data = Configs.configs.duplicate(true)
 	SaveLoad._save()
 	get_tree().paused = false
-	MusicController.allow_scene_audio()
+	MusicController.permitir_audio_cena()
 	get_tree().change_scene_to_file("res://Scenes/andar_hall.tscn")
 
 

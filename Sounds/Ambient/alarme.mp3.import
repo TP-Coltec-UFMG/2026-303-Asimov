@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/alarme.mp3-526c680d931d28097666652e34ab0ec5.m
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

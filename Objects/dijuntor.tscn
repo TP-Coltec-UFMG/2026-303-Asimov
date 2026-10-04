@@ -57,10 +57,11 @@ frame = 2
 [node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
 interaction_path = NodePath("../../Interectable")
 
-[node name="PickupComponent" type="Node" parent="." unique_id=92231633 node_paths=PackedStringArray("interactable")]
+[node name="PickupComponent" type="Node" parent="." unique_id=92231633]
 script = ExtResource("4_e67j1")
-interactable = NodePath("../Interectable")
 destruir_ao_coletar = false
 metadata/_custom_type_script = "uid://dtfbuvijibmfx"
 
 [connection signal="interagiu" from="PickupComponent" to="." method="_on_pickup_component_interagiu"]
+
+[connection signal="interacao_solicitada" from="Interectable" to="PickupComponent" method="coletar"]

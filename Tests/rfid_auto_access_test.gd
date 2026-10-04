@@ -46,23 +46,23 @@ func _run() -> void:
 	var trigger := world.get_node("SceneTrigger2") as SceneTrigger
 	trigger.reproduzir_acesso_negado()
 	var indicator: Node2D = trigger.get_node("DoorAccessIndicator")
-	_expect(indicator.visible and not indicator.granted, "O cartão negado deve acender o indicador vermelho da porta.")
+	_expect(indicator.visible and not indicator.liberado, "O cartão negado deve acender o indicador vermelho da porta.")
 	var door_collision := trigger.get_node("CollisionShape2D") as CollisionShape2D
 	_expect(is_equal_approx(indicator.global_position.x, door_collision.global_position.x) and indicator.global_position.y < door_collision.global_position.y, "O indicador deve ficar acima da porta, respeitando o deslocamento do leitor.")
-	indicator.show_status(true)
-	_expect(indicator.granted and indicator.status_color == indicator.GRANTED_COLOR, "O acesso liberado deve trocar o indicador para verde.")
+	indicator.mostrar_estado(true)
+	_expect(indicator.liberado and indicator.cor_estado == indicator.cor_liberado, "O acesso liberado deve trocar o indicador para verde.")
 	var elevator_indicator: Node2D = world.get_node("SceneTrigger/DoorAccessIndicator")
-	elevator_indicator.show_status(false)
+	elevator_indicator.mostrar_estado(false)
 	_expect(not elevator_indicator.visible, "O indicador das portas não deve aparecer no elevador.")
-	trigger.enter_with_verified_card(player)
+	trigger.entrar_com_cartao_verificado(player)
 	await get_tree().create_timer(0.2).timeout
-	_expect(not trigger.access_in_progress, "O leitor não pode aceitar automaticamente um RFID ainda incompleto.")
+	_expect(not trigger.acesso_em_andamento, "O leitor não pode aceitar automaticamente um RFID ainda incompleto.")
 	state["data_center_rfid_minigame_completed"] = true
 	state["data_center_rfid_reading_checked"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	controller._restore_access_progress(state)
 	await get_tree().create_timer(0.2).timeout
-	_expect(get_tree().current_scene == world and not trigger.access_in_progress, "Continuar um save concluído não deve repetir a entrada automática.")
+	_expect(get_tree().current_scene == world and not trigger.acesso_em_andamento, "Continuar um save concluído não deve repetir a entrada automática.")
 	state["data_center_rfid_auto_access_pending"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	player.reset_sprite_player()

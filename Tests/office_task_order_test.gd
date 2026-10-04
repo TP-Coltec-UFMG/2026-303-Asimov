@@ -48,7 +48,7 @@ func _run() -> void:
 	_expect(panel_script.mission_destination({"data_center_return_task_active": true, "data_center_breaker_restored": true}) == 6, "Após o reparo, o destino deve ser o data center.")
 	SaveGame.save_global_state("hall_quest_01", {"elevator_third_floor_unlocked": true})
 	var trigger := SceneTrigger.new()
-	trigger.body_p = player
+	trigger.jogador = player
 	trigger.andar_atual = 2
 	var panel := preload("res://Objects/painel_elevador.tscn").instantiate()
 	panel.scene_trigger = trigger

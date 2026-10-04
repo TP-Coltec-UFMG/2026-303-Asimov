@@ -57,28 +57,34 @@ func _run() -> void:
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(0.1))
 		var ambience := floor.get_node("SceneAmbience")
 		await get_tree().create_timer(1.2).timeout
-		_expect(ambience.bed.playing, floor_name + ": ambience starts")
+		_expect(ambience.fundo.playing, floor_name + ": ambience starts")
 		capture.clear_buffer()
 		await get_tree().create_timer(0.5).timeout
 		_report_mix(floor_name)
 
-		ambience.bed.seek(ambience.bed.stream.get_length() - 0.35)
+		ambience.fundo.seek(ambience.fundo.stream.get_length() - 0.35)
 		await get_tree().create_timer(0.8).timeout
-		_expect(ambience.bed.playing, floor_name + ": ambience survives the loop seam")
-		_expect(not ambience.next_bed.playing, floor_name + ": only one voice after crossfade")
+		_expect(ambience.fundo.playing, floor_name + ": ambience survives the loop seam")
+		_expect(not ambience.proximo_fundo.playing, floor_name + ": only one voice after crossfade")
 		get_tree().paused = true
 		await get_tree().create_timer(0.1).timeout
-		_expect(ambience.bed.stream_paused, floor_name + ": ambience pauses")
-		var position_before: float = ambience.bed.get_playback_position()
+		_expect(ambience.fundo.stream_paused, floor_name + ": ambience pauses")
+		var position_before: float = ambience.fundo.get_playback_position()
 		await get_tree().create_timer(0.12).timeout
-		_expect(absf(ambience.bed.get_playback_position() - position_before) < 0.03, floor_name + ": paused audio does not advance")
+		_expect(absf(ambience.fundo.get_playback_position() - position_before) < 0.03, floor_name + ": paused audio does not advance")
 		get_tree().paused = false
+		ambience.definir_silencio_elevador(true)
+		_expect(ambience.fundo.volume_linear == 0.0 and ambience.proximo_fundo.volume_linear == 0.0, floor_name + ": elevator silences both ambience voices")
+		_expect(ambience.temporizador_gotas.is_stopped() and ambience.temporizador_metal.is_stopped(), floor_name + ": elevator stops background events")
+		ambience.definir_silencio_elevador(false)
+		await get_tree().create_timer(1.1).timeout
+		_expect(ambience.fundo.volume_linear > 0.0, floor_name + ": ambience fades back after elevator")
 		if floor_name == "andar_hall":
-			ambience._on_drip()
-			_expect(ambience.drip_voice.playing, "Hall: dripping plays")
+			ambience._ao_gotejar()
+			_expect(ambience.som_gota.playing, "Hall: dripping plays")
 			await get_tree().create_timer(0.7).timeout
-			ambience._on_creak()
-			_expect(ambience.creak_voice.playing, "Hall: metal creak plays")
+			ambience._ao_ranger_metal()
+			_expect(ambience.som_metal.playing, "Hall: metal creak plays")
 			await get_tree().create_timer(2.0).timeout
 	get_tree().current_scene = self
 	previous.queue_free()

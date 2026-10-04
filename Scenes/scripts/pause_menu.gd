@@ -291,7 +291,7 @@ func esta_dentro_do_logo(node: Node) -> bool:
 
 func continuar():
 	get_tree().paused = false
-	MusicController.resume_all_audio()
+	MusicController.retomar_todos_audios()
 	estado_audio_antes_pausa.clear()
 	$AnimationPlayer.play_backwards("blur")
 	hide()
@@ -307,7 +307,7 @@ func pausar():
 	estado_audio_antes_pausa = (
 		MusicController.get_checkpoint_state().duplicate(true)
 	)
-	MusicController.pause_all_audio()
+	MusicController.pausar_todos_audios()
 	get_tree().paused = true
 	$AnimationPlayer.play("blur")
 	show()
@@ -356,7 +356,7 @@ func _ao_pressionar_sair() -> void:
 	if get_tree().paused:
 
 		SaveGame.save_current_session(estado_audio_antes_pausa)
-		MusicController.pause_all_audio()
+		MusicController.pausar_todos_audios()
 		transicao.visible = true
 		transicao.play("default")
 		await transicao.animation_finished
@@ -367,13 +367,13 @@ func _ao_pressionar_sair() -> void:
 		)
 
 		if erro != OK:
-			MusicController.allow_scene_audio()
+			MusicController.permitir_audio_cena()
 			continuar()
 			push_error("Não foi possível voltar ao menu principal.")
 			return
 
 		scene_tree.paused = false
-		MusicController.pause_all_audio()
+		MusicController.pausar_todos_audios()
 
 
 func _ao_voltar_menu() -> void:

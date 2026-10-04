@@ -421,19 +421,19 @@ func _update_weapon() -> void:
 	var gun := player.inventory.get_item_control("gun")
 	if gun == null:
 		return
-	var ammo := int(gun.get("current_ammo"))
+	var ammo := int(gun.get("municao_atual"))
 	if ammo < last_gun_ammo:
 		shots_before_reload += last_gun_ammo - ammo
-	if bool(gun.get("reloading")):
+	if bool(gun.get("recarregando")):
 		reload_started = true
 	elif reload_started and ammo > last_gun_ammo:
 		weapon_reloaded = true
 		reload_started = false
 		objective_label.text = "Arma recarregada. Acerte o drone-alvo novamente."
 		_announce_objective()
-	if int(gun.get("reserve_ammo")) <= 0:
-		gun.set("reserve_ammo", 14)
-		gun.call("refresh_hud")
+	if int(gun.get("municao_reserva")) <= 0:
+		gun.set("municao_reserva", 14)
+		gun.call("atualizar_painel_arma")
 	last_gun_ammo = ammo
 
 

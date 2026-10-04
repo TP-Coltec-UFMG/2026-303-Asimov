@@ -40,8 +40,7 @@ signal extincao_iniciada
 
 func _ready() -> void:
 	if particulas.process_material is ParticleProcessMaterial:
-		mat_particulas = particulas.process_material.duplicate()
-		particulas.process_material = mat_particulas
+		mat_particulas = particulas.process_material
 		gravidade_original = mat_particulas.gravity
 
 	escala_particulas_original = particulas.scale
@@ -62,25 +61,22 @@ func _ready() -> void:
 			atualizar_fogo()
 
 	if not apagado:
-		_start_fire_ambient()
+		_iniciar_som_fogo()
 
 
-func _start_fire_ambient() -> void:
-	var available_sounds: Array[AudioStream] = []
+func _iniciar_som_fogo() -> void:
+	var sons_disponiveis: Array[AudioStream] = []
 	if ambient_sound_a != null:
-		available_sounds.append(ambient_sound_a)
+		sons_disponiveis.append(ambient_sound_a)
 	if ambient_sound_b != null:
-		available_sounds.append(ambient_sound_b)
-	if available_sounds.is_empty():
+		sons_disponiveis.append(ambient_sound_b)
+	if sons_disponiveis.is_empty():
 		return
 
-	var chooser := RandomNumberGenerator.new()
-	chooser.seed = hash("%s:%s" % [save_id, str(get_path())])
-	var selected := available_sounds[chooser.randi_range(0, available_sounds.size() - 1)]
-	var local_stream := selected.duplicate()
-	if local_stream is AudioStreamOggVorbis:
-		(local_stream as AudioStreamOggVorbis).loop = true
-	fire_ambient.stream = local_stream
+	var sorteador := RandomNumberGenerator.new()
+	sorteador.seed = hash("%s:%s" % [save_id, str(get_path())])
+	var selecionado := sons_disponiveis[sorteador.randi_range(0, sons_disponiveis.size() - 1)]
+	fire_ambient.stream = selecionado
 	fire_ambient.play()
 
 

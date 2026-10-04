@@ -24,8 +24,8 @@ process_mode = 1
 [node name="Controle_de_tempo" type="Control" parent="Fixture/UI"]
 
 [node name="SceneTrigger" parent="Fixture" instance=ExtResource("2_trigger")]
-connected_scene = "data_center_forte"
-access_override = true
+cena_destino = "data_center_forte"
+acesso_controlado = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fixture/SceneTrigger"]
 position = Vector2(-157.5, -103.25)

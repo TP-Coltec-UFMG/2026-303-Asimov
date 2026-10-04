@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/Musica_de_cenario_2.mp3-15693739b92ca64170e8e
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

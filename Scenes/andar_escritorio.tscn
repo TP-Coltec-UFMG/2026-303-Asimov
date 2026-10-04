@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c560g03fs0qnq"]
 
 [ext_resource type="Script" uid="uid://g1w561ysx6au" path="res://Scenes/scripts/playground.gd" id="1_aes5c"]
-[ext_resource type="Script" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_office"]
+[ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_office"]
 [ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="2_o85rk"]
 [ext_resource type="PackedScene" uid="uid://cv26hyyd4gmju" path="res://Objects/luz_emergencia.tscn" id="3_iqkel"]
 [ext_resource type="PackedScene" uid="uid://nk3t56ltg47k" path="res://TileMaps/Andar_escritorio/escritorio.tscn" id="3_kribp"]
@@ -35,9 +35,8 @@ size = Vector2(11, 18)
 [node name="andar_escritorio" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_aes5c")
 
-[node name="SceneAmbience" type="Node2D" parent="."]
-script = ExtResource("ambience_office")
-ambience_kind = 3
+[node name="SceneAmbience" parent="." instance=ExtResource("ambience_office")]
+tipo_ambiente = 3
 
 [node name="Perigos" type="Node" parent="." unique_id=1974936498]
 
@@ -138,7 +137,7 @@ delete_npc_at_end = true
 position = Vector2(-170, -241)
 
 [node name="SceneTrigger" parent="." unique_id=889034584 instance=ExtResource("7_rnk6w")]
-connected_scene = "sala_chefe"
+cena_destino = "sala_chefe"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger" unique_id=953326990]
 z_index = 1

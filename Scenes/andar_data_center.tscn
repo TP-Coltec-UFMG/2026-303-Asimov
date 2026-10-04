@@ -19,7 +19,7 @@
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="21_rfid_font"]
 [ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="22_cooling_guide"]
 [ext_resource type="Script" uid="uid://drgm3fa52vppv" path="res://Scenes/scripts/data_center_activity.gd" id="activity_data_center"]
-[ext_resource type="Script" uid="uid://dvouf3jvmif20" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_data_center"]
+[ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_data_center"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -65,9 +65,8 @@ size = Vector2(12, 32)
 [node name="ANDAR_DATA_CENTER" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y5mn0")
 
-[node name="SceneAmbience" type="Node2D" parent="." unique_id=1019998292]
-script = ExtResource("ambience_data_center")
-ambience_kind = 1
+[node name="SceneAmbience" parent="." unique_id=1019998292 instance=ExtResource("ambience_data_center")]
+tipo_ambiente = 1
 
 [node name="ANDAR_DATA_CENTER" parent="." unique_id=601132916 instance=ExtResource("3_7oj87")]
 position = Vector2(-230, -253)
@@ -276,8 +275,8 @@ position = Vector2(69.5, -225.5)
 shape = SubResource("RectangleShape2D_6n53c")
 
 [node name="SceneTrigger2" parent="." unique_id=814941055 instance=ExtResource("4_7jkyd")]
-connected_scene = "data_center_forte"
-access_override = true
+cena_destino = "data_center_forte"
+acesso_controlado = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger2" unique_id=1360181984]
 z_index = 1
@@ -329,7 +328,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_rfid_fill")
 show_percentage = false
 
 [node name="SceneTrigger3" parent="." unique_id=1041251766 instance=ExtResource("4_7jkyd")]
-connected_scene = "data_center_refrigeracao"
+cena_destino = "data_center_refrigeracao"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger3" unique_id=1030047178]
 z_index = 1
@@ -424,3 +423,5 @@ process_mode = 4
 visible = false
 position = Vector2(0, -12)
 save_id = "data_center_story_boss_card"
+
+[connection signal="solicitou_acesso" from="SceneTrigger2" to="DataCenterIntroController" method="_on_access_requested"]

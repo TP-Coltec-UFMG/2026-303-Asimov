@@ -166,7 +166,7 @@ func _descobrir_tutoriais() -> void:
 	elif jogador.usando_arma:
 		var arma := inventario.get_item_control("gun")
 		_enfileirar("weapon", true)
-		if _ja_visto("weapon") and int(arma.current_ammo) <= 0:
+		if _ja_visto("weapon") and int(arma.municao_atual) <= 0:
 			_enfileirar("reload", true)
 		if _ja_visto("weapon") and inventario.get_item_on_inventary("lanterna"):
 			_enfileirar("weapon_flashlight")
@@ -188,7 +188,7 @@ func _ainda_relevante(id: String) -> bool:
 	match id:
 		"reload":
 			var arma := inventario.get_item_control("gun")
-			return jogador.usando_arma and arma != null and int(arma.current_ammo) <= 0
+			return jogador.usando_arma and arma != null and int(arma.municao_atual) <= 0
 		"weapon", "weapon_flashlight":
 			return jogador.usando_arma
 		"flashlight":
@@ -234,7 +234,7 @@ func _iniciar_tutorial(id: String) -> void:
 	direcoes_praticadas.clear()
 	posicao_inicial = jogador.global_position
 	var arma := jogador.inventory.get_item_control("gun")
-	municao_inicial = int(arma.current_ammo) if arma != null else 0
+	municao_inicial = int(arma.municao_atual) if arma != null else 0
 	quantidade_coletada_inicial = jogador.inventory.get_save_state().size()
 	var conteudo := _conteudo(id)
 	titulo.text = conteudo[0]
@@ -348,10 +348,10 @@ func _acao_praticada() -> bool:
 			return extinguisher != null and bool(extinguisher.extintor_ligado)
 		"weapon":
 			var arma := inventario.get_item_control("gun")
-			return arma != null and int(arma.current_ammo) < municao_inicial
+			return arma != null and int(arma.municao_atual) < municao_inicial
 		"reload":
 			var arma := inventario.get_item_control("gun")
-			return arma != null and int(arma.current_ammo) > municao_inicial
+			return arma != null and int(arma.municao_atual) > municao_inicial
 		"weapon_flashlight":
 			var lamp := inventario.get_item_control("lanterna")
 			return jogador.usando_arma and lamp != null and bool(lamp.lanterna_acessa)
@@ -483,13 +483,13 @@ func _reduzir_musica(ativo: bool, imediato: bool = false) -> void:
 		return
 	transicao_musica = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	transicao_musica.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	transicao_musica.tween_method(_aplicar_volume_tutorial, MusicController.tutorial_music_factor, fator_alvo, DURACAO_TRANSICAO_MUSICA)
+	transicao_musica.tween_method(_aplicar_volume_tutorial, MusicController.fator_musica_tutorial, fator_alvo, DURACAO_TRANSICAO_MUSICA)
 
 
 func _aplicar_volume_tutorial(fator: float) -> void:
 	if not is_instance_valid(MusicController):
 		return
-	MusicController.set_tutorial_music_factor(fator)
+	MusicController.definir_fator_musica_tutorial(fator)
 
 
 func _iniciar_destaque() -> void:

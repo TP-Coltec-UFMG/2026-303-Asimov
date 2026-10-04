@@ -138,14 +138,14 @@ func _ensure_starting_gun() -> void:
 			candidate.queue_free()
 
 
-func update_weapon_hud(current_ammo: int, magazine_size: int, reserve_ammo: int, reloading: bool) -> void:
+func update_weapon_hud(municao_atual: int, magazine_size: int, municao_reserva: int, recarregando: bool) -> void:
 	ammo_panel.visible = usando_arma
 	if not usando_arma:
 		return
-	if reloading:
-		ammo_label.text = "RECARREGANDO...  %d" % reserve_ammo
+	if recarregando:
+		ammo_label.text = "RECARREGANDO...  %d" % municao_reserva
 	else:
-		ammo_label.text = "%d / %d  |  RESERVA %d" % [current_ammo, magazine_size, reserve_ammo]
+		ammo_label.text = "%d / %d  |  RESERVA %d" % [municao_atual, magazine_size, municao_reserva]
 
 
 func show_ammo_pickup(amount: int) -> void:
@@ -209,9 +209,9 @@ func _show_restart_warning(message: String, restart_from_beginning: bool = false
 
 
 func _toggle_alarm_from_player() -> bool:
-	if not MusicController.toggle_alarm_by_player():
+	if not MusicController.alternar_alarme_jogador():
 		return false
-	if MusicController.alarm_user_muted:
+	if MusicController.alarme_silenciado_jogador:
 		balao_de_pensamento.enfileirar_dialogo("alarm.disabled_by_player", "alarm:disabled_by_player")
 		_show_alarm_status("Alarme desativado")
 	else:
@@ -241,7 +241,7 @@ func _show_alarm_status(message: String) -> void:
 
 
 func show_alarm_hint() -> void:
-	if MusicController.alarm_user_muted:
+	if MusicController.alarme_silenciado_jogador:
 		return
 	if alarm_tip_tween != null and alarm_tip_tween.is_valid():
 		alarm_tip_tween.kill()
@@ -342,7 +342,7 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 
 	empurrando = false
 	if is_instance_valid(objeto_manipulado):
-		objeto_manipulado.set_manipulated_outline(false)
+		objeto_manipulado.definir_contorno_manipulacao(false)
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
 	_stop_movement_sfx()
@@ -457,7 +457,7 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 		return
 	
 	objeto_manipulado = objeto
-	objeto_manipulado.set_manipulated_outline(true)
+	objeto_manipulado.definir_contorno_manipulacao(true)
 	lado_objeto_manipulado = lado
 	cardinal_direction = lado
 	add_collision_exception_with(objeto_manipulado)
@@ -469,7 +469,7 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 
 func soltar_objeto() -> void:
 	if objeto_manipulado != null and is_instance_valid(objeto_manipulado):
-		objeto_manipulado.set_manipulated_outline(false)
+		objeto_manipulado.definir_contorno_manipulacao(false)
 		remove_collision_exception_with(objeto_manipulado)
 		objeto_manipulado.remove_collision_exception_with(self)
 
@@ -510,7 +510,7 @@ func mover_com_objeto(movimento: Vector2) -> void:
 		objeto_manipulado.move_and_collide(movimento)
 		if not drag_sfx.playing:
 
-			drag_sfx.stream = GameAudio.SCRAPES[randi_range(0, 1)]
+			drag_sfx.stream = GameAudio.RASPAGENS[randi_range(0, 1)]
 			drag_sfx.play()
 	elif drag_sfx.playing:
 		drag_sfx.stop()
@@ -625,10 +625,10 @@ func reset_sprite_player() -> void:
 	usando_lanterna = false
 	var lanterna = inventory.get_item_control("lanterna")
 	if lanterna != null:
-		lanterna.set_luz(false)
+		lanterna.definir_luz(false)
 	var extintor = inventory.get_item_control("extintor")
 	if extintor != null:
-		extintor.set_fumaca(false)
+		extintor.definir_fumaca(false)
 	usando_arma = false
 	usando_cartao = false
 	usando_laptop = false
@@ -650,25 +650,25 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("use_lanterna") and inventory.get_item_on_inventary("lanterna"):
 		var lanterna = inventory.get_item_control("lanterna")
-		lanterna.set_player(self)
+		lanterna.definir_jogador(self)
 		if usando_arma:
-			lanterna.toggle_luz()
+			lanterna.alternar_luz()
 			get_viewport().set_input_as_handled()
 			return
 		if usando_lanterna:
-			lanterna.set_luz(false)
+			lanterna.definir_luz(false)
 			reset_sprite_player()
 		else:
 			reset_sprite_player()
 			usando_lanterna = true
 			inventory.set_equipped_item("lanterna")
-			lanterna.set_luz(true)
+			lanterna.definir_luz(true)
 			$Sprite2D.texture = preload("res://Player/Sprites/Alex_com_lanterna16x16.png")
 			
 			
 	if event.is_action_pressed("use_arma") and inventory.get_item_on_inventary("gun"):
 		var gun = inventory.get_item_control("gun")
-		gun.set_player(self)
+		gun.definir_jogador(self)
 		if usando_arma:
 			reset_sprite_player()
 		else:
@@ -676,26 +676,26 @@ func _input(event: InputEvent) -> void:
 			usando_arma = true
 			inventory.set_equipped_item("gun")
 			$Sprite2D.texture = preload("res://Player/Sprites/Alex_com_arma16x16.png")
-		gun.refresh_hud()
+		gun.atualizar_painel_arma()
 			
 			
 	if event.is_action_pressed("use_extintor") and inventory.get_item_on_inventary("extintor"):
 		var extintor = inventory.get_item_control("extintor")
 		if usando_extintor:
-			extintor.set_fumaca(false)
+			extintor.definir_fumaca(false)
 			reset_sprite_player()
 		else:
 			reset_sprite_player()
-			extintor.set_player(self)
+			extintor.definir_jogador(self)
 			usando_extintor = true
 			inventory.set_equipped_item("extintor")
-			extintor.set_fumaca(false)
+			extintor.definir_fumaca(false)
 			$Sprite2D.texture = preload("res://Player/Sprites/Alex_16x16_com_extintor.png")
 			
 			
 	if event.is_action_pressed("use_cartao") and inventory.get_item_on_inventary("cartao"):
 		var cartao = inventory.get_item_control("cartao")
-		cartao.set_player(self)
+		cartao.definir_jogador(self)
 		if usando_cartao:
 			reset_sprite_player()
 		else:
@@ -712,7 +712,7 @@ func _input(event: InputEvent) -> void:
 				
 	if event.is_action_pressed("use_laptop") and inventory.get_item_on_inventary("laptop"):
 		var laptop = inventory.get_item_control("laptop")
-		laptop.set_player(self)
+		laptop.definir_jogador(self)
 		if usando_laptop:
 			reset_sprite_player()
 		else:
@@ -724,7 +724,7 @@ func _input(event: InputEvent) -> void:
 			
 	if event.is_action_pressed("use_cabo") and inventory.get_item_on_inventary("cabo"):
 		var cabo = inventory.get_item_control("cabo")
-		cabo.set_player(self)
+		cabo.definir_jogador(self)
 		if usando_cabo:
 			reset_sprite_player()
 		else:

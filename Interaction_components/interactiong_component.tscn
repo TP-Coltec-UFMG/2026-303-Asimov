@@ -12,6 +12,7 @@ height = 22.0
 light_mode = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_kb8ke"]
+resource_local_to_scene = true
 font = ExtResource("2_m7ep5")
 font_size = 12
 outline_size = 2

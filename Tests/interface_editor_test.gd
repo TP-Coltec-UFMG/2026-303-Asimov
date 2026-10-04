@@ -107,7 +107,7 @@ func _executar() -> void:
 	_verificar(DialogManager.get_children() == caixas_originais, "Conversas sucessivas não devem criar ou excluir nós.")
 	Configs.configs = configuracoes_originais
 	SaveGame.save_data = progresso_original
-	MusicController.stop_all_audio()
+	MusicController.parar_todos_audios()
 	var arquivo := FileAccess.open("res://.interface-results.json", FileAccess.WRITE)
 	arquivo.store_string(JSON.stringify({"passed": falhas.is_empty(), "checks": verificacoes, "failures": falhas}, "\t"))
 	for falha in falhas:

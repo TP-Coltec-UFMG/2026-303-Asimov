@@ -14,7 +14,7 @@ size = Vector2(42, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yiw1b"]
 size = Vector2(42, 24)
 
-[node name="Escada" type="CharacterBody2D" unique_id=775917438]
+[node name="Escada" type="CharacterBody2D" unique_id=775917438 groups=["empurravel"]]
 script = ExtResource("1_n2o1b")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1463579393]

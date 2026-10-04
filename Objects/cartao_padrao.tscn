@@ -37,8 +37,9 @@ shadow_enabled = true
 shadow_filter = 2
 texture = ExtResource("4_0gfww")
 
-[node name="PickupComponent" type="Node" parent="." unique_id=1733838396 node_paths=PackedStringArray("interactable")]
+[node name="PickupComponent" type="Node" parent="." unique_id=1733838396]
 script = ExtResource("5_pktqx")
-item_id = "cartao"
-interactable = NodePath("../Interectable")
+id_item = "cartao"
 metadata/_custom_type_script = "uid://dtfbuvijibmfx"
+
+[connection signal="interacao_solicitada" from="Interectable" to="PickupComponent" method="coletar"]

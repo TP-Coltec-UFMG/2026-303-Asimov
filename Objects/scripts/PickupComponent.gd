@@ -1,60 +1,32 @@
 extends Node
 class_name PickupComponent
 
-@export var item_id: String = ""
-@export var item_scene: PackedScene
-@export var interactable: Area2D
+signal interagiu
+
+@export var id_item: String = ""
+@export var cena_item: PackedScene
 @export var destruir_ao_coletar: bool = true
 @export var criar_checkpoint_ao_coletar: bool = true
 
-signal interagiu
-
 
 func _ready() -> void:
-	if interactable == null:
-		interactable = get_parent().get_node_or_null("Interectable")
-
-	if interactable == null:
-		push_warning("PickupComponent sem Interectable em: " + str(get_parent().name))
-		return
-
-	if item_scene == null:
-		var parent_scene_path := get_parent().scene_file_path
-
-		if parent_scene_path != "":
-			item_scene = load(parent_scene_path)
-
-	interactable.interact = coletar
+	if cena_item == null and not id_item.is_empty() and id_item != "conhecimento":
+		var caminho_cena := get_parent().scene_file_path
+		if not caminho_cena.is_empty():
+			cena_item = load(caminho_cena)
 
 
 func coletar() -> void:
-	var player := get_tree().get_first_node_in_group("player") as Player
-
-	if player == null:
-		push_warning("Nenhum Player encontrado no grupo 'player'.")
+	var jogador := get_tree().get_first_node_in_group("player") as Player
+	if jogador == null or jogador.inventory == null:
 		return
-
-	if player.inventory == null:
-		push_warning("Player está sem referência para o inventory.")
+	if not jogador.inventory.add_item(id_item, cena_item):
 		return
-
-	var coletou: bool = player.inventory.add_item(
-		item_id,
-		item_scene
-	)
-
-	if not coletou:
-		return
-		
 	interagiu.emit()
-
-	var objeto: Node = get_parent()
-
+	var objeto := get_parent()
 	if objeto.has_method("foi_coletado"):
 		objeto.foi_coletado()
-
 	if criar_checkpoint_ao_coletar:
-		SaveGame.create_checkpoint(player)
-
+		SaveGame.create_checkpoint(jogador)
 	if destruir_ao_coletar:
 		objeto.queue_free()

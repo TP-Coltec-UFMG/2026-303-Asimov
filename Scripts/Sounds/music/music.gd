@@ -1,16 +1,16 @@
 extends Node2D
 
-@onready var bg_music: AudioStreamPlayer = $"BG Music"
-@onready var bg_ambient: AudioStreamPlayer = $"BG Ambient"
-@onready var countdown_music: AudioStreamPlayer = $COUNTDOWN_MUSIC
+@onready var musica_fundo: AudioStreamPlayer = $"BG Music"
+@onready var ambiente_fundo: AudioStreamPlayer = $"BG Ambient"
+@onready var musica_contagem: AudioStreamPlayer = $COUNTDOWN_MUSIC
 @onready var som_alarme: AudioStreamPlayer = $SOM_ALARME
 @onready var som_de_fundo: AudioStreamPlayer = $SOM_DE_FUNDO
 @onready var musica_quando_o_disjuntor_apagar: AudioStreamPlayer = $MUSICA_QUANDO_O_DISJUNTOR_APAGAR
-@onready var heartbeat: AudioStreamPlayer = $HEARTBEAT
-@onready var initial_background_music: AudioStreamPlayer = $INITIAL_BACKGROUND_MUSIC
-@onready var hacking_music: AudioStreamPlayer = $HACKING_MUSIC
+@onready var batimento: AudioStreamPlayer = $HEARTBEAT
+@onready var musica_cenario: AudioStreamPlayer = $INITIAL_BACKGROUND_MUSIC
+@onready var musica_hack: AudioStreamPlayer = $HACKING_MUSIC
 
-const AUDIO_PLAYERS: Dictionary = {
+const TOCADORES_AUDIO: Dictionary = {
 	"bg_music": NodePath("BG Music"),
 	"bg_ambient": NodePath("BG Ambient"),
 	"countdown_music": NodePath("COUNTDOWN_MUSIC"),
@@ -21,7 +21,7 @@ const AUDIO_PLAYERS: Dictionary = {
 
 	"tension_ambience": NodePath("INITIAL_BACKGROUND_MUSIC")
 }
-const ELEVATOR_MUSIC_PLAYERS: Array[NodePath] = [
+const MUSICAS_ELEVADOR: Array[NodePath] = [
 	NodePath("BG Music"),
 	NodePath("COUNTDOWN_MUSIC"),
 	NodePath("SOM_DE_FUNDO"),
@@ -29,1030 +29,1010 @@ const ELEVATOR_MUSIC_PLAYERS: Array[NodePath] = [
 	NodePath("INITIAL_BACKGROUND_MUSIC"),
 	NodePath("HACKING_MUSIC")
 ]
-const POST_BREAKER_BACKGROUND_MUSIC = preload("res://Sounds/Cenario/Musica_de_cenario_3.mp3")
+const MUSICA_APOS_DISJUNTOR = preload("res://Sounds/Cenario/Musica_de_cenario_3.mp3")
 
-const SILENT_VOLUME_DB: float = -80.0
-const OPENING_MUSIC_FADE_DURATION: float = 3.0
-const POWER_OUTAGE_FADE_DURATION: float = 4.0
-const POWER_OUTAGE_MUSIC_START_DELAY: float = 1.0
-const POWER_OUTAGE_BACKGROUND_FADE_DURATION: float = 1.0
-const POWER_OUTAGE_ALARM_VOLUME: float = 0.3
-const ALARM_INITIAL_VOLUME: float = 0.3
-const ALARM_REDUCED_VOLUME: float = 0.1
-const ALARM_INITIAL_DURATION: float = 30.0
-const ALARM_FADE_DURATION: float = 4.0
-const ALARM_HINT_DELAY: float = 120.0
-const ALARM_QUIET_CONTEXT_VOLUME: float = 0.05
-const HEARTBEAT_NORMAL_PITCH: float = 1.0
-const HEARTBEAT_LOW_STAMINA_PITCH: float = 3.0
-const HEARTBEAT_POWER_OUTAGE_PITCH: float = 1.45
-const HEARTBEAT_PITCH_CHANGE_PER_SECOND: float = 0.55
-const HEARTBEAT_STAMINA_RESPONSE_START: float = 0.2
-const HEARTBEAT_STAMINA_RESPONSE_END: float = 0.85
-const INITIAL_BACKGROUND_MUSIC_FINAL_VOLUME_FACTOR: float = 0.5
-const INITIAL_BACKGROUND_MUSIC_VOLUME_CHANGE_DB_PER_SECOND: float = 4.0
-const HACKING_MUSIC_TARGET_DB: float = -6.0
-const HACKING_MUSIC_FADE_DURATION: float = 1.5
-const HACKING_BACKGROUND_MUSIC_FACTOR: float = 0.28
-const NPC_DIALOG_MUSIC_FACTOR: float = 0.5
-const NPC_DIALOG_MUSIC_FADE_DURATION: float = 0.4
-const HEARTBEAT_INTRO_DURATION: float = 20.0
-const HEARTBEAT_INTRO_PITCH: float = 1.25
-const HEARTBEAT_FINAL_START_PITCH: float = 1.2
-const HEARTBEAT_FINAL_MAX_PITCH: float = 1.65
-const HEARTBEAT_FINAL_DURATION: float = 46.0
-const PROGRAMMER_FINAL_BACKGROUND_DB: float = -34.0
-const PROGRAMMER_FINAL_COUNTDOWN_DB: float = -18.0
+const VOLUME_SILENCIO_DB: float = -80.0
+const DURACAO_TRANSICAO_MUSICA_ABERTURA: float = 3.0
+const DURACAO_TRANSICAO_DISJUNTOR: float = 4.0
+const ESPERA_INICIO_MUSICA_DISJUNTOR: float = 1.0
+const DURACAO_TRANSICAO_FUNDO_DISJUNTOR: float = 1.0
+const VOLUME_ALARME_DISJUNTOR: float = 0.3
+const VOLUME_INICIAL_ALARME: float = 0.3
+const VOLUME_REDUZIDO_ALARME: float = 0.1
+const DURACAO_INICIAL_ALARME: float = 30.0
+const DURACAO_TRANSICAO_ALARME: float = 4.0
+const ESPERA_AVISO_ALARME: float = 120.0
+const VOLUME_CONTEXTO_ALARME_BAIXO: float = 0.05
+const TOM_NORMAL_BATIMENTO: float = 1.0
+const TOM_BATIMENTO_CANSADO: float = 3.0
+const TOM_BATIMENTO_DISJUNTOR: float = 1.45
+const VELOCIDADE_TRANSICAO_TOM_BATIMENTO: float = 0.55
+const INICIO_RESPOSTA_BATIMENTO_CANSACO: float = 0.2
+const FIM_RESPOSTA_BATIMENTO_CANSACO: float = 0.85
+const FATOR_VOLUME_MUSICA_CENARIO_FINAL: float = 0.5
+const VELOCIDADE_TRANSICAO_VOLUME_CENARIO: float = 4.0
+const VOLUME_ALVO_MUSICA_HACK_DB: float = -6.0
+const DURACAO_TRANSICAO_MUSICA_HACK: float = 1.5
+const FATOR_MUSICA_FUNDO_HACK: float = 0.28
+const FATOR_MUSICA_DIALOGO_NPC: float = 0.5
+const DURACAO_TRANSICAO_MUSICA_DIALOGO: float = 0.4
+const DURACAO_BATIMENTO_INICIAL: float = 20.0
+const TOM_BATIMENTO_INICIAL: float = 1.25
+const TOM_INICIAL_BATIMENTO_FINAL: float = 1.2
+const TOM_MAXIMO_BATIMENTO_FINAL: float = 1.65
+const DURACAO_BATIMENTO_FINAL: float = 46.0
+const VOLUME_FUNDO_FINAL_PROGRAMADOR_DB: float = -34.0
+const VOLUME_CONTAGEM_FINAL_PROGRAMADOR_DB: float = -18.0
 
-enum PowerOutageAudioState {
-	IDLE,
-	FADING_IN,
-	ACTIVE,
-	FADING_OUT
+enum EstadoAudioDisjuntor {
+	INATIVO,
+	AUMENTANDO,
+	ATIVO,
+	DIMINUINDO
 }
 
-var scene_audio_blocked: bool = false
-var pending_scene_starts: Dictionary = {}
-var paused_audio_positions: Dictionary = {}
-var paused_hacking_music_position: float = -1.0
-var hacking_music_mix: float = 0.0
-var hacking_background_applied_factor: float = 1.0
-var npc_dialog_music_factor: float = 1.0
-var npc_dialog_music_applied_factor: float = 1.0
-var npc_dialog_music_base_db: float = 0.0
-var tutorial_music_factor: float = 1.0
-var alarm_normal_volume_db: float = 0.0
-var alarm_elapsed: float = 0.0
-var alarm_unducked_volume_db: float = 0.0
-var alarm_user_muted: bool = false
-var alarm_user_position: float = 0.0
-var alarm_hint_elapsed: float = 0.0
-var alarm_hint_shown: bool = false
-var alarm_quiet_contexts: Dictionary = {}
-var opening_music_normal_volume_db: float = 0.0
-var opening_music_started: bool = false
-var opening_music_finished: bool = false
-var power_outage_music_normal_volume_db: float = 0.0
-var power_outage_audio_state: PowerOutageAudioState = PowerOutageAudioState.IDLE
-var power_outage_fade_elapsed: float = 0.0
-var power_outage_music_delay_remaining: float = 0.0
-var power_outage_music_fade_elapsed: float = 0.0
-var power_outage_alarm_start_db: float = SILENT_VOLUME_DB
-var power_outage_alarm_target_db: float = SILENT_VOLUME_DB
-var power_outage_music_start_db: float = SILENT_VOLUME_DB
-var power_outage_music_target_db: float = SILENT_VOLUME_DB
-var initial_background_music_normal_volume_db: float = 0.0
-var initial_background_music_target_volume_db: float = 0.0
-var initial_background_music_restoring_from_outage: bool = false
-var initial_background_music_start_stream: AudioStream
-var initial_background_music_after_breaker: bool = false
-var heartbeat_intro_elapsed: float = 0.0
-var menu_fade_tween: Tween
-var menu_fade_restore_volumes: Dictionary = {}
-var elevator_audio_active: bool = false
-var elevator_music_process_modes: Dictionary = {}
+var audio_cena_bloqueado: bool = false
+var inicios_pendentes: Dictionary = {}
+var posicoes_audio_pausado: Dictionary = {}
+var posicao_hack_pausada: float = -1.0
+var mistura_hack: float = 0.0
+var fator_fundo_hack_aplicado: float = 1.0
+var fator_musica_dialogo: float = 1.0
+var fator_dialogo_aplicado: float = 1.0
+var volume_base_dialogo_db: float = 0.0
+var fator_musica_tutorial: float = 1.0
+var volume_normal_alarme_db: float = 0.0
+var tempo_alarme: float = 0.0
+var volume_alarme_sem_atenuacao_db: float = 0.0
+var alarme_silenciado_jogador: bool = false
+var posicao_alarme_jogador: float = 0.0
+var tempo_aviso_alarme: float = 0.0
+var aviso_alarme_exibido: bool = false
+var contextos_alarme_baixo: Dictionary = {}
+var volume_normal_musica_inicio_db: float = 0.0
+var musica_inicio_iniciada: bool = false
+var musica_inicio_finalizada: bool = false
+var volume_normal_musica_disjuntor_db: float = 0.0
+var estado_audio_disjuntor: EstadoAudioDisjuntor = EstadoAudioDisjuntor.INATIVO
+var tempo_transicao_disjuntor: float = 0.0
+var espera_musica_disjuntor: float = 0.0
+var tempo_transicao_musica_disjuntor: float = 0.0
+var volume_inicial_alarme_disjuntor_db: float = VOLUME_SILENCIO_DB
+var volume_alvo_alarme_disjuntor_db: float = VOLUME_SILENCIO_DB
+var volume_inicial_musica_disjuntor_db: float = VOLUME_SILENCIO_DB
+var volume_alvo_musica_disjuntor_db: float = VOLUME_SILENCIO_DB
+var volume_normal_musica_cenario_db: float = 0.0
+var volume_alvo_musica_cenario_db: float = 0.0
+var musica_cenario_retornando: bool = false
+var faixa_inicial_cenario: AudioStream
+var musica_cenario_apos_disjuntor: bool = false
+var tempo_batimento_inicial: float = 0.0
+var transicao_audio_menu: Tween
+var volumes_retorno_menu: Dictionary = {}
+var audio_elevador_ativo: bool = false
+var modos_musica_elevador: Dictionary = {}
 
 
 func _ready() -> void:
 
-	if som_alarme.stream is AudioStreamMP3:
-		var alarm_loop := som_alarme.stream.duplicate() as AudioStreamMP3
-		alarm_loop.loop = true
-		som_alarme.stream = alarm_loop
-	if heartbeat.stream is AudioStreamMP3:
-		var heartbeat_loop := heartbeat.stream.duplicate() as AudioStreamMP3
-		heartbeat_loop.loop = true
-		heartbeat.stream = heartbeat_loop
-	if initial_background_music.stream is AudioStreamMP3:
-		var background_loop := initial_background_music.stream.duplicate() as AudioStreamMP3
-		background_loop.loop = true
-		initial_background_music.stream = background_loop
-	if hacking_music.stream is AudioStreamOggVorbis:
-		var hacking_loop := hacking_music.stream.duplicate() as AudioStreamOggVorbis
-		hacking_loop.loop = true
-		hacking_music.stream = hacking_loop
-	initial_background_music_start_stream = initial_background_music.stream
-	_play_if_stopped(bg_ambient)
-	_play_if_stopped(bg_music)
-	alarm_normal_volume_db = som_alarme.volume_db
-	alarm_unducked_volume_db = som_alarme.volume_db
-	opening_music_normal_volume_db = som_de_fundo.volume_db
-	power_outage_music_normal_volume_db = musica_quando_o_disjuntor_apagar.volume_db
-	initial_background_music_normal_volume_db = initial_background_music.volume_db
-	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
-	heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
-	initial_background_music.pitch_scale = 1.0
+	faixa_inicial_cenario = musica_cenario.stream
+	_tocar_se_parado(ambiente_fundo)
+	_tocar_se_parado(musica_fundo)
+	volume_normal_alarme_db = som_alarme.volume_db
+	volume_alarme_sem_atenuacao_db = som_alarme.volume_db
+	volume_normal_musica_inicio_db = som_de_fundo.volume_db
+	volume_normal_musica_disjuntor_db = musica_quando_o_disjuntor_apagar.volume_db
+	volume_normal_musica_cenario_db = musica_cenario.volume_db
+	volume_alvo_musica_cenario_db = volume_normal_musica_cenario_db
+	batimento.pitch_scale = TOM_NORMAL_BATIMENTO
+	musica_cenario.pitch_scale = 1.0
 
 
 func _process(delta: float) -> void:
-	if scene_audio_blocked or get_tree().paused:
+	if audio_cena_bloqueado or get_tree().paused:
 		return
-	_update_opening_music_fade()
-	_update_alarm_volume(delta)
-	_update_alarm_hint(delta)
-	_update_power_outage_audio(delta)
-	_update_heartbeat(delta)
-	_update_initial_background_music(delta)
-	_update_hacking_music(delta)
-	_update_npc_dialog_music(delta)
+	_atualizar_transicao_musica_abertura()
+	_atualizar_volume_alarme(delta)
+	_atualizar_aviso_alarme(delta)
+	_atualizar_audio_disjuntor(delta)
+	_atualizar_batimento(delta)
+	_atualizar_musica_cenario(delta)
+	_atualizar_musica_hack(delta)
+	_atualizar_musica_dialogo(delta)
 
 
-func _update_npc_dialog_music(delta: float) -> void:
-	var music_bus := AudioServer.get_bus_index(&"Music")
-	if music_bus < 0:
+func _atualizar_musica_dialogo(delta: float) -> void:
+	var canal_musica := AudioServer.get_bus_index(&"Music")
+	if canal_musica < 0:
 		return
 
-	var current_volume_db := AudioServer.get_bus_volume_db(music_bus)
-	if npc_dialog_music_applied_factor < 1.0:
-		var expected_volume_db := npc_dialog_music_base_db + linear_to_db(npc_dialog_music_applied_factor)
-		if is_equal_approx(current_volume_db, expected_volume_db):
-			current_volume_db = npc_dialog_music_base_db
-		npc_dialog_music_applied_factor = 1.0
-	var target_factor := NPC_DIALOG_MUSIC_FACTOR if DialogManager.is_showing_dialog else 1.0
-	npc_dialog_music_factor = move_toward(
-		npc_dialog_music_factor,
-		target_factor,
-		delta / NPC_DIALOG_MUSIC_FADE_DURATION
+	var volume_atual_db := AudioServer.get_bus_volume_db(canal_musica)
+	if fator_dialogo_aplicado < 1.0:
+		var volume_esperado_db := volume_base_dialogo_db + linear_to_db(fator_dialogo_aplicado)
+		if is_equal_approx(volume_atual_db, volume_esperado_db):
+			volume_atual_db = volume_base_dialogo_db
+		fator_dialogo_aplicado = 1.0
+	var fator_alvo := FATOR_MUSICA_DIALOGO_NPC if DialogManager.is_showing_dialog else 1.0
+	fator_musica_dialogo = move_toward(
+		fator_musica_dialogo,
+		fator_alvo,
+		delta / DURACAO_TRANSICAO_MUSICA_DIALOGO
 	)
-	npc_dialog_music_base_db = current_volume_db
-	var combined_factor := npc_dialog_music_factor * tutorial_music_factor
-	AudioServer.set_bus_volume_db(music_bus, current_volume_db + linear_to_db(combined_factor))
-	npc_dialog_music_applied_factor = combined_factor
+	volume_base_dialogo_db = volume_atual_db
+	var fator_combinado := fator_musica_dialogo * fator_musica_tutorial
+	AudioServer.set_bus_volume_db(canal_musica, volume_atual_db + linear_to_db(fator_combinado))
+	fator_dialogo_aplicado = fator_combinado
 
 
-func set_tutorial_music_factor(factor: float) -> void:
-	tutorial_music_factor = clampf(factor, 0.01, 1.0)
-	_update_npc_dialog_music(0.0)
-	_refresh_alarm_output()
+func definir_fator_musica_tutorial(fator: float) -> void:
+	fator_musica_tutorial = clampf(fator, 0.01, 1.0)
+	_atualizar_musica_dialogo(0.0)
+	_atualizar_saida_alarme()
 
 
-func _update_hacking_music(delta: float) -> void:
-	var target_mix := 1.0 if _is_hacking_scene() else 0.0
-	hacking_music_mix = move_toward(
-		hacking_music_mix,
-		target_mix,
-		delta / HACKING_MUSIC_FADE_DURATION
+func _atualizar_musica_hack(delta: float) -> void:
+	var mistura_alvo := 1.0 if _cena_de_hack() else 0.0
+	mistura_hack = move_toward(
+		mistura_hack,
+		mistura_alvo,
+		delta / DURACAO_TRANSICAO_MUSICA_HACK
 	)
-	if target_mix > 0.0 and not hacking_music.playing:
-		hacking_music.play()
-	var music_amplitude := db_to_linear(HACKING_MUSIC_TARGET_DB) * hacking_music_mix
-	if music_amplitude > db_to_linear(SILENT_VOLUME_DB):
-		hacking_music.volume_db = linear_to_db(music_amplitude)
+	if mistura_alvo > 0.0 and not musica_hack.playing:
+		musica_hack.play()
+	var amplitude_musica := db_to_linear(VOLUME_ALVO_MUSICA_HACK_DB) * mistura_hack
+	if amplitude_musica > db_to_linear(VOLUME_SILENCIO_DB):
+		musica_hack.volume_db = linear_to_db(amplitude_musica)
 	else:
-		hacking_music.volume_db = SILENT_VOLUME_DB
-		if hacking_music.playing:
-			hacking_music.stop()
+		musica_hack.volume_db = VOLUME_SILENCIO_DB
+		if musica_hack.playing:
+			musica_hack.stop()
 
-	var background_factor := lerpf(1.0, HACKING_BACKGROUND_MUSIC_FACTOR, hacking_music_mix)
-	var background_amplitude := db_to_linear(initial_background_music.volume_db) * background_factor
-	hacking_background_applied_factor = background_factor
-	initial_background_music.volume_db = linear_to_db(maxf(
-		background_amplitude,
-		db_to_linear(SILENT_VOLUME_DB)
+	var fator_fundo := lerpf(1.0, FATOR_MUSICA_FUNDO_HACK, mistura_hack)
+	var amplitude_fundo := db_to_linear(musica_cenario.volume_db) * fator_fundo
+	fator_fundo_hack_aplicado = fator_fundo
+	musica_cenario.volume_db = linear_to_db(maxf(
+		amplitude_fundo,
+		db_to_linear(VOLUME_SILENCIO_DB)
 	))
 
 
-func _is_hacking_scene() -> bool:
-	var current_scene := get_tree().current_scene
-	if not is_instance_valid(current_scene):
+func _cena_de_hack() -> bool:
+	var cena_atual := get_tree().current_scene
+	if not is_instance_valid(cena_atual):
 		return false
-	var scene_path := current_scene.scene_file_path
+	var caminho_cena := cena_atual.scene_file_path
 	return (
-		scene_path.begins_with("res://Minigames/Minigame1/levels/")
-		or scene_path.begins_with("res://Minigames/Minigame3/levels/")
+		caminho_cena.begins_with("res://Minigames/Minigame1/levels/")
+		or caminho_cena.begins_with("res://Minigames/Minigame3/levels/")
 	)
 
 
-func _update_heartbeat(delta: float) -> void:
+func _atualizar_batimento(delta: float) -> void:
 
 	if not is_instance_valid(scene_manager.player):
-		if heartbeat.playing:
-			heartbeat.stop()
-		heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
+		if batimento.playing:
+			batimento.stop()
+		batimento.pitch_scale = TOM_NORMAL_BATIMENTO
 		return
 
-	var current_player: Player = scene_manager.player
-	_play_if_stopped(heartbeat)
-	var mission := SaveGame.office_mission_state(current_player)
-	var power_is_out := (
-		bool(mission.get("data_center_power_outage", false))
-		and not bool(mission.get("data_center_breaker_restored", false))
+	var jogador_atual: Player = scene_manager.player
+	_tocar_se_parado(batimento)
+	var missao := SaveGame.office_mission_state(jogador_atual)
+	var energia_desligada := (
+		bool(missao.get("data_center_power_outage", false))
+		and not bool(missao.get("data_center_breaker_restored", false))
 	)
-	var target_pitch := _heartbeat_pitch_from_stamina(current_player.cansaco)
-	if heartbeat_intro_elapsed < HEARTBEAT_INTRO_DURATION:
-		heartbeat_intro_elapsed = minf(
-			heartbeat_intro_elapsed + delta,
-			HEARTBEAT_INTRO_DURATION
+	var tom_alvo := _tom_batimento_por_cansaco(jogador_atual.cansaco)
+	if tempo_batimento_inicial < DURACAO_BATIMENTO_INICIAL:
+		tempo_batimento_inicial = minf(
+			tempo_batimento_inicial + delta,
+			DURACAO_BATIMENTO_INICIAL
 		)
-		target_pitch = maxf(target_pitch, HEARTBEAT_INTRO_PITCH)
-	if power_is_out:
-		target_pitch = maxf(target_pitch, HEARTBEAT_POWER_OUTAGE_PITCH)
-	var remaining_time := SaveGame.tempo_atual
-	if remaining_time > 0.0 and remaining_time <= HEARTBEAT_FINAL_DURATION:
-		var final_progress := clampf(
-			1.0 - (remaining_time / HEARTBEAT_FINAL_DURATION),
+		tom_alvo = maxf(tom_alvo, TOM_BATIMENTO_INICIAL)
+	if energia_desligada:
+		tom_alvo = maxf(tom_alvo, TOM_BATIMENTO_DISJUNTOR)
+	var tempo_restante := SaveGame.tempo_atual
+	if tempo_restante > 0.0 and tempo_restante <= DURACAO_BATIMENTO_FINAL:
+		var progresso_final := clampf(
+			1.0 - (tempo_restante / DURACAO_BATIMENTO_FINAL),
 			0.0,
 			1.0
 		)
-		var smooth_final_progress := (
-			final_progress * final_progress
-			* (3.0 - 2.0 * final_progress)
+		var progresso_final_suave := (
+			progresso_final * progresso_final
+			* (3.0 - 2.0 * progresso_final)
 		)
-		target_pitch = maxf(
-			target_pitch,
+		tom_alvo = maxf(
+			tom_alvo,
 			lerpf(
-				HEARTBEAT_FINAL_START_PITCH,
-				HEARTBEAT_FINAL_MAX_PITCH,
-				smooth_final_progress
+				TOM_INICIAL_BATIMENTO_FINAL,
+				TOM_MAXIMO_BATIMENTO_FINAL,
+				progresso_final_suave
 			)
 		)
-	heartbeat.pitch_scale = move_toward(
-		heartbeat.pitch_scale,
-		target_pitch,
-		HEARTBEAT_PITCH_CHANGE_PER_SECOND * delta
+	batimento.pitch_scale = move_toward(
+		batimento.pitch_scale,
+		tom_alvo,
+		VELOCIDADE_TRANSICAO_TOM_BATIMENTO * delta
 	)
 
 
-func _heartbeat_pitch_from_stamina(exhaustion: float) -> float:
+func _tom_batimento_por_cansaco(cansaco: float) -> float:
 
-	var progress := clampf(
-		(exhaustion - HEARTBEAT_STAMINA_RESPONSE_START)
-		/ (HEARTBEAT_STAMINA_RESPONSE_END - HEARTBEAT_STAMINA_RESPONSE_START),
+	var progresso := clampf(
+		(cansaco - INICIO_RESPOSTA_BATIMENTO_CANSACO)
+		/ (FIM_RESPOSTA_BATIMENTO_CANSACO - INICIO_RESPOSTA_BATIMENTO_CANSACO),
 		0.0,
 		1.0
 	)
-	var smooth_progress := progress * progress * (3.0 - 2.0 * progress)
+	var progresso_suave := progresso * progresso * (3.0 - 2.0 * progresso)
 	return lerpf(
-		HEARTBEAT_NORMAL_PITCH,
-		HEARTBEAT_LOW_STAMINA_PITCH,
-		smooth_progress
+		TOM_NORMAL_BATIMENTO,
+		TOM_BATIMENTO_CANSADO,
+		progresso_suave
 	)
 
 
-func _update_initial_background_music(delta: float) -> void:
+func _atualizar_musica_cenario(delta: float) -> void:
 
-	if hacking_background_applied_factor < 1.0:
-		initial_background_music.volume_db = linear_to_db(
-			db_to_linear(initial_background_music.volume_db)
-			/ hacking_background_applied_factor
+	if fator_fundo_hack_aplicado < 1.0:
+		musica_cenario.volume_db = linear_to_db(
+			db_to_linear(musica_cenario.volume_db)
+			/ fator_fundo_hack_aplicado
 		)
-		hacking_background_applied_factor = 1.0
+		fator_fundo_hack_aplicado = 1.0
 	if not is_instance_valid(scene_manager.player):
-		if initial_background_music.playing:
-			initial_background_music.stop()
-		initial_background_music.pitch_scale = 1.0
-		if power_outage_audio_state != PowerOutageAudioState.IDLE:
+		if musica_cenario.playing:
+			musica_cenario.stop()
+		musica_cenario.pitch_scale = 1.0
+		if estado_audio_disjuntor != EstadoAudioDisjuntor.INATIVO:
 
-			initial_background_music.volume_db = SILENT_VOLUME_DB
+			musica_cenario.volume_db = VOLUME_SILENCIO_DB
 		else:
-			initial_background_music.volume_db = initial_background_music_normal_volume_db
-			initial_background_music_target_volume_db = initial_background_music_normal_volume_db
-			initial_background_music_restoring_from_outage = false
+			musica_cenario.volume_db = volume_normal_musica_cenario_db
+			volume_alvo_musica_cenario_db = volume_normal_musica_cenario_db
+			musica_cenario_retornando = false
 		return
 
-	_play_if_stopped(initial_background_music)
-	initial_background_music.pitch_scale = 1.0
-	var outage_active := (
-		power_outage_audio_state != PowerOutageAudioState.IDLE
+	_tocar_se_parado(musica_cenario)
+	musica_cenario.pitch_scale = 1.0
+	var disjuntor_desarmado := (
+		estado_audio_disjuntor != EstadoAudioDisjuntor.INATIVO
 		and not (
-			power_outage_audio_state == PowerOutageAudioState.FADING_OUT
-			and initial_background_music_after_breaker
+			estado_audio_disjuntor == EstadoAudioDisjuntor.DIMINUINDO
+			and musica_cenario_apos_disjuntor
 		)
 	)
-	var target_volume_db := (
-		SILENT_VOLUME_DB if outage_active else initial_background_music_target_volume_db
+	var volume_alvo_db := (
+		VOLUME_SILENCIO_DB if disjuntor_desarmado else volume_alvo_musica_cenario_db
 	)
-	if outage_active or initial_background_music_restoring_from_outage:
+	if disjuntor_desarmado or musica_cenario_retornando:
 
-		var fade_duration := (
-			POWER_OUTAGE_FADE_DURATION
-			if power_outage_audio_state == PowerOutageAudioState.FADING_OUT
-			and initial_background_music_after_breaker
-			else POWER_OUTAGE_BACKGROUND_FADE_DURATION
+		var duracao_transicao := (
+			DURACAO_TRANSICAO_DISJUNTOR
+			if estado_audio_disjuntor == EstadoAudioDisjuntor.DIMINUINDO
+			and musica_cenario_apos_disjuntor
+			else DURACAO_TRANSICAO_FUNDO_DISJUNTOR
 		)
-		var fade_step := (
-			db_to_linear(initial_background_music_normal_volume_db)
-			* delta / fade_duration
+		var passo_transicao := (
+			db_to_linear(volume_normal_musica_cenario_db)
+			* delta / duracao_transicao
 		)
-		var next_amplitude := move_toward(
-			db_to_linear(initial_background_music.volume_db),
-			db_to_linear(target_volume_db),
-			fade_step
+		var proxima_amplitude := move_toward(
+			db_to_linear(musica_cenario.volume_db),
+			db_to_linear(volume_alvo_db),
+			passo_transicao
 		)
-		initial_background_music.volume_db = linear_to_db(maxf(
-			next_amplitude,
-			db_to_linear(SILENT_VOLUME_DB)
+		musica_cenario.volume_db = linear_to_db(maxf(
+			proxima_amplitude,
+			db_to_linear(VOLUME_SILENCIO_DB)
 		))
 	else:
-		initial_background_music.volume_db = move_toward(
-			initial_background_music.volume_db,
-			target_volume_db,
-			INITIAL_BACKGROUND_MUSIC_VOLUME_CHANGE_DB_PER_SECOND * delta
+		musica_cenario.volume_db = move_toward(
+			musica_cenario.volume_db,
+			volume_alvo_db,
+			VELOCIDADE_TRANSICAO_VOLUME_CENARIO * delta
 		)
-	if initial_background_music_restoring_from_outage and is_equal_approx(
-		initial_background_music.volume_db, target_volume_db
+	if musica_cenario_retornando and is_equal_approx(
+		musica_cenario.volume_db, volume_alvo_db
 	):
-		initial_background_music_restoring_from_outage = false
+		musica_cenario_retornando = false
 
 
-func _set_initial_background_track(after_breaker: bool) -> void:
-	if initial_background_music_after_breaker == after_breaker:
+func _definir_faixa_cenario(apos_disjuntor: bool) -> void:
+	if musica_cenario_apos_disjuntor == apos_disjuntor:
 		return
-	initial_background_music.stop()
-	var new_stream: AudioStream = (
-		POST_BREAKER_BACKGROUND_MUSIC
-		if after_breaker else initial_background_music_start_stream
+	musica_cenario.stop()
+	var nova_faixa: AudioStream = (
+		MUSICA_APOS_DISJUNTOR
+		if apos_disjuntor else faixa_inicial_cenario
 	)
-	if after_breaker and new_stream is AudioStreamMP3:
-		var looped_stream := new_stream.duplicate() as AudioStreamMP3
-		looped_stream.loop = true
-		new_stream = looped_stream
-	initial_background_music.stream = new_stream
-	initial_background_music.volume_db = (
-		SILENT_VOLUME_DB
-		if after_breaker else initial_background_music_normal_volume_db
+	musica_cenario.stream = nova_faixa
+	musica_cenario.volume_db = (
+		VOLUME_SILENCIO_DB
+		if apos_disjuntor else volume_normal_musica_cenario_db
 	)
-	initial_background_music_after_breaker = after_breaker
+	musica_cenario_apos_disjuntor = apos_disjuntor
 
 
-func _update_alarm_volume(delta: float) -> void:
+func _atualizar_volume_alarme(delta: float) -> void:
 	if not som_alarme.playing or som_alarme.stream_paused:
 		return
-	alarm_elapsed = minf(alarm_elapsed + delta, ALARM_INITIAL_DURATION + ALARM_FADE_DURATION)
-	if power_outage_audio_state != PowerOutageAudioState.IDLE:
+	tempo_alarme = minf(tempo_alarme + delta, DURACAO_INICIAL_ALARME + DURACAO_TRANSICAO_ALARME)
+	if estado_audio_disjuntor != EstadoAudioDisjuntor.INATIVO:
 		return
-	var progress := clampf((alarm_elapsed - ALARM_INITIAL_DURATION) / ALARM_FADE_DURATION, 0.0, 1.0)
-	_apply_alarm_volume(linear_to_db(
-		db_to_linear(alarm_normal_volume_db)
-		* lerpf(ALARM_INITIAL_VOLUME, ALARM_REDUCED_VOLUME, progress)
+	var progresso := clampf((tempo_alarme - DURACAO_INICIAL_ALARME) / DURACAO_TRANSICAO_ALARME, 0.0, 1.0)
+	_aplicar_volume_alarme(linear_to_db(
+		db_to_linear(volume_normal_alarme_db)
+		* lerpf(VOLUME_INICIAL_ALARME, VOLUME_REDUZIDO_ALARME, progresso)
 	))
 
 
-func _update_alarm_hint(delta: float) -> void:
-	if alarm_hint_shown or alarm_user_muted or not som_alarme.playing or som_alarme.stream_paused:
+func _atualizar_aviso_alarme(delta: float) -> void:
+	if aviso_alarme_exibido or alarme_silenciado_jogador or not som_alarme.playing or som_alarme.stream_paused:
 		return
-	alarm_hint_elapsed = minf(alarm_hint_elapsed + delta, ALARM_HINT_DELAY)
-	if alarm_hint_elapsed < ALARM_HINT_DELAY or not is_instance_valid(scene_manager.player):
+	tempo_aviso_alarme = minf(tempo_aviso_alarme + delta, ESPERA_AVISO_ALARME)
+	if tempo_aviso_alarme < ESPERA_AVISO_ALARME or not is_instance_valid(scene_manager.player):
 		return
-	var current_player := scene_manager.player as Player
-	var current_scene := get_tree().current_scene
-	if current_scene == null or not current_scene.is_ancestor_of(current_player):
+	var jogador_atual := scene_manager.player as Player
+	var cena_atual := get_tree().current_scene
+	if cena_atual == null or not cena_atual.is_ancestor_of(jogador_atual):
 		return
-	if not current_player.is_visible_in_tree() or not current_player.is_physics_processing() or DialogManager.is_showing_dialog:
+	if not jogador_atual.is_visible_in_tree() or not jogador_atual.is_physics_processing() or DialogManager.is_showing_dialog:
 		return
-	current_player.show_alarm_hint()
-	alarm_hint_shown = true
+	jogador_atual.show_alarm_hint()
+	aviso_alarme_exibido = true
 
 
-func _start_bg_music(from_position: float = 0.0) -> void:
-	_play_if_stopped(bg_music, from_position)
+func _iniciar_musica_fundo(posicao_inicial: float = 0.0) -> void:
+	_tocar_se_parado(musica_fundo, posicao_inicial)
 
-func _stop_bg_music() -> void:
-	bg_music.stop()
-
-
-func _start_bg_ambient(from_position: float = 0.0) -> void:
-	_play_if_stopped(bg_ambient, from_position)
-
-func _stop_bg_ambient() -> void:
-	bg_ambient.stop()
+func _parar_musica_fundo() -> void:
+	musica_fundo.stop()
 
 
-func _start_countdown(from_position: float = 0.0) -> void:
-	initial_background_music_target_volume_db = linear_to_db(
-		db_to_linear(initial_background_music_normal_volume_db)
-		* INITIAL_BACKGROUND_MUSIC_FINAL_VOLUME_FACTOR
+func _iniciar_ambiente_fundo(posicao_inicial: float = 0.0) -> void:
+	_tocar_se_parado(ambiente_fundo, posicao_inicial)
+
+func _parar_ambiente_fundo() -> void:
+	ambiente_fundo.stop()
+
+
+func _iniciar_musica_contagem(posicao_inicial: float = 0.0) -> void:
+	volume_alvo_musica_cenario_db = linear_to_db(
+		db_to_linear(volume_normal_musica_cenario_db)
+		* FATOR_VOLUME_MUSICA_CENARIO_FINAL
 	)
-	_play_if_stopped(countdown_music, from_position)
+	_tocar_se_parado(musica_contagem, posicao_inicial)
 
-func _stop_countdown() -> void:
-	countdown_music.stop()
-	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
-
-
-func start_programmer_final_mix() -> void:
-
-	initial_background_music_target_volume_db = PROGRAMMER_FINAL_BACKGROUND_DB
-	countdown_music.volume_db = PROGRAMMER_FINAL_COUNTDOWN_DB
-	set_alarm_quiet_context(&"programmer_ending", true)
+func _parar_musica_contagem() -> void:
+	musica_contagem.stop()
+	volume_alvo_musica_cenario_db = volume_normal_musica_cenario_db
 
 
-func start_engineer_final_mix() -> void:
-	initial_background_music_target_volume_db = PROGRAMMER_FINAL_BACKGROUND_DB
-	countdown_music.volume_db = PROGRAMMER_FINAL_COUNTDOWN_DB
-	set_alarm_quiet_context(&"engineer_ending", true)
+func iniciar_mixagem_final_programador() -> void:
+
+	volume_alvo_musica_cenario_db = VOLUME_FUNDO_FINAL_PROGRAMADOR_DB
+	musica_contagem.volume_db = VOLUME_CONTAGEM_FINAL_PROGRAMADOR_DB
+	definir_contexto_alarme_baixo(&"programmer_ending", true)
 
 
-func _start_som_alarme(from_position: float = 0.0) -> void:
-	if alarm_user_muted:
+func iniciar_mixagem_final_engenheiro() -> void:
+	volume_alvo_musica_cenario_db = VOLUME_FUNDO_FINAL_PROGRAMADOR_DB
+	musica_contagem.volume_db = VOLUME_CONTAGEM_FINAL_PROGRAMADOR_DB
+	definir_contexto_alarme_baixo(&"engineer_ending", true)
+
+
+func _iniciar_alarme(posicao_inicial: float = 0.0) -> void:
+	if alarme_silenciado_jogador:
 		return
-	_play_if_stopped(som_alarme, from_position)
-	_update_alarm_volume(0.0)
+	_tocar_se_parado(som_alarme, posicao_inicial)
+	_atualizar_volume_alarme(0.0)
 
-func _stop_som_alarme() -> void:
-	if power_outage_audio_state != PowerOutageAudioState.IDLE:
+func _parar_alarme() -> void:
+	if estado_audio_disjuntor != EstadoAudioDisjuntor.INATIVO:
 		return
 	som_alarme.stop()
-	alarm_unducked_volume_db = alarm_normal_volume_db
-	_refresh_alarm_output()
+	volume_alarme_sem_atenuacao_db = volume_normal_alarme_db
+	_atualizar_saida_alarme()
 
 
-func _start_som_de_fundo(from_position: float = 0.0) -> void:
-	if opening_music_finished:
+func _iniciar_musica_abertura(posicao_inicial: float = 0.0) -> void:
+	if musica_inicio_finalizada:
 		return
 	if not som_de_fundo.playing:
-		som_de_fundo.volume_db = opening_music_normal_volume_db
-		opening_music_started = true
-	_play_if_stopped(som_de_fundo, from_position)
+		som_de_fundo.volume_db = volume_normal_musica_inicio_db
+		musica_inicio_iniciada = true
+	_tocar_se_parado(som_de_fundo, posicao_inicial)
 
-func _stop_som_de_fundo() -> void:
+func _parar_musica_abertura() -> void:
 	som_de_fundo.stop()
 	
 
-func _set_volume_som_de_fundo(volume: float) -> void:
-	opening_music_normal_volume_db = linear_to_db(volume)
-	if not opening_music_finished:
-		som_de_fundo.volume_db = opening_music_normal_volume_db
+func _definir_volume_musica_abertura(volume: float) -> void:
+	volume_normal_musica_inicio_db = linear_to_db(volume)
+	if not musica_inicio_finalizada:
+		som_de_fundo.volume_db = volume_normal_musica_inicio_db
 
 
-func _set_volume_som_alarme(volume: float) -> void:
-	alarm_normal_volume_db = linear_to_db(volume)
-	if power_outage_audio_state == PowerOutageAudioState.IDLE:
-		_update_alarm_volume(0.0)
+func _definir_volume_alarme(volume: float) -> void:
+	volume_normal_alarme_db = linear_to_db(volume)
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.INATIVO:
+		_atualizar_volume_alarme(0.0)
 
 
-func _set_volume_countdown(volume: float) -> void:
-	countdown_music.volume_db = linear_to_db(volume)
+func _definir_volume_contagem(volume: float) -> void:
+	musica_contagem.volume_db = linear_to_db(volume)
 
 
-func _start_power_outage_audio() -> void:
-	if power_outage_audio_state == PowerOutageAudioState.ACTIVE or power_outage_audio_state == PowerOutageAudioState.FADING_IN:
+func _iniciar_audio_disjuntor() -> void:
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.ATIVO or estado_audio_disjuntor == EstadoAudioDisjuntor.AUMENTANDO:
 		return
-	var resuming_fade_out := power_outage_audio_state == PowerOutageAudioState.FADING_OUT
-	if not resuming_fade_out:
+	var retomando_transicao_saida := estado_audio_disjuntor == EstadoAudioDisjuntor.DIMINUINDO
+	if not retomando_transicao_saida:
 		musica_quando_o_disjuntor_apagar.stop()
-		musica_quando_o_disjuntor_apagar.volume_db = SILENT_VOLUME_DB
-	if not alarm_user_muted and not som_alarme.playing:
-		som_alarme.volume_db = SILENT_VOLUME_DB
-		alarm_unducked_volume_db = SILENT_VOLUME_DB
-		_play_if_stopped(som_alarme)
-	if resuming_fade_out and not musica_quando_o_disjuntor_apagar.playing:
-		_play_if_stopped(musica_quando_o_disjuntor_apagar)
-	_start_power_outage_fade(
-		PowerOutageAudioState.FADING_IN,
-		linear_to_db(db_to_linear(alarm_normal_volume_db) * POWER_OUTAGE_ALARM_VOLUME),
-		power_outage_music_normal_volume_db
+		musica_quando_o_disjuntor_apagar.volume_db = VOLUME_SILENCIO_DB
+	if not alarme_silenciado_jogador and not som_alarme.playing:
+		som_alarme.volume_db = VOLUME_SILENCIO_DB
+		volume_alarme_sem_atenuacao_db = VOLUME_SILENCIO_DB
+		_tocar_se_parado(som_alarme)
+	if retomando_transicao_saida and not musica_quando_o_disjuntor_apagar.playing:
+		_tocar_se_parado(musica_quando_o_disjuntor_apagar)
+	_iniciar_transicao_disjuntor(
+		EstadoAudioDisjuntor.AUMENTANDO,
+		linear_to_db(db_to_linear(volume_normal_alarme_db) * VOLUME_ALARME_DISJUNTOR),
+		volume_normal_musica_disjuntor_db
 	)
-	power_outage_music_delay_remaining = (
-		0.0 if resuming_fade_out else POWER_OUTAGE_MUSIC_START_DELAY
+	espera_musica_disjuntor = (
+		0.0 if retomando_transicao_saida else ESPERA_INICIO_MUSICA_DISJUNTOR
 	)
-	power_outage_music_fade_elapsed = 0.0
+	tempo_transicao_musica_disjuntor = 0.0
 
 
-func _stop_power_outage_audio() -> void:
+func _parar_audio_disjuntor() -> void:
 	if bool(SaveGame.office_mission_state().get("data_center_breaker_restored", false)):
-		_set_initial_background_track(true)
-		initial_background_music_restoring_from_outage = true
-	if power_outage_audio_state == PowerOutageAudioState.FADING_OUT:
+		_definir_faixa_cenario(true)
+		musica_cenario_retornando = true
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.DIMINUINDO:
 		return
-	if power_outage_audio_state == PowerOutageAudioState.IDLE and not musica_quando_o_disjuntor_apagar.playing:
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.INATIVO and not musica_quando_o_disjuntor_apagar.playing:
 		return
 
-	alarm_elapsed = ALARM_INITIAL_DURATION + ALARM_FADE_DURATION
-	power_outage_music_delay_remaining = 0.0
-	_start_power_outage_fade(
-		PowerOutageAudioState.FADING_OUT,
-		linear_to_db(db_to_linear(alarm_normal_volume_db) * ALARM_REDUCED_VOLUME),
-		SILENT_VOLUME_DB
+	tempo_alarme = DURACAO_INICIAL_ALARME + DURACAO_TRANSICAO_ALARME
+	espera_musica_disjuntor = 0.0
+	_iniciar_transicao_disjuntor(
+		EstadoAudioDisjuntor.DIMINUINDO,
+		linear_to_db(db_to_linear(volume_normal_alarme_db) * VOLUME_REDUZIDO_ALARME),
+		VOLUME_SILENCIO_DB
 	)
 
 
-func _update_opening_music_fade() -> void:
-	if opening_music_finished or not opening_music_started:
+func _atualizar_transicao_musica_abertura() -> void:
+	if musica_inicio_finalizada or not musica_inicio_iniciada:
 		return
 	if not som_de_fundo.playing:
-		opening_music_finished = true
+		musica_inicio_finalizada = true
 		return
 	if som_de_fundo.stream == null:
 		return
-	var duration := som_de_fundo.stream.get_length()
-	if duration <= 0.0:
+	var duracao := som_de_fundo.stream.get_length()
+	if duracao <= 0.0:
 		return
-	var fade_start := maxf(0.0, duration - OPENING_MUSIC_FADE_DURATION)
-	var progress := clampf(
-		(som_de_fundo.get_playback_position() - fade_start) / OPENING_MUSIC_FADE_DURATION,
+	var inicio_transicao := maxf(0.0, duracao - DURACAO_TRANSICAO_MUSICA_ABERTURA)
+	var progresso := clampf(
+		(som_de_fundo.get_playback_position() - inicio_transicao) / DURACAO_TRANSICAO_MUSICA_ABERTURA,
 		0.0,
 		1.0
 	)
-	if progress > 0.0:
+	if progresso > 0.0:
 		som_de_fundo.volume_db = lerpf(
-			opening_music_normal_volume_db,
-			SILENT_VOLUME_DB,
-			progress
+			volume_normal_musica_inicio_db,
+			VOLUME_SILENCIO_DB,
+			progresso
 		)
 
 
-func _start_power_outage_fade(
-	new_state: PowerOutageAudioState,
-	alarm_target_db: float,
-	music_target_db: float
+func _iniciar_transicao_disjuntor(
+	novo_estado: EstadoAudioDisjuntor,
+	volume_alvo_alarme_db: float,
+	volume_alvo_musica_db: float
 ) -> void:
-	power_outage_audio_state = new_state
-	power_outage_fade_elapsed = 0.0
+	estado_audio_disjuntor = novo_estado
+	tempo_transicao_disjuntor = 0.0
 
-	power_outage_alarm_start_db = alarm_unducked_volume_db
-	power_outage_alarm_target_db = alarm_target_db
-	power_outage_music_start_db = musica_quando_o_disjuntor_apagar.volume_db
-	power_outage_music_target_db = music_target_db
+	volume_inicial_alarme_disjuntor_db = volume_alarme_sem_atenuacao_db
+	volume_alvo_alarme_disjuntor_db = volume_alvo_alarme_db
+	volume_inicial_musica_disjuntor_db = musica_quando_o_disjuntor_apagar.volume_db
+	volume_alvo_musica_disjuntor_db = volume_alvo_musica_db
 
 
-func _update_power_outage_audio(delta: float) -> void:
-	if power_outage_audio_state == PowerOutageAudioState.IDLE:
+func _atualizar_audio_disjuntor(delta: float) -> void:
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.INATIVO:
 		return
-	power_outage_fade_elapsed += delta
-	var progress := clampf(power_outage_fade_elapsed / POWER_OUTAGE_FADE_DURATION, 0.0, 1.0)
-	var smooth_progress := progress * progress * (3.0 - 2.0 * progress)
-	_apply_alarm_volume(linear_to_db(maxf(lerpf(
-		db_to_linear(power_outage_alarm_start_db),
-		db_to_linear(power_outage_alarm_target_db),
-		smooth_progress
-	), db_to_linear(SILENT_VOLUME_DB))))
-	var music_progress := progress
-	if power_outage_audio_state == PowerOutageAudioState.FADING_IN:
-		var music_delta := delta
-		if power_outage_music_delay_remaining > 0.0:
-			music_delta = maxf(0.0, delta - power_outage_music_delay_remaining)
-			power_outage_music_delay_remaining = maxf(
+	tempo_transicao_disjuntor += delta
+	var progresso := clampf(tempo_transicao_disjuntor / DURACAO_TRANSICAO_DISJUNTOR, 0.0, 1.0)
+	var progresso_suave := progresso * progresso * (3.0 - 2.0 * progresso)
+	_aplicar_volume_alarme(linear_to_db(maxf(lerpf(
+		db_to_linear(volume_inicial_alarme_disjuntor_db),
+		db_to_linear(volume_alvo_alarme_disjuntor_db),
+		progresso_suave
+	), db_to_linear(VOLUME_SILENCIO_DB))))
+	var progresso_musica := progresso
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.AUMENTANDO:
+		var delta_musica := delta
+		if espera_musica_disjuntor > 0.0:
+			delta_musica = maxf(0.0, delta - espera_musica_disjuntor)
+			espera_musica_disjuntor = maxf(
 				0.0,
-				power_outage_music_delay_remaining - delta
+				espera_musica_disjuntor - delta
 			)
-			if power_outage_music_delay_remaining == 0.0:
-				_play_if_stopped(musica_quando_o_disjuntor_apagar)
-		if power_outage_music_delay_remaining > 0.0:
+			if espera_musica_disjuntor == 0.0:
+				_tocar_se_parado(musica_quando_o_disjuntor_apagar)
+		if espera_musica_disjuntor > 0.0:
 			return
-		power_outage_music_fade_elapsed += music_delta
-		music_progress = clampf(
-			power_outage_music_fade_elapsed / POWER_OUTAGE_FADE_DURATION,
+		tempo_transicao_musica_disjuntor += delta_musica
+		progresso_musica = clampf(
+			tempo_transicao_musica_disjuntor / DURACAO_TRANSICAO_DISJUNTOR,
 			0.0,
 			1.0
 		)
 	musica_quando_o_disjuntor_apagar.volume_db = linear_to_db(lerpf(
-		db_to_linear(power_outage_music_start_db),
-		db_to_linear(power_outage_music_target_db),
-		music_progress
+		db_to_linear(volume_inicial_musica_disjuntor_db),
+		db_to_linear(volume_alvo_musica_disjuntor_db),
+		progresso_musica
 	))
-	if progress < 1.0 or music_progress < 1.0:
+	if progresso < 1.0 or progresso_musica < 1.0:
 		return
-	if power_outage_audio_state == PowerOutageAudioState.FADING_OUT:
+	if estado_audio_disjuntor == EstadoAudioDisjuntor.DIMINUINDO:
 		musica_quando_o_disjuntor_apagar.stop()
-		musica_quando_o_disjuntor_apagar.volume_db = power_outage_music_normal_volume_db
-		power_outage_audio_state = PowerOutageAudioState.IDLE
-		initial_background_music_restoring_from_outage = true
+		musica_quando_o_disjuntor_apagar.volume_db = volume_normal_musica_disjuntor_db
+		estado_audio_disjuntor = EstadoAudioDisjuntor.INATIVO
+		musica_cenario_retornando = true
 		return
-	power_outage_audio_state = PowerOutageAudioState.ACTIVE
+	estado_audio_disjuntor = EstadoAudioDisjuntor.ATIVO
 
 
-func stop_all_audio() -> void:
-	scene_audio_blocked = false
-	pending_scene_starts.clear()
-	paused_audio_positions.clear()
-	paused_hacking_music_position = -1.0
-	hacking_music_mix = 0.0
-	hacking_background_applied_factor = 1.0
-	opening_music_started = false
-	opening_music_finished = false
-	power_outage_audio_state = PowerOutageAudioState.IDLE
-	power_outage_fade_elapsed = 0.0
-	power_outage_music_delay_remaining = 0.0
-	power_outage_music_fade_elapsed = 0.0
-	initial_background_music_restoring_from_outage = false
-	alarm_elapsed = 0.0
-	alarm_user_muted = false
-	alarm_user_position = 0.0
-	alarm_hint_elapsed = 0.0
-	alarm_hint_shown = false
-	alarm_quiet_contexts.clear()
-	heartbeat_intro_elapsed = 0.0
-	heartbeat.pitch_scale = HEARTBEAT_NORMAL_PITCH
-	initial_background_music.pitch_scale = 1.0
-	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
+func parar_todos_audios() -> void:
+	audio_cena_bloqueado = false
+	inicios_pendentes.clear()
+	posicoes_audio_pausado.clear()
+	posicao_hack_pausada = -1.0
+	mistura_hack = 0.0
+	fator_fundo_hack_aplicado = 1.0
+	musica_inicio_iniciada = false
+	musica_inicio_finalizada = false
+	estado_audio_disjuntor = EstadoAudioDisjuntor.INATIVO
+	tempo_transicao_disjuntor = 0.0
+	espera_musica_disjuntor = 0.0
+	tempo_transicao_musica_disjuntor = 0.0
+	musica_cenario_retornando = false
+	tempo_alarme = 0.0
+	alarme_silenciado_jogador = false
+	posicao_alarme_jogador = 0.0
+	tempo_aviso_alarme = 0.0
+	aviso_alarme_exibido = false
+	contextos_alarme_baixo.clear()
+	tempo_batimento_inicial = 0.0
+	batimento.pitch_scale = TOM_NORMAL_BATIMENTO
+	musica_cenario.pitch_scale = 1.0
+	volume_alvo_musica_cenario_db = volume_normal_musica_cenario_db
 
-	for player_id: String in AUDIO_PLAYERS:
-		var audio_player := _get_audio_player(player_id)
+	for id_tocador: String in TOCADORES_AUDIO:
+		var tocador := _obter_tocador(id_tocador)
 
-		if audio_player == null:
+		if tocador == null:
 			continue
 
-		audio_player.stop()
-		audio_player.stream_paused = false
-	hacking_music.stop()
-	hacking_music.volume_db = SILENT_VOLUME_DB
-	_set_initial_background_track(false)
-	initial_background_music.volume_db = initial_background_music_normal_volume_db
+		tocador.stop()
+		tocador.stream_paused = false
+	musica_hack.stop()
+	musica_hack.volume_db = VOLUME_SILENCIO_DB
+	_definir_faixa_cenario(false)
+	musica_cenario.volume_db = volume_normal_musica_cenario_db
 
 
-func pause_all_audio() -> void:
-	if scene_audio_blocked and not paused_audio_positions.is_empty():
+func pausar_todos_audios() -> void:
+	if audio_cena_bloqueado and not posicoes_audio_pausado.is_empty():
 		return
 
-	scene_audio_blocked = true
-	paused_audio_positions.clear()
+	audio_cena_bloqueado = true
+	posicoes_audio_pausado.clear()
 
-	for player_id: String in AUDIO_PLAYERS:
-		var audio_player := _get_audio_player(player_id)
+	for id_tocador: String in TOCADORES_AUDIO:
+		var tocador := _obter_tocador(id_tocador)
 
-		if audio_player != null and audio_player.playing:
-			paused_audio_positions[player_id] = maxf(
+		if tocador != null and tocador.playing:
+			posicoes_audio_pausado[id_tocador] = maxf(
 				0.0,
-				audio_player.get_playback_position()
+				tocador.get_playback_position()
 			)
-			audio_player.stop()
-	if hacking_music.playing:
-		paused_hacking_music_position = maxf(0.0, hacking_music.get_playback_position())
-		hacking_music.stop()
+			tocador.stop()
+	if musica_hack.playing:
+		posicao_hack_pausada = maxf(0.0, musica_hack.get_playback_position())
+		musica_hack.stop()
 
 
-func fade_out_for_menu(duration: float) -> void:
-	if menu_fade_tween != null and menu_fade_tween.is_valid():
-		menu_fade_tween.kill()
-	menu_fade_restore_volumes.clear()
-	scene_audio_blocked = true
-	initial_background_music_target_volume_db = SILENT_VOLUME_DB
-	power_outage_audio_state = PowerOutageAudioState.IDLE
-	power_outage_music_delay_remaining = 0.0
-	power_outage_music_fade_elapsed = 0.0
-	initial_background_music_restoring_from_outage = false
-	menu_fade_tween = create_tween()
-	menu_fade_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	var players: Array[AudioStreamPlayer] = [
-		bg_music,
-		bg_ambient,
-		countdown_music,
+func reduzir_audio_para_menu(duracao: float) -> void:
+	if transicao_audio_menu != null and transicao_audio_menu.is_valid():
+		transicao_audio_menu.kill()
+	volumes_retorno_menu.clear()
+	audio_cena_bloqueado = true
+	volume_alvo_musica_cenario_db = VOLUME_SILENCIO_DB
+	estado_audio_disjuntor = EstadoAudioDisjuntor.INATIVO
+	espera_musica_disjuntor = 0.0
+	tempo_transicao_musica_disjuntor = 0.0
+	musica_cenario_retornando = false
+	transicao_audio_menu = create_tween()
+	transicao_audio_menu.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	var tocadores: Array[AudioStreamPlayer] = [
+		musica_fundo,
+		ambiente_fundo,
+		musica_contagem,
 		som_alarme,
 		som_de_fundo,
 		musica_quando_o_disjuntor_apagar,
-		heartbeat,
-		initial_background_music,
-		hacking_music
+		batimento,
+		musica_cenario,
+		musica_hack
 	]
-	for audio_player: AudioStreamPlayer in players:
-		if not audio_player.playing:
+	for tocador: AudioStreamPlayer in tocadores:
+		if not tocador.playing:
 			continue
-		menu_fade_restore_volumes[audio_player] = audio_player.volume_db
-		menu_fade_tween.parallel().tween_property(
-			audio_player,
+		volumes_retorno_menu[tocador] = tocador.volume_db
+		transicao_audio_menu.parallel().tween_property(
+			tocador,
 			"volume_db",
-			SILENT_VOLUME_DB,
-			maxf(duration, 0.01)
+			VOLUME_SILENCIO_DB,
+			maxf(duracao, 0.01)
 		)
-	menu_fade_tween.finished.connect(_finish_menu_audio_fade)
+	transicao_audio_menu.chain().tween_callback(_finalizar_transicao_audio_menu)
 
 
-func _finish_menu_audio_fade() -> void:
-	for audio_player: Variant in menu_fade_restore_volumes:
-		if not is_instance_valid(audio_player):
+func _finalizar_transicao_audio_menu() -> void:
+	for tocador: Variant in volumes_retorno_menu:
+		if not is_instance_valid(tocador):
 			continue
-		audio_player.stop()
-		audio_player.volume_db = float(menu_fade_restore_volumes[audio_player])
-	menu_fade_restore_volumes.clear()
-	paused_hacking_music_position = -1.0
-	hacking_music_mix = 0.0
-	hacking_background_applied_factor = 1.0
-	initial_background_music_target_volume_db = initial_background_music_normal_volume_db
-	scene_audio_blocked = false
+		tocador.stop()
+		tocador.volume_db = float(volumes_retorno_menu[tocador])
+	volumes_retorno_menu.clear()
+	posicao_hack_pausada = -1.0
+	mistura_hack = 0.0
+	fator_fundo_hack_aplicado = 1.0
+	volume_alvo_musica_cenario_db = volume_normal_musica_cenario_db
+	audio_cena_bloqueado = false
 
 
-func resume_all_audio() -> void:
-	scene_audio_blocked = false
-	pending_scene_starts.clear()
+func retomar_todos_audios() -> void:
+	audio_cena_bloqueado = false
+	inicios_pendentes.clear()
 
-	for player_id: String in paused_audio_positions:
-		var audio_player := _get_audio_player(player_id)
+	for id_tocador: String in posicoes_audio_pausado:
+		var tocador := _obter_tocador(id_tocador)
 
-		if audio_player != null and audio_player.stream != null:
-			var playback_position := maxf(
+		if tocador != null and tocador.stream != null:
+			var posicao_reproducao := maxf(
 				0.0,
-				float(paused_audio_positions[player_id])
+				float(posicoes_audio_pausado[id_tocador])
 			)
-			var stream_length := audio_player.stream.get_length()
-			if stream_length > 0.0:
-				playback_position = fmod(playback_position, stream_length)
-			audio_player.play(playback_position)
+			var duracao_faixa := tocador.stream.get_length()
+			if duracao_faixa > 0.0:
+				posicao_reproducao = fmod(posicao_reproducao, duracao_faixa)
+			tocador.play(posicao_reproducao)
 
-	paused_audio_positions.clear()
-	if paused_hacking_music_position >= 0.0 and _is_hacking_scene() and hacking_music.stream != null:
-		hacking_music.play(paused_hacking_music_position)
-	paused_hacking_music_position = -1.0
-
-
-func begin_checkpoint_restore() -> void:
-	pending_scene_starts.clear()
-	pause_all_audio()
+	posicoes_audio_pausado.clear()
+	if posicao_hack_pausada >= 0.0 and _cena_de_hack() and musica_hack.stream != null:
+		musica_hack.play(posicao_hack_pausada)
+	posicao_hack_pausada = -1.0
 
 
-func allow_scene_audio() -> void:
-	resume_all_audio()
+func iniciar_restauracao_checkpoint() -> void:
+	inicios_pendentes.clear()
+	pausar_todos_audios()
+
+
+func permitir_audio_cena() -> void:
+	retomar_todos_audios()
 
 
 func get_checkpoint_state() -> Dictionary:
-	var state: Dictionary = {}
-	state["alarm_envelope"] = {
-		"elapsed": alarm_elapsed,
-		"unducked_volume_db": alarm_unducked_volume_db,
-		"user_muted": alarm_user_muted,
-		"user_position": alarm_user_position,
-		"hint_elapsed": alarm_hint_elapsed,
-		"hint_shown": alarm_hint_shown,
-		"power_state": power_outage_audio_state,
-		"fade_elapsed": power_outage_fade_elapsed,
-		"music_delay_remaining": power_outage_music_delay_remaining,
-		"music_fade_elapsed": power_outage_music_fade_elapsed,
-		"background_restoring": initial_background_music_restoring_from_outage,
-		"background_track_after_breaker": initial_background_music_after_breaker,
-		"alarm_start": power_outage_alarm_start_db,
-		"alarm_target": power_outage_alarm_target_db,
-		"music_start": power_outage_music_start_db,
-		"music_target": power_outage_music_target_db,
-		"heartbeat_intro_elapsed": heartbeat_intro_elapsed
+	var estado: Dictionary = {}
+	estado["alarm_envelope"] = {
+		"elapsed": tempo_alarme,
+		"unducked_volume_db": volume_alarme_sem_atenuacao_db,
+		"user_muted": alarme_silenciado_jogador,
+		"user_position": posicao_alarme_jogador,
+		"hint_elapsed": tempo_aviso_alarme,
+		"hint_shown": aviso_alarme_exibido,
+		"power_state": estado_audio_disjuntor,
+		"fade_elapsed": tempo_transicao_disjuntor,
+		"music_delay_remaining": espera_musica_disjuntor,
+		"music_fade_elapsed": tempo_transicao_musica_disjuntor,
+		"background_restoring": musica_cenario_retornando,
+		"background_track_after_breaker": musica_cenario_apos_disjuntor,
+		"alarm_start": volume_inicial_alarme_disjuntor_db,
+		"alarm_target": volume_alvo_alarme_disjuntor_db,
+		"music_start": volume_inicial_musica_disjuntor_db,
+		"music_target": volume_alvo_musica_disjuntor_db,
+		"heartbeat_intro_elapsed": tempo_batimento_inicial
 	}
 
-	for player_id: String in AUDIO_PLAYERS:
-		var audio_player := _get_audio_player(player_id)
+	for id_tocador: String in TOCADORES_AUDIO:
+		var tocador := _obter_tocador(id_tocador)
 
-		if audio_player == null:
+		if tocador == null:
 			continue
 
-		state[player_id] = {
-			"playing": audio_player.playing,
+		estado[id_tocador] = {
+			"playing": tocador.playing,
 			"position": (
-				audio_player.get_playback_position()
-				if audio_player.playing
+				tocador.get_playback_position()
+				if tocador.playing
 				else 0.0
 			),
-			"volume_db": audio_player.volume_db
+			"volume_db": tocador.volume_db
 		}
 
-	return state
+	return estado
 
 
-func load_checkpoint_state(state: Dictionary) -> void:
-	var breaker_restored := bool(
+func load_checkpoint_state(estado: Dictionary) -> void:
+	var disjuntor_religado := bool(
 		SaveGame.office_mission_state().get("data_center_breaker_restored", false)
 	)
-	var saved_envelope: Dictionary = state.get("alarm_envelope", {})
-	var old_background_track_save := (
-		breaker_restored and not saved_envelope.has("background_track_after_breaker")
+	var estado_alarme_salvo: Dictionary = estado.get("alarm_envelope", {})
+	var save_com_faixa_antiga := (
+		disjuntor_religado and not estado_alarme_salvo.has("background_track_after_breaker")
 	)
-	_set_initial_background_track(breaker_restored)
+	_definir_faixa_cenario(disjuntor_religado)
 
-	if state.is_empty():
-		scene_audio_blocked = false
-		pending_scene_starts.clear()
-		initial_background_music_restoring_from_outage = breaker_restored
+	if estado.is_empty():
+		audio_cena_bloqueado = false
+		inicios_pendentes.clear()
+		musica_cenario_retornando = disjuntor_religado
 		return
 
-	var recover_silent_save := (
-		_is_silent_checkpoint_state(state)
-		and not pending_scene_starts.is_empty()
+	var recuperar_save_silencioso := (
+		_checkpoint_sem_audio(estado)
+		and not inicios_pendentes.is_empty()
 	)
 
-	for player_id: String in AUDIO_PLAYERS:
-		if not state.has(player_id):
+	for id_tocador: String in TOCADORES_AUDIO:
+		if not estado.has(id_tocador):
 			continue
 
-		var audio_player := _get_audio_player(player_id)
-		var saved_value: Variant = state[player_id]
+		var tocador := _obter_tocador(id_tocador)
+		var valor_salvo: Variant = estado[id_tocador]
 
-		if audio_player == null or not saved_value is Dictionary:
+		if tocador == null or not valor_salvo is Dictionary:
 			continue
 
-		var saved_player: Dictionary = saved_value
-		var should_play := bool(saved_player.get("playing", false))
-		var playback_position := maxf(
+		var tocador_salvo: Dictionary = valor_salvo
+		var deve_tocar := bool(tocador_salvo.get("playing", false))
+		var posicao_reproducao := maxf(
 			0.0,
-			float(saved_player.get("position", 0.0))
+			float(tocador_salvo.get("position", 0.0))
 		)
-		if recover_silent_save and pending_scene_starts.has(player_id):
-			should_play = true
-			playback_position = maxf(
+		if recuperar_save_silencioso and inicios_pendentes.has(id_tocador):
+			deve_tocar = true
+			posicao_reproducao = maxf(
 				0.0,
-				float(pending_scene_starts[player_id])
+				float(inicios_pendentes[id_tocador])
 			)
 
-		if player_id == "som_alarme" and pending_scene_starts.has(player_id) and not bool(saved_envelope.get("user_muted", false)):
-			should_play = true
-		if player_id == "tension_ambience" and old_background_track_save:
-			playback_position = 0.0
+		if id_tocador == "som_alarme" and inicios_pendentes.has(id_tocador) and not bool(estado_alarme_salvo.get("user_muted", false)):
+			deve_tocar = true
+		if id_tocador == "tension_ambience" and save_com_faixa_antiga:
+			posicao_reproducao = 0.0
 
-		audio_player.volume_db = float(
-			saved_player.get("volume_db", audio_player.volume_db)
+		tocador.volume_db = float(
+			tocador_salvo.get("volume_db", tocador.volume_db)
 		)
 
-		if not should_play:
-			if audio_player.playing:
-				audio_player.stop()
+		if not deve_tocar:
+			if tocador.playing:
+				tocador.stop()
 
-			audio_player.stream_paused = false
+			tocador.stream_paused = false
 			continue
 
-		if audio_player.stream == null:
+		if tocador.stream == null:
 			continue
 
-		var stream_length := audio_player.stream.get_length()
+		var duracao_faixa := tocador.stream.get_length()
 
-		if stream_length > 0.0:
-			playback_position = fmod(playback_position, stream_length)
+		if duracao_faixa > 0.0:
+			posicao_reproducao = fmod(posicao_reproducao, duracao_faixa)
 
-		if audio_player.playing:
+		if tocador.playing:
 
-			audio_player.stream_paused = true
-			audio_player.seek(playback_position)
+			tocador.stream_paused = true
+			tocador.seek(posicao_reproducao)
 		else:
-			audio_player.play(playback_position)
+			tocador.play(posicao_reproducao)
 
-		audio_player.stream_paused = false
+		tocador.stream_paused = false
 
-	scene_audio_blocked = false
-	pending_scene_starts.clear()
-	paused_audio_positions.clear()
-	_restore_alarm_envelope(state)
-	if breaker_restored and power_outage_audio_state in [
-		PowerOutageAudioState.FADING_IN,
-		PowerOutageAudioState.ACTIVE
+	audio_cena_bloqueado = false
+	inicios_pendentes.clear()
+	posicoes_audio_pausado.clear()
+	_restaurar_estado_alarme(estado)
+	if disjuntor_religado and estado_audio_disjuntor in [
+		EstadoAudioDisjuntor.AUMENTANDO,
+		EstadoAudioDisjuntor.ATIVO
 	]:
-		_stop_power_outage_audio()
-	initial_background_music_target_volume_db = (
+		_parar_audio_disjuntor()
+	volume_alvo_musica_cenario_db = (
 		linear_to_db(
-			db_to_linear(initial_background_music_normal_volume_db)
-			* INITIAL_BACKGROUND_MUSIC_FINAL_VOLUME_FACTOR
+			db_to_linear(volume_normal_musica_cenario_db)
+			* FATOR_VOLUME_MUSICA_CENARIO_FINAL
 		)
-		if countdown_music.playing
-		else initial_background_music_normal_volume_db
+		if musica_contagem.playing
+		else volume_normal_musica_cenario_db
 	)
 
 
-func _restore_alarm_envelope(state: Dictionary) -> void:
-	var envelope: Dictionary = state.get("alarm_envelope", {})
+func _restaurar_estado_alarme(estado: Dictionary) -> void:
+	var estado_alarme: Dictionary = estado.get("alarm_envelope", {})
 
-	alarm_elapsed = float(envelope.get("elapsed", ALARM_INITIAL_DURATION + ALARM_FADE_DURATION))
-	alarm_unducked_volume_db = float(envelope.get("unducked_volume_db", som_alarme.volume_db))
-	alarm_user_muted = bool(envelope.get("user_muted", false))
-	alarm_user_position = maxf(0.0, float(envelope.get("user_position", 0.0)))
-	alarm_hint_elapsed = clampf(float(envelope.get("hint_elapsed", 0.0)), 0.0, ALARM_HINT_DELAY)
-	alarm_hint_shown = bool(envelope.get("hint_shown", alarm_user_muted))
-	alarm_quiet_contexts.clear()
-	power_outage_audio_state = int(envelope.get("power_state", PowerOutageAudioState.IDLE)) as PowerOutageAudioState
-	power_outage_fade_elapsed = float(envelope.get("fade_elapsed", 0.0))
-	power_outage_music_delay_remaining = float(envelope.get("music_delay_remaining", 0.0))
-	power_outage_music_fade_elapsed = float(envelope.get("music_fade_elapsed", power_outage_fade_elapsed))
-	initial_background_music_restoring_from_outage = bool(envelope.get("background_restoring", false))
-	power_outage_alarm_start_db = float(envelope.get("alarm_start", som_alarme.volume_db))
-	power_outage_alarm_target_db = float(envelope.get("alarm_target", som_alarme.volume_db))
-	power_outage_music_start_db = float(envelope.get("music_start", musica_quando_o_disjuntor_apagar.volume_db))
-	power_outage_music_target_db = float(envelope.get("music_target", musica_quando_o_disjuntor_apagar.volume_db))
-	heartbeat_intro_elapsed = clampf(
-		float(envelope.get(
+	tempo_alarme = float(estado_alarme.get("elapsed", DURACAO_INICIAL_ALARME + DURACAO_TRANSICAO_ALARME))
+	volume_alarme_sem_atenuacao_db = float(estado_alarme.get("unducked_volume_db", som_alarme.volume_db))
+	alarme_silenciado_jogador = bool(estado_alarme.get("user_muted", false))
+	posicao_alarme_jogador = maxf(0.0, float(estado_alarme.get("user_position", 0.0)))
+	tempo_aviso_alarme = clampf(float(estado_alarme.get("hint_elapsed", 0.0)), 0.0, ESPERA_AVISO_ALARME)
+	aviso_alarme_exibido = bool(estado_alarme.get("hint_shown", alarme_silenciado_jogador))
+	contextos_alarme_baixo.clear()
+	estado_audio_disjuntor = int(estado_alarme.get("power_state", EstadoAudioDisjuntor.INATIVO)) as EstadoAudioDisjuntor
+	tempo_transicao_disjuntor = float(estado_alarme.get("fade_elapsed", 0.0))
+	espera_musica_disjuntor = float(estado_alarme.get("music_delay_remaining", 0.0))
+	tempo_transicao_musica_disjuntor = float(estado_alarme.get("music_fade_elapsed", tempo_transicao_disjuntor))
+	musica_cenario_retornando = bool(estado_alarme.get("background_restoring", false))
+	volume_inicial_alarme_disjuntor_db = float(estado_alarme.get("alarm_start", som_alarme.volume_db))
+	volume_alvo_alarme_disjuntor_db = float(estado_alarme.get("alarm_target", som_alarme.volume_db))
+	volume_inicial_musica_disjuntor_db = float(estado_alarme.get("music_start", musica_quando_o_disjuntor_apagar.volume_db))
+	volume_alvo_musica_disjuntor_db = float(estado_alarme.get("music_target", musica_quando_o_disjuntor_apagar.volume_db))
+	tempo_batimento_inicial = clampf(
+		float(estado_alarme.get(
 			"heartbeat_intro_elapsed",
-			envelope.get("tension_intro_elapsed", HEARTBEAT_INTRO_DURATION)
+			estado_alarme.get("tension_intro_elapsed", DURACAO_BATIMENTO_INICIAL)
 		)),
 		0.0,
-		HEARTBEAT_INTRO_DURATION
+		DURACAO_BATIMENTO_INICIAL
 	)
-	if envelope.is_empty():
-		var mission: Dictionary = SaveGame.office_mission_state()
-		if bool(mission.get("data_center_power_outage", false)) and not bool(mission.get("data_center_breaker_restored", false)):
-			_start_power_outage_audio()
+	if estado_alarme.is_empty():
+		var missao: Dictionary = SaveGame.office_mission_state()
+		if bool(missao.get("data_center_power_outage", false)) and not bool(missao.get("data_center_breaker_restored", false)):
+			_iniciar_audio_disjuntor()
 		else:
-			_stop_power_outage_audio()
-	_update_alarm_volume(0.0)
-	if alarm_user_muted:
+			_parar_audio_disjuntor()
+	_atualizar_volume_alarme(0.0)
+	if alarme_silenciado_jogador:
 		som_alarme.stop()
 
 
-func mute_alarm_by_player() -> bool:
-	if alarm_user_muted or not som_alarme.playing:
+func silenciar_alarme_jogador() -> bool:
+	if alarme_silenciado_jogador or not som_alarme.playing:
 		return false
-	alarm_user_position = maxf(0.0, som_alarme.get_playback_position())
-	alarm_user_muted = true
-	alarm_hint_shown = true
+	posicao_alarme_jogador = maxf(0.0, som_alarme.get_playback_position())
+	alarme_silenciado_jogador = true
+	aviso_alarme_exibido = true
 	som_alarme.stop()
-	_refresh_alarm_output()
+	_atualizar_saida_alarme()
 	return true
 
 
-func toggle_alarm_by_player() -> bool:
-	if not alarm_user_muted:
-		return mute_alarm_by_player()
-	alarm_user_muted = false
-	_play_if_stopped(som_alarme, alarm_user_position)
-	_refresh_alarm_output()
+func alternar_alarme_jogador() -> bool:
+	if not alarme_silenciado_jogador:
+		return silenciar_alarme_jogador()
+	alarme_silenciado_jogador = false
+	_tocar_se_parado(som_alarme, posicao_alarme_jogador)
+	_atualizar_saida_alarme()
 	return true
 
 
-func set_alarm_quiet_context(context: StringName, active: bool) -> void:
-	if active:
-		alarm_quiet_contexts[context] = true
+func definir_contexto_alarme_baixo(contexto: StringName, ativo: bool) -> void:
+	if ativo:
+		contextos_alarme_baixo[contexto] = true
 	else:
-		alarm_quiet_contexts.erase(context)
-	_refresh_alarm_output()
+		contextos_alarme_baixo.erase(contexto)
+	_atualizar_saida_alarme()
 
 
-func set_elevator_audio(active: bool) -> void:
-	if elevator_audio_active == active:
+func definir_audio_elevador(ativo: bool) -> void:
+	if audio_elevador_ativo == ativo:
 		return
-	elevator_audio_active = active
-	for player_path: NodePath in ELEVATOR_MUSIC_PLAYERS:
-		var player := get_node_or_null(player_path) as AudioStreamPlayer
-		if player == null:
+	audio_elevador_ativo = ativo
+	for caminho_tocador: NodePath in MUSICAS_ELEVADOR:
+		var tocador := get_node_or_null(caminho_tocador) as AudioStreamPlayer
+		if tocador == null:
 			continue
-		if active:
-			elevator_music_process_modes[player_path] = player.process_mode
-			player.process_mode = Node.PROCESS_MODE_ALWAYS
+		if ativo:
+			modos_musica_elevador[caminho_tocador] = tocador.process_mode
+			tocador.process_mode = Node.PROCESS_MODE_ALWAYS
 		else:
-			var previous_mode: int = elevator_music_process_modes.get(player_path, Node.PROCESS_MODE_INHERIT)
+			var modo_anterior: int = modos_musica_elevador.get(caminho_tocador, Node.PROCESS_MODE_INHERIT)
 			@warning_ignore("int_as_enum_without_cast")
-			player.process_mode = previous_mode
-	elevator_music_process_modes.clear()
+			tocador.process_mode = modo_anterior
+	modos_musica_elevador.clear()
 
-	for ambience: Node in get_tree().get_nodes_in_group("scene_ambience"):
-		if is_instance_valid(ambience) and ambience.has_method("set_elevator_muffling"):
-			ambience.call("set_elevator_muffling", active)
-
-
-func is_alarm_quiet_context_active(context: StringName) -> bool:
-	return alarm_quiet_contexts.has(context)
+	for ambiente: Node in get_tree().get_nodes_in_group("scene_ambience"):
+		if is_instance_valid(ambiente) and ambiente.has_method("definir_silencio_elevador"):
+			ambiente.call("definir_silencio_elevador", ativo)
 
 
-func _apply_alarm_volume(volume_db: float) -> void:
-	alarm_unducked_volume_db = volume_db
-	_refresh_alarm_output()
+func contexto_alarme_baixo_ativo(contexto: StringName) -> bool:
+	return contextos_alarme_baixo.has(contexto)
 
 
-func _refresh_alarm_output() -> void:
-	if alarm_user_muted:
-		som_alarme.volume_db = SILENT_VOLUME_DB
+func _aplicar_volume_alarme(volume_db: float) -> void:
+	volume_alarme_sem_atenuacao_db = volume_db
+	_atualizar_saida_alarme()
+
+
+func _atualizar_saida_alarme() -> void:
+	if alarme_silenciado_jogador:
+		som_alarme.volume_db = VOLUME_SILENCIO_DB
 		return
-	var output_db := alarm_unducked_volume_db
-	if not alarm_quiet_contexts.is_empty():
-		output_db = linear_to_db(
-			db_to_linear(alarm_normal_volume_db) * ALARM_QUIET_CONTEXT_VOLUME
+	var volume_saida_db := volume_alarme_sem_atenuacao_db
+	if not contextos_alarme_baixo.is_empty():
+		volume_saida_db = linear_to_db(
+			db_to_linear(volume_normal_alarme_db) * VOLUME_CONTEXTO_ALARME_BAIXO
 		)
-	som_alarme.volume_db = output_db + linear_to_db(tutorial_music_factor)
+	som_alarme.volume_db = volume_saida_db + linear_to_db(fator_musica_tutorial)
 
 
-func _get_audio_player(player_id: String) -> AudioStreamPlayer:
-	if not AUDIO_PLAYERS.has(player_id):
+func _obter_tocador(id_tocador: String) -> AudioStreamPlayer:
+	if not TOCADORES_AUDIO.has(id_tocador):
 		return null
 
-	return get_node_or_null(AUDIO_PLAYERS[player_id]) as AudioStreamPlayer
+	return get_node_or_null(TOCADORES_AUDIO[id_tocador]) as AudioStreamPlayer
 
 
-func _play_if_stopped(
-	audio_player: AudioStreamPlayer,
-	from_position: float = 0.0
+func _tocar_se_parado(
+	tocador: AudioStreamPlayer,
+	posicao_inicial: float = 0.0
 ) -> void:
-	if audio_player == null or audio_player.stream == null:
+	if tocador == null or tocador.stream == null:
 		return
 
-	if scene_audio_blocked:
-		var player_id := _get_audio_player_id(audio_player)
+	if audio_cena_bloqueado:
+		var id_tocador := _obter_id_tocador(tocador)
 
-		if not player_id.is_empty():
-			pending_scene_starts[player_id] = maxf(from_position, 0.0)
+		if not id_tocador.is_empty():
+			inicios_pendentes[id_tocador] = maxf(posicao_inicial, 0.0)
 
 		return
 
-	if audio_player.playing:
-		if audio_player.stream_paused:
-			audio_player.stream_paused = false
+	if tocador.playing:
+		if tocador.stream_paused:
+			tocador.stream_paused = false
 		return
 
-	audio_player.play(maxf(from_position, 0.0))
+	tocador.play(maxf(posicao_inicial, 0.0))
 
 
-func _get_audio_player_id(audio_player: AudioStreamPlayer) -> String:
-	for player_id: String in AUDIO_PLAYERS:
-		if _get_audio_player(player_id) == audio_player:
-			return player_id
+func _obter_id_tocador(tocador: AudioStreamPlayer) -> String:
+	for id_tocador: String in TOCADORES_AUDIO:
+		if _obter_tocador(id_tocador) == tocador:
+			return id_tocador
 
 	return ""
 
 
-func _is_silent_checkpoint_state(state: Dictionary) -> bool:
-	var found_player := false
+func _checkpoint_sem_audio(estado: Dictionary) -> bool:
+	var encontrou_tocador := false
 
-	for player_id: String in AUDIO_PLAYERS:
-		if not state.has(player_id):
+	for id_tocador: String in TOCADORES_AUDIO:
+		if not estado.has(id_tocador):
 			continue
 
-		var saved_value: Variant = state[player_id]
+		var valor_salvo: Variant = estado[id_tocador]
 
-		if not saved_value is Dictionary:
+		if not valor_salvo is Dictionary:
 			continue
 
-		found_player = true
+		encontrou_tocador = true
 
-		if bool((saved_value as Dictionary).get("playing", false)):
+		if bool((valor_salvo as Dictionary).get("playing", false)):
 			return false
 
-	return found_player
+	return encontrou_tocador

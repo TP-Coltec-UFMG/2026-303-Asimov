@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/batimento_cardiaco.mp3-6cc8d48d4ccebd49a4d6b4
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0

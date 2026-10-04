@@ -324,7 +324,7 @@ func _pause_minigame() -> void:
 		neural_animation.pause()
 	_set_progress_tweens_paused(true)
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	MusicController.pause_all_audio()
+	MusicController.pausar_todos_audios()
 	get_tree().paused = true
 	pause_overlay.show()
 	continue_button.grab_focus()
@@ -336,7 +336,7 @@ func _resume_minigame() -> void:
 	pause_overlay.hide()
 	pause_open = false
 	get_tree().paused = false
-	MusicController.resume_all_audio()
+	MusicController.retomar_todos_audios()
 	_set_progress_tweens_paused(false)
 	if animation_was_playing:
 		neural_animation.play()
@@ -363,7 +363,7 @@ func _exit_tree() -> void:
 	if pause_open:
 		pause_open = false
 		get_tree().paused = false
-		MusicController.resume_all_audio()
+		MusicController.retomar_todos_audios()
 
 
 func _set_progress_tweens_paused(value: bool) -> void:

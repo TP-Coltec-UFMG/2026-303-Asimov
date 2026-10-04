@@ -44,7 +44,7 @@ func _run() -> void:
 	state["data_center_return_task_active"] = false
 	state["data_center_return_task_completed"] = false
 	var elevator_trigger := SceneTrigger.new()
-	elevator_trigger.body_p = player
+	elevator_trigger.jogador = player
 	elevator_trigger.call("_concluir_tarefa_do_sexto_andar", 6)
 	_expect(bool(state.get("data_center_return_task_pending", false)), "A chegada antecipada precisa continuar pendente até o fim dos balões.")
 	_expect(bool(state.get("data_center_return_task_completed", false)), "O elevador precisa registrar a chegada antecipada ao sexto andar.")

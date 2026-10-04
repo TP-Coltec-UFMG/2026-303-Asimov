@@ -74,6 +74,7 @@ func _run() -> void:
 	audio.add_child(tension)
 	var controller := preload("res://Scenes/scripts/engineer_ending_controller.gd").new()
 	controller.name = "EngineerEnding"
+	controller.add_child(preload("res://Scenes/Audio/efeitos_finais.tscn").instantiate())
 	add_child(controller)
 	controller.set_process(false)
 	controller.scene = self
@@ -109,6 +110,7 @@ func _run() -> void:
 	var fire: Node2D = controller.fires[0]
 	_expect(fire.scene_file_path == "res://Objects/fogo.tscn" and fire.scale == Vector2.ONE, "Original fire scene and size")
 	_expect(fire.damage_enabled and fire.save_enabled and fire.particulas.emitting, "Original damage, saving and particles enabled")
+	_expect(fire.mat_particulas != controller.fires[1].mat_particulas, "Each original fire must keep its independent particle material")
 	_expect(fire.fire_ambient.playing and fire.fire_ambient.stream != null, "Original positional fire audio plays")
 	var health := player.get_vida()
 	player.position = fire.global_position + Vector2(0, -8)
@@ -183,12 +185,14 @@ func _run() -> void:
 	await get_tree().create_timer(0.09).timeout
 	_expect(int(SaveGame.office_mission_state(player).get("engineer_completed_count", 0)) == 5, "All objectives finish after three initial circuits and two reserves")
 	_expect(controller.escape_active and is_instance_valid(controller.escape_timer_label), "Last component starts 20-second escape")
+	_expect(controller.efeitos_finais.get_node("Explosoes").get_child_count() == 32, "Component effects reuse the fixed scene nodes")
 	_expect(controller.escape_timer_label.text == "00:20", "Escape countdown begins at twenty seconds")
-	_expect(is_instance_valid(controller.escape_siren) and controller.escape_siren.playing, "Escape siren begins and can rise")
+	_expect(is_instance_valid(controller.sirene_fuga) and controller.sirene_fuga.playing, "Escape siren begins and can rise")
 	controller._on_escape_exit_requested(null)
 	await get_tree().create_timer(0.2).timeout
 	_expect(controller.destruction_cutscene_running and not player.visible, "Using exit hides player and starts destruction cutscene")
 	_expect(is_instance_valid(controller.destruction_camera) and controller.fires.size() > 4, "Cutscene camera shows new persistent explosion fires")
+	_expect(controller.efeitos_finais.get_node("Explosoes").get_child_count() == 32, "Final destruction does not add new audio or burst nodes")
 	var report := FileAccess.open("res://.engineer-fire-results.json", FileAccess.WRITE)
 	report.store_string(JSON.stringify({"passed": failures == 0, "failures": failures, "checks": checks}))
 	get_tree().quit(0 if failures == 0 else 1)

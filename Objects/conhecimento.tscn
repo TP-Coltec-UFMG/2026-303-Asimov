@@ -26,8 +26,9 @@ texture = ExtResource("3_c18f0")
 [node name="ColorAccessibilityCue" parent="Sprite2D" instance=ExtResource("99_color_accessibility")]
 interaction_path = NodePath("../../Interectable")
 
-[node name="PickupComponent" type="Node" parent="." unique_id=2065607514 node_paths=PackedStringArray("interactable")]
+[node name="PickupComponent" type="Node" parent="." unique_id=2065607514]
 script = ExtResource("4_4kem8")
-item_id = "conhecimento"
-interactable = NodePath("../Interectable")
+id_item = "conhecimento"
 metadata/_custom_type_script = "uid://dtfbuvijibmfx"
+
+[connection signal="interacao_solicitada" from="Interectable" to="PickupComponent" method="coletar"]

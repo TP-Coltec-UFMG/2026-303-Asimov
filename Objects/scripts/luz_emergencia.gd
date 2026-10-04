@@ -16,12 +16,12 @@ func _ready() -> void:
 
 func liga_luz() -> void:
 	point_light_2d.show()
-	MusicController._start_som_alarme()
+	MusicController._iniciar_alarme()
 	set_process(true)
 	
 func desliga_luz() -> void:
 	point_light_2d.hide()
-	MusicController._stop_som_alarme()
+	MusicController._parar_alarme()
 	set_process(false)
 
 func _process(delta: float) -> void:

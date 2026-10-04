@@ -51,16 +51,16 @@ func _run() -> void:
 	guide._atualizar_tutorial(guide.DURACAO_TRANSICAO)
 	await _wait_for_attention()
 	_expect(is_equal_approx(guide.balao.modulate.a, 1.0) and guide.balao.scale.is_equal_approx(Vector2.ONE), "A entrada deve terminar com o balão visível e sem distorção.")
-	_expect(is_equal_approx(MusicController.tutorial_music_factor, 0.35), "A música deve diminuir suavemente durante o tutorial.")
-	for path: NodePath in MusicController.ELEVATOR_MUSIC_PLAYERS:
+	_expect(is_equal_approx(MusicController.fator_musica_tutorial, 0.35), "A música deve diminuir suavemente durante o tutorial.")
+	for path: NodePath in MusicController.MUSICAS_ELEVADOR:
 		_expect(is_equal_approx(MusicController.get_node(path).pitch_scale, 1.0), "O tutorial deve manter o tom e a velocidade normais das músicas.")
 	_expect(is_equal_approx(MusicController.som_alarme.pitch_scale, 1.0), "O tutorial deve manter o tom normal do alarme.")
-	_expect(is_equal_approx(MusicController.som_alarme.volume_db, MusicController.alarm_unducked_volume_db + linear_to_db(0.35)), "O alarme deve ficar mais baixo sem perder seu fade próprio.")
-	MusicController.alarm_user_muted = true
-	MusicController._refresh_alarm_output()
-	_expect(is_equal_approx(MusicController.som_alarme.volume_db, MusicController.SILENT_VOLUME_DB), "O tutorial deve manter o alarme silenciado quando o jogador o desligar.")
-	MusicController.alarm_user_muted = false
-	MusicController._refresh_alarm_output()
+	_expect(is_equal_approx(MusicController.som_alarme.volume_db, MusicController.volume_alarme_sem_atenuacao_db + linear_to_db(0.35)), "O alarme deve ficar mais baixo sem perder seu fade próprio.")
+	MusicController.alarme_silenciado_jogador = true
+	MusicController._atualizar_saida_alarme()
+	_expect(is_equal_approx(MusicController.som_alarme.volume_db, MusicController.VOLUME_SILENCIO_DB), "O tutorial deve manter o alarme silenciado quando o jogador o desligar.")
+	MusicController.alarme_silenciado_jogador = false
+	MusicController._atualizar_saida_alarme()
 	_expect(is_equal_approx(AudioServer.get_bus_volume_db(music_bus), original_music_db + linear_to_db(0.35)), "O volume do tutorial deve respeitar o volume original da música.")
 	guide._atualizar_tutorial(1.0)
 	_expect(not guide.finalizando, "Sem tentar a ação, a explicação deve continuar até dez segundos.")
@@ -92,8 +92,8 @@ func _run() -> void:
 	guide._atualizar_tutorial(guide.DURACAO_TRANSICAO)
 	await _wait_for_attention()
 	_expect(is_equal_approx(AudioServer.get_bus_volume_db(music_bus), original_music_db), "Concluir deve devolver a música ao volume original.")
-	_expect(is_equal_approx(MusicController.initial_background_music.pitch_scale, 1.0), "Concluir deve restaurar o tom normal da música.")
-	_expect(is_equal_approx(MusicController.som_alarme.pitch_scale, 1.0) and is_equal_approx(MusicController.som_alarme.volume_db, MusicController.alarm_unducked_volume_db), "Concluir deve restaurar o alarme ao estado atual normal.")
+	_expect(is_equal_approx(MusicController.musica_cenario.pitch_scale, 1.0), "Concluir deve restaurar o tom normal da música.")
+	_expect(is_equal_approx(MusicController.som_alarme.pitch_scale, 1.0) and is_equal_approx(MusicController.som_alarme.volume_db, MusicController.volume_alarme_sem_atenuacao_db), "Concluir deve restaurar o alarme ao estado atual normal.")
 	_expect(is_equal_approx(heart.modulate.a, 0.8) and is_equal_approx(player.inventory.slot_1.modulate.a, 1.0), "Concluir deve restaurar as opacidades originais.")
 	_expect(is_equal_approx(quests.get_node("ColorRect").modulate.a, 0.4), "Restaurar o foco deve preservar o estado atual das tarefas.")
 	_expect(guide._ja_visto("walk") and guide.tutorial_ativo.is_empty(), "Praticar deve concluir e registrar a explicação.")
@@ -103,7 +103,7 @@ func _run() -> void:
 	guide._iniciar_tutorial("run")
 	guide._atualizar_tutorial(guide.DURACAO_TRANSICAO)
 	await get_tree().create_timer(0.2, true, false, true).timeout
-	_expect(is_equal_approx(MusicController.initial_background_music.pitch_scale, 1.0), "O fade de volume não deve modificar o tom da música.")
+	_expect(is_equal_approx(MusicController.musica_cenario.pitch_scale, 1.0), "O fade de volume não deve modificar o tom da música.")
 	await _wait_for_attention()
 	var stamina_rect: Rect2 = (stamina as Control).get_global_rect()
 	_expect(not guide.balao.get_global_rect().intersects(stamina_rect), "O tutorial de corrida deve ficar à direita sem cobrir a estamina.")
@@ -113,7 +113,7 @@ func _run() -> void:
 	_expect(not guide._jogo_disponivel(), "Não deve haver ensino no menu de pausa.")
 	guide._suspender()
 	await _wait_for_attention()
-	_expect(is_equal_approx(MusicController.tutorial_music_factor, 1.0), "Pausar deve restaurar a música sem depender da câmera lenta.")
+	_expect(is_equal_approx(MusicController.fator_musica_tutorial, 1.0), "Pausar deve restaurar a música sem depender da câmera lenta.")
 	_expect(is_equal_approx(MusicController.som_alarme.pitch_scale, 1.0), "O alarme deve manter seu tom normal ao pausar.")
 	_expect(is_equal_approx(heart.modulate.a, 0.8) and is_equal_approx(stamina.modulate.a, 1.0), "Pausar deve restaurar a interface mesmo com a árvore pausada.")
 	_expect(is_equal_approx(Engine.time_scale, 1.0) and not guide.balao.visible, "Pausar deve esconder a explicação e restaurar a velocidade.")
@@ -201,9 +201,9 @@ func _run() -> void:
 	await _wait_for_attention()
 	_expect(is_equal_approx(player.inventory.slot_6.modulate.a, 1.0) and is_equal_approx(player.inventory.slot_2.modulate.a, 0.15), "O extintor deve receber destaque no próprio slot.")
 	var extinguisher := player.inventory.get_item_control("extintor")
-	extinguisher.set_fumaca(true)
+	extinguisher.definir_fumaca(true)
 	_expect(guide._acao_praticada(), "Usar o extintor real deve ser reconhecido.")
-	extinguisher.set_fumaca(false)
+	extinguisher.definir_fumaca(false)
 	guide._concluir_tutorial()
 	guide.pendentes.clear()
 	_equip("use_extintor")
@@ -214,22 +214,22 @@ func _run() -> void:
 	_equip("use_arma")
 	guide._iniciar_tutorial("weapon")
 	var arma := player.inventory.get_item_control("gun")
-	arma.current_ammo -= 1
+	arma.municao_atual -= 1
 	_expect(guide._acao_praticada(), "Um disparo deve concluir a orientação da arma.")
 	guide._concluir_tutorial()
 	guide.pendentes.clear()
 	guide._descobrir_tutoriais()
 	_expect(not "reload" in guide.pendentes, "A recarga não deve ser ensinada após apenas um disparo.")
-	arma.current_ammo = 0
+	arma.municao_atual = 0
 	guide._descobrir_tutoriais()
 	_expect("reload" in guide.pendentes and guide._ainda_relevante("reload"), "Esvaziar o pente deve liberar a orientação de recarga.")
 	guide._iniciar_tutorial("reload")
-	arma._start_reload()
+	arma._iniciar_recarga()
 	await get_tree().create_timer(1.3).timeout
 	_expect(guide._acao_praticada(), "Uma recarga real deve concluir sua explicação.")
 	guide._concluir_tutorial()
 	guide.pendentes.clear()
-	arma.current_ammo = 0
+	arma.municao_atual = 0
 	guide._descobrir_tutoriais()
 	_expect(not "reload" in guide.pendentes, "A orientação de recarga não deve se repetir ao esvaziar outro pente.")
 	guide._iniciar_tutorial("weapon_flashlight")
@@ -266,7 +266,7 @@ func _run() -> void:
 	guide._atualizar_tutorial(guide.DURACAO_TRANSICAO)
 	await _wait_for_attention()
 	AudioServer.set_bus_volume_db(music_bus, linear_to_db(0.2))
-	MusicController.set_tutorial_music_factor(MusicController.tutorial_music_factor)
+	MusicController.definir_fator_musica_tutorial(MusicController.fator_musica_tutorial)
 	_expect(is_equal_approx(AudioServer.get_bus_volume_db(music_bus), linear_to_db(0.2 * 0.35)), "Uma alteração de volume durante o tutorial deve continuar sendo respeitada.")
 	if "--capture" in OS.get_cmdline_user_args():
 		await _wait_for_attention()
@@ -274,7 +274,7 @@ func _run() -> void:
 		get_viewport().get_texture().get_image().save_png("res://.contextual-preview.png")
 	guide._ao_mudar_cena()
 	_expect(is_equal_approx(MusicController.som_alarme.pitch_scale, 1.0), "Trocar de cena não deve deixar o alarme grave.")
-	for path: NodePath in MusicController.ELEVATOR_MUSIC_PLAYERS:
+	for path: NodePath in MusicController.MUSICAS_ELEVADOR:
 		_expect(is_equal_approx(MusicController.get_node(path).pitch_scale, 1.0), "Trocar de cena deve restaurar o tom de todas as músicas.")
 	_expect(is_equal_approx(AudioServer.get_bus_volume_db(music_bus), linear_to_db(0.2)), "Trocar de cena deve restaurar o volume mais recente das configurações.")
 	AudioServer.set_bus_volume_db(music_bus, original_music_db)
