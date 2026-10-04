@@ -65,6 +65,15 @@ func atualizar_texto(id: String, texto: String) -> void:
 			item["texto"] = texto
 
 
+func enfileirar_repetivel(id: String, texto: String) -> void:
+	if id.is_empty() or esta_pendente(id):
+		return
+	_concluidos.erase(id)
+	_descartados.erase(id)
+	_fila.push_front({"id": id, "texto": texto})
+	_iniciar_proximo()
+
+
 func tem_pensamento(id: String) -> bool:
 	if foi_concluido(id) or _descartados.has(id) or str(_ativo.get("id", "")) == id:
 		return true

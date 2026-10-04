@@ -6,3 +6,10 @@ res://Objects/scripts/objeto_empurravel.gd
 res://Player/ManPlayer.tscn
 res://Player/Scripts/player.gd
 res://Scenes/scripts/quest_mission.gd
+res://NPC'S/clarxs.gd
+res://Scenes/andar_hall.tscn
+res://Scenes/scripts/hall_elevator_route.gd
+res://Tests/hall_elevator_route_test.gd
+res://Objects/scripts/fogo.gd
+res://Player/Scripts/balao_de_pensamento.gd
+res://Scenes/scripts/hall_objective_highlight.gd

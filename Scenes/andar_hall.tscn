@@ -42,6 +42,7 @@
 [ext_resource type="Script" uid="uid://dvouf3jvmif20" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_hall"]
 
 [ext_resource type="Script" path="res://Scenes/scripts/hall_elevator_route.gd" id="elevator_route"]
+[ext_resource type="Script" path="res://Scenes/scripts/hall_npc_navigation.gd" id="npc_navigation"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4bo1l"]
 load_path = "res://.godot/imported/pedaco_1.png-219691cfb0d6eee3e96f77c1fa5091d6.ctex"
@@ -861,6 +862,10 @@ position = Vector2(-26, -22)
 
 [node name="Exit" type="Marker2D" parent="ElevatorRoute"]
 position = Vector2(-26, -94)
+
+[node name="HallNPCNavigation" type="Node2D" parent="."]
+process_physics_priority = -1
+script = ExtResource("npc_navigation")
 
 [node name="Pedaco2" type="Sprite2D" parent="." unique_id=936507080]
 position = Vector2(-129, -85)

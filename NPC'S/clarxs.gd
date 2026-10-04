@@ -66,6 +66,40 @@ var cached_path_points: Dictionary = {}
 var current_point: int = -1
 var path_finished: bool = true
 var exit_arrival_elapsed: float = 0.0
+var obstacle_navigation: Node2D
+var navigation_points := PackedVector2Array()
+var navigation_index := 0
+var navigation_target := Vector2.INF
+var navigation_revision := -1
+var movement_target := Vector2.INF
+
+
+func set_obstacle_navigation(navigator: Node2D) -> void:
+	obstacle_navigation = navigator
+	var body := $CharacterBody2D as CharacterBody2D
+	body.collision_mask = 33
+	var footprint := CapsuleShape2D.new()
+	footprint.radius = 5.0
+	footprint.height = 12.0
+	($CharacterBody2D/CollisionShape2D as CollisionShape2D).shape = footprint
+	for player in get_tree().get_nodes_in_group(&"player"):
+		if player is PhysicsBody2D:
+			body.add_collision_exception_with(player)
+
+
+func _obstacle_target(target: Vector2) -> Vector2:
+	if not is_instance_valid(obstacle_navigation):
+		return target
+	if target != navigation_target or navigation_revision != obstacle_navigation.revision:
+		navigation_target = target
+		navigation_points = obstacle_navigation.find_route(global_position, target)
+		navigation_revision = obstacle_navigation.revision
+		navigation_index = 0
+	if navigation_points.is_empty():
+		return global_position
+	while navigation_index < navigation_points.size() - 1 and global_position.distance_to(navigation_points[navigation_index]) <= 3.0:
+		navigation_index += 1
+	return navigation_points[navigation_index]
 
 
 var player_in_range: bool = false
@@ -151,6 +185,7 @@ func _on_path_start_requested(path: NPCPath) -> void:
 
 func start_path(path: NPCPath) -> void:
 	exit_arrival_elapsed = 0.0
+	navigation_target = Vector2.INF
 	if path == null:
 		return
 
@@ -439,7 +474,15 @@ func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
 	if is_queued_for_deletion():
 		return
 	var delta := get_physics_process_delta_time()
-	global_position += safe_velocity * delta
+	if is_instance_valid(obstacle_navigation):
+		var body := $CharacterBody2D as CharacterBody2D
+		var before := body.global_position
+		body.velocity = safe_velocity
+		body.move_and_slide()
+		global_position += body.global_position - before
+		body.position = Vector2.ZERO
+	else:
+		global_position += safe_velocity * delta
 	if safe_velocity.length_squared() > 1.0:
 		last_direction = safe_velocity.normalized()
 		var kind := desperate_movement_type if desperate else (current_path.movement_type if current_path != null else NPCPath.MovementType.RUN)
@@ -448,11 +491,19 @@ func _on_crowd_velocity_computed(safe_velocity: Vector2) -> void:
 		play_idle(last_direction)
 
 	if desperate:
-		if global_position.distance_to(desperate_target) <= 2.0:
+		var goal := desperate_target
+		if is_instance_valid(obstacle_navigation) and not navigation_points.is_empty():
+			goal = navigation_points[-1]
+		var tolerance := 3.0 if is_instance_valid(obstacle_navigation) else 2.0
+		if global_position.distance_to(goal) <= tolerance:
 			desperate_wait_timer = rng.randf_range(desperate_min_wait, desperate_max_wait)
 			choose_random_desperate_target()
 	elif current_path != null and not path_finished and current_point >= 0 and current_point < path_points.size():
-		if global_position.distance_to(path_points[current_point]) <= 2.0:
+		var goal := path_points[current_point]
+		if is_instance_valid(obstacle_navigation) and not navigation_points.is_empty():
+			goal = navigation_points[-1]
+		var tolerance := 3.0 if is_instance_valid(obstacle_navigation) else 2.0
+		if global_position.distance_to(goal) <= tolerance:
 			go_to_next_path_point()
 
 
@@ -489,6 +540,7 @@ func update_movement(delta: float) -> void:
 		return
 
 	var target: Vector2 = path_points[current_point]
+	movement_target = _obstacle_target(target)
 
 	var speed: float = walk_speed
 
@@ -496,7 +548,7 @@ func update_movement(delta: float) -> void:
 		speed = run_speed
 
 	var direction: Vector2 = global_position.direction_to(
-		target
+		movement_target
 	)
 
 	if direction != Vector2.ZERO:
@@ -612,9 +664,7 @@ func update_desperate_movement(
 
 		return
 
-	var direction: Vector2 = global_position.direction_to(
-		desperate_target
-	)
+	var direction: Vector2 = global_position.direction_to(_obstacle_target(desperate_target))
 
 	if direction != Vector2.ZERO:
 		last_direction = direction

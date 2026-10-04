@@ -3,6 +3,7 @@ extends Node
 @export var save_id: String = "hall_quest_01"
 
 const EXTINGUISHER_SCRIPT := preload("res://Objects/scripts/extintor.gd")
+const OBJECTIVE_HIGHLIGHT := preload("res://Scenes/scripts/hall_objective_highlight.gd")
 
 var man_player: Player
 var quest_ui: QuestMissionUI
@@ -50,6 +51,9 @@ func _inicializar() -> void:
 	_apply_saved_visuals()
 	_atualizar_linhas_tarefas()
 	_inicializado = true
+	for fire in get_parent().get_node("Perigos").get_children():
+		if fire.has_signal("extincao_iniciada") and fire.name not in [&"Fogo3", &"Fogo5", &"Fogo6"]:
+			fire.extincao_iniciada.connect(_on_non_objective_fire_extinction)
 	man_player.balao_de_pensamento.pensamento_finalizado.connect(_on_pensamento_finalizado)
 	man_player.balao_de_pensamento.pensamento_iniciado.connect(_on_pensamento_iniciado)
 
@@ -59,6 +63,7 @@ func _inicializar() -> void:
 	_descartar_instrucoes_obsoletas()
 
 	_on_pensamento_iniciado(man_player.balao_de_pensamento.pensamento_atual_id())
+	_highlight_hall_objectives()
 	man_player.balao_de_pensamento.atualizar_texto(
 		_pensamento_id("pos_saida_2"),
 		"Devo verificar o escritório no 3º andar."
@@ -119,6 +124,13 @@ func _pensar(id: String, texto: String) -> void:
 	man_player.balao_de_pensamento.enfileirar(_pensamento_id(id), texto)
 
 
+func _on_non_objective_fire_extinction() -> void:
+	man_player.balao_de_pensamento.enfileirar_repetivel(
+		_pensamento_id("fogo_fora_da_saida"),
+		"Só preciso apagar os fogos no caminho do elevador."
+	)
+
+
 func _descartar_instrucoes_obsoletas() -> void:
 
 	var ids: Array[String] = [_pensamento_id("intro_3")]
@@ -139,12 +151,46 @@ func _atualizar_visibilidade() -> void:
 
 
 func _on_pensamento_iniciado(id: String) -> void:
+	if id == _pensamento_id("intro_4") or id == _pensamento_id("pedras"):
+		_highlight_hall_objectives()
 	if id == _pensamento_id("intro_2") and not orientar_elevador:
 		orientar_elevador = true
 		orientacao_elevador_iniciada.emit()
 	if id == _pensamento_id("intro_4") and not orientar_extintor:
 		orientar_extintor = true
 		pensamento_extintor_iniciado.emit()
+
+
+func _highlight_hall_objectives() -> void:
+	_clear_objective_highlights()
+	if _hide_scheduled or not M1_feito:
+		return
+	if not M2_feito:
+		var navigation := get_parent().get_node("HallNPCNavigation")
+		var passage: Rect2 = get_parent().get_node("ElevatorRoute").bounds
+		for object in get_parent().get_node("Coletaveis").get_children():
+			if object is ObjetoEmpurravel:
+				var sprite := object.get_node("Sprite2D") as Sprite2D
+				if passage.intersects(navigation.sprite_bounds(sprite)):
+					_add_objective_highlight(sprite)
+
+
+func _add_objective_highlight(target: Node2D) -> void:
+	var previous := target.get_node_or_null("ObjectiveHighlight")
+	if previous != null:
+		target.remove_child(previous)
+		previous.queue_free()
+	var highlight := Node2D.new()
+	highlight.name = "ObjectiveHighlight"
+	highlight.set_script(OBJECTIVE_HIGHLIGHT)
+	highlight.add_to_group(&"hall_objective_highlight")
+	target.add_child(highlight)
+
+
+func _clear_objective_highlights() -> void:
+	for highlight in get_tree().get_nodes_in_group(&"hall_objective_highlight"):
+		if get_parent().is_ancestor_of(highlight) and not highlight.is_queued_for_deletion():
+			highlight.fade_out()
 
 
 func _on_pensamento_finalizado(id: String) -> void:
@@ -251,6 +297,8 @@ func _physics_process(delta: float) -> void:
 		return
 	M2_feito = clear
 	quest_ui.set_task_completed(1, clear, clear)
+	if clear and M1_feito:
+		_clear_objective_highlights()
 	if clear and not M1_feito:
 		_pensar("aviso_1", "Preciso apagar todos os focos de incêndio!")
 		_pensar("aviso_2", "Não é seguro passar assim.")
@@ -274,6 +322,7 @@ func _update_fire_task() -> void:
 
 	M1_feito = true
 	quest_ui.set_task_completed(0, true, true)
+	_highlight_hall_objectives()
 
 	if not M2_feito:
 		_pensar("pedras", "Só preciso tirar essas pedras do caminho!")

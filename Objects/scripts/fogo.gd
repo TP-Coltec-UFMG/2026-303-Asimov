@@ -36,6 +36,7 @@ const INTERVALO_DANO: float = 0.10
 const DANO_POR_TICK: int = 10
 
 signal fogo_apagou
+signal extincao_iniciada
 
 func _ready() -> void:
 	if particulas.process_material is ParticleProcessMaterial:
@@ -150,6 +151,7 @@ func iniciar_extincao() -> void:
 	extintor_atingindo = true
 	acumulador_visual = INTERVALO_ATUALIZACAO_VISUAL
 	set_process(true)
+	extincao_iniciada.emit()
 
 
 func parar_extincao() -> void:

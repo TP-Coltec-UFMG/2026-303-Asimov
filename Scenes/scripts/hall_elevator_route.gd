@@ -15,7 +15,7 @@ func _ready() -> void:
 	shape.radius = 7.0
 	shape.height = 22.0
 	query.shape = shape
-	query.collision_mask = 1
+	query.collision_mask = 33
 	query.margin = 2.0
 	grid.region = Rect2i(Vector2i.ZERO, Vector2i(ceil(bounds.size.x / cell_size) + 1, ceil(bounds.size.y / cell_size) + 1))
 	grid.cell_size = Vector2.ONE * cell_size
@@ -82,12 +82,7 @@ func _cell(point: Vector2) -> Vector2i:
 func prepare_exit_path(npc: Node2D, path: NPCPath, route: PackedVector2Array) -> void:
 	if route.is_empty():
 		return
-	var original: Array[Vector2] = npc.cached_path_points[path]
 	var points: Array[Vector2] = []
-	for point in original:
-		if point.y <= route[0].y:
-			break
-		points.append(point)
 	for point in route:
 		points.append(point)
 	npc.cached_path_points[path] = points
