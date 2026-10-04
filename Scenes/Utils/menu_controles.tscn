@@ -1,0 +1,779 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scenes/scripts/controles.gd" id="controle"]
+[ext_resource type="Script" path="res://Scenes/scripts/inputremapup.gd" id="botao"]
+[ext_resource type="FontFile" path="res://Fonts/PixelifySans-SemiBold.ttf" id="fonte"]
+[ext_resource type="Texture2D" path="res://Sprites/ui/Icons/controle.png" id="icone"]
+
+[sub_resource type="StyleBoxFlat" id="Painel"]
+bg_color = Color(0.018, 0.022, 0.028, 0.96)
+border_color = Color(0, 0, 0, 0)
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="Grupo"]
+bg_color = Color(0.038, 0.046, 0.058, 0.94)
+border_color = Color(0.24, 0.27, 0.31, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="Aviso"]
+bg_color = Color(0.2, 0.06, 0.04, 0.98)
+border_color = Color(1, 0.63, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="Normal"]
+bg_color = Color(0.065, 0.075, 0.088, 1)
+border_color = Color(0.25, 0.28, 0.32, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+bg_color = Color(0.12, 0.135, 0.155, 1)
+border_color = Color(0.82, 0.84, 0.87, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="Pressed"]
+bg_color = Color(0.17, 0.18, 0.2, 1)
+border_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+bg_color = Color(0.09, 0.1, 0.115, 1)
+border_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+content_margin_left = 5.0
+content_margin_top = 4.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+anti_aliasing = false
+
+[node name="Controles" type="Node2D"]
+script = ExtResource("controle")
+
+[node name="RemapPanel" type="PanelContainer" parent="."]
+offset_left = 14.0
+offset_top = 47.0
+offset_right = 466.0
+offset_bottom = 262.0
+theme_override_styles/panel = SubResource("Painel")
+
+[node name="Margin" type="MarginContainer" parent="RemapPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 5
+
+[node name="ControlsScroll" type="ScrollContainer" parent="RemapPanel/Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="RemapPanel/Margin/ControlsScroll"]
+layout_mode = 2
+custom_minimum_size = Vector2(426, 0)
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="AssistenciaMira" type="CheckButton" parent="RemapPanel/Margin/ControlsScroll/Content" groups=["alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 23)
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+text = "ASSISTÊNCIA DE MIRA"
+flat = true
+
+[node name="Columns" type="HBoxContainer" parent="RemapPanel/Margin/ControlsScroll/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="Group0" type="PanelContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns"]
+layout_mode = 2
+custom_minimum_size = Vector2(138, 0)
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Grupo")
+
+[node name="Margin" type="MarginContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="ControlColumn" type="VBoxContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Heading" type="Label" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 14)
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.86, 0.87, 0.89, 1)
+text = "MOVIMENTO"
+horizontal_alignment = 1
+
+[node name="Remap_up" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "up"
+nome_acao = "CIMA"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_down" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "down"
+nome_acao = "BAIXO"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_left" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "left"
+nome_acao = "ESQUERDA"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_right" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "right"
+nome_acao = "DIREITA"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_correr" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "correr"
+nome_acao = "CORRER"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_empurrar" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "empurrar"
+nome_acao = "EMPURRAR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Group1" type="PanelContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns"]
+layout_mode = 2
+custom_minimum_size = Vector2(138, 0)
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Grupo")
+
+[node name="Margin" type="MarginContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="ControlColumn" type="VBoxContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Heading" type="Label" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 14)
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.86, 0.87, 0.89, 1)
+text = "EQUIPAR"
+horizontal_alignment = 1
+
+[node name="Remap_use_lanterna" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "use_lanterna"
+nome_acao = "LANTERNA"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_use_arma" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "use_arma"
+nome_acao = "ARMA"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_use_cartao" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "use_cartao"
+nome_acao = "CARTÃO"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_use_laptop" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "use_laptop"
+nome_acao = "LAPTOP"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_use_cabo" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "use_cabo"
+nome_acao = "CABO"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_use_extintor" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "use_extintor"
+nome_acao = "EXTINTOR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Group2" type="PanelContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns"]
+layout_mode = 2
+custom_minimum_size = Vector2(138, 0)
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Grupo")
+
+[node name="Margin" type="MarginContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="ControlColumn" type="VBoxContainer" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Heading" type="Label" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 14)
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.86, 0.87, 0.89, 1)
+text = "AÇÕES"
+horizontal_alignment = 1
+
+[node name="Remap_interact" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "interact"
+nome_acao = "INTERAGIR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_pular_pensamento" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "pular_pensamento"
+nome_acao = "PULAR FALA"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_show_tasks" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "show_tasks"
+nome_acao = "VER TAREFAS"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_toggle_alarm" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "toggle_alarm"
+nome_acao = "DESLIGAR ALARME"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_fire" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "fire"
+nome_acao = "ATIRAR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_reload" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "reload"
+nome_acao = "RECARREGAR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_acende_lanterna" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "acende_lanterna"
+nome_acao = "LIGAR LUZ"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_usar_extintor" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "usar_extintor"
+nome_acao = "USAR EXTINTOR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="Remap_esc" type="Button" parent="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn" groups=["Botoes_Controles", "alto_contraste"]]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 22)
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 9
+theme_override_constants/icon_max_width = 13
+icon = ExtResource("icone")
+clip_text = true
+alignment = 0
+script = ExtResource("botao")
+action = "esc"
+nome_acao = "PAUSAR"
+theme_override_styles/normal = SubResource("Normal")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/hover = SubResource("Hover")
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_styles/pressed = SubResource("Pressed")
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("Focus")
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+
+[node name="ConflictWarning" type="PanelContainer" parent="RemapPanel"]
+visible = false
+layout_mode = 0
+offset_left = 8.0
+offset_top = 183.0
+offset_right = 444.0
+offset_bottom = 208.0
+z_index = 20
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Aviso")
+
+[node name="Label" type="Label" parent="RemapPanel/ConflictWarning"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/font = ExtResource("fonte")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="toggled" from="RemapPanel/Margin/ControlsScroll/Content/AssistenciaMira" to="." method="_ao_alternar_assistencia_mira"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor" to="." method="_mostrar_aviso_conflito"]
+[connection signal="pressed" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc" to="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc" method="_ao_pressionar"]
+[connection signal="remap_conflict" from="RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc" to="." method="_mostrar_aviso_conflito"]

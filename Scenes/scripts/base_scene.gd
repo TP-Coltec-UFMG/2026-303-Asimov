@@ -145,9 +145,9 @@ func _registrar_chegada_escritorio() -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
 		if primeira_chegada:
-			quest_ui.complete_third_floor()
+			quest_ui.concluir_terceiro_andar()
 		else:
-			quest_ui.refresh_saved_state()
+			quest_ui.restaurar_estado_salvo()
 	var balao := player.balao_de_pensamento
 	var pensamento_novo: bool = not balao.tem_pensamento(OFFICE_EMPTY_THOUGHT_ID)
 	if pensamento_novo:

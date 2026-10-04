@@ -53,6 +53,16 @@
 [ext_resource type="Texture2D" uid="uid://1ed8qp4ixd3c" path="res://Sprites/background/Design sem nome(14).png" id="54_qrea0"]
 [ext_resource type="Script" uid="uid://dsipk6ntdfmhe" path="res://Scripts/UI/menu_input_router.gd" id="55_menu_input"]
 
+[ext_resource type="PackedScene" path="res://Scenes/Utils/menu_controles.tscn" id="ControlesCena"]
+
+[ext_resource type="PackedScene" path="res://Scenes/Utils/navegacao_menu.tscn" id="NavegacaoCena"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Menus/opcoes.gd" id="GDScript_w1el0"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/configuracoes_som.gd" id="GDScript_gj1q6"]
+[ext_resource type="Script" path="res://Scripts/UI/Menus/configuracoes_interface.gd" id="GDScript_jfdv3"]
+
+[sub_resource type="StyleBoxEmpty" id="PainelTransparente"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fh6vw"]
 shader = ExtResource("1_nwcfo")
 shader_parameter/lod = 0.0
@@ -272,39 +282,6 @@ animations = [{
 "speed": 30.0
 }]
 
-[sub_resource type="GDScript" id="GDScript_w1el0"]
-script/source = "extends Node2D
-
-
-func _on_option_language_button_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Idioma\"))
-
-
-func _on_menu_sounds_settings_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Opções de Volume\"))
-
-
-func _on_menu_controllers_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Opções de Controles\"))
-
-
-func _on_menu_interface_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Opções de Interface\"))
-
-
-func _on_menu_acessibilidadades_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Opções de Acessibilidade\"))
-
-
-func _on_back_to_menu_button_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
-"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbjth"]
 
@@ -312,123 +289,7 @@ func _on_back_to_menu_button_mouse_entered() -> void:
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m7e8o"]
 
-[sub_resource type="GDScript" id="GDScript_gj1q6"]
-script/source = "extends Node2D
 
-func _on_back_to_menu_button_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
-
-
-func _on_volume_slider_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Volume\")) 
-
-
-func _on_music_slider_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Música\"))
-
-
-func _on_sfx_slider_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Ambiente\"))
-
-
-func _on_ldt_slider_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Leitor de Tela\"))
-
-
-func _on_volume_slider_value_changed(value: float) -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
-
-
-func _on_music_slider_value_changed(value: float) -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
-
-
-func _on_sfx_slider_value_changed(value: float) -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
-
-
-func _on_ldt_slider_value_changed(value: float) -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(value * 100) + \"%\"))
-"
-
-[sub_resource type="GDScript" id="GDScript_jfdv3"]
-script/source = "extends Node2D
-
-@onready var options_frame_rate: OptionButton = $OptionsFrameRate
-@onready var options_interface_size: OptionButton = $OptionsInterfaceSize
-
-
-func _on_tela_cheia_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-		Configs._change_tela_cheia(true)
-		if Configs.configs.leitor_de_tela:
-			LeitorDeTela._ler_texto(atr(\"Tela cheia ativada\"))
-	else:
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
-		Configs._change_tela_cheia(false)
-		if Configs.configs.leitor_de_tela:
-			LeitorDeTela._ler_texto(atr(\"Tela cheia desativada\"))
-
-
-func _on_mostrar_fps_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		Configs._change_mostrar_fps(true)
-		if Configs.configs.leitor_de_tela:
-			LeitorDeTela._ler_texto(atr(\"Mostrar FPS ativado\"))
-	else:
-		Configs._change_mostrar_fps(false)
-		if Configs.configs.leitor_de_tela:
-			LeitorDeTela._ler_texto(atr(\"Mostrar FPS desativado\"))
-
-
-func _on_options_frame_rate_item_selected(index: int) -> void:
-	Engine.max_fps = options_frame_rate.get_item_id(index)
-	Configs._change_frame_rate(Engine.max_fps)
-
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(options_frame_rate.get_item_id(index))))
-
-
-func _on_back_to_menu_button_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"VOLTAR\"))
-
-
-func _on_tela_cheia_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Tela Cheia\"))
-
-
-func _on_mostrar_fps_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Mostrar FPS\"))
-
-
-func _on_options_frame_rate_mouse_entered() -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(\"Limite de FPS\"))
-
-
-func _on_options_frame_rate_item_focused(index: int) -> void:
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(options_frame_rate.get_item_id(index))))
-
-
-func _on_options_interface_size_item_selected(index: int) -> void:
-	Configs._change_interface_size(index)
-	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(options_interface_size.get_item_text(index))))
-"
 
 [node name="PauseMenu" type="Control" unique_id=365074401]
 process_mode = 3
@@ -440,8 +301,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_05uyy")
 
-[node name="MenuInputRouter" type="Node" parent="." unique_id=1954539704]
-script = ExtResource("55_menu_input")
+[node name="MenuInputRouter" parent="." unique_id=1954539704 instance=ExtResource("NavegacaoCena")]
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1360480697]
 material = SubResource("ShaderMaterial_fh6vw")
@@ -466,7 +326,7 @@ offset_right = 68.75
 offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_f1qxr")
+theme_override_styles/panel = SubResource("PainelTransparente")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=166143369]
 layout_mode = 2
@@ -523,7 +383,7 @@ metadata/_edit_lock_ = true
 
 [node name="Opcoes" type="Node2D" parent="." unique_id=1630857137]
 visible = false
-script = SubResource("GDScript_w1el0")
+script = ExtResource("GDScript_w1el0")
 
 [node name="Label" type="Label" parent="Opcoes" unique_id=713246887 groups=["alto_contraste"]]
 offset_right = 480.0
@@ -638,7 +498,7 @@ icon = ExtResource("16_2fm1b")
 
 [node name="SettingSound" type="Node2D" parent="." unique_id=1506756702]
 visible = false
-script = SubResource("GDScript_gj1q6")
+script = ExtResource("GDScript_gj1q6")
 
 [node name="Label" type="Label" parent="SettingSound" unique_id=755806379 groups=["alto_contraste"]]
 anchors_preset = -1
@@ -802,7 +662,7 @@ icon = ExtResource("16_2fm1b")
 
 [node name="Interface" type="Node2D" parent="." unique_id=291027112]
 visible = false
-script = SubResource("GDScript_jfdv3")
+script = ExtResource("GDScript_jfdv3")
 
 [node name="Label" type="Label" parent="Interface" unique_id=1171414535 groups=["alto_contraste"]]
 anchors_preset = -1
@@ -1189,9 +1049,8 @@ pivot_offset = Vector2(13, 13)
 theme_override_constants/icon_max_width = 23
 icon = ExtResource("16_2fm1b")
 
-[node name="Controles" type="Node2D" parent="." unique_id=1749754943]
+[node name="Controles" parent="." unique_id=1749754943 instance=ExtResource("ControlesCena")]
 visible = false
-script = ExtResource("52_61q4e")
 
 [node name="BackToMenuButton" parent="Controles" unique_id=2124454461 groups=["alto_contraste"] instance=ExtResource("9_2s720")]
 offset_left = 453.0
@@ -1217,207 +1076,6 @@ theme_override_font_sizes/font_size = 40
 text = "CONTROLES"
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Controles" unique_id=2000429107]
-offset_left = 14.0
-offset_top = 44.0
-offset_right = 144.0
-offset_bottom = 270.0
-size_flags_horizontal = 0
-theme_override_constants/separation = -16
-
-[node name="InputRemapButton" type="Button" parent="Controles/VBoxContainer" unique_id=330671689 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-toggle_mode = true
-text = "UP : W"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "up"
-
-[node name="Inputremapdown" type="Button" parent="Controles/VBoxContainer" unique_id=589083238 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "DOWN : S"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "down"
-action_name = "DOWN"
-
-[node name="Inputremapright" type="Button" parent="Controles/VBoxContainer" unique_id=1143405146 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "RIGHT : D"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "right"
-action_name = "RIGHT"
-
-[node name="Inputremapleft" type="Button" parent="Controles/VBoxContainer" unique_id=1387534551 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "LEFT : A"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "left"
-action_name = "LEFT"
-
-[node name="InputremapRun" type="Button" parent="Controles/VBoxContainer" unique_id=1920295086 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "RUN : SHIFT
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "correr"
-action_name = "RUN"
-
-[node name="InputremapInteract" type="Button" parent="Controles/VBoxContainer" unique_id=1869044147 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "INTERACT : E
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "interact"
-action_name = "INTERACT"
-
-[node name="InputremapUse_Card" type="Button" parent="Controles/VBoxContainer" unique_id=859650037 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "USE CARD : E
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "usar_cartao"
-action_name = "USE CARD"
-
-[node name="VBoxContainer3" type="VBoxContainer" parent="Controles" unique_id=1830198424]
-offset_left = 254.0
-offset_top = 44.0
-offset_right = 437.0
-offset_bottom = 242.0
-theme_override_constants/separation = -16
-
-[node name="InputremapSelect_lanterna" type="Button" parent="Controles/VBoxContainer3" unique_id=697828945 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "SELECT LIGHT : 1
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "use_lanterna"
-action_name = "SELECT LIGHT"
-
-[node name="InputremapSelect_arma" type="Button" parent="Controles/VBoxContainer3" unique_id=1574681438 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "SELECT GUN : 2
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "use_arma"
-action_name = "SELECT GUN"
-
-[node name="InputremapSelect_card" type="Button" parent="Controles/VBoxContainer3" unique_id=897812534 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "SELECT CARD : 3
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "use_cartao"
-action_name = "SELECT CARD"
-
-[node name="InputremapUse_laptop" type="Button" parent="Controles/VBoxContainer3" unique_id=1552795755 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "SELECT LAPTOP : 4
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "use_laptop"
-action_name = "SELECT LAPTOP"
-
-[node name="InputremapUse_cabo" type="Button" parent="Controles/VBoxContainer3" unique_id=1540592407 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "SELECT CABLE : 5
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "use_cabo"
-action_name = "SELECT CABLE "
-
-[node name="InputremapAscende_Lanterna" type="Button" parent="Controles/VBoxContainer3" unique_id=860974815 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "TURN ON LIGHT : Q
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "acende_lanterna"
-action_name = "TURN ON LIGHT"
-
-[node name="InputremapPause" type="Button" parent="Controles/VBoxContainer3" unique_id=66236166 groups=["Botoes_Controles", "alto_contraste"]]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("5_6kgnf")
-text = "PAUSE : ESC
-
-"
-icon = ExtResource("13_htgjv")
-flat = true
-alignment = 0
-script = ExtResource("53_846ot")
-action = "esc"
-action_name = "PAUSE"
-
 [node name="BackgroundMenuOptions" type="Sprite2D" parent="." unique_id=517082448 groups=["alto_contraste"]]
 visible = false
 z_index = -99
@@ -1436,21 +1094,21 @@ theme_override_font_sizes/font_size = 9
 text = "123 FPS"
 script = ExtResource("51_h3d7w")
 
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Resume" to="." method="_ao_pressionar_continuar"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="_ao_pressionar_reiniciar"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Options" to="." method="_ao_pressionar_opcoes"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Quit" to="." method="_ao_pressionar_sair"]
 [connection signal="item_selected" from="Opcoes/VContainer/OptionLanguageButton" to="Opcoes/VContainer/OptionLanguageButton" method="_on_item_selected"]
 [connection signal="mouse_entered" from="Opcoes/VContainer/OptionLanguageButton" to="Opcoes" method="_on_option_language_button_mouse_entered"]
 [connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuSoundsSettings" to="Opcoes" method="_on_menu_sounds_settings_mouse_entered"]
-[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuSoundsSettings" to="." method="_on_menu_sounds_settings_pressed"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuSoundsSettings" to="." method="_ao_abrir_configuracoes_som"]
 [connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuControllers" to="Opcoes" method="_on_menu_controllers_mouse_entered"]
-[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuControllers" to="." method="_on_menu_controllers_pressed"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuControllers" to="." method="_ao_abrir_controles"]
 [connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuInterface" to="Opcoes" method="_on_menu_interface_mouse_entered"]
-[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuInterface" to="." method="_on_menu_interface_pressed"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuInterface" to="." method="_ao_abrir_interface"]
 [connection signal="mouse_entered" from="Opcoes/VContainer/VContainer/MenuAcessibilidadades" to="Opcoes" method="_on_menu_acessibilidadades_mouse_entered"]
-[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuAcessibilidadades" to="." method="_on_menu_acessibilidadades_pressed"]
-[connection signal="pressed" from="Opcoes/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed"]
+[connection signal="pressed" from="Opcoes/VContainer/VContainer/MenuAcessibilidadades" to="." method="_ao_abrir_acessibilidade"]
+[connection signal="pressed" from="Opcoes/BackToMenuButton" to="." method="_ao_voltar_menu"]
 [connection signal="mouse_entered" from="SettingSound/VContainer/volume_slider" to="SettingSound" method="_on_volume_slider_mouse_entered"]
 [connection signal="value_changed" from="SettingSound/VContainer/volume_slider" to="SettingSound" method="_on_volume_slider_value_changed"]
 [connection signal="value_changed" from="SettingSound/VContainer/volume_slider" to="SettingSound/VContainer/volume_slider/valueVolume" method="_on_volume_slider_value_changed"]
@@ -1464,7 +1122,7 @@ script = ExtResource("51_h3d7w")
 [connection signal="value_changed" from="SettingSound/VContainer/ldt_slider" to="SettingSound" method="_on_ldt_slider_value_changed"]
 [connection signal="value_changed" from="SettingSound/VContainer/ldt_slider" to="SettingSound/VContainer/ldt_slider/valueLDT" method="_on_ldt_slider_value_changed"]
 [connection signal="mouse_entered" from="SettingSound/BackToMenuButton" to="SettingSound" method="_on_back_to_menu_button_mouse_entered"]
-[connection signal="pressed" from="SettingSound/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_settings_sounds"]
+[connection signal="pressed" from="SettingSound/BackToMenuButton" to="." method="_ao_voltar_configuracoes_som"]
 [connection signal="mouse_entered" from="Interface/TelaCheia" to="Interface" method="_on_tela_cheia_mouse_entered"]
 [connection signal="toggled" from="Interface/TelaCheia" to="Interface" method="_on_tela_cheia_toggled"]
 [connection signal="mouse_entered" from="Interface/MostrarFps" to="Interface" method="_on_mostrar_fps_mouse_entered"]
@@ -1473,10 +1131,10 @@ script = ExtResource("51_h3d7w")
 [connection signal="item_selected" from="Interface/OptionsFrameRate" to="Interface" method="_on_options_frame_rate_item_selected"]
 [connection signal="mouse_entered" from="Interface/OptionsFrameRate" to="Interface" method="_on_options_frame_rate_mouse_entered"]
 [connection signal="item_focused" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_item_focused"]
-[connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="." method="_on_options_interface_size_item_selected"]
-[connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_item_selected"]
+[connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="." method="_ao_escolher_tamanho_interface"]
+[connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="Interface" method="_ao_escolher_tamanho_interface"]
 [connection signal="mouse_entered" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_mouse_entered"]
-[connection signal="pressed" from="Interface/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_interface_menu"]
+[connection signal="pressed" from="Interface/BackToMenuButton" to="." method="_ao_voltar_configuracoes_interface"]
 [connection signal="item_selected" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_item_selected"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_mouse_entered"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer" method="_on_legendas_mouse_entered"]
@@ -1493,21 +1151,111 @@ script = ExtResource("51_h3d7w")
 [connection signal="toggled" from="Accessibility/VContainer/MovimentoCamera" to="Accessibility/VContainer/MovimentoCamera" method="_on_toggled"]
 [connection signal="mouse_entered" from="Accessibility/VContainer/PainelTarefasDinamico" to="Accessibility/VContainer/PainelTarefasDinamico" method="_on_mouse_entered"]
 [connection signal="toggled" from="Accessibility/VContainer/PainelTarefasDinamico" to="Accessibility/VContainer/PainelTarefasDinamico" method="_on_toggled"]
-[connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_on_acessibility"]
-[connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_controles"]
-[connection signal="pressed" from="Controles/BackToMenuButton" to="." method="_on_back_to_menu_button_pressed_controles"]
-[connection signal="pressed" from="Controles/VBoxContainer/InputRemapButton" to="Controles/VBoxContainer/InputRemapButton" method="_on_pressed"]
-[connection signal="toggled" from="Controles/VBoxContainer/InputRemapButton" to="Controles/VBoxContainer/InputRemapButton" method="_on_toggled"]
-[connection signal="pressed" from="Controles/VBoxContainer/Inputremapdown" to="Controles/VBoxContainer/Inputremapdown" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer/Inputremapright" to="Controles/VBoxContainer/Inputremapright" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer/Inputremapleft" to="Controles/VBoxContainer/Inputremapleft" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer/InputremapRun" to="Controles/VBoxContainer/InputremapRun" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer/InputremapInteract" to="Controles/VBoxContainer/InputremapInteract" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer/InputremapUse_Card" to="Controles/VBoxContainer/InputremapUse_Card" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapSelect_lanterna" to="Controles/VBoxContainer3/InputremapSelect_lanterna" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapSelect_arma" to="Controles/VBoxContainer3/InputremapSelect_arma" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapSelect_card" to="Controles/VBoxContainer3/InputremapSelect_card" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapUse_laptop" to="Controles/VBoxContainer3/InputremapUse_laptop" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapUse_cabo" to="Controles/VBoxContainer3/InputremapUse_cabo" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapAscende_Lanterna" to="Controles/VBoxContainer3/InputremapAscende_Lanterna" method="_on_pressed"]
-[connection signal="pressed" from="Controles/VBoxContainer3/InputremapPause" to="Controles/VBoxContainer3/InputremapPause" method="_on_pressed"]
+[connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_ao_voltar_acessibilidade"]
+[connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_ao_voltar_controles"]
+[connection signal="pressed" from="Controles/BackToMenuButton" to="." method="_ao_voltar_controles"]
+
+[connection signal="focus_entered" from="PanelContainer/VBoxContainer/Resume" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("PanelContainer/VBoxContainer/Resume")]]
+[connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Resume" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("PanelContainer/VBoxContainer/Resume")]]
+[connection signal="focus_entered" from="PanelContainer/VBoxContainer/Restart" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("PanelContainer/VBoxContainer/Restart")]]
+[connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Restart" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("PanelContainer/VBoxContainer/Restart")]]
+[connection signal="focus_entered" from="PanelContainer/VBoxContainer/Options" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("PanelContainer/VBoxContainer/Options")]]
+[connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Options" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("PanelContainer/VBoxContainer/Options")]]
+[connection signal="focus_entered" from="PanelContainer/VBoxContainer/Quit" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("PanelContainer/VBoxContainer/Quit")]]
+[connection signal="mouse_entered" from="PanelContainer/VBoxContainer/Quit" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("PanelContainer/VBoxContainer/Quit")]]
+[connection signal="focus_entered" from="Opcoes/VContainer/OptionLanguageButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Opcoes/VContainer/OptionLanguageButton")]]
+[connection signal="mouse_entered" from="Opcoes/VContainer/OptionLanguageButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Opcoes/VContainer/OptionLanguageButton")]]
+[connection signal="focus_entered" from="Opcoes/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Opcoes/BackToMenuButton")]]
+[connection signal="mouse_entered" from="Opcoes/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Opcoes/BackToMenuButton")]]
+[connection signal="focus_entered" from="SettingSound/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/BackToMenuButton")]]
+[connection signal="mouse_entered" from="SettingSound/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/BackToMenuButton")]]
+[connection signal="focus_entered" from="Interface/TelaCheia" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Interface/TelaCheia")]]
+[connection signal="mouse_entered" from="Interface/TelaCheia" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/TelaCheia")]]
+[connection signal="focus_entered" from="Interface/MostrarFps" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Interface/MostrarFps")]]
+[connection signal="mouse_entered" from="Interface/MostrarFps" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/MostrarFps")]]
+[connection signal="focus_entered" from="Interface/OptionsFrameRate" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Interface/OptionsFrameRate")]]
+[connection signal="mouse_entered" from="Interface/OptionsFrameRate" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/OptionsFrameRate")]]
+[connection signal="focus_entered" from="Interface/OptionsInterfaceSize" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Interface/OptionsInterfaceSize")]]
+[connection signal="mouse_entered" from="Interface/OptionsInterfaceSize" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/OptionsInterfaceSize")]]
+[connection signal="focus_entered" from="Interface/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Interface/BackToMenuButton")]]
+[connection signal="mouse_entered" from="Interface/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/BackToMenuButton")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/OptionDaltonismoButton")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/OptionDaltonismoButton")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/Legendas" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/Legendas")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/Legendas" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/Legendas")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/LeitorDeTela")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/LeitorDeTela")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/AltoContraste" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/AltoContraste")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/AltoContraste")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/AltoContraste/Cor" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/AltoContraste/Cor")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste/Cor" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/AltoContraste/Cor")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/MovimentoCamera" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/MovimentoCamera")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/MovimentoCamera" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/MovimentoCamera")]]
+[connection signal="focus_entered" from="Accessibility/VContainer/PainelTarefasDinamico" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/PainelTarefasDinamico")]]
+[connection signal="mouse_entered" from="Accessibility/VContainer/PainelTarefasDinamico" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/PainelTarefasDinamico")]]
+[connection signal="focus_entered" from="Accessibility/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/BackToMenuButton")]]
+[connection signal="mouse_entered" from="Accessibility/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/BackToMenuButton")]]
+[connection signal="focus_entered" from="Controles/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/BackToMenuButton")]]
+[connection signal="mouse_entered" from="Controles/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/BackToMenuButton")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/AssistenciaMira" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/AssistenciaMira")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/AssistenciaMira" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/AssistenciaMira")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_up")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_down")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_left")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_right")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_correr")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group0/Margin/ControlColumn/Remap_empurrar")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_lanterna")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_arma")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cartao")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_laptop")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_cabo")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group1/Margin/ControlColumn/Remap_use_extintor")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_interact")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_pular_pensamento")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_show_tasks")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_toggle_alarm")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_fire")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_reload")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_acende_lanterna")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_usar_extintor")]]
+[connection signal="focus_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc")]]
+[connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc")]]
+
+
+[connection signal="color_changed" from="Accessibility/VContainer/AltoContraste/Cor" to="Accessibility/VContainer/AltoContraste/Cor" method="_on_color_changed"]
+[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste/Cor" to="Accessibility/VContainer/AltoContraste/Cor" method="_on_mouse_entered"]
+[connection signal="pressed" from="Accessibility/VContainer/AltoContraste/Cor" to="Accessibility/VContainer/AltoContraste/Cor" method="_on_picker_button_pressed"]
+
+[connection signal="focus_entered" from="SettingSound/VContainer/volume_slider" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/VContainer/volume_slider")]]
+[connection signal="mouse_entered" from="SettingSound/VContainer/volume_slider" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/VContainer/volume_slider")]]
+[connection signal="focus_exited" from="SettingSound/VContainer/volume_slider" to="MenuInputRouter" method="_ao_perder_foco"]
+[connection signal="focus_entered" from="SettingSound/VContainer/music_slider" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/VContainer/music_slider")]]
+[connection signal="mouse_entered" from="SettingSound/VContainer/music_slider" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/VContainer/music_slider")]]
+[connection signal="focus_exited" from="SettingSound/VContainer/music_slider" to="MenuInputRouter" method="_ao_perder_foco"]
+[connection signal="focus_entered" from="SettingSound/VContainer/sfx_slider" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/VContainer/sfx_slider")]]
+[connection signal="mouse_entered" from="SettingSound/VContainer/sfx_slider" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/VContainer/sfx_slider")]]
+[connection signal="focus_exited" from="SettingSound/VContainer/sfx_slider" to="MenuInputRouter" method="_ao_perder_foco"]
+[connection signal="focus_entered" from="SettingSound/VContainer/ldt_slider" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/VContainer/ldt_slider")]]
+[connection signal="mouse_entered" from="SettingSound/VContainer/ldt_slider" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/VContainer/ldt_slider")]]
+[connection signal="focus_exited" from="SettingSound/VContainer/ldt_slider" to="MenuInputRouter" method="_ao_perder_foco"]

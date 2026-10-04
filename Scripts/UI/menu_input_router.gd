@@ -9,100 +9,78 @@ enum InputMode {
 
 const MOUSE_ICON: Texture2D = preload("res://Sprites/ui/InputMode/mouse.svg")
 const KEYBOARD_ICON: Texture2D = preload("res://Sprites/ui/InputMode/keyboard.svg")
-const REFRESH_INTERVAL_SECONDS: float = 0.25
+const INTERVALO_ATUALIZACAO: float = 0.25
 
-@export var show_mode_indicator: bool = false
-@export var announce_keyboard_focus: bool = true
-@export var focus_color: Color = Color("ffd166")
-@export_range(1, 6, 1) var focus_border_width: int = 1
+@export var mostrar_indicador_entrada: bool = false
+@export var anunciar_foco_teclado: bool = true
+@export var cor_foco: Color = Color("ffd166")
+@export_range(1, 6, 1) var largura_borda_foco: int = 1
 
-var _input_mode: InputMode = InputMode.MOUSE
-var _tracked_controls: Array[Control] = []
-var _remap_controls: Array[InputRemapButton] = []
-var _controls_dirty: bool = true
-var _refresh_timer: float = 0.0
-var _active_scope: Node
+var _modo_entrada: InputMode = InputMode.MOUSE
+var _controles_observados: Array[Control] = []
+var _botoes_remapeamento: Array[InputRemapButton] = []
+var _atualizacao_pendente: bool = true
+var _tempo_atualizacao: float = 0.0
+var _menu_ativo: Node
 
-var _indicator_layer: CanvasLayer
-var _indicator_panel: PanelContainer
-var _indicator_icon: TextureRect
+@onready var _camada_indicador: CanvasLayer = $InputModeIndicatorLayer
+@onready var _painel_indicador: PanelContainer = $InputModeIndicatorLayer/InputModeIndicator
+@onready var _icone_indicador: TextureRect = $InputModeIndicatorLayer/InputModeIndicator/Icone
 
-var _keyboard_focus_style: StyleBoxFlat
-var _mouse_focus_style: StyleBoxEmpty
+@export var _estilo_foco_teclado: StyleBoxFlat
+@export var _estilo_foco_mouse: StyleBoxEmpty
 
-var _back_transition_locked: bool = false
+var _retorno_bloqueado: bool = false
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_create_focus_styles()
-	_create_mode_indicator()
-	_install_wasd_navigation()
-	get_tree().node_added.connect(_on_tree_node_changed)
-	get_tree().node_removed.connect(_on_tree_node_changed)
+	_preparar_estilos_foco()
+	_instalar_navegacao_wasd()
+	get_tree().node_added.connect(_ao_mudar_no_arvore)
+	get_tree().node_removed.connect(_ao_mudar_no_arvore)
 
 	await get_tree().process_frame
-	_refresh_controls()
-	_apply_input_mode_visuals()
+	_atualizar_controles()
+	_aplicar_visual_entrada()
 
 
 func _process(delta: float) -> void:
-	var host_is_visible := _is_host_visible()
-	if _indicator_layer != null:
-		_indicator_layer.visible = show_mode_indicator and host_is_visible
+	var host_is_visible := _menu_visivel()
+	if _camada_indicador != null:
+		_camada_indicador.visible = mostrar_indicador_entrada and host_is_visible
 
 	if not host_is_visible:
 		return
-	if _is_waiting_for_remap():
+	if _aguardando_remapeamento():
 		return
 
-	_refresh_timer -= delta
-	if _refresh_timer <= 0.0:
-		_refresh_timer = REFRESH_INTERVAL_SECONDS
-		_refresh_controls()
+	_tempo_atualizacao -= delta
+	if _tempo_atualizacao <= 0.0:
+		_tempo_atualizacao = INTERVALO_ATUALIZACAO
+		_atualizar_controles()
 		
-		_update_all_slider_outlines()
+		_atualizar_bordas_sliders()
 
 	if not host_is_visible:
 		return
 
-func _prepare_slider_outline(slider: Slider) -> void:
-	if slider.get_node_or_null("KeyboardFocusOutline") != null:
-		return
-
-	var outline := Panel.new()
-	outline.name = "KeyboardFocusOutline"
-	outline.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	outline.focus_mode = Control.FOCUS_NONE
-	outline.visible = false
-	outline.z_index = 10
-
-	slider.add_child(outline)
-	outline.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	outline.add_theme_stylebox_override(
-		"panel",
-		_keyboard_focus_style
-	)
-
-	slider.focus_entered.connect(
-		_update_slider_outline.bind(slider)
-	)
-	slider.focus_exited.connect(
-		_update_slider_outline.bind(slider)
-	)
+func _preparar_borda_slider(slider: Slider) -> void:
+	var outline := slider.get_node_or_null("KeyboardFocusOutline") as Panel
+	if outline != null:
+		outline.add_theme_stylebox_override("panel", _estilo_foco_teclado)
 
 
-func _update_slider_outline(_slider: Slider) -> void:
-	call_deferred("_update_all_slider_outlines")
+func _atualizar_borda_slider(_slider: Slider) -> void:
+	call_deferred("_atualizar_bordas_sliders")
 
-	var new_scope := _find_active_scope()
-	_configure_scope_navigation(new_scope)
+	var new_scope := _encontrar_menu_ativo()
+	_configurar_navegacao_menu(new_scope)
 	var focus_owner := get_viewport().gui_get_focus_owner()
-	if new_scope != _active_scope or not _is_control_available(focus_owner, new_scope):
-		_active_scope = new_scope
-		if _input_mode == InputMode.KEYBOARD:
-			_focus_first_available()
+	if new_scope != _menu_ativo or not _controle_disponivel(focus_owner, new_scope):
+		_menu_ativo = new_scope
+		if _modo_entrada == InputMode.KEYBOARD:
+			_focar_primeiro_disponivel()
 
 
 func _input(event: InputEvent) -> void:
@@ -110,13 +88,13 @@ func _input(event: InputEvent) -> void:
 		var mouse_motion := event as InputEventMouseMotion
 
 		if mouse_motion.relative.length_squared() > 0.0:
-			_set_input_mode(InputMode.MOUSE)
+			_definir_modo_entrada(InputMode.MOUSE)
 
 	elif event is InputEventMouseButton:
 		var mouse_button := event as InputEventMouseButton
 
 		if mouse_button.pressed:
-			_set_input_mode(InputMode.MOUSE)
+			_definir_modo_entrada(InputMode.MOUSE)
 
 	elif event is InputEventKey:
 		var key_event := event as InputEventKey
@@ -124,33 +102,33 @@ func _input(event: InputEvent) -> void:
 		if not key_event.pressed or key_event.echo:
 			return
 
-		_set_input_mode(InputMode.KEYBOARD)
+		_definir_modo_entrada(InputMode.KEYBOARD)
 
 		if key_event.keycode == KEY_ESCAPE:
-			if _has_visible_popup():
+			if _popup_visivel():
 				return
 
-			if _go_back_one_menu():
+			if _voltar_um_menu():
 				get_viewport().set_input_as_handled()
 				return
 
 		var focus_owner := get_viewport().gui_get_focus_owner()
-		var had_menu_focus := _is_control_available(
+		var had_menu_focus := _controle_disponivel(
 			focus_owner,
-			_find_active_scope()
+			_encontrar_menu_ativo()
 		)
 
-		if _is_host_visible() and not _is_waiting_for_remap():
-			_focus_first_available()
+		if _menu_visivel() and not _aguardando_remapeamento():
+			_focar_primeiro_disponivel()
 
-			if not had_menu_focus and _is_navigation_event(key_event):
+			if not had_menu_focus and _evento_navegacao(key_event):
 				get_viewport().set_input_as_handled()
 
-func _go_back_one_menu() -> bool:
-	if _back_transition_locked:
+func _voltar_um_menu() -> bool:
+	if _retorno_bloqueado:
 		return true
 
-	var scope := _find_active_scope()
+	var scope := _encontrar_menu_ativo()
 	var host := get_parent()
 
 	if scope == null or host == null:
@@ -160,22 +138,22 @@ func _go_back_one_menu() -> bool:
 
 	match scope.name:
 		&"SettingSound":
-			method_name = &"_on_back_to_menu_button_pressed_on_settings_sounds"
+			method_name = &"_ao_voltar_configuracoes_som"
 
 		&"Interface":
-			method_name = &"_on_back_to_menu_button_pressed_on_interface_menu"
+			method_name = &"_ao_voltar_configuracoes_interface"
 
 		&"Accessibility":
-			method_name = &"_on_back_to_menu_button_pressed_on_acessibility"
+			method_name = &"_ao_voltar_acessibilidade"
 
 		&"Controles":
-			method_name = &"_on_back_to_menu_button_pressed_controles"
+			method_name = &"_ao_voltar_controles"
 
 		&"Opcoes":
-			method_name = &"_on_back_to_menu_button_pressed"
+			method_name = &"_ao_voltar_menu"
 
 		&"PrimeiraVez":
-			method_name = &"_on_back_to_menu_button_pressed_on_menu_primeira_vez"
+			method_name = &"_ao_voltar_primeira_vez"
 
 		_:
 
@@ -184,102 +162,64 @@ func _go_back_one_menu() -> bool:
 	if not host.has_method(method_name):
 		return false
 
-	_back_transition_locked = true
+	_retorno_bloqueado = true
 	host.call(method_name)
-	_unlock_menu_back()
+	_liberar_retorno_menu()
 
 	return true
 
 
-func _unlock_menu_back() -> void:
+func _liberar_retorno_menu() -> void:
 	await get_tree().create_timer(0.5, true).timeout
-	_back_transition_locked = false
+	_retorno_bloqueado = false
 
 
-func _set_input_mode(new_mode: InputMode) -> void:
-	if _input_mode == new_mode:
+func _definir_modo_entrada(new_mode: InputMode) -> void:
+	if _modo_entrada == new_mode:
 		return
 
-	_input_mode = new_mode
-	_apply_input_mode_visuals()
+	_modo_entrada = new_mode
+	_aplicar_visual_entrada()
 
-	if _input_mode == InputMode.KEYBOARD and _is_host_visible():
+	if _modo_entrada == InputMode.KEYBOARD and _menu_visivel():
 		var focus_owner := get_viewport().gui_get_focus_owner()
-		_announce_focused_control(focus_owner)
+		_anunciar_controle_focado(focus_owner)
 
 
-func _create_focus_styles() -> void:
-	_keyboard_focus_style = StyleBoxFlat.new()
-	_keyboard_focus_style.bg_color = Color.TRANSPARENT
-	_keyboard_focus_style.border_color = focus_color
-	_keyboard_focus_style.set_border_width_all(focus_border_width)
-	_keyboard_focus_style.set_corner_radius_all(3)
+func _preparar_estilos_foco() -> void:
+	_estilo_foco_teclado.bg_color = Color.TRANSPARENT
+	_estilo_foco_teclado.border_color = cor_foco
+	_estilo_foco_teclado.set_border_width_all(largura_borda_foco)
+	_estilo_foco_teclado.set_corner_radius_all(3)
 
-	_keyboard_focus_style.expand_margin_left = 0.0
-	_keyboard_focus_style.expand_margin_top = 0.0
-	_keyboard_focus_style.expand_margin_right = 0.0
-	_keyboard_focus_style.expand_margin_bottom = 0.0
-
-	_mouse_focus_style = StyleBoxEmpty.new()
+	_estilo_foco_teclado.expand_margin_left = 0.0
+	_estilo_foco_teclado.expand_margin_top = 0.0
+	_estilo_foco_teclado.expand_margin_right = 0.0
+	_estilo_foco_teclado.expand_margin_bottom = 0.0
 
 
-func _create_mode_indicator() -> void:
-	_indicator_layer = CanvasLayer.new()
-	_indicator_layer.name = "InputModeIndicatorLayer"
-	_indicator_layer.layer = 100
-	add_child(_indicator_layer)
 
-	_indicator_panel = PanelContainer.new()
-	_indicator_panel.name = "InputModeIndicator"
-	_indicator_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	_indicator_panel.offset_left = -76.0
-	_indicator_panel.offset_top = 6.0
-	_indicator_panel.offset_right = -48.0
-	_indicator_panel.offset_bottom = 34.0
-	_indicator_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_indicator_panel.focus_mode = Control.FOCUS_NONE
-	_indicator_layer.add_child(_indicator_panel)
-
-	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.07, 0.07, 0.065, 0.96)
-	panel_style.set_border_width_all(0)
-	panel_style.set_corner_radius_all(4)
-	panel_style.content_margin_left = 5.0
-	panel_style.content_margin_top = 5.0
-	panel_style.content_margin_right = 5.0
-	panel_style.content_margin_bottom = 5.0
-	_indicator_panel.add_theme_stylebox_override("panel", panel_style)
-
-	_indicator_icon = TextureRect.new()
-	_indicator_icon.custom_minimum_size = Vector2(18.0, 18.0)
-	_indicator_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_indicator_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_indicator_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_indicator_icon.focus_mode = Control.FOCUS_NONE
-	_indicator_panel.add_child(_indicator_icon)
-
-
-func _apply_input_mode_visuals() -> void:
-	if _indicator_icon != null:
-		if _input_mode == InputMode.KEYBOARD:
-			_indicator_icon.texture = KEYBOARD_ICON
-			_indicator_panel.accessibility_name = "Modo teclado"
+func _aplicar_visual_entrada() -> void:
+	if _icone_indicador != null:
+		if _modo_entrada == InputMode.KEYBOARD:
+			_icone_indicador.texture = KEYBOARD_ICON
+			_painel_indicador.accessibility_name = "Modo teclado"
 		else:
-			_indicator_icon.texture = MOUSE_ICON
-			_indicator_panel.accessibility_name = "Modo mouse"
+			_icone_indicador.texture = MOUSE_ICON
+			_painel_indicador.accessibility_name = "Modo mouse"
 	@warning_ignore("incompatible_ternary")
 	var focus_style: StyleBox = (
-		_keyboard_focus_style if _input_mode == InputMode.KEYBOARD else _mouse_focus_style
+		_estilo_foco_teclado if _modo_entrada == InputMode.KEYBOARD else _estilo_foco_mouse
 	)
-	for control in _tracked_controls:
+	for control in _controles_observados:
 		if is_instance_valid(control):     
 			control.add_theme_stylebox_override("focus", focus_style)
-	_update_all_slider_outlines()
+	_atualizar_bordas_sliders()
 
-func _update_all_slider_outlines() -> void:
+func _atualizar_bordas_sliders() -> void:
 	var focus_owner := get_viewport().gui_get_focus_owner()
 
-	for control in _tracked_controls:
+	for control in _controles_observados:
 		if not is_instance_valid(control):
 			continue
 
@@ -295,50 +235,47 @@ func _update_all_slider_outlines() -> void:
 			continue
 
 		outline.visible = (
-			_input_mode == InputMode.KEYBOARD
+			_modo_entrada == InputMode.KEYBOARD
 			and slider == focus_owner
 			and slider.is_visible_in_tree()
 		)
 
-func _on_tree_node_changed(_node: Node) -> void:
-	_controls_dirty = true
+func _ao_mudar_no_arvore(_node: Node) -> void:
+	_atualizacao_pendente = true
 
 
-func _refresh_controls() -> void:
+func _atualizar_controles() -> void:
 
-	if not _controls_dirty:
+	if not _atualizacao_pendente:
 		return
-	_controls_dirty = false
+	_atualizacao_pendente = false
 	var host := get_parent()
 	if host == null:
 		return
 		
 	@warning_ignore("incompatible_ternary")
 	var focus_style: StyleBox = (
-		_keyboard_focus_style if _input_mode == InputMode.KEYBOARD else _mouse_focus_style
+		_estilo_foco_teclado if _modo_entrada == InputMode.KEYBOARD else _estilo_foco_mouse
 	)
 	for node in host.find_children("*", "Control", true, false):
 		var control := node as Control
-		if control == null or control in _tracked_controls:
+		if control == null or control in _controles_observados:
 			continue
-		if _is_indicator_control(control):
+		if _controle_do_indicador(control):
 			continue
 
-		_tracked_controls.append(control)
+		_controles_observados.append(control)
 		if control is InputRemapButton:
-			_remap_controls.append(control as InputRemapButton)
+			_botoes_remapeamento.append(control as InputRemapButton)
 		control.add_theme_stylebox_override("focus", focus_style)
-		_disable_back_button_scale(control)
+		_desativar_escala_botao_voltar(control)
 		if control is Slider:       
-			_prepare_slider_outline(control as Slider)
-
-		if control.focus_mode != Control.FOCUS_NONE:
-			control.focus_entered.connect(_on_control_focus_entered.bind(control))
-			control.mouse_entered.connect(_on_control_mouse_entered.bind(control))
+			_preparar_borda_slider(control as Slider)
 
 
-func _on_control_mouse_entered(control: Control) -> void:
-	if _input_mode != InputMode.MOUSE or not _is_control_available(control, _find_active_scope()):
+
+func _ao_entrar_mouse_controle(control: Control) -> void:
+	if _modo_entrada != InputMode.MOUSE or not _controle_disponivel(control, _encontrar_menu_ativo()):
 		return
 	var already_focused := control.has_focus()
 	control.grab_focus()
@@ -347,64 +284,64 @@ func _on_control_mouse_entered(control: Control) -> void:
 		if already_focused:
 			control.call("_announce_selection")
 		return
-	if not _has_external_mouse_handler(control):
-		_announce_focused_control(control)
+	if not _possui_evento_mouse_externo(control):
+		_anunciar_controle_focado(control)
 
 
-func _on_control_focus_entered(control: Control) -> void:
-	if _input_mode == InputMode.KEYBOARD:
-		_announce_focused_control(control)
+func _ao_receber_foco_controle(control: Control) -> void:
+	if _modo_entrada == InputMode.KEYBOARD:
+		_anunciar_controle_focado(control)
 
 
-func _focus_first_available() -> void:
-	if not _is_host_visible() or _has_visible_popup() or _is_waiting_for_remap():
+func _focar_primeiro_disponivel() -> void:
+	if not _menu_visivel() or _popup_visivel() or _aguardando_remapeamento():
 		return
 
-	_active_scope = _find_active_scope()
-	if _active_scope == null:
+	_menu_ativo = _encontrar_menu_ativo()
+	if _menu_ativo == null:
 		return
-	_configure_scope_navigation(_active_scope)
+	_configurar_navegacao_menu(_menu_ativo)
 
 	var current_focus := get_viewport().gui_get_focus_owner()
-	if _is_control_available(current_focus, _active_scope):
+	if _controle_disponivel(current_focus, _menu_ativo):
 		return
 
-	for control in _collect_focusable_controls(_active_scope):
+	for control in _coletar_controles_focaveis(_menu_ativo):
 		control.grab_focus()
 		return
 
 
-func _find_active_scope() -> Node:
+func _encontrar_menu_ativo() -> Node:
 	var host := get_parent()
 	if host == null:
 		return null
 
 	var active_scope: Node = host
 	for child in host.get_children():
-		if child == self or not _is_node_visible(child):
+		if child == self or not _no_visivel(child):
 			continue
-		if not _collect_focusable_controls(child).is_empty():
+		if not _coletar_controles_focaveis(child).is_empty():
 			active_scope = child
 
 	return active_scope
 
 
-func _collect_focusable_controls(scope: Node) -> Array[Control]:
+func _coletar_controles_focaveis(scope: Node) -> Array[Control]:
 	var controls: Array[Control] = []
 	if scope is Control:
 		var scope_control := scope as Control
-		if _is_focusable(scope_control):
+		if _pode_receber_foco(scope_control):
 			controls.append(scope_control)
 
 	for node in scope.find_children("*", "Control", true, false):
 		var control := node as Control
-		if control != null and _is_focusable(control) and not _is_indicator_control(control):
+		if control != null and _pode_receber_foco(control) and not _controle_do_indicador(control):
 			controls.append(control)
 
 	return controls
 
 
-func _is_focusable(control: Control) -> bool:
+func _pode_receber_foco(control: Control) -> bool:
 	if not is_instance_valid(control):
 		return false
 	if control.focus_mode == Control.FOCUS_NONE or not control.is_visible_in_tree():
@@ -414,47 +351,47 @@ func _is_focusable(control: Control) -> bool:
 	return true
 
 
-func _is_control_available(control: Control, scope: Node) -> bool:
-	if control == null or scope == null or not _is_focusable(control):
+func _controle_disponivel(control: Control, scope: Node) -> bool:
+	if control == null or scope == null or not _pode_receber_foco(control):
 		return false
 	return control == scope or scope.is_ancestor_of(control)
 
 
-func _is_host_visible() -> bool:
+func _menu_visivel() -> bool:
 	var host := get_parent()
 	if host is CanvasItem:
 		return (host as CanvasItem).is_visible_in_tree()
 	return host != null and host.is_inside_tree()
 
 
-func _is_node_visible(node: Node) -> bool:
+func _no_visivel(node: Node) -> bool:
 	if node is CanvasItem:
 		return (node as CanvasItem).is_visible_in_tree()
 	return node.is_inside_tree()
 
 
-func _is_indicator_control(control: Control) -> bool:
-	return _indicator_panel != null and (
-		control == _indicator_panel or _indicator_panel.is_ancestor_of(control)
+func _controle_do_indicador(control: Control) -> bool:
+	return _painel_indicador != null and (
+		control == _painel_indicador or _painel_indicador.is_ancestor_of(control)
 	)
 
 
-func _is_back_button(control: Control) -> bool:
+func _botao_voltar(control: Control) -> bool:
 	var normalized_name := control.name.to_lower().replace("_", "")
 	return "backtomenu" in normalized_name or normalized_name == "back"
 
 
-func _configure_scope_navigation(scope: Node) -> void:
+func _configurar_navegacao_menu(scope: Node) -> void:
 	if scope == null:
 		return
 
-	var controls := _collect_focusable_controls(scope)
+	var controls := _coletar_controles_focaveis(scope)
 	var first_content_control: Control
 	var back_buttons: Array[Control] = []
 	
 
 	for control in controls:
-		if _is_back_button(control):
+		if _botao_voltar(control):
 			back_buttons.append(control)
 			@warning_ignore("unassigned_variable")
 		elif first_content_control == null:
@@ -474,10 +411,10 @@ func _configure_scope_navigation(scope: Node) -> void:
 		var path_to_back := first_content_control.get_path_to(back_button)
 		first_content_control.focus_neighbor_top = path_to_back
 		first_content_control.focus_previous = path_to_back
-	_configure_controls_columns(scope)
-	_configure_interface_grid(scope)
+	_configurar_colunas_controles(scope)
+	_configurar_grade_interface(scope)
 
-func _set_focus_neighbor(
+func _definir_vizinho_foco(
 	source: Control,
 	target: Control,
 	direction: StringName
@@ -497,25 +434,25 @@ func _set_focus_neighbor(
 		&"down":
 			source.focus_neighbor_bottom = target_path
 
-func _disable_back_button_scale(control: Control) -> void:
-	if not _is_back_button(control):
+func _desativar_escala_botao_voltar(control: Control) -> void:
+	if not _botao_voltar(control):
 		return
 
 	for property in control.get_property_list():
 		var property_name: StringName = property.get("name", &"")
 
-		if property_name == &"hover_scale":
-			control.set("hover_scale", Vector2.ONE)
+		if property_name == &"escala_hover":
+			control.set("escala_hover", Vector2.ONE)
 
-		if property_name == &"press_scale":
-			control.set("press_scale", Vector2(0.95, 0.95))
+		if property_name == &"escala_pressionado":
+			control.set("escala_pressionado", Vector2(0.95, 0.95))
 
 	control.scale = Vector2.ONE
 
-	call_deferred("_keep_back_button_inside_viewport", control)
+	call_deferred("_manter_botao_voltar_na_tela", control)
 
 
-func _keep_back_button_inside_viewport(control: Control) -> void:
+func _manter_botao_voltar_na_tela(control: Control) -> void:
 	if not is_instance_valid(control) or not control.is_inside_tree():
 		return
 
@@ -528,12 +465,12 @@ func _keep_back_button_inside_viewport(control: Control) -> void:
 		var correction := button_rect.end.x - right_limit
 		control.global_position.x -= correction
 
-func _configure_controls_columns(scope: Node) -> void:
+func _configurar_colunas_controles(scope: Node) -> void:
 	if scope.name != &"Controles":
 		return
 
 	var columns_root := scope.get_node_or_null(
-		"RemapPanel/Margin/Content/Columns"
+		"RemapPanel/Margin/ControlsScroll/Content/Columns"
 	)
 
 	if columns_root == null:
@@ -544,7 +481,7 @@ func _configure_controls_columns(scope: Node) -> void:
 	for group_panel: Node in columns_root.get_children():
 		var column_controls: Array[Control] = []
 
-		for control: Control in _collect_focusable_controls(group_panel):
+		for control: Control in _coletar_controles_focaveis(group_panel):
 			if control is InputRemapButton:
 				column_controls.append(control)
 
@@ -561,14 +498,14 @@ func _configure_controls_columns(scope: Node) -> void:
 			var control := column_controls[row_index] as Control
 
 			if row_index > 0:
-				_set_focus_neighbor(
+				_definir_vizinho_foco(
 					control,
 					column_controls[row_index - 1] as Control,
 					&"up"
 				)
 
 			if row_index < column_controls.size() - 1:
-				_set_focus_neighbor(
+				_definir_vizinho_foco(
 					control,
 					column_controls[row_index + 1] as Control,
 					&"down"
@@ -580,7 +517,7 @@ func _configure_controls_columns(scope: Node) -> void:
 					row_index,
 					left_column.size() - 1
 				)
-				_set_focus_neighbor(
+				_definir_vizinho_foco(
 					control,
 					left_column[left_row] as Control,
 					&"left"
@@ -592,7 +529,7 @@ func _configure_controls_columns(scope: Node) -> void:
 					row_index,
 					right_column.size() - 1
 				)
-				_set_focus_neighbor(
+				_definir_vizinho_foco(
 					control,
 					right_column[right_row] as Control,
 					&"right"
@@ -609,13 +546,13 @@ func _configure_controls_columns(scope: Node) -> void:
 			if column_controls.is_empty():
 				continue
 
-			_set_focus_neighbor(
+			_definir_vizinho_foco(
 				column_controls[0] as Control,
 				back_button,
 				&"up"
 			)
 
-func _configure_interface_grid(scope: Node) -> void:
+func _configurar_grade_interface(scope: Node) -> void:
 	if scope.name != &"Interface":
 		return
 
@@ -639,64 +576,64 @@ func _configure_interface_grid(scope: Node) -> void:
 		"BackToMenuButton"
 	) as Control
 
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		full_screen,
 		interface_size,
 		&"right"
 	)
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		interface_size,
 		full_screen,
 		&"left"
 	)
 
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		show_fps,
 		frame_rate,
 		&"right"
 	)
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		frame_rate,
 		show_fps,
 		&"left"
 	)
 
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		full_screen,
 		show_fps,
 		&"down"
 	)
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		show_fps,
 		full_screen,
 		&"up"
 	)
 
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		interface_size,
 		frame_rate,
 		&"down"
 	)
-	_set_focus_neighbor(
+	_definir_vizinho_foco(
 		frame_rate,
 		interface_size,
 		&"up"
 	)
 
 	if back_button != null:
-		_set_focus_neighbor(
+		_definir_vizinho_foco(
 			full_screen,
 			back_button,
 			&"up"
 		)
-		_set_focus_neighbor(
+		_definir_vizinho_foco(
 			interface_size,
 			back_button,
 			&"up"
 		)
 
-func _has_visible_popup() -> bool:
-	for control in _tracked_controls:
+func _popup_visivel() -> bool:
+	for control in _controles_observados:
 		if not is_instance_valid(control):
 			continue
 
@@ -715,29 +652,29 @@ func _has_visible_popup() -> bool:
 	return false
 
 
-func _is_waiting_for_remap() -> bool:
-	for control in _remap_controls:
+func _aguardando_remapeamento() -> bool:
+	for control in _botoes_remapeamento:
 		if is_instance_valid(control) and control is InputRemapButton:
 			if (control as InputRemapButton).esperando_input:
 				return true
 	return false
 
 
-func _has_external_mouse_handler(control: Control) -> bool:
+func _possui_evento_mouse_externo(control: Control) -> bool:
 	for connection in control.mouse_entered.get_connections():
 		var callback: Callable = connection.get("callable", Callable())
 		var receiver := callback.get_object()
 		if receiver == null or receiver == self:
 			continue
 
-		if receiver == control and callback.get_method() == &"_button_hover":
+		if receiver == control and callback.get_method() == &"_ao_destacar_botao":
 			continue
 		return true
 	return false
 
 
-func _announce_focused_control(control: Control) -> void:
-	if not announce_keyboard_focus or control == null:
+func _anunciar_controle_focado(control: Control) -> void:
+	if not anunciar_foco_teclado or control == null:
 		return
 	if not bool(Configs.configs.get("leitor_de_tela", false)):
 		return
@@ -760,14 +697,14 @@ func _announce_focused_control(control: Control) -> void:
 	LeitorDeTela._ler_texto(tr(spoken_text))
 
 
-func _install_wasd_navigation() -> void:
-	_add_key_to_action("ui_up", KEY_W)
-	_add_key_to_action("ui_down", KEY_S)
-	_add_key_to_action("ui_left", KEY_A)
-	_add_key_to_action("ui_right", KEY_D)
+func _instalar_navegacao_wasd() -> void:
+	_adicionar_tecla_acao("ui_up", KEY_W)
+	_adicionar_tecla_acao("ui_down", KEY_S)
+	_adicionar_tecla_acao("ui_left", KEY_A)
+	_adicionar_tecla_acao("ui_right", KEY_D)
 
 
-func _is_navigation_event(event: InputEventKey) -> bool:
+func _evento_navegacao(event: InputEventKey) -> bool:
 	return (
 		event.is_action_pressed("ui_up")
 		or event.is_action_pressed("ui_down")
@@ -777,7 +714,7 @@ func _is_navigation_event(event: InputEventKey) -> bool:
 	)
 
 
-func _add_key_to_action(action: StringName, physical_keycode: Key) -> void:
+func _adicionar_tecla_acao(action: StringName, physical_keycode: Key) -> void:
 	if not InputMap.has_action(action):
 		InputMap.add_action(action)
 
@@ -785,3 +722,20 @@ func _add_key_to_action(action: StringName, physical_keycode: Key) -> void:
 	key_event.physical_keycode = physical_keycode
 	if not InputMap.action_has_event(action, key_event):
 		InputMap.action_add_event(action, key_event)
+
+
+func _ao_receber_foco(caminho: NodePath) -> void:
+	var controle := get_parent().get_node_or_null(caminho) as Control
+	if controle != null:
+		_ao_receber_foco_controle(controle)
+	_atualizar_borda_slider(null)
+
+
+func _ao_entrar_mouse(caminho: NodePath) -> void:
+	var controle := get_parent().get_node_or_null(caminho) as Control
+	if controle != null:
+		_ao_entrar_mouse_controle(controle)
+
+
+func _ao_perder_foco() -> void:
+	_atualizar_borda_slider(null)

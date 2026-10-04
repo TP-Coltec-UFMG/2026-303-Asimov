@@ -59,23 +59,23 @@ func _run() -> void:
 	await get_tree().process_frame
 	var vbox := quest.get_node("VBoxContainer") as VBoxContainer
 	var panel := quest.get_node("ColorRect") as ColorRect
-	for row in quest.rows:
+	for row in quest.linhas:
 		row.hide()
 	quest.show()
-	quest.rows[0].show()
+	quest.linhas[0].show()
 	await get_tree().process_frame
 	var fixed_x := vbox.position.x
 	var fixed_width := vbox.size.x
-	quest.rows[0].hide()
-	quest.rows[7].show()
+	quest.linhas[0].hide()
+	quest.linhas[7].show()
 	await get_tree().process_frame
 	_expect(is_equal_approx(vbox.position.x, fixed_x) and is_equal_approx(vbox.size.x, fixed_width), "Uma tarefa com quebra de linha não pode deslocar o painel horizontalmente.")
-	quest.rows[7].hide()
-	quest.rows[QuestMissionUI.COOLING_TASK_INDEX].show()
+	quest.linhas[7].hide()
+	quest.linhas[QuestMissionUI.COOLING_TASK_INDEX].show()
 	await get_tree().process_frame
 	_expect(is_equal_approx(vbox.position.x, fixed_x) and is_equal_approx(vbox.size.x, fixed_width), "A tarefa opcional não pode alterar a posição horizontal das outras tarefas.")
 	_expect(vbox.position.x >= panel.position.x and vbox.position.x + vbox.size.x <= panel.position.x + panel.size.x + 0.01, "Os textos precisam permanecer dentro dos limites laterais do painel.")
-	for row in quest.rows:
+	for row in quest.linhas:
 		row.hide()
 	quest.hide()
 	player.balao_de_pensamento.enfileirar("test:busy", "Ainda estou ocupado.")
@@ -88,7 +88,7 @@ func _run() -> void:
 	quest.call("_process", 0.2)
 	_expect(player.balao_de_pensamento.tem_pensamento(QuestMissionUI.COOLING_THOUGHT_TIME), "O pensamento deve começar depois do intervalo.")
 	_expect(bool(state.get("cooling_optional_task_active", false)), "A tarefa deve ser ativada antes dos pensamentos de contexto.")
-	_expect((quest.rows[QuestMissionUI.COOLING_TASK_INDEX] as CanvasItem).visible, "A tarefa opcional deve aparecer junto do primeiro pensamento.")
+	_expect((quest.linhas[QuestMissionUI.COOLING_TASK_INDEX] as CanvasItem).visible, "A tarefa opcional deve aparecer junto do primeiro pensamento.")
 	for _index in range(3):
 		player.balao_de_pensamento.pular_pensamento()
 		await get_tree().process_frame
@@ -96,10 +96,10 @@ func _run() -> void:
 
 	state["programmer_ending_started"] = true
 	state["programmer_launch_isolated"] = true
-	quest.show_programmer_ending_tasks(1)
+	quest.mostrar_tarefas_final_programador(1)
 	var visible_programmer_rows := 0
 	var cooling_task_integrated := false
-	for row in quest.rows:
+	for row in quest.linhas:
 		if not row.visible:
 			continue
 		visible_programmer_rows += 1

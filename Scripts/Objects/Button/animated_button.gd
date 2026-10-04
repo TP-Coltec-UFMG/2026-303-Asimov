@@ -1,80 +1,79 @@
 extends Button
 
-@export_category("Hover")
-@export var hover_scale: Vector2 = Vector2(1.1, 1.1)
-@export var hover_animation_length: float = 0.1
-@export var un_hover_animation_length: float = 0.1
+@export_category("Animação")
+@export var animar_hover: bool = true
+@export var escala_hover: Vector2 = Vector2(1.1, 1.1)
+@export var duracao_hover: float = 0.1
+@export var duracao_saida_hover: float = 0.1
 
 @export_category("Press")
-@export var press_scale: Vector2 = Vector2(0.95, 0.95)
-@export var press_animation_length_1: float = 0.1
-@export var press_animation_length_2: float = 0.1
+@export var escala_pressionado: Vector2 = Vector2(0.95, 0.95)
+@export var duracao_pressao: float = 0.1
+@export var duracao_retorno: float = 0.1
 
-var animation_tween: Tween
-var original_scale: Vector2
+var transicao_botao: Tween
+var escala_original: Vector2
 
 
 func _ready() -> void:
-	original_scale = scale
-
-	pressed.connect(_button_press)
-	mouse_entered.connect(_button_hover)
-	mouse_exited.connect(_button_un_hover)
-	focus_entered.connect(_button_hover)
-	focus_exited.connect(_button_un_hover)
-	resized.connect(update_pivot)
-
-	update_pivot()
+	escala_original = scale
 
 
-func update_pivot() -> void:
+	atualizar_pivo()
+
+
+func atualizar_pivo() -> void:
 	pivot_offset = size / 2.0
 
 
-func _button_press() -> void:
-	if animation_tween:
-		animation_tween.kill()
+func _ao_pressionar_botao() -> void:
+	if transicao_botao:
+		transicao_botao.kill()
 
-	animation_tween = create_tween().set_trans(Tween.TRANS_SINE)
+	transicao_botao = create_tween().set_trans(Tween.TRANS_SINE)
 
-	animation_tween.tween_property(
+	transicao_botao.tween_property(
 		self,
 		"scale",
-		original_scale * press_scale,
-		press_animation_length_1
+		escala_original * escala_pressionado,
+		duracao_pressao
 	)
 
-	animation_tween.chain().tween_property(
+	transicao_botao.chain().tween_property(
 		self,
 		"scale",
-		original_scale * hover_scale,
-		press_animation_length_2
-	)
-
-
-func _button_hover() -> void:
-	if animation_tween:
-		animation_tween.kill()
-
-	animation_tween = create_tween().set_trans(Tween.TRANS_SINE)
-
-	animation_tween.tween_property(
-		self,
-		"scale",
-		original_scale * hover_scale,
-		hover_animation_length
+		escala_original * escala_hover,
+		duracao_retorno
 	)
 
 
-func _button_un_hover() -> void:
-	if animation_tween:
-		animation_tween.kill()
+func _ao_destacar_botao() -> void:
+	if not animar_hover:
+		return
+	if transicao_botao:
+		transicao_botao.kill()
 
-	animation_tween = create_tween().set_trans(Tween.TRANS_SINE)
+	transicao_botao = create_tween().set_trans(Tween.TRANS_SINE)
 
-	animation_tween.tween_property(
+	transicao_botao.tween_property(
 		self,
 		"scale",
-		original_scale,
-		un_hover_animation_length
+		escala_original * escala_hover,
+		duracao_hover
+	)
+
+
+func _ao_remover_destaque_botao() -> void:
+	if not animar_hover:
+		return
+	if transicao_botao:
+		transicao_botao.kill()
+
+	transicao_botao = create_tween().set_trans(Tween.TRANS_SINE)
+
+	transicao_botao.tween_property(
+		self,
+		"scale",
+		escala_original,
+		duracao_saida_hover
 	)

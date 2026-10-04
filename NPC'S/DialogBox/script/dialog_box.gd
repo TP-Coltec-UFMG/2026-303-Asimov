@@ -3,78 +3,93 @@ extends MarginContainer
 signal dialog_finished()
 signal line_started(index: int)
 
-var texts_to_display: Array[String] = []
-var current_index: int = 0
-var typing_speed: float = 0.05
-var is_typing: bool = false
-var skip_typing: bool = false
-var is_closing: bool = false
+var textos: Array[String] = []
+var indice_atual: int = 0
+@export_range(0.01, 0.2, 0.01) var intervalo_digitacao: float = 0.05
+var digitando: bool = false
+var fechando: bool = false
+var em_uso: bool = false
 
-@onready var text_label: Label = $text_container/text_label
-@onready var indicator: TextureRect = $indicator
-@onready var tween: Tween = get_tree().create_tween()
+@onready var texto: Label = $text_container/text_label
+@onready var indicador: TextureRect = $indicator
+@onready var temporizador_digitacao: Timer = $TemporizadorDigitacao
+@onready var animacoes: AnimationPlayer = $Animacoes
+
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	hide()
+	indicador.hide()
 
-	pivot_offset = size / 2
-	scale = Vector2.ZERO
-	indicator.visible = false
 
-	tween.tween_property(
-		self,
-		"scale",
-		Vector2.ONE,
-		0.3
-	).set_trans(Tween.TRANS_BACK)
+func iniciar_exibicao() -> void:
+	cancelar_exibicao()
+	em_uso = true
+	pivot_offset = size / 2.0
+	show()
+	animacoes.play(&"abrir")
+	animacoes.advance(0.0)
+	mostrar_texto()
 
-func show_text() -> void:
-	if current_index < texts_to_display.size():
-		line_started.emit(current_index)
-		is_typing = true
-		skip_typing = false
-		indicator.visible = false
-		text_label.text = ""
 
-		_type_text(texts_to_display[current_index])
-	else:
-		_close_dialog()
+func mostrar_texto() -> void:
+	if indice_atual >= textos.size():
+		_fechar_dialogo()
+		return
+	line_started.emit(indice_atual)
+	digitando = true
+	indicador.hide()
+	texto.text = textos[indice_atual]
+	texto.visible_characters = 0
+	temporizador_digitacao.start(intervalo_digitacao)
 
-func _type_text(text: String) -> void:
-	for i in range(text.length()):
-		if skip_typing:
-			text_label.text = text
-			break
 
-		text_label.text += text[i]
-		await get_tree().create_timer(typing_speed).timeout
+func _ao_digitar_caractere() -> void:
+	texto.visible_characters += 1
+	if texto.visible_characters >= texto.text.length():
+		_concluir_digitacao()
 
-	is_typing = false
-	indicator.visible = true
 
-func _close_dialog():
-	is_closing = true
-	is_typing = true
+func _concluir_digitacao() -> void:
+	temporizador_digitacao.stop()
+	texto.visible_characters = -1
+	digitando = false
+	indicador.show()
 
-	@warning_ignore("shadowed_variable")
-	var tween = get_tree().create_tween()
-	tween.tween_property(
-		self,
-		"scale",
-		Vector2.ZERO,
-		0.3
-	).set_trans(Tween.TRANS_BACK)
 
-	await tween.finished
+func _fechar_dialogo() -> void:
+	if fechando:
+		return
+	fechando = true
+	digitando = true
+	temporizador_digitacao.stop()
+	animacoes.play(&"fechar")
+	animacoes.advance(0.0)
 
+
+func _ao_terminar_animacao(nome: StringName) -> void:
+	if nome != &"fechar":
+		return
+	cancelar_exibicao()
 	dialog_finished.emit()
-	queue_free()
 
-func advance() -> void:
-	if is_typing:
-		skip_typing = true
-	elif current_index + 1 < texts_to_display.size():
-		current_index += 1
-		show_text()
+
+func avancar() -> void:
+	if fechando:
+		return
+	if digitando:
+		_concluir_digitacao()
+	elif indice_atual + 1 < textos.size():
+		indice_atual += 1
+		mostrar_texto()
 	else:
-		_close_dialog()
+		_fechar_dialogo()
+
+
+func cancelar_exibicao() -> void:
+	temporizador_digitacao.stop()
+	animacoes.stop()
+	fechando = false
+	digitando = false
+	em_uso = false
+	indicador.hide()
+	hide()

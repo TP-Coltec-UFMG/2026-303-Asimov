@@ -1109,18 +1109,18 @@ func _start_power_failure_dialog() -> void:
 		return
 	if DialogManager.is_showing_dialog and DialogManager.current_dialog_id == POWER_DIALOG_ID:
 		return
-	if DialogManager.is_showing_dialog and DialogManager.dialog_box != null and bool(DialogManager.dialog_box.get("is_closing")):
+	if DialogManager.is_showing_dialog and DialogManager.dialog_box != null and bool(DialogManager.dialog_box.get("fechando")):
 		await get_tree().create_timer(0.1).timeout
 		_start_power_failure_dialog()
 		return
 	if DialogManager.is_showing_dialog and DialogManager.dialog_box != null:
 		var interrupted_lines: Array[String] = []
-		for line in DialogManager.dialog_box.texts_to_display:
+		for line in DialogManager.dialog_box.textos:
 			interrupted_lines.append(str(line))
 		state["data_center_interrupted_dialog"] = {
 			"id": DialogManager.current_dialog_id,
 			"lines": interrupted_lines,
-			"index": int(DialogManager.dialog_box.current_index)
+			"index": int(DialogManager.dialog_box.indice_atual)
 		}
 		SaveGame.save_global_state("hall_quest_01", state)
 		_save_checkpoint()
@@ -1139,13 +1139,13 @@ func _suspend_dialog_for_return() -> void:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	var lines: Array[String] = []
-	for line in DialogManager.dialog_box.texts_to_display:
+	for line in DialogManager.dialog_box.textos:
 		lines.append(str(line))
 	var snapshot_key := "data_center_power_dialog_snapshot" if dialog_id == POWER_DIALOG_ID else "data_center_interrupted_dialog"
 	state[snapshot_key] = {
 		"id": dialog_id,
 		"lines": lines,
-		"index": int(DialogManager.dialog_box.current_index)
+		"index": int(DialogManager.dialog_box.indice_atual)
 	}
 	if dialog_id != POWER_DIALOG_ID:
 		state["data_center_access_resume_talk_needed"] = true
@@ -1331,7 +1331,7 @@ func _set_power_outage_music(active: bool) -> void:
 func _show_card_task(completed: bool, animate: bool = false) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_data_center_card_task(completed, animate)
+		quest_ui.mostrar_tarefa_cartao_data_center(completed, animate)
 
 
 func _show_power_talk_task() -> void:
@@ -1339,15 +1339,15 @@ func _show_power_talk_task() -> void:
 	if quest_ui != null:
 		var state: Dictionary = SaveGame.office_mission_state(player)
 		if bool(state.get("data_center_return_task_completed", false)):
-			quest_ui.show_return_and_scientist_talk_tasks()
+			quest_ui.mostrar_tarefas_retorno_e_cientista()
 		else:
-			quest_ui.show_data_center_power_talk_task()
+			quest_ui.mostrar_tarefa_conversa_energia()
 
 
 func _show_access_intro_tasks(state: Dictionary) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_data_center_access_intro_tasks(
+		quest_ui.mostrar_tarefas_intro_acesso_data_center(
 			bool(state.get("data_center_card_dialog_finished", false)),
 			bool(state.get("data_center_access_plan_finished", false)),
 			bool(state.get("data_center_access_npc_arrived", false))
@@ -1361,7 +1361,7 @@ func _has_boss_card() -> bool:
 func _show_rfid_reader_task() -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_rfid_reader_task(false)
+		quest_ui.mostrar_tarefa_leitor_rfid(false)
 
 
 func _show_rfid_repair_tasks(
@@ -1371,7 +1371,7 @@ func _show_rfid_repair_tasks(
 ) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_rfid_repair_tasks(wires_repaired, reading_checked, animate)
+		quest_ui.mostrar_tarefas_reparo_rfid(wires_repaired, reading_checked, animate)
 
 
 func _set_access_prompt(text: String) -> void:
@@ -1388,7 +1388,7 @@ func _show_power_tasks(
 ) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_data_center_power_tasks(
+		quest_ui.mostrar_tarefas_energia_data_center(
 			flashlight_completed,
 			fourth_floor_completed,
 			breaker_completed,

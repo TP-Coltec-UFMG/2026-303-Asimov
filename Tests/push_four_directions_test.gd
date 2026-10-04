@@ -8,7 +8,7 @@ func _ready() -> void:
 	get_tree().set_meta(&"dev_mission_jump_active", true)
 	original_save = SaveGame.save_data.duplicate(true)
 	SaveGame.save_data = {}
-	ContextualTutorial.cancel_current()
+	ContextualTutorial.cancelar_atual()
 	ContextualTutorial.set_process(false)
 	call_deferred("_run")
 

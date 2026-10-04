@@ -4,8 +4,6 @@ signal dialog_started(dialog_id: String)
 signal dialog_finished(dialog_id: String)
 signal dialog_line_started(dialog_id: String, index: int)
 
-@export var dialog_scene: PackedScene
-
 var dialog_box = null
 var is_showing_dialog: bool = false
 var current_dialog_id: String = ""
@@ -20,7 +18,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("interact") or event.is_action_pressed("ui_accept"):
 		get_viewport().set_input_as_handled()
-		dialog_box.advance()
+		dialog_box.avancar()
 
 func start_catalog_dialog(sequence_id: String, dialog_id: String = "", start_index: int = 0) -> void:
 	start_dialog(DialogueCatalog.texts(sequence_id), dialog_id, start_index, sequence_id)
@@ -32,27 +30,40 @@ func start_dialog(texts: Array[String], dialog_id: String = "", start_index: int
 	if texts.is_empty():
 		return
 
-	if dialog_scene:
-		dialog_box = dialog_scene.instantiate()
+	var caixa_disponivel := _obter_caixa_disponivel()
+	if caixa_disponivel != null:
+		dialog_box = caixa_disponivel
 		current_dialog_id = dialog_id
 		current_sequence_id = sequence_id
 		is_showing_dialog = true
 
-		add_child(dialog_box)
+		dialog_box.textos = texts
+		dialog_box.indice_atual = clampi(start_index, 0, maxi(texts.size() - 1, 0))
 
-		dialog_box.texts_to_display = texts
-		dialog_box.current_index = clampi(start_index, 0, maxi(texts.size() - 1, 0))
-
-		dialog_box.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		dialog_box.offset_left = 16
-		dialog_box.offset_right = -16
-		dialog_box.offset_top = -120 
-		dialog_box.offset_bottom = -16
-
-		dialog_box.dialog_finished.connect(_on_dialog_finished)
-		dialog_box.line_started.connect(_on_dialog_line_started)
-		dialog_box.show_text()
+		dialog_box.iniciar_exibicao()
 		dialog_started.emit(current_dialog_id)
+	else:
+		push_error("Não há uma caixa de diálogo disponível na cena do DialogManager.")
+
+
+func _obter_caixa_disponivel() -> MarginContainer:
+	for caixa: Node in get_children():
+		if caixa is MarginContainer and not bool(caixa.em_uso):
+			return caixa as MarginContainer
+	return null
+
+
+func limpar_dialogos() -> void:
+	for caixa: Node in get_children():
+		if caixa is MarginContainer:
+			caixa.cancelar_exibicao()
+	dialog_box = null
+	is_showing_dialog = false
+	current_dialog_id = ""
+	current_sequence_id = ""
+	current_line_data = {}
+	suspended_dialogs.clear()
+	input_blocked = false
 
 
 func interrupt_with_dialog(texts: Array[String], dialog_id: String, auto_resume: bool = true) -> void:

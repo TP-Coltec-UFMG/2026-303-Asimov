@@ -341,8 +341,8 @@ process_physics_priority = -6
 
 [node name="QUEST_MISSION" parent="." unique_id=1665720135 instance=ExtResource("16_quest")]
 layer = 6
-standalone_mode = true
-standalone_left_side = true
-standalone_white_border = true
+modo_isolado = true
+lado_esquerdo = true
+borda_branca = true
 
 [connection signal="pressed" from="Home/Computador/Button" to="." method="_on_button_pressed"]

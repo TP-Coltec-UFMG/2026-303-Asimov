@@ -44,7 +44,7 @@ func _on_boss_card_collected() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_go_to_sixth_floor_task(false, true)
+		quest_ui.mostrar_tarefa_ir_sexto_andar(false, true)
 	player.balao_de_pensamento.descartar([BOSS_ROOM_EMPTY_ID])
 	player.balao_de_pensamento.enfileirar_dialogo("sala_chefe.on_boss_card_collected.player", BOSS_CARD_FOUND_ID)
 	if player.checkpoint_enabled:
@@ -64,7 +64,7 @@ func prepare_return_to_office() -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_go_to_sixth_floor_task(false)
+		quest_ui.mostrar_tarefa_ir_sexto_andar(false)
 	if player.checkpoint_enabled:
 		SaveGame.create_checkpoint(player)
 
@@ -73,7 +73,7 @@ func _show_boss_room_tasks(state: Dictionary) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui == null:
 		return
-	quest_ui.show_boss_room_and_cable_tasks(
+	quest_ui.mostrar_tarefas_sala_chefe_e_cabo(
 		bool(state.get("office_boss_room_access_found", false)),
 		bool(state.get("office_cable_collected", false)),
 		false,

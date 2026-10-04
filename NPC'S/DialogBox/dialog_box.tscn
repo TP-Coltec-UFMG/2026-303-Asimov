@@ -51,6 +51,44 @@ frame_12/duration = 0.1
 frame_13/texture = ExtResource("7_5jb7t")
 frame_13/duration = 0.1
 
+[sub_resource type="Animation" id="Animacao_abrir"]
+resource_name = "abrir"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animacao_fechar"]
+resource_name = "fechar"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="BibliotecaDialogo"]
+_data = {
+&"abrir": SubResource("Animacao_abrir"),
+&"fechar": SubResource("Animacao_fechar")
+}
+
 [node name="dialog_box" type="MarginContainer" unique_id=94448366]
 process_mode = 3
 z_index = 1
@@ -99,3 +137,14 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 texture = SubResource("AnimatedTexture_d0u6y")
+
+[node name="TemporizadorDigitacao" type="Timer" parent="."]
+wait_time = 0.05
+
+[node name="Animacoes" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("BibliotecaDialogo")
+}
+
+[connection signal="timeout" from="TemporizadorDigitacao" to="." method="_ao_digitar_caractere"]
+[connection signal="animation_finished" from="Animacoes" to="." method="_ao_terminar_animacao"]

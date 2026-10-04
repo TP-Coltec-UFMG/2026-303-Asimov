@@ -19,9 +19,6 @@ func _ready() -> void:
 
 	accessibility_name = "Escolher cor do alto contraste"
 
-	color_changed.connect(_on_color_changed)
-	mouse_entered.connect(_on_mouse_entered)
-	pressed.connect(_on_picker_button_pressed)
 
 
 func _on_picker_button_pressed() -> void:

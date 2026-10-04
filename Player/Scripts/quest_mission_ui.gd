@@ -1,9 +1,9 @@
 class_name QuestMissionUI
 extends CanvasLayer
 
-@export var standalone_mode: bool = false
-@export var standalone_left_side: bool = false
-@export var standalone_white_border: bool = false
+@export var modo_isolado: bool = false
+@export var lado_esquerdo: bool = false
+@export var borda_branca: bool = false
 
 const BREAKER_URGENT_THOUGHT_ID := "data_center:breaker_restored_urgent"
 const BREAKER_RETURN_THOUGHT_ID := "data_center:breaker_return_plan"
@@ -16,9 +16,8 @@ const COOLING_THOUGHT_FAILURE := "cooling:failed_attempt"
 const COOLING_THOUGHT_FAILURE_ALTERNATIVE := "cooling:other_system_after_failure"
 const COOLING_TASK_INDEX := 13
 const COOLING_IDLE_DELAY := 3.0
-const PANEL_DISPLAY_TIME := 15.0
-const PANEL_FADE_IN_TIME := 0.45
-const PANEL_FADE_OUT_TIME := 0.8
+@export_range(0.05, 3.0, 0.05) var duracao_aparecer_painel: float = 0.45
+@export_range(0.05, 3.0, 0.05) var duracao_sumir_painel: float = 0.8
 const PROGRAMMER_ENDING_TASKS: Array[String] = [
 	"ISOLE O PROTOCOLO DE\nLANÇAMENTO",
 	"RECONSTRUA A REDE NEURAL",
@@ -33,7 +32,7 @@ const ENGINEER_ENDING_TASKS: Array[String] = [
 	"QUEIME COMPONENTE E FONTE RESERVAS",
 ]
 
-@onready var rows: Array[HBoxContainer] = [
+@onready var linhas: Array[HBoxContainer] = [
 	$VBoxContainer/HBoxContainer2,
 	$VBoxContainer/HBoxContainer,
 	$VBoxContainer/HBoxContainer3,
@@ -49,7 +48,7 @@ const ENGINEER_ENDING_TASKS: Array[String] = [
 	$VBoxContainer/HBoxContainer13,
 	$VBoxContainer/HBoxContainer14,
 ]
-@onready var markers: Array[AnimatedSprite2D] = [
+@onready var marcadores: Array[AnimatedSprite2D] = [
 	$VBoxContainer/HBoxContainer2/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer/AnimatedSprite2D,
 	$VBoxContainer/HBoxContainer3/AnimatedSprite2D,
@@ -66,90 +65,85 @@ const ENGINEER_ENDING_TASKS: Array[String] = [
 	$VBoxContainer/HBoxContainer14/AnimatedSprite2D,
 ]
 
-var desired_visible: bool = false
-var hidden_for_elevator: bool = false
+var visibilidade_desejada: bool = false
+var oculto_no_elevador: bool = false
 var cooling_idle_time: float = 0.0
-var rendering_programmer_tasks: bool = false
-var _panel_time_left: float = PANEL_DISPLAY_TIME
-var _auto_hidden: bool = false
-var _completed_rows: Array[bool] = []
-var _panel_fading_out: bool = false
-var _panel_fade: Tween
-var _dynamic_panel_enabled: bool = true
-var _display_alpha: float = 1.0
-var _tutorial_opacity: float = 1.0
+var exibindo_tarefas_programador: bool = false
+@onready var temporizador_exibicao: Timer = $TemporizadorExibicao
+var _oculto_automaticamente: bool = false
+var _tarefas_concluidas: Array[bool] = []
+var _ocultando_painel: bool = false
+var _transicao_painel: Tween
+var _painel_dinamico_ativado: bool = true
+var _opacidade_exibicao: float = 1.0
+var _opacidade_tutorial: float = 1.0
 
 
 func _enter_tree() -> void:
-	if hidden_for_elevator:
+	if oculto_no_elevador:
 		call_deferred("_restore_after_scene_change")
 
 
 func _ready() -> void:
-	add_to_group(&"task_panels")
-	_dynamic_panel_enabled = bool(Configs.configs.get("painel_tarefas_dinamico", true))
-	for row in rows:
-		_completed_rows.append(false)
-	if standalone_mode:
-		_configure_standalone_appearance()
-		_ignore_mouse_input_recursive(self)
-		for row in rows:
+	_painel_dinamico_ativado = bool(Configs.configs.get("painel_tarefas_dinamico", true))
+	for row in linhas:
+		_tarefas_concluidas.append(false)
+	if modo_isolado:
+		_configurar_aparencia_isolada()
+		_ignorar_mouse_recursivamente(self)
+		for row in linhas:
 			row.hide()
 		hide()
 		return
-	rows[2].hide()
-	rows[3].hide()
-	rows[4].hide()
-	rows[5].hide()
-	rows[6].hide()
-	rows[7].hide()
-	rows[8].hide()
-	rows[9].hide()
-	rows[10].hide()
-	rows[11].hide()
-	rows[12].hide()
-	rows[COOLING_TASK_INDEX].hide()
+	linhas[2].hide()
+	linhas[3].hide()
+	linhas[4].hide()
+	linhas[5].hide()
+	linhas[6].hide()
+	linhas[7].hide()
+	linhas[8].hide()
+	linhas[9].hide()
+	linhas[10].hide()
+	linhas[11].hide()
+	linhas[12].hide()
+	linhas[COOLING_TASK_INDEX].hide()
 	hide()
-	call_deferred("_connect_thought_balloon")
-	call_deferred("refresh_saved_state")
+	call_deferred("restaurar_estado_salvo")
 
 
-func _configure_standalone_appearance() -> void:
+func _configurar_aparencia_isolada() -> void:
 	var background := $ColorRect as Control
 	var border := $StandaloneBorder as Control
 	var title := $Label2 as Control
 	var task_list := $VBoxContainer as Control
-	border.visible = standalone_white_border
-	if not standalone_left_side:
+	border.visible = borda_branca
+	if not lado_esquerdo:
 		return
-	_move_control_to_left(background, 0.0, 106.0)
-	_move_control_to_left(border, 0.0, 106.0)
-	_move_control_to_left(title, 36.0, 77.0)
-	_move_control_to_left(task_list, 16.0, 105.0)
+	_mover_controle_para_esquerda(background, 0.0, 106.0)
+	_mover_controle_para_esquerda(border, 0.0, 106.0)
+	_mover_controle_para_esquerda(title, 36.0, 77.0)
+	_mover_controle_para_esquerda(task_list, 16.0, 105.0)
 
 
-func _move_control_to_left(control: Control, left: float, right: float) -> void:
+func _mover_controle_para_esquerda(control: Control, left: float, right: float) -> void:
 	control.anchor_left = 0.0
 	control.anchor_right = 0.0
 	control.offset_left = left
 	control.offset_right = right
 
 
-func _ignore_mouse_input_recursive(node: Node) -> void:
+func _ignorar_mouse_recursivamente(node: Node) -> void:
 	if node is Control:
 		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
 	for child in node.get_children():
-		_ignore_mouse_input_recursive(child)
+		_ignorar_mouse_recursivamente(child)
 
 
 func _process(delta: float) -> void:
 	var configured_dynamic := bool(Configs.configs.get("painel_tarefas_dinamico", true))
-	if configured_dynamic != _dynamic_panel_enabled:
-		apply_dynamic_panel_setting()
-	if _dynamic_panel_enabled and not standalone_mode and desired_visible and not _auto_hidden and not _panel_fading_out and visible:
-		_panel_time_left -= delta
-		if _panel_time_left <= 0.0:
-			_fade_out_panel()
+	if configured_dynamic != _painel_dinamico_ativado:
+		aplicar_configuracao_painel_dinamico()
+	temporizador_exibicao.paused = not (_painel_dinamico_ativado and not modo_isolado and visibilidade_desejada and not _oculto_automaticamente and not _ocultando_painel and visible)
 	var current_player := get_parent() as Player
 	if current_player == null:
 		return
@@ -172,99 +166,99 @@ func _process(delta: float) -> void:
 		_start_cooling_intro(current_player, state)
 
 
-func apply_dynamic_panel_setting() -> void:
-	_dynamic_panel_enabled = bool(Configs.configs.get("painel_tarefas_dinamico", true))
-	_panel_time_left = PANEL_DISPLAY_TIME
-	if _dynamic_panel_enabled or standalone_mode:
+func aplicar_configuracao_painel_dinamico() -> void:
+	_painel_dinamico_ativado = bool(Configs.configs.get("painel_tarefas_dinamico", true))
+	temporizador_exibicao.start()
+	if _painel_dinamico_ativado or modo_isolado:
 		return
-	_stop_panel_fade()
-	_auto_hidden = false
-	_set_panel_alpha(1.0)
-	visible = desired_visible and not get_tree().paused and not hidden_for_elevator
+	_parar_transicao_painel()
+	_oculto_automaticamente = false
+	_definir_opacidade_painel(1.0)
+	visible = visibilidade_desejada and not get_tree().paused and not oculto_no_elevador
 
 
-func set_panel_visible(value: bool) -> void:
-	if value and not standalone_mode and not rendering_programmer_tasks:
+func definir_painel_visivel(value: bool) -> void:
+	if value and not modo_isolado and not exibindo_tarefas_programador:
 		_sync_optional_cooling_row()
-	var was_desired := desired_visible
-	desired_visible = value
-	if value and not was_desired and not standalone_mode:
-		_reveal_panel()
-	elif not value and not standalone_mode:
-		_stop_panel_fade()
-		_auto_hidden = false
-		_set_panel_alpha(1.0)
-	visible = value and (not _auto_hidden or _panel_fading_out) and not get_tree().paused and not hidden_for_elevator
+	var was_desired := visibilidade_desejada
+	visibilidade_desejada = value
+	if value and not was_desired and not modo_isolado:
+		_revelar_painel()
+	elif not value and not modo_isolado:
+		_parar_transicao_painel()
+		_oculto_automaticamente = false
+		_definir_opacidade_painel(1.0)
+	visible = value and (not _oculto_automaticamente or _ocultando_painel) and not get_tree().paused and not oculto_no_elevador
 
 
-func _task_changed() -> void:
-	if not standalone_mode:
-		if desired_visible:
-			_reveal_panel()
+func _ao_mudar_tarefa() -> void:
+	if not modo_isolado:
+		if visibilidade_desejada:
+			_revelar_painel()
 		else:
-			_panel_time_left = PANEL_DISPLAY_TIME
-			_auto_hidden = false
+			temporizador_exibicao.start()
+			_oculto_automaticamente = false
 
 
-func _reveal_panel() -> void:
+func _revelar_painel() -> void:
 	var was_visible := visible
-	_stop_panel_fade()
-	_auto_hidden = false
-	_panel_time_left = PANEL_DISPLAY_TIME
-	if desired_visible and not hidden_for_elevator and not get_tree().paused:
+	_parar_transicao_painel()
+	_oculto_automaticamente = false
+	temporizador_exibicao.start()
+	if visibilidade_desejada and not oculto_no_elevador and not get_tree().paused:
 		if not was_visible:
-			_set_panel_alpha(0.0)
+			_definir_opacidade_painel(0.0)
 		show()
-		var from_alpha := _panel_alpha()
+		var from_alpha := _obter_opacidade_painel()
 		if from_alpha < 1.0:
-			_panel_fade = create_tween()
-			_panel_fade.tween_method(_set_panel_alpha, from_alpha, 1.0, PANEL_FADE_IN_TIME)
+			_transicao_painel = create_tween()
+			_transicao_painel.tween_method(_definir_opacidade_painel, from_alpha, 1.0, duracao_aparecer_painel)
 
 
-func _fade_out_panel() -> void:
-	_panel_fading_out = true
-	_stop_panel_fade(false)
-	_panel_fade = create_tween()
-	_panel_fade.tween_method(_set_panel_alpha, _panel_alpha(), 0.0, PANEL_FADE_OUT_TIME)
-	_panel_fade.tween_callback(func() -> void:
-		_panel_fading_out = false
-		_auto_hidden = true
+func _ocultar_painel_suavemente() -> void:
+	_ocultando_painel = true
+	_parar_transicao_painel(false)
+	_transicao_painel = create_tween()
+	_transicao_painel.tween_method(_definir_opacidade_painel, _obter_opacidade_painel(), 0.0, duracao_sumir_painel)
+	_transicao_painel.tween_callback(func() -> void:
+		_ocultando_painel = false
+		_oculto_automaticamente = true
 		hide()
 	)
 
 
-func _stop_panel_fade(reset_fading: bool = true) -> void:
-	if _panel_fade != null and _panel_fade.is_valid():
-		_panel_fade.kill()
-	_panel_fade = null
+func _parar_transicao_painel(reset_fading: bool = true) -> void:
+	if _transicao_painel != null and _transicao_painel.is_valid():
+		_transicao_painel.kill()
+	_transicao_painel = null
 	if reset_fading:
-		_panel_fading_out = false
+		_ocultando_painel = false
 
 
-func _panel_alpha() -> float:
-	return _display_alpha
+func _obter_opacidade_painel() -> float:
+	return _opacidade_exibicao
 
 
-func _set_panel_alpha(alpha: float) -> void:
-	_display_alpha = alpha
+func _definir_opacidade_painel(alpha: float) -> void:
+	_opacidade_exibicao = alpha
 	for part in [$ColorRect, $StandaloneBorder, $Label2, $VBoxContainer]:
-		(part as CanvasItem).modulate.a = alpha * _tutorial_opacity
+		(part as CanvasItem).modulate.a = alpha * _opacidade_tutorial
 
 
-func set_tutorial_opacity(alpha: float) -> void:
-	_tutorial_opacity = clampf(alpha, 0.0, 1.0)
-	_set_panel_alpha(_display_alpha)
+func definir_opacidade_tutorial(alpha: float) -> void:
+	_opacidade_tutorial = clampf(alpha, 0.0, 1.0)
+	_definir_opacidade_painel(_opacidade_exibicao)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if standalone_mode:
+	if modo_isolado:
 		return
 	if not event.is_action_pressed("show_tasks"):
 		return
 	if event is InputEventKey and (event as InputEventKey).echo:
 		return
 	var current_player := get_parent() as Player
-	if not desired_visible or hidden_for_elevator or get_tree().paused:
+	if not visibilidade_desejada or oculto_no_elevador or get_tree().paused:
 		return
 	if current_player == null or not current_player.is_physics_processing():
 		return
@@ -276,54 +270,54 @@ func _unhandled_input(event: InputEvent) -> void:
 	var guide := scene.get_node_or_null("CoolingLocationGuide")
 	if guide != null and bool(guide.get("cutscene_running")):
 		return
-	_reveal_panel()
+	_revelar_painel()
 	get_viewport().set_input_as_handled()
 
 
-func hide_during_elevator() -> void:
-	hidden_for_elevator = true
+func ocultar_durante_elevador() -> void:
+	oculto_no_elevador = true
 	hide()
 
 
-func restore_after_elevator() -> void:
-	hidden_for_elevator = false
-	visible = desired_visible and not _auto_hidden and not get_tree().paused
+func restaurar_apos_elevador() -> void:
+	oculto_no_elevador = false
+	visible = visibilidade_desejada and not _oculto_automaticamente and not get_tree().paused
 
 
-func hide_all_tasks(preserve_optional: bool = true) -> void:
-	for row in rows:
+func ocultar_todas_tarefas(preserve_optional: bool = true) -> void:
+	for row in linhas:
 		row.hide()
-	if standalone_mode:
-		set_panel_visible(false)
+	if modo_isolado:
+		definir_painel_visivel(false)
 		return
 	if not preserve_optional:
-		desired_visible = false
+		visibilidade_desejada = false
 		hide()
 		return
 	_sync_optional_cooling_row()
-	set_panel_visible(rows[COOLING_TASK_INDEX].visible)
+	definir_painel_visivel(linhas[COOLING_TASK_INDEX].visible)
 
 
-func show_standalone_task(
+func mostrar_tarefa_isolada(
 	text: String,
 	completed: bool = false,
 	animate: bool = false
 ) -> void:
-	if not standalone_mode:
+	if not modo_isolado:
 		return
-	for index in range(rows.size()):
-		set_task_visible(index, index == 0)
-	set_task_text(0, text)
-	set_task_completed(0, completed, animate)
-	set_panel_visible(true)
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 0)
+	definir_texto_tarefa(0, text)
+	definir_tarefa_concluida(0, completed, animate)
+	definir_painel_visivel(true)
 
 
-func show_standalone_task_sequence(
+func mostrar_sequencia_tarefas_isoladas(
 	tasks: Array[String],
 	completed_count: int,
 	animate_latest: bool = false
 ) -> void:
-	if not standalone_mode or tasks.is_empty():
+	if not modo_isolado or tasks.is_empty():
 		return
 	var safe_completed := clampi(completed_count, 0, tasks.size())
 	var start_index := 0
@@ -332,23 +326,23 @@ func show_standalone_task_sequence(
 	elif safe_completed >= 3:
 		start_index = floori(float(safe_completed - 1) / 2.0) * 2
 		start_index = mini(start_index, maxi(tasks.size() - 3, 0))
-	for row_index in range(rows.size()):
+	for row_index in range(linhas.size()):
 		var task_index := start_index + row_index
 		var should_show := row_index < 3 and task_index < tasks.size()
-		set_task_visible(row_index, should_show)
+		definir_tarefa_visivel(row_index, should_show)
 		if not should_show:
 			continue
-		set_task_text(row_index, tasks[task_index])
+		definir_texto_tarefa(row_index, tasks[task_index])
 		var completed := task_index < safe_completed
-		set_task_completed(
+		definir_tarefa_concluida(
 			row_index,
 			completed,
 			animate_latest and completed and task_index == safe_completed - 1
 		)
-	set_panel_visible(true)
+	definir_painel_visivel(true)
 
 
-func show_programmer_ending_tasks(
+func mostrar_tarefas_final_programador(
 	completed_count: int,
 	animate_latest: bool = false
 ) -> void:
@@ -389,28 +383,28 @@ func show_programmer_ending_tasks(
 			"completed": false,
 			"task_index": -1,
 		})
-	for row_index in range(rows.size()):
+	for row_index in range(linhas.size()):
 		var should_show := row_index < 3 and row_index < entries.size()
-		set_task_visible(row_index, should_show)
+		definir_tarefa_visivel(row_index, should_show)
 		if not should_show:
 			continue
 		var entry := entries[row_index]
-		set_task_text(row_index, str(entry["text"]))
+		definir_texto_tarefa(row_index, str(entry["text"]))
 		var completed := bool(entry["completed"])
 		var task_index := int(entry["task_index"])
-		set_task_completed(
+		definir_tarefa_concluida(
 			row_index,
 			completed,
 			animate_latest
 			and completed
 			and task_index == safe_completed - 1
 		)
-	rendering_programmer_tasks = true
-	set_panel_visible(true)
-	rendering_programmer_tasks = false
+	exibindo_tarefas_programador = true
+	definir_painel_visivel(true)
+	exibindo_tarefas_programador = false
 
 
-func show_engineer_ending_tasks(completed_count: int, animate_latest: bool = false) -> void:
+func mostrar_tarefas_final_engenheiro(completed_count: int, animate_latest: bool = false) -> void:
 	var safe_completed := clampi(completed_count, 0, ENGINEER_ENDING_TASKS.size())
 	var start_index := maxi(0, safe_completed - 2)
 	var visible_end := mini(safe_completed + 1, ENGINEER_ENDING_TASKS.size())
@@ -428,15 +422,15 @@ func show_engineer_ending_tasks(completed_count: int, animate_latest: bool = fal
 		entries.append({"text": "OPCIONAL: REDIRECIONE A\nREFRIGERAÇÃO DA IA", "completed": false, "task_index": -1})
 	var row_index := 0
 	for entry in entries:
-		set_task_visible(row_index, true)
-		set_task_text(row_index, str(entry["text"]))
-		set_task_completed(row_index, bool(entry["completed"]), animate_latest and int(entry["task_index"]) == safe_completed - 1)
+		definir_tarefa_visivel(row_index, true)
+		definir_texto_tarefa(row_index, str(entry["text"]))
+		definir_tarefa_concluida(row_index, bool(entry["completed"]), animate_latest and int(entry["task_index"]) == safe_completed - 1)
 		row_index += 1
-	for index in range(row_index, rows.size()):
-		set_task_visible(index, false)
-	rendering_programmer_tasks = true
-	set_panel_visible(true)
-	rendering_programmer_tasks = false
+	for index in range(row_index, linhas.size()):
+		definir_tarefa_visivel(index, false)
+	exibindo_tarefas_programador = true
+	definir_painel_visivel(true)
+	exibindo_tarefas_programador = false
 
 
 func _sync_optional_cooling_row() -> void:
@@ -444,21 +438,21 @@ func _sync_optional_cooling_row() -> void:
 		return
 	var state := SaveGame.office_mission_state(get_parent() as Player)
 	if bool(state.get("engineer_ending_started", false)):
-		set_task_visible(COOLING_TASK_INDEX, false)
-		if not rendering_programmer_tasks:
-			show_engineer_ending_tasks(int(state.get("engineer_completed_count", 0)))
+		definir_tarefa_visivel(COOLING_TASK_INDEX, false)
+		if not exibindo_tarefas_programador:
+			mostrar_tarefas_final_engenheiro(int(state.get("engineer_completed_count", 0)))
 		return
 	if bool(state.get("programmer_ending_started", false)):
-		set_task_visible(COOLING_TASK_INDEX, false)
-		if not rendering_programmer_tasks:
-			show_programmer_ending_tasks(_programmer_completed_count(state))
+		definir_tarefa_visivel(COOLING_TASK_INDEX, false)
+		if not exibindo_tarefas_programador:
+			mostrar_tarefas_final_programador(_programmer_completed_count(state))
 		return
 	var active := bool(state.get("cooling_optional_task_active", false))
 	var completed := bool(state.get("cooling_optional_task_completed", false))
-	set_task_visible(COOLING_TASK_INDEX, active or completed)
+	definir_tarefa_visivel(COOLING_TASK_INDEX, active or completed)
 	if active or completed:
-		set_task_text(COOLING_TASK_INDEX, "OPCIONAL: REDIRECIONE A\nREFRIGERAÇÃO DA IA")
-		set_task_completed(COOLING_TASK_INDEX, completed)
+		definir_texto_tarefa(COOLING_TASK_INDEX, "OPCIONAL: REDIRECIONE A\nREFRIGERAÇÃO DA IA")
+		definir_tarefa_concluida(COOLING_TASK_INDEX, completed)
 
 
 func _programmer_completed_count(state: Dictionary) -> int:
@@ -506,7 +500,6 @@ func _queue_cooling_intro(current_player: Player) -> void:
 
 
 func _restore_cooling_intro(current_player: Player, state: Dictionary) -> void:
-	_connect_thought_balloon()
 	_activate_cooling_task(current_player, state)
 	_queue_cooling_intro(current_player)
 
@@ -519,7 +512,7 @@ func _activate_cooling_task(current_player: Player, state: Dictionary) -> void:
 	state["cooling_optional_task_completed"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
 	_sync_optional_cooling_row()
-	set_panel_visible(true)
+	definir_painel_visivel(true)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
 
@@ -531,7 +524,7 @@ func _queue_cooling_completion(current_player: Player, state: Dictionary) -> voi
 	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_completion.player", COOLING_THOUGHT_SUCCESS)
 	current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_completion.player.02", COOLING_THOUGHT_RESULT)
 	_sync_optional_cooling_row()
-	set_panel_visible(true)
+	definir_painel_visivel(true)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
 
@@ -544,7 +537,7 @@ func _queue_cooling_failure(current_player: Player, state: Dictionary) -> void:
 	if bool(state.get("cooling_failure_has_alternative", false)):
 		current_player.balao_de_pensamento.enfileirar_dialogo("hall_ui.queue_cooling_failure.player.02", COOLING_THOUGHT_FAILURE_ALTERNATIVE)
 	_sync_optional_cooling_row()
-	set_panel_visible(true)
+	definir_painel_visivel(true)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
 
@@ -558,33 +551,33 @@ func _discard_cooling_intro_thoughts(current_player: Player) -> void:
 
 
 func _restore_after_scene_change() -> void:
-	if is_inside_tree() and hidden_for_elevator:
-		restore_after_elevator()
+	if is_inside_tree() and oculto_no_elevador:
+		restaurar_apos_elevador()
 
 
-func set_task_visible(index: int, value: bool) -> void:
-	if index >= 0 and index < rows.size():
-		if rows[index].visible != value:
-			_task_changed()
-		rows[index].visible = value
+func definir_tarefa_visivel(index: int, value: bool) -> void:
+	if index >= 0 and index < linhas.size():
+		if linhas[index].visible != value:
+			_ao_mudar_tarefa()
+		linhas[index].visible = value
 
 
-func set_task_text(index: int, value: String) -> void:
-	if index >= 0 and index < rows.size():
-		var label := rows[index].get_node("Label3") as Label
-		if label.text != value and rows[index].visible:
-			_task_changed()
+func definir_texto_tarefa(index: int, value: String) -> void:
+	if index >= 0 and index < linhas.size():
+		var label := linhas[index].get_node("Label3") as Label
+		if label.text != value and linhas[index].visible:
+			_ao_mudar_tarefa()
 		label.text = value
 
 
-func set_task_completed(index: int, completed: bool, animate: bool = false) -> void:
-	if index < 0 or index >= markers.size():
+func definir_tarefa_concluida(index: int, completed: bool, animate: bool = false) -> void:
+	if index < 0 or index >= marcadores.size():
 		return
-	if _completed_rows.size() == rows.size() and _completed_rows[index] != completed:
-		_completed_rows[index] = completed
-		if rows[index].visible:
-			_task_changed()
-	var marker := markers[index]
+	if _tarefas_concluidas.size() == linhas.size() and _tarefas_concluidas[index] != completed:
+		_tarefas_concluidas[index] = completed
+		if linhas[index].visible:
+			_ao_mudar_tarefa()
+	var marker := marcadores[index]
 	marker.stop()
 	marker.animation = &"default"
 	if completed and animate:
@@ -596,35 +589,35 @@ func set_task_completed(index: int, completed: bool, animate: bool = false) -> v
 		marker.frame_progress = 0.0
 
 
-func complete_third_floor() -> void:
-	show_only_third_floor_task(true, true)
+func concluir_terceiro_andar() -> void:
+	mostrar_apenas_tarefa_terceiro_andar(true, true)
 
 
-func show_only_third_floor_task(completed: bool, animate: bool = false) -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 3)
-	set_task_text(3, "IR PARA O TERCEIRO ANDAR")
-	set_task_completed(3, completed, animate)
-	set_panel_visible(true)
+func mostrar_apenas_tarefa_terceiro_andar(completed: bool, animate: bool = false) -> void:
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 3)
+	definir_texto_tarefa(3, "IR PARA O TERCEIRO ANDAR")
+	definir_tarefa_concluida(3, completed, animate)
+	definir_painel_visivel(true)
 
 
-func show_talk_to_npc_task(completed: bool, animate: bool = false) -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 3)
-	set_task_text(3, "FALE COM O CIENTISTA")
-	set_task_completed(3, completed, animate)
-	set_panel_visible(true)
+func mostrar_tarefa_falar_com_npc(completed: bool, animate: bool = false) -> void:
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 3)
+	definir_texto_tarefa(3, "FALE COM O CIENTISTA")
+	definir_tarefa_concluida(3, completed, animate)
+	definir_painel_visivel(true)
 
 
-func show_find_boss_room_access_task(completed: bool = false, animate: bool = false) -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 3)
-	set_task_text(3, "ENCONTRE UMA FORMA DE\nENTRAR NA SALA DO CHEFE")
-	set_task_completed(3, completed, animate)
-	set_panel_visible(true)
+func mostrar_tarefa_acesso_sala_chefe(completed: bool = false, animate: bool = false) -> void:
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 3)
+	definir_texto_tarefa(3, "ENCONTRE UMA FORMA DE\nENTRAR NA SALA DO CHEFE")
+	definir_tarefa_concluida(3, completed, animate)
+	definir_painel_visivel(true)
 
 
-func show_boss_room_and_cable_tasks(
+func mostrar_tarefas_sala_chefe_e_cabo(
 	boss_room_completed: bool = false,
 	cable_completed: bool = false,
 	animate_cable: bool = false,
@@ -634,76 +627,69 @@ func show_boss_room_and_cable_tasks(
 	boss_card_completed: bool = false,
 	find_laptop: bool = false
 ) -> void:
-	for index in range(rows.size()):
-		set_task_visible(
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(
 			index,
 			index == 2
 			or index == 3
 			or (index == 4 and hack_ready)
 			or (index == 5 and show_boss_card_task)
 		)
-	set_task_text(2, "ENCONTRE UMA FORMA DE\nENTRAR NA SALA DO CHEFE")
-	set_task_completed(2, boss_room_completed)
-	set_task_text(3, "ENCONTRE UM NOTEBOOK" if find_laptop else "ENCONTRE UM CABO")
-	set_task_completed(3, cable_completed, animate_cable)
-	set_task_text(4, "HACKEIE A SALA DO CHEFE!")
-	set_task_completed(4, hack_completed)
-	set_task_text(5, "PEGUE O CARTÃO DO CHEFE")
-	set_task_completed(5, boss_card_completed)
-	set_panel_visible(true)
+	definir_texto_tarefa(2, "ENCONTRE UMA FORMA DE\nENTRAR NA SALA DO CHEFE")
+	definir_tarefa_concluida(2, boss_room_completed)
+	definir_texto_tarefa(3, "ENCONTRE UM NOTEBOOK" if find_laptop else "ENCONTRE UM CABO")
+	definir_tarefa_concluida(3, cable_completed, animate_cable)
+	definir_texto_tarefa(4, "HACKEIE A SALA DO CHEFE!")
+	definir_tarefa_concluida(4, hack_completed)
+	definir_texto_tarefa(5, "PEGUE O CARTÃO DO CHEFE")
+	definir_tarefa_concluida(5, boss_card_completed)
+	definir_painel_visivel(true)
 
 
-func show_find_hacking_item_task(
+func mostrar_tarefa_encontrar_item_hack(
 	find_laptop: bool,
 	completed: bool = false,
 	animate: bool = false
 ) -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 3)
-	set_task_text(3, "ENCONTRE UM NOTEBOOK" if find_laptop else "ENCONTRE UM CABO")
-	set_task_completed(3, completed, animate)
-	set_panel_visible(true)
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 3)
+	definir_texto_tarefa(3, "ENCONTRE UM NOTEBOOK" if find_laptop else "ENCONTRE UM CABO")
+	definir_tarefa_concluida(3, completed, animate)
+	definir_painel_visivel(true)
 
 
-func show_go_to_sixth_floor_task(completed: bool = false, animate: bool = false) -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 6)
-	set_task_text(6, "VÁ PARA O SEXTO ANDAR")
-	set_task_completed(6, completed, animate)
-	set_panel_visible(true)
+func mostrar_tarefa_ir_sexto_andar(completed: bool = false, animate: bool = false) -> void:
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 6)
+	definir_texto_tarefa(6, "VÁ PARA O SEXTO ANDAR")
+	definir_tarefa_concluida(6, completed, animate)
+	definir_painel_visivel(true)
 
 
-func show_return_to_data_center_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(6, "VOLTE AO DATA CENTER", completed, animate)
+func mostrar_tarefa_voltar_data_center(completed: bool = false, animate: bool = false) -> void:
+	_mostrar_tarefa_unica_data_center(6, "VOLTE AO DATA CENTER", completed, animate)
 
 
 func start_breaker_followup() -> void:
 	var current_player := get_parent() as Player
 	if current_player == null:
 		return
-	_connect_thought_balloon()
 	var state: Dictionary = SaveGame.office_mission_state(current_player)
 	if bool(state.get("data_center_return_task_active", false)):
 		if not bool(state.get("data_center_return_task_completed", false)):
-			show_return_to_data_center_task(false)
+			mostrar_tarefa_voltar_data_center(false)
 		return
 	state["data_center_return_task_pending"] = false
 	state["data_center_return_task_active"] = true
 	state["data_center_return_task_completed"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
-	show_return_to_data_center_task(false)
+	mostrar_tarefa_voltar_data_center(false)
 	_queue_breaker_followup_thoughts(current_player)
 
 
-func _connect_thought_balloon() -> void:
-	var current_player := get_parent() as Player
-	if current_player == null:
-		return
-	var balloon := current_player.get_node_or_null("BalaoDePensamento")
-	if balloon == null:
-		return
-	if not balloon.pensamento_finalizado.is_connected(_on_thought_finished):
-		balloon.pensamento_finalizado.connect(_on_thought_finished)
+func _ao_terminar_exibicao() -> void:
+	if _painel_dinamico_ativado and visibilidade_desejada and not oculto_no_elevador:
+		_ocultar_painel_suavemente()
 
 
 func _queue_breaker_followup_thoughts(current_player: Player) -> void:
@@ -736,19 +722,19 @@ func _activate_return_to_data_center_task() -> void:
 	state["data_center_return_task_completed"] = already_arrived
 	SaveGame.save_global_state("hall_quest_01", state)
 	if already_arrived and _data_center_scientist_talk_pending(state):
-		show_return_and_scientist_talk_tasks()
+		mostrar_tarefas_retorno_e_cientista()
 	else:
-		show_return_to_data_center_task(already_arrived, already_arrived)
+		mostrar_tarefa_voltar_data_center(already_arrived, already_arrived)
 	if current_player.checkpoint_enabled:
 		SaveGame.create_checkpoint(current_player)
 
 
-func show_data_center_card_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(7, "ENTREGUE O CARTÃO AO CIENTISTA", completed, animate)
+func mostrar_tarefa_cartao_data_center(completed: bool = false, animate: bool = false) -> void:
+	_mostrar_tarefa_unica_data_center(7, "ENTREGUE O CARTÃO AO CIENTISTA", completed, animate)
 
 
-func show_data_center_power_talk_task() -> void:
-	_show_single_data_center_task(7, "FALE COM O CIENTISTA", false, false)
+func mostrar_tarefa_conversa_energia() -> void:
+	_mostrar_tarefa_unica_data_center(7, "FALE COM O CIENTISTA", false, false)
 
 
 func _data_center_scientist_talk_pending(state: Dictionary) -> bool:
@@ -759,124 +745,124 @@ func _data_center_scientist_talk_pending(state: Dictionary) -> bool:
 	)
 
 
-func show_return_and_scientist_talk_tasks() -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 6 or index == 7)
-	set_task_text(6, "VOLTE AO DATA CENTER")
-	set_task_completed(6, true)
-	set_task_text(7, "FALE COM O CIENTISTA")
-	set_task_completed(7, false)
-	set_panel_visible(true)
+func mostrar_tarefas_retorno_e_cientista() -> void:
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 6 or index == 7)
+	definir_texto_tarefa(6, "VOLTE AO DATA CENTER")
+	definir_tarefa_concluida(6, true)
+	definir_texto_tarefa(7, "FALE COM O CIENTISTA")
+	definir_tarefa_concluida(7, false)
+	definir_painel_visivel(true)
 
 
-func show_data_center_access_intro_tasks(
+func mostrar_tarefas_intro_acesso_data_center(
 	card_dialog_finished: bool,
 	plan_finished: bool,
 	npc_arrived: bool
 ) -> void:
 	var access_started := plan_finished
-	for index in range(rows.size()):
-		set_task_visible(index, index == 7 or (index == 8 and card_dialog_finished) or (index == 9 and access_started))
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 7 or (index == 8 and card_dialog_finished) or (index == 9 and access_started))
 	if npc_arrived and access_started:
-		set_task_text(7, "ESCUTE O CIENTISTA")
-		set_task_text(8, "ACOMPANHE O CIENTISTA")
-		set_task_text(9, "ABRA A ÁREA RESTRITA")
-		set_task_completed(7, true)
-		set_task_completed(8, true)
-		set_task_completed(9, false)
+		definir_texto_tarefa(7, "ESCUTE O CIENTISTA")
+		definir_texto_tarefa(8, "ACOMPANHE O CIENTISTA")
+		definir_texto_tarefa(9, "ABRA A ÁREA RESTRITA")
+		definir_tarefa_concluida(7, true)
+		definir_tarefa_concluida(8, true)
+		definir_tarefa_concluida(9, false)
 	else:
-		set_task_text(7, "ENTREGUE O CARTÃO AO CIENTISTA")
-		set_task_completed(7, true)
+		definir_texto_tarefa(7, "ENTREGUE O CARTÃO AO CIENTISTA")
+		definir_tarefa_concluida(7, true)
 		if card_dialog_finished:
-			set_task_text(8, "ESCUTE O CIENTISTA")
-			set_task_completed(8, access_started)
+			definir_texto_tarefa(8, "ESCUTE O CIENTISTA")
+			definir_tarefa_concluida(8, access_started)
 		if access_started:
-			set_task_text(9, "ACOMPANHE O CIENTISTA")
-			set_task_completed(9, false)
-	set_panel_visible(true)
+			definir_texto_tarefa(9, "ACOMPANHE O CIENTISTA")
+			definir_tarefa_concluida(9, false)
+	definir_painel_visivel(true)
 
 
-func show_find_flashlight_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(8, "ENCONTRE UMA LANTERNA", completed, animate)
+func mostrar_tarefa_encontrar_lanterna(completed: bool = false, animate: bool = false) -> void:
+	_mostrar_tarefa_unica_data_center(8, "ENCONTRE UMA LANTERNA", completed, animate)
 
 
-func show_restore_breaker_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(10, "LIGUE O DISJUNTOR", completed, animate)
+func mostrar_tarefa_religar_disjuntor(completed: bool = false, animate: bool = false) -> void:
+	_mostrar_tarefa_unica_data_center(10, "LIGUE O DISJUNTOR", completed, animate)
 
 
-func show_go_to_fourth_floor_task(completed: bool = false, animate: bool = false) -> void:
-	_show_single_data_center_task(9, "VÁ PARA O QUARTO ANDAR", completed, animate)
+func mostrar_tarefa_ir_quarto_andar(completed: bool = false, animate: bool = false) -> void:
+	_mostrar_tarefa_unica_data_center(9, "VÁ PARA O QUARTO ANDAR", completed, animate)
 
 
-func show_rfid_reader_task(
+func mostrar_tarefa_leitor_rfid(
 	completed: bool = false,
 	animate: bool = false
 ) -> void:
 	var text := "VERIFIQUE O LEITOR RFID" if str(Configs.configs.get("job", "")) == "engenheiro_eletrico" else "REPROGRAME O CARTÃO RFID"
-	_show_single_data_center_task(12, text, completed, animate)
+	_mostrar_tarefa_unica_data_center(12, text, completed, animate)
 
 
-func show_rfid_repair_tasks(
+func mostrar_tarefas_reparo_rfid(
 	wires_repaired: bool = false,
 	reading_checked: bool = false,
 	animate_repair: bool = false
 ) -> void:
 	var engineer := str(Configs.configs.get("job", "")) == "engenheiro_eletrico"
 	if not engineer:
-		_show_single_data_center_task(12, "REPROGRAME O CARTÃO RFID", reading_checked, animate_repair)
+		_mostrar_tarefa_unica_data_center(12, "REPROGRAME O CARTÃO RFID", reading_checked, animate_repair)
 		return
-	for index in range(rows.size()):
-		set_task_visible(index, index == 11 or (index == 12 and (not engineer or wires_repaired)))
-	set_task_text(11, "RECONECTE OS CABOS")
-	set_task_completed(11, wires_repaired, animate_repair)
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 11 or (index == 12 and (not engineer or wires_repaired)))
+	definir_texto_tarefa(11, "RECONECTE OS CABOS")
+	definir_tarefa_concluida(11, wires_repaired, animate_repair)
 	if engineer:
 		if wires_repaired:
-			set_task_text(12, "ENTRE NO DATA CENTER")
-			set_task_completed(12, false)
-		set_panel_visible(true)
+			definir_texto_tarefa(12, "ENTRE NO DATA CENTER")
+			definir_tarefa_concluida(12, false)
+		definir_painel_visivel(true)
 		return
-	set_task_text(12, "VERIFIQUE A LEITURA RFID")
-	set_task_completed(12, reading_checked)
-	set_panel_visible(true)
+	definir_texto_tarefa(12, "VERIFIQUE A LEITURA RFID")
+	definir_tarefa_concluida(12, reading_checked)
+	definir_painel_visivel(true)
 
 
-func show_data_center_power_tasks(
+func mostrar_tarefas_energia_data_center(
 	flashlight_completed: bool = false,
 	fourth_floor_completed: bool = false,
 	breaker_completed: bool = false,
 	animate_fourth_floor: bool = false
 ) -> void:
-	for index in range(rows.size()):
-		set_task_visible(index, index == 6 or index == 8 or index == 9 or index == 10)
-	set_task_text(6, "VÁ PARA O SEXTO ANDAR")
-	set_task_completed(6, true)
-	set_task_text(8, "ENCONTRE UMA LANTERNA")
-	set_task_completed(8, flashlight_completed)
-	set_task_text(9, "VÁ PARA O QUARTO ANDAR")
-	set_task_completed(9, fourth_floor_completed, animate_fourth_floor)
-	set_task_text(10, "LIGUE O DISJUNTOR")
-	set_task_completed(10, breaker_completed)
-	set_panel_visible(true)
+	for index in range(linhas.size()):
+		definir_tarefa_visivel(index, index == 6 or index == 8 or index == 9 or index == 10)
+	definir_texto_tarefa(6, "VÁ PARA O SEXTO ANDAR")
+	definir_tarefa_concluida(6, true)
+	definir_texto_tarefa(8, "ENCONTRE UMA LANTERNA")
+	definir_tarefa_concluida(8, flashlight_completed)
+	definir_texto_tarefa(9, "VÁ PARA O QUARTO ANDAR")
+	definir_tarefa_concluida(9, fourth_floor_completed, animate_fourth_floor)
+	definir_texto_tarefa(10, "LIGUE O DISJUNTOR")
+	definir_tarefa_concluida(10, breaker_completed)
+	definir_painel_visivel(true)
 
 
-func _show_single_data_center_task(
+func _mostrar_tarefa_unica_data_center(
 	index: int,
 	text: String,
 	completed: bool,
 	animate: bool
 ) -> void:
-	for row_index in range(rows.size()):
-		set_task_visible(row_index, row_index == index)
-	set_task_text(index, text)
-	set_task_completed(index, completed, animate)
-	set_panel_visible(true)
+	for row_index in range(linhas.size()):
+		definir_tarefa_visivel(row_index, row_index == index)
+	definir_texto_tarefa(index, text)
+	definir_tarefa_concluida(index, completed, animate)
+	definir_painel_visivel(true)
 
 
-func refresh_saved_state() -> void:
+func restaurar_estado_salvo() -> void:
 	var current_player := get_parent() as Player
 	var state: Dictionary = SaveGame.office_mission_state(current_player)
 	if bool(state.get("engineer_ending_started", false)):
-		show_engineer_ending_tasks(int(state.get("engineer_completed_count", 0)))
+		mostrar_tarefas_final_engenheiro(int(state.get("engineer_completed_count", 0)))
 		return
 	var unlocked := bool(state.get("elevator_third_floor_unlocked", false))
 	var arrived := bool(state.get("arrived_third_floor", false))
@@ -921,54 +907,53 @@ func refresh_saved_state() -> void:
 			programmer_completed = 2
 		elif bool(state.get("programmer_launch_isolated", false)):
 			programmer_completed = 1
-		show_programmer_ending_tasks(programmer_completed)
+		mostrar_tarefas_final_programador(programmer_completed)
 		return
 	if return_task_pending and current_player != null:
-		_connect_thought_balloon()
 		_activate_return_to_data_center_task()
 		_queue_breaker_followup_thoughts(current_player)
 		return
 	if return_task_active and not return_task_completed:
-		show_return_to_data_center_task(false)
+		mostrar_tarefa_voltar_data_center(false)
 	elif card_delivered and breaker_completed and _data_center_scientist_talk_pending(state):
 		if return_task_completed:
-			show_return_and_scientist_talk_tasks()
+			mostrar_tarefas_retorno_e_cientista()
 		else:
-			show_data_center_power_talk_task()
+			mostrar_tarefa_conversa_energia()
 	elif bool(state.get("data_center_power_outage", false)) and not breaker_completed:
 		if not bool(state.get("data_center_power_dialog_finished", false)) and (
 			str(state.get("data_center_outage_phase", "")) == "before"
 			or not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty()
 		):
-			show_data_center_power_talk_task()
+			mostrar_tarefa_conversa_energia()
 		else:
-			show_data_center_power_tasks(flashlight_completed, tools_floor_task_completed, false)
+			mostrar_tarefas_energia_data_center(flashlight_completed, tools_floor_task_completed, false)
 	elif rfid_wires_task_active or rfid_wires_repaired or bool(state.get("data_center_rfid_reader_rechecked", false)):
-		show_rfid_repair_tasks(rfid_wires_repaired, rfid_reading_checked)
+		mostrar_tarefas_reparo_rfid(rfid_wires_repaired, rfid_reading_checked)
 	elif rfid_inspection_task_active or old_decryption_task_active:
-		show_rfid_reader_task(false)
+		mostrar_tarefa_leitor_rfid(false)
 	elif card_delivered and (breaker_completed or not bool(state.get("data_center_power_outage", false))):
-		show_data_center_access_intro_tasks(
+		mostrar_tarefas_intro_acesso_data_center(
 			bool(state.get("data_center_card_dialog_finished", false)),
 			bool(state.get("data_center_access_plan_finished", false)),
 			bool(state.get("data_center_access_npc_arrived", false))
 		)
 	elif tools_floor_task_active:
-		show_data_center_power_tasks(
+		mostrar_tarefas_energia_data_center(
 			flashlight_completed,
 			tools_floor_task_completed,
 			breaker_completed
 		)
 	elif data_center_task_active:
-		show_go_to_sixth_floor_task(data_center_task_completed)
+		mostrar_tarefa_ir_sexto_andar(data_center_task_completed)
 	elif data_center_task_pending:
-		show_go_to_sixth_floor_task(data_center_task_completed)
+		mostrar_tarefa_ir_sexto_andar(data_center_task_completed)
 	elif unlocked:
-		set_task_completed(0, true)
-		set_task_completed(1, true)
-		set_task_completed(2, true)
+		definir_tarefa_concluida(0, true)
+		definir_tarefa_concluida(1, true)
+		definir_tarefa_concluida(2, true)
 		if laptop_collected or cable_collected:
-			show_boss_room_and_cable_tasks(
+			mostrar_tarefas_sala_chefe_e_cabo(
 				boss_room_access_found,
 				laptop_collected if find_laptop else cable_collected,
 				false,
@@ -979,25 +964,25 @@ func refresh_saved_state() -> void:
 				find_laptop
 			)
 		elif dialog_finished:
-			show_find_boss_room_access_task(boss_room_access_found)
+			mostrar_tarefa_acesso_sala_chefe(boss_room_access_found)
 		elif npc_ready:
-			show_talk_to_npc_task(false)
+			mostrar_tarefa_falar_com_npc(false)
 		else:
-			show_only_third_floor_task(arrived)
+			mostrar_apenas_tarefa_terceiro_andar(arrived)
 	else:
-		set_task_visible(3, false)
-		set_task_visible(4, false)
-		set_task_visible(5, false)
-		set_task_visible(6, false)
-		set_task_visible(11, false)
-		set_task_visible(12, false)
+		definir_tarefa_visivel(3, false)
+		definir_tarefa_visivel(4, false)
+		definir_tarefa_visivel(5, false)
+		definir_tarefa_visivel(6, false)
+		definir_tarefa_visivel(11, false)
+		definir_tarefa_visivel(12, false)
 	_sync_optional_cooling_row()
-	if rows[COOLING_TASK_INDEX].visible:
-		set_panel_visible(true)
+	if linhas[COOLING_TASK_INDEX].visible:
+		definir_painel_visivel(true)
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_PAUSED:
 		hide()
-	elif what == NOTIFICATION_UNPAUSED and is_node_ready() and not hidden_for_elevator:
-		restore_after_elevator()
+	elif what == NOTIFICATION_UNPAUSED and is_node_ready() and not oculto_no_elevador:
+		restaurar_apos_elevador()

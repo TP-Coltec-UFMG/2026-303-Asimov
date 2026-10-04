@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="3"]
 
 [sub_resource type="StyleBoxFlat" id="PanelStyle"]
+resource_local_to_scene = true
 bg_color = Color(0.025, 0.035, 0.045, 0.96)
 border_width_left = 2
 border_width_top = 2

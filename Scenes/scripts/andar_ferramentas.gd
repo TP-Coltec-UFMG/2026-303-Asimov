@@ -13,7 +13,7 @@ func _configurar_missao_do_data_center() -> void:
 	if bool(state.get("data_center_tools_floor_task_active", false)):
 		var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 		if quest_ui != null:
-			quest_ui.show_data_center_power_tasks(
+			quest_ui.mostrar_tarefas_energia_data_center(
 				player.inventory.get_item_on_inventary("lanterna"),
 				bool(state.get("data_center_tools_floor_task_completed", false)),
 				bool(state.get("data_center_breaker_restored", false))

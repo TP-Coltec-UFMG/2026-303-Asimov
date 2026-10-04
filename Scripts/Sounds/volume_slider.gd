@@ -5,7 +5,6 @@ var bus_index: int = -1
 
 
 func _ready() -> void:
-	value_changed.connect(_on_value_changed)
 
 	if bus_name == "Master":
 		bus_index = AudioServer.get_bus_index("Master")

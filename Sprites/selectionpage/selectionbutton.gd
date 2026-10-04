@@ -41,7 +41,7 @@ func _on_mouse_exited() -> void:
 		modulate.a = 0.8
 
 
-func _on_pressed() -> void:
+func _ao_pressionar() -> void:
 	if not selected:
 		selected = true
 		control.option_selected = button

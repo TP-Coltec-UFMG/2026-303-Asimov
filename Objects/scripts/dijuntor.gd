@@ -105,7 +105,7 @@ func _registrar_energia_restaurada() -> void:
 	MusicController._stop_power_outage_audio()
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_data_center_power_tasks(
+		quest_ui.mostrar_tarefas_energia_data_center(
 			true,
 			bool(state.get("data_center_tools_floor_task_completed", false)),
 			true

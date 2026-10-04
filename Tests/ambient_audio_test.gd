@@ -209,8 +209,8 @@ func _run() -> void:
 	_expect(main_menu.get_node_or_null("Accessibility/VContainer/MovimentoCamera") is CheckBox, "O menu principal precisa exibir a opção de movimento de câmera.")
 	_expect(pause_menu.get_node_or_null("Accessibility/VContainer/MovimentoCamera") is CheckBox, "O menu de pausa precisa exibir a opção de movimento de câmera.")
 	_expect(main_menu.get_node_or_null("EndingReturnFade/Black") is ColorRect, "O retorno do final precisa ter um fade de entrada próprio.")
-	var ending_return_animation := main_menu.get_node_or_null("EndingReturnFade/AnimationPlayer") as AnimationPlayer
-	_expect(ending_return_animation != null and ending_return_animation.has_animation(&"ending_return_fade_in"), "O fade de entrada do menu precisa estar configurado no AnimationPlayer.")
+	var animacao_retorno_final := main_menu.get_node_or_null("EndingReturnFade/AnimationPlayer") as AnimationPlayer
+	_expect(animacao_retorno_final != null and animacao_retorno_final.has_animation(&"ending_return_fade_in"), "O fade de entrada do menu precisa estar configurado no AnimationPlayer.")
 	var strong_data_center_scene := load("res://Scenes/data_center_forte.tscn") as PackedScene
 	var strong_data_center := strong_data_center_scene.instantiate()
 	_expect(strong_data_center.get_node_or_null("ProgrammerEnding/Audio/FinalResolution") == null, "O encerramento não pode iniciar uma segunda música.")

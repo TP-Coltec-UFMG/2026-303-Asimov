@@ -1,27 +1,23 @@
 extends Control
 
-@onready var transition: AnimatedSprite2D = $Transition
-@onready var panel_container: PanelContainer = $PanelContainer
+@onready var transicao: AnimatedSprite2D = $Transition
+@onready var painel_menu: PanelContainer = $PanelContainer
 @export var player : Player
 
 const AJUSTE_LABEL_GRANDE: float = 6.0
 const GRUPO_INTERFACE: String = "interface_escalavel"
 
-var audio_state_before_pause: Dictionary = {}
+var estado_audio_antes_pausa: Dictionary = {}
 
 
 func _ready() -> void:
 	HighContrast.apply_to_tree(self)
 	SaveLoad._load()
-	var interface_index: int = int(Configs.configs.get("interface_size", 0))
-	call_deferred("aplicar_tamanho_interface_por_index", interface_index)
+	var indice_interface: int = int(Configs.configs.get("interface_size", 0))
+	call_deferred("aplicar_tamanho_interface_por_index", indice_interface)
 	$AnimationPlayer.play("RESET")
 	hide()
-	var transparent_panel := StyleBoxEmpty.new()
-	$PanelContainer.add_theme_stylebox_override(
-		"panel",
-		transparent_panel
-	)
+
 
 
 func obter_fator_interface(index: int) -> float:
@@ -39,12 +35,12 @@ func aplicar_tamanho_interface_por_index(index: int) -> void:
 	var fator: float = obter_fator_interface(index)
 	aplicar_tamanho_interface(self, fator, index)
 
-func aplicar_tamanho_interface(node: Node, fator: float, interface_index: int) -> void:
+func aplicar_tamanho_interface(node: Node, fator: float, indice_interface: int) -> void:
 	salvar_valores_originais(node)
-	aplicar_escala_node(node, fator, interface_index)
+	aplicar_escala_node(node, fator, indice_interface)
 
 	for child in node.get_children():
-		aplicar_tamanho_interface(child, fator, interface_index)
+		aplicar_tamanho_interface(child, fator, indice_interface)
 
 func salvar_valores_originais(node: Node) -> void:
 	if node.has_meta("valores_salvos"):
@@ -128,7 +124,7 @@ func salvar_valores_originais(node: Node) -> void:
 
 	node.set_meta("valores_salvos", true)
 
-func aplicar_escala_node(node: Node, fator: float, interface_index: int) -> void:
+func aplicar_escala_node(node: Node, fator: float, indice_interface: int) -> void:
 	if node is OptionButton:
 		var option_button := node as OptionButton
 
@@ -190,7 +186,7 @@ func aplicar_escala_node(node: Node, fator: float, interface_index: int) -> void
 			button.position = nova_posicao
 
 		if button.has_meta("base_expand_icon"):
-			if interface_index == 2:
+			if indice_interface == 2:
 				if node.is_in_group("Botoes_Controles"):
 					button.expand_icon = false
 				else:
@@ -208,7 +204,7 @@ func aplicar_escala_node(node: Node, fator: float, interface_index: int) -> void
 			var novo_font_size: int = int(round(base_font_size * fator))
 			var diferenca_fonte: int = novo_font_size - base_font_size
 
-			if interface_index == 2 and esta_dentro_do_logo(label):
+			if indice_interface == 2 and esta_dentro_do_logo(label):
 				novo_font_size = base_font_size
 				diferenca_fonte = 0
 
@@ -217,7 +213,7 @@ func aplicar_escala_node(node: Node, fator: float, interface_index: int) -> void
 			var nova_posicao: Vector2 = label.position
 			nova_posicao.y = base_position_y - diferenca_fonte
 
-			if interface_index == 2 and not esta_dentro_do_logo(label):
+			if indice_interface == 2 and not esta_dentro_do_logo(label):
 				nova_posicao.y -= AJUSTE_LABEL_GRANDE
 
 			label.position = nova_posicao
@@ -293,22 +289,22 @@ func esta_dentro_do_logo(node: Node) -> bool:
 
 	
 
-func resume():
+func continuar():
 	get_tree().paused = false
 	MusicController.resume_all_audio()
-	audio_state_before_pause.clear()
+	estado_audio_antes_pausa.clear()
 	$AnimationPlayer.play_backwards("blur")
 	hide()
 
 
-func pause():
+func pausar():
 	if get_tree().has_group("opening_gameplay_blur"):
 		return
 	var current_player := get_tree().get_first_node_in_group("player") as Player
 	if is_instance_valid(current_player) and current_player.npc_warning_active:
 		return
 
-	audio_state_before_pause = (
+	estado_audio_antes_pausa = (
 		MusicController.get_checkpoint_state().duplicate(true)
 	)
 	MusicController.pause_all_audio()
@@ -325,45 +321,45 @@ func _unhandled_input(event: InputEvent) -> void:
 		if DialogManager.is_showing_dialog:
 			return
 		if get_tree().paused:
-			resume()
+			continuar()
 		else:
-			pause()
+			pausar()
 
 		get_viewport().set_input_as_handled()
 
 
-func _on_resume_pressed() -> void:
+func _ao_pressionar_continuar() -> void:
 	if get_tree().paused:
-		resume()
+		continuar()
 
 
-func _on_restart_pressed() -> void:
+func _ao_pressionar_reiniciar() -> void:
 	if get_tree().paused:
-		resume()
+		continuar()
 
 		SaveGame.load_last_checkpoint()
 
 
-func _on_options_pressed() -> void:
+func _ao_pressionar_opcoes() -> void:
 	if get_tree().paused:
-		transition.show()
-		transition.play("default")
+		transicao.show()
+		transicao.play("default")
 
 		$PanelContainer.visible = false
 		$Opcoes.visible = true
 		$BackgroundMenuOptions.visible = true
-		transition.play_backwards("default")
+		transicao.play_backwards("default")
 	pass	
 
 
-func _on_quit_pressed() -> void:
+func _ao_pressionar_sair() -> void:
 	if get_tree().paused:
 
-		SaveGame.save_current_session(audio_state_before_pause)
+		SaveGame.save_current_session(estado_audio_antes_pausa)
 		MusicController.pause_all_audio()
-		transition.visible = true
-		transition.play("default")
-		await transition.animation_finished
+		transicao.visible = true
+		transicao.play("default")
+		await transicao.animation_finished
 
 		var scene_tree := get_tree()
 		var erro := scene_tree.change_scene_to_file(
@@ -372,7 +368,7 @@ func _on_quit_pressed() -> void:
 
 		if erro != OK:
 			MusicController.allow_scene_audio()
-			resume()
+			continuar()
 			push_error("Não foi possível voltar ao menu principal.")
 			return
 
@@ -380,77 +376,77 @@ func _on_quit_pressed() -> void:
 		MusicController.pause_all_audio()
 
 
-func _on_back_to_menu_button_pressed() -> void:
+func _ao_voltar_menu() -> void:
 	SaveLoad.save_data = Configs.configs
 	SaveLoad._save()
-	transition.play("default")
-	await transition.animation_finished
+	transicao.play("default")
+	await transicao.animation_finished
 	$PanelContainer.visible = true
 	$ColorRect.visible = true
 	$Opcoes.visible = false
 	$BackgroundMenuOptions.visible = false
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
-func _on_menu_sounds_settings_pressed() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_abrir_configuracoes_som() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = false
 	$SettingSound.visible = true
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
-func _on_menu_controllers_pressed() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_abrir_controles() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = false
 	$Controles.visible = true
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
-func _on_menu_interface_pressed() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_abrir_interface() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = false
 	$Interface.visible = true
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
-func _on_menu_acessibilidadades_pressed() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_abrir_acessibilidade() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = false
 	$Accessibility.visible = true
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
 
 
-func _on_back_to_menu_button_pressed_on_settings_sounds() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_voltar_configuracoes_som() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = true
 	$SettingSound.visible = false
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
 
-func _on_back_to_menu_button_pressed_on_interface_menu() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_voltar_configuracoes_interface() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = true
 	$Interface.visible = false
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
-func _on_options_interface_size_item_selected(index: int) -> void:
+func _ao_escolher_tamanho_interface(index: int) -> void:
 	aplicar_tamanho_interface_por_index(index)
 
 
-func _on_back_to_menu_button_pressed_on_acessibility() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_voltar_acessibilidade() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = true
 	$Accessibility.visible = false
-	transition.play_backwards("default")
+	transicao.play_backwards("default")
 
 
-func _on_back_to_menu_button_pressed_controles() -> void:
-	transition.play("default")
-	await transition.animation_finished
+func _ao_voltar_controles() -> void:
+	transicao.play("default")
+	await transicao.animation_finished
 	$Opcoes.visible = true
 	$Controles.visible = false
-	transition.play_backwards("default")
+	transicao.play_backwards("default")

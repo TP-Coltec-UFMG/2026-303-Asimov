@@ -440,7 +440,7 @@ func _mostrar_progresso_tarefas(
 	animar_ultima: bool = false
 ) -> void:
 	if is_instance_valid(painel_tarefas):
-		painel_tarefas.show_standalone_task_sequence(
+		painel_tarefas.mostrar_sequencia_tarefas_isoladas(
 			TAREFAS_RFID,
 			concluidas,
 			animar_ultima

@@ -2,7 +2,7 @@ extends Button
 
 @export var action: String
 @export var index: int = 0
-@export var action_name: String = "UP"
+@export var nome_acao: String = "UP"
 
 var esperando_input: bool = false
 
@@ -14,9 +14,9 @@ func _ready() -> void:
 
 
 
-func _on_pressed() -> void:
+func _ao_pressionar() -> void:
 	esperando_input = true
-	text = action_name + ": Aguardando entrada"
+	text = nome_acao + ": Aguardando entrada"
 	release_focus()
 
 
@@ -72,7 +72,7 @@ func remapear(novo_input: InputEvent) -> void:
 
 func atualizar_texto() -> void:
 	if !InputMap.has_action(action):
-		text = action_name + ": Sem ação"
+		text = nome_acao + ": Sem ação"
 		return
 
 
@@ -80,7 +80,7 @@ func atualizar_texto() -> void:
 
 
 	if index >= eventos.size():
-		text = action_name + ": Não registrado"
+		text = nome_acao + ": Não registrado"
 		return
 
 
@@ -105,4 +105,4 @@ func atualizar_texto() -> void:
 		tecla_texto = input.as_text()
 
 
-	text = action_name + ": " + tecla_texto
+	text = nome_acao + ": " + tecla_texto

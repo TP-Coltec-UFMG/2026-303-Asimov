@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/UI/menu_input_router.gd" id="roteador"]
+
+[sub_resource type="StyleBoxFlat" id="EstiloIndicador"]
+bg_color = Color(0.07, 0.07, 0.065, 0.96)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="FocoTeclado"]
+resource_local_to_scene = true
+bg_color = Color(0, 0, 0, 0)
+border_color = Color(1, 0.82, 0.4, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+
+[sub_resource type="StyleBoxEmpty" id="FocoMouse"]
+
+[node name="MenuInputRouter" type="Node"]
+process_mode = 3
+script = ExtResource("roteador")
+_estilo_foco_teclado = SubResource("FocoTeclado")
+_estilo_foco_mouse = SubResource("FocoMouse")
+
+[node name="InputModeIndicatorLayer" type="CanvasLayer" parent="."]
+visible = false
+layer = 100
+
+[node name="InputModeIndicator" type="PanelContainer" parent="InputModeIndicatorLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -76.0
+offset_top = 6.0
+offset_right = -48.0
+offset_bottom = 34.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("EstiloIndicador")
+
+[node name="Icone" type="TextureRect" parent="InputModeIndicatorLayer/InputModeIndicator"]
+layout_mode = 2
+custom_minimum_size = Vector2(18, 18)
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

@@ -144,7 +144,7 @@ func _descartar_instrucoes_obsoletas() -> void:
 func _atualizar_visibilidade() -> void:
 	if not is_inside_tree() or is_queued_for_deletion() or not _inicializado or not is_instance_valid(quest_ui):
 		return
-	quest_ui.set_panel_visible(true)
+	quest_ui.definir_painel_visivel(true)
 
 
 func _on_pensamento_iniciado(id: String) -> void:
@@ -214,21 +214,21 @@ func _liberar_elevador_terceiro() -> void:
 
 
 func _atualizar_tarefa_terceiro() -> void:
-	quest_ui.set_task_text(3, "IR PARA O TERCEIRO ANDAR")
-	quest_ui.show_only_third_floor_task(_chegou_terceiro_andar)
+	quest_ui.definir_texto_tarefa(3, "IR PARA O TERCEIRO ANDAR")
+	quest_ui.mostrar_apenas_tarefa_terceiro_andar(_chegou_terceiro_andar)
 
 
 func _atualizar_linhas_tarefas() -> void:
 	if _elevador_terceiro_liberado:
 		_atualizar_tarefa_terceiro()
 		return
-	quest_ui.set_task_visible(0, true)
-	quest_ui.set_task_visible(1, true)
-	quest_ui.set_task_visible(2, _hide_scheduled)
+	quest_ui.definir_tarefa_visivel(0, true)
+	quest_ui.definir_tarefa_visivel(1, true)
+	quest_ui.definir_tarefa_visivel(2, _hide_scheduled)
 	if _hide_scheduled:
-		quest_ui.set_task_text(2, "ESPERE TODO MUNDO SAIR")
-		quest_ui.set_task_completed(2, _todos_sairam)
-	quest_ui.set_task_visible(3, false)
+		quest_ui.definir_texto_tarefa(2, "ESPERE TODO MUNDO SAIR")
+		quest_ui.definir_tarefa_concluida(2, _todos_sairam)
+	quest_ui.definir_tarefa_visivel(3, false)
 
 
 func _instanciar_indicador_final() -> void:
@@ -294,7 +294,7 @@ func _physics_process(delta: float) -> void:
 		_tentar_finalizar_missao()
 		return
 	M2_feito = clear
-	quest_ui.set_task_completed(1, clear, clear)
+	quest_ui.definir_tarefa_concluida(1, clear, clear)
 	get_parent().get_node("ElevatorRoute").set_guidance_visible(M1_feito and not clear)
 	if clear and M1_feito:
 		_clear_objective_highlights()
@@ -320,7 +320,7 @@ func _update_fire_task() -> void:
 		return
 
 	M1_feito = true
-	quest_ui.set_task_completed(0, true, true)
+	quest_ui.definir_tarefa_concluida(0, true, true)
 	_highlight_hall_objectives()
 
 	if not M2_feito:
@@ -393,12 +393,12 @@ func _start_npc_exit_paths(legacy_restore: bool = false) -> void:
 
 
 func _iniciar_espera_npcs() -> void:
-	quest_ui.set_task_visible(2, true)
+	quest_ui.definir_tarefa_visivel(2, true)
 	if _todos_sairam:
 		_concluir_saida_depois_da_animacao(null)
 		return
-	quest_ui.set_task_text(2, "ESPERE TODO MUNDO SAIR")
-	quest_ui.set_task_completed(2, false)
+	quest_ui.definir_texto_tarefa(2, "ESPERE TODO MUNDO SAIR")
+	quest_ui.definir_tarefa_concluida(2, false)
 	var npcs := get_node_or_null("../NPCs")
 	_saida_pendente = 0
 	_evacuacao_ativa = true
@@ -429,8 +429,8 @@ func _concluir_saida_npcs() -> void:
 		return
 	_todos_sairam = true
 	_evacuacao_ativa = false
-	quest_ui.set_task_completed(2, true, true)
-	_concluir_saida_depois_da_animacao(quest_ui.markers[2])
+	quest_ui.definir_tarefa_concluida(2, true, true)
+	_concluir_saida_depois_da_animacao(quest_ui.marcadores[2])
 
 
 func _concluir_saida_depois_da_animacao(marcador: AnimatedSprite2D) -> void:
@@ -533,7 +533,7 @@ func _is_saved_fire_extinguished(fire_save_id: String) -> bool:
 
 
 func _apply_saved_visuals() -> void:
-	quest_ui.set_task_completed(0, M1_feito)
-	quest_ui.set_task_completed(1, M2_feito)
-	quest_ui.set_task_completed(2, _todos_sairam)
-	quest_ui.set_task_completed(3, _chegou_terceiro_andar)
+	quest_ui.definir_tarefa_concluida(0, M1_feito)
+	quest_ui.definir_tarefa_concluida(1, M2_feito)
+	quest_ui.definir_tarefa_concluida(2, _todos_sairam)
+	quest_ui.definir_tarefa_concluida(3, _chegou_terceiro_andar)

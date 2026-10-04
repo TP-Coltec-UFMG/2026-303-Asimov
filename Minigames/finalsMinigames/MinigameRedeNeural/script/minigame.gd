@@ -629,7 +629,7 @@ func _avaliar(player_agrees: bool) -> void:
 	_flash_focus_path(foco, bool(current_q["ok"]))
 
 	if answered == 1 and not weights_panel.visible:
-		_reveal_panel()
+		_revelar_painel()
 
 	_update_bars()
 	for key in PARAM_KEYS:
@@ -653,7 +653,7 @@ func _is_complete() -> bool:
 	return true
 
 
-func _reveal_panel() -> void:
+func _revelar_painel() -> void:
 	if intro_panel.visible:
 		var intro_tween: Tween = create_tween()
 		intro_tween.tween_property(intro_panel, "modulate:a", 0.0, 0.28)

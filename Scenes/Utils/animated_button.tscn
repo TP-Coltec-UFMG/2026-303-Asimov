@@ -12,3 +12,10 @@ offset_bottom = 9.0
 theme_override_fonts/font = ExtResource("1_qsou7")
 flat = true
 script = ExtResource("1_1a68j")
+
+[connection signal="pressed" from="." to="." method="_ao_pressionar_botao"]
+[connection signal="mouse_entered" from="." to="." method="_ao_destacar_botao"]
+[connection signal="mouse_exited" from="." to="." method="_ao_remover_destaque_botao"]
+[connection signal="focus_entered" from="." to="." method="_ao_destacar_botao"]
+[connection signal="focus_exited" from="." to="." method="_ao_remover_destaque_botao"]
+[connection signal="resized" from="." to="." method="atualizar_pivo"]

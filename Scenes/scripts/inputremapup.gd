@@ -3,7 +3,7 @@ class_name InputRemapButton
 
 signal remap_conflict(message: String)
 
-const CONTEXT_ACTIONS: PackedStringArray = [
+const ACOES_CONTEXTUAIS: PackedStringArray = [
 	"fire",
 	"acende_lanterna",
 	"usar_extintor"
@@ -12,7 +12,7 @@ const CONTEXT_ACTIONS: PackedStringArray = [
 
 @export var action: String
 @export var index: int = 0
-@export var action_name: String = "UP"
+@export var nome_acao: String = "UP"
 
 
 var esperando_input: bool = false
@@ -23,9 +23,9 @@ func _ready() -> void:
 
 
 
-func _on_pressed() -> void:
+func _ao_pressionar() -> void:
 	esperando_input = true
-	text = action_name + "  [...]"
+	text = nome_acao + "  [...]"
 	release_focus()
 
 
@@ -75,12 +75,12 @@ func remapear(novo_input: InputEvent) -> void:
 	elif input_salvo is InputEventJoypadButton:
 		(input_salvo as InputEventJoypadButton).pressed = false
 
-	var unchanged := index < eventos.size() and _events_match(eventos[index], input_salvo)
+	var unchanged := index < eventos.size() and _entradas_correspondem(eventos[index], input_salvo)
 	if not unchanged:
-		var conflicts := _find_conflicts(input_salvo)
+		var conflicts := _encontrar_conflitos(input_salvo)
 		if not conflicts.is_empty():
 			remap_conflict.emit(
-				"AVISO: %s também usa %s" % [", ".join(conflicts), _get_input_text(input_salvo)]
+				"AVISO: %s também usa %s" % [", ".join(conflicts), _obter_texto_entrada(input_salvo)]
 			)
 
 	InputMap.action_erase_events(action)
@@ -111,27 +111,27 @@ func remapear(novo_input: InputEvent) -> void:
 	grab_focus()
 
 
-func _find_conflicts(input_event: InputEvent) -> PackedStringArray:
+func _encontrar_conflitos(input_event: InputEvent) -> PackedStringArray:
 	var conflicts := PackedStringArray()
 	for node: Node in get_tree().get_nodes_in_group(&"Botoes_Controles"):
 		var other := node as InputRemapButton
 		if other == null or other == self or other.action == action:
 			continue
-		if _is_allowed_context_pair(action, other.action):
+		if _par_contextual_permitido(action, other.action):
 			continue
 		for existing: InputEvent in InputMap.action_get_events(other.action):
-			if _events_match(existing, input_event):
-				if not conflicts.has(other.action_name):
-					conflicts.append(other.action_name)
+			if _entradas_correspondem(existing, input_event):
+				if not conflicts.has(other.nome_acao):
+					conflicts.append(other.nome_acao)
 				break
 	return conflicts
 
 
-func _is_allowed_context_pair(first: String, second: String) -> bool:
-	return CONTEXT_ACTIONS.has(first) and CONTEXT_ACTIONS.has(second)
+func _par_contextual_permitido(first: String, second: String) -> bool:
+	return ACOES_CONTEXTUAIS.has(first) and ACOES_CONTEXTUAIS.has(second)
 
 
-func _events_match(first: InputEvent, second: InputEvent) -> bool:
+func _entradas_correspondem(first: InputEvent, second: InputEvent) -> bool:
 	if first is InputEventKey and second is InputEventKey:
 		var first_key := first as InputEventKey
 		var second_key := second as InputEventKey
@@ -156,7 +156,7 @@ func _events_match(first: InputEvent, second: InputEvent) -> bool:
 
 func atualizar_texto() -> void:
 	if !InputMap.has_action(action):
-		text = action_name + "  [SEM AÇÃO]"
+		text = nome_acao + "  [SEM AÇÃO]"
 		return
 
 
@@ -164,16 +164,16 @@ func atualizar_texto() -> void:
 
 
 	if index >= eventos.size():
-		text = action_name + "  [NÃO DEFINIDO]"
+		text = nome_acao + "  [NÃO DEFINIDO]"
 		return
 
 
 	var input := eventos[index]
-	var tecla_texto := _get_input_text(input)
-	text = action_name + "  [" + tecla_texto + "]"
+	var tecla_texto := _obter_texto_entrada(input)
+	text = nome_acao + "  [" + tecla_texto + "]"
 
 
-func _get_input_text(input: InputEvent) -> String:
+func _obter_texto_entrada(input: InputEvent) -> String:
 	if input is InputEventKey:
 		var key_input := input as InputEventKey
 

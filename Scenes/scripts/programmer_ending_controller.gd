@@ -622,7 +622,7 @@ func _update_flow_from_state(animate_latest: bool = false) -> void:
 	var completed_count := _completed_task_count(state)
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_programmer_ending_tasks(completed_count, animate_latest)
+		quest_ui.mostrar_tarefas_final_programador(completed_count, animate_latest)
 	_update_scene_points(state)
 
 
@@ -728,7 +728,7 @@ func _start_final_transition(animated: bool) -> void:
 	_lock_player()
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI if is_instance_valid(player) else null
 	if quest_ui != null:
-		quest_ui.hide_all_tasks(false)
+		quest_ui.ocultar_todas_tarefas(false)
 	final_fade.show()
 	final_card.hide()
 	final_fade.mouse_filter = Control.MOUSE_FILTER_STOP

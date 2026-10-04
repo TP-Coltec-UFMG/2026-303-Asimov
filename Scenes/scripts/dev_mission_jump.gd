@@ -102,11 +102,7 @@ func _jump(index: int) -> void:
 		return
 	_close_menu()
 	get_tree().paused = false
-	if is_instance_valid(DialogManager.dialog_box):
-		DialogManager.dialog_box.queue_free()
-	DialogManager.dialog_box = null
-	DialogManager.is_showing_dialog = false
-	DialogManager.current_dialog_id = ""
+	DialogManager.limpar_dialogos()
 	MusicController.stop_all_audio()
 	get_tree().set_meta(&"dev_mission_jump_active", true)
 	active_stage = index

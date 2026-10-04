@@ -197,19 +197,19 @@ func save_input_bindings() -> void:
 func _capture_input_bindings() -> Dictionary:
 	var bindings: Dictionary = {}
 
-	for action_name: String in REMAPPABLE_ACTIONS:
-		if not InputMap.has_action(action_name):
+	for nome_acao: String in REMAPPABLE_ACTIONS:
+		if not InputMap.has_action(nome_acao):
 			continue
 
 		var serialized_events: Array = []
 
-		for input_event: InputEvent in InputMap.action_get_events(action_name):
+		for input_event: InputEvent in InputMap.action_get_events(nome_acao):
 			var event_data: Dictionary = _serialize_input_event(input_event)
 
 			if not event_data.is_empty():
 				serialized_events.append(event_data)
 
-		bindings[action_name] = serialized_events
+		bindings[nome_acao] = serialized_events
 
 	return bindings
 
@@ -224,12 +224,12 @@ func _apply_input_bindings(value: Variant) -> void:
 		bindings["use_cabo"] = bindings["use_faca"]
 
 	for action_key: Variant in bindings:
-		var action_name := str(action_key)
+		var nome_acao := str(action_key)
 
-		if not REMAPPABLE_ACTIONS.has(action_name):
+		if not REMAPPABLE_ACTIONS.has(nome_acao):
 			continue
 
-		if not InputMap.has_action(action_name):
+		if not InputMap.has_action(nome_acao):
 			continue
 
 		var serialized_events: Variant = bindings[action_key]
@@ -248,10 +248,10 @@ func _apply_input_bindings(value: Variant) -> void:
 		if restored_events.is_empty():
 			continue
 
-		InputMap.action_erase_events(action_name)
+		InputMap.action_erase_events(nome_acao)
 
 		for input_event: InputEvent in restored_events:
-			InputMap.action_add_event(action_name, input_event)
+			InputMap.action_add_event(nome_acao, input_event)
 
 	get_tree().call_group(
 		&"inventory_binding_slots",

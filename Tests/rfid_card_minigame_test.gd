@@ -30,7 +30,7 @@ func _run() -> void:
 	var quest := minigame.get_node("QUEST_MISSION") as QuestMissionUI
 	var campaign_timer := minigame.get_node("CampaignHUD/Controle_de_tempo") as Control
 	var pause_menu := minigame.get_node("CampaignHUD/PauseMenu") as Control
-	_expect(quest.standalone_mode, "O painel do minigame precisa operar isolado da campanha.")
+	_expect(quest.modo_isolado, "O painel do minigame precisa operar isolado da campanha.")
 	_expect((quest.get_node("ColorRect") as Control).mouse_filter == Control.MOUSE_FILTER_IGNORE, "O painel de tarefas não pode cobrir as interações do cenário.")
 	_expect((quest.get_node("ColorRect") as Control).position.x <= 0.01, "Neste minigame, o painel de tarefas precisa ficar no lado esquerdo.")
 	_expect((quest.get_node("StandaloneBorder") as Control).visible, "O painel deste minigame precisa exibir a borda branca.")
@@ -108,11 +108,11 @@ func _expect(condition: bool, message: String) -> void:
 
 
 func _task_text(quest: QuestMissionUI, row_index: int) -> String:
-	return str((quest.rows[row_index].get_node("Label3") as Label).text)
+	return str((quest.linhas[row_index].get_node("Label3") as Label).text)
 
 
 func _task_completed(quest: QuestMissionUI, row_index: int) -> bool:
-	var marker := quest.markers[row_index]
+	var marker := quest.marcadores[row_index]
 	return (
 		marker.is_playing()
 		or marker.frame == marker.sprite_frames.get_frame_count(&"default") - 1

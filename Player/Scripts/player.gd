@@ -163,7 +163,7 @@ func show_hall_extinguisher_failure() -> void:
 func _show_restart_warning(message: String, restart_from_beginning: bool = false) -> void:
 	if npc_warning_active or not is_inside_tree():
 		return
-	ContextualTutorial.cancel_current()
+	ContextualTutorial.cancelar_atual()
 	npc_warning_active = true
 	npc_warning_previous_time_scale = Engine.time_scale
 	Engine.time_scale = maxf(0.05, npc_warning_previous_time_scale * 0.22)
@@ -759,7 +759,7 @@ func get_conhecimento() -> float:
 	return inteligencia.value
 
 func tomar_dano(dano: float) -> void:
-	if ContextualTutorial.protects_player(self):
+	if ContextualTutorial.protege_jogador(self):
 		return
 	if dano <= 0.0:
 		return

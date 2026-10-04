@@ -158,7 +158,7 @@ func enter_with_verified_card(returning_player: Player) -> void:
 	body_p = returning_player
 	if not _tem_cartao_compativel():
 		return
-	ContextualTutorial.cancel_current()
+	ContextualTutorial.cancelar_atual()
 	body_p.direction = Vector2.ZERO
 	body_p.velocity = Vector2.ZERO
 	body_p.correndo = false
@@ -285,9 +285,9 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 			var return_quest_ui := _obter_painel_tarefas()
 			if return_quest_ui != null:
 				if SaveGame.data_center_scientist_talk_pending(state):
-					return_quest_ui.show_return_and_scientist_talk_tasks()
+					return_quest_ui.mostrar_tarefas_retorno_e_cientista()
 				else:
-					return_quest_ui.show_return_to_data_center_task(true, true)
+					return_quest_ui.mostrar_tarefa_voltar_data_center(true, true)
 		return
 	if not bool(state.get("office_data_center_task_active", false)):
 		return
@@ -301,7 +301,7 @@ func _concluir_tarefa_do_sexto_andar(andar: int) -> void:
 	])
 	var quest_ui := _obter_painel_tarefas()
 	if quest_ui != null:
-		quest_ui.show_go_to_sixth_floor_task(true, true)
+		quest_ui.mostrar_tarefa_ir_sexto_andar(true, true)
 
 
 func _concluir_tarefa_do_quarto_andar(andar: int) -> void:
@@ -316,7 +316,7 @@ func _concluir_tarefa_do_quarto_andar(andar: int) -> void:
 	SaveGame.save_global_state("hall_quest_01", state)
 	var quest_ui := _obter_painel_tarefas()
 	if quest_ui != null:
-		quest_ui.show_data_center_power_tasks(
+		quest_ui.mostrar_tarefas_energia_data_center(
 			body_p.inventory.get_item_on_inventary("lanterna"),
 			true,
 			bool(state.get("data_center_breaker_restored", false)),
@@ -355,13 +355,13 @@ static func andar_liberado_por_progresso(andar: int, estado: Dictionary) -> bool
 func _ocultar_paineis_tarefas() -> void:
 	var painel := _obter_painel_tarefas()
 	if painel != null:
-		painel.hide_during_elevator()
+		painel.ocultar_durante_elevador()
 
 
 func _mostrar_paineis_tarefas() -> void:
 	var painel := _obter_painel_tarefas()
 	if painel != null:
-		painel.restore_after_elevator()
+		painel.restaurar_apos_elevador()
 
 
 func _obter_painel_tarefas() -> QuestMissionUI:

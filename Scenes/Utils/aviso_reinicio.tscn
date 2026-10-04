@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" uid="uid://d304ktd4yfv1v" path="res://Minigames/Arte/PixelifySans-Regular.ttf" id="12_hxkef"]
+[ext_resource type="Shader" uid="uid://b1ilig77glkro" path="res://shaders/protected_npc_blur.gdshader" id="100_npc_blur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_npc_warning"]
+shader = ExtResource("100_npc_blur")
+shader_parameter/blur_amount = 2.8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npc_warning"]
+bg_color = Color(0.035, 0.02, 0.025, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.25, 0.2, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="NonLethalWarning" type="CanvasLayer" unique_id=490698558]
+process_mode = 3
+layer = 220
+visible = false
+
+[node name="Root" type="Control" parent="." unique_id=1488458074]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Blur" type="ColorRect" parent="Root" unique_id=232456165]
+material = SubResource("ShaderMaterial_npc_warning")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MessagePanel" type="Panel" parent="Root" unique_id=1200404950]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -174.0
+offset_top = -34.0
+offset_right = 174.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_npc_warning")
+
+[node name="Label" type="Label" parent="Root/MessagePanel" unique_id=768257852]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("12_hxkef")
+theme_override_font_sizes/font_size = 13
+text = "NÃO SERÁ PERMITIDO CAUSAR DANO EM OUTROS NPCS."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BlackFade" type="ColorRect" parent="Root" unique_id=1423789522]
+z_index = 20
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+

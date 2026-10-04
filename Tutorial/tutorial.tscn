@@ -118,7 +118,7 @@ starting_gun_enabled = false
 
 [node name="QUEST_MISSION" parent="TrainingPlayer"]
 process_mode = 4
-standalone_mode = true
+modo_isolado = true
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1786955026]
 process_mode = 3

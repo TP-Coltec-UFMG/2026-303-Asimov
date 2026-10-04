@@ -278,7 +278,7 @@ func _on_cable_collected() -> void:
 func _show_talk_task(completed: bool, animate: bool = false) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_talk_to_npc_task(completed, animate)
+		quest_ui.mostrar_tarefa_falar_com_npc(completed, animate)
 
 
 func _show_boss_room_access_task() -> void:
@@ -290,7 +290,7 @@ func _show_boss_room_access_task() -> void:
 			bool(state.get("office_laptop_collected", false))
 			or bool(state.get("office_cable_collected", false))
 		):
-			quest_ui.show_boss_room_and_cable_tasks(
+			quest_ui.mostrar_tarefas_sala_chefe_e_cabo(
 				bool(state.get("office_boss_room_access_found", false)),
 				bool(state.get("office_laptop_collected", false) if find_laptop else state.get("office_cable_collected", false)),
 				false,
@@ -301,7 +301,7 @@ func _show_boss_room_access_task() -> void:
 				find_laptop
 			)
 		else:
-			quest_ui.show_find_boss_room_access_task()
+			quest_ui.mostrar_tarefa_acesso_sala_chefe()
 
 
 func _show_hacking_item_task(state: Dictionary, animate: bool = false) -> void:
@@ -315,7 +315,7 @@ func _show_hacking_item_task(state: Dictionary, animate: bool = false) -> void:
 		else state.get("office_cable_collected", false)
 	)
 	if bool(state.get("office_dialog_finished", false)):
-		quest_ui.show_boss_room_and_cable_tasks(
+		quest_ui.mostrar_tarefas_sala_chefe_e_cabo(
 			bool(state.get("office_boss_room_access_found", false)),
 			item_collected,
 			animate,
@@ -326,7 +326,7 @@ func _show_hacking_item_task(state: Dictionary, animate: bool = false) -> void:
 			find_laptop
 		)
 	else:
-		quest_ui.show_find_hacking_item_task(find_laptop, item_collected, animate)
+		quest_ui.mostrar_tarefa_encontrar_item_hack(find_laptop, item_collected, animate)
 
 
 func _register_first_hacking_item(state: Dictionary, item: String) -> String:
@@ -413,7 +413,7 @@ func _show_data_center_prompt() -> void:
 func _show_go_to_sixth_floor_task(completed: bool = false) -> void:
 	var quest_ui := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest_ui != null:
-		quest_ui.show_go_to_sixth_floor_task(completed)
+		quest_ui.mostrar_tarefa_ir_sexto_andar(completed)
 
 
 func _unlock_boss_room_hack_task(state: Dictionary) -> bool:

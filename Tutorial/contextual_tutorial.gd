@@ -1,216 +1,215 @@
 extends CanvasLayer
 
-const SEEN_KEY := "contextual_tutorial_seen"
-const SLOW_SCALE := 0.25
-const FADE_DURATION := 0.45
-const ENTER_DURATION := 0.6
-const MUSIC_FADE_DURATION := 0.65
-const TUTORIAL_MUSIC_FACTOR := 0.35
-const PANEL_WIDTH := 250.0
-const WALK_ACTIONS: Array[StringName] = [&"up", &"left", &"down", &"right"]
-const GAP_DURATION := 0.8
-const UNFOCUSED_OPACITY := 0.15
+const CHAVE_TUTORIAIS_VISTOS := "contextual_tutorial_seen"
+const ESCALA_CAMERA_LENTA := 0.25
+const DURACAO_TRANSICAO := 0.45
+const DURACAO_ENTRADA := 0.6
+const DURACAO_TRANSICAO_MUSICA := 0.65
+const FATOR_MUSICA_TUTORIAL := 0.35
+const LARGURA_PAINEL := 250.0
+const ACOES_MOVIMENTO: Array[StringName] = [&"up", &"left", &"down", &"right"]
+const INTERVALO_TUTORIAIS := 0.8
+const OPACIDADE_SEM_DESTAQUE := 0.15
 
-@onready var panel: Panel = $Panel
-@onready var title: Label = $Panel/Content/Title
-@onready var explanation: RichTextLabel = $Panel/Content/Explanation
+@onready var balao: Panel = $Panel
+@onready var titulo: Label = $Panel/Content/Title
+@onready var explicacao: RichTextLabel = $Panel/Content/Explanation
 
-var player: Player
-var pending: Array[String] = []
-var active_lesson := ""
-var elapsed := 0.0
-var minimum_reading_time := ENTER_DURATION
-var maximum_reading_time := 10.0
-var finishing := false
-var practiced := false
-var starting_position := Vector2.ZERO
-var baseline_ammo := 0
-var previous_scale := 1.0
-var owned_scale := 1.0
-var owns_slow_motion := false
-var last_tick := 0
-var scan_elapsed := 0.0
-var available_time := 0.0
-var gap := 0.0
-var lesson_player_id := 0
-var collected_count := 0
-var baseline_collected_count := 0
-var observed_player_id := 0
-var attention_targets: Array[Dictionary] = []
-var attention_panel: QuestMissionUI
-var attention_tasks_focused := false
-var attention_tween: Tween
-var attention_amount := 0.0
-var attention_active := false
-var glow_tween: Tween
-var glow_style: StyleBoxFlat
-var panel_tween: Tween
-var panel_rest_position := Vector2.ZERO
-var music_tween: Tween
-var music_duck_active := false
-var action_was_active := false
-var walk_actions_pressed: Array[StringName] = []
+var jogador: Player
+var pendentes: Array[String] = []
+var tutorial_ativo := ""
+var tempo_decorrido := 0.0
+var tempo_minimo_leitura := DURACAO_ENTRADA
+@export_range(5.0, 30.0, 0.5) var tempo_maximo_leitura: float = 10.0
+var finalizando := false
+var praticou := false
+var posicao_inicial := Vector2.ZERO
+var municao_inicial := 0
+var escala_anterior := 1.0
+var escala_aplicada := 1.0
+var controla_camera_lenta := false
+var ultimo_instante := 0
+var tempo_varredura := 0.0
+var tempo_disponivel := 0.0
+var intervalo := 0.0
+var id_jogador_tutorial := 0
+var quantidade_coletada := 0
+var quantidade_coletada_inicial := 0
+var id_jogador_observado := 0
+var alvos_destaque: Array[Dictionary] = []
+var painel_destacado: QuestMissionUI
+var tarefas_destacadas := false
+var transicao_destaque: Tween
+var intensidade_destaque := 0.0
+var destaque_ativo := false
+var transicao_brilho: Tween
+var estilo_brilho: StyleBoxFlat
+var transicao_balao: Tween
+var posicao_repouso_balao := Vector2.ZERO
+var transicao_musica: Tween
+var musica_reduzida := false
+var acao_estava_ativa := false
+var direcoes_praticadas: Array[StringName] = []
 
 
 func _ready() -> void:
-	last_tick = Time.get_ticks_usec()
-	glow_style = panel.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	panel.add_theme_stylebox_override("panel", glow_style)
-	get_tree().scene_changed.connect(_on_scene_changed)
+	ultimo_instante = Time.get_ticks_usec()
+	estilo_brilho = balao.get_theme_stylebox("panel") as StyleBoxFlat
+	get_tree().scene_changed.connect(_ao_mudar_cena)
 
 
 func _exit_tree() -> void:
-	_release_slow_motion()
-	_restore_attention(true)
-	_stop_glow()
-	_set_music_duck(false, true)
-	_stop_panel_motion()
+	_restaurar_camera_lenta()
+	_restaurar_destaque(true)
+	_parar_brilho()
+	_reduzir_musica(false, true)
+	_parar_movimento_balao()
 
 
-func _on_scene_changed() -> void:
-	cancel_current()
-	_restore_attention(true)
-	_set_music_duck(false, true)
-	pending.clear()
-	player = null
-	available_time = 0.0
+func _ao_mudar_cena() -> void:
+	cancelar_atual()
+	_restaurar_destaque(true)
+	_reduzir_musica(false, true)
+	pendentes.clear()
+	jogador = null
+	tempo_disponivel = 0.0
 
 
-func start_new_game() -> void:
-	_on_scene_changed()
-	gap = 0.0
-	scan_elapsed = 0.0
-	observed_player_id = 0
-	Configs.configs[SEEN_KEY] = {}
+func iniciar_novo_jogo() -> void:
+	_ao_mudar_cena()
+	intervalo = 0.0
+	tempo_varredura = 0.0
+	id_jogador_observado = 0
+	Configs.configs[CHAVE_TUTORIAIS_VISTOS] = {}
 	SaveLoad._save()
 
 
 func _process(_delta: float) -> void:
-	var now := Time.get_ticks_usec()
-	var real_delta := minf(float(now - last_tick) / 1000000.0, 0.1)
-	last_tick = now
-	if not _gameplay_available():
-		_suspend()
-		available_time = 0.0
+	var agora := Time.get_ticks_usec()
+	var delta_real := minf(float(agora - ultimo_instante) / 1000000.0, 0.1)
+	ultimo_instante = agora
+	if not _jogo_disponivel():
+		_suspender()
+		tempo_disponivel = 0.0
 		return
-	available_time += real_delta
-	if not active_lesson.is_empty() and lesson_player_id != player.get_instance_id():
-		cancel_current()
-	if not active_lesson.is_empty():
-		_update_lesson(real_delta)
+	tempo_disponivel += delta_real
+	if not tutorial_ativo.is_empty() and id_jogador_tutorial != jogador.get_instance_id():
+		cancelar_atual()
+	if not tutorial_ativo.is_empty():
+		_atualizar_tutorial(delta_real)
 		return
-	gap = maxf(0.0, gap - real_delta)
-	scan_elapsed += real_delta
-	if scan_elapsed < 0.1 or available_time < 0.6:
+	intervalo = maxf(0.0, intervalo - delta_real)
+	tempo_varredura += delta_real
+	if tempo_varredura < 0.1 or tempo_disponivel < 0.6:
 		return
-	scan_elapsed = 0.0
-	_discover_lessons()
-	if gap <= 0.0:
-		_start_next()
+	tempo_varredura = 0.0
+	_descobrir_tutoriais()
+	if intervalo <= 0.0:
+		_iniciar_proximo()
 
 
-func _gameplay_available() -> bool:
-	var scene := get_tree().current_scene
-	if not scene is BaseScene or get_tree().paused or DialogManager.is_showing_dialog:
+func _jogo_disponivel() -> bool:
+	var cena := get_tree().current_scene
+	if not cena is BaseScene or get_tree().paused or DialogManager.is_showing_dialog:
 		return false
-	if not is_instance_valid(player) or not scene.is_ancestor_of(player):
-		player = scene.get_scene_player()
-	if not is_instance_valid(player):
+	if not is_instance_valid(jogador) or not cena.is_ancestor_of(jogador):
+		jogador = cena.get_scene_player()
+	if not is_instance_valid(jogador):
 		return false
-	if not player.can_process() or not player.is_physics_processing() or not player.is_processing_input():
+	if not jogador.can_process() or not jogador.is_physics_processing() or not jogador.is_processing_input():
 		return false
-	if not player.is_visible_in_tree() or player.npc_warning_active:
+	if not jogador.is_visible_in_tree() or jogador.npc_warning_active:
 		return false
 	if get_tree().get_first_node_in_group(&"opening_gameplay_blur") != null:
 		return false
 	var camera := get_viewport().get_camera_2d()
-	return camera == player.camera_2d
+	return camera == jogador.camera_2d
 
 
-func _seen(id: String) -> bool:
-	var seen: Variant = Configs.configs.get(SEEN_KEY, {})
-	return seen is Dictionary and bool(seen.get(id, false))
+func _ja_visto(id: String) -> bool:
+	var vistos: Variant = Configs.configs.get(CHAVE_TUTORIAIS_VISTOS, {})
+	return vistos is Dictionary and bool(vistos.get(id, false))
 
 
-func _queue(id: String, urgent: bool = false) -> void:
-	if id == active_lesson or id in pending or _seen(id):
+func _enfileirar(id: String, urgente: bool = false) -> void:
+	if id == tutorial_ativo or id in pendentes or _ja_visto(id):
 		return
-	if id == "push" and not _push_lesson_unlocked():
+	if id == "push" and not _tutorial_empurrar_liberado():
 		return
-	if urgent:
-		pending.push_front(id)
+	if urgente:
+		pendentes.push_front(id)
 	else:
-		pending.append(id)
+		pendentes.append(id)
 
 
-func _discover_lessons() -> void:
-	var inventory := player.inventory
-	var count := inventory.get_save_state().size()
-	if observed_player_id != player.get_instance_id():
-		collected_count = count
-		observed_player_id = player.get_instance_id()
-	if count > collected_count:
-		_queue("collect")
-	collected_count = count
-	var interaction := player.get_node_or_null("InteractiongComponent")
-	if interaction != null:
-		for area: Area2D in interaction.current_interactions:
+func _descobrir_tutoriais() -> void:
+	var inventario := jogador.inventory
+	var quantidade := inventario.get_save_state().size()
+	if id_jogador_observado != jogador.get_instance_id():
+		quantidade_coletada = quantidade
+		id_jogador_observado = jogador.get_instance_id()
+	if quantidade > quantidade_coletada:
+		_enfileirar("collect")
+	quantidade_coletada = quantidade
+	var interacao := jogador.get_node_or_null("InteractiongComponent")
+	if interacao != null:
+		for area: Area2D in interacao.current_interactions:
 			if is_instance_valid(area) and area.is_interactable and area.get_parent().get_node_or_null("PickupComponent") != null:
-				_queue("collect")
+				_enfileirar("collect")
 				break
-	if player.objeto_manipulado != null or player.has_grab_object_nearby():
-		_queue("push", true)
-	if player.usando_extintor:
-		_queue("extinguisher", true)
-	elif player.usando_lanterna:
-		_queue("flashlight", true)
-	elif player.usando_arma:
-		var gun := inventory.get_item_control("gun")
-		_queue("weapon", true)
-		if _seen("weapon") and int(gun.current_ammo) <= 0:
-			_queue("reload", true)
-		if _seen("weapon") and inventory.get_item_on_inventary("lanterna"):
-			_queue("weapon_flashlight")
-	var card := inventory.get_item_control("cartao")
-	if card != null:
-		_queue("card_%d" % int(card.tipo))
-	if inventory.get_item_on_inventary("lanterna"):
-		_queue("flashlight")
-	if not _seen("walk"):
-		_queue("walk")
-	elif not _seen("run") and player.direction != Vector2.ZERO:
-		_queue("run")
-	if bool(player.get_node("QUEST_MISSION")._auto_hidden):
-		_queue("tasks", true)
+	if jogador.objeto_manipulado != null or jogador.has_grab_object_nearby():
+		_enfileirar("push", true)
+	if jogador.usando_extintor:
+		_enfileirar("extinguisher", true)
+	elif jogador.usando_lanterna:
+		_enfileirar("flashlight", true)
+	elif jogador.usando_arma:
+		var arma := inventario.get_item_control("gun")
+		_enfileirar("weapon", true)
+		if _ja_visto("weapon") and int(arma.current_ammo) <= 0:
+			_enfileirar("reload", true)
+		if _ja_visto("weapon") and inventario.get_item_on_inventary("lanterna"):
+			_enfileirar("weapon_flashlight")
+	var cartao := inventario.get_item_control("cartao")
+	if cartao != null:
+		_enfileirar("card_%d" % int(cartao.tipo))
+	if inventario.get_item_on_inventary("lanterna"):
+		_enfileirar("flashlight")
+	if not _ja_visto("walk"):
+		_enfileirar("walk")
+	elif not _ja_visto("run") and jogador.direction != Vector2.ZERO:
+		_enfileirar("run")
+	if bool(jogador.get_node("QUEST_MISSION")._oculto_automaticamente):
+		_enfileirar("tasks", true)
 
 
-func _relevant(id: String) -> bool:
-	var inventory := player.inventory
+func _ainda_relevante(id: String) -> bool:
+	var inventario := jogador.inventory
 	match id:
 		"reload":
-			var gun := inventory.get_item_control("gun")
-			return player.usando_arma and gun != null and int(gun.current_ammo) <= 0
+			var arma := inventario.get_item_control("gun")
+			return jogador.usando_arma and arma != null and int(arma.current_ammo) <= 0
 		"weapon", "weapon_flashlight":
-			return player.usando_arma
+			return jogador.usando_arma
 		"flashlight":
-			return inventory.get_item_on_inventary("lanterna")
+			return inventario.get_item_on_inventary("lanterna")
 		"extinguisher":
-			return player.usando_extintor
+			return jogador.usando_extintor
 		"tasks":
-			return bool(player.get_node("QUEST_MISSION")._auto_hidden)
+			return bool(jogador.get_node("QUEST_MISSION")._oculto_automaticamente)
 		"push":
-			return _push_lesson_unlocked() and (player.objeto_manipulado != null or player.has_grab_object_nearby())
+			return _tutorial_empurrar_liberado() and (jogador.objeto_manipulado != null or jogador.has_grab_object_nearby())
 	if id.begins_with("card_"):
-		var card := inventory.get_item_control("cartao")
-		return card != null and int(card.tipo) == int(id.trim_prefix("card_"))
+		var cartao := inventario.get_item_control("cartao")
+		return cartao != null and int(cartao.tipo) == int(id.trim_prefix("card_"))
 	return true
 
 
-func _push_lesson_unlocked() -> bool:
-	var scene := get_tree().current_scene
-	if scene != null and scene.scene_file_path == "res://Scenes/andar_hall.tscn":
-		var quest := scene.get_node_or_null("QuestController")
-		return quest != null and bool(quest.M1_feito)
+func _tutorial_empurrar_liberado() -> bool:
+	var cena := get_tree().current_scene
+	if cena != null and cena.scene_file_path == "res://Scenes/andar_hall.tscn":
+		var missao := cena.get_node_or_null("QuestController")
+		return missao != null and bool(missao.M1_feito)
 	var hall: Variant = SaveGame.save_data.get("res://Scenes/andar_hall.tscn", {})
 	if not hall is Dictionary:
 		return false
@@ -218,92 +217,92 @@ func _push_lesson_unlocked() -> bool:
 	return mission is Dictionary and bool(mission.get("task_fire_done", false))
 
 
-func _start_next() -> void:
-	while not pending.is_empty():
-		var id: String = pending.pop_front()
-		if not _seen(id) and _relevant(id):
-			_begin_lesson(id)
+func _iniciar_proximo() -> void:
+	while not pendentes.is_empty():
+		var id: String = pendentes.pop_front()
+		if not _ja_visto(id) and _ainda_relevante(id):
+			_iniciar_tutorial(id)
 			return
 
 
-func _begin_lesson(id: String) -> void:
-	active_lesson = id
-	lesson_player_id = player.get_instance_id()
-	elapsed = 0.0
-	finishing = false
-	practiced = false
-	walk_actions_pressed.clear()
-	starting_position = player.global_position
-	var gun := player.inventory.get_item_control("gun")
-	baseline_ammo = int(gun.current_ammo) if gun != null else 0
-	baseline_collected_count = player.inventory.get_save_state().size()
-	var content := _content(id)
-	title.text = content[0]
-	explanation.text = "[center]" + content[1] + "[/center]"
-	minimum_reading_time = ENTER_DURATION
-	panel.accessibility_name = title.text + ". " + content[1]
-	var factor := 1.1 if int(Configs.configs.get("interface_size", 0)) == 2 else 1.0
-	title.add_theme_font_size_override("font_size", int(round(12.0 * factor)))
+func _iniciar_tutorial(id: String) -> void:
+	tutorial_ativo = id
+	id_jogador_tutorial = jogador.get_instance_id()
+	tempo_decorrido = 0.0
+	finalizando = false
+	praticou = false
+	direcoes_praticadas.clear()
+	posicao_inicial = jogador.global_position
+	var arma := jogador.inventory.get_item_control("gun")
+	municao_inicial = int(arma.current_ammo) if arma != null else 0
+	quantidade_coletada_inicial = jogador.inventory.get_save_state().size()
+	var conteudo := _conteudo(id)
+	titulo.text = conteudo[0]
+	explicacao.text = "[center]" + conteudo[1] + "[/center]"
+	tempo_minimo_leitura = DURACAO_ENTRADA
+	balao.accessibility_name = titulo.text + ". " + conteudo[1]
+	var fator := 1.1 if int(Configs.configs.get("interface_size", 0)) == 2 else 1.0
+	titulo.add_theme_font_size_override("font_size", int(round(12.0 * fator)))
 	for font_size_name in ["normal_font_size", "bold_font_size"]:
-		explanation.add_theme_font_size_override(font_size_name, int(round(10.0 * factor)))
-	action_was_active = _action_practiced()
-	_animate_panel(true)
+		explicacao.add_theme_font_size_override(font_size_name, int(round(10.0 * fator)))
+	acao_estava_ativa = _acao_praticada()
+	_animar_balao(true)
 	if bool(Configs.configs.get("leitor_de_tela", false)):
-		LeitorDeTela._ler_texto(panel.accessibility_name)
-	_acquire_slow_motion()
-	_start_attention()
-	_start_glow()
-	_set_music_duck(true)
+		LeitorDeTela._ler_texto(balao.accessibility_name)
+	_ativar_camera_lenta()
+	_iniciar_destaque()
+	_iniciar_brilho()
+	_reduzir_musica(true)
 
 
-func _update_lesson(real_delta: float) -> void:
-	if not owns_slow_motion:
-		if available_time < 0.6:
+func _atualizar_tutorial(delta_real: float) -> void:
+	if not controla_camera_lenta:
+		if tempo_disponivel < 0.6:
 			return
-		_acquire_slow_motion()
-		if not finishing:
-			_animate_panel(true)
-			_start_attention()
-			_start_glow()
-			_set_music_duck(true)
-	elapsed += real_delta
-	var action_active := _action_practiced()
-	practiced = practiced or (action_active and not action_was_active)
-	action_was_active = action_active
-	if not finishing and elapsed >= minimum_reading_time and (practiced or elapsed >= maximum_reading_time):
-		finishing = true
-		elapsed = 0.0
-		_restore_attention()
-		_stop_glow()
-		_animate_panel(false)
-		_set_music_duck(false)
-	if finishing:
-		var progress := clampf(elapsed / FADE_DURATION, 0.0, 1.0)
-		_set_owned_scale(lerpf(previous_scale * SLOW_SCALE, previous_scale, progress))
-		if not owns_slow_motion:
+		_ativar_camera_lenta()
+		if not finalizando:
+			_animar_balao(true)
+			_iniciar_destaque()
+			_iniciar_brilho()
+			_reduzir_musica(true)
+	tempo_decorrido += delta_real
+	var action_active := _acao_praticada()
+	praticou = praticou or (action_active and not acao_estava_ativa)
+	acao_estava_ativa = action_active
+	if not finalizando and tempo_decorrido >= tempo_minimo_leitura and (praticou or tempo_decorrido >= tempo_maximo_leitura):
+		finalizando = true
+		tempo_decorrido = 0.0
+		_restaurar_destaque()
+		_parar_brilho()
+		_animar_balao(false)
+		_reduzir_musica(false)
+	if finalizando:
+		var progress := clampf(tempo_decorrido / DURACAO_TRANSICAO, 0.0, 1.0)
+		_definir_escala_aplicada(lerpf(escala_anterior * ESCALA_CAMERA_LENTA, escala_anterior, progress))
+		if not controla_camera_lenta:
 			return
 		if progress >= 1.0:
-			_complete_lesson()
+			_concluir_tutorial()
 	else:
-		_set_owned_scale(lerpf(previous_scale, previous_scale * SLOW_SCALE, minf(1.0, elapsed / FADE_DURATION)))
+		_definir_escala_aplicada(lerpf(escala_anterior, escala_anterior * ESCALA_CAMERA_LENTA, minf(1.0, tempo_decorrido / DURACAO_TRANSICAO)))
 
 
-func _input(event: InputEvent) -> void:
-	if active_lesson.is_empty() or finishing or not owns_slow_motion:
+func _input(evento: InputEvent) -> void:
+	if tutorial_ativo.is_empty() or finalizando or not controla_camera_lenta:
 		return
-	if not _gameplay_available():
+	if not _jogo_disponivel():
 		return
-	if event is InputEventKey and event.echo:
+	if evento is InputEventKey and evento.echo:
 		return
-	if active_lesson == "walk":
-		for action: StringName in WALK_ACTIONS:
-			if event.is_action_pressed(action) and action not in walk_actions_pressed:
-				walk_actions_pressed.append(action)
-		_refresh_walk_text()
-		practiced = walk_actions_pressed.size() == WALK_ACTIONS.size()
+	if tutorial_ativo == "walk":
+		for action: StringName in ACOES_MOVIMENTO:
+			if evento.is_action_pressed(action) and action not in direcoes_praticadas:
+				direcoes_praticadas.append(action)
+		_atualizar_texto_movimento()
+		praticou = direcoes_praticadas.size() == ACOES_MOVIMENTO.size()
 		return
 	var actions: Array[StringName] = []
-	match active_lesson:
+	match tutorial_ativo:
 		"run":
 			actions.append(&"correr")
 		"push":
@@ -322,309 +321,309 @@ func _input(event: InputEvent) -> void:
 			actions.append(&"use_lanterna")
 		"tasks":
 			actions.append(&"show_tasks")
-	if active_lesson.begins_with("card_"):
+	if tutorial_ativo.begins_with("card_"):
 		actions.assign([&"use_cartao", &"interact"])
 	for action: StringName in actions:
-		if event.is_action_pressed(action):
-			practiced = true
+		if evento.is_action_pressed(action):
+			praticou = true
 			return
 
 
-func _action_practiced() -> bool:
-	var inventory := player.inventory
-	match active_lesson:
+func _acao_praticada() -> bool:
+	var inventario := jogador.inventory
+	match tutorial_ativo:
 		"walk":
-			return walk_actions_pressed.size() == WALK_ACTIONS.size()
+			return direcoes_praticadas.size() == ACOES_MOVIMENTO.size()
 		"run":
-			return player.correndo
+			return jogador.correndo
 		"push":
-			return player.objeto_manipulado != null and player.global_position.distance_to(starting_position) >= 3.0
+			return jogador.objeto_manipulado != null and jogador.global_position.distance_to(posicao_inicial) >= 3.0
 		"collect":
-			return inventory.get_save_state().size() > baseline_collected_count
+			return inventario.get_save_state().size() > quantidade_coletada_inicial
 		"flashlight":
-			var lamp := inventory.get_item_control("lanterna")
+			var lamp := inventario.get_item_control("lanterna")
 			return lamp != null and bool(lamp.lanterna_acessa)
 		"extinguisher":
-			var extinguisher := inventory.get_item_control("extintor")
+			var extinguisher := inventario.get_item_control("extintor")
 			return extinguisher != null and bool(extinguisher.extintor_ligado)
 		"weapon":
-			var gun := inventory.get_item_control("gun")
-			return gun != null and int(gun.current_ammo) < baseline_ammo
+			var arma := inventario.get_item_control("gun")
+			return arma != null and int(arma.current_ammo) < municao_inicial
 		"reload":
-			var gun := inventory.get_item_control("gun")
-			return gun != null and int(gun.current_ammo) > baseline_ammo
+			var arma := inventario.get_item_control("gun")
+			return arma != null and int(arma.current_ammo) > municao_inicial
 		"weapon_flashlight":
-			var lamp := inventory.get_item_control("lanterna")
-			return player.usando_arma and lamp != null and bool(lamp.lanterna_acessa)
+			var lamp := inventario.get_item_control("lanterna")
+			return jogador.usando_arma and lamp != null and bool(lamp.lanterna_acessa)
 		"tasks":
 			return Input.is_action_pressed("show_tasks")
-	return active_lesson.begins_with("card_") and player.usando_cartao
+	return tutorial_ativo.begins_with("card_") and jogador.usando_cartao
 
 
-func _refresh_walk_text() -> void:
+func _atualizar_texto_movimento() -> void:
 	var keys: Array[String] = []
-	for action: StringName in WALK_ACTIONS:
-		var key := _key(action).replace("[", "[lb]")
-		keys.append("[b]" + key + "[/b]" if action in walk_actions_pressed else key)
-	explanation.text = "[center]Use %s para andar pelo cenário.[/center]" % "/".join(keys)
+	for action: StringName in ACOES_MOVIMENTO:
+		var key := _tecla(action).replace("[", "[lb]")
+		keys.append("[b]" + key + "[/b]" if action in direcoes_praticadas else key)
+	explicacao.text = "[center]Use %s para andar pelo cenário.[/center]" % "/".join(keys)
 
 
-func _complete_lesson() -> void:
-	var saved: Variant = Configs.configs.get(SEEN_KEY, {})
-	var seen: Dictionary = saved.duplicate() if saved is Dictionary else {}
-	seen[active_lesson] = true
-	Configs.configs[SEEN_KEY] = seen
+func _concluir_tutorial() -> void:
+	var saved: Variant = Configs.configs.get(CHAVE_TUTORIAIS_VISTOS, {})
+	var vistos: Dictionary = saved.duplicate() if saved is Dictionary else {}
+	vistos[tutorial_ativo] = true
+	Configs.configs[CHAVE_TUTORIAIS_VISTOS] = vistos
 	SaveLoad._save()
-	cancel_current()
-	gap = GAP_DURATION
+	cancelar_atual()
+	intervalo = INTERVALO_TUTORIAIS
 
 
-func _acquire_slow_motion() -> void:
-	previous_scale = Engine.time_scale
-	owned_scale = previous_scale
-	owns_slow_motion = true
+func _ativar_camera_lenta() -> void:
+	escala_anterior = Engine.time_scale
+	escala_aplicada = escala_anterior
+	controla_camera_lenta = true
 
 
-func _set_owned_scale(value: float) -> void:
-	if not is_equal_approx(Engine.time_scale, owned_scale):
-		cancel_current()
+func _definir_escala_aplicada(value: float) -> void:
+	if not is_equal_approx(Engine.time_scale, escala_aplicada):
+		cancelar_atual()
 		return
 	Engine.time_scale = value
-	owned_scale = value
+	escala_aplicada = value
 
 
-func _release_slow_motion() -> void:
-	if owns_slow_motion and is_equal_approx(Engine.time_scale, owned_scale):
-		Engine.time_scale = previous_scale
-	owns_slow_motion = false
+func _restaurar_camera_lenta() -> void:
+	if controla_camera_lenta and is_equal_approx(Engine.time_scale, escala_aplicada):
+		Engine.time_scale = escala_anterior
+	controla_camera_lenta = false
 
 
-func _suspend() -> void:
-	_release_slow_motion()
-	_stop_panel_motion()
-	panel.hide()
-	_restore_attention()
-	_stop_glow()
-	_set_music_duck(false)
+func _suspender() -> void:
+	_restaurar_camera_lenta()
+	_parar_movimento_balao()
+	balao.hide()
+	_restaurar_destaque()
+	_parar_brilho()
+	_reduzir_musica(false)
 
 
-func cancel_current() -> void:
-	_release_slow_motion()
-	_stop_panel_motion()
-	panel.hide()
-	_restore_attention()
-	_stop_glow()
-	_set_music_duck(false)
-	active_lesson = ""
-	finishing = false
-	practiced = false
+func cancelar_atual() -> void:
+	_restaurar_camera_lenta()
+	_parar_movimento_balao()
+	balao.hide()
+	_restaurar_destaque()
+	_parar_brilho()
+	_reduzir_musica(false)
+	tutorial_ativo = ""
+	finalizando = false
+	praticou = false
 
 
-func _panel_destination() -> Vector2:
-	var viewport_size := get_viewport().get_visible_rect().size
-	var margin := 14.0
-	var destination := Vector2((viewport_size.x - panel.size.x) * 0.5, margin)
-	match active_lesson:
+func _destino_balao() -> Vector2:
+	var tamanho_tela := get_viewport().get_visible_rect().size
+	var margem := 14.0
+	var destino := Vector2((tamanho_tela.x - balao.size.x) * 0.5, margem)
+	match tutorial_ativo:
 		"run":
-			destination.x = viewport_size.x - panel.size.x - margin
+			destino.x = tamanho_tela.x - balao.size.x - margem
 		"tasks", "weapon", "reload", "weapon_flashlight":
-			destination.x = margin
-	destination.x = clampf(destination.x, margin, maxf(margin, viewport_size.x - panel.size.x - margin))
-	return destination
+			destino.x = margem
+	destino.x = clampf(destino.x, margem, maxf(margem, tamanho_tela.x - balao.size.x - margem))
+	return destino
 
 
-func _animate_panel(entering: bool) -> void:
-	_stop_panel_motion()
-	if entering:
-		var style := panel.get_theme_stylebox("panel")
-		var content_width := PANEL_WIDTH - style.get_content_margin(SIDE_LEFT) - style.get_content_margin(SIDE_RIGHT)
-		title.size.x = content_width
-		explanation.size.x = content_width
-		var font_size := explanation.get_theme_font_size("normal_font_size")
-		var plain_text := explanation.get_parsed_text()
-		var body_height := explanation.get_theme_font("normal_font").get_multiline_string_size(plain_text, HORIZONTAL_ALIGNMENT_CENTER, content_width, font_size).y
-		if active_lesson == "walk":
-			body_height = maxf(body_height, explanation.get_theme_font("bold_font").get_multiline_string_size(plain_text, HORIZONTAL_ALIGNMENT_CENTER, content_width, font_size).y)
-		var title_height := title.get_theme_font("font").get_height(title.get_theme_font_size("font_size"))
-		var content := panel.get_node("Content") as VBoxContainer
-		var height := title_height + body_height + content.get_theme_constant("separation") + style.get_content_margin(SIDE_TOP) + style.get_content_margin(SIDE_BOTTOM)
-		panel.size = Vector2(PANEL_WIDTH, ceilf(height))
-		panel_rest_position = _panel_destination()
-		panel.pivot_offset = panel.size * 0.5
-		panel.position = panel_rest_position - Vector2(0.0, 12.0)
-		panel.scale = Vector2.ONE * 0.94
-		panel.modulate.a = 0.0
-		panel.show()
-	panel_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
-	panel_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT if entering else Tween.EASE_IN)
-	var duration := ENTER_DURATION if entering else FADE_DURATION
-	panel_tween.tween_property(panel, "position", panel_rest_position if entering else panel_rest_position - Vector2(0.0, 8.0), duration)
-	panel_tween.tween_property(panel, "scale", Vector2.ONE if entering else Vector2.ONE * 0.98, duration)
-	panel_tween.tween_property(panel, "modulate:a", 1.0 if entering else 0.0, duration).set_trans(Tween.TRANS_SINE)
+func _animar_balao(entrando: bool) -> void:
+	_parar_movimento_balao()
+	if entrando:
+		var estilo := balao.get_theme_stylebox("panel")
+		var largura_conteudo := LARGURA_PAINEL - estilo.get_content_margin(SIDE_LEFT) - estilo.get_content_margin(SIDE_RIGHT)
+		titulo.size.x = largura_conteudo
+		explicacao.size.x = largura_conteudo
+		var tamanho_fonte := explicacao.get_theme_font_size("normal_font_size")
+		var texto_simples := explicacao.get_parsed_text()
+		var altura_texto := explicacao.get_theme_font("normal_font").get_multiline_string_size(texto_simples, HORIZONTAL_ALIGNMENT_CENTER, largura_conteudo, tamanho_fonte).y
+		if tutorial_ativo == "walk":
+			altura_texto = maxf(altura_texto, explicacao.get_theme_font("bold_font").get_multiline_string_size(texto_simples, HORIZONTAL_ALIGNMENT_CENTER, largura_conteudo, tamanho_fonte).y)
+		var altura_titulo := titulo.get_theme_font("font").get_height(titulo.get_theme_font_size("font_size"))
+		var conteudo := balao.get_node("Content") as VBoxContainer
+		var altura := altura_titulo + altura_texto + conteudo.get_theme_constant("separation") + estilo.get_content_margin(SIDE_TOP) + estilo.get_content_margin(SIDE_BOTTOM)
+		balao.size = Vector2(LARGURA_PAINEL, ceilf(altura))
+		posicao_repouso_balao = _destino_balao()
+		balao.pivot_offset = balao.size * 0.5
+		balao.position = posicao_repouso_balao - Vector2(0.0, 12.0)
+		balao.scale = Vector2.ONE * 0.94
+		balao.modulate.a = 0.0
+		balao.show()
+	transicao_balao = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_parallel(true)
+	transicao_balao.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT if entrando else Tween.EASE_IN)
+	var duracao := DURACAO_ENTRADA if entrando else DURACAO_TRANSICAO
+	transicao_balao.tween_property(balao, "position", posicao_repouso_balao if entrando else posicao_repouso_balao - Vector2(0.0, 8.0), duracao)
+	transicao_balao.tween_property(balao, "scale", Vector2.ONE if entrando else Vector2.ONE * 0.98, duracao)
+	transicao_balao.tween_property(balao, "modulate:a", 1.0 if entrando else 0.0, duracao).set_trans(Tween.TRANS_SINE)
 
 
-func _stop_panel_motion() -> void:
-	if panel_tween != null and panel_tween.is_valid():
-		panel_tween.kill()
-	panel_tween = null
+func _parar_movimento_balao() -> void:
+	if transicao_balao != null and transicao_balao.is_valid():
+		transicao_balao.kill()
+	transicao_balao = null
 
 
-func _set_music_duck(active: bool, immediate: bool = false) -> void:
-	if not immediate and music_duck_active == active:
+func _reduzir_musica(ativo: bool, imediato: bool = false) -> void:
+	if not imediato and musica_reduzida == ativo:
 		return
-	music_duck_active = active
-	if music_tween != null and music_tween.is_valid():
-		music_tween.kill()
-	music_tween = null
+	musica_reduzida = ativo
+	if transicao_musica != null and transicao_musica.is_valid():
+		transicao_musica.kill()
+	transicao_musica = null
 	if not is_instance_valid(MusicController):
 		return
-	var target_factor := TUTORIAL_MUSIC_FACTOR if active else 1.0
-	if immediate:
-		_apply_tutorial_music(target_factor)
+	var fator_alvo := FATOR_MUSICA_TUTORIAL if ativo else 1.0
+	if imediato:
+		_aplicar_volume_tutorial(fator_alvo)
 		return
-	music_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	music_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	music_tween.tween_method(_apply_tutorial_music, MusicController.tutorial_music_factor, target_factor, MUSIC_FADE_DURATION)
+	transicao_musica = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	transicao_musica.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	transicao_musica.tween_method(_aplicar_volume_tutorial, MusicController.tutorial_music_factor, fator_alvo, DURACAO_TRANSICAO_MUSICA)
 
 
-func _apply_tutorial_music(factor: float) -> void:
+func _aplicar_volume_tutorial(fator: float) -> void:
 	if not is_instance_valid(MusicController):
 		return
-	MusicController.set_tutorial_music_factor(factor)
+	MusicController.set_tutorial_music_factor(fator)
 
 
-func _start_attention() -> void:
-	_restore_attention(true)
-	var hud := player.get_node("CanvasLayer/Control")
-	for element in hud.get_children():
-		if element is CanvasItem:
-			_add_attention_target(element, active_lesson == "run" and element.name == &"estamina")
-	for item_id: String in player.inventory.slots_por_item:
-		var focused := active_lesson == "collect"
-		match active_lesson:
+func _iniciar_destaque() -> void:
+	_restaurar_destaque(true)
+	var hud := jogador.get_node("CanvasLayer/Control")
+	for elemento in hud.get_children():
+		if elemento is CanvasItem:
+			_adicionar_alvo_destaque(elemento, tutorial_ativo == "run" and elemento.name == &"estamina")
+	for item_id: String in jogador.inventory.slots_por_item:
+		var destacado := tutorial_ativo == "collect"
+		match tutorial_ativo:
 			"weapon", "reload":
-				focused = item_id == "gun"
+				destacado = item_id == "gun"
 			"weapon_flashlight":
-				focused = item_id in ["gun", "lanterna"]
+				destacado = item_id in ["gun", "lanterna"]
 			"flashlight":
-				focused = item_id == "lanterna"
+				destacado = item_id == "lanterna"
 			"extinguisher":
-				focused = item_id == "extintor"
-		if active_lesson.begins_with("card_"):
-			focused = item_id == "cartao"
-		_add_attention_target(player.inventory.slots_por_item[item_id], focused)
-	_add_attention_target(player.get_node("CanvasLayer/AmmoPanel"), active_lesson in ["weapon", "reload", "weapon_flashlight"])
-	_add_attention_target(player.get_node("CanvasLayer/AlarmTip"), false, ^"self_modulate:a")
-	var scene := get_tree().current_scene
-	if scene != null:
-		_add_attention_target(scene.get_node_or_null("UI/Controle_de_tempo"), false)
-	attention_panel = player.get_node("QUEST_MISSION") as QuestMissionUI
-	attention_tasks_focused = active_lesson == "tasks"
-	attention_active = true
-	attention_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	attention_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	attention_tween.tween_method(_apply_attention, 0.0, 1.0, FADE_DURATION)
+				destacado = item_id == "extintor"
+		if tutorial_ativo.begins_with("card_"):
+			destacado = item_id == "cartao"
+		_adicionar_alvo_destaque(jogador.inventory.slots_por_item[item_id], destacado)
+	_adicionar_alvo_destaque(jogador.get_node("CanvasLayer/AmmoPanel"), tutorial_ativo in ["weapon", "reload", "weapon_flashlight"])
+	_adicionar_alvo_destaque(jogador.get_node("CanvasLayer/AlarmTip"), false, ^"self_modulate:a")
+	var cena := get_tree().current_scene
+	if cena != null:
+		_adicionar_alvo_destaque(cena.get_node_or_null("UI/Controle_de_tempo"), false)
+	painel_destacado = jogador.get_node("QUEST_MISSION") as QuestMissionUI
+	tarefas_destacadas = tutorial_ativo == "tasks"
+	destaque_ativo = true
+	transicao_destaque = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	transicao_destaque.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	transicao_destaque.tween_method(_aplicar_destaque, 0.0, 1.0, DURACAO_TRANSICAO)
 
 
-func _add_attention_target(node: Node, focused: bool, property: NodePath = ^"modulate:a") -> void:
-	if not node is CanvasItem:
+func _adicionar_alvo_destaque(no: Node, destacado: bool, propriedade: NodePath = ^"modulate:a") -> void:
+	if not no is CanvasItem:
 		return
-	attention_targets.append({"node": node, "property": property, "original": node.get_indexed(property), "focused": focused})
+	alvos_destaque.append({"node": no, "property": propriedade, "original": no.get_indexed(propriedade), "focused": destacado})
 
 
-func _apply_attention(amount: float) -> void:
-	attention_amount = amount
-	for target: Dictionary in attention_targets:
-		var node: Object = target["node"]
-		if is_instance_valid(node):
-			var original: float = target["original"]
-			var factor := 1.0 if bool(target["focused"]) else UNFOCUSED_OPACITY
-			node.set_indexed(target["property"], original * lerpf(1.0, factor, amount))
-	if is_instance_valid(attention_panel):
-		var factor := 1.0 if attention_tasks_focused else UNFOCUSED_OPACITY
-		attention_panel.set_tutorial_opacity(lerpf(1.0, factor, amount))
+func _aplicar_destaque(intensidade: float) -> void:
+	intensidade_destaque = intensidade
+	for alvo: Dictionary in alvos_destaque:
+		var no: Object = alvo["node"]
+		if is_instance_valid(no):
+			var original: float = alvo["original"]
+			var fator := 1.0 if bool(alvo["focused"]) else OPACIDADE_SEM_DESTAQUE
+			no.set_indexed(alvo["property"], original * lerpf(1.0, fator, intensidade))
+	if is_instance_valid(painel_destacado):
+		var fator := 1.0 if tarefas_destacadas else OPACIDADE_SEM_DESTAQUE
+		painel_destacado.definir_opacidade_tutorial(lerpf(1.0, fator, intensidade))
 
 
-func _restore_attention(immediate: bool = false) -> void:
-	if not attention_active and not immediate:
+func _restaurar_destaque(imediato: bool = false) -> void:
+	if not destaque_ativo and not imediato:
 		return
-	attention_active = false
-	if attention_tween != null and attention_tween.is_valid():
-		attention_tween.kill()
-	attention_tween = null
-	if immediate:
-		_apply_attention(0.0)
-		attention_targets.clear()
-		attention_panel = null
+	destaque_ativo = false
+	if transicao_destaque != null and transicao_destaque.is_valid():
+		transicao_destaque.kill()
+	transicao_destaque = null
+	if imediato:
+		_aplicar_destaque(0.0)
+		alvos_destaque.clear()
+		painel_destacado = null
 		return
-	attention_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	attention_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	attention_tween.tween_method(_apply_attention, attention_amount, 0.0, FADE_DURATION)
-	attention_tween.tween_callback(func() -> void:
-		attention_targets.clear()
-		attention_panel = null
+	transicao_destaque = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	transicao_destaque.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	transicao_destaque.tween_method(_aplicar_destaque, intensidade_destaque, 0.0, DURACAO_TRANSICAO)
+	transicao_destaque.tween_callback(func() -> void:
+		alvos_destaque.clear()
+		painel_destacado = null
 	)
 
 
-func _start_glow() -> void:
-	_stop_glow()
-	glow_tween = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_loops()
-	glow_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	glow_tween.tween_property(glow_style, "shadow_color:a", 0.85, 0.9)
-	glow_tween.tween_property(glow_style, "shadow_color:a", 0.45, 0.9)
+func _iniciar_brilho() -> void:
+	_parar_brilho()
+	transicao_brilho = create_tween().set_ignore_time_scale(true).set_pause_mode(Tween.TWEEN_PAUSE_PROCESS).set_loops()
+	transicao_brilho.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	transicao_brilho.tween_property(estilo_brilho, "shadow_color:a", 0.85, 0.9)
+	transicao_brilho.tween_property(estilo_brilho, "shadow_color:a", 0.45, 0.9)
 
 
-func _stop_glow() -> void:
-	if glow_tween != null and glow_tween.is_valid():
-		glow_tween.kill()
-	glow_tween = null
+func _parar_brilho() -> void:
+	if transicao_brilho != null and transicao_brilho.is_valid():
+		transicao_brilho.kill()
+	transicao_brilho = null
 
 
-func protects_player(candidate: Player) -> bool:
-	return candidate == player and owns_slow_motion and not active_lesson.is_empty()
+func protege_jogador(candidato: Player) -> bool:
+	return candidato == jogador and controla_camera_lenta and not tutorial_ativo.is_empty()
 
 
-func _key(action: StringName) -> String:
-	var events := InputMap.action_get_events(action)
-	if events.is_empty():
+func _tecla(action: StringName) -> String:
+	var entradas := InputMap.action_get_events(action)
+	if entradas.is_empty():
 		return "tecla não definida"
-	var event: InputEvent = events[0]
-	if event is InputEventKey:
-		return OS.get_keycode_string(event.physical_keycode if event.physical_keycode != KEY_NONE else event.keycode)
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
+	var evento: InputEvent = entradas[0]
+	if evento is InputEventKey:
+		return OS.get_keycode_string(evento.physical_keycode if evento.physical_keycode != KEY_NONE else evento.keycode)
+	if evento is InputEventMouseButton:
+		if evento.button_index == MOUSE_BUTTON_LEFT:
 			return "clique esquerdo"
-		if event.button_index == MOUSE_BUTTON_RIGHT:
+		if evento.button_index == MOUSE_BUTTON_RIGHT:
 			return "clique direito"
-	return event.as_text()
+	return evento.as_text()
 
 
-func _content(id: String) -> Array[String]:
+func _conteudo(id: String) -> Array[String]:
 	match id:
 		"walk":
-			return ["MOVIMENTO", "Use %s/%s/%s/%s para andar pelo cenário." % [_key("up"), _key("left"), _key("down"), _key("right")]]
+			return ["MOVIMENTO", "Use %s/%s/%s/%s para andar pelo cenário." % [_tecla("up"), _tecla("left"), _tecla("down"), _tecla("right")]]
 		"run":
-			return ["CORRIDA", "Segure %s enquanto anda. Correr gasta estamina; caminhar permite recuperá-la." % _key("correr")]
+			return ["CORRIDA", "Segure %s enquanto anda. Correr gasta estamina; caminhar permite recuperá-la." % _tecla("correr")]
 		"push":
-			return ["EMPURRAR E PUXAR", "Sem item equipado, aperte %s junto do objeto. Mova-o nas quatro direções; aperte novamente para soltar." % _key("empurrar")]
+			return ["EMPURRAR E PUXAR", "Sem item equipado, aperte %s junto do objeto. Mova-o nas quatro direções; aperte novamente para soltar." % _tecla("empurrar")]
 		"collect":
-			return ["COLETAR ITENS", "Aproxime-se e aperte %s para coletar. A tecla abaixo de cada item no inventário permite equipá-lo ou guardá-lo." % _key("interact")]
+			return ["COLETAR ITENS", "Aproxime-se e aperte %s para coletar. A tecla abaixo de cada item no inventário permite equipá-lo ou guardá-lo." % _tecla("interact")]
 		"card_1":
-			return ["CARTÃO COMUM", "Abre acessos comuns. Equipe com %s e aperte %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
+			return ["CARTÃO COMUM", "Abre acessos comuns. Equipe com %s e aperte %s junto ao leitor." % [_tecla("use_cartao"), _tecla("interact")]]
 		"card_2":
-			return ["CARTÃO DE ACESSO RESTRITO", "Abre áreas restritas. Equipe com %s e aperte %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
+			return ["CARTÃO DE ACESSO RESTRITO", "Abre áreas restritas. Equipe com %s e aperte %s junto ao leitor." % [_tecla("use_cartao"), _tecla("interact")]]
 		"card_3":
-			return ["CARTÃO DO CHEFE", "Tem o maior nível de acesso. Equipe com %s e aperte %s junto ao leitor." % [_key("use_cartao"), _key("interact")]]
+			return ["CARTÃO DO CHEFE", "Tem o maior nível de acesso. Equipe com %s e aperte %s junto ao leitor." % [_tecla("use_cartao"), _tecla("interact")]]
 		"flashlight":
-			return ["LANTERNA", "Equipe ou guarde com %s. Aponte com o mouse e use %s para acender ou apagar." % [_key("use_lanterna"), _key("acende_lanterna")]]
+			return ["LANTERNA", "Equipe ou guarde com %s. Aponte com o mouse e use %s para acender ou apagar." % [_tecla("use_lanterna"), _tecla("acende_lanterna")]]
 		"extinguisher":
-			return ["EXTINTOR", "Mire no fogo e segure %s para apagá-lo. A barra mostra a carga restante. Aperte %s para guardar o extintor." % [_key("usar_extintor"), _key("use_extintor")]]
+			return ["EXTINTOR", "Mire no fogo e segure %s para apagá-lo. A barra mostra a carga restante. Aperte %s para guardar o extintor." % [_tecla("usar_extintor"), _tecla("use_extintor")]]
 		"weapon":
-			return ["ARMA", "Equipe com %s, mire com o mouse e atire com %s. Não atire em NPCs." % [_key("use_arma"), _key("fire")]]
+			return ["ARMA", "Equipe com %s, mire com o mouse e atire com %s. Não atire em NPCs." % [_tecla("use_arma"), _tecla("fire")]]
 		"reload":
-			return ["RECARREGAR", "Aperte %s para recarregar. É preciso ter munição na reserva." % _key("reload")]
+			return ["RECARREGAR", "Aperte %s para recarregar. É preciso ter munição na reserva." % _tecla("reload")]
 		"weapon_flashlight":
-			return ["ARMA E LANTERNA", "Com a arma equipada, use %s para acender a lanterna. Você pode iluminar e atirar ao mesmo tempo." % _key("use_lanterna")]
+			return ["ARMA E LANTERNA", "Com a arma equipada, use %s para acender a lanterna. Você pode iluminar e atirar ao mesmo tempo." % _tecla("use_lanterna")]
 		"tasks":
-			return ["SUAS TAREFAS", "O painel ficou oculto. Aperte %s para mostrá-lo novamente e conferir sua próxima tarefa." % _key("show_tasks")]
+			return ["SUAS TAREFAS", "O painel ficou oculto. Aperte %s para mostrá-lo novamente e conferir sua próxima tarefa." % _tecla("show_tasks")]
 	return ["", ""]

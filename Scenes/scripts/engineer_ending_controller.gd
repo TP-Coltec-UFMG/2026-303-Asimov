@@ -529,7 +529,7 @@ func _show_tasks(animate: bool = false) -> void:
 		return
 	var quest := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest != null:
-		quest.show_engineer_ending_tasks(int(state.get("engineer_completed_count", 0)), animate)
+		quest.mostrar_tarefas_final_engenheiro(int(state.get("engineer_completed_count", 0)), animate)
 
 
 func _explode_point(point_name: String, stage: int) -> void:
@@ -783,7 +783,7 @@ func _begin_escape_sequence() -> void:
 		timer.call("pausar_timer")
 	var quest := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI if is_instance_valid(player) else null
 	if quest != null:
-		quest.hide_all_tasks(false)
+		quest.ocultar_todas_tarefas(false)
 	_queue_dialogue(DialogueCatalog.entries("engineer.escape"))
 
 
@@ -1047,7 +1047,7 @@ func _finish_game(animated: bool) -> void:
 	_lock_player()
 	var quest := player.get_node_or_null("QUEST_MISSION") as QuestMissionUI
 	if quest != null:
-		quest.hide_all_tasks(false)
+		quest.ocultar_todas_tarefas(false)
 	final_fade.show()
 	final_fade.mouse_filter = Control.MOUSE_FILTER_STOP
 	final_fade.color.a = 0.0 if animated else 1.0

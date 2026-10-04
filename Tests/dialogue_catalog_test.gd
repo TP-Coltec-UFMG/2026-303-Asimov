@@ -66,13 +66,13 @@ func _run() -> void:
 	_expect(DialogManager.current_line_data["sender_id"] == "scientist", "A fala atual deve identificar seu remetente.")
 	DialogManager.interrupt_with_catalog_dialog("data_center.power_failure.before", "catalog:interruption", false)
 	_expect(DialogManager.current_line_data["sender_id"] == "player", "A interrupção deve identificar a fala do jogador.")
-	DialogManager.dialog_box.call("_close_dialog")
+	DialogManager.dialog_box.call("_fechar_dialogo")
 	await get_tree().create_timer(1.0).timeout
 	_expect(not DialogManager.is_showing_dialog, "A queda deve aguardar a interação com o NPC para retomar.")
 	_expect(DialogManager.resume_suspended_dialog("catalog:original"), "A conversa do JSON deve permitir retomada.")
-	_expect(DialogManager.dialog_box == original_box and int(original_box.current_index) == 1, "A conversa deve retomar a mesma fala.")
+	_expect(DialogManager.dialog_box == original_box and int(original_box.indice_atual) == 1, "A conversa deve retomar a mesma fala.")
 	_expect(DialogManager.current_sequence_id == "data_center.card_delivery" and DialogManager.current_line_data["recipient_id"] == "player", "A retomada deve preservar a sequência e seus participantes.")
-	DialogManager.dialog_box.call("_close_dialog")
+	DialogManager.dialog_box.call("_fechar_dialogo")
 	await get_tree().create_timer(1.0).timeout
 	var report := FileAccess.open("res://.dialogue-catalog-results.json", FileAccess.WRITE)
 	report.store_string(JSON.stringify({"passed": failures.is_empty(), "failures": failures, "lines": data["lines"].size(), "sequences": data["sequences"].size()}, "\t"))

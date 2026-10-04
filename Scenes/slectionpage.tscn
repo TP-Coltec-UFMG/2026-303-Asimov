@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://3v65ns525vg8" path="res://Sprites/transitions/Transition.png" id="5_h7hbm"]
 [ext_resource type="Script" uid="uid://dsipk6ntdfmhe" path="res://Scripts/UI/menu_input_router.gd" id="6_menu_input"]
 
+[ext_resource type="PackedScene" path="res://Scenes/Utils/navegacao_menu.tscn" id="NavegacaoCena"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
 atlas = ExtResource("5_h7hbm")
 region = Rect2(0, 0, 384, 216)
@@ -73,8 +75,7 @@ animations = [{
 
 [node name="slectionpage" type="Node2D" unique_id=1755590176]
 
-[node name="MenuInputRouter" type="Node" parent="." unique_id=691436893]
-script = ExtResource("6_menu_input")
+[node name="MenuInputRouter" parent="." unique_id=691436893 instance=ExtResource("NavegacaoCena")]
 
 [node name="Control" type="Control" parent="." unique_id=1858804346]
 layout_mode = 3
@@ -304,25 +305,25 @@ sprite_frames = SubResource("SpriteFrames_11bea")
 
 [connection signal="mouse_entered" from="Control/Job/Programador" to="Control/Job/Programador" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Job/Programador" to="Control/Job/Programador" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Job/Programador" to="Control/Job/Programador" method="_on_pressed"]
+[connection signal="pressed" from="Control/Job/Programador" to="Control/Job/Programador" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_on_pressed"]
+[connection signal="pressed" from="Control/Job/Engenheiro" to="Control/Job/Engenheiro" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Character/Character1" to="Control/Character/Character1" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Character/Character1" to="Control/Character/Character1" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Character/Character1" to="Control/Character/Character1" method="_on_pressed"]
+[connection signal="pressed" from="Control/Character/Character1" to="Control/Character/Character1" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Character/Character2" to="Control/Character/Character2" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Character/Character2" to="Control/Character/Character2" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Character/Character2" to="Control/Character/Character2" method="_on_pressed"]
+[connection signal="pressed" from="Control/Character/Character2" to="Control/Character/Character2" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Character/Character3" to="Control/Character/Character3" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Character/Character3" to="Control/Character/Character3" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Character/Character3" to="Control/Character/Character3" method="_on_pressed"]
+[connection signal="pressed" from="Control/Character/Character3" to="Control/Character/Character3" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_on_pressed"]
+[connection signal="pressed" from="Control/Difficulty/Easy" to="Control/Difficulty/Easy" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_on_pressed"]
+[connection signal="pressed" from="Control/Difficulty/Normal" to="Control/Difficulty/Normal" method="_ao_pressionar"]
 [connection signal="mouse_entered" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_on_mouse_exited"]
-[connection signal="pressed" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_on_pressed"]
+[connection signal="pressed" from="Control/Difficulty/Hard" to="Control/Difficulty/Hard" method="_ao_pressionar"]

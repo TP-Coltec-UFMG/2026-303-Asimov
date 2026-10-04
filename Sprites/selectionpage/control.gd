@@ -5,7 +5,7 @@ var option_selected: String = ""
 
 
 func _ready() -> void:
-	ContextualTutorial.start_new_game()
+	ContextualTutorial.iniciar_novo_jogo()
 	await get_tree().process_frame
 	$CHOICETEXT.text = "SELECIONE A DIFICULDADE"
 	$Difficulty.visible = true

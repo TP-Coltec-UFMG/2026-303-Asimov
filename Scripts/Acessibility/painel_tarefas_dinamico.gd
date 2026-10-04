@@ -10,7 +10,7 @@ func _ready() -> void:
 func _on_toggled(toggled_on: bool) -> void:
 	Configs._change_painel_tarefas_dinamico(toggled_on)
 	SaveLoad._save()
-	get_tree().call_group(&"task_panels", &"apply_dynamic_panel_setting")
+	get_tree().call_group(&"task_panels", &"aplicar_configuracao_painel_dinamico")
 	if Configs.configs.leitor_de_tela:
 		LeitorDeTela._ler_texto(
 			"Painel de tarefas dinâmico ativado"

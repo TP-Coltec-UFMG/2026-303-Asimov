@@ -4,6 +4,7 @@ var failures: Array[String] = []
 
 
 func _ready() -> void:
+	get_tree().set_meta(&"dev_mission_jump_active", true)
 	_run.call_deferred()
 
 
@@ -24,29 +25,29 @@ func _run() -> void:
 		"data_center_access_resume_talk_needed": true
 	}
 	SaveGame.save_global_state("hall_quest_01", state)
-	quest.refresh_saved_state()
-	_expect(quest.rows[6].visible and quest.rows[7].visible, "O retorno concluído e a conversa pendente devem aparecer juntos.")
-	_expect(not quest.rows[12].visible, "A tarefa RFID deve aguardar a conversa pendente.")
-	_expect((quest.rows[7].get_node("Label3") as Label).text == "FALE COM O CIENTISTA", "O painel deve orientar a falar com o cientista.")
+	quest.restaurar_estado_salvo()
+	_expect(quest.linhas[6].visible and quest.linhas[7].visible, "O retorno concluído e a conversa pendente devem aparecer juntos.")
+	_expect(not quest.linhas[12].visible, "A tarefa RFID deve aguardar a conversa pendente.")
+	_expect((quest.linhas[7].get_node("Label3") as Label).text == "FALE COM O CIENTISTA", "O painel deve orientar a falar com o cientista.")
 	state["data_center_access_resume_talk_needed"] = false
 	state["data_center_interrupted_dialog"] = {"id": "data_center:access_plan", "lines": ["Fala"], "index": 0}
 	SaveGame.save_global_state("hall_quest_01", state)
-	quest.refresh_saved_state()
-	_expect(quest.rows[7].visible, "Uma fala interrompida também deve manter a tarefa de conversar.")
+	quest.restaurar_estado_salvo()
+	_expect(quest.linhas[7].visible, "Uma fala interrompida também deve manter a tarefa de conversar.")
 	state.erase("data_center_interrupted_dialog")
 	SaveGame.save_global_state("hall_quest_01", state)
-	quest.refresh_saved_state()
-	_expect(quest.rows[7].visible, "Um save antigo com o retorno concluído também deve pedir a conversa.")
+	quest.restaurar_estado_salvo()
+	_expect(quest.linhas[7].visible, "Um save antigo com o retorno concluído também deve pedir a conversa.")
 	state["data_center_scientist_followup_done"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
-	quest.refresh_saved_state()
-	_expect(quest.rows[12].visible and not quest.rows[7].visible, "Após a conversa, a tarefa RFID deve voltar.")
+	quest.restaurar_estado_salvo()
+	_expect(quest.linhas[12].visible and not quest.linhas[7].visible, "Após a conversa, a tarefa RFID deve voltar.")
 	state["data_center_access_resume_talk_needed"] = true
 	state["data_center_scientist_followup_done"] = false
 	state["data_center_return_task_pending"] = true
 	SaveGame.save_global_state("hall_quest_01", state)
 	quest._activate_return_to_data_center_task()
-	_expect(quest.rows[6].visible and quest.rows[7].visible, "Concluir o retorno não pode apagar a tarefa de conversar.")
+	_expect(quest.linhas[6].visible and quest.linhas[7].visible, "Concluir o retorno não pode apagar a tarefa de conversar.")
 	for failure in failures:
 		push_error(failure)
 	if failures.is_empty():

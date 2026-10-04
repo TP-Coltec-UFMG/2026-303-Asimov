@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Tests/interface_editor_test.gd" id="teste"]
+
+[node name="TesteInterfaceEditor" type="Node"]
+process_mode = 3
+script = ExtResource("teste")

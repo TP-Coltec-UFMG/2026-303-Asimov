@@ -4,6 +4,7 @@ var failures: Array[String] = []
 
 
 func _ready() -> void:
+	get_tree().set_meta(&"dev_mission_jump_active", true)
 	_run.call_deferred()
 
 
@@ -31,7 +32,7 @@ func _run() -> void:
 					SaveGame.save_global_state("hall_quest_01", state)
 					var expected_completed: bool = laptop if first_item == "cabo" else cable
 					if laptop or cable:
-						quest.refresh_saved_state()
+						quest.restaurar_estado_salvo()
 						_check_row(quest, first_item, expected_completed, "restauração")
 						controller._show_boss_room_access_task()
 						_check_row(quest, first_item, expected_completed, "após conversa")
@@ -71,8 +72,8 @@ func _run() -> void:
 
 func _check_row(quest: QuestMissionUI, first_item: String, completed: bool, context: String) -> void:
 	var expected_text := "ENCONTRE UM NOTEBOOK" if first_item == "cabo" else "ENCONTRE UM CABO"
-	_expect((quest.rows[3].get_node("Label3") as Label).text == expected_text, context + ": deve pedir o item correto.")
-	_expect(quest._completed_rows[3] == completed, context + ": a conclusão deve corresponder ao item mostrado.")
+	_expect((quest.linhas[3].get_node("Label3") as Label).text == expected_text, context + ": deve pedir o item correto.")
+	_expect(quest._tarefas_concluidas[3] == completed, context + ": a conclusão deve corresponder ao item mostrado.")
 
 
 func _expect(condition: bool, message: String) -> void:
