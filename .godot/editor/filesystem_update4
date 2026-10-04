@@ -2,3 +2,6 @@ res://Player/Scripts/quest_mission_ui.gd
 res://Tutorial/contextual_tutorial.gd
 res://Scripts/Sounds/music/music.gd
 res://Tests/contextual_tutorial_test.gd
+res://Objects/scripts/objeto_empurravel.gd
+res://Player/ManPlayer.tscn
+res://Player/Scripts/player.gd

@@ -243,6 +243,9 @@ size = Vector2(1, 22)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qmd"]
 size = Vector2(1, 22)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_grab_vertical"]
+size = Vector2(14, 3)
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_weg28"]
 light_mode = 1
 
@@ -557,6 +560,18 @@ position = Vector2(5, 2)
 position = Vector2(3.5, -7)
 shape = SubResource("RectangleShape2D_57qmd")
 
+[node name="GrabUp" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrabUp"]
+position = Vector2(0, -17.5)
+shape = SubResource("RectangleShape2D_grab_vertical")
+
+[node name="GrabDown" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GrabDown"]
+position = Vector2(0, 7.5)
+shape = SubResource("RectangleShape2D_grab_vertical")
+
 [node name="BalaoDePensamento" type="Sprite2D" parent="." unique_id=1534882724]
 z_index = 99
 material = SubResource("CanvasItemMaterial_weg28")
@@ -583,7 +598,11 @@ autowrap_mode = 3
 
 [connection signal="current_animation_changed" from="AnimationPlayer" to="." method="_on_animation_player_current_animation_changed"]
 [connection signal="value_changed" from="CanvasLayer/Control/estamina" to="CanvasLayer/Control/estamina" method="_on_value_changed"]
-[connection signal="body_entered" from="GrabLeft" to="." method="_on_grab_left_body_entered"]
-[connection signal="body_exited" from="GrabLeft" to="." method="_on_grab_left_body_exited"]
-[connection signal="body_entered" from="GrabRight" to="." method="_on_grab_right_body_entered"]
-[connection signal="body_exited" from="GrabRight" to="." method="_on_grab_right_body_exited"]
+[connection signal="body_entered" from="GrabLeft" to="." method="_on_grab_body_entered" binds=[Vector2(-1, 0)]]
+[connection signal="body_exited" from="GrabLeft" to="." method="_on_grab_body_exited" binds=[Vector2(-1, 0)]]
+[connection signal="body_entered" from="GrabRight" to="." method="_on_grab_body_entered" binds=[Vector2(1, 0)]]
+[connection signal="body_exited" from="GrabRight" to="." method="_on_grab_body_exited" binds=[Vector2(1, 0)]]
+[connection signal="body_entered" from="GrabUp" to="." method="_on_grab_body_entered" binds=[Vector2(0, -1)]]
+[connection signal="body_exited" from="GrabUp" to="." method="_on_grab_body_exited" binds=[Vector2(0, -1)]]
+[connection signal="body_entered" from="GrabDown" to="." method="_on_grab_body_entered" binds=[Vector2(0, 1)]]
+[connection signal="body_exited" from="GrabDown" to="." method="_on_grab_body_exited" binds=[Vector2(0, 1)]]

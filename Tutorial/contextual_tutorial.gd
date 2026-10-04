@@ -158,7 +158,7 @@ func _discover_lessons() -> void:
 			if is_instance_valid(area) and area.is_interactable and area.get_parent().get_node_or_null("PickupComponent") != null:
 				_queue("collect")
 				break
-	if player.objeto_manipulado != null or not player.objetos_grab_left.is_empty() or not player.objetos_grab_right.is_empty():
+	if player.objeto_manipulado != null or player.has_grab_object_nearby():
 		_queue("push", true)
 	if player.usando_extintor:
 		_queue("extinguisher", true)
@@ -199,7 +199,7 @@ func _relevant(id: String) -> bool:
 		"tasks":
 			return bool(player.get_node("QUEST_MISSION")._auto_hidden)
 		"push":
-			return _push_lesson_unlocked() and (player.objeto_manipulado != null or not player.objetos_grab_left.is_empty() or not player.objetos_grab_right.is_empty())
+			return _push_lesson_unlocked() and (player.objeto_manipulado != null or player.has_grab_object_nearby())
 	if id.begins_with("card_"):
 		var card := inventory.get_item_control("cartao")
 		return card != null and int(card.tipo) == int(id.trim_prefix("card_"))
@@ -606,7 +606,7 @@ func _content(id: String) -> Array[String]:
 		"run":
 			return ["CORRIDA", "Segure %s enquanto anda. Correr gasta estamina; caminhar permite recuperá-la." % _key("correr")]
 		"push":
-			return ["EMPURRAR E PUXAR", "Sem item equipado, aperte %s ao lado do objeto. Ande para empurrar ou puxar; aperte novamente para soltar." % _key("empurrar")]
+			return ["EMPURRAR E PUXAR", "Sem item equipado, aperte %s junto do objeto. Mova-o nas quatro direções; aperte novamente para soltar." % _key("empurrar")]
 		"collect":
 			return ["COLETAR ITENS", "Aproxime-se e aperte %s para coletar. A tecla abaixo de cada item no inventário permite equipá-lo ou guardá-lo." % _key("interact")]
 		"card_1":

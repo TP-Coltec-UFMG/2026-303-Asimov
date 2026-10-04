@@ -68,6 +68,8 @@ class MovementAudioGuard extends Node:
 
 var objetos_grab_left: Array[ObjetoEmpurravel] = []
 var objetos_grab_right: Array[ObjetoEmpurravel] = []
+var objetos_grab_up: Array[ObjetoEmpurravel] = []
+var objetos_grab_down: Array[ObjetoEmpurravel] = []
 
 var correndo: bool = false
 var andando: bool = false
@@ -370,11 +372,6 @@ func _physics_process(delta: float) -> void:
 
 	direction = Input.get_vector("left", "right", "up", "down")
 	
-	if objeto_manipulado != null:
-		direction.y = 0.0
-		if not is_zero_approx(direction.x):
-			direction.x = -1.0 if direction.x < 0.0 else 1.0
-	
 	var mudou_estado: bool = SetState()
 	var mudou_direcao: bool = SetDirection()
 	var mudou_sentido_animacao: bool = SetWalkingBackwards()
@@ -431,22 +428,29 @@ func _update_walking_sfx(moved: bool = false) -> void:
 func tentar_pegar_objeto() -> void:
 	if objeto_manipulado != null:
 		return
-	if cardinal_direction == Vector2.LEFT:
-		for i in range(objetos_grab_left.size() - 1, -1, -1):
-			var objeto: ObjetoEmpurravel = objetos_grab_left[i]
-			if not is_instance_valid(objeto):
-				objetos_grab_left.remove_at(i)
-				continue
-			pegar_objeto(objeto, Vector2.LEFT)
-			return
-	elif cardinal_direction == Vector2.RIGHT:
-		for i in range(objetos_grab_right.size() - 1, -1, -1):
-			var objeto: ObjetoEmpurravel = objetos_grab_right[i]
-			if not is_instance_valid(objeto):
-				objetos_grab_right.remove_at(i)
-				continue
-			pegar_objeto(objeto, Vector2.RIGHT)
-			return
+	var candidates := _grab_candidates(cardinal_direction)
+	for i in range(candidates.size() - 1, -1, -1):
+		var objeto: ObjetoEmpurravel = candidates[i]
+		if not is_instance_valid(objeto):
+			candidates.remove_at(i)
+			continue
+		pegar_objeto(objeto, cardinal_direction)
+		return
+
+
+func _grab_candidates(lado: Vector2) -> Array[ObjetoEmpurravel]:
+	match lado:
+		Vector2.LEFT:
+			return objetos_grab_left
+		Vector2.UP:
+			return objetos_grab_up
+		Vector2.DOWN:
+			return objetos_grab_down
+	return objetos_grab_right
+
+
+func has_grab_object_nearby() -> bool:
+	return not objetos_grab_left.is_empty() or not objetos_grab_right.is_empty() or not objetos_grab_up.is_empty() or not objetos_grab_down.is_empty()
 
 func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 	if objeto_manipulado != null:
@@ -488,9 +492,9 @@ func _physics_manipulando(delta: float) -> void:
 		soltar_objeto()
 		return
 	
-	var movimento: Vector2 = Vector2(direction.x * move_speed * delta, 0.0)
+	var movimento: Vector2 = direction * move_speed * delta
 	
-	if is_zero_approx(movimento.x):
+	if movimento.is_zero_approx():
 		if drag_sfx.playing:
 			drag_sfx.stop()
 		return
@@ -514,47 +518,24 @@ func mover_com_objeto(movimento: Vector2) -> void:
 	elif drag_sfx.playing:
 		drag_sfx.stop()
 
-func _on_grab_left_body_entered(body: Node2D) -> void:
+func _on_grab_body_entered(body: Node2D, lado: Vector2) -> void:
 	if not body is ObjetoEmpurravel:
 		return
 		
 	var objeto: ObjetoEmpurravel = body as ObjetoEmpurravel
-	
-	if not objeto in objetos_grab_left:
-		objetos_grab_left.append(objeto)
+	var candidates := _grab_candidates(lado)
+	if not objeto in candidates:
+		candidates.append(objeto)
 		
-	if empurrando and objeto_manipulado == null and cardinal_direction == Vector2.LEFT:
-		pegar_objeto(objeto, Vector2.LEFT)
+	if empurrando and objeto_manipulado == null and cardinal_direction == lado:
+		pegar_objeto(objeto, lado)
 
-func _on_grab_left_body_exited(body: Node2D) -> void:
+func _on_grab_body_exited(body: Node2D, lado: Vector2) -> void:
 	if not body is ObjetoEmpurravel:
 		return
 		
 	var objeto: ObjetoEmpurravel = body as ObjetoEmpurravel
-	
-	if objeto in objetos_grab_left:
-		objetos_grab_left.erase(objeto)
-
-func _on_grab_right_body_entered(body: Node2D) -> void:
-	if not body is ObjetoEmpurravel:
-		return
-		
-	var objeto: ObjetoEmpurravel = body as ObjetoEmpurravel
-	
-	if not objeto in objetos_grab_right:
-		objetos_grab_right.append(objeto)
-		
-	if empurrando and objeto_manipulado == null and cardinal_direction == Vector2.RIGHT:
-		pegar_objeto(objeto, Vector2.RIGHT)
-
-func _on_grab_right_body_exited(body: Node2D) -> void:
-	if not body is ObjetoEmpurravel:
-		return
-		
-	var objeto: ObjetoEmpurravel = body as ObjetoEmpurravel
-	
-	if objeto in objetos_grab_right:
-		objetos_grab_right.erase(objeto)
+	_grab_candidates(lado).erase(objeto)
 
 func usando_item_com_mira() -> bool:
 	return usando_lanterna or usando_arma or usando_extintor
