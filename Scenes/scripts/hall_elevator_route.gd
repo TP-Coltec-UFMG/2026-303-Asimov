@@ -8,9 +8,19 @@ var query := PhysicsShapeQueryParameters2D.new()
 var obstacle_transforms: Array[Transform2D] = []
 var cached_route := PackedVector2Array()
 var initialized := false
+var guidance_visible := false
+var guidance_tween: Tween
+var guidance_alpha := 0.0:
+	set(value):
+		guidance_alpha = value
+		queue_redraw()
 
 
 func _ready() -> void:
+	z_index = 1
+	var unshaded := CanvasItemMaterial.new()
+	unshaded.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
+	material = unshaded
 	var shape := CapsuleShape2D.new()
 	shape.radius = 7.0
 	shape.height = 22.0
@@ -24,6 +34,31 @@ func _ready() -> void:
 	grid.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	grid.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	grid.update()
+
+
+func set_guidance_visible(enabled: bool) -> void:
+	if guidance_visible == enabled:
+		return
+	guidance_visible = enabled
+	if guidance_tween != null and guidance_tween.is_valid():
+		guidance_tween.kill()
+	guidance_tween = create_tween()
+	guidance_tween.tween_property(self, "guidance_alpha", 1.0 if enabled else 0.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func _draw() -> void:
+	if guidance_alpha <= 0.0:
+		return
+	var start: Vector2 = $Entrance.position
+	var finish: Vector2 = $Exit.position
+	var direction := start.direction_to(finish)
+	var side := direction.orthogonal()
+	draw_line(start, finish, Color(1.0, 0.94, 0.75, 0.06 * guidance_alpha), 18.0)
+	draw_line(start, finish, Color(1.0, 0.94, 0.75, 0.22 * guidance_alpha), 1.0)
+	for fraction in [0.35, 0.7]:
+		var tip := start.lerp(finish, fraction)
+		var arrow := PackedVector2Array([tip - direction * 4.0 + side * 3.0, tip, tip - direction * 4.0 - side * 3.0])
+		draw_polyline(arrow, Color(1.0, 0.94, 0.75, 0.22 * guidance_alpha), 1.0)
 
 
 func get_clear_route() -> PackedVector2Array:

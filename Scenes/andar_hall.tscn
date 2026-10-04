@@ -206,6 +206,7 @@ scale = Vector2(0.425, 0.425)
 save_id = "extintor2"
 
 [node name="pedaco1" type="CharacterBody2D" parent="Coletaveis" unique_id=775917438 groups=["empurravel"]]
+z_index = 2
 position = Vector2(-22, 5)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_1"
@@ -233,6 +234,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_m7e8o")
 
 [node name="pedaco5" type="CharacterBody2D" parent="Coletaveis" unique_id=1634234465 groups=["empurravel"]]
+z_index = 2
 position = Vector2(27, 39)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_2"
@@ -261,6 +263,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco2" type="CharacterBody2D" parent="Coletaveis" unique_id=1777953629 groups=["empurravel"]]
+z_index = 2
 position = Vector2(12, 5)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_3"
@@ -289,6 +292,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco4" type="CharacterBody2D" parent="Coletaveis" unique_id=302313232 groups=["empurravel"]]
+z_index = 2
 position = Vector2(-33, 41)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_4"
@@ -317,6 +321,7 @@ position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_nflo4")
 
 [node name="pedaco3" type="CharacterBody2D" parent="Coletaveis" unique_id=386280701 groups=["empurravel"]]
+z_index = 2
 position = Vector2(-1, 29)
 script = ExtResource("4_48805")
 save_id = "PEDACO_PAREDE_5"
@@ -523,10 +528,11 @@ rotation = 1.5707964
 scale = Vector2(0.035156276, 0.15584177)
 texture = ExtResource("14_pjvw7")
 
-[node name="NPCs" type="Node" parent="." unique_id=247527864]
+[node name="NPCs" type="Node2D" parent="." unique_id=247527864]
+z_index = 3
+y_sort_enabled = true
 
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("5_vvkyc")]
-z_index = 2
 position = Vector2(142, -89)
 sprite_sheet = ExtResource("15_tbjth")
 run_speed = 40.0
@@ -548,7 +554,6 @@ random_at_end = false
 delete_npc_at_end = true
 
 [node name="NPC2" parent="NPCs" unique_id=1302424203 instance=ExtResource("5_vvkyc")]
-z_index = 1
 position = Vector2(123, -89)
 sprite_sheet = ExtResource("17_xahv0")
 run_speed = 45.0
@@ -616,7 +621,6 @@ movement_type = 1
 delete_npc_at_end = true
 
 [node name="NPC5" parent="NPCs" unique_id=660128066 instance=ExtResource("5_vvkyc")]
-z_index = 6
 position = Vector2(83, -8)
 sprite_sheet = ExtResource("20_m7e8o")
 run_speed = 45.0
@@ -683,7 +687,6 @@ movement_type = 1
 delete_npc_at_end = true
 
 [node name="NPC8" parent="NPCs" unique_id=1960654454 instance=ExtResource("5_vvkyc")]
-z_index = 3
 position = Vector2(-121, -22)
 sprite_sheet = ExtResource("23_4bo1l")
 run_speed = 45.0
@@ -706,7 +709,6 @@ movement_type = 1
 delete_npc_at_end = true
 
 [node name="NPC9" parent="NPCs" unique_id=841091034 instance=ExtResource("5_vvkyc")]
-z_index = 3
 position = Vector2(-121, 60)
 sprite_sheet = ExtResource("24_xcn0o")
 run_speed = 45.0
@@ -729,7 +731,6 @@ movement_type = 1
 delete_npc_at_end = true
 
 [node name="NPC10" parent="NPCs" unique_id=911211034 instance=ExtResource("5_vvkyc")]
-z_index = 3
 position = Vector2(-88, -4)
 sprite_sheet = ExtResource("7_nqlva")
 run_speed = 45.0
@@ -752,7 +753,6 @@ movement_type = 1
 delete_npc_at_end = true
 
 [node name="NPC11" parent="NPCs" unique_id=1190239884 instance=ExtResource("5_vvkyc")]
-z_index = 3
 position = Vector2(36, 153)
 sprite_sheet = ExtResource("23_ohpjp")
 run_speed = 45.0
@@ -775,7 +775,6 @@ movement_type = 1
 delete_npc_at_end = true
 
 [node name="NPC12" parent="NPCs" unique_id=1388378966 instance=ExtResource("5_vvkyc")]
-z_index = 3
 position = Vector2(-59, 153)
 sprite_sheet = ExtResource("26_4bo1l")
 run_speed = 45.0

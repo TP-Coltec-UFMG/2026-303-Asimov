@@ -163,6 +163,7 @@ func _on_pensamento_iniciado(id: String) -> void:
 
 func _highlight_hall_objectives() -> void:
 	_clear_objective_highlights()
+	get_parent().get_node("ElevatorRoute").set_guidance_visible(M1_feito and not M2_feito and not _hide_scheduled)
 	if _hide_scheduled or not M1_feito:
 		return
 	if not M2_feito:
@@ -297,6 +298,7 @@ func _physics_process(delta: float) -> void:
 		return
 	M2_feito = clear
 	quest_ui.set_task_completed(1, clear, clear)
+	get_parent().get_node("ElevatorRoute").set_guidance_visible(M1_feito and not clear)
 	if clear and M1_feito:
 		_clear_objective_highlights()
 	if clear and not M1_feito:
