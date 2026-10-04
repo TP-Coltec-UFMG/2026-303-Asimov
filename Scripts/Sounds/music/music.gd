@@ -80,6 +80,7 @@ var hacking_background_applied_factor: float = 1.0
 var npc_dialog_music_factor: float = 1.0
 var npc_dialog_music_applied_factor: float = 1.0
 var npc_dialog_music_base_db: float = 0.0
+var tutorial_music_factor: float = 1.0
 var alarm_normal_volume_db: float = 0.0
 var alarm_elapsed: float = 0.0
 var alarm_unducked_volume_db: float = 0.0
@@ -161,8 +162,11 @@ func _update_npc_dialog_music(delta: float) -> void:
 	if music_bus < 0:
 		return
 
+	var current_volume_db := AudioServer.get_bus_volume_db(music_bus)
 	if npc_dialog_music_applied_factor < 1.0:
-		AudioServer.set_bus_volume_db(music_bus, npc_dialog_music_base_db)
+		var expected_volume_db := npc_dialog_music_base_db + linear_to_db(npc_dialog_music_applied_factor)
+		if is_equal_approx(current_volume_db, expected_volume_db):
+			current_volume_db = npc_dialog_music_base_db
 		npc_dialog_music_applied_factor = 1.0
 	var target_factor := NPC_DIALOG_MUSIC_FACTOR if DialogManager.is_showing_dialog else 1.0
 	npc_dialog_music_factor = move_toward(
@@ -170,11 +174,16 @@ func _update_npc_dialog_music(delta: float) -> void:
 		target_factor,
 		delta / NPC_DIALOG_MUSIC_FADE_DURATION
 	)
-	npc_dialog_music_base_db = AudioServer.get_bus_volume_db(music_bus)
-	var base_amplitude := db_to_linear(npc_dialog_music_base_db)
-	var ducked_amplitude := base_amplitude * npc_dialog_music_factor
-	AudioServer.set_bus_volume_db(music_bus, linear_to_db(maxf(ducked_amplitude, db_to_linear(SILENT_VOLUME_DB))))
-	npc_dialog_music_applied_factor = npc_dialog_music_factor if npc_dialog_music_factor < 1.0 else 1.0
+	npc_dialog_music_base_db = current_volume_db
+	var combined_factor := npc_dialog_music_factor * tutorial_music_factor
+	AudioServer.set_bus_volume_db(music_bus, current_volume_db + linear_to_db(combined_factor))
+	npc_dialog_music_applied_factor = combined_factor
+
+
+func set_tutorial_music_factor(factor: float) -> void:
+	tutorial_music_factor = clampf(factor, 0.01, 1.0)
+	_update_npc_dialog_music(0.0)
+	_refresh_alarm_output()
 
 
 func _update_hacking_music(delta: float) -> void:
@@ -983,12 +992,12 @@ func _refresh_alarm_output() -> void:
 	if alarm_user_muted:
 		som_alarme.volume_db = SILENT_VOLUME_DB
 		return
+	var output_db := alarm_unducked_volume_db
 	if not alarm_quiet_contexts.is_empty():
-		som_alarme.volume_db = linear_to_db(
+		output_db = linear_to_db(
 			db_to_linear(alarm_normal_volume_db) * ALARM_QUIET_CONTEXT_VOLUME
 		)
-		return
-	som_alarme.volume_db = alarm_unducked_volume_db
+	som_alarme.volume_db = output_db + linear_to_db(tutorial_music_factor)
 
 
 func _get_audio_player(player_id: String) -> AudioStreamPlayer:
