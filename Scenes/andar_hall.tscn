@@ -41,6 +41,8 @@
 [ext_resource type="PackedScene" path="res://Scenes/Utils/color_accessibility_cue.tscn" id="99_color_accessibility"]
 [ext_resource type="Script" uid="uid://dvouf3jvmif20" path="res://Scenes/scripts/scene_ambience.gd" id="ambience_hall"]
 
+[ext_resource type="Script" path="res://Scenes/scripts/hall_elevator_route.gd" id="elevator_route"]
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4bo1l"]
 load_path = "res://.godot/imported/pedaco_1.png-219691cfb0d6eee3e96f77c1fa5091d6.ctex"
 
@@ -113,9 +115,6 @@ size = Vector2(9, 11.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wweuw"]
 size = Vector2(9, 12)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
-size = Vector2(3.5, 15)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2iras"]
 atlas = ExtResource("26_nflo4")
@@ -843,12 +842,6 @@ script = ExtResource("20_vkln7")
 process_physics_priority = -6
 player = NodePath("../../ManPlayer")
 
-[node name="Area2D" type="Area2D" parent="UI" unique_id=1222956211]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="UI/Area2D" unique_id=1915402409]
-position = Vector2(12.75, -89)
-shape = SubResource("RectangleShape2D_yf5fn")
-
 [node name="Transition" type="AnimatedSprite2D" parent="UI" unique_id=954264057]
 visible = false
 z_index = 1
@@ -859,6 +852,15 @@ frame = 7
 
 [node name="QuestController" type="Node" parent="." unique_id=856587055]
 script = ExtResource("18_h0r3n")
+
+[node name="ElevatorRoute" type="Node2D" parent="."]
+script = ExtResource("elevator_route")
+
+[node name="Entrance" type="Marker2D" parent="ElevatorRoute"]
+position = Vector2(-26, -22)
+
+[node name="Exit" type="Marker2D" parent="ElevatorRoute"]
+position = Vector2(-26, -94)
 
 [node name="Pedaco2" type="Sprite2D" parent="." unique_id=936507080]
 position = Vector2(-129, -85)
@@ -884,4 +886,3 @@ texture = ExtResource("8_vkln7")
 [connection signal="fogo_apagou" from="Perigos/Fogo5" to="QuestController" method="_on_fogo_5_fogo_apagou"]
 [connection signal="fogo_apagou" from="Perigos/Fogo6" to="QuestController" method="_on_fogo_6_fogo_apagou"]
 [connection signal="jogador_morreu" from="ManPlayer" to="UI/Controle_de_tempo" method="_on_man_player_jogador_morreu"]
-[connection signal="body_entered" from="UI/Area2D" to="QuestController" method="_on_area_2d_body_entered"]

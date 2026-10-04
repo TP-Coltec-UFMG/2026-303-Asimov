@@ -29,6 +29,9 @@ var _elevador_terceiro_liberado: bool = false
 var _chegou_terceiro_andar: bool = false
 var _extinguisher_check_elapsed := 0.0
 var _extinguisher_failure_started := false
+var _route_check_elapsed := 0.0
+var _exit_paths_pending := false
+var _exit_paths_legacy_restore := false
 
 func _ready() -> void:
 
@@ -232,17 +235,23 @@ func _on_fogo_6_fogo_apagou() -> void:
 		_save_progress_and_checkpoint()
 
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
-	if not body is ObjetoEmpurravel:
+func _physics_process(delta: float) -> void:
+	if _exit_paths_pending:
+		_exit_paths_pending = false
+		_start_npc_exit_paths(_exit_paths_legacy_restore)
+	if not _inicializado or _hide_scheduled:
 		return
-
-	if M2_feito:
+	_route_check_elapsed += delta
+	if _route_check_elapsed < 0.25:
 		return
-
-	M2_feito = true
-	quest_ui.set_task_completed(1, true, true)
-
-	if not M1_feito:
+	_route_check_elapsed = 0.0
+	var clear: bool = not get_parent().get_node("ElevatorRoute").get_clear_route().is_empty()
+	if clear == M2_feito:
+		_tentar_finalizar_missao()
+		return
+	M2_feito = clear
+	quest_ui.set_task_completed(1, clear, clear)
+	if clear and not M1_feito:
 		_pensar("aviso_1", "Preciso apagar todos os focos de incêndio!")
 		_pensar("aviso_2", "Não é seguro passar assim.")
 
@@ -282,6 +291,8 @@ func _tentar_finalizar_missao() -> bool:
 
 	if _hide_scheduled:
 		return false
+	if not Engine.is_in_physics_frame():
+		return false
 
 	_hide_scheduled = true
 
@@ -294,10 +305,16 @@ func _tentar_finalizar_missao() -> bool:
 
 
 func _start_npc_exit_paths(legacy_restore: bool = false) -> void:
+	if not Engine.is_in_physics_frame():
+		_exit_paths_pending = true
+		_exit_paths_legacy_restore = legacy_restore
+		return
 	var npcs := get_node_or_null("../NPCs")
 
 	if npcs == null:
 		return
+	var route_checker := get_parent().get_node("ElevatorRoute")
+	var route: PackedVector2Array = route_checker.get_clear_route()
 
 	for npc in npcs.get_children():
 		if npc.is_queued_for_deletion():
@@ -307,6 +324,7 @@ func _start_npc_exit_paths(legacy_restore: bool = false) -> void:
 
 		if path == null:
 			continue
+		route_checker.prepare_exit_path(npc, path, route)
 
 		if legacy_restore:
 			if not npc.get_script():

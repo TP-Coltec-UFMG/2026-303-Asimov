@@ -5,3 +5,4 @@ res://Tests/contextual_tutorial_test.gd
 res://Objects/scripts/objeto_empurravel.gd
 res://Player/ManPlayer.tscn
 res://Player/Scripts/player.gd
+res://Scenes/scripts/quest_mission.gd
