@@ -1,1 +1,1 @@
-extends "res://Tutorial/tutorial_rooms.gd"
+ extends "res://Tutorial/tutorial_rooms.gd"

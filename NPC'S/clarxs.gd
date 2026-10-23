@@ -12,6 +12,7 @@ signal solicitou_interacao(npc: Node2D)
 @export var pegada_navegacao: Shape2D
 @export var textos_dialogo: Array[String] = []
 @export var dialogo_habilitado: bool = true
+@export var acompanhar_player_com_olhar: bool = true
 @export var id_dialogo: String = ""
 @export var id_sequencia_dialogo: String = ""
 
@@ -224,7 +225,7 @@ func configurar_animacoes() -> void:
 func _process(delta: float) -> void:
 	_atualizar_indicador_interacao()
 	if desvio_multidao_habilitado:
-		if not desesperado and (caminho_atual == null or caminho_finalizado) and jogador_no_alcance and player_ref:
+		if acompanhar_player_com_olhar and not desesperado and (caminho_atual == null or caminho_finalizado) and jogador_no_alcance and player_ref:
 			atualizar_direcao()
 		return
 
@@ -236,7 +237,7 @@ func _process(delta: float) -> void:
 		atualizar_movimento(delta)
 		return
 
-	if jogador_no_alcance and player_ref:
+	if acompanhar_player_com_olhar and jogador_no_alcance and player_ref:
 		atualizar_direcao()
 		return
 

@@ -13,14 +13,14 @@
 [ext_resource type="Script" uid="uid://c3bmarmj4pw5v" path="res://Scenes/scripts/data_center_intro_controller.gd" id="16_data_center"]
 [ext_resource type="PackedScene" uid="uid://ceroyqy22gqmd" path="res://Objects/Lanterna.tscn" id="17_flashlight"]
 [ext_resource type="Script" uid="uid://b1nxd271n3cpp" path="res://Scenes/scripts/line_2d.gd" id="18_npc_path"]
+[ext_resource type="Texture2D" uid="uid://bfufeqcgcydgm" path="res://NPC'S/NPC/scientist_1.png" id="18_x5ty7"]
 [ext_resource type="PackedScene" uid="uid://3adv0qqyjmrq" path="res://Objects/cartao_forte.tscn" id="19_strong_card"]
 [ext_resource type="PackedScene" uid="uid://beo4uworw31ct" path="res://Objects/cartao_chefe.tscn" id="20_boss_card"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="21_rfid_font"]
 [ext_resource type="PackedScene" path="res://Scenes/cooling_location_guide.tscn" id="22_cooling_guide"]
 [ext_resource type="Script" uid="uid://drgm3fa52vppv" path="res://Scenes/scripts/data_center_activity.gd" id="activity_data_center"]
 [ext_resource type="PackedScene" path="res://Scenes/Audio/ambiente.tscn" id="ambience_data_center"]
-
-[ext_resource type="SpriteFrames" path="res://NPC'S/Animacoes/scientist_1.tres" id="animacoes_10_s1lij"]
+[ext_resource type="AudioStream" uid="uid://c0ginjtcldu78" path="res://Sounds/Effects/mixkit-small-electric-glitch-2595.mp3" id="falha_eletrica"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
 size = Vector2(13, 21)
@@ -63,6 +63,256 @@ size = Vector2(11, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ekofs"]
 size = Vector2(12, 32)
 
+[sub_resource type="AtlasTexture" id="Quadro4"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(48, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro1"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro2"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro67"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(288, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro68"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(304, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro69"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(320, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro70"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(336, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro71"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(352, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro72"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(368, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro49"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(0, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro50"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(16, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro51"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(32, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro52"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(48, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro53"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(64, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro54"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(80, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro55"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(96, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro56"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(112, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro57"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(128, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro58"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(144, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro59"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(160, 64, 16, 32)
+
+[sub_resource type="AtlasTexture" id="Quadro60"]
+atlas = ExtResource("18_x5ty7")
+region = Rect2(176, 64, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x5ty7"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro4")
+}],
+"loop": 0,
+"name": &"idle_down",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro1")
+}],
+"loop": 0,
+"name": &"idle_side",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro2")
+}],
+"loop": 0,
+"name": &"idle_up",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro67")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro68")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro69")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro70")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro71")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro72")
+}],
+"loop": 1,
+"name": &"run_down",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro49")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro50")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro51")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro52")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro53")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro54")
+}],
+"loop": 1,
+"name": &"run_side",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro55")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro56")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro57")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro58")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro59")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro60")
+}],
+"loop": 1,
+"name": &"run_up",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro67")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro68")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro69")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro70")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro71")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro72")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro49")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro50")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro51")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro52")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro53")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro54")
+}],
+"loop": 1,
+"name": &"walk_side",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Quadro55")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro56")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro57")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro58")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro59")
+}, {
+"duration": 1.0,
+"texture": SubResource("Quadro60")
+}],
+"loop": 1,
+"name": &"walk_up",
+"speed": 8.0
+}]
+
 [node name="ANDAR_DATA_CENTER" type="Node2D" unique_id=1272659551]
 script = ExtResource("1_y5mn0")
 
@@ -76,7 +326,7 @@ metadata/_edit_lock_ = true
 [node name="Iluminacao" type="Node" parent="." unique_id=1277360669]
 
 [node name="CanvasModulate" type="CanvasModulate" parent="Iluminacao" unique_id=1474701810]
-color = Color(0.5721848, 0.5721848, 0.5721848, 1)
+color = Color(0.40298524, 0.4029852, 0.40298522, 1)
 
 [node name="PointLight2D93" type="PointLight2D" parent="Iluminacao" unique_id=1446000464]
 position = Vector2(5, -74)
@@ -221,15 +471,7 @@ offset_bottom = -109.0
 color = Color(0, 0, 0, 0.81960785)
 
 [node name="LuzDeEmergencia" parent="Iluminacao" unique_id=1619443567 instance=ExtResource("3_7c6dg")]
-position = Vector2(-39, -244.00002)
-scale = Vector2(0.115, 0.115)
-
-[node name="LuzDeEmergencia2" parent="Iluminacao" unique_id=2026266579 instance=ExtResource("3_7c6dg")]
-position = Vector2(72, -244)
-scale = Vector2(0.115, 0.115)
-
-[node name="LuzDeEmergencia3" parent="Iluminacao" unique_id=1094045165 instance=ExtResource("3_7c6dg")]
-position = Vector2(-188, -243.99998)
+position = Vector2(-58, -244)
 scale = Vector2(0.115, 0.115)
 
 [node name="AtividadeDosMonitores" type="Node2D" parent="Iluminacao" unique_id=767300196]
@@ -390,15 +632,26 @@ color = Color(0, 0, 0, 0)
 [node name="DataCenterIntroController" type="Node" parent="." unique_id=1256750246]
 script = ExtResource("16_data_center")
 
+[node name="VerificarAproximacaoRFID" type="Timer" parent="DataCenterIntroController" unique_id=2000498053]
+wait_time = 0.2
+
+[node name="FalhaEletrica" type="AudioStreamPlayer" parent="DataCenterIntroController" unique_id=674966019]
+stream = ExtResource("falha_eletrica")
+volume_db = -12.0
+bus = &"sfx"
+
 [node name="NPCs" type="Node" parent="." unique_id=581868378]
 
 [node name="AcessoForteNPCDestino" type="Marker2D" parent="NPCs" unique_id=1016277972]
 position = Vector2(-171, -129)
 
+[node name="PaineisNPCDestino" type="Marker2D" parent="NPCs" unique_id=309453487]
+position = Vector2(-101, -201)
+
 [node name="NPC1" parent="NPCs" unique_id=406687579 instance=ExtResource("9_kxi26")]
 z_index = 2
 position = Vector2(-101, -201)
-animacoes = ExtResource("animacoes_10_s1lij")
+animacoes = SubResource("SpriteFrames_x5ty7")
 dialogo_habilitado = false
 interacao_personalizada = true
 texto_interacao = "ESPAÇO: ENTREGAR CARTÃO"
@@ -419,6 +672,11 @@ visible = false
 position = Vector2(0, -12)
 save_id = "data_center_story_strong_card"
 
+[node name="CaminhoAtePaineis" type="Line2D" parent="NPCs/NPC1" unique_id=288624261]
+points = PackedVector2Array(-11, 64, -9, 26, 0, 0)
+script = ExtResource("18_npc_path")
+sortear_ao_terminar = false
+
 [node name="CartaoChefeDaHistoria" parent="NPCs/NPC1" unique_id=258681730 instance=ExtResource("20_boss_card")]
 process_mode = 4
 visible = false
@@ -426,8 +684,7 @@ position = Vector2(0, -12)
 save_id = "data_center_story_boss_card"
 
 [connection signal="solicitou_acesso" from="SceneTrigger2" to="DataCenterIntroController" method="_on_access_requested"]
-
-[connection signal="solicitou_inicio" from="NPCs/NPC1/CaminhoAteAcessoForte" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
-
+[connection signal="timeout" from="DataCenterIntroController/VerificarAproximacaoRFID" to="DataCenterIntroController" method="_on_outage_timer_timeout"]
 [connection signal="caminho_concluido" from="NPCs/NPC1" to="DataCenterIntroController" method="_on_recipient_path_completed"]
 [connection signal="solicitou_interacao" from="NPCs/NPC1" to="DataCenterIntroController" method="_on_recipient_interaction_requested"]
+[connection signal="solicitou_inicio" from="NPCs/NPC1/CaminhoAteAcessoForte" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c4e81i13gjvx3"]
 
 [ext_resource type="Texture2D" uid="uid://cjdafjwf7hgnm" path="res://Sprites/objects/New Piskel(3).png" id="1_wrett"]
-[ext_resource type="Texture2D" uid="uid://xe3xoat3u8dd" path="res://Sprites/ilumination/Design sem nome(8).png" id="2_5ba0m"]
 [ext_resource type="Script" uid="uid://d1r7g26yroggs" path="res://Objects/scripts/luz_de_emergencia.gd" id="2_aqftx"]
+[ext_resource type="Texture2D" uid="uid://dfhkmwfxsu333" path="res://Sprites/ilumination/2d_lights_and_shadows_neutral_point_light.webp" id="3_aqftx"]
 
 [node name="LuzDeEmergencia" type="Sprite2D" unique_id=1619443567]
 texture = ExtResource("1_wrett")
@@ -10,7 +10,8 @@ script = ExtResource("2_aqftx")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1195572133]
 visible = false
-position = Vector2(0, -34)
+position = Vector2(-6.0000005, 252)
 scale = Vector2(3.252799, 2.3199987)
 energy = 0.43
-texture = ExtResource("2_5ba0m")
+texture = ExtResource("3_aqftx")
+texture_scale = 3.27

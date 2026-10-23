@@ -13,11 +13,8 @@ const CARD_ITEM_ID: String = "cartao"
 const STRONG_CARD_TYPE: int = 2
 const BOSS_CARD_TYPE: int = 3
 const POWER_OFF_COLOR := Color("#020202")
-const POWER_FLICKER_COUNT: int = 3
-const POWER_FLICKER_OFF_TIME: float = 0.12
-const POWER_FLICKER_ON_TIME: float = 0.10
-const OUTAGE_AFTER_MIN_DELAY: float = 5.0
-const OUTAGE_AFTER_MAX_DELAY: float = 22.0
+const DISTANCIA_AVISO_RFID: float = 82.0
+const INTERVALOS_DRENAGEM: Array[float] = [0.65, 0.4, 0.22]
 
 @export_range(0.1, 30.0, 0.1) var rfid_verification_duration: float = 5.0
 @export var rfid_thought_balloon_offset := Vector2(0.0, -17.0)
@@ -37,7 +34,10 @@ var regular_lights: Array[PointLight2D] = []
 var regular_light_visibility: Dictionary = {}
 var normal_canvas_color: Color = Color.WHITE
 var power_sequence_running: bool = false
-var outage_timer: Timer
+@onready var outage_timer: Timer = $VerificarAproximacaoRFID
+@onready var caminho_paineis: NPCPath = $"../NPCs/NPC1/CaminhoAtePaineis"
+@onready var destino_paineis: Marker2D = $"../NPCs/PaineisNPCDestino"
+@onready var som_falha: AudioStreamPlayer = $FalhaEletrica
 var access_sequence_busy: bool = false
 var rfid_verification_running: bool = false
 var rfid_verification_interrupted: bool = false
@@ -91,16 +91,10 @@ func _initialize() -> void:
 	_prepare_story_card(strong_story_card)
 	_prepare_story_card(boss_story_card)
 	_prepare_recipient()
-	outage_timer = Timer.new()
-	outage_timer.one_shot = true
-	add_child(outage_timer)
-	outage_timer.timeout.connect(_on_outage_timer_timeout)
 	_cache_regular_lights()
 	_connect_world_objects()
 	if not DialogManager.dialog_finished.is_connected(_on_dialog_finished):
 		DialogManager.dialog_finished.connect(_on_dialog_finished)
-	if not DialogManager.dialog_line_started.is_connected(_on_dialog_line_started):
-		DialogManager.dialog_line_started.connect(_on_dialog_line_started)
 	_restore_progress()
 
 
@@ -136,21 +130,19 @@ func _restore_progress() -> void:
 	if bool(state.get("data_center_power_outage", false)):
 		_apply_power_outage_visuals()
 		_set_power_outage_music(true)
+		if bool(state.get("data_center_outage_cinematic", false)):
+			_retornar_cientista_aos_paineis(state)
 		if bool(state.get("data_center_power_dialog_finished", false)):
 			_show_power_tasks(
 				player.inventory.get_item_on_inventary(FLASHLIGHT_ITEM_ID),
 				bool(state.get("data_center_tools_floor_task_completed", false))
 			)
 		else:
-			_set_recipient_interaction(true, "ESPAÇO: FALAR")
+			_set_recipient_interaction(not bool(state.get("data_center_outage_cinematic", false)) or bool(state.get("data_center_power_panel_reached", false)), "ESPAÇO: FALAR")
 			_show_power_talk_task()
 		return
 	if bool(state.get("data_center_card_delivered", false)):
 		_ensure_outage_schedule(state)
-		if str(state.get("data_center_outage_phase", "")) == "before" and bool(state.get("data_center_outage_pending", false)):
-			_show_card_task(true)
-			call_deferred("_begin_power_failure")
-			return
 		if bool(state.get("data_center_card_dialog_finished", false)):
 			_restore_access_progress(state)
 		else:
@@ -317,6 +309,11 @@ func _on_recipient_interaction_requested(_npc: Node2D) -> void:
 	if not _is_current_scene() or DialogManager.is_showing_dialog:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
+	if power_sequence_running:
+		return
+	if _power_is_out(state) and bool(state.get("data_center_outage_cinematic", false)) and not bool(state.get("data_center_power_panel_reached", false)):
+		return
+	recipient.set("acompanhar_player_com_olhar", true)
 	if not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty():
 		_set_recipient_interaction(false)
 		_resume_interrupted_dialog("data_center_power_dialog_snapshot")
@@ -356,11 +353,7 @@ func _deliver_boss_card() -> void:
 	player.reset_sprite_player()
 	_show_card_task(true, true)
 	_save_checkpoint()
-	if str(state.get("data_center_outage_phase", "")) == "before":
-		_begin_power_failure()
-	else:
-		_start_card_dialog()
-		_arm_outage_timer(state)
+	_start_card_dialog()
 
 
 func _start_card_dialog() -> void:
@@ -370,68 +363,38 @@ func _start_card_dialog() -> void:
 
 
 func _ensure_outage_schedule(state: Dictionary) -> void:
-	if bool(state.get("data_center_power_outage", false)) or bool(state.get("data_center_breaker_restored", false)):
+	if _power_is_out(state) or bool(state.get("data_center_breaker_restored", false)):
 		return
-	if bool(state.get("data_center_outage_pending", false)):
-		if str(state.get("data_center_outage_phase", "")) == "during":
-			if bool(state.get("data_center_access_plan_finished", false)):
-				state["data_center_outage_phase"] = "after"
-				state["data_center_outage_delay"] = randf_range(OUTAGE_AFTER_MIN_DELAY, OUTAGE_AFTER_MAX_DELAY)
-				state["data_center_outage_due_unix"] = 0.0
-			elif not state.has("data_center_outage_target_dialog"):
-
-				state["data_center_outage_target_dialog"] = ACCESS_PLAN_DIALOG_ID if bool(state.get("data_center_card_dialog_finished", false)) else CARD_DIALOG_ID
-				state["data_center_outage_target_line"] = 1
-			SaveGame.save_global_state("hall_quest_01", state)
-		return
-	var phase: String = str(["before", "during", "after"][randi_range(0, 2)])
 	state["data_center_outage_pending"] = true
-	state["data_center_outage_phase"] = phase
-	state["data_center_outage_delay"] = randf_range(OUTAGE_AFTER_MIN_DELAY, OUTAGE_AFTER_MAX_DELAY) if phase == "after" else 0.0
-	state["data_center_outage_due_unix"] = 0.0
-	if phase == "during":
-		var target_dialog := CARD_DIALOG_ID if randi_range(0, 1) == 0 else ACCESS_PLAN_DIALOG_ID
-		state["data_center_outage_target_dialog"] = target_dialog
-		state["data_center_outage_target_line"] = randi_range(1, 3 if target_dialog == CARD_DIALOG_ID else 2)
+	state["data_center_outage_phase"] = "approach"
+	state["data_center_outage_cinematic"] = true
+	state.erase("data_center_outage_due_unix")
+	state.erase("data_center_outage_target_dialog")
+	state.erase("data_center_outage_target_line")
 	SaveGame.save_global_state("hall_quest_01", state)
 
 
 func _arm_outage_timer(state: Dictionary) -> void:
-	if outage_timer == null or not outage_timer.is_stopped():
-		return
-	if not bool(state.get("data_center_outage_pending", false)):
-		return
-	if str(state.get("data_center_outage_phase", "")) != "after" or not bool(state.get("data_center_access_plan_finished", false)):
-		return
-	var due_unix := float(state.get("data_center_outage_due_unix", 0.0))
-	if due_unix <= 0.0:
-		due_unix = Time.get_unix_time_from_system() + float(state.get("data_center_outage_delay", 5.0))
-		state["data_center_outage_due_unix"] = due_unix
-		SaveGame.save_global_state("hall_quest_01", state)
-	outage_timer.start(maxf(due_unix - Time.get_unix_time_from_system(), 0.1))
-
-
-func _on_dialog_line_started(dialog_id: String, index: int) -> void:
-	if not _is_current_scene() or power_sequence_running:
-		return
-	var state: Dictionary = SaveGame.office_mission_state(player)
-	if not bool(state.get("data_center_outage_pending", false)) or str(state.get("data_center_outage_phase", "")) != "during":
-		return
-	if dialog_id == str(state.get("data_center_outage_target_dialog", "")) and index == int(state.get("data_center_outage_target_line", -1)):
-		_begin_power_failure()
+	if bool(state.get("data_center_outage_pending", false)) and bool(state.get("data_center_access_plan_finished", false)) and not bool(state.get("data_center_breaker_restored", false)):
+		outage_timer.start()
 
 
 func _on_outage_timer_timeout() -> void:
-	if not _is_current_scene():
+	if not _is_current_scene() or power_sequence_running:
+		return
+	var state := SaveGame.office_mission_state(player)
+	if not bool(state.get("data_center_outage_pending", false)) or bool(state.get("data_center_breaker_restored", false)):
+		outage_timer.stop()
+		return
+	if not bool(state.get("data_center_access_plan_finished", false)) or DialogManager.is_showing_dialog:
 		return
 	var cooling_guide := get_parent().get_node_or_null("CoolingLocationGuide")
 	if cooling_guide != null and bool(cooling_guide.get("cutscene_running")):
-		outage_timer.start(0.5)
 		return
-	if rfid_verification_running or access_sequence_busy:
-		outage_timer.start(0.5)
+	if rfid_verification_running or access_sequence_busy or not player.is_physics_processing():
 		return
-	_begin_power_failure()
+	if player.global_position.distance_squared_to(access_destination.global_position) <= DISTANCIA_AVISO_RFID * DISTANCIA_AVISO_RFID:
+		_begin_power_failure()
 
 
 func _start_access_plan_dialog() -> void:
@@ -538,7 +501,7 @@ func _on_dialog_finished(dialog_id: String) -> void:
 			SaveGame.save_global_state("hall_quest_01", state)
 			_restore_access_progress(state)
 			_save_checkpoint()
-	if dialog_id != POWER_DIALOG_ID and _power_is_out(state) and not bool(state.get("data_center_power_dialog_finished", false)):
+	if dialog_id != POWER_DIALOG_ID and _power_is_out(state) and not bool(state.get("data_center_power_dialog_finished", false)) and not bool(state.get("data_center_outage_cinematic", false)):
 		call_deferred("_start_power_failure_dialog")
 
 
@@ -563,6 +526,17 @@ func _begin_recipient_walk() -> void:
 
 
 func _on_recipient_path_completed(finished_path: NPCPath) -> void:
+	if finished_path == caminho_paineis and _is_current_scene():
+		var estado := SaveGame.office_mission_state(player)
+		estado["data_center_power_panel_reached"] = true
+		SaveGame.save_global_state("hall_quest_01", estado)
+		recipient.set("acompanhar_player_com_olhar", false)
+		recipient.call("reproduzir_parado", Vector2.UP)
+		_set_recipient_interaction(true, "ESPAÇO: FALAR")
+		if not bool(estado.get("data_center_power_dialog_finished", false)):
+			_show_power_talk_task()
+		_save_checkpoint()
+		return
 	if finished_path != access_path or not _is_current_scene():
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
@@ -576,6 +550,8 @@ func _on_recipient_path_completed(finished_path: NPCPath) -> void:
 
 
 func _resume_access_at_reader(state: Dictionary) -> void:
+	if bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false)):
+		return
 	if (
 		bool(state.get("data_center_rfid_inspection_task_active", false))
 		or bool(state.get("data_center_rfid_wires_task_active", false))
@@ -665,9 +641,8 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 		player.balao_de_pensamento.enfileirar_dialogo("data_center.access_before_power", "data_center:access_before_power")
 		return
 	if bool(state.get("data_center_outage_pending", false)) and not bool(state.get("data_center_breaker_restored", false)):
-		if outage_timer != null:
-			outage_timer.stop()
-		_begin_power_failure()
+		if bool(state.get("data_center_access_plan_finished", false)):
+			_begin_power_failure()
 		return
 	if bool(state.get("data_center_rfid_reading_checked", false)):
 		return
@@ -1054,45 +1029,88 @@ func _begin_power_failure() -> void:
 		return
 	if bool(state.get("data_center_power_outage", false)):
 		_apply_power_outage_visuals()
-		_start_power_failure_dialog()
+		return
+	if not bool(state.get("data_center_access_plan_finished", false)) or DialogManager.is_showing_dialog or rfid_verification_running or access_sequence_busy:
 		return
 	if outage_timer != null:
 		outage_timer.stop()
 	power_sequence_running = true
 	DialogManager.input_blocked = true
+	_set_access_interactable(false)
+	_set_recipient_interaction(false)
 	if bool(state.get("data_center_access_npc_moving", false)) and recipient.has_method("parar_caminho_atual"):
 		state["data_center_access_npc_paused_point"] = int(recipient.get("ponto_atual"))
 		SaveGame.save_global_state("hall_quest_01", state)
 		recipient.call("parar_caminho_atual")
-	for _index in POWER_FLICKER_COUNT:
-		_set_regular_lights_visible(false)
-		await get_tree().create_timer(POWER_FLICKER_OFF_TIME, false).timeout
+	_definir_luz_aviso(false)
+	await get_tree().create_timer(0.08, false).timeout
+	if not _is_current_scene():
+		return
+	_definir_luz_aviso(true)
+	await get_tree().create_timer(1.25, false).timeout
+	if not _is_current_scene():
+		return
+	var pensamento_cientista := recipient.get_node("BalaoDePensamento")
+	pensamento_cientista.caracteres_por_segundo = 24.0
+	pensamento_cientista.tempo_minimo = 1.8
+	pensamento_cientista.tempo_maximo = 1.8
+	pensamento_cientista.enfileirar_dialogo("data_center.power_warning.scientist")
+	som_falha.play()
+	for indice in INTERVALOS_DRENAGEM.size():
+		await get_tree().create_timer(INTERVALOS_DRENAGEM[indice], false).timeout
 		if not _is_current_scene():
 			return
-		_set_regular_lights_visible(true)
-		await get_tree().create_timer(POWER_FLICKER_ON_TIME, false).timeout
+		_definir_luz_aviso(false)
+		await get_tree().create_timer(0.1 + indice * 0.03, false).timeout
 		if not _is_current_scene():
 			return
+		_definir_luz_aviso(true)
+	await get_tree().create_timer(0.35, false).timeout
+	if not _is_current_scene():
+		return
 	state = SaveGame.office_mission_state(player)
 	state["data_center_power_outage"] = true
+	state["data_center_outage_cinematic"] = true
 	state["data_center_outage_pending"] = false
 	state["data_center_access_resume_talk_needed"] = true
 	state["data_center_scientist_followup_done"] = false
 	if bool(state.get("data_center_access_npc_moving", false)):
 		state["data_center_access_npc_moving"] = false
 	SaveGame.save_global_state("hall_quest_01", state)
+	_definir_luz_aviso(false)
+	GameAudio.tocar_interface(self, GameAudio.DISJUNTOR, -10.0)
+	await get_tree().create_timer(0.3, false).timeout
+	if not _is_current_scene():
+		return
 	_apply_power_outage_visuals()
 	_reduce_remaining_time_once()
 	_set_power_outage_music(true)
+	player.balao_de_pensamento.enfileirar_dialogo("data_center.power_failure.thought")
 	_set_recipient_interaction(false)
 	power_sequence_running = false
 	DialogManager.input_blocked = false
 	_save_checkpoint()
-	if str(state.get("data_center_outage_phase", "")) == "before":
-		_set_recipient_interaction(true, "ESPAÇO: FALAR")
-		_show_power_talk_task()
-	else:
-		_start_power_failure_dialog()
+	_show_power_talk_task()
+	_retornar_cientista_aos_paineis(state)
+
+
+func _definir_luz_aviso(acesa: bool) -> void:
+	_set_regular_lights_visible(acesa)
+	var modulacao := get_node_or_null("../Iluminacao/CanvasModulate") as CanvasModulate
+	if modulacao != null:
+		modulacao.color = normal_canvas_color if acesa else POWER_OFF_COLOR
+
+
+func _retornar_cientista_aos_paineis(state: Dictionary) -> void:
+	recipient.set("acompanhar_player_com_olhar", false)
+	if bool(state.get("data_center_power_panel_reached", false)):
+		recipient.call("parar_caminho_atual")
+		recipient.global_position = destino_paineis.global_position
+		recipient.call("reproduzir_parado", Vector2.UP)
+		_set_recipient_interaction(not bool(state.get("data_center_power_dialog_finished", false)))
+		return
+	_set_recipient_interaction(false)
+	recipient.call("iniciar_caminho", caminho_paineis)
 
 
 func _start_power_failure_dialog() -> void:
@@ -1100,6 +1118,8 @@ func _start_power_failure_dialog() -> void:
 		return
 	var state: Dictionary = SaveGame.office_mission_state(player)
 	if not _power_is_out(state) or bool(state.get("data_center_power_dialog_finished", false)):
+		return
+	if bool(state.get("data_center_outage_cinematic", false)) and not bool(state.get("data_center_power_panel_reached", false)):
 		return
 	if DialogManager.is_showing_dialog and DialogManager.current_dialog_id == POWER_DIALOG_ID:
 		return
@@ -1119,7 +1139,7 @@ func _start_power_failure_dialog() -> void:
 		SaveGame.save_global_state("hall_quest_01", state)
 		_save_checkpoint()
 	DialogManager.interrupt_with_catalog_dialog(
-		"data_center.power_failure.before" if str(state.get("data_center_outage_phase", "")) == "before" else "data_center.power_failure.interrupted",
+		"data_center.power_failure.panel" if bool(state.get("data_center_outage_cinematic", false)) else "data_center.power_failure.interrupted",
 		POWER_DIALOG_ID,
 		false
 	)

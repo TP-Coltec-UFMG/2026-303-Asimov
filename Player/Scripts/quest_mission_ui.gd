@@ -923,6 +923,7 @@ func restaurar_estado_salvo() -> void:
 	elif bool(state.get("data_center_power_outage", false)) and not breaker_completed:
 		if not bool(state.get("data_center_power_dialog_finished", false)) and (
 			str(state.get("data_center_outage_phase", "")) == "before"
+			or bool(state.get("data_center_outage_cinematic", false))
 			or not (state.get("data_center_power_dialog_snapshot", {}) as Dictionary).is_empty()
 		):
 			mostrar_tarefa_conversa_energia()
