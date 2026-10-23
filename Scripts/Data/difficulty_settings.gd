@@ -20,22 +20,13 @@ static func current_job() -> String:
 
 
 static func initial_time_seconds() -> float:
-	var difficulty := current_difficulty()
-	if current_job() == "engenheiro_eletrico":
-		match difficulty:
-			"easy":
-				return 20.0 * 60.0
-			"hard":
-				return 10.0 * 60.0
-			_:
-				return 15.0 * 60.0
-	match difficulty:
+	match current_difficulty():
 		"easy":
-			return 15.0 * 60.0
+			return 20.0 * 60.0
 		"hard":
 			return 10.0 * 60.0
 		_:
-			return 30.0 * 60.0
+			return 15.0 * 60.0
 
 
 static func cooling_reward_seconds() -> float:

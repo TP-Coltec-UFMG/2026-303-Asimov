@@ -265,11 +265,13 @@ func _physics_process(delta: float) -> void:
 
 
 func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
-	if is_queued_for_deletion():
+	if not is_inside_tree() or not can_process() or is_queued_for_deletion():
 		return
 	var delta := get_physics_process_delta_time()
 	if is_instance_valid(navegacao_obstaculos) or empurravel_pelo_player:
 		var body := $CharacterBody2D as CharacterBody2D
+		if not body.is_inside_tree() or not body.can_process() or not PhysicsServer2D.body_get_space(body.get_rid()).is_valid():
+			return
 		var before := body.global_position
 		body.velocity = safe_velocity
 		body.move_and_slide()

@@ -6,3 +6,5 @@ res://shaders/filtro_daltonismo.gdshader
 res://shaders/pause_menu.gdshader
 res://Scenes/animations/cooling_location_guide_animations.tres
 res://Scenes/animations/cooling_location_guide_tree.tres
+res://Objects/scripts/controle_de_tempo.gd
+res://Scripts/Data/difficulty_settings.gd

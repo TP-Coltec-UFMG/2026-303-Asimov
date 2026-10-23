@@ -3,7 +3,6 @@ extends Control
 signal tempo_esgotado
 
 const DIFFICULTY_SETTINGS := preload("res://Scripts/Data/difficulty_settings.gd")
-const TEMPO_LIMITE_DEV: float = 60 * 10
 const TEMPO_INICIO_AUDIO: float = 11.0
 const TEMPO_INICIO_COUNT_DOWN: float = 46.0
 const TEMPO_EVENTO_REFRIGERACAO: float = 120.0
@@ -24,13 +23,11 @@ var tempo_tremor_final: float = 0.0
 var intensidade_tremor_final: float = 0.0
 var camera_em_tremor: Camera2D = null
 var offset_original_camera: Vector2 = Vector2.ZERO
-var limite_da_partida: float = 60.0 * 12.0
+var limite_da_partida: float = 60.0 * 15.0
 
 
 func _ready() -> void:
 	limite_da_partida = DIFFICULTY_SETTINGS.initial_time_seconds()
-	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
-		limite_da_partida = TEMPO_LIMITE_DEV
 	add_to_group("temporizador_jogo")
 	if SaveGame.tempo_atual >= 0.0:
 		carregar_tempo_restante(SaveGame.tempo_atual)
