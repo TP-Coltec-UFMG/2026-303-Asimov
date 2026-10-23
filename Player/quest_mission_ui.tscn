@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c0gnsi802ues5"]
 
 [ext_resource type="Script" uid="uid://dja6157yfkiav" path="res://Player/Scripts/quest_mission_ui.gd" id="1"]
+[ext_resource type="Script" path="res://Player/Scripts/orientacao_tarefas.gd" id="orientacao"]
 [ext_resource type="FontFile" uid="uid://4u0s2rx02af5" path="res://Minigames/Arte/PixelifySans-Medium.ttf" id="2"]
 [ext_resource type="Texture2D" uid="uid://bnat7qx6txmu4" path="res://Sprites/ui/New_Piskel.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://ilqnqop4tga7" path="res://Sprites/ui/New_Piskel1.png" id="4"]
@@ -319,4 +320,13 @@ sprite_frames = SubResource("SpriteFramesCheck")
 wait_time = 15.0
 one_shot = true
 
+[node name="OrientacaoTarefas" type="Node" parent="."]
+process_mode = 1
+script = ExtResource("orientacao")
+
+[node name="Verificacao" type="Timer" parent="OrientacaoTarefas"]
+wait_time = 0.25
+autostart = true
+
+[connection signal="timeout" from="OrientacaoTarefas/Verificacao" to="OrientacaoTarefas" method="_ao_verificar"]
 [connection signal="timeout" from="TemporizadorExibicao" to="." method="_ao_terminar_exibicao"]

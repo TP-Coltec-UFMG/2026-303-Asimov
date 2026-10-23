@@ -656,6 +656,7 @@ dialogo_habilitado = false
 interacao_personalizada = true
 texto_interacao = "ESPAÇO: ENTREGAR CARTÃO"
 save_id = "data_center_recipient"
+empurravel_pelo_player = true
 velocidade_corrida = 40.0
 
 [node name="CaminhoAteAcessoForte" type="Line2D" parent="NPCs/NPC1" unique_id=56411354]

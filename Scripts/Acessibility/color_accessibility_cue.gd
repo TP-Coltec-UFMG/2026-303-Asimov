@@ -15,6 +15,8 @@ var _padding: Vector2 = Vector2.ONE
 var _last_geometry: Array = []
 var _cue_material: ShaderMaterial
 var _forced_outline: bool = false
+var _mission_hint: bool = false
+var _mission_pulse: float = 0.0
 
 
 func _ready() -> void:
@@ -51,8 +53,17 @@ func set_forced_outline(enabled: bool) -> void:
 		_refresh_enabled_state()
 
 
+func set_mission_hint(enabled: bool) -> void:
+	if _mission_hint == enabled:
+		return
+	_mission_hint = enabled
+	_mission_pulse = 0.0
+	if is_node_ready():
+		_refresh_enabled_state()
+
+
 func _refresh_enabled_state(mode: int = FiltroDaltonismo.modo) -> void:
-	var enabled := mode != 0 or HighContrast.enabled or _forced_outline
+	var enabled := mode != 0 or HighContrast.enabled or _forced_outline or _mission_hint
 	material = _cue_material
 	_cue_material.set_shader_parameter("modo", mode if mode != 0 else int(enabled))
 	set_process(enabled)
@@ -61,7 +72,7 @@ func _refresh_enabled_state(mode: int = FiltroDaltonismo.modo) -> void:
 		_process(0.0)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	visible = _target_available()
 	if not visible or not _sprite.is_visible_in_tree():
 		return
@@ -109,6 +120,9 @@ func _process(_delta: float) -> void:
 	_padding = Vector2(0.75 / scale_x, 0.75 / scale_y)
 
 	self_modulate = _sprite.self_modulate
+	if _mission_hint:
+		_mission_pulse += delta
+		self_modulate.a *= 0.65 + 0.35 * (sin(_mission_pulse * 3.0) * 0.5 + 0.5)
 	var geometry: Array = [_texture, _source, _destination, _flip_h, _flip_v, _padding]
 	if geometry != _last_geometry:
 		_last_geometry = geometry

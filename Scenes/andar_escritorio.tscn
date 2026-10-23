@@ -116,6 +116,7 @@ id_sequencia_dialogo = "office.scientist.introduction"
 dialogo_habilitado = false
 id_dialogo = "office:npc_intro_dialog"
 save_id = "office_intro_npc"
+empurravel_pelo_player = true
 velocidade_corrida = 40.0
 
 [node name="Line2D2" type="Line2D" parent="NPCs/NPC1" unique_id=559845400]

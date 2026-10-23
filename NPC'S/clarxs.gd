@@ -30,6 +30,7 @@ var checkpoint_restored: bool = false
 @export var velocidade_caminhada: float = 30.0
 @export var velocidade_corrida: float = 60.0
 @export var desvio_multidao_habilitado: bool = false
+@export var empurravel_pelo_player: bool = false
 @export var raio_chegada_saida: float = 24.0
 @export var tempo_chegada_saida: float = 0.5
 
@@ -116,11 +117,13 @@ func _ready() -> void:
 		textos_dialogo = DialogueCatalog.texts(id_sequencia_dialogo)
 	rng.randomize()
 	indicador_interacao.visible = false
+	if empurravel_pelo_player:
+		desvio_multidao_habilitado = true
 	if desvio_multidao_habilitado:
 
 		var body := $CharacterBody2D as CharacterBody2D
 		body.collision_layer = 2
-		body.collision_mask = 0
+		body.collision_mask = 1 if empurravel_pelo_player else 0
 
 		agente_desvio.target_position = global_position + Vector2(100000.0, 100000.0)
 		agente_desvio.avoidance_enabled = true
@@ -245,6 +248,9 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if not desvio_multidao_habilitado:
 		return
+	if empurravel_pelo_player and DialogManager.is_showing_dialog:
+		agente_desvio.velocity = Vector2.ZERO
+		return
 	if _atualizar_chegada_saida(delta):
 		return
 	if desesperado:
@@ -262,7 +268,7 @@ func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
 	if is_queued_for_deletion():
 		return
 	var delta := get_physics_process_delta_time()
-	if is_instance_valid(navegacao_obstaculos):
+	if is_instance_valid(navegacao_obstaculos) or empurravel_pelo_player:
 		var body := $CharacterBody2D as CharacterBody2D
 		var before := body.global_position
 		body.velocity = safe_velocity
