@@ -20,6 +20,8 @@ var configs: Dictionary = {
 	"movimento_camera": true,
 	"painel_tarefas_dinamico": true,
 	"assistencia_mira": false,
+	"corrida_automatica": false,
+	"equipar_itens_automaticamente": true,
 	"input_bindings": {},
 	"interface_size": 0,
 	"tutorial_seen": false,

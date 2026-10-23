@@ -47,6 +47,8 @@ var save_data: Dictionary = {
 	"movimento_camera" : true,
 	"painel_tarefas_dinamico" : true,
 	"assistencia_mira" : false,
+	"corrida_automatica": false,
+	"equipar_itens_automaticamente": true,
 	"input_bindings": {},
 	"interface_size" : 0,
 	"tutorial_seen" : false,
@@ -125,6 +127,8 @@ func _apply_load() -> void:
 	save_data["movimento_camera"] = bool(save_data.get("movimento_camera", true))
 	save_data["painel_tarefas_dinamico"] = bool(save_data.get("painel_tarefas_dinamico", true))
 	save_data["assistencia_mira"] = bool(save_data.get("assistencia_mira", false))
+	save_data["corrida_automatica"] = bool(save_data.get("corrida_automatica", false))
+	save_data["equipar_itens_automaticamente"] = bool(save_data.get("equipar_itens_automaticamente", true))
 
 	if str(save_data.get("job", "")) == "engenheiro":
 		save_data["job"] = "engenheiro_eletrico"

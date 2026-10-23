@@ -61,6 +61,14 @@
 [ext_resource type="Script" path="res://Scripts/UI/Menus/configuracoes_som.gd" id="GDScript_gj1q6"]
 [ext_resource type="Script" path="res://Scripts/UI/Menus/configuracoes_interface.gd" id="GDScript_jfdv3"]
 
+[ext_resource type="Script" path="res://Scripts/Acessibility/opcao_controle_simplificado.gd" id="controle_simplificado"]
+
+[sub_resource type="StyleBoxEmpty" id="MargensRolagemAcessibilidade"]
+content_margin_left = 32.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
 [sub_resource type="StyleBoxEmpty" id="PainelTransparente"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fh6vw"]
@@ -820,15 +828,28 @@ theme_override_font_sizes/font_size = 40
 text = "ACESSIBILIDADE"
 horizontal_alignment = 1
 
-[node name="VContainer" type="VBoxContainer" parent="Accessibility" unique_id=1333947604]
-offset_left = 118.0
+[node name="Rolagem" type="ScrollContainer" parent="Accessibility"]
+theme_override_styles/panel = SubResource("MargensRolagemAcessibilidade")
+offset_left = 90.0
 offset_top = 64.0
-offset_right = 329.0
-offset_bottom = 238.0
+offset_right = 422.0
+offset_bottom = 248.0
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="VContainer" type="VBoxContainer" parent="Accessibility/Rolagem"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 script = ExtResource("35_jcmch")
 
-[node name="OptionDaltonismoButton" type="OptionButton" parent="Accessibility/VContainer" unique_id=864497664 groups=["alto_contraste"]]
+[node name="TituloFiltro" type="Label" parent="Accessibility/Rolagem/VContainer" groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_vjiof")
+theme_override_font_sizes/font_size = 12
+text = "Auxílio de cores"
+
+[node name="OptionDaltonismoButton" type="OptionButton" parent="Accessibility/Rolagem/VContainer" unique_id=864497664 groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("5_6kgnf")
 theme_override_font_sizes/font_size = 10
@@ -847,23 +868,7 @@ pixel_font = ExtResource("7_vjiof")
 pixel_font_size = 8
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="Accessibility/VContainer/OptionDaltonismoButton" unique_id=1403739012 groups=["alto_contraste"]]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = -0.0663717
-anchor_top = -0.16666648
-anchor_right = 0.18555143
-anchor_bottom = 0.0952381
-offset_left = 17.0
-offset_top = -11.500004
-offset_right = 78.2871
-offset_bottom = 6.0
-theme_override_fonts/font = ExtResource("7_vjiof")
-theme_override_font_sizes/font_size = 12
-text = "Auxílio de cores"
-metadata/_edit_use_anchors_ = true
-
-[node name="Legendas" type="CheckBox" parent="Accessibility/VContainer" unique_id=1829192796 groups=["alto_contraste"]]
+[node name="Legendas" type="CheckBox" parent="Accessibility/Rolagem/VContainer" unique_id=1829192796 groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_fonts/font = ExtResource("7_vjiof")
@@ -874,7 +879,7 @@ text = "Legendas"
 flat = true
 script = ExtResource("41_8ivwb")
 
-[node name="Tamanho" type="SpinBox" parent="Accessibility/VContainer/Legendas" unique_id=770380116]
+[node name="Tamanho" type="SpinBox" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=770380116]
 visible = false
 layout_mode = 0
 offset_left = 56.0
@@ -887,7 +892,7 @@ max_value = 16.0
 value = 10.0
 suffix = "px"
 
-[node name="Label" type="Label" parent="Accessibility/VContainer/Legendas/Tamanho" unique_id=1272877909 groups=["alto_contraste"]]
+[node name="Label" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas/Tamanho" unique_id=1272877909 groups=["alto_contraste"]]
 layout_mode = 0
 offset_left = -72.85713
 offset_top = -3.0517578e-05
@@ -898,13 +903,13 @@ theme_override_font_sizes/font_size = 16
 text = "Tamanho"
 vertical_alignment = 1
 
-[node name="Back" type="Sprite2D" parent="Accessibility/VContainer/Legendas" unique_id=1484724646]
+[node name="Back" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=1484724646]
 visible = false
 position = Vector2(180, 35.000008)
 scale = Vector2(6, 6)
 texture = ExtResource("42_4cnwg")
 
-[node name="PreviewTamanho" type="Label" parent="Accessibility/VContainer/Legendas" unique_id=895986951]
+[node name="PreviewTamanho" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=895986951]
 visible = false
 layout_mode = 0
 offset_left = 120.3125
@@ -917,7 +922,7 @@ text = "px"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PreviewSubtitlles" type="Label" parent="Accessibility/VContainer/Legendas" unique_id=244385278]
+[node name="PreviewSubtitlles" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=244385278]
 visible = false
 layout_mode = 0
 offset_left = 120.3125
@@ -930,12 +935,12 @@ text = "10 Minutos..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Sprite18" type="Sprite2D" parent="Accessibility/VContainer/Legendas" unique_id=1077829303]
+[node name="Sprite18" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=1077829303]
 position = Vector2(-9, 12)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("44_hpw7c")
 
-[node name="LeitorDeTela" type="CheckBox" parent="Accessibility/VContainer" unique_id=1355120424 groups=["alto_contraste"]]
+[node name="LeitorDeTela" type="CheckBox" parent="Accessibility/Rolagem/VContainer" unique_id=1355120424 groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_fonts/font = ExtResource("7_vjiof")
@@ -947,7 +952,7 @@ flat = true
 icon_alignment = 2
 script = ExtResource("46_mvqmk")
 
-[node name="Velocidade" type="SpinBox" parent="Accessibility/VContainer/LeitorDeTela" unique_id=1029142242]
+[node name="Velocidade" type="SpinBox" parent="Accessibility/Rolagem/VContainer/LeitorDeTela" unique_id=1029142242]
 visible = false
 layout_mode = 0
 offset_left = 56.0
@@ -961,7 +966,7 @@ step = 0.5
 value = 1.0
 suffix = "x"
 
-[node name="Label" type="Label" parent="Accessibility/VContainer/LeitorDeTela/Velocidade" unique_id=120496949 groups=["alto_contraste"]]
+[node name="Label" type="Label" parent="Accessibility/Rolagem/VContainer/LeitorDeTela/Velocidade" unique_id=120496949 groups=["alto_contraste"]]
 layout_mode = 0
 offset_left = -87.14285
 offset_right = -5.142853
@@ -970,12 +975,12 @@ theme_override_fonts/font = ExtResource("7_vjiof")
 text = "Velocidade"
 vertical_alignment = 1
 
-[node name="Sprite18" type="Sprite2D" parent="Accessibility/VContainer/LeitorDeTela" unique_id=558172925]
+[node name="Sprite18" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/LeitorDeTela" unique_id=558172925]
 position = Vector2(-9, 12)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("24_28wvs")
 
-[node name="AltoContraste" type="CheckBox" parent="Accessibility/VContainer" unique_id=1744881956 groups=["alto_contraste"]]
+[node name="AltoContraste" type="CheckBox" parent="Accessibility/Rolagem/VContainer" unique_id=1744881956 groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_fonts/font = ExtResource("7_vjiof")
@@ -986,12 +991,12 @@ text = "Alto Contraste"
 flat = true
 script = ExtResource("47_muefp")
 
-[node name="Sprite18" type="Sprite2D" parent="Accessibility/VContainer/AltoContraste" unique_id=1904644337]
+[node name="Sprite18" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/AltoContraste" unique_id=1904644337]
 position = Vector2(-9, 12)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("48_l6sj7")
 
-[node name="Cor" type="ColorPickerButton" parent="Accessibility/VContainer/AltoContraste" unique_id=1774757633 groups=["alto_contraste"]]
+[node name="Cor" type="ColorPickerButton" parent="Accessibility/Rolagem/VContainer/AltoContraste" unique_id=1774757633 groups=["alto_contraste"]]
 layout_mode = 0
 offset_left = 143.0
 offset_top = 1.0
@@ -1005,7 +1010,7 @@ color = Color(1, 1, 0, 1)
 edit_alpha = false
 script = ExtResource("47_contrast_color")
 
-[node name="MovimentoCamera" type="CheckBox" parent="Accessibility/VContainer" groups=["alto_contraste"]]
+[node name="MovimentoCamera" type="CheckBox" parent="Accessibility/Rolagem/VContainer" groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_fonts/font = ExtResource("7_vjiof")
@@ -1017,12 +1022,12 @@ button_pressed = true
 flat = true
 script = ExtResource("49_camera_motion")
 
-[node name="Sprite2D" type="Sprite2D" parent="Accessibility/VContainer/MovimentoCamera"]
+[node name="Sprite2D" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/MovimentoCamera"]
 position = Vector2(-9, 13)
 scale = Vector2(0.795, 0.795)
 texture = ExtResource("56_camera_icon")
 
-[node name="PainelTarefasDinamico" type="CheckBox" parent="Accessibility/VContainer" groups=["alto_contraste"]]
+[node name="PainelTarefasDinamico" type="CheckBox" parent="Accessibility/Rolagem/VContainer" groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_fonts/font = ExtResource("7_vjiof")
@@ -1034,10 +1039,38 @@ button_pressed = true
 flat = true
 script = ExtResource("50_dynamic_tasks")
 
-[node name="Sprite2D" type="Sprite2D" parent="Accessibility/VContainer/PainelTarefasDinamico"]
+[node name="Sprite2D" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/PainelTarefasDinamico"]
 position = Vector2(-8, 12)
 scale = Vector2(0.45, 0.45)
 texture = ExtResource("57_tasks_icon")
+
+[node name="CorridaAutomatica" type="CheckBox" parent="Accessibility/Rolagem/VContainer" groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_fonts/font = ExtResource("7_vjiof")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("25_hdbqt")
+theme_override_icons/unchecked = ExtResource("26_q6c6f")
+text = "Corrida automática"
+flat = true
+script = ExtResource("controle_simplificado")
+
+chave_configuracao = "corrida_automatica"
+padrao = false
+
+[node name="EquiparAutomaticamente" type="CheckBox" parent="Accessibility/Rolagem/VContainer" groups=["alto_contraste"]]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_fonts/font = ExtResource("7_vjiof")
+theme_override_font_sizes/font_size = 13
+theme_override_icons/checked = ExtResource("25_hdbqt")
+theme_override_icons/unchecked = ExtResource("26_q6c6f")
+text = "Equipar itens automaticamente"
+flat = true
+script = ExtResource("controle_simplificado")
+
+chave_configuracao = "equipar_itens_automaticamente"
+padrao = true
 
 [node name="BackToMenuButton" parent="Accessibility" unique_id=776410913 groups=["alto_contraste"] instance=ExtResource("9_2s720")]
 offset_left = 453.0
@@ -1135,22 +1168,22 @@ script = ExtResource("51_h3d7w")
 [connection signal="item_selected" from="Interface/OptionsInterfaceSize" to="Interface" method="_ao_escolher_tamanho_interface"]
 [connection signal="mouse_entered" from="Interface/OptionsInterfaceSize" to="Interface" method="_on_options_interface_size_mouse_entered"]
 [connection signal="pressed" from="Interface/BackToMenuButton" to="." method="_ao_voltar_configuracoes_interface"]
-[connection signal="item_selected" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_item_selected"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="Accessibility/VContainer" method="_on_option_daltonismo_button_mouse_entered"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer" method="_on_legendas_mouse_entered"]
-[connection signal="toggled" from="Accessibility/VContainer/Legendas" to="Accessibility/VContainer/Legendas" method="_on_toggled"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/Legendas/Tamanho" to="Accessibility/VContainer" method="_on_tamanho_mouse_entered"]
-[connection signal="value_changed" from="Accessibility/VContainer/Legendas/Tamanho" to="Accessibility/VContainer/Legendas" method="_on_tamanho_value_changed"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela" to="Accessibility/VContainer" method="_on_leitor_de_tela_mouse_entered"]
-[connection signal="toggled" from="Accessibility/VContainer/LeitorDeTela" to="Accessibility/VContainer/LeitorDeTela" method="_on_toggled"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela/Velocidade" to="Accessibility/VContainer/LeitorDeTela" method="_on_velocidade_mouse_entered"]
-[connection signal="value_changed" from="Accessibility/VContainer/LeitorDeTela/Velocidade" to="Accessibility/VContainer/LeitorDeTela" method="_on_velocidade_value_changed"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste" to="Accessibility/VContainer/AltoContraste" method="_on_mouse_entered"]
-[connection signal="toggled" from="Accessibility/VContainer/AltoContraste" to="Accessibility/VContainer/AltoContraste" method="_on_toggled"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/MovimentoCamera" to="Accessibility/VContainer/MovimentoCamera" method="_on_mouse_entered"]
-[connection signal="toggled" from="Accessibility/VContainer/MovimentoCamera" to="Accessibility/VContainer/MovimentoCamera" method="_on_toggled"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/PainelTarefasDinamico" to="Accessibility/VContainer/PainelTarefasDinamico" method="_on_mouse_entered"]
-[connection signal="toggled" from="Accessibility/VContainer/PainelTarefasDinamico" to="Accessibility/VContainer/PainelTarefasDinamico" method="_on_toggled"]
+[connection signal="item_selected" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="Accessibility/Rolagem/VContainer" method="_on_option_daltonismo_button_item_selected"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="Accessibility/Rolagem/VContainer" method="_on_option_daltonismo_button_mouse_entered"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/Legendas" to="Accessibility/Rolagem/VContainer" method="_on_legendas_mouse_entered"]
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/Legendas" to="Accessibility/Rolagem/VContainer/Legendas" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/Legendas/Tamanho" to="Accessibility/Rolagem/VContainer" method="_on_tamanho_mouse_entered"]
+[connection signal="value_changed" from="Accessibility/Rolagem/VContainer/Legendas/Tamanho" to="Accessibility/Rolagem/VContainer/Legendas" method="_on_tamanho_value_changed"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="Accessibility/Rolagem/VContainer" method="_on_leitor_de_tela_mouse_entered"]
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="Accessibility/Rolagem/VContainer/LeitorDeTela" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela/Velocidade" to="Accessibility/Rolagem/VContainer/LeitorDeTela" method="_on_velocidade_mouse_entered"]
+[connection signal="value_changed" from="Accessibility/Rolagem/VContainer/LeitorDeTela/Velocidade" to="Accessibility/Rolagem/VContainer/LeitorDeTela" method="_on_velocidade_value_changed"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/AltoContraste" to="Accessibility/Rolagem/VContainer/AltoContraste" method="_on_mouse_entered"]
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/AltoContraste" to="Accessibility/Rolagem/VContainer/AltoContraste" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/MovimentoCamera" to="Accessibility/Rolagem/VContainer/MovimentoCamera" method="_on_mouse_entered"]
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/MovimentoCamera" to="Accessibility/Rolagem/VContainer/MovimentoCamera" method="_on_toggled"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/PainelTarefasDinamico" to="Accessibility/Rolagem/VContainer/PainelTarefasDinamico" method="_on_mouse_entered"]
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/PainelTarefasDinamico" to="Accessibility/Rolagem/VContainer/PainelTarefasDinamico" method="_on_toggled"]
 [connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_ao_voltar_acessibilidade"]
 [connection signal="pressed" from="Accessibility/BackToMenuButton" to="." method="_ao_voltar_controles"]
 [connection signal="pressed" from="Controles/BackToMenuButton" to="." method="_ao_voltar_controles"]
@@ -1179,20 +1212,20 @@ script = ExtResource("51_h3d7w")
 [connection signal="mouse_entered" from="Interface/OptionsInterfaceSize" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/OptionsInterfaceSize")]]
 [connection signal="focus_entered" from="Interface/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Interface/BackToMenuButton")]]
 [connection signal="mouse_entered" from="Interface/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/BackToMenuButton")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/OptionDaltonismoButton")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/OptionDaltonismoButton")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/Legendas" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/Legendas")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/Legendas" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/Legendas")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/LeitorDeTela")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/LeitorDeTela")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/AltoContraste" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/AltoContraste")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/AltoContraste")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/AltoContraste/Cor" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/AltoContraste/Cor")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste/Cor" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/AltoContraste/Cor")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/MovimentoCamera" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/MovimentoCamera")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/MovimentoCamera" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/MovimentoCamera")]]
-[connection signal="focus_entered" from="Accessibility/VContainer/PainelTarefasDinamico" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/VContainer/PainelTarefasDinamico")]]
-[connection signal="mouse_entered" from="Accessibility/VContainer/PainelTarefasDinamico" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/VContainer/PainelTarefasDinamico")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/OptionDaltonismoButton")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/OptionDaltonismoButton")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/Legendas" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/Legendas")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/Legendas" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/Legendas")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/LeitorDeTela")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/LeitorDeTela")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/AltoContraste" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/AltoContraste")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/AltoContraste" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/AltoContraste")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/AltoContraste/Cor" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/AltoContraste/Cor")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/AltoContraste/Cor" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/AltoContraste/Cor")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/MovimentoCamera" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/MovimentoCamera")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/MovimentoCamera" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/MovimentoCamera")]]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/PainelTarefasDinamico" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/PainelTarefasDinamico")]]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/PainelTarefasDinamico" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/PainelTarefasDinamico")]]
 [connection signal="focus_entered" from="Accessibility/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/BackToMenuButton")]]
 [connection signal="mouse_entered" from="Accessibility/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/BackToMenuButton")]]
 [connection signal="focus_entered" from="Controles/BackToMenuButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Controles/BackToMenuButton")]]
@@ -1243,9 +1276,9 @@ script = ExtResource("51_h3d7w")
 [connection signal="mouse_entered" from="Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Controles/RemapPanel/Margin/ControlsScroll/Content/Columns/Group2/Margin/ControlColumn/Remap_esc")]]
 
 
-[connection signal="color_changed" from="Accessibility/VContainer/AltoContraste/Cor" to="Accessibility/VContainer/AltoContraste/Cor" method="_on_color_changed"]
-[connection signal="mouse_entered" from="Accessibility/VContainer/AltoContraste/Cor" to="Accessibility/VContainer/AltoContraste/Cor" method="_on_mouse_entered"]
-[connection signal="pressed" from="Accessibility/VContainer/AltoContraste/Cor" to="Accessibility/VContainer/AltoContraste/Cor" method="_on_picker_button_pressed"]
+[connection signal="color_changed" from="Accessibility/Rolagem/VContainer/AltoContraste/Cor" to="Accessibility/Rolagem/VContainer/AltoContraste/Cor" method="_on_color_changed"]
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/AltoContraste/Cor" to="Accessibility/Rolagem/VContainer/AltoContraste/Cor" method="_on_mouse_entered"]
+[connection signal="pressed" from="Accessibility/Rolagem/VContainer/AltoContraste/Cor" to="Accessibility/Rolagem/VContainer/AltoContraste/Cor" method="_on_picker_button_pressed"]
 
 [connection signal="focus_entered" from="SettingSound/VContainer/volume_slider" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/VContainer/volume_slider")]]
 [connection signal="mouse_entered" from="SettingSound/VContainer/volume_slider" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/VContainer/volume_slider")]]
@@ -1259,3 +1292,13 @@ script = ExtResource("51_h3d7w")
 [connection signal="focus_entered" from="SettingSound/VContainer/ldt_slider" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("SettingSound/VContainer/ldt_slider")]]
 [connection signal="mouse_entered" from="SettingSound/VContainer/ldt_slider" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("SettingSound/VContainer/ldt_slider")]]
 [connection signal="focus_exited" from="SettingSound/VContainer/ldt_slider" to="MenuInputRouter" method="_ao_perder_foco"]
+
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/CorridaAutomatica" to="Accessibility/Rolagem/VContainer/CorridaAutomatica" method="_on_toggled"]
+
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/CorridaAutomatica" to="Accessibility/Rolagem/VContainer/CorridaAutomatica" method="_on_mouse_entered"]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/CorridaAutomatica" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/CorridaAutomatica")]]
+
+[connection signal="toggled" from="Accessibility/Rolagem/VContainer/EquiparAutomaticamente" to="Accessibility/Rolagem/VContainer/EquiparAutomaticamente" method="_on_toggled"]
+
+[connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/EquiparAutomaticamente" to="Accessibility/Rolagem/VContainer/EquiparAutomaticamente" method="_on_mouse_entered"]
+[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/EquiparAutomaticamente" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/EquiparAutomaticamente")]]

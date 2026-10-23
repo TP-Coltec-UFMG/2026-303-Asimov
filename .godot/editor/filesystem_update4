@@ -10,3 +10,11 @@ res://Objects/scripts/controle_de_tempo.gd
 res://Scripts/Data/difficulty_settings.gd
 res://Dialogue/dialogues.pt_BR.json
 res://NPC'S/Animacoes/scientist_1.tres
+res://Player/Scripts/player.gd
+res://Scenes/scripts/data_center_intro_controller.gd
+res://Scenes/scripts/scene_trigger.gd
+res://Scripts/Data/configs.gd
+res://Scripts/Data/save/SaveLoad.gd
+res://Tutorial/contextual_tutorial.gd
+res://Tests/simplified_controls_test.gd
+res://Tests/automatic_push_test.gd

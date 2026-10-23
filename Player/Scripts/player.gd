@@ -38,6 +38,9 @@ const STARTING_GUN := preload("res://Objects/arma.tscn")
 var cardinal_direction: Vector2 = Vector2.DOWN
 var direction: Vector2 = Vector2.ZERO
 var move_speed: float = 40.0
+var tempo_corrida_automatica: float = 0.0
+var direcao_corrida_automatica := Vector2.ZERO
+var recuperando_corrida_automatica: bool = false
 var state: String = "idle"
 
 var andando_de_costas: bool = false
@@ -56,6 +59,11 @@ var usando_extintor: bool = false
 var empurrando: bool = false
 
 var objeto_manipulado: ObjetoEmpurravel = null
+var empurrao_automatico: bool = false
+var candidato_empurrao: ObjetoEmpurravel = null
+var tempo_contato_empurrao: float = 0.0
+var posicao_candidato_empurrao: Vector2 = Vector2.ZERO
+var direcao_contato_empurrao: Vector2 = Vector2.ZERO
 var lado_objeto_manipulado: Vector2 = Vector2.ZERO
 var drag_sfx: AudioStreamPlayer2D
 
@@ -119,6 +127,11 @@ func _stop_movement_sfx() -> void:
 
 
 func _exit_tree() -> void:
+	_reiniciar_contato_empurrao()
+	if empurrao_automatico:
+		soltar_objeto(false)
+	tempo_corrida_automatica = 0.0
+	direcao_corrida_automatica = Vector2.ZERO
 	_stop_movement_sfx()
 	if npc_warning_active:
 		Engine.time_scale = npc_warning_previous_time_scale
@@ -356,6 +369,10 @@ func load_checkpoint_state(checkpoint_state: Dictionary) -> void:
 func _physics_process(delta: float) -> void:
 	_atualizar_regeneracao_vida(delta)
 	if DialogManager.is_showing_dialog:
+		_reiniciar_contato_empurrao()
+		if empurrao_automatico:
+			soltar_objeto()
+		tempo_corrida_automatica = 0.0
 		direction = Vector2.ZERO
 		velocity = Vector2.ZERO
 		correndo = false
@@ -368,6 +385,8 @@ func _physics_process(delta: float) -> void:
 		return
 
 	direction = Input.get_vector("left", "right", "up", "down")
+	if empurrao_automatico and direction.is_zero_approx():
+		soltar_objeto()
 	
 	var mudou_estado: bool = SetState()
 	var mudou_direcao: bool = SetDirection()
@@ -391,15 +410,31 @@ func _physics_process(delta: float) -> void:
 		_physics_manipulando(delta)
 	else:
 		move_and_slide()
+		_tentar_empurrao_automatico(delta)
 	crowd_obstacle.velocity = (global_position - posicao_antes) / delta
 	_update_walking_sfx(global_position.distance_squared_to(posicao_antes) > 0.000001)
 
 func atualizar_corrida(delta: float) -> void:
-	if Input.is_action_pressed("correr") and state != "idle" and objeto_manipulado == null and cansaco < 1.0:
+	var automatica := bool(Configs.configs.get("corrida_automatica", false))
+	if not automatica or state == "idle" or direction.is_zero_approx() or objeto_manipulado != null or direction.dot(direcao_corrida_automatica) < 0.5:
+		tempo_corrida_automatica = 0.0
+	elif get_real_velocity().length_squared() > 1.0:
+		tempo_corrida_automatica += delta
+	else:
+		tempo_corrida_automatica = 0.0
+	direcao_corrida_automatica = direction
+	if cansaco >= 1.0:
+		recuperando_corrida_automatica = true
+	elif cansaco <= 0.65:
+		recuperando_corrida_automatica = false
+	var intensidade := smoothstep(1.2, 2.5, tempo_corrida_automatica) if automatica and not recuperando_corrida_automatica else 0.0
+	if Input.is_action_pressed("correr"):
+		intensidade = 1.0
+	if intensidade > 0.0 and state != "idle" and objeto_manipulado == null and cansaco < 1.0:
 		correndo = true
 		andando = false
-		move_speed = VELOCIDADE_CORRIDA - float(int(40.0 * cansaco))
-		cansaco += CONSUMO_CANSACO * delta
+		move_speed = lerpf(VELOCIDADE_NORMAL, VELOCIDADE_CORRIDA - float(int(40.0 * cansaco)), intensidade)
+		cansaco += CONSUMO_CANSACO * delta * intensidade
 		cansaco = minf(cansaco, 1.0)
 	else:
 		correndo = false
@@ -467,19 +502,65 @@ func pegar_objeto(objeto: ObjetoEmpurravel, lado: Vector2) -> void:
 	UpdateAnimation()
 	UpdateOccluderLight()
 
-func soltar_objeto() -> void:
+func _reiniciar_contato_empurrao() -> void:
+	candidato_empurrao = null
+	tempo_contato_empurrao = 0.0
+	direcao_contato_empurrao = Vector2.ZERO
+
+func _tentar_empurrao_automatico(delta: float) -> void:
+	if empurrando or objeto_manipulado != null or direction.is_zero_approx():
+		_reiniciar_contato_empurrao()
+		return
+	for indice in get_slide_collision_count():
+		var contato := get_slide_collision(indice)
+		var objeto := contato.get_collider() as ObjetoEmpurravel
+		if objeto == null or objeto.is_queued_for_deletion() or not objeto.can_process():
+			continue
+		var lado := -contato.get_normal()
+		if direction.dot(lado) <= 0.4:
+			continue
+		lado = Vector2(signf(lado.x), 0) if absf(lado.x) > absf(lado.y) else Vector2(0, signf(lado.y))
+		if candidato_empurrao != objeto or direcao_contato_empurrao != lado or objeto.global_position.distance_squared_to(posicao_candidato_empurrao) > 0.0025:
+			candidato_empurrao = objeto
+			direcao_contato_empurrao = lado
+			tempo_contato_empurrao = 0.0
+		else:
+			tempo_contato_empurrao += delta
+		posicao_candidato_empurrao = objeto.global_position
+		if tempo_contato_empurrao < 1.0:
+			return
+		_reiniciar_contato_empurrao()
+		if usando_algum_item():
+			reset_sprite_player()
+		empurrando = true
+		empurrao_automatico = true
+		correndo = false
+		move_speed = VELOCIDADE_NORMAL
+		tempo_corrida_automatica = 0.0
+		pegar_objeto(objeto, lado)
+		sprite.texture = preload("res://Player/Sprites/Alex_16x16_empurrando.png")
+		return
+	_reiniciar_contato_empurrao()
+
+
+func soltar_objeto(salvar_checkpoint: bool = true) -> void:
+	_reiniciar_contato_empurrao()
+	var estava_segurando := is_instance_valid(objeto_manipulado)
 	if objeto_manipulado != null and is_instance_valid(objeto_manipulado):
 		objeto_manipulado.definir_contorno_manipulacao(false)
 		remove_collision_exception_with(objeto_manipulado)
 		objeto_manipulado.remove_collision_exception_with(self)
 
-	if checkpoint_enabled:
-		SaveGame.create_checkpoint(self)
-	
 	objeto_manipulado = null
 	lado_objeto_manipulado = Vector2.ZERO
+	if empurrao_automatico:
+		empurrao_automatico = false
+		empurrando = false
+		sprite.texture = preload("res://Player/Sprites/Alex_16x16.png")
 	if is_instance_valid(drag_sfx):
 		drag_sfx.stop()
+	if estava_segurando and checkpoint_enabled and salvar_checkpoint:
+		SaveGame.create_checkpoint(self)
 
 func _physics_manipulando(delta: float) -> void:
 	if objeto_manipulado == null:
@@ -639,6 +720,56 @@ func reset_sprite_player() -> void:
 	soltar_objeto()
 	empurrando = false
 	$Sprite2D.texture = preload("res://Player/Sprites/Alex_16x16.png")
+
+func equipar_item_automaticamente(id_item: String) -> bool:
+	if inventory.equipped_item_id == id_item:
+		return true
+	if not bool(Configs.configs.get("equipar_itens_automaticamente", true)):
+		return false
+	if not is_physics_processing() or not can_process() or get_tree().paused or DialogManager.is_showing_dialog:
+		return false
+	return equipar_item(id_item)
+
+
+func equipar_item(id_item: String) -> bool:
+	var item := inventory.get_item_control(id_item)
+	if not is_instance_valid(item):
+		return false
+	if inventory.equipped_item_id == id_item:
+		return true
+	reset_sprite_player()
+	item.definir_jogador(self)
+	match id_item:
+		"lanterna":
+			usando_lanterna = true
+			item.definir_luz(true)
+			sprite.texture = preload("res://Player/Sprites/Alex_com_lanterna16x16.png")
+		"gun":
+			usando_arma = true
+			sprite.texture = preload("res://Player/Sprites/Alex_com_arma16x16.png")
+			item.atualizar_painel_arma()
+		"extintor":
+			usando_extintor = true
+			item.definir_fumaca(false)
+			sprite.texture = preload("res://Player/Sprites/Alex_16x16_com_extintor.png")
+		"cartao":
+			usando_cartao = true
+			match int(item.tipo):
+				3:
+					sprite.texture = preload("res://Player/Sprites/Alex_com_cartao_chefe16x16.png")
+				2:
+					sprite.texture = preload("res://Player/Sprites/Alex_com_cartao_forte16x16.png")
+				_:
+					sprite.texture = preload("res://Player/Sprites/Alex_com_cartao_padrao16x16.png")
+		"laptop":
+			usando_laptop = true
+			sprite.texture = preload("res://Player/Sprites/Alex_com_laptop16x16.png")
+		"cabo":
+			usando_cabo = true
+			sprite.texture = preload("res://Player/Sprites/Alex_16x16_com_cabo.png")
+	inventory.set_equipped_item(id_item)
+	return true
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_alarm"):

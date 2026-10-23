@@ -126,6 +126,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().paused = true
 
 	if event.is_action_pressed("interact") and dentro_da_area and not eh_elevador:
+		if is_instance_valid(jogador):
+			jogador.equipar_item_automaticamente("cartao")
 		if is_instance_valid(jogador) and jogador.usando_cartao:
 			GameAudio.tocar_no_mundo(self, GameAudio.PASSAR_CARTAO, -12.0)
 		if acesso_controlado:
@@ -137,6 +139,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _tem_cartao_compativel() or _sala_do_chefe_foi_hackeada():
 			await _entrar_area_autorizada()
 		elif _pode_hackear_sala_do_chefe():
+			jogador.equipar_item_automaticamente("laptop")
 			Progresso.iniciar_hack_da_sala_do_chefe(jogador)
 		else:
 			$DoorAccessIndicator.mostrar_estado(false)

@@ -64,6 +64,24 @@ func _ready() -> void:
 		_iniciar_som_fogo()
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if apagado or not is_visible_in_tree() or not event.is_action_pressed("usar_extintor") or event.is_echo():
+		return
+	if not bool(Configs.configs.get("equipar_itens_automaticamente", true)):
+		return
+	if get_global_mouse_position().distance_to(global_position) > 32.0:
+		return
+	var jogador := get_tree().get_first_node_in_group("player") as Player
+	if jogador == null or jogador.global_position.distance_to(global_position) > 64.0:
+		return
+	var extintor = jogador.inventory.get_item_control("extintor")
+	if extintor == null or extintor.combustivel_acabou:
+		return
+	if jogador.equipar_item_automaticamente("extintor"):
+		extintor.definir_fumaca(true)
+		get_viewport().set_input_as_handled()
+
+
 func _iniciar_som_fogo() -> void:
 	var sons_disponiveis: Array[AudioStream] = []
 	if ambient_sound_a != null:

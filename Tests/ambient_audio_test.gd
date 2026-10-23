@@ -206,8 +206,8 @@ func _run() -> void:
 	var pause_menu_scene := load("res://Scenes/pause_menu.tscn") as PackedScene
 	var main_menu := main_menu_scene.instantiate()
 	var pause_menu := pause_menu_scene.instantiate()
-	_expect(main_menu.get_node_or_null("Accessibility/VContainer/MovimentoCamera") is CheckBox, "O menu principal precisa exibir a opção de movimento de câmera.")
-	_expect(pause_menu.get_node_or_null("Accessibility/VContainer/MovimentoCamera") is CheckBox, "O menu de pausa precisa exibir a opção de movimento de câmera.")
+	_expect(main_menu.get_node_or_null("Accessibility/Rolagem/VContainer/MovimentoCamera") is CheckBox, "O menu principal precisa exibir a opção de movimento de câmera.")
+	_expect(pause_menu.get_node_or_null("Accessibility/Rolagem/VContainer/MovimentoCamera") is CheckBox, "O menu de pausa precisa exibir a opção de movimento de câmera.")
 	_expect(main_menu.get_node_or_null("EndingReturnFade/Black") is ColorRect, "O retorno do final precisa ter um fade de entrada próprio.")
 	var animacao_retorno_final := main_menu.get_node_or_null("EndingReturnFade/AnimationPlayer") as AnimationPlayer
 	_expect(animacao_retorno_final != null and animacao_retorno_final.has_animation(&"ending_return_fade_in"), "O fade de entrada do menu precisa estar configurado no AnimationPlayer.")

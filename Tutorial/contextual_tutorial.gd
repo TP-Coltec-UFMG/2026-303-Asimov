@@ -603,9 +603,11 @@ func _conteudo(id: String) -> Array[String]:
 		"walk":
 			return ["MOVIMENTO", "Use %s/%s/%s/%s para andar pelo cenário." % [_tecla("up"), _tecla("left"), _tecla("down"), _tecla("right")]]
 		"run":
+			if bool(Configs.configs.get("corrida_automatica", false)):
+				return ["CORRIDA AUTOMÁTICA", "Mantenha uma direção pressionada para começar a correr. Solte para parar. Correr gasta estamina."]
 			return ["CORRIDA", "Segure %s enquanto anda. Correr gasta estamina; caminhar permite recuperá-la." % _tecla("correr")]
 		"push":
-			return ["EMPURRAR E PUXAR", "Sem item equipado, aperte %s junto do objeto. Mova-o nas quatro direções; aperte novamente para soltar." % _tecla("empurrar")]
+			return ["EMPURRAR E PUXAR", "Ande contra o objeto por 1 segundo para empurrar; solte a direção para largar. Para segurá-lo e puxar, use %s." % _tecla("empurrar")]
 		"collect":
 			return ["COLETAR ITENS", "Aproxime-se e aperte %s para coletar. A tecla abaixo de cada item no inventário permite equipá-lo ou guardá-lo." % _tecla("interact")]
 		"card_1":

@@ -659,12 +659,14 @@ func _on_access_requested(_trigger: SceneTrigger) -> void:
 		await _inspect_rfid_reader()
 		return
 	if bool(state.get("data_center_access_boss_card_given", false)):
+		player.equipar_item_automaticamente("cartao")
 		if _current_card_type() != BOSS_CARD_TYPE or not player.usando_cartao:
 			player.balao_de_pensamento.enfileirar_dialogo("data_center.equip_boss_card", "data_center:equip_boss_card")
 			return
 		await _reject_boss_card()
 		return
 	if bool(state.get("data_center_access_strong_card_given", false)):
+		player.equipar_item_automaticamente("cartao")
 		if _current_card_type() != STRONG_CARD_TYPE or not player.usando_cartao:
 			player.balao_de_pensamento.enfileirar_dialogo("data_center.equip_strong_card", "data_center:equip_strong_card")
 			return

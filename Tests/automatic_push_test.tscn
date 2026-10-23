@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Tests/automatic_push_test.gd" id="teste"]
+
+[node name="TesteEmpurraoAutomatico" type="Node"]
+script = ExtResource("teste")

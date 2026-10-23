@@ -576,6 +576,9 @@ func _restore_global_pause_menu() -> void:
 
 
 func _apply_recalibration() -> void:
+	var cartao := player.inventory.get_item_control("cartao")
+	if is_instance_valid(cartao) and int(cartao.get("tipo")) == 3:
+		player.equipar_item_automaticamente("cartao")
 	if not _boss_card_equipped():
 		player.balao_de_pensamento.enfileirar_dialogo("programmer.boss_card_required", "programmer:boss_card_required")
 		return

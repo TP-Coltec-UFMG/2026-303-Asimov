@@ -78,6 +78,7 @@ func _pode_ligar_disjuntor_do_data_center() -> bool:
 	if bool(state.get("data_center_breaker_restored", false)):
 		return false
 	if player.inventory.get_item_on_inventary("lanterna"):
+		player.equipar_item_automaticamente("lanterna")
 		return true
 	player.balao_de_pensamento.enfileirar_dialogo("data_center.need_flashlight_for_breaker", "data_center:need_flashlight_for_breaker")
 	return false

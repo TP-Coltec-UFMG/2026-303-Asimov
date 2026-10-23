@@ -91,6 +91,16 @@ var velocidade_projetil: float = 145.0
 var dano_projetil: float = 18.0
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if destruido or not is_visible_in_tree() or not event.is_action_pressed("fire") or event.is_echo():
+		return
+	if get_global_mouse_position().distance_to(global_position) > 14.0:
+		return
+	var jogador := get_tree().get_first_node_in_group("player") as Player
+	if jogador != null:
+		jogador.equipar_item_automaticamente("gun")
+
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_aplicar_dificuldade()
