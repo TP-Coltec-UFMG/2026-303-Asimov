@@ -8,3 +8,5 @@ res://Scenes/animations/cooling_location_guide_animations.tres
 res://Scenes/animations/cooling_location_guide_tree.tres
 res://Objects/scripts/controle_de_tempo.gd
 res://Scripts/Data/difficulty_settings.gd
+res://Dialogue/dialogues.pt_BR.json
+res://NPC'S/Animacoes/scientist_1.tres

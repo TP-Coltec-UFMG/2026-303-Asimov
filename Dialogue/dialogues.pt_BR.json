@@ -16,6 +16,12 @@
 		}
 	},
 	"lines": {
+		"scientist.push_warning": {
+			"sender_id": "scientist",
+			"recipient_id": "player",
+			"thought": false,
+			"text": "Para!"
+		},
 		"mini_game_cartao.setup.player": {
 			"sender_id": "player",
 			"recipient_id": "player",

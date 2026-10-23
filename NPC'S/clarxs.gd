@@ -31,6 +31,8 @@ var checkpoint_restored: bool = false
 @export var velocidade_corrida: float = 60.0
 @export var desvio_multidao_habilitado: bool = false
 @export var empurravel_pelo_player: bool = false
+@export var paciencia_empurrao: float = 1.2
+@export var distancia_maxima_empurrao: float = 18.0
 @export var raio_chegada_saida: float = 24.0
 @export var tempo_chegada_saida: float = 0.5
 
@@ -55,6 +57,11 @@ var pontos_caminhos_salvos: Dictionary = {}
 var ponto_atual: int = -1
 var caminho_finalizado: bool = true
 var tempo_na_saida: float = 0.0
+var tempo_empurrado: float = 0.0
+var posicao_antes_empurrao := Vector2.ZERO
+var resistindo_empurrao: bool = false
+var tempo_sem_insistencia: float = 0.0
+var colisao_empurrao := KinematicCollision2D.new()
 var navegacao_obstaculos: Node2D
 var pontos_navegacao := PackedVector2Array()
 var indice_navegacao := 0
@@ -124,6 +131,10 @@ func _ready() -> void:
 		var body := $CharacterBody2D as CharacterBody2D
 		body.collision_layer = 2
 		body.collision_mask = 1 if empurravel_pelo_player else 0
+		if empurravel_pelo_player:
+			body.top_level = true
+			body.global_position = global_position
+			($CharacterBody2D/CollisionShape2D as CollisionShape2D).shape = pegada_navegacao
 
 		agente_desvio.target_position = global_position + Vector2(100000.0, 100000.0)
 		agente_desvio.avoidance_enabled = true
@@ -169,6 +180,7 @@ func _ao_solicitar_inicio_caminho(path: NPCPath) -> void:
 
 
 func iniciar_caminho(path: NPCPath) -> void:
+	_reiniciar_paciencia()
 	tempo_na_saida = 0.0
 	destino_navegacao = Vector2.INF
 	if path == null:
@@ -205,6 +217,7 @@ func iniciar_caminho(path: NPCPath) -> void:
 
 
 func parar_caminho_atual() -> void:
+	_reiniciar_paciencia()
 	tempo_na_saida = 0.0
 	caminho_atual = null
 
@@ -251,6 +264,8 @@ func _physics_process(delta: float) -> void:
 	if empurravel_pelo_player and DialogManager.is_showing_dialog:
 		agente_desvio.velocity = Vector2.ZERO
 		return
+	if empurravel_pelo_player and _atualizar_resistencia(delta):
+		return
 	if _atualizar_chegada_saida(delta):
 		return
 	if desesperado:
@@ -267,16 +282,27 @@ func _physics_process(delta: float) -> void:
 func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
 	if not is_inside_tree() or not can_process() or is_queued_for_deletion():
 		return
+	if empurravel_pelo_player and DialogManager.is_showing_dialog:
+		return
 	var delta := get_physics_process_delta_time()
 	if is_instance_valid(navegacao_obstaculos) or empurravel_pelo_player:
 		var body := $CharacterBody2D as CharacterBody2D
 		if not body.is_inside_tree() or not body.can_process() or not PhysicsServer2D.body_get_space(body.get_rid()).is_valid():
 			return
+		if empurravel_pelo_player:
+			if not body.global_position.is_equal_approx(global_position):
+				body.global_position = global_position
+			if resistindo_empurrao:
+				_mover_resistindo(body, delta)
+				return
 		var before := body.global_position
 		body.velocity = safe_velocity
 		body.move_and_slide()
-		global_position += body.global_position - before
-		body.position = Vector2.ZERO
+		if empurravel_pelo_player:
+			global_position = body.global_position
+		else:
+			global_position += body.global_position - before
+			body.position = Vector2.ZERO
 	else:
 		global_position += safe_velocity * delta
 	if safe_velocity.length_squared() > 1.0:
@@ -301,6 +327,68 @@ func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
 		var tolerance := 3.0 if is_instance_valid(navegacao_obstaculos) else 2.0
 		if global_position.distance_to(goal) <= tolerance:
 			avancar_ponto_caminho()
+
+
+func _atualizar_resistencia(delta: float) -> bool:
+	var pressionando := false
+	var jogador_proximo := false
+	if is_instance_valid(player_ref) and player_ref is Player:
+		var jogador := player_ref as Player
+		var ate_npc := global_position - jogador.global_position
+		jogador_proximo = ate_npc.length_squared() < 625.0
+		pressionando = jogador.is_physics_processing() and ate_npc.length_squared() < 625.0 and jogador.direction.dot(ate_npc.normalized()) > 0.4
+	if resistindo_empurrao:
+		tempo_sem_insistencia = 0.0 if pressionando or jogador_proximo else tempo_sem_insistencia + delta
+		if tempo_sem_insistencia >= 1.25 and global_position.distance_to(posicao_antes_empurrao) < 1.0:
+			_reiniciar_paciencia()
+			return false
+		agente_desvio.velocity = Vector2.ZERO
+		return true
+	if pressionando:
+		if tempo_empurrado <= 0.0:
+			posicao_antes_empurrao = global_position
+		tempo_empurrado += delta
+		if tempo_empurrado >= paciencia_empurrao or global_position.distance_to(posicao_antes_empurrao) >= distancia_maxima_empurrao:
+			resistindo_empurrao = true
+			tempo_sem_insistencia = 0.0
+			agente_desvio.avoidance_priority = 1.0
+			agente_desvio.velocity = Vector2.ZERO
+			$BalaoDePensamento.enfileirar_dialogo("scientist.push_warning", "scientist:push_warning", true)
+			return true
+	else:
+		tempo_empurrado = maxf(tempo_empurrado - delta * 0.5, 0.0)
+		if caminho_atual != null and not caminho_finalizado:
+			tempo_empurrado = 0.0
+	return false
+
+
+func _reiniciar_paciencia() -> void:
+	tempo_empurrado = 0.0
+	resistindo_empurrao = false
+	tempo_sem_insistencia = 0.0
+	if is_instance_valid(agente_desvio):
+		agente_desvio.avoidance_priority = 0.5
+
+
+func _mover_resistindo(corpo: CharacterBody2D, delta: float) -> void:
+	var movimento := corpo.global_position.direction_to(posicao_antes_empurrao) * minf(velocidade_corrida * delta, corpo.global_position.distance_to(posicao_antes_empurrao))
+	if movimento.length_squared() < 0.0001:
+		corpo.velocity = Vector2.ZERO
+		reproduzir_parado(last_direction)
+		return
+	if corpo.test_move(corpo.global_transform, movimento, colisao_empurrao):
+		var jogador := colisao_empurrao.get_collider() as Player
+		if is_instance_valid(jogador) and jogador.is_physics_processing() and jogador.can_process() and not DialogManager.is_showing_dialog:
+			jogador.move_and_collide(movimento)
+	var anterior := corpo.global_position
+	corpo.move_and_collide(movimento)
+	global_position = corpo.global_position
+	var deslocamento := global_position - anterior
+	if deslocamento.length_squared() > 0.0001:
+		last_direction = deslocamento.normalized()
+		atualizar_animacao_movimento(last_direction, NPCPath.MovementType.WALK)
+	else:
+		reproduzir_parado(last_direction)
 
 
 func _atualizar_chegada_saida(delta: float) -> bool:
