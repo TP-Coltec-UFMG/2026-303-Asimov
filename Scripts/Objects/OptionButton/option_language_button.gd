@@ -7,7 +7,7 @@ extends OptionButton
 func _ready() -> void:
 	var idioma_atual : String = SaveLoad.save_data.traducao
 	var index_idioma_atual : int
-	if idioma_atual == "PORTUGUÊSE":
+	if idioma_atual == "PORTUGUÊS":
 		index_idioma_atual = 0
 	elif idioma_atual == "ENGLISH":
 		index_idioma_atual = 1
@@ -28,4 +28,3 @@ func _ready() -> void:
 func _on_item_selected(index: int) -> void:
 	var new_language : String = get_item_text(index)
 	Configs._change_traducao(new_language)
-	TranslationServer.set_locale(new_language)

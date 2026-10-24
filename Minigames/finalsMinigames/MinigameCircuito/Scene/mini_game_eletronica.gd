@@ -2,6 +2,7 @@ extends Node2D
 
 signal minigame_completed
 signal minigame_failed
+signal minigame_restarted(substituto: Node2D)
 
 
 enum ModoObjetivo {
@@ -348,7 +349,7 @@ func _reiniciar_circuito() -> void:
 	nova.visible = visible
 
 	# Reconecta quem estava ouvindo os sinais do minigame.
-	for nome_sinal in ["minigame_completed", "minigame_failed"]:
+	for nome_sinal in ["minigame_completed", "minigame_failed", "minigame_restarted"]:
 
 		for conexao in get_signal_connection_list(nome_sinal):
 
@@ -368,6 +369,7 @@ func _reiniciar_circuito() -> void:
 	pai.add_child(nova)
 
 	pai.move_child(nova, indice)
+	minigame_restarted.emit(nova)
 
 	queue_free()
 

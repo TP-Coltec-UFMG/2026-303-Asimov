@@ -334,6 +334,7 @@ func _open_minigame(stage: int) -> void:
 	minigame.modo_objetivo = OBJECTIVES[stage]
 	minigame.minigame_completed.connect(_on_minigame_completed.bind(stage), CONNECT_ONE_SHOT)
 	minigame.minigame_failed.connect(_on_minigame_failed, CONNECT_ONE_SHOT)
+	minigame.minigame_restarted.connect(_on_minigame_restarted)
 	minigame_root.add_child(minigame)
 	var timer_panel := PanelContainer.new()
 	timer_panel.name = "CircuitTimer"
@@ -420,6 +421,10 @@ func _leave_minigame() -> void:
 
 func _on_minigame_failed() -> void:
 	_leave_minigame()
+
+
+func _on_minigame_restarted(substituto: Node2D) -> void:
+	minigame = substituto
 
 
 func _on_minigame_completed(stage: int) -> void:

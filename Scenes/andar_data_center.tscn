@@ -689,3 +689,5 @@ save_id = "data_center_story_boss_card"
 [connection signal="caminho_concluido" from="NPCs/NPC1" to="DataCenterIntroController" method="_on_recipient_path_completed"]
 [connection signal="solicitou_interacao" from="NPCs/NPC1" to="DataCenterIntroController" method="_on_recipient_interaction_requested"]
 [connection signal="solicitou_inicio" from="NPCs/NPC1/CaminhoAteAcessoForte" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]
+
+[connection signal="solicitou_inicio" from="NPCs/NPC1/CaminhoAtePaineis" to="NPCs/NPC1" method="_ao_solicitar_inicio_caminho"]

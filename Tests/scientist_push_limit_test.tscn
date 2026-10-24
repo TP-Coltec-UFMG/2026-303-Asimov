@@ -1,6 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="Script" path="res://Tests/scientist_push_limit_test.gd" id="teste"]
-
-[node name="TesteLimiteEmpurrao" type="Node"]
-script = ExtResource("teste")

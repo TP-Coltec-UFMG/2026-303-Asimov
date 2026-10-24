@@ -18,3 +18,10 @@ res://Scripts/Data/save/SaveLoad.gd
 res://Tutorial/contextual_tutorial.gd
 res://Tests/simplified_controls_test.gd
 res://Tests/automatic_push_test.gd
+res://Tutorial/tutorial.gd
+res://Tradutions/traducoes - Página1(8).pt_BR.translation
+res://Tradutions/traducoes - Página1(8).en.translation
+res://Tradutions/traducoes - Página1(8).es.translation
+res://Tradutions/traducoes - Página1(8).fr.translation
+res://Scripts/Objects/OptionButton/option_language_button.gd
+res://Scripts/UI/Menus/primeira_vez.gd

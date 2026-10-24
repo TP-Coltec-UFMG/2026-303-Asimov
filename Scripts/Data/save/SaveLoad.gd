@@ -134,7 +134,7 @@ func _apply_load() -> void:
 		save_data["job"] = "engenheiro_eletrico"
 	Configs.configs = save_data.duplicate(true)
 
-	TranslationServer.set_locale(save_data.traducao)
+	Configs.aplicar_idioma()
 
 	AudioServer.set_bus_volume_db(
 		AudioServer.get_bus_index("Master"),

@@ -1,6 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="Script" path="res://Tests/simplified_controls_test.gd" id="teste"]
-
-[node name="TesteControlesSimplificados" type="Node"]
-script = ExtResource("teste")

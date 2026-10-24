@@ -37,6 +37,20 @@ var tutorial_return_scene: String = "res://Scenes/slectionpage.tscn"
 
 func _change_traducao(new_value : String):
 	configs.traducao = new_value
+	aplicar_idioma()
+
+
+func aplicar_idioma() -> void:
+	var idioma := str(configs.get("traducao", "PORTUGUÊS")).to_upper()
+	match idioma:
+		"ENGLISH", "EN":
+			TranslationServer.set_locale("en")
+		"ESPAÑOL", "ES":
+			TranslationServer.set_locale("es")
+		"FRANÇAIS", "FR":
+			TranslationServer.set_locale("fr")
+		_:
+			TranslationServer.set_locale("pt_BR")
 	
 func _change_volume_geral(new_value : float):
 	configs.volume_geral = new_value

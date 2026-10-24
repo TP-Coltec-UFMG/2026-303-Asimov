@@ -16,7 +16,6 @@ func _iniciar() -> void:
 		new_language = "ENGLISH"
 		
 	Configs._change_traducao(new_language)
-	TranslationServer.set_locale(new_language)
 	SaveLoad._save()
 	
 	if Configs.configs.primeira_vez:

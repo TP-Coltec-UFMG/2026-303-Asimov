@@ -1,0 +1,3627 @@
+{
+  "data": "2026-10-23",
+  "criterio": "Remover somente mídias sem referências por caminho, nome, UID e dependências nativas; preservar carregamentos dinâmicos e todas as cenas/scripts.",
+  "bytesRemovidosDoProjeto": 111370143,
+  "bytesFontesEMetadados": 81548723,
+  "bytesCache": 29821420,
+  "validacao": {
+    "recursosCarregadosAntes": 177,
+    "recursosCarregadosDepois": 177,
+    "dependenciasAlteradas": [],
+    "arquivosRemovidosAindaReferenciados": [],
+    "observacao": "Erro de indentação de Tutorial/tutorial.gd:1 já existia antes da limpeza. Carregar PackedScene não equivale a jogar todos os caminhos."
+  },
+  "copiaDeSegurancaTemporaria": "C:\\Users\\Lucas\\AppData\\Local\\Temp\\asimov-limpeza-81d4fef5b5ba4544b93903ce0f2aa193",
+  "arquivosRemovidos": [
+    {
+      "path": "Minigames/Arte/Quadros_192/camera_01.png",
+      "bytes": 1660,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/camera_02.png",
+      "bytes": 1677,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/camera_03.png",
+      "bytes": 1636,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/camera_04.png",
+      "bytes": 1643,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/engrenagem_01.png",
+      "bytes": 1480,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/engrenagem_02.png",
+      "bytes": 1554,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/engrenagem_03.png",
+      "bytes": 1520,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/engrenagem_04.png",
+      "bytes": 1523,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/robo_01.png",
+      "bytes": 1654,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/robo_02.png",
+      "bytes": 1634,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/robo_03.png",
+      "bytes": 1623,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/robo_04.png",
+      "bytes": 1612,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/terminal_01.png",
+      "bytes": 1770,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/terminal_02.png",
+      "bytes": 1656,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/terminal_03.png",
+      "bytes": 1876,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Arte/Quadros_192/terminal_04.png",
+      "bytes": 1867,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Scripts/New Piskel (5).png",
+      "bytes": 231,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Scripts/New Piskel (5).png.import",
+      "bytes": 997,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Scripts/New Piskel (6).png",
+      "bytes": 285,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Scripts/New Piskel (6).png.import",
+      "bytes": 996,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/botao_continuar_normal_128x32.png",
+      "bytes": 2028,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/botao_continuar_normal_128x32.png.import",
+      "bytes": 1054,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/botao_continuar_pressionado_128x32.png",
+      "bytes": 1791,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/botao_continuar_pressionado_128x32.png.import",
+      "bytes": 1070,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/caixa_texto_456x72.png",
+      "bytes": 11206,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/03_interface/caixa_texto_456x72.png.import",
+      "bytes": 1022,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_03.png",
+      "bytes": 1827,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico/componente_eletronico/sprite_03.png.import",
+      "bytes": 1026,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_03.png",
+      "bytes": 2056,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/componente_eletronico3/componente_eletronico3/sprite_03.png.import",
+      "bytes": 1028,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_03.png",
+      "bytes": 1769,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/fonte_normal/sprite_03.png.import",
+      "bytes": 1011,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/juncoes/sprite_03.png",
+      "bytes": 1000,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/juncoes/sprite_03.png.import",
+      "bytes": 1006,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/led/sprite_03.png",
+      "bytes": 1248,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/led/sprite_03.png.import",
+      "bytes": 1002,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/linhas_de_conducao/sprite_03.png",
+      "bytes": 1070,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/linhas_de_conducao/sprite_03.png.import",
+      "bytes": 1018,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_03.png",
+      "bytes": 959,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/finalsMinigames/MinigameCircuito/Sprites/sprites_eletrica/resistor_normal/sprite_03.png.import",
+      "bytes": 1015,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_continuar_hover_en.png",
+      "bytes": 6435,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_continuar_hover_en.png.import",
+      "bytes": 1003,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_continuar_normal_en.png",
+      "bytes": 5535,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_continuar_normal_en.png.import",
+      "bytes": 1007,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_continuar_pressionado_en.png",
+      "bytes": 6333,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_continuar_pressionado_en.png.import",
+      "bytes": 1022,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_maximizar.png",
+      "bytes": 6860,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/botao_maximizar.png.import",
+      "bytes": 977,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/botao_continuar_hover.png",
+      "bytes": 8029,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/botao_continuar_hover.png.import",
+      "bytes": 1015,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/botao_continuar_normal.png",
+      "bytes": 6858,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/botao_continuar_normal.png.import",
+      "bytes": 1018,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/botao_continuar_pressionado.png",
+      "bytes": 7855,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/botao_continuar_pressionado.png.import",
+      "bytes": 1032,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/caixa_texto.png",
+      "bytes": 43256,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/interface/interface/caixa_texto.png.import",
+      "bytes": 985,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/m3x6.ttf",
+      "bytes": 10044,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/m3x6.ttf.import",
+      "bytes": 765,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/tabela_banco_dados (1).png",
+      "bytes": 61869,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/Minigame5/Sprites/tabela_banco_dados (1).png.import",
+      "bytes": 998,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/clear.wav",
+      "bytes": 96974,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/clear.wav.import",
+      "bytes": 503,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/ohno.wav",
+      "bytes": 162474,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/ohno.wav.import",
+      "bytes": 498,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/select.wav",
+      "bytes": 124620,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/select.wav.import",
+      "bytes": 506,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/turn.wav",
+      "bytes": 7278,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/turn.wav.import",
+      "bytes": 500,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/water.wav",
+      "bytes": 193946,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/sounds/water.wav.import",
+      "bytes": 505,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/03_auburn_violet.png",
+      "bytes": 16235,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/03_auburn_violet.png.import",
+      "bytes": 962,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/05_green_teal.png",
+      "bytes": 16121,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/05_green_teal.png.import",
+      "bytes": 952,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/ClarxsSide.png",
+      "bytes": 843,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/ClarxsSide.png.import",
+      "bytes": 944,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/ClarxsUPDOWN.png",
+      "bytes": 1402,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/ClarxsUPDOWN.png.import",
+      "bytes": 950,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_0.png",
+      "bytes": 10750,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_0.png.import",
+      "bytes": 938,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_1.png",
+      "bytes": 9393,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_1.png.import",
+      "bytes": 938,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_3.png",
+      "bytes": 11070,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_3.png.import",
+      "bytes": 938,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_4.png",
+      "bytes": 9849,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/pessoa_4.png.import",
+      "bytes": 938,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_2.png",
+      "bytes": 10580,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_2.png.import",
+      "bytes": 946,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_3.png",
+      "bytes": 9876,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_3.png.import",
+      "bytes": 947,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_4.png",
+      "bytes": 9831,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_4.png.import",
+      "bytes": 946,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_5.png",
+      "bytes": 9865,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "NPC'S/NPC/scientist_5.png.import",
+      "bytes": 947,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Player/Sprites/Alex_com_faca16x16.png",
+      "bytes": 15045,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Player/Sprites/Alex_com_faca16x16.png.import",
+      "bytes": 973,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Alarme.aac",
+      "bytes": 212543,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Ambient/atlasaudio-thriller-594864.mp3.mpeg",
+      "bytes": 3537606,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Ambient/atlasaudio-true-crime-590803.mp3.mpeg",
+      "bytes": 4161201,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Ambient/ENDGAME.mp3.mpeg",
+      "bytes": 4400064,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Ambient/leberch-our-line-investigation-music-594953.mp3.mpeg",
+      "bytes": 3009306,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Ambient/leberch-riser-riser-music-590428.mp3.mpeg",
+      "bytes": 4929410,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Ambient/leberch-tension-riser-590425.mp3.mpeg",
+      "bytes": 3873645,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_cenario_1.mp3",
+      "bytes": 2618932,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_cenario_1.mp3.import",
+      "bytes": 401,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_cenario_4.mp3",
+      "bytes": 2117381,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_cenario_4.mp3.import",
+      "bytes": 400,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_fundo.mp3",
+      "bytes": 12417567,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_fundo.mp3.import",
+      "bytes": 389,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_fundo_inicial.mp3",
+      "bytes": 4400064,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Cenario/Musica_de_fundo_inicial.mp3.import",
+      "bytes": 413,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Cenario/musica_disjuntor_desligado.mp3",
+      "bytes": 2880768,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Cenario/musica_disjuntor_desligado.mp3.import",
+      "bytes": 422,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/clavier-music-solas-203831.mp3",
+      "bytes": 2618932,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/clavier-music-solas-203831.mp3.import",
+      "bytes": 414,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/External/floor-creak-01.wav",
+      "bytes": 114480,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/External/floor-creak-01.wav.import",
+      "bytes": 516,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Voice/male_deep_1.ogg",
+      "bytes": 6325,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Voice/male_deep_1.ogg.import",
+      "bytes": 402,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Voice/male_deep_2.ogg",
+      "bytes": 7131,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Voice/male_deep_2.ogg.import",
+      "bytes": 402,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Voice/male_standard_1.ogg",
+      "bytes": 6504,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Voice/male_standard_1.ogg.import",
+      "bytes": 413,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Voice/male_standard_2.ogg",
+      "bytes": 6768,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Voice/male_standard_2.ogg.import",
+      "bytes": 412,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Voice/quick_1.ogg",
+      "bytes": 4944,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Voice/quick_1.ogg.import",
+      "bytes": 390,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sounds/Voice/quick_2.ogg",
+      "bytes": 5212,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sounds/Voice/quick_2.ogg.import",
+      "bytes": 390,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/background/Design sem nome(10).png",
+      "bytes": 185903,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/background/Design sem nome(10).png.import",
+      "bytes": 980,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/background/Design sem nome(13).png",
+      "bytes": 774767,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/background/Design sem nome(13).png.import",
+      "bytes": 980,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/background/Design sem nome(9).png",
+      "bytes": 229998,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/background/Design sem nome(9).png.import",
+      "bytes": 977,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/background/Grass-01.png",
+      "bytes": 21622,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/background/Grass-01.png.import",
+      "bytes": 947,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/background/MenuBackground.png",
+      "bytes": 118372,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/background/MenuBackground.png.import",
+      "bytes": 964,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/background/OptionBackground.png",
+      "bytes": 36968,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/background/OptionBackground.png.import",
+      "bytes": 971,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/elevador/bt_andar_normal_abrindo.png",
+      "bytes": 35682,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/elevador/bt_andar_normal_abrindo.png.import",
+      "bytes": 990,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-angular.png",
+      "bytes": 174487,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-angular.png.import",
+      "bytes": 972,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-horizontal.png",
+      "bytes": 45206,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-horizontal.png.import",
+      "bytes": 981,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-vertical-mirror.png",
+      "bytes": 43652,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-vertical-mirror.png.import",
+      "bytes": 996,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-vertical.png",
+      "bytes": 31304,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ilumination/gradient-vertical.png.import",
+      "bytes": 974,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/objects/faca.png",
+      "bytes": 231,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/objects/faca.png.import",
+      "bytes": 932,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ui/barra.png",
+      "bytes": 195,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ui/barra.png.import",
+      "bytes": 930,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ui/default_inventory_background.png",
+      "bytes": 656,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ui/default_inventory_background.png.import",
+      "bytes": 999,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ui/item_slot_empty_background.png",
+      "bytes": 202,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ui/item_slot_empty_background.png.import",
+      "bytes": 992,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ui/Logo/AuraCode.png",
+      "bytes": 2994,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ui/Logo/AuraCode.png.import",
+      "bytes": 944,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "Sprites/ui/Logo/sprite_0-export.png",
+      "bytes": 155886,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "Sprites/ui/Logo/sprite_0-export.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data08.png",
+      "bytes": 788,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data08.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data09.png",
+      "bytes": 606,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data09.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data10.png",
+      "bytes": 656,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data10.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data11.png",
+      "bytes": 836,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data11.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data12.png",
+      "bytes": 758,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data12.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data13.png",
+      "bytes": 733,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data13.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data14.png",
+      "bytes": 1154,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data14.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data18.png",
+      "bytes": 767,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data18.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data20.png",
+      "bytes": 892,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data20.png.import",
+      "bytes": 955,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data21.png",
+      "bytes": 1077,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data21.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data22.png",
+      "bytes": 618,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data22.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data23.png",
+      "bytes": 653,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data23.png.import",
+      "bytes": 955,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data24.png",
+      "bytes": 593,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data24.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data25.png",
+      "bytes": 873,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data25.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data26.png",
+      "bytes": 575,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data26.png.import",
+      "bytes": 955,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data27.png",
+      "bytes": 656,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data27.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data29.png",
+      "bytes": 528,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data29.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data30.png",
+      "bytes": 505,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data30.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data31.png",
+      "bytes": 512,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data31.png.import",
+      "bytes": 955,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data32.png",
+      "bytes": 924,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data32.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data33.png",
+      "bytes": 997,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data33.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data34.png",
+      "bytes": 738,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data34.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data35.png",
+      "bytes": 591,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data35.png.import",
+      "bytes": 955,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data36.png",
+      "bytes": 745,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data36.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data37.png",
+      "bytes": 656,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data37.png.import",
+      "bytes": 955,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data38.png",
+      "bytes": 566,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data38.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data39.png",
+      "bytes": 773,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data39.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data40.png",
+      "bytes": 772,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data40.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data41.png",
+      "bytes": 892,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data41.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data43.png",
+      "bytes": 748,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data43.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data44.png",
+      "bytes": 857,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data44.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data45.png",
+      "bytes": 792,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data45.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data48.png",
+      "bytes": 644,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data48.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data49.png",
+      "bytes": 582,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/data49.png.import",
+      "bytes": 956,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_03.png",
+      "bytes": 1365,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_03.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_17.png",
+      "bytes": 782,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_17.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_24.png",
+      "bytes": 676,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_24.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_28.png",
+      "bytes": 1191,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_28.png.import",
+      "bytes": 964,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_32.png",
+      "bytes": 570,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_32.png.import",
+      "bytes": 964,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_34.png",
+      "bytes": 1235,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_34.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_35.png",
+      "bytes": 1083,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_35.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_36.png",
+      "bytes": 835,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_36.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_37.png",
+      "bytes": 737,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_37.png.import",
+      "bytes": 964,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_41.png",
+      "bytes": 487,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_DataCenter/sprites/sprite_41.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_03.png",
+      "bytes": 794,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_03.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_17.png",
+      "bytes": 760,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_17.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_24.png",
+      "bytes": 652,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_24.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_28.png",
+      "bytes": 1796,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_28.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_32.png",
+      "bytes": 718,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_32.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_34.png",
+      "bytes": 740,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_34.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_35.png",
+      "bytes": 782,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_35.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_36.png",
+      "bytes": 797,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_36.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_37.png",
+      "bytes": 765,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_37.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_41.png",
+      "bytes": 760,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_41.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_51.png",
+      "bytes": 953,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_51.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_52.png",
+      "bytes": 963,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_52.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_55.png",
+      "bytes": 847,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_55.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_56.png",
+      "bytes": 891,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_56.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_57.png",
+      "bytes": 782,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_57.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_59.png",
+      "bytes": 826,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_59.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_60.png",
+      "bytes": 654,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_60.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_61.png",
+      "bytes": 701,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_61.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_62.png",
+      "bytes": 639,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_62.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_63.png",
+      "bytes": 803,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_63.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_64.png",
+      "bytes": 955,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_64.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_65.png",
+      "bytes": 849,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_65.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_66.png",
+      "bytes": 865,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_66.png.import",
+      "bytes": 965,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_67.png",
+      "bytes": 958,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_67.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_68.png",
+      "bytes": 907,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_68.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_69.png",
+      "bytes": 821,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_69.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_70.png",
+      "bytes": 697,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_70.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_71.png",
+      "bytes": 1328,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_71.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_72.png",
+      "bytes": 662,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_72.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_73.png",
+      "bytes": 701,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_73.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_74.png",
+      "bytes": 625,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_74.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_75.png",
+      "bytes": 781,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_75.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_76.png",
+      "bytes": 706,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_76.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_77.png",
+      "bytes": 814,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_ferramentas/sprites/sprite_77.png.import",
+      "bytes": 966,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_Hall/SPRITES_HALL/lixeiraquebrada.png",
+      "bytes": 750892,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_Hall/SPRITES_HALL/lixeiraquebrada.png.import",
+      "bytes": 982,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_Hall/SPRITES_HALL/paredeComFios_0.png",
+      "bytes": 1371,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_Hall/SPRITES_HALL/paredeComFios_0.png.import",
+      "bytes": 982,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Andar_Hall/SPRITES_HALL/pedaco_0.png",
+      "bytes": 160,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Andar_Hall/SPRITES_HALL/pedaco_0.png.import",
+      "bytes": 961,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/sprites/Interiors_free_16x16.png",
+      "bytes": 134462,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/sprites/Interiors_free_16x16.png.import",
+      "bytes": 981,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/painel elevador/sprite_2.png",
+      "bytes": 55816,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/painel elevador/sprite_2.png.import",
+      "bytes": 959,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/painel elevador/sprite_3.png",
+      "bytes": 55834,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/painel elevador/sprite_3.png.import",
+      "bytes": 959,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_0.png",
+      "bytes": 297,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_0.png.import",
+      "bytes": 937,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_1.png",
+      "bytes": 361,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_1.png.import",
+      "bytes": 937,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_3.png",
+      "bytes": 351,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_3.png.import",
+      "bytes": 937,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_4.png",
+      "bytes": 361,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_4.png.import",
+      "bytes": 936,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_5.png",
+      "bytes": 374,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_5.png.import",
+      "bytes": 937,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_6.png",
+      "bytes": 342,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_6.png.import",
+      "bytes": 937,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "TileMaps/Utils/sign_7.png",
+      "bytes": 346,
+      "kind": "midia_sem_referencias"
+    },
+    {
+      "path": "TileMaps/Utils/sign_7.png.import",
+      "bytes": 937,
+      "kind": "metadados_da_midia"
+    },
+    {
+      "path": "escada.tscn2347698343.tmp",
+      "bytes": 969,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "extintor.tscn2218705792.tmp",
+      "bytes": 2431,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "extintor.tscn2257996793.tmp",
+      "bytes": 2431,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame1/levels/UnlockSecurity.tscn5612061366.tmp",
+      "bytes": 3877,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/juncao.tscn551017823.tmp",
+      "bytes": 4953,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_cartao.tscn2201223025.tmp",
+      "bytes": 9713,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_cartao.tscn2213133612.tmp",
+      "bytes": 9713,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_cartao.tscn421940761.tmp",
+      "bytes": 11186,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_eletronica.tscn1532983525.tmp",
+      "bytes": 16777,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_eletronica.tscn1545341642.tmp",
+      "bytes": 16777,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_eletronica.tscn1559911135.tmp",
+      "bytes": 16777,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_eletronica.tscn20431350344.tmp",
+      "bytes": 17378,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/Minigame5/Scene/mini_game_eletronica.tscn564158865.tmp",
+      "bytes": 16705,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Minigames/PuzzleDosCanos/tscn/gameplay.tscn99073883.tmp",
+      "bytes": 17572,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Player/ManPlayer.tscn17376456782.tmp",
+      "bytes": 9809,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Player/ManPlayer.tscn1780406921.tmp",
+      "bytes": 6790,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Player/player.tscn6518584213.tmp",
+      "bytes": 8019,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/andar_hall.tscn10043239407.tmp",
+      "bytes": 37479,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/andar_hall.tscn9958542296.tmp",
+      "bytes": 37494,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/animated_button.tscn4905298548.tmp",
+      "bytes": 700,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/animated_button.tscn4913027843.tmp",
+      "bytes": 700,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/playground.tscn1035938268.tmp",
+      "bytes": 142517,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/playground.tscn988182965.tmp",
+      "bytes": 142517,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn2356090079.tmp",
+      "bytes": 67946,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn38747730.tmp",
+      "bytes": 67979,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn4749804131.tmp",
+      "bytes": 81070,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn4765674132.tmp",
+      "bytes": 80824,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn51554834.tmp",
+      "bytes": 67952,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn61871540.tmp",
+      "bytes": 67952,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7215103145.tmp",
+      "bytes": 81752,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7220142112.tmp",
+      "bytes": 81752,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7269413321.tmp",
+      "bytes": 81752,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7285567051.tmp",
+      "bytes": 81859,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7377592926.tmp",
+      "bytes": 81859,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7756719601.tmp",
+      "bytes": 81752,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7778885833.tmp",
+      "bytes": 81752,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/principal.tscn7821994039.tmp",
+      "bytes": 81752,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Scenes/Utils/animated_button.tscn305487413.tmp",
+      "bytes": 1166,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/atlasaudio-thriller-594864.mp3.mpeg60985534.tmp",
+      "bytes": 3537606,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/atlasaudio-true-crime-590803.mp3.mpeg63071339.tmp",
+      "bytes": 4161201,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/dragon-studio-copyright-free-fire-crackling-427409.ogg.import67211145.tmp",
+      "bytes": 521,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/dragon-studio-copyright-free-fire-crackling-427409.ogg65152648.tmp",
+      "bytes": 258218,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/ENDGAME.mp3.mpeg69242011.tmp",
+      "bytes": 4400064,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/Fire-Burning-Loop-Sound-Effect-PV-SOUND-FX-_youtube_.ogg.import73365482.tmp",
+      "bytes": 527,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/Fire-Burning-Loop-Sound-Effect-PV-SOUND-FX-_youtube_.ogg71307658.tmp",
+      "bytes": 173346,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/freesound_community-elevator-45786.ogg.import77394732.tmp",
+      "bytes": 473,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/freesound_community-elevator-45786.ogg75376737.tmp",
+      "bytes": 29879,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/freesound_community-elevator-sound-99315.ogg.import81459993.tmp",
+      "bytes": 491,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/freesound_community-elevator-sound-99315.ogg79415733.tmp",
+      "bytes": 25539,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/leberch-our-line-investigation-music-594953.mp3.mpeg83500048.tmp",
+      "bytes": 3009306,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/leberch-riser-riser-music-590428.mp3.mpeg85549342.tmp",
+      "bytes": 4929410,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Sounds/Ambient/leberch-tension-riser-590425.mp3.mpeg87600056.tmp",
+      "bytes": 3873645,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "teste.tscn7419174692.tmp",
+      "bytes": 1390,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "TileMaps/sala.tscn21181802685.tmp",
+      "bytes": 172821,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": "Tutorial/tutorial.tscn6015969798.tmp",
+      "bytes": 24495,
+      "kind": "temporario_antigo"
+    },
+    {
+      "path": ".godot/imported/03_auburn_violet.png-402cc418a14db52a64951f69d3843b85.ctex",
+      "bytes": 5354,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/03_auburn_violet.png-402cc418a14db52a64951f69d3843b85.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/05_green_teal.png-237f9a7e396505f0c296c7eb0060d28e.ctex",
+      "bytes": 5142,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/05_green_teal.png-237f9a7e396505f0c296c7eb0060d28e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Alex_com_faca16x16.png-5199b6fecc11fcbd79c3c187c128a9a3.ctex",
+      "bytes": 6274,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Alex_com_faca16x16.png-5199b6fecc11fcbd79c3c187c128a9a3.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/AuraCode.png-80b47c6b5c4a4fd1da0c2993c3d5b898.ctex",
+      "bytes": 1460,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/AuraCode.png-80b47c6b5c4a4fd1da0c2993c3d5b898.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/barra.png-5e92cfba5211ec814237260b6bc56e12.ctex",
+      "bytes": 136,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/barra.png-5e92cfba5211ec814237260b6bc56e12.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_hover_en.png-33108e7b6f12639eb57c7d24723c4bae.ctex",
+      "bytes": 4978,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_hover_en.png-33108e7b6f12639eb57c7d24723c4bae.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_hover.png-7f9a3ec3a2e4c42fdb7cdf3bbd758b73.ctex",
+      "bytes": 5268,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_hover.png-7f9a3ec3a2e4c42fdb7cdf3bbd758b73.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_normal_128x32.png-7cc9536ebbac3a616f380a22db7580b5.ctex",
+      "bytes": 688,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_normal_128x32.png-7cc9536ebbac3a616f380a22db7580b5.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_normal_en.png-2eee6d36cda13b17bd3dbc0a7cd808f8.ctex",
+      "bytes": 4300,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_normal_en.png-2eee6d36cda13b17bd3dbc0a7cd808f8.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_normal.png-01a62fb49ac91e891e35f3c6f28ae177.ctex",
+      "bytes": 4774,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_normal.png-01a62fb49ac91e891e35f3c6f28ae177.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_pressionado_128x32.png-4fdf6c22d93f79ae6ab018f23a9be938.ctex",
+      "bytes": 780,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_pressionado_128x32.png-4fdf6c22d93f79ae6ab018f23a9be938.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_pressionado_en.png-a62a4421272038ca46d18255946a62bf.ctex",
+      "bytes": 4788,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_pressionado_en.png-a62a4421272038ca46d18255946a62bf.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_pressionado.png-85433428a1b01f46498df1a3e0e01bfa.ctex",
+      "bytes": 5180,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_continuar_pressionado.png-85433428a1b01f46498df1a3e0e01bfa.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_maximizar.png-9b258fa34bab4cd9ca7f77e97e30160a.ctex",
+      "bytes": 878,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/botao_maximizar.png-9b258fa34bab4cd9ca7f77e97e30160a.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/bt_andar_normal_abrindo.png-e4655edd112fefb09aaecd62b2e9353d.ctex",
+      "bytes": 5676,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/bt_andar_normal_abrindo.png-e4655edd112fefb09aaecd62b2e9353d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/caixa_texto_456x72.png-794ee9311a2e2caf58fc1f8566bbcbf9.ctex",
+      "bytes": 5296,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/caixa_texto_456x72.png-794ee9311a2e2caf58fc1f8566bbcbf9.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/caixa_texto.png-7354b1b638c442021c9f0a0dac8e175e.ctex",
+      "bytes": 25738,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/caixa_texto.png-7354b1b638c442021c9f0a0dac8e175e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/ClarxsSide.png-5f768de9fdc7b3a195d59ae8e318488e.ctex",
+      "bytes": 428,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/ClarxsSide.png-5f768de9fdc7b3a195d59ae8e318488e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/ClarxsUPDOWN.png-b56380b8bbc723e0961fc0f15b96035f.ctex",
+      "bytes": 588,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/ClarxsUPDOWN.png-b56380b8bbc723e0961fc0f15b96035f.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/clavier-music-solas-203831.mp3-cd1e2f2a43652eb15bfcbb3045cb7d82.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/clavier-music-solas-203831.mp3-cd1e2f2a43652eb15bfcbb3045cb7d82.mp3str",
+      "bytes": 2619267,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/clear.wav-da79992d16b46bf6f37be3712bad412e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/clear.wav-da79992d16b46bf6f37be3712bad412e.sample",
+      "bytes": 96991,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data08.png-e8c1e4c56c4529c803d5ce4351df1bc1.ctex",
+      "bytes": 390,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data08.png-e8c1e4c56c4529c803d5ce4351df1bc1.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data09.png-ca316ec037536fe3516660808f8be9de.ctex",
+      "bytes": 300,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data09.png-ca316ec037536fe3516660808f8be9de.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data10.png-f53036113114d9a56c3d6b5f3e7ebd42.ctex",
+      "bytes": 324,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data10.png-f53036113114d9a56c3d6b5f3e7ebd42.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data11.png-1537077524546ac81cafe98907300f61.ctex",
+      "bytes": 420,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data11.png-1537077524546ac81cafe98907300f61.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data12.png-3e81a7e7dbed06c1ad6d2e7fd48cad6f.ctex",
+      "bytes": 416,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data12.png-3e81a7e7dbed06c1ad6d2e7fd48cad6f.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data13.png-9122ca879f55b0fdd8bfd978a5c79772.ctex",
+      "bytes": 366,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data13.png-9122ca879f55b0fdd8bfd978a5c79772.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data14.png-810d4fe2c4d9014f2da97c270a611f77.ctex",
+      "bytes": 502,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data14.png-810d4fe2c4d9014f2da97c270a611f77.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data18.png-ae114e5adfeacf7ad11dd80edd551d49.ctex",
+      "bytes": 368,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data18.png-ae114e5adfeacf7ad11dd80edd551d49.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data20.png-3aa169df4924fcdf094c358418a6df2e.ctex",
+      "bytes": 408,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data20.png-3aa169df4924fcdf094c358418a6df2e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data21.png-f19acbe9791bd52bfa24f399e001dcf7.ctex",
+      "bytes": 456,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data21.png-f19acbe9791bd52bfa24f399e001dcf7.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data22.png-8b4c26ab0fd9bb8c68922f5194fa98f6.ctex",
+      "bytes": 332,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data22.png-8b4c26ab0fd9bb8c68922f5194fa98f6.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data23.png-630d2272ebc4217b36edb789207ac998.ctex",
+      "bytes": 332,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data23.png-630d2272ebc4217b36edb789207ac998.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data24.png-b47c79c52d9b1687ff14c7e2568b4938.ctex",
+      "bytes": 320,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data24.png-b47c79c52d9b1687ff14c7e2568b4938.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data25.png-4091eb7d3048fb6c5cf639bc4124920c.ctex",
+      "bytes": 430,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data25.png-4091eb7d3048fb6c5cf639bc4124920c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data26.png-32c0a16340e255994716d572c884d8d7.ctex",
+      "bytes": 274,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data26.png-32c0a16340e255994716d572c884d8d7.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data27.png-179f611355f2e71d8775c93e54aab916.ctex",
+      "bytes": 340,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data27.png-179f611355f2e71d8775c93e54aab916.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data29.png-a82b1ab9bdc8b6511f6a8502c36a4b4f.ctex",
+      "bytes": 294,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data29.png-a82b1ab9bdc8b6511f6a8502c36a4b4f.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data30.png-9d8798beebc2a6ed2ef7a45af1ee943e.ctex",
+      "bytes": 292,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data30.png-9d8798beebc2a6ed2ef7a45af1ee943e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data31.png-ae761bf5dfe81753693d38bf433bf6d4.ctex",
+      "bytes": 282,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data31.png-ae761bf5dfe81753693d38bf433bf6d4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data32.png-0da621442320dde89e0b2186115ac36d.ctex",
+      "bytes": 524,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data32.png-0da621442320dde89e0b2186115ac36d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data33.png-48944d2a66688aab4dc6405bb2bb7f04.ctex",
+      "bytes": 462,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data33.png-48944d2a66688aab4dc6405bb2bb7f04.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data34.png-034ef76f75ee3bf7b6ddaaa03abd5306.ctex",
+      "bytes": 330,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data34.png-034ef76f75ee3bf7b6ddaaa03abd5306.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data35.png-b7d6297b8390245a199471eabb8ef003.ctex",
+      "bytes": 302,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data35.png-b7d6297b8390245a199471eabb8ef003.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data36.png-c9afb45c0b2ced6e3768224877d5d71e.ctex",
+      "bytes": 374,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data36.png-c9afb45c0b2ced6e3768224877d5d71e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data37.png-c1718fec0b6db28994ee5926d4fa39aa.ctex",
+      "bytes": 340,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data37.png-c1718fec0b6db28994ee5926d4fa39aa.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data38.png-c482f715118d145cfcdee28631f4d579.ctex",
+      "bytes": 286,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data38.png-c482f715118d145cfcdee28631f4d579.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data39.png-3c8ed04881f9658cc4c37d575c6071eb.ctex",
+      "bytes": 414,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data39.png-3c8ed04881f9658cc4c37d575c6071eb.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data40.png-b57a59f735e0659c89a3d56ef147f7f4.ctex",
+      "bytes": 412,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data40.png-b57a59f735e0659c89a3d56ef147f7f4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data41.png-cfa8c6e4cd6dc9dafca6a005a48489bd.ctex",
+      "bytes": 482,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data41.png-cfa8c6e4cd6dc9dafca6a005a48489bd.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data43.png-b5b4a439c5976fe354e9e98937f0a421.ctex",
+      "bytes": 380,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data43.png-b5b4a439c5976fe354e9e98937f0a421.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data44.png-823c8a6cb1955d717a4e06b4ff31a3dd.ctex",
+      "bytes": 450,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data44.png-823c8a6cb1955d717a4e06b4ff31a3dd.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data45.png-c2e95dccb28985cf6bd949407f627d15.ctex",
+      "bytes": 368,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data45.png-c2e95dccb28985cf6bd949407f627d15.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data48.png-be0ba4885b53ca79253bb857e6a46688.ctex",
+      "bytes": 340,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data48.png-be0ba4885b53ca79253bb857e6a46688.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data49.png-6a31b4ae19b12f8ff0b4aba5a5065dcd.ctex",
+      "bytes": 288,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/data49.png-6a31b4ae19b12f8ff0b4aba5a5065dcd.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/default_inventory_background.png-86fc6c4199ae47e9f26eb3294d98457b.ctex",
+      "bytes": 250,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/default_inventory_background.png-86fc6c4199ae47e9f26eb3294d98457b.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Design sem nome(10).png-29b5473765c9bb8f5ccaced2f4382545.ctex",
+      "bytes": 145434,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Design sem nome(10).png-29b5473765c9bb8f5ccaced2f4382545.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Design sem nome(13).png-281ac3e3245a331476851e1e674ae743.ctex",
+      "bytes": 715580,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Design sem nome(13).png-281ac3e3245a331476851e1e674ae743.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Design sem nome(9).png-1656742b6093e5880a0a696f2fadefa7.ctex",
+      "bytes": 184664,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Design sem nome(9).png-1656742b6093e5880a0a696f2fadefa7.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/faca.png-a7ceb633a8a2ae59f8fa6dd392720363.ctex",
+      "bytes": 230,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/faca.png-a7ceb633a8a2ae59f8fa6dd392720363.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/floor-creak-01.wav-d257e57df5e642f946e686e56e654aa9.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/floor-creak-01.wav-d257e57df5e642f946e686e56e654aa9.sample",
+      "bytes": 23538,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-angular.png-f60b2055a6746ef52f3062ec4db14221.ctex",
+      "bytes": 7604,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-angular.png-f60b2055a6746ef52f3062ec4db14221.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-horizontal.png-7dd416d8e291e031334705ee39647426.ctex",
+      "bytes": 122,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-horizontal.png-7dd416d8e291e031334705ee39647426.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-vertical-mirror.png-41b07d026086bb5180f2b816eecf5e0a.ctex",
+      "bytes": 132,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-vertical-mirror.png-41b07d026086bb5180f2b816eecf5e0a.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-vertical.png-97f0812c435383b4776237907fa4a2a3.ctex",
+      "bytes": 124,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/gradient-vertical.png-97f0812c435383b4776237907fa4a2a3.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Grass-01.png-930bf868a9e177d5f800d36c1ad05184.ctex",
+      "bytes": 9854,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Grass-01.png-930bf868a9e177d5f800d36c1ad05184.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Interiors_free_16x16.png-a17746f2a5a63a5481474735009aa7fd.ctex",
+      "bytes": 57400,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Interiors_free_16x16.png-a17746f2a5a63a5481474735009aa7fd.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/item_slot_empty_background.png-b1b8fd33865f4ae908ca5b4813e88cea.ctex",
+      "bytes": 174,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/item_slot_empty_background.png-b1b8fd33865f4ae908ca5b4813e88cea.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/lixeiraquebrada.png-1c07cda2b2aa8539539e3c599d432736.ctex",
+      "bytes": 578154,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/lixeiraquebrada.png-1c07cda2b2aa8539539e3c599d432736.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/m3x6.ttf-dc79be98f12ab9af7a6d2d87274488c3.fontdata",
+      "bytes": 4684,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/m3x6.ttf-dc79be98f12ab9af7a6d2d87274488c3.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_deep_1.ogg-0ac3d96a403bfca723927700b4af233c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_deep_1.ogg-0ac3d96a403bfca723927700b4af233c.oggvorbisstr",
+      "bytes": 6979,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_deep_2.ogg-0825e17821fe6fe5b6d7a398cda0c5e5.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_deep_2.ogg-0825e17821fe6fe5b6d7a398cda0c5e5.oggvorbisstr",
+      "bytes": 7831,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_standard_1.ogg-63f92af428265644829fea6b95e60002.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_standard_1.ogg-63f92af428265644829fea6b95e60002.oggvorbisstr",
+      "bytes": 7163,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_standard_2.ogg-f08ad1a058c05955f409c71627c3b3a0.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/male_standard_2.ogg-f08ad1a058c05955f409c71627c3b3a0.oggvorbisstr",
+      "bytes": 7443,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/MenuBackground.png-ab8cf8dea07fc931c982830081550bbb.ctex",
+      "bytes": 87104,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/MenuBackground.png-ab8cf8dea07fc931c982830081550bbb.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_cenario_1.mp3-bb27a71e8d963acec8b836163fc848e3.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_cenario_1.mp3-bb27a71e8d963acec8b836163fc848e3.mp3str",
+      "bytes": 2619267,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_cenario_4.mp3-b0e01cc708412d3aa7f10a53575dd9d9.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_cenario_4.mp3-b0e01cc708412d3aa7f10a53575dd9d9.mp3str",
+      "bytes": 2117719,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_fundo_inicial.mp3-ba08533a174b8dc620398a438c2c1c6c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_fundo_inicial.mp3-ba08533a174b8dc620398a438c2c1c6c.mp3str",
+      "bytes": 4400399,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_fundo.mp3-36d672a6ff6fb3f12402c68a52a4d89c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/Musica_de_fundo.mp3-36d672a6ff6fb3f12402c68a52a4d89c.mp3str",
+      "bytes": 12417903,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/musica_disjuntor_desligado.mp3-bc8e0e7b2f71b94ea7566d829341be9a.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/musica_disjuntor_desligado.mp3-bc8e0e7b2f71b94ea7566d829341be9a.mp3str",
+      "bytes": 2881103,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/New Piskel (5).png-133ea0c9145a8e3bce2c4fd44555b004.ctex",
+      "bytes": 152,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/New Piskel (5).png-133ea0c9145a8e3bce2c4fd44555b004.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/New Piskel (6).png-127d9070178aa1a03960714b9cf54d59.ctex",
+      "bytes": 170,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/New Piskel (6).png-127d9070178aa1a03960714b9cf54d59.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/ohno.wav-ec1a1b2b3005336ddb52d8bc757f0433.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/ohno.wav-ec1a1b2b3005336ddb52d8bc757f0433.sample",
+      "bytes": 162291,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/OptionBackground.png-89dc6670c91fafe49740b1f5ad5eae3c.ctex",
+      "bytes": 30676,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/OptionBackground.png-89dc6670c91fafe49740b1f5ad5eae3c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/paredeComFios_0.png-34495d0b165482f41cb95a52b1c58ff0.ctex",
+      "bytes": 578,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/paredeComFios_0.png-34495d0b165482f41cb95a52b1c58ff0.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pedaco_0.png-11e4a7395e5760c24fd1fe7a465ef76d.ctex",
+      "bytes": 118,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pedaco_0.png-11e4a7395e5760c24fd1fe7a465ef76d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_0.png-f526fee8d86e46ebb54c89dd70ae9023.ctex",
+      "bytes": 5244,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_0.png-f526fee8d86e46ebb54c89dd70ae9023.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_1.png-d3d074a5cba3b58522d08611c25a1b14.ctex",
+      "bytes": 4028,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_1.png-d3d074a5cba3b58522d08611c25a1b14.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_3.png-1fe059a19762615d026086dcfe65dbe6.ctex",
+      "bytes": 5330,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_3.png-1fe059a19762615d026086dcfe65dbe6.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_4.png-09f9631234fcab225c24db6f4456556c.ctex",
+      "bytes": 4316,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/pessoa_4.png-09f9631234fcab225c24db6f4456556c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/quick_1.ogg-b8d70c3eb5c2387ba5a1c2090b9b16dd.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/quick_1.ogg-b8d70c3eb5c2387ba5a1c2090b9b16dd.oggvorbisstr",
+      "bytes": 5527,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/quick_2.ogg-94d7eab39dc2b94f78725766aeb239a4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/quick_2.ogg-94d7eab39dc2b94f78725766aeb239a4.oggvorbisstr",
+      "bytes": 5803,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_2.png-5694c3feb8afaf9877747ca45b41bb18.ctex",
+      "bytes": 5198,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_2.png-5694c3feb8afaf9877747ca45b41bb18.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_3.png-794028e73a11b41a663474dc42e7ae9e.ctex",
+      "bytes": 4326,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_3.png-794028e73a11b41a663474dc42e7ae9e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_4.png-b4630b277c1d4aa96a2893f04399c6f5.ctex",
+      "bytes": 4312,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_4.png-b4630b277c1d4aa96a2893f04399c6f5.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_5.png-c2032ad438bb9df77251051741aae3bb.ctex",
+      "bytes": 4326,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/scientist_5.png-c2032ad438bb9df77251051741aae3bb.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/select.wav-b9607d64732052b7ca3afdc143d72c15.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/select.wav-b9607d64732052b7ca3afdc143d72c15.sample",
+      "bytes": 120359,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_0.png-53d86ce20d7be33d5a4099b7625aabb9.ctex",
+      "bytes": 148,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_0.png-53d86ce20d7be33d5a4099b7625aabb9.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_1.png-ad3741cb14319c4769214e6daedde9b0.ctex",
+      "bytes": 168,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_1.png-ad3741cb14319c4769214e6daedde9b0.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_3.png-8a01bf0910b90f68d97fd0871696122d.ctex",
+      "bytes": 158,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_3.png-8a01bf0910b90f68d97fd0871696122d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_4.png-32135c01eab902955f52c2252eb21226.ctex",
+      "bytes": 160,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_4.png-32135c01eab902955f52c2252eb21226.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_5.png-b118d070c390ee3496646317bb2d4461.ctex",
+      "bytes": 160,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_5.png-b118d070c390ee3496646317bb2d4461.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_6.png-28be9299af0ee84057bd8acffd167139.ctex",
+      "bytes": 186,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_6.png-28be9299af0ee84057bd8acffd167139.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_7.png-c0cb8f80bef8ba90b2f0d0b5aeff5453.ctex",
+      "bytes": 186,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sign_7.png-c0cb8f80bef8ba90b2f0d0b5aeff5453.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_0-export.png-47f427d05492cd069d7fd67cabed7de9.ctex",
+      "bytes": 18350,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_0-export.png-47f427d05492cd069d7fd67cabed7de9.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-03675150ffe14629704e5b7b2766b872.ctex",
+      "bytes": 1798,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-03675150ffe14629704e5b7b2766b872.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-0e01592075f8440de3ea09f326293239.ctex",
+      "bytes": 628,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-0e01592075f8440de3ea09f326293239.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-31dcb3e87286190dc1ffa3edf85c4daf.ctex",
+      "bytes": 1876,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-31dcb3e87286190dc1ffa3edf85c4daf.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-4d16b727e8f0e960b3b176f37d560a51.ctex",
+      "bytes": 506,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-4d16b727e8f0e960b3b176f37d560a51.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-63af586d7bcfafa6c269be2638d0188c.ctex",
+      "bytes": 686,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-63af586d7bcfafa6c269be2638d0188c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-770ee1219a668ed95961b1a82c3369d1.ctex",
+      "bytes": 658,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-770ee1219a668ed95961b1a82c3369d1.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-83eac1fe1785bed984ae7f5734062101.ctex",
+      "bytes": 618,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-83eac1fe1785bed984ae7f5734062101.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-b4e7bddd498054d02090e25b35f274bc.ctex",
+      "bytes": 892,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-b4e7bddd498054d02090e25b35f274bc.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-e64e0c3ea249ba3b1ecb78d5391562eb.ctex",
+      "bytes": 374,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_03.png-e64e0c3ea249ba3b1ecb78d5391562eb.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_17.png-6a8f597499f5ece368ea898093dcc4c2.ctex",
+      "bytes": 326,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_17.png-6a8f597499f5ece368ea898093dcc4c2.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_17.png-bbeb87c3d319b927c819d5db1dc40907.ctex",
+      "bytes": 404,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_17.png-bbeb87c3d319b927c819d5db1dc40907.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_2.png-34add749d221327e4d0c6c6b0d61481b.ctex",
+      "bytes": 29986,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_2.png-34add749d221327e4d0c6c6b0d61481b.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_24.png-d563f0c2a40e30172bb5a4af9c13b68b.ctex",
+      "bytes": 342,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_24.png-d563f0c2a40e30172bb5a4af9c13b68b.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_24.png-e007cb59d5ee736a783b3ac763de0991.ctex",
+      "bytes": 294,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_24.png-e007cb59d5ee736a783b3ac763de0991.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_28.png-7ba82deed34426e8c1132c711dde06db.ctex",
+      "bytes": 554,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_28.png-7ba82deed34426e8c1132c711dde06db.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_28.png-cacdeff94bae7ac9f6138d24a61a67f4.ctex",
+      "bytes": 808,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_28.png-cacdeff94bae7ac9f6138d24a61a67f4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_3.png-86b0d71df83185220c82b9038fe4b68a.ctex",
+      "bytes": 30020,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_3.png-86b0d71df83185220c82b9038fe4b68a.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_32.png-2f372095c3dbaf5f9f3c727847adcbc4.ctex",
+      "bytes": 298,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_32.png-2f372095c3dbaf5f9f3c727847adcbc4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_32.png-d4bc21d41ba432607747a18e7630538a.ctex",
+      "bytes": 350,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_32.png-d4bc21d41ba432607747a18e7630538a.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_34.png-8e1bef0735ae60019edfa46e40241f7f.ctex",
+      "bytes": 610,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_34.png-8e1bef0735ae60019edfa46e40241f7f.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_34.png-cc1384d476d2d2063c87c06958144e5c.ctex",
+      "bytes": 338,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_34.png-cc1384d476d2d2063c87c06958144e5c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_35.png-16b54500c23ca6e19c146acd6a5d6604.ctex",
+      "bytes": 324,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_35.png-16b54500c23ca6e19c146acd6a5d6604.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_35.png-8dcf1185c96687f04dbcda7be54e179b.ctex",
+      "bytes": 504,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_35.png-8dcf1185c96687f04dbcda7be54e179b.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_36.png-7539a04bfc3d1b9bea85198983e49826.ctex",
+      "bytes": 384,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_36.png-7539a04bfc3d1b9bea85198983e49826.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_36.png-db799aece94fe47885ca2d817262b4e4.ctex",
+      "bytes": 408,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_36.png-db799aece94fe47885ca2d817262b4e4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_37.png-2219461de9bb485228be0c16b0c7d102.ctex",
+      "bytes": 380,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_37.png-2219461de9bb485228be0c16b0c7d102.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_37.png-c2293f3957f87e2a28b26aa237662cb2.ctex",
+      "bytes": 340,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_37.png-c2293f3957f87e2a28b26aa237662cb2.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_41.png-6038a0f01cb59cd473f9df71f2a70e8b.ctex",
+      "bytes": 248,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_41.png-6038a0f01cb59cd473f9df71f2a70e8b.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_41.png-9396b0c4aa9a1be9fb05bc5c52a70ac8.ctex",
+      "bytes": 356,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_41.png-9396b0c4aa9a1be9fb05bc5c52a70ac8.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_51.png-4d3c6a3494ffa4044b6f64f48247f9ed.ctex",
+      "bytes": 478,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_51.png-4d3c6a3494ffa4044b6f64f48247f9ed.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_52.png-c04d25437412b8f4bff5a481a9bbcd09.ctex",
+      "bytes": 484,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_52.png-c04d25437412b8f4bff5a481a9bbcd09.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_55.png-fd4b125e0fae54246e9e026c97dca48d.ctex",
+      "bytes": 412,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_55.png-fd4b125e0fae54246e9e026c97dca48d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_56.png-7c92d4da7410a4616cd9fd2ffb2fa31b.ctex",
+      "bytes": 442,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_56.png-7c92d4da7410a4616cd9fd2ffb2fa31b.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_57.png-6a06bf1e8ced2f59c2aad60acd257493.ctex",
+      "bytes": 318,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_57.png-6a06bf1e8ced2f59c2aad60acd257493.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_59.png-aba9f4034825588eb34b50c8e1319f6d.ctex",
+      "bytes": 374,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_59.png-aba9f4034825588eb34b50c8e1319f6d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_60.png-a7b79be9af445ecacc5508087219982f.ctex",
+      "bytes": 358,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_60.png-a7b79be9af445ecacc5508087219982f.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_61.png-41602ab726c2adcc8e9e173c023106ce.ctex",
+      "bytes": 350,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_61.png-41602ab726c2adcc8e9e173c023106ce.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_62.png-477f47403b4e3b611c2eac6a8f611510.ctex",
+      "bytes": 304,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_62.png-477f47403b4e3b611c2eac6a8f611510.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_63.png-e6a87120bf2615ad6d6f79c8686c212e.ctex",
+      "bytes": 338,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_63.png-e6a87120bf2615ad6d6f79c8686c212e.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_64.png-e1e9063834a5b46b0fca68cc278e280c.ctex",
+      "bytes": 448,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_64.png-e1e9063834a5b46b0fca68cc278e280c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_65.png-0b2f9024a807ac5942d1e24f742e2465.ctex",
+      "bytes": 418,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_65.png-0b2f9024a807ac5942d1e24f742e2465.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_66.png-5fb5ff5c7200a369b2a1ea357aa93094.ctex",
+      "bytes": 402,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_66.png-5fb5ff5c7200a369b2a1ea357aa93094.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_67.png-c4f37f69dc83273c43200c2f898ea7b2.ctex",
+      "bytes": 448,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_67.png-c4f37f69dc83273c43200c2f898ea7b2.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_68.png-290f8490a1e17600f5a74f0e24ad741c.ctex",
+      "bytes": 420,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_68.png-290f8490a1e17600f5a74f0e24ad741c.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_69.png-156b9d8e15a96e50dac26ce4392f9c69.ctex",
+      "bytes": 422,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_69.png-156b9d8e15a96e50dac26ce4392f9c69.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_70.png-8a9993337cbfc9088ea35dd0411b3963.ctex",
+      "bytes": 370,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_70.png-8a9993337cbfc9088ea35dd0411b3963.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_71.png-f9afc0fef97760b01f1378c10a9f8bc1.ctex",
+      "bytes": 522,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_71.png-f9afc0fef97760b01f1378c10a9f8bc1.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_72.png-9abe46575de99ff6d3a2df141b6e709a.ctex",
+      "bytes": 320,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_72.png-9abe46575de99ff6d3a2df141b6e709a.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_73.png-779599e699d5067a0262e1451ec28de0.ctex",
+      "bytes": 346,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_73.png-779599e699d5067a0262e1451ec28de0.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_74.png-cadfe8a30ab9bc8d2b904d8c74ca64f4.ctex",
+      "bytes": 294,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_74.png-cadfe8a30ab9bc8d2b904d8c74ca64f4.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_75.png-ec35e26d495dd56760ee859b82cfe354.ctex",
+      "bytes": 362,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_75.png-ec35e26d495dd56760ee859b82cfe354.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_76.png-5b02ebdd1cc89ee7a62208b521c12b7d.ctex",
+      "bytes": 366,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_76.png-5b02ebdd1cc89ee7a62208b521c12b7d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_77.png-66367eb6f429304dbf781bd387afd687.ctex",
+      "bytes": 404,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/sprite_77.png-66367eb6f429304dbf781bd387afd687.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/tabela_banco_dados (1).png-c3d6b5121c36956de1c3321c5b8f3d78.ctex",
+      "bytes": 40522,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/tabela_banco_dados (1).png-c3d6b5121c36956de1c3321c5b8f3d78.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/turn.wav-5c6a5b0c88eb6ef526c4fad92c77798f.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/turn.wav-5c6a5b0c88eb6ef526c4fad92c77798f.sample",
+      "bytes": 7555,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/water.wav-ec69c2e29fccc5b95ef2fdfcdff1013d.md5",
+      "bytes": 91,
+      "kind": "cache_orfao"
+    },
+    {
+      "path": ".godot/imported/water.wav-ec69c2e29fccc5b95ef2fdfcdff1013d.sample",
+      "bytes": 194275,
+      "kind": "cache_orfao"
+    }
+  ]
+}
