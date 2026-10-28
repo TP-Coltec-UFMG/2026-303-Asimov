@@ -23,7 +23,7 @@ var tempo_tremor_final: float = 0.0
 var intensidade_tremor_final: float = 0.0
 var camera_em_tremor: Camera2D = null
 var offset_original_camera: Vector2 = Vector2.ZERO
-var limite_da_partida: float = 60.0 * 15.0
+var limite_da_partida: float = 60.0 * 15
 
 
 func _ready() -> void:

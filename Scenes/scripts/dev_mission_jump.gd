@@ -26,7 +26,8 @@ const STAGES := [
 	{"title": "14 · Final / isolar lançamento", "scene": STRONG_DATA_CENTER, "position": Vector2(-158, -51)},
 	{"title": "15 · Final / rede neural", "scene": STRONG_DATA_CENTER, "position": Vector2(-158, -51)},
 	{"title": "16 · Final / restaurar leis", "scene": STRONG_DATA_CENTER, "position": Vector2(-158, -51)},
-	{"title": "17 · Final / aplicar correção", "scene": STRONG_DATA_CENTER, "position": Vector2(-158, -51)}
+	{"title": "17 · Programador / aplicar correção · 1 minuto", "scene": STRONG_DATA_CENTER, "position": Vector2(-158, -51)},
+	{"title": "18 · Engenheiro / último circuito · 1 minuto", "scene": STRONG_DATA_CENTER, "position": Vector2(-158, -51), "job": "engenheiro_eletrico"}
 ]
 
 @onready var menu: Control = $Menu
@@ -106,12 +107,12 @@ func _jump(index: int) -> void:
 	MusicController.parar_todos_audios()
 	get_tree().set_meta(&"dev_mission_jump_active", true)
 	active_stage = index
-	indicator.text = "DEV · %02d · Ctrl+Shift+D" % (index + 1)
-	indicator.show()
+	indicator.hide()
 
 	var state := _mission_state(index)
 	var world := _world_state(index, state)
 	var job := "programador" if index >= 13 else str(Configs.configs.get("job", "programador"))
+	job = str(stage.get("job", job))
 	if job.is_empty():
 		job = "programador"
 	Configs.configs["job"] = job
@@ -132,7 +133,7 @@ func _jump(index: int) -> void:
 		"difficulty": Configs.configs["difficulty"]
 	}
 	SaveGame.checkpoint_audio_state = {}
-	SaveGame.tempo_restante = 118.0 if index == 12 else 540.0
+	SaveGame.tempo_restante = 60.0 if index >= 13 else (118.0 if index == 12 else 540.0)
 	SaveGame.tempo_atual = SaveGame.tempo_restante
 	SaveGame.restore_checkpoint_pending = false
 	SaveGame.restore_audio_pending = false
@@ -141,6 +142,17 @@ func _jump(index: int) -> void:
 
 
 func _mission_state(index: int) -> Dictionary:
+	if index == 17:
+		var estado_engenheiro := _mission_state(12)
+		estado_engenheiro["cooling_optional_task_active"] = false
+		estado_engenheiro["data_center_engineer_access_unlocked"] = true
+		estado_engenheiro["data_center_forte_intro_seen"] = true
+		estado_engenheiro["engineer_ending_started"] = true
+		estado_engenheiro["engineer_completed_count"] = 4
+		estado_engenheiro["engineer_redundancy_seen"] = true
+		estado_engenheiro["engineer_point_order"] = ["ServerRowB", "ServerRowC", "ServerRowD"]
+		estado_engenheiro["engineer_backup_order"] = ["ServerColumn", "ServerRowA"]
+		return estado_engenheiro
 	var state: Dictionary = {}
 	if index >= 1:
 		state["elevator_third_floor_unlocked"] = true
@@ -199,6 +211,7 @@ func _mission_state(index: int) -> Dictionary:
 		state["cooling_opportunity_triggered"] = true
 		state["cooling_optional_task_active"] = true
 	if index >= 13:
+		state["cooling_opportunity_triggered"] = true
 		state["data_center_forte_intro_seen"] = true
 		state["programmer_ending_started"] = true
 		state["programmer_confrontation_started"] = true
@@ -234,7 +247,7 @@ func _inventory(index: int) -> Dictionary:
 	if index >= 2:
 		items["laptop"] = {"scene_path": "res://Objects/laptop.tscn"}
 		items["cabo"] = {"scene_path": "res://Objects/cabo.tscn"}
-	if index == 4:
+	if index == 4 or index >= 13:
 		items["cartao"] = {"scene_path": "res://Objects/cartao_chefe.tscn"}
 	if index >= 6:
 		items["lanterna"] = {"scene_path": "res://Objects/Lanterna.tscn"}

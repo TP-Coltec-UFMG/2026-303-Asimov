@@ -1,27 +1,5 @@
-res://NPC'S/clarxs.gd
-res://Scripts/Acessibility/color_accessibility_cue.gd
-res://Player/ManPlayer.tscn
+res://Tutorial/contextual_tutorial.gd
+res://Scenes/principal.tscn
 res://shaders/mapa_acessibilidade.gdshader
 res://shaders/filtro_daltonismo.gdshader
 res://shaders/pause_menu.gdshader
-res://Scenes/animations/cooling_location_guide_animations.tres
-res://Scenes/animations/cooling_location_guide_tree.tres
-res://Objects/scripts/controle_de_tempo.gd
-res://Scripts/Data/difficulty_settings.gd
-res://Dialogue/dialogues.pt_BR.json
-res://NPC'S/Animacoes/scientist_1.tres
-res://Player/Scripts/player.gd
-res://Scenes/scripts/data_center_intro_controller.gd
-res://Scenes/scripts/scene_trigger.gd
-res://Scripts/Data/configs.gd
-res://Scripts/Data/save/SaveLoad.gd
-res://Tutorial/contextual_tutorial.gd
-res://Tests/simplified_controls_test.gd
-res://Tests/automatic_push_test.gd
-res://Tutorial/tutorial.gd
-res://Tradutions/traducoes - Página1(8).pt_BR.translation
-res://Tradutions/traducoes - Página1(8).en.translation
-res://Tradutions/traducoes - Página1(8).es.translation
-res://Tradutions/traducoes - Página1(8).fr.translation
-res://Scripts/Objects/OptionButton/option_language_button.gd
-res://Scripts/UI/Menus/primeira_vez.gd

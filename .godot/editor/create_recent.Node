@@ -1,6 +1,9 @@
+Sprite2D
+AnimationPlayer
+Camera2D
+CanvasModulate
 CollisionShape2D
 StaticBody2D
-Sprite2D
 ColorRect
 PointLight2D
 AudioStreamPlayer2D
@@ -9,5 +12,3 @@ SubViewportContainer
 SubViewport
 HBoxContainer
 Line2D
-MultiMeshInstance2D
-Label

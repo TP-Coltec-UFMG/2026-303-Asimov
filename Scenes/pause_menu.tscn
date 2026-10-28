@@ -62,6 +62,8 @@
 [ext_resource type="Script" path="res://Scripts/UI/Menus/configuracoes_interface.gd" id="GDScript_jfdv3"]
 
 [ext_resource type="Script" path="res://Scripts/Acessibility/opcao_controle_simplificado.gd" id="controle_simplificado"]
+[ext_resource type="Texture2D" path="res://Sprites/ui/Icons/sprite_1.png" id="icone_corrida_automatica"]
+[ext_resource type="Texture2D" path="res://Sprites/ui/Icons/sprite_0.png" id="icone_equipar_automaticamente"]
 
 [sub_resource type="StyleBoxEmpty" id="MargensRolagemAcessibilidade"]
 content_margin_left = 32.0
@@ -1058,6 +1060,11 @@ script = ExtResource("controle_simplificado")
 chave_configuracao = "corrida_automatica"
 padrao = false
 
+[node name="Sprite2D" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/CorridaAutomatica"]
+position = Vector2(-10, 10)
+scale = Vector2(0.465, 0.465)
+texture = ExtResource("icone_corrida_automatica")
+
 [node name="EquiparAutomaticamente" type="CheckBox" parent="Accessibility/Rolagem/VContainer" groups=["alto_contraste"]]
 layout_mode = 2
 theme_override_constants/h_separation = 8
@@ -1071,6 +1078,11 @@ script = ExtResource("controle_simplificado")
 
 chave_configuracao = "equipar_itens_automaticamente"
 padrao = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/EquiparAutomaticamente"]
+position = Vector2(-10, 10)
+scale = Vector2(0.465, 0.465)
+texture = ExtResource("icone_equipar_automaticamente")
 
 [node name="BackToMenuButton" parent="Accessibility" unique_id=776410913 groups=["alto_contraste"] instance=ExtResource("9_2s720")]
 offset_left = 453.0

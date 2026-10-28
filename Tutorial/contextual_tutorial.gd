@@ -15,6 +15,8 @@ const OPACIDADE_SEM_DESTAQUE := 0.15
 @onready var titulo: Label = $Panel/Content/Title
 @onready var explicacao: RichTextLabel = $Panel/Content/Explanation
 
+@export var tutoriais_habilitados: bool = true
+
 var jogador: Player
 var pendentes: Array[String] = []
 var tutorial_ativo := ""
@@ -109,6 +111,8 @@ func _process(_delta: float) -> void:
 
 
 func _jogo_disponivel() -> bool:
+	if not tutoriais_habilitados:
+		return false
 	var cena := get_tree().current_scene
 	if not cena is BaseScene or get_tree().paused or DialogManager.is_showing_dialog:
 		return false

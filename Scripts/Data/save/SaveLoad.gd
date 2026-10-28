@@ -84,6 +84,8 @@ func _save() -> void:
 
 
 func _load() -> void:
+	if OS.is_debug_build() and get_tree().has_meta(&"dev_mission_jump_active"):
+		return
 	var migrated_intro_cutscene: bool = false
 	if FileAccess.file_exists(FILE_PATH):
 		var file: FileAccess = FileAccess.open(FILE_PATH, FileAccess.READ)
