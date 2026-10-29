@@ -6,10 +6,10 @@ uid="uid://sy8cnsrp6jpc"
 
 [deps]
 
-files=["res://Tradutions/traducoes - Página1.PORTUGUÊS.translation", "res://Tradutions/traducoes - Página1.ENGLISH.translation", "res://Tradutions/traducoes - Página1.ESPAÑOL.translation", "res://Tradutions/traducoes - Página1.FRANÇAIS.translation"]
+files=["res://Tradutions/traducoes - Página1.pt_BR.translation", "res://Tradutions/traducoes - Página1.en.translation", "res://Tradutions/traducoes - Página1.es.translation", "res://Tradutions/traducoes - Página1.fr.translation"]
 
 source_file="res://Tradutions/traducoes - Página1.csv"
-dest_files=["res://Tradutions/traducoes - Página1.PORTUGUÊS.translation", "res://Tradutions/traducoes - Página1.ENGLISH.translation", "res://Tradutions/traducoes - Página1.ESPAÑOL.translation", "res://Tradutions/traducoes - Página1.FRANÇAIS.translation"]
+dest_files=["res://Tradutions/traducoes - Página1.pt_BR.translation", "res://Tradutions/traducoes - Página1.en.translation", "res://Tradutions/traducoes - Página1.es.translation", "res://Tradutions/traducoes - Página1.fr.translation"]
 
 [params]
 
