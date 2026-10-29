@@ -160,6 +160,10 @@ O edifício do jogo será composto por seis andares: datacenter, sala de ferrame
 
 <img width="1003" height="574" alt="Captura de tela 2026-10-28 212307" src="https://github.com/user-attachments/assets/848ed47a-a7f0-4a77-8243-2931809e4c85" />
 
+### SALA DE REFRIGERAÇÃO
+
+<img width="1024" height="552" alt="Captura de tela 2026-10-29 080823" src="https://github.com/user-attachments/assets/454b5fc7-c8e7-4fe8-93d8-383efe6a6f12" />
+
 ---
 
 ## MINIGAMES
