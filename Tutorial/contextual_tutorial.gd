@@ -57,6 +57,7 @@ var direcoes_praticadas: Array[StringName] = []
 func _ready() -> void:
 	ultimo_instante = Time.get_ticks_usec()
 	estilo_brilho = balao.get_theme_stylebox("panel") as StyleBoxFlat
+	aplicar_tamanho_legenda()
 	get_tree().scene_changed.connect(_ao_mudar_cena)
 
 
@@ -245,10 +246,7 @@ func _iniciar_tutorial(id: String) -> void:
 	explicacao.text = "[center]" + conteudo[1] + "[/center]"
 	tempo_minimo_leitura = DURACAO_ENTRADA
 	balao.accessibility_name = titulo.text + ". " + conteudo[1]
-	var fator := 1.1 if int(Configs.configs.get("interface_size", 0)) == 2 else 1.0
-	titulo.add_theme_font_size_override("font_size", int(round(12.0 * fator)))
-	for font_size_name in ["normal_font_size", "bold_font_size"]:
-		explicacao.add_theme_font_size_override(font_size_name, int(round(10.0 * fator)))
+	aplicar_tamanho_legenda()
 	acao_estava_ativa = _acao_praticada()
 	_animar_balao(true)
 	if bool(Configs.configs.get("leitor_de_tela", false)):
@@ -257,6 +255,21 @@ func _iniciar_tutorial(id: String) -> void:
 	_iniciar_destaque()
 	_iniciar_brilho()
 	_reduzir_musica(true)
+
+
+func aplicar_tamanho_legenda() -> void:
+	if not is_node_ready():
+		return
+	var fator := Configs.obter_fator_legendas()
+	if int(Configs.configs.get("interface_size", 0)) == 2:
+		fator *= 1.1
+	titulo.add_theme_font_size_override("font_size", roundi(12.0 * fator))
+	for propriedade in ["normal_font_size", "bold_font_size"]:
+		explicacao.add_theme_font_size_override(propriedade, roundi(10.0 * fator))
+	if balao.visible and not tutorial_ativo.is_empty():
+		_dimensionar_balao()
+		posicao_repouso_balao = _destino_balao()
+		balao.position = posicao_repouso_balao
 
 
 func _atualizar_tutorial(delta_real: float) -> void:
@@ -436,22 +449,26 @@ func _destino_balao() -> Vector2:
 	return destino
 
 
+func _dimensionar_balao() -> void:
+	var estilo := balao.get_theme_stylebox("panel")
+	var largura_conteudo := LARGURA_PAINEL - estilo.get_content_margin(SIDE_LEFT) - estilo.get_content_margin(SIDE_RIGHT)
+	titulo.size.x = largura_conteudo
+	explicacao.size.x = largura_conteudo
+	var tamanho_fonte := explicacao.get_theme_font_size("normal_font_size")
+	var texto_simples := explicacao.get_parsed_text()
+	var altura_texto := explicacao.get_theme_font("normal_font").get_multiline_string_size(texto_simples, HORIZONTAL_ALIGNMENT_CENTER, largura_conteudo, tamanho_fonte).y
+	if tutorial_ativo == "walk":
+		altura_texto = maxf(altura_texto, explicacao.get_theme_font("bold_font").get_multiline_string_size(texto_simples, HORIZONTAL_ALIGNMENT_CENTER, largura_conteudo, tamanho_fonte).y)
+	var altura_titulo := titulo.get_theme_font("font").get_height(titulo.get_theme_font_size("font_size"))
+	var conteudo := balao.get_node("Content") as VBoxContainer
+	var altura := altura_titulo + altura_texto + conteudo.get_theme_constant("separation") + estilo.get_content_margin(SIDE_TOP) + estilo.get_content_margin(SIDE_BOTTOM)
+	balao.size = Vector2(LARGURA_PAINEL, ceilf(altura))
+
+
 func _animar_balao(entrando: bool) -> void:
 	_parar_movimento_balao()
 	if entrando:
-		var estilo := balao.get_theme_stylebox("panel")
-		var largura_conteudo := LARGURA_PAINEL - estilo.get_content_margin(SIDE_LEFT) - estilo.get_content_margin(SIDE_RIGHT)
-		titulo.size.x = largura_conteudo
-		explicacao.size.x = largura_conteudo
-		var tamanho_fonte := explicacao.get_theme_font_size("normal_font_size")
-		var texto_simples := explicacao.get_parsed_text()
-		var altura_texto := explicacao.get_theme_font("normal_font").get_multiline_string_size(texto_simples, HORIZONTAL_ALIGNMENT_CENTER, largura_conteudo, tamanho_fonte).y
-		if tutorial_ativo == "walk":
-			altura_texto = maxf(altura_texto, explicacao.get_theme_font("bold_font").get_multiline_string_size(texto_simples, HORIZONTAL_ALIGNMENT_CENTER, largura_conteudo, tamanho_fonte).y)
-		var altura_titulo := titulo.get_theme_font("font").get_height(titulo.get_theme_font_size("font_size"))
-		var conteudo := balao.get_node("Content") as VBoxContainer
-		var altura := altura_titulo + altura_texto + conteudo.get_theme_constant("separation") + estilo.get_content_margin(SIDE_TOP) + estilo.get_content_margin(SIDE_BOTTOM)
-		balao.size = Vector2(LARGURA_PAINEL, ceilf(altura))
+		_dimensionar_balao()
 		posicao_repouso_balao = _destino_balao()
 		balao.pivot_offset = balao.size * 0.5
 		balao.position = posicao_repouso_balao - Vector2(0.0, 12.0)

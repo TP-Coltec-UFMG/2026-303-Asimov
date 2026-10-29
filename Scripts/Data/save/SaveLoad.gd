@@ -36,7 +36,7 @@ var save_data: Dictionary = {
 	"filtro_de_daltonismo" : 0,
 	"frame_rate" : 0,
 	"mostrar_fps" : false,
-	"legenda_ativa" : false,
+	"legenda_ativa" : true,
 	"tamanho_legenda" : 10,
 	"primeira_vez" : true,
 	"leitor_de_tela" : false,
@@ -135,6 +135,9 @@ func _apply_load() -> void:
 	if str(save_data.get("job", "")) == "engenheiro":
 		save_data["job"] = "engenheiro_eletrico"
 	Configs.configs = save_data.duplicate(true)
+	Configs.configs["legenda_ativa"] = true
+	save_data["legenda_ativa"] = true
+	Configs._change_tamanho_legenda(int(save_data.get("tamanho_legenda", 10)))
 
 	Configs.aplicar_idioma()
 

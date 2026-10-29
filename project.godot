@@ -177,7 +177,7 @@ show_tasks={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://Tradutions/traducoes - Página1(8).en.translation", "res://Tradutions/traducoes - Página1(8).es.translation", "res://Tradutions/traducoes - Página1(8).fr.translation", "res://Tradutions/traducoes - Página1(8).pt_BR.translation")
+locale/translations=PackedStringArray("res://Tradutions/traducoes - Página1.ENGLISH.translation", "res://Tradutions/traducoes - Página1.ESPAÑOL.translation", "res://Tradutions/traducoes - Página1.FRANÇAIS.translation", "res://Tradutions/traducoes - Página1.PORTUGUÊS.translation")
 
 [layer_names]
 

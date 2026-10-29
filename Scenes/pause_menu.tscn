@@ -870,29 +870,31 @@ pixel_font = ExtResource("7_vjiof")
 pixel_font_size = 8
 metadata/_edit_use_anchors_ = true
 
-[node name="Legendas" type="CheckBox" parent="Accessibility/Rolagem/VContainer" unique_id=1829192796 groups=["alto_contraste"]]
+[node name="Legendas" type="Control" parent="Accessibility/Rolagem/VContainer" unique_id=1829192796 groups=["texto_legendas"]]
+custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_fonts/font = ExtResource("7_vjiof")
-theme_override_font_sizes/font_size = 13
-theme_override_icons/checked = ExtResource("25_hdbqt")
-theme_override_icons/unchecked = ExtResource("26_q6c6f")
-text = "Legendas"
-flat = true
 script = ExtResource("41_8ivwb")
 
+[node name="Titulo" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 2.0
+theme_override_fonts/font = ExtResource("7_vjiof")
+theme_override_font_sizes/font_size = 13
+text = "Legendas"
+
 [node name="Tamanho" type="SpinBox" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=770380116]
-visible = false
 layout_mode = 0
 offset_left = 56.0
 offset_top = 22.0
 offset_right = 142.5
 offset_bottom = 53.0
 scale = Vector2(0.6, 0.6)
-min_value = 8.0
-max_value = 16.0
-value = 10.0
-suffix = "px"
+min_value = 80.0
+max_value = 160.0
+step = 10.0
+value = 100.0
+suffix = "%"
 
 [node name="Label" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas/Tamanho" unique_id=1272877909 groups=["alto_contraste"]]
 layout_mode = 0
@@ -906,13 +908,11 @@ text = "Tamanho"
 vertical_alignment = 1
 
 [node name="Back" type="Sprite2D" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=1484724646]
-visible = false
 position = Vector2(180, 35.000008)
 scale = Vector2(6, 6)
 texture = ExtResource("42_4cnwg")
 
 [node name="PreviewTamanho" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=895986951]
-visible = false
 layout_mode = 0
 offset_left = 120.3125
 offset_top = 26.000008
@@ -920,12 +920,11 @@ offset_right = 252.3125
 offset_bottom = 54.000008
 theme_override_fonts/font = ExtResource("43_52422")
 theme_override_font_sizes/font_size = 13
-text = "px"
+text = "100% (padrão)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PreviewSubtitlles" type="Label" parent="Accessibility/Rolagem/VContainer/Legendas" unique_id=244385278]
-visible = false
 layout_mode = 0
 offset_left = 120.3125
 offset_top = -0.9999924
@@ -933,7 +932,7 @@ offset_right = 252.3125
 offset_bottom = 26.000008
 theme_override_fonts/font = ExtResource("7_vjiof")
 theme_override_font_sizes/font_size = 10
-text = "10 Minutos..."
+text = "Texto de exemplo"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1183,7 +1182,6 @@ script = ExtResource("51_h3d7w")
 [connection signal="item_selected" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="Accessibility/Rolagem/VContainer" method="_on_option_daltonismo_button_item_selected"]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="Accessibility/Rolagem/VContainer" method="_on_option_daltonismo_button_mouse_entered"]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/Legendas" to="Accessibility/Rolagem/VContainer" method="_on_legendas_mouse_entered"]
-[connection signal="toggled" from="Accessibility/Rolagem/VContainer/Legendas" to="Accessibility/Rolagem/VContainer/Legendas" method="_on_toggled"]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/Legendas/Tamanho" to="Accessibility/Rolagem/VContainer" method="_on_tamanho_mouse_entered"]
 [connection signal="value_changed" from="Accessibility/Rolagem/VContainer/Legendas/Tamanho" to="Accessibility/Rolagem/VContainer/Legendas" method="_on_tamanho_value_changed"]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="Accessibility/Rolagem/VContainer" method="_on_leitor_de_tela_mouse_entered"]
@@ -1226,7 +1224,6 @@ script = ExtResource("51_h3d7w")
 [connection signal="mouse_entered" from="Interface/BackToMenuButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Interface/BackToMenuButton")]]
 [connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/OptionDaltonismoButton")]]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/OptionDaltonismoButton" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/OptionDaltonismoButton")]]
-[connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/Legendas" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/Legendas")]]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/Legendas" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/Legendas")]]
 [connection signal="focus_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_receber_foco" binds=[NodePath("Accessibility/Rolagem/VContainer/LeitorDeTela")]]
 [connection signal="mouse_entered" from="Accessibility/Rolagem/VContainer/LeitorDeTela" to="MenuInputRouter" method="_ao_entrar_mouse" binds=[NodePath("Accessibility/Rolagem/VContainer/LeitorDeTela")]]

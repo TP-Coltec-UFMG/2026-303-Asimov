@@ -9,7 +9,7 @@ var configs: Dictionary = {
 	"filtro_de_daltonismo" : 0,
 	"frame_rate" : 0,
 	"mostrar_fps" : false,
-	"legenda_ativa" : false,
+	"legenda_ativa" : true,
 	"tamanho_legenda" : 10,
 	"primeira_vez" : true,
 	"leitor_de_tela" : false,
@@ -73,11 +73,13 @@ func _change_frame_rate(new_value : int):
 func _change_mostrar_fps(new_value : bool):
 	configs.mostrar_fps = new_value
 
-func _change_legenda_ativa(new_value : bool):
-	configs.legenda_ativa = new_value
-	
 func _change_tamanho_legenda(new_value : int):
-	configs.tamanho_legenda = new_value
+	configs.tamanho_legenda = clampi(new_value, 8, 16)
+	get_tree().call_group(&"texto_legendas", &"aplicar_tamanho_legenda")
+
+
+func obter_fator_legendas() -> float:
+	return clampf(float(configs.get("tamanho_legenda", 10)), 8.0, 16.0) / 10.0
 	
 func _change_primeira_vez():
 	configs.primeira_vez = false

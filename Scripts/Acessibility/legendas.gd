@@ -1,47 +1,27 @@
-extends CheckBox
-@onready var back: Sprite2D = $Back
+extends Control
+
 @onready var preview_tamanho: Label = $PreviewTamanho
 @onready var preview_subtitlles: Label = $PreviewSubtitlles
 @onready var tamanho: SpinBox = $Tamanho
 
 
 func _ready() -> void:
-	if Configs.configs.legenda_ativa:
-		button_pressed = true
-		tamanho.value = Configs.configs.tamanho_legenda
-		preview_tamanho.text = str(Configs.configs.tamanho_legenda) + "px"
-		preview_subtitlles.add_theme_font_size_override("font_size", Configs.configs.tamanho_legenda)
-	else:
-		button_pressed = false
-
-func _on_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		Configs._change_legenda_ativa(true)
-		tamanho.visible = true
-		back.visible = true
-		preview_subtitlles.visible = true
-		preview_tamanho.visible = true
-		if Configs.configs.leitor_de_tela:
-			LeitorDeTela._ler_texto(atr("Legendas ativada"))
-	else:
-		Configs._change_legenda_ativa(false)
-		tamanho.visible = false
-		back.visible = false
-		preview_subtitlles.visible = false
-		preview_tamanho.visible = false
-		if Configs.configs.leitor_de_tela:
-			LeitorDeTela._ler_texto(atr("Legendas desativada"))
+	aplicar_tamanho_legenda.call_deferred()
 
 
-func _on_tamanho_value_changed(value: int) -> void:
-	Configs._change_tamanho_legenda(value)
-	preview_tamanho.text = str(value) + "px"
-	
-	if value > preview_subtitlles.get_theme_font_size("font_size"):
-		preview_subtitlles.add_theme_font_size_override("font_size", value)
-	else:
-		preview_subtitlles.remove_theme_font_size_override("font_size")
-		preview_subtitlles.add_theme_font_size_override("font_size", value)
-		
+func aplicar_tamanho_legenda() -> void:
+	if not is_node_ready():
+		return
+	var fator := Configs.obter_fator_legendas()
+	tamanho.set_value_no_signal(roundi(fator * 100.0))
+	preview_tamanho.text = "%d%%" % roundi(fator * 100.0)
+	if is_equal_approx(fator, 1.0):
+		preview_tamanho.text += " (padrão)"
+	preview_subtitlles.add_theme_font_size_override("font_size", roundi(10.0 * fator))
+
+
+func _on_tamanho_value_changed(value: float) -> void:
+	Configs._change_tamanho_legenda(roundi(value / 10.0))
+	SaveLoad._save()
 	if Configs.configs.leitor_de_tela:
-		LeitorDeTela._ler_texto(atr(str(value)))
+		LeitorDeTela._ler_texto("Tamanho das legendas: %d por cento" % roundi(value))

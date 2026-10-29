@@ -14,15 +14,24 @@ var em_uso: bool = false
 @onready var indicador: TextureRect = $indicator
 @onready var temporizador_digitacao: Timer = $TemporizadorDigitacao
 @onready var animacoes: AnimationPlayer = $Animacoes
+@onready var tamanho_original: int = texto.get_theme_font_size("font_size")
 
 
 func _ready() -> void:
 	hide()
 	indicador.hide()
+	aplicar_tamanho_legenda()
+
+
+func aplicar_tamanho_legenda() -> void:
+	if not is_node_ready():
+		return
+	texto.add_theme_font_size_override("font_size", roundi(tamanho_original * Configs.obter_fator_legendas()))
 
 
 func iniciar_exibicao() -> void:
 	cancelar_exibicao()
+	aplicar_tamanho_legenda()
 	em_uso = true
 	pivot_offset = size / 2.0
 	show()

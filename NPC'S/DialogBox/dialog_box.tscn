@@ -89,7 +89,7 @@ _data = {
 &"fechar": SubResource("Animacao_fechar")
 }
 
-[node name="dialog_box" type="MarginContainer" unique_id=94448366]
+[node name="dialog_box" type="MarginContainer" unique_id=94448366 groups=["texto_legendas"]]
 process_mode = 3
 z_index = 1
 anchors_preset = -1
