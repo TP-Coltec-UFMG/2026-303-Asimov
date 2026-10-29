@@ -172,7 +172,7 @@ O edifício do jogo será composto por seis andares: datacenter, sala de ferrame
 
 ### CIRCUITOS
 
-<img width="801" height="450" alt="Captura de tela 2026-09-10 183506" src="https://github.com/user-attachments/assets/9bbad422-e16c-4ab2-9b03-a0a08ccf90da" />
+<img width="967" height="538" alt="image" src="https://github.com/user-attachments/assets/f068a0d3-0784-429f-86ff-95bd69e2b045" />
 
 ### VIGILÂNCIA
 
