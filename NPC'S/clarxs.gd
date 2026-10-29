@@ -133,6 +133,7 @@ func _ready() -> void:
 		body.collision_mask = 1 if empurravel_pelo_player else 0
 		if empurravel_pelo_player:
 			body.top_level = true
+			body.motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 			body.global_position = global_position
 			($CharacterBody2D/CollisionShape2D as CollisionShape2D).shape = pegada_navegacao
 
@@ -264,7 +265,13 @@ func _physics_process(delta: float) -> void:
 	if empurravel_pelo_player and DialogManager.is_showing_dialog:
 		agente_desvio.velocity = Vector2.ZERO
 		return
-	if empurravel_pelo_player and _atualizar_resistencia(delta):
+	var prioridade_caminhada := _tem_prioridade_caminhada()
+	if empurravel_pelo_player:
+		($CharacterBody2D as CharacterBody2D).set_collision_layer_value(1, prioridade_caminhada)
+	if prioridade_caminhada:
+		_reiniciar_paciencia()
+		agente_desvio.avoidance_priority = 1.0
+	elif empurravel_pelo_player and _atualizar_resistencia(delta):
 		return
 	if _atualizar_chegada_saida(delta):
 		return
@@ -295,6 +302,9 @@ func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
 			if resistindo_empurrao:
 				_mover_resistindo(body, delta)
 				return
+			if _tem_prioridade_caminhada():
+				safe_velocity = agente_desvio.velocity
+				_empurrar_jogador_no_caminho(body, safe_velocity * delta)
 		var before := body.global_position
 		body.velocity = safe_velocity
 		body.move_and_slide()
@@ -329,7 +339,31 @@ func _ao_calcular_velocidade_segura(safe_velocity: Vector2) -> void:
 			avancar_ponto_caminho()
 
 
+func _tem_prioridade_caminhada() -> bool:
+	return empurravel_pelo_player and (
+		(caminho_atual != null and not caminho_finalizado)
+		or (desesperado and tempo_espera_desespero <= 0.0)
+	)
+
+
+func _empurrar_jogador_no_caminho(corpo: CharacterBody2D, movimento: Vector2) -> void:
+	if movimento.is_zero_approx():
+		return
+	var direcao := movimento.normalized()
+	var alcance := movimento
+	if is_instance_valid(player_ref) and player_ref is Player:
+		var jogador_proximo := player_ref as Player
+		var velocidade_contraria := maxf(-jogador_proximo.direction.dot(direcao) * jogador_proximo.move_speed, 0.0)
+		alcance += direcao * velocidade_contraria * get_physics_process_delta_time()
+	if not corpo.test_move(corpo.global_transform, alcance, colisao_empurrao):
+		return
+	var jogador := colisao_empurrao.get_collider() as Player
+	if is_instance_valid(jogador) and jogador.is_physics_processing() and jogador.can_process() and not DialogManager.is_showing_dialog:
+		jogador.move_and_collide(alcance)
+
+
 func _atualizar_resistencia(delta: float) -> bool:
+	agente_desvio.avoidance_priority = 0.5 if not resistindo_empurrao else 1.0
 	var pressionando := false
 	var jogador_proximo := false
 	if is_instance_valid(player_ref) and player_ref is Player:
